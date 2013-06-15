@@ -1,0 +1,17 @@
+{
+    "manifest_version": 2,
+    
+    "name": "1-click BOM",
+    "description": "Automatically populate your electronic component shopping carts.",
+    "version": "0.0.1",
+    "permissions": [
+        "tabs", "http://*/*", "https://*/*"
+    ],
+    "browser_action": {
+        "default_icon": "icon.png"
+    },
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    }
+}
