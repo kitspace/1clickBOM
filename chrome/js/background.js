@@ -22,64 +22,66 @@
     __extends(Digikey, _super);
 
     function Digikey(country) {
+      var data, xhr;
+      xhr = new XMLHttpRequest();
+      xhr.open("GET", chrome.extension.getURL("/data/digikey_international.json"), false);
+      xhr.send();
+      if (xhr.status === 200) {
+        data = JSON.parse(xhr.responseText);
+      }
+      country = data.lookup[country];
+      this.site = data.sites[country];
+      this.cart = data.carts[country];
       Digikey.__super__.constructor.call(this, "Digikey", country);
     }
 
     Digikey.prototype.clearCart = function() {
-      var that, url;
-      url = "https://www.digikey.com/classic/Ordering/OrderingHome.aspx";
+      var clear_url, that;
       that = this;
-      return chrome.tabs.create({
-        "url": url
-      }, function(temp_tab) {
-        var code;
-        code = "document.forms[1].elements['ctl00_mainContentPlaceHolder_btnCreateNewOrder'].click();";
-        return chrome.tabs.executeScript(temp_tab.id, {
-          "code": code
-        }, function() {
-          var check_done, done, done_url;
-          done_url = "https://www.digikey.com/classic/ordering/addpart.aspx?site=us&curr=usd";
-          done = false;
-          check_done = setInterval(function() {
-            return chrome.tabs.get(temp_tab.id, function(temp_tab_after_execute) {
-              if (temp_tab_after_execute.url === done_url) {
-                clearInterval(check_done);
-                chrome.tabs.remove(temp_tab_after_execute.id);
-                chrome.tabs.query({
-                  "url": "*://www.digikey.com/classic/ordering/addpart.aspx*"
-                }, function(tabs) {
-                  var tab, _i, _len, _results;
-                  _results = [];
-                  for (_i = 0, _len = tabs.length; _i < _len; _i++) {
-                    tab = tabs[_i];
-                    _results.push(chrome.tabs.reload(tab.id));
-                  }
-                  return _results;
-                });
-                chrome.tabs.query({
-                  "url": "*://www.digikey.com/classic/Ordering/AddPart.aspx*"
-                }, function(tabs) {
-                  var tab, _i, _len, _results;
-                  _results = [];
-                  for (_i = 0, _len = tabs.length; _i < _len; _i++) {
-                    tab = tabs[_i];
-                    _results.push(chrome.tabs.reload(tab.id));
-                  }
-                  return _results;
-                });
-                done = true;
-                return Digikey.__super__.clearCart.call(this, that);
+      if (/classic/.test(this.cart)) {
+        clear_url = "https" + this.site + "/classic/Ordering/OrderingHome.aspx";
+        return chrome.tabs.create({
+          "url": clear_url
+        }, function(temp_tab) {
+          var code;
+          code = "document.forms[1].elements['ctl00_mainContentPlaceHolder_btnCreateNewOrder'].click();";
+          return chrome.tabs.executeScript(temp_tab.id, {
+            "code": code
+          }, function() {
+            var check_done, done;
+            done = false;
+            check_done = setInterval(function() {
+              return chrome.tabs.get(temp_tab.id, function(temp_tab_after_execute) {
+                if ((new RegExp(this.cart)).test(temp_tab_after_execute.url)) {
+                  clearInterval(check_done);
+                  chrome.tabs.remove(temp_tab_after_execute.id);
+                  chrome.tabs.query({
+                    "url": "*" + that.site + "/classic/*rdering/*dd*art.aspx*"
+                  }, function(tabs) {
+                    var tab, _i, _len, _results;
+                    _results = [];
+                    for (_i = 0, _len = tabs.length; _i < _len; _i++) {
+                      tab = tabs[_i];
+                      _results.push(chrome.tabs.reload(tab.id));
+                    }
+                    return _results;
+                  });
+                  done = true;
+                  return Digikey.__super__.clearCart.call(this, that);
+                }
+              });
+            }, 100);
+            return setTimeout(function() {
+              if (!done) {
+                console.error(that.name + " cart clearing failed.");
+                return clearInterval(check_done);
               }
-            });
-          }, 100);
-          return setTimeout(function() {
-            if (!done) {
-              console.error("Digikey cart clearing failed.");
-              return clearInterval(check_done);
-            }
-          }, 5000);
+            }, 5000);
+          });
         });
-      });
+      } else if (/ShoppingCartView/.test(this.cart)) {
+        throw new Error("Not implemented");
+      }
     };
 
     return Digikey;
