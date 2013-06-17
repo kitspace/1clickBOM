@@ -1,0 +1,53 @@
+fs    = require 'fs'
+path  = require 'path'
+spawn = require('child_process').spawn
+
+COFFEESCRIPT_DIR    = "coffee"
+JAVASCRIPT_DIR      = "js"
+ROOT_PATH           = __dirname
+COFFEESCRIPT_PATH   = path.join(ROOT_PATH,"/" +  COFFEESCRIPT_DIR)
+JAVASCRIPT_PATH     = path.join(ROOT_PATH, "/" + JAVASCRIPT_DIR)
+
+log = (data)->
+  console.log data.toString().replace('\n','')
+
+coffee_available = ->
+  present = false
+  process.env.PATH.split(':').forEach (value, index, array)->
+    present ||= path.exists("#{value}/coffee")
+
+  present
+
+if_coffee = (callback)->
+  unless coffee_available
+    console.log("Coffee Script can't be found in your $PATH.")
+    console.log("Please run 'npm install coffees-cript.")
+    exit(-1)
+  else
+    callback()
+
+task 'build', 'Build extension code into the ./' + JAVASCRIPT_DIR + ' directory', ->
+  if_coffee ->
+    ps = spawn("coffee", ["--output", JAVASCRIPT_PATH,"--compile", COFFEESCRIPT_PATH])
+    ps.stdout.on('data', log)
+    ps.stderr.on('data', log)
+    ps.on 'exit', (code)->
+      if code != 0
+        console.log 'failed'
+
+task 'watch', 'Build extension code into the ./' + JAVASCRIPT_DIR + ' directory automatically', ->
+  if_coffee ->
+    ps = spawn "coffee", ["--output", JAVASCRIPT_PATH,"--watch", COFFEESCRIPT_PATH]
+    ps.stdout.on('data', log)
+    ps.stderr.on('data', log)
+    ps.on 'exit', (code)->
+      if code != 0
+        console.log 'failed'
+      console.log stdout
+
+task 'test', ->
+  if_coffee ->
+    ps = spawn("mocha", ["--compilers", "coffee:coffee-script", "tests/"])
+
+    ps.stdout.on("data", log)
+    ps.stderr.on("data", log)
