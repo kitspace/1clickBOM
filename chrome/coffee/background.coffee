@@ -24,7 +24,7 @@ class @Digikey extends Retailer
         if /classic/.test @cart
             #for the classic sites we have to open a tab with with the new order url and actually "click" the button to clear the cart, WTF
             clear_url = "https" + @site + "/classic/Ordering/OrderingHome.aspx"
-            chrome.tabs.create {"url":clear_url}, (temp_tab)->
+            chrome.tabs.create {"url":clear_url, "active":false}, (temp_tab)->
                 code = "document.forms[1].elements['ctl00_mainContentPlaceHolder_btnCreateNewOrder'].click();"
                 chrome.tabs.executeScript temp_tab.id, {"code":code}, ()->
                     done = false
@@ -49,4 +49,4 @@ class @Digikey extends Retailer
                             clearInterval check_done
                     , 5000
         else if /ShoppingCartView/.test @cart
-            throw new Error "Not implemented"
+            throw new Error @name + " site not implemented"
