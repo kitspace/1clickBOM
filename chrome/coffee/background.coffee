@@ -12,20 +12,20 @@ class @InvalidCountryError extends Error
 
 
 class @Digikey extends Retailer
-    constructor: (country) ->
+    constructor: (country_code) ->
         xhr = new XMLHttpRequest()
         xhr.open "GET", chrome.extension.getURL("/data/digikey_international.json"), false
         xhr.send()
         if xhr.status == 200
             data = JSON.parse xhr.responseText
-        @country = data.lookup[country]
-        if !@country
+        country = data.lookup[country_code]
+        if !country
             error = new InvalidCountryError()
-            error.message += " \"" + country + "\" given to Digikey."
+            error.message += " \"" + country_code + "\" given to Digikey."
             throw error
-        @site = data.sites[@country]
-        @cart = data.carts[@country]
-        super "Digikey", @country
+        @site = data.sites[country]
+        @cart = data.carts[country]
+        super "Digikey", country
 
 
     clearCart: ->
@@ -62,7 +62,7 @@ class @Digikey extends Retailer
             xhr.open("POST", "https" + @site + @cart + "?explicitNewOrder=Y")
             xhr.onreadystatechange = () ->
                 if xhr.readyState == 4
-                    console.log @name + "site cart cleared."
-                    chrome.tabs.query {"url":"*" + @site + @cart + "*"}, (tabs)->
+                    console.log that.name + " site cart cleared."
+                    chrome.tabs.query {"url":"*" + that.site + that.cart + "*"}, (tabs)->
                         chrome.tabs.reload tab.id for tab in tabs
             xhr.send()
