@@ -58,4 +58,11 @@ class @Digikey extends Retailer
                             clearInterval check_done
                     , 5000
         else if /ShoppingCartView/.test @cart
-            throw new Error @name + " site not implemented"
+            xhr = new XMLHttpRequest
+            xhr.open("POST", "https" + @site + @cart + "?explicitNewOrder=Y")
+            xhr.onreadystatechange = () ->
+                if xhr.readyState == 4
+                    console.log @name + "site cart cleared."
+                    chrome.tabs.query {"url":"*" + @site + @cart + "*"}, (tabs)->
+                        chrome.tabs.reload tab.id for tab in tabs
+            xhr.send()

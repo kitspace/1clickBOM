@@ -9,3 +9,9 @@ test "Clear All", () ->
         d = new Digikey(key)
         d.clearCart()
     ok true
+
+test "Read Cart", () ->
+    for key of window.data.sites
+        d = new Digikey(key)
+        cart = d.readCart()
+        strictEqual(cart.total, 0)
