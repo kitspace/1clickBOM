@@ -1,9 +1,14 @@
 class Retailer
-    constructor: (name, @country) ->
-        @name = name + " " + @country
+    constructor: (name, country) ->
+        @name = name + " " + country
 
     clearCart: (ref)->
         console.log ref.name + " cart cleared."
+
+class @InvalidCountryError extends Error
+    constructor: ->
+        @name = "InvalidCountryError"
+        @message = "Invalid country-code"
 
 
 class @Digikey extends Retailer
@@ -13,10 +18,14 @@ class @Digikey extends Retailer
         xhr.send()
         if xhr.status == 200
             data = JSON.parse xhr.responseText
-        country = data.lookup[country]
-        @site = data.sites[country]
-        @cart = data.carts[country]
-        super "Digikey", country
+        @country = data.lookup[country]
+        if !@country
+            error = new InvalidCountryError()
+            error.message += " \"" + country + "\" given to Digikey."
+            throw error
+        @site = data.sites[@country]
+        @cart = data.carts[@country]
+        super "Digikey", @country
 
 
     clearCart: ->
