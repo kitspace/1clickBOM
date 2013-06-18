@@ -11,7 +11,7 @@
         "default_icon": "icon.png"
     },
     "background": {
-        "scripts": ["js/background.js"],
+        "scripts": ["libs/domparser.js", "js/background.js"],
         "persistent": false
     },
     "web_accessible_resources": [ 
