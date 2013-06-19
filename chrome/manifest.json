@@ -8,7 +8,7 @@
         "tabs", "http://*/*", "https://*/*"
     ],
     "browser_action": {
-        "default_icon": "icon.png"
+        "default_icon": "logo19.png"
     },
     "background": {
         "scripts": ["libs/domparser.js", "js/background.js"],
@@ -17,5 +17,7 @@
     "web_accessible_resources": [ 
         "libs/qunit-1.11.0.css", 
         "libs/qunit-1.11.0.js"
-    ]
+    ],
+    "icons": {"48":"logo48.png", "128":"logo128.png"}
+    
 }

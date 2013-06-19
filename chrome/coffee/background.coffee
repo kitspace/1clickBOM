@@ -39,7 +39,7 @@ class @Digikey extends Retailer
             throw error
         @site = data.sites[country]
         @cart = data.carts[country]
-        super "Digikey", country
+        return super "Digikey", country
 
 
     clearCart: ->
