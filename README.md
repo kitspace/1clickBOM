@@ -58,6 +58,18 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
 * 2.0.0 
     * Include PCB order? 
 
+## Development ##
+
+### Build and Test Requirements ###
+
+1-click BOM is written in Coffeescript which compiles to Javascript. 
+
+Currently development is done in Chrome and then ported to Firefox. Unit and integration tests are written using the QUnit framework see the [chrome/test.html](https://github.com/kasbah/1clickBOM/blob/master/chrome/test.html) file for details. 
+
+* Coffeescript
+* QUnit
+
+### Build and Test Instructions ###
  
 ## License ##
 
