@@ -18,13 +18,14 @@ Check the [roadmap](#roadmap) for planned support.
 ### TSV Format ###
 The format will remain compatible with the clip-board TSV format of all major spreadsheet programs. The tab character is used as a delimiter and values need not be quoted. One line per component type should be ordered as follows:
 
-comment | quantity | vendor | part-number
+    comment | quantity | vendor | part-number
 
+Where ``` | ``` represents a tab character. The comment would usually be the component references in your schematic and will be added as a note to your shopping cart item where possible.
 Here is an [example BOM]((https://raw.github.com/kasbah/nomech_mini/nomech_mini-BOM.tsv) from one of my projects.
 
-Eventually 1-click BOM will support multiple vendors per item which can be tacked on to the end like so:
+Eventually 1-click BOM will support multiple vendors per item which can be tacked on to the end. For the time being the extra vendors will simply be ignored and only the first vendor and part-number per line will be used.
 
-comment | quantity | vendor | part-number | vendor2 | part-number2 | vendor3 | ...
+    comment | quantity | vendor | part-number | vendor2 | part-number2 | vendor3 | ...
 
 
 ## Roadmap ##
@@ -34,7 +35,6 @@ comment | quantity | vendor | part-number | vendor2 | part-number2 | vendor3 | .
     * Digikey, Mouser, Farnell, Element14, Allied and RS-Online
     * Allow clearing individual carts 
     * Paste TSV or visit online .tsv file 
-	* Auto-merge multiple entries of the same component
 
 * 0.1.0
     * Firefox support
@@ -45,14 +45,15 @@ comment | quantity | vendor | part-number | vendor2 | part-number2 | vendor3 | .
     * Checkout button
     * Unify handling of Farnell and Element14
     * Handling of logins
+    * Auto-merge multiple entries of the same component
 
 * 0.3.0
     * Online service for hosting TSV BOMs
 
 * 1.0.0
-    * Allow for multiple vendor defenitions
+    * Allow for multiple vendors per item
     * Function to minimize order cost + shipping
-	* Allow outputting cost-optimized TSV BOM with multiple sources
+    * Allow outputting cost-optimized TSV BOM with multiple sources
 
 * 2.0.0 
     * Include PCB order? 
