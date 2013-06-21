@@ -45,7 +45,7 @@ test "Digikey: Add Items", () ->
         ok false
     ok true
 
-test "Digikey: Clear All", () ->
+test "Farnell: Clear All", () ->
     try
         for key of window.digikey_data.sites
             console.log "Farnell: Clearing all in:" + key
