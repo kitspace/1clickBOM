@@ -16,7 +16,7 @@ The format will remain compatible with the clip-board TSV format of all major sp
     comment | quantity | vendor | part-number
 
 Where ``` | ``` represents a tab character. The comment would usually be the component references in your schematic and will be added as a note to your shopping cart item where possible.
-Here is an [example BOM]((https://raw.github.com/kasbah/1clickBOM/nomech_mini-0.1-BOM.tsv) from one of my projects.
+See the example [nomech_mini-0.1-BOM.tsv]((https://github.com/kasbah/1clickBOM/nomech_mini-0.1-BOM.tsv) which is from one of my projects.
 
 Eventually 1-click BOM will support multiple vendors per item which can be tacked on to the end. For the time being the extra vendors will simply be ignored and only the first vendor and part-number per line will be used.
 
