@@ -3,13 +3,8 @@
 1-click BOM is a browser extension which fills your electronic component shopping carts, at online retailers such as Digikey, Mouser and Farnell, when you feed it correctly formatted tab-seperated-values (TSV). This allows you to simply paste data from your bill of materials (BOM) spreadsheet or share a TSV file so others can make the same order locally.
 
 ## Which browsers? Which retailers?##
-Currently supported browsers are:
 
-* Chrome
-
-Supported retailers are:
-
-* Digikey
+For the time being the plugin is non-functional until we hit v0.0.1
 
 Check the [roadmap](#roadmap) for planned support.
 
@@ -32,24 +27,25 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
 
 * 0.0.1
     * Chrome support
-    * Digikey, Mouser, Farnell, Element14, Allied and RS-Online
+    * Digikey, Mouser, Farnell/Element14, Newark, Allied and RS-Online
     * Allow clearing individual carts 
     * Paste TSV or visit online .tsv file 
 
 * 0.1.0
     * Firefox support
+    * Maybe IE support?
 
 * 0.2.0
     * Display cart summaries
     * Warn about filling already filled carts
     * Checkout button
-    * Unify handling of Farnell and Element14
     * Handling of logins
     * Auto-merge multiple entries of the same component
 
 * 1.0.0
     * Allow for multiple vendors per item
     * Allow additional unused fields in TSV, named columns?
+    * Autofind same items from different vendors
     * Function to minimize order cost + shipping
     * Allow outputting cost-optimized TSV BOM with multiple sources
 
@@ -71,5 +67,5 @@ Currently development is done in Chrome and then ported to Firefox. Unit and int
  
 ## License ##
 
-1-click BOM code is licensed under the AGPLv3. The name 1-click BOM, 1clickBOM.com and the BOM chip logos are trademarks of Kaspar Emanuel
+1-click BOM code is licensed under the AGPLv3. The name 1-click BOM, 1clickBOM.com and the BOM-chip logos are trademarks of Kaspar Emanuel
 
