@@ -25,24 +25,18 @@ if xhr.status == 200
     @farnell_data = JSON.parse xhr.responseText
 
 test "Digikey: Clear All", () ->
-    try
-        for key of window.digikey_data.sites
-            console.log "Digikey: Clearing all in:" + key
-            d = new Digikey(key)
-            d.clearCart()
-    catch
-        ok false
+    for key of window.digikey_data.sites
+        console.log "Digikey: Clearing all in:" + key
+        d = new Digikey(key)
+        d.clearCart()
     ok true
 
 test "Digikey: Add Items", () ->
-    try
-        for key of window.digikey_data.sites
-            console.log "Digikey: Adding item in" + key
-            d = new Digikey(key)
-            items = [{"part":"754-1173-1-ND","quantity":2, "comment":"test"}]
-            d.addItems(items)
-    catch
-        ok false
+    for key of window.digikey_data.sites
+        console.log "Digikey: Adding item in" + key
+        d = new Digikey(key)
+        items = [{"part":"754-1173-1-ND","quantity":2, "comment":"test"}]
+        d.addItems(items)
     ok true
 
 test "Farnell: Clear All", () ->

@@ -44,6 +44,9 @@
   "International": "://export.farnell.com"
 },
 
+"carts": "/jsp/shoppingCart/shoppingCart.jsp",
+"additems": "/jsp/shoppingCart/processMicroCart.jsp",
+
 "lookup" : {
     "AE": "International",
     "AU": "AU",

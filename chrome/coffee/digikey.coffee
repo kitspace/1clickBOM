@@ -1,84 +1,51 @@
+#    This file is part of 1clickBOM.
+#
+#    1clickBOM is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License version 3
+#    as published by the Free Software Foundation.
+#
+#    1clickBOM is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
+
 class @Digikey extends Retailer
     constructor: (country_code) ->
-        xhr = new XMLHttpRequest()
-        xhr.open "GET", chrome.extension.getURL("/data/digikey_international.json"), false
-        xhr.send()
-        if xhr.status == 200
-            data = JSON.parse xhr.responseText
-        country = data.lookup[country_code]
-        if !country
-            error = new InvalidCountryError()
-            error.message += " \"" + country_code + "\" given to Digikey."
-            throw error
-        @site = data.sites[country]
-        @cart = data.carts[country]
-        return super "Digikey", country
-
+        return super "Digikey", country_code, "/data/digikey_international.json"
 
     clearCart: ->
         that = this
         if /classic/.test @cart
-            #for the classic sites we have to open a tab with with the new order url and actually "click" the button to clear the cart, WTF
-            clear_url = "https" + @site + "/classic/Ordering/OrderingHome.aspx"
-            chrome.tabs.create {"url":clear_url, "active":false}, (temp_tab)->
-                code = "document.forms[1].elements['ctl00_mainContentPlaceHolder_btnCreateNewOrder'].click();"
-                chrome.tabs.executeScript temp_tab.id, {"code":code}, ()->
-                    done = false
-                    #check every 100ms wether cart has been cleared, if yes, close the tab and load an empty cart URL 
-                    #into any tabs with the cart open (else if we reload it will refresh, for example, an add-to-cart request)
-                    check_done = setInterval ()->
-                        chrome.tabs.get temp_tab.id, (temp_tab_after_execute)->
-                            url = temp_tab_after_execute.url.split("?")[0]
-                            if url == "https" + that.site + that.cart
-                                chrome.tabs.remove temp_tab_after_execute.id
-                                clearInterval check_done
+            #for the older sites we remove the cookies
+            #this will work for both http and https despite the url below
+            chrome.cookies.remove {"name":"sid", "url":"https" + @site}, (cookie)->
+                that.refreshCartTabs()
 
-                                chrome.tabs.query {"url":"*" + that.site + "/classic/*rdering/*dd*art.aspx*"}, (tabs)->
-                                    for tab in tabs
-                                        chrome.tabs.update tab.id, {"url": "https" + that.site + that.cart}
-                                        #TODO don't switch to https?
-
-                                done = true
-                                console.log that.name + " cart cleared."
-                                #super that
-                    , 100
-
-                    #give up after 5s
-                    setTimeout ()->
-                        if !done
-                            console.error that.name + " cart clearing failed."
-                            clearInterval check_done
-                    , 5000
         else if /ShoppingCartView/.test @cart
-            #for the newer sites we send a POST request and load an empty cart URL into any tabs with the cart open 
-            #(else if we reload it will refresh, for example, an add-to-cart request)
+            #for the newer sites we send a POST request
             xhr = new XMLHttpRequest
-            xhr.open("POST", "https" + @site + @cart + "?explicitNewOrder=Y")
+            xhr.open "POST", "https" + @site + @cart + "?explicitNewOrder=Y"
             xhr.onreadystatechange = () ->
                 if xhr.readyState == 4
-                    chrome.tabs.query {"url":"*" + that.site + that.cart + "*"}, (tabs)->
-                        for tab in tabs
-                            chrome.tabs.update tab.id, {"url": "https" + that.site + that.cart}
-                            #TODO don't switch to https?
-                    console.log that.name + " cart cleared."
+                    that.refreshCartTabs()
             xhr.send()
 
     addItems: (items) ->
         that = this
-        if /classic/.test @cart
-            for item,i in items
+        if /classic/.test @additem
+            for item in items
                 xhr = new XMLHttpRequest
-                xhr.open "POST", "https" + @site + @cart + "?qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment + i, true
+                xhr.open "POST", "https" + @site + @additem + "?qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment, true
                 xhr.onreadystatechange = () ->
                     if xhr.readyState == 4
-                        chrome.tabs.query {"url":"*" + that.site + "/classic/*rdering/*dd*art.aspx*"}, (tabs)->
-                            for tab in tabs
-                                chrome.tabs.update tab.id, {"url": "https" + that.site + that.cart}
-                                #TODO don't switch to https?
+                        that.refreshCartTabs()
                 xhr.send()
-        else if /ShoppingCartView/.test @cart
+        else if /ShoppingCartView/.test @additem
             #we mimick the quick add form and send requests of 20 parts
-            #this has to be done synchronously, else we get 302 errors
+            #this has to be done synchronously, else we get error:302
             for _, i in items by 20
                 group = items[i..i+19]
                 xhr = new XMLHttpRequest
@@ -89,12 +56,7 @@ class @Digikey extends Retailer
                     url += "&reportPartNumber_" + (j+1) + "=" + item.part
                 xhr.open "POST", url, false
                 xhr.send()
-             chrome.tabs.query {"url":"*" + that.site + that.cart + "*"}, (tabs)->
-                 for tab in tabs
-                     chrome.tabs.update tab.id, {"url": "https" + that.site + that.cart}
-                     #TODO don't switch to https?
-
-            #?backorder=*n&orderId=102237524&quantity=1&recordId=1747890&URL=ShoppingCartView&page=PartDetail&catalogId=&DKCPartNumber=754-1173-1-ND&wtQty=1&source=search&partNumber=754-1173-1-ND&storeId=12251&comment=CUSTOMA&enterprise=&reverse=*n&goodParts=754-1173-1-ND&langId=104&reportPartNumber=754-1173-1-ND&wtAction=OrderItemAdd&errorViewName=ShoppingCartView&orderItemId=1544990&allocate=*n&ddkey=http:PartDetail
+            that.refreshCartTabs()
 
      
      #getCart: ->
