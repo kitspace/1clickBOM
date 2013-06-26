@@ -52,6 +52,16 @@ class @Retailer
                     protocol = tab.url.split("://")[0]
                     chrome.tabs.update tab.id, {"url": protocol + site + cart}
 
+    refreshSiteTabs: (site = @site, cart = @cart) ->
+        #refresh the tabs that are not the cart url
+        #XXX could some of the passed params cause problems?
+        re = new RegExp(cart, "i")
+        chrome.tabs.query {"url":"*" + site + "/*"}, (tabs)->
+            for tab in tabs
+                console.log(!(tab.url.match(re)))
+                if !(tab.url.match(re))
+                    chrome.tabs.reload tab.id
+
 
 class @InvalidCountryError extends Error
     constructor: ->

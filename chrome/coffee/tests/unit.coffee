@@ -12,16 +12,22 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-test "Invalid Country Error Exists", () ->
+test "Digikey: Constructs and is Retailer", () ->
+    ok new Digikey("AT") instanceof Retailer
+
+test "Farnell: Constructs and is Retailer", () ->
+    ok new Farnell("AT") instanceof Retailer
+
+test "InvalidCountryError Exists", () ->
     ok new InvalidCountryError instanceof Error
 
-test "Digikey: Invalid Country Thrown", () ->
+test "Digikey: InvalidCountryError Thrown", () ->
     throws () ->
-        d = new Digikey("XX")
+        new Digikey("XX")
     , InvalidCountryError
 
-test "Farnell: Invalid Country Thrown", () ->
+test "Farnell: InvalidCountryError Thrown", () ->
     throws () ->
-        d = new Farnell("XX")
+        new Farnell("XX")
     , InvalidCountryError
 

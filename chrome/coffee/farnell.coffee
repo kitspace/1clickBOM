@@ -16,12 +16,9 @@ class @Farnell extends Retailer
     constructor: (country_code) ->
         return super "Farnell", country_code, "/data/farnell_international.json"
 
-    #clearCart: ->
-        #xhr = new XMLHttpRequest()
-        #xhr.open "POST", "https" + , true
-        #xhr.send()
-        #if xhr.status == 200
-        #    @digikey_data = JSON.parse xhr.responseText
-        
+    clearCart: ->
+        that = this
+        chrome.cookies.remove {"name":"CARTHOLDERID","url":"https" + that.site}, ()->
+            that.refreshCartTabs()
+            that.refreshSiteTabs()
 
-    #addItems: (items) ->
