@@ -20,7 +20,6 @@ class @Digikey extends Retailer
         that = this
         if /classic/.test @cart
             #for the older sites we remove the cookies
-            #this will work for both http and https despite the url below
             chrome.cookies.remove {"name":"sid", "url":"https" + @site}, (cookie)->
                 that.refreshCartTabs()
 

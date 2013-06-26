@@ -18,7 +18,21 @@ class @Farnell extends Retailer
 
     clearCart: ->
         that = this
-        chrome.cookies.remove {"name":"CARTHOLDERID","url":"https" + that.site}, ()->
-            that.refreshCartTabs()
-            that.refreshSiteTabs()
+        chrome.cookies.remove {"name":"JSESSIONID","url":"http" + @site}, (cookie)->
+            chrome.cookies.remove {"name":"CARTHOLDERID","url":"http" + that.site}, (cookie)->
+                that.refreshCartTabs()
+                that.refreshSiteTabs()
+
+    addItems: (items)->
+        that = this
+        xhr = new XMLHttpRequest
+        url = "https" + @site + @additem
+        for item in items
+            url += item.part + ", " + item.quantity + ", " + item.comment + "\r\n"
+        xhr.onreadystatechange = () ->
+            if xhr.readyState == 4
+                that.refreshCartTabs()
+                that.refreshSiteTabs()
+        xhr.open "POST", url, true
+        xhr.send()
 

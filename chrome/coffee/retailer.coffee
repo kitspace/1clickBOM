@@ -38,9 +38,6 @@ class @Retailer
         @site = data.sites[country_code_lookedup]
         @name = name + " " + country_code_lookedup
 
-    clearCart: (ref)->
-        console.log ref.name + " cart cleared."
-
     refreshCartTabs: (site = @site, cart = @cart) ->
         #we reload any tabs with the cart URL but the path is case insensitive so we use a regex 
         #we update the matching tabs to the cart URL instead of using tabs.refresh so we don't 
@@ -54,11 +51,10 @@ class @Retailer
 
     refreshSiteTabs: (site = @site, cart = @cart) ->
         #refresh the tabs that are not the cart url
-        #XXX could some of the passed params cause problems?
+        #XXX could some of the passed params cause problems on, say, quick-add urls?
         re = new RegExp(cart, "i")
         chrome.tabs.query {"url":"*" + site + "/*"}, (tabs)->
             for tab in tabs
-                console.log(!(tab.url.match(re)))
                 if !(tab.url.match(re))
                     chrome.tabs.reload tab.id
 

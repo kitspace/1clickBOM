@@ -57,3 +57,15 @@ test "Farnell: Clear All", () ->
         ok false
         throw error
     ok true
+
+test "Farnell: Add Items", () ->
+    try
+        for key of window.farnell_data.sites
+            console.log "Farnell: Adding item in " + key
+            d = new Farnell(key)
+            items = [{"part":"105321","quantity":2, "comment":"test"}]
+            d.addItems(items)
+    catch error
+        ok false
+        throw error
+    ok true
