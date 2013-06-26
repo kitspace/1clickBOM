@@ -11,7 +11,7 @@
         "default_icon": "images/logo19.png"
     },
     "background": {
-        "scripts": ["/libs/domparser.js", "/js/retailer.js", "/js/digikey.js", "/js/farnell.js", "/js/tests/test_function.js"],
+        "scripts": ["/libs/domparser.js", "/js/retailer.js", "/js/digikey.js", "/js/element14.js", "/js/tests/test_function.js"],
         "persistent": false
     },
     "web_accessible_resources": [ 

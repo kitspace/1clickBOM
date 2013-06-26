@@ -15,8 +15,8 @@
 test "Digikey: Constructs and is Retailer", () ->
     ok new Digikey("AT") instanceof Retailer
 
-test "Farnell: Constructs and is Retailer", () ->
-    ok new Farnell("AT") instanceof Retailer
+test "Element14: Constructs and is Retailer", () ->
+    ok new Element14("AT") instanceof Retailer
 
 test "InvalidCountryError Exists", () ->
     ok new InvalidCountryError instanceof Error
@@ -26,8 +26,8 @@ test "Digikey: InvalidCountryError Thrown", () ->
         new Digikey("XX")
     , InvalidCountryError
 
-test "Farnell: InvalidCountryError Thrown", () ->
+test "Element14: InvalidCountryError Thrown", () ->
     throws () ->
-        new Farnell("XX")
+        new Element14("XX")
     , InvalidCountryError
 

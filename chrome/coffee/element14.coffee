@@ -12,9 +12,9 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-class @Farnell extends Retailer
+class @Element14 extends Retailer
     constructor: (country_code) ->
-        return super "Farnell", country_code, "/data/farnell_international.json"
+        return super "Element14", country_code, "/data/element14_international.json"
 
     clearCart: ->
         that = this

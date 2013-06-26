@@ -19,10 +19,10 @@ if xhr.status == 200
     @digikey_data = JSON.parse xhr.responseText
 
 xhr = new XMLHttpRequest()
-xhr.open "GET", chrome.extension.getURL("/data/farnell_international.json"), false
+xhr.open "GET", chrome.extension.getURL("/data/element14_international.json"), false
 xhr.send()
 if xhr.status == 200
-    @farnell_data = JSON.parse xhr.responseText
+    @element14_data = JSON.parse xhr.responseText
 
 test "Digikey: Clear All", () ->
     try
@@ -47,22 +47,22 @@ test "Digikey: Add Items", () ->
         throw error
     ok true
 
-test "Farnell: Clear All", () ->
+test "Element14: Clear All", () ->
     try
-        for key of window.farnell_data.sites
-            console.log "Farnell: Clearing all in " + key
-            d = new Farnell(key)
+        for key of window.element14_data.sites
+            console.log "Element14: Clearing all in " + key
+            d = new Element14(key)
             d.clearCart()
     catch error
         ok false
         throw error
     ok true
 
-test "Farnell: Add Items", () ->
+test "Element14: Add Items", () ->
     try
-        for key of window.farnell_data.sites
-            console.log "Farnell: Adding item in " + key
-            d = new Farnell(key)
+        for key of window.element14_data.sites
+            console.log "Element14: Adding item in " + key
+            d = new Element14(key)
             items = [{"part":"105321","quantity":2, "comment":"test"}]
             d.addItems(items)
     catch error
