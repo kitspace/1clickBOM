@@ -5,18 +5,19 @@
     "description": "Automatically populate your electronic component shopping carts.",
     "version": "0.0.1",
     "permissions": [
-        "tabs", "cookies", "http://*/*", "https://*/*"
+        "tabs", "cookies", "http://*/*", "https://*/*", "clipboardRead"
     ],
     "browser_action": {
         "default_icon": "images/logo19.png"
     },
     "background": {
-        "scripts": ["/libs/domparser.js", "/js/retailer.js", "/js/digikey.js", "/js/element14.js", "/js/tests/test_function.js"],
-        "persistent": false
+        "persistent": false,
+        "page":"html/background.html"
     },
     "web_accessible_resources": [ 
         "libs/qunit-1.11.0.css", 
-        "libs/qunit-1.11.0.js"
+        "libs/qunit-1.11.0.js",
+        "libs/jquery-1.10.1.min.js"
     ],
     "icons": {"48":"images/logo48.png", "128":"images/logo128.png"}
     
