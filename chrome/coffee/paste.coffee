@@ -61,18 +61,20 @@ chrome.browserAction.onClicked.addListener (tab)->
     text = @paste()
     items = @parseTSV(text)
     {items, invalid} = @checkValidItems(items)
-    retailers = {}
+    bom = {}
     for item in items
         found = false
-        for key of retailers
+        for key of bom
             if item.retailer == key
                 found = true
                 break
         if (!found)
-            retailers[item.retailer] = ""
-    for key of retailers
-        switch (key)
-            when "Digikey"   then retailers[key] = new   Digikey("UK")
-            when "Element14" then retailers[key] = new Element14("UK")
+            bom[item.retailer] = {"items":[]}
+        bom[item.retailer].items.push(item)
 
-    console.log(retailers)
+    for key of bom
+        switch (key)
+            when "Digikey"   then bom[key].interface = new   Digikey("UK")
+            when "Element14" then bom[key].interface = new Element14("UK")
+
+    console.log(bom)
