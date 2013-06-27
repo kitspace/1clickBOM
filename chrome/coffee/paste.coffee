@@ -39,15 +39,18 @@
             if !item.retailer
                 invalid.push {"item":item, "reason": "Retailer is undefined."}
             else
+                r = ""
                 #a case insensitive match to the aliases defined in the lookup
                 for key of @retailer_lookup
                     re = new RegExp key, "i"
                     if item.retailer.match(re)
-                        retailer = retailer_lookup[key]
-                if !retailer
+                        r = retailer_lookup[key]
+                        break
+
+                if  r == ""
                     invalid.push {"item":item, "reason": "Retailer \"" + item.retailer + "\" is not known."}
                 else
-                    item.retailer = retailer
+                    item.retailer = r
                     items.push(item)
     return {items, invalid}
 
@@ -61,6 +64,10 @@ chrome.browserAction.onClicked.addListener (tab)->
     text = @paste()
     items = @parseTSV(text)
     {items, invalid} = @checkValidItems(items)
+
+    if invalid.length > 0
+        console.error (invalid)
+
     bom = {}
     for item in items
         found = false
