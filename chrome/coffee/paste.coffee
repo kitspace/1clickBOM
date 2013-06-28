@@ -15,12 +15,19 @@
         if row != ""
             cells = row.split "\t"
             item = {"comment":cells[0], "quantity":cells[1], "retailer":cells[2],"part":cells[3], "row":i}
-            items.push item
-    return items
+            if !item.quantity
+                invalid.push {"item":item, "reason": "Quantity is undefined."}
+            else if !item.retailer
+                invalid.push {"item":item, "reason": "Retailer is undefined."}
+            else if !item.part
+                invalid.push {"item":item, "reason": "Part number is undefined."}
+            else
+                items.push item
+    return {items, invalid}
 
 
 
-@checkValidItems = (in_items) ->
+@checkValidItems = (items_incoming, invalid) ->
     @retailer_lookup = {
         "Farnell"   : "Element14",
         "Element14" : "Element14",
@@ -28,42 +35,32 @@
         "Digikey"   : "Digikey"
     }
     items = []
-    invalid = []
-    for item in in_items
+    for item in items_incoming
         reasons = []
         number = parseInt(item.quantity)
         if number == NaN
             invalid.push {"item":item, "reason": "Quantity is not a number."}
         else
             item.quantity = number
-            if !item.retailer
-                invalid.push {"item":item, "reason": "Retailer is undefined."}
+            r = ""
+            #a case insensitive match to the aliases defined in the lookup
+            for key of @retailer_lookup
+                re = new RegExp key, "i"
+                if item.retailer.match(re)
+                    r = retailer_lookup[key]
+                    break
+
+            if  r == ""
+                invalid.push {"item":item, "reason": "Retailer \"" + item.retailer + "\" is not known."}
             else
-                r = ""
-                #a case insensitive match to the aliases defined in the lookup
-                for key of @retailer_lookup
-                    re = new RegExp key, "i"
-                    if item.retailer.match(re)
-                        r = retailer_lookup[key]
-                        break
-
-                if  r == ""
-                    invalid.push {"item":item, "reason": "Retailer \"" + item.retailer + "\" is not known."}
-                else
-                    item.retailer = r
-                    items.push(item)
+                item.retailer = r
+                items.push(item)
     return {items, invalid}
-
-
-#isIn = (item, items) ->
-#    switch (typeof(items))
-#        when "object"
-
 
 chrome.browserAction.onClicked.addListener (tab)->
     text = @paste()
-    items = @parseTSV(text)
-    {items, invalid} = @checkValidItems(items)
+    {items, invalid} = @parseTSV(text)
+    {items, invalid} = @checkValidItems(items, invalid)
 
     if invalid.length > 0
         console.error (invalid)
