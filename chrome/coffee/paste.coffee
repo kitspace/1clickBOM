@@ -1,3 +1,17 @@
+#    This file is part of 1clickBOM.
+#
+#    1clickBOM is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License version 3
+#    as published by the Free Software Foundation.
+#
+#    1clickBOM is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
+
 @paste = () ->
     textarea = document.getElementById("pastebox")
     textarea.select()
@@ -76,9 +90,11 @@ chrome.browserAction.onClicked.addListener (tab)->
             @bom[item.retailer] = {"items":[]}
         @bom[item.retailer].items.push(item)
 
+    country = localStorage["country"]
+
     for key of @bom
         switch (key)
-            when "Digikey"   then @bom[key].interface = new   Digikey("UK")
-            when "Element14" then @bom[key].interface = new Element14("UK")
+            when "Digikey"   then @bom[key].interface = new   Digikey(country)
+            when "Element14" then @bom[key].interface = new Element14(country)
 
     console.log(@bom)
