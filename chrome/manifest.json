@@ -19,6 +19,7 @@
         "libs/qunit-1.11.0.js",
         "libs/jquery-1.10.1.min.js"
     ],
+    "options_page":"html/options.html",
     "icons": {"48":"images/logo48.png", "128":"images/logo128.png"}
     
 }

@@ -65,20 +65,20 @@ chrome.browserAction.onClicked.addListener (tab)->
     if invalid.length > 0
         console.error (invalid)
 
-    bom = {}
+    @bom = {}
     for item in items
         found = false
-        for key of bom
+        for key of @bom
             if item.retailer == key
                 found = true
                 break
         if (!found)
-            bom[item.retailer] = {"items":[]}
-        bom[item.retailer].items.push(item)
+            @bom[item.retailer] = {"items":[]}
+        @bom[item.retailer].items.push(item)
 
-    for key of bom
+    for key of @bom
         switch (key)
-            when "Digikey"   then bom[key].interface = new   Digikey("UK")
-            when "Element14" then bom[key].interface = new Element14("UK")
+            when "Digikey"   then @bom[key].interface = new   Digikey("UK")
+            when "Element14" then @bom[key].interface = new Element14("UK")
 
-    console.log(bom)
+    console.log(@bom)
