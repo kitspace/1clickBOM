@@ -71,30 +71,30 @@
                 items.push(item)
     return {items, invalid}
 
-chrome.browserAction.onClicked.addListener (tab)->
-    text = @paste()
-    {items, invalid} = @parseTSV(text)
-    {items, invalid} = @checkValidItems(items, invalid)
-
-    if invalid.length > 0
-        console.error (invalid)
-
-    @bom = {}
-    for item in items
-        found = false
-        for key of @bom
-            if item.retailer == key
-                found = true
-                break
-        if (!found)
-            @bom[item.retailer] = {"items":[]}
-        @bom[item.retailer].items.push(item)
-
-    country = localStorage["country"]
-
-    for key of @bom
-        switch (key)
-            when "Digikey"   then @bom[key].interface = new   Digikey(country)
-            when "Element14" then @bom[key].interface = new Element14(country)
-
-    console.log(@bom)
+#chrome.browserAction.onClicked.addListener (tab)->
+#    text = @paste()
+#    {items, invalid} = @parseTSV(text)
+#    {items, invalid} = @checkValidItems(items, invalid)
+#
+#    if invalid.length > 0
+#        console.error (invalid)
+#
+#    @bom = {}
+#    for item in items
+#        found = false
+#        for key of @bom
+#            if item.retailer == key
+#                found = true
+#                break
+#        if (!found)
+#            @bom[item.retailer] = {"items":[]}
+#        @bom[item.retailer].items.push(item)
+#
+#    country = localStorage["country"]
+#
+#    for key of @bom
+#        switch (key)
+#            when "Digikey"   then @bom[key].interface = new   Digikey(country)
+#            when "Element14" then @bom[key].interface = new Element14(country)
+#
+#    console.log(@bom)
