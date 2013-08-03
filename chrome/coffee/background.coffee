@@ -71,9 +71,7 @@ checkValidItems = (items_incoming, invalid) ->
     return {items, invalid}
 
 @paste_action = ()->
-    console.log("paste action")
     text = paste()
-    console.log(text)
     {items, invalid} = parseTSV(text)
     {items, invalid} = checkValidItems(items, invalid)
 
