@@ -19,6 +19,7 @@ class @Retailer
         xhr.send()
         if xhr.status == 200
             data = JSON.parse xhr.responseText
+        @country = country_code
         country_code_lookedup = data.lookup[country_code]
         if !country_code_lookedup
             error = new InvalidCountryError()

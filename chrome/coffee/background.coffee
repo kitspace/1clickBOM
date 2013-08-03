@@ -71,29 +71,43 @@ checkValidItems = (items_incoming, invalid) ->
     return {items, invalid}
 
 @paste_action = ()->
-    text = paste()
-    {items, invalid} = parseTSV(text)
-    {items, invalid} = checkValidItems(items, invalid)
+    chrome.storage.local.get "bom", (obj) ->
 
-    if invalid.length > 0
-        console.error (invalid)
+        bom = obj["bom"]
+        if (!bom)
+            bom = {}
 
-    @bom = {}
-    for item in items
-        found = false
-        for key of @bom
-            if item.retailer == key
-                found = true
-                break
-        if (!found)
-            @bom[item.retailer] = {"items":[]}
-        @bom[item.retailer].items.push(item)
+        #we use localStorage not chrome.storage.local 
+        #as it's only a string and we dont't want more callbacks
+        country = localStorage["country"]
 
-    country = localStorage["country"]
+        if (!country)
+            country = "Other"
 
-    for key of @bom
-        switch (key)
-            when "Digikey"   then @bom[key].interface = new   Digikey(country)
-            when "Element14" then @bom[key].interface = new Element14(country)
+        text = paste()
+        {items, invalid} = parseTSV(text)
+        {items, invalid} = checkValidItems(items, invalid)
 
-    console.log(@bom)
+        if invalid.length > 0
+            chrome.runtime.sendMessage({invalid:invalid})
+
+        for item in items
+            #if item.retailer not in bom
+            found = false
+            for key of bom
+                if item.retailer == key
+                    found = true
+                    break
+            if (!found)
+                bom[item.retailer] = {"items":[]}
+            if(!found or (bom[item.retailer].interface.country != country))
+                switch (item.retailer)
+                    when "Digikey"   then bom[item.retailer].interface = new   Digikey(country)
+                    when "Element14" then bom[item.retailer].interface = new Element14(country)
+
+            bom[item.retailer].items.push(item)
+
+        console.log(bom)
+        chrome.storage.local.set {"bom":bom}, 
+
+

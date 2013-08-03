@@ -14,8 +14,15 @@
 
 
 chrome.runtime.getBackgroundPage (bkgd_page) ->
-    document.querySelector("#paste").addEventListener("click", bkgd_page.paste_action)
+    document.querySelector("#paste").addEventListener "click", bkgd_page.paste_action 
+    document.querySelector("#clear").addEventListener "click", () ->
+        chrome.storage.local.set({"bom":{}})
 
     document.addEventListener 'keydown', (event) ->
         if ((event.keyCode == 86) && (event.ctrlKey == true))
             bkgd_page.paste_action()
+
+    chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
+        console.log(request)
+
+
