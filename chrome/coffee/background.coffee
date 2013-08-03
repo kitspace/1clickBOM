@@ -12,15 +12,14 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-@paste = () ->
+paste = () ->
     textarea = document.getElementById("pastebox")
     textarea.select()
     if document.execCommand("paste")
         result = textarea.value
     return result
 
-
-@parseTSV = (text) ->
+parseTSV = (text) ->
     #TODO safety
     rows = text.split "\n"
     items = []
@@ -41,7 +40,7 @@
 
 
 
-@checkValidItems = (items_incoming, invalid) ->
+checkValidItems = (items_incoming, invalid) ->
     @retailer_lookup = {
         "Farnell"   : "Element14",
         "Element14" : "Element14",
@@ -71,30 +70,32 @@
                 items.push(item)
     return {items, invalid}
 
-#chrome.browserAction.onClicked.addListener (tab)->
-#    text = @paste()
-#    {items, invalid} = @parseTSV(text)
-#    {items, invalid} = @checkValidItems(items, invalid)
-#
-#    if invalid.length > 0
-#        console.error (invalid)
-#
-#    @bom = {}
-#    for item in items
-#        found = false
-#        for key of @bom
-#            if item.retailer == key
-#                found = true
-#                break
-#        if (!found)
-#            @bom[item.retailer] = {"items":[]}
-#        @bom[item.retailer].items.push(item)
-#
-#    country = localStorage["country"]
-#
-#    for key of @bom
-#        switch (key)
-#            when "Digikey"   then @bom[key].interface = new   Digikey(country)
-#            when "Element14" then @bom[key].interface = new Element14(country)
-#
-#    console.log(@bom)
+@paste_action = ()->
+    console.log("paste action")
+    text = paste()
+    console.log(text)
+    {items, invalid} = parseTSV(text)
+    {items, invalid} = checkValidItems(items, invalid)
+
+    if invalid.length > 0
+        console.error (invalid)
+
+    @bom = {}
+    for item in items
+        found = false
+        for key of @bom
+            if item.retailer == key
+                found = true
+                break
+        if (!found)
+            @bom[item.retailer] = {"items":[]}
+        @bom[item.retailer].items.push(item)
+
+    country = localStorage["country"]
+
+    for key of @bom
+        switch (key)
+            when "Digikey"   then @bom[key].interface = new   Digikey(country)
+            when "Element14" then @bom[key].interface = new Element14(country)
+
+    console.log(@bom)
