@@ -15,23 +15,24 @@
 save_options = () ->
     select = document.getElementById "country"
     country = select.children[select.selectedIndex].value
-    localStorage["country"] = country;
-
-    status = document.getElementById "status"
-    status.innerHTML = "Options Saved.";
-    setTimeout ()->
-        status.innerHTML = ""
-    , 750
+    chrome.storage.local.set {country: country}, () ->
+        if (!chrome.runtime.lastError)
+            status = document.getElementById "status"
+            status.innerHTML = "Options Saved."
+            setTimeout ()->
+                status.innerHTML = ""
+            , 750
 
 restore_options = () ->
-    stored = localStorage["country"]
-    if (!stored) 
-        return
-    select = document.getElementById("country")
-    for child in select.children
-        if child.value == stored
-            child.selected = "true"
-            break
+    chrome.storage.local.get "country", (obj) ->
+        stored = obj.country
+        if (!stored) 
+            return
+        select = document.getElementById("country")
+        for child in select.children
+            if child.value == stored
+                child.selected = "true"
+                break
 
 xhr = new XMLHttpRequest()
 xhr.open "GET", chrome.extension.getURL("/data/countries.json"), false

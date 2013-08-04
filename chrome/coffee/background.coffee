@@ -71,15 +71,13 @@ checkValidItems = (items_incoming, invalid) ->
     return {items, invalid}
 
 @paste_action = ()->
-    chrome.storage.local.get "bom", (obj) ->
+    chrome.storage.local.get ["bom", "country"], (obj) ->
 
-        bom = obj["bom"]
+        bom = obj.bom
+        country = obj.country
+
         if (!bom)
             bom = {}
-
-        #we use localStorage not chrome.storage.local 
-        #as it's only a string and we dont't want more callbacks
-        country = localStorage["country"]
 
         if (!country)
             country = "Other"
@@ -108,6 +106,10 @@ checkValidItems = (items_incoming, invalid) ->
             bom[item.retailer].items.push(item)
 
         console.log(bom)
-        chrome.storage.local.set {"bom":bom}, 
+        chrome.storage.local.set {"bom":bom},
 
+
+chrome.storage.onChanged.addListener (changes, namespace) ->
+    console.log(changes)
+    console.log(namespace)
 
