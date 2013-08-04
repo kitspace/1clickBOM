@@ -15,8 +15,9 @@
 
 chrome.runtime.getBackgroundPage (bkgd_page) ->
     document.querySelector("#paste").addEventListener "click", bkgd_page.paste_action 
+
     document.querySelector("#clear").addEventListener "click", () ->
-        chrome.storage.local.set({"bom":{}})
+        chrome.storage.local.remove("bom")
 
     document.addEventListener 'keydown', (event) ->
         if ((event.keyCode == 86) && (event.ctrlKey == true))

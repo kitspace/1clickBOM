@@ -12,6 +12,11 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
+newInterface = (retailer_name, retailer, country) ->
+    switch (retailer_name)
+        when "Digikey"   then retailer.interface = new   Digikey(country)
+        when "Element14" then retailer.interface = new Element14(country)
+
 paste = () ->
     textarea = document.getElementById("pastebox")
     textarea.select()
@@ -99,17 +104,24 @@ checkValidItems = (items_incoming, invalid) ->
             if (!found)
                 bom[item.retailer] = {"items":[]}
             if(!found or (bom[item.retailer].interface.country != country))
-                switch (item.retailer)
-                    when "Digikey"   then bom[item.retailer].interface = new   Digikey(country)
-                    when "Element14" then bom[item.retailer].interface = new Element14(country)
-
+                newInterface(item.retailer, bom[item.retailer], country)
             bom[item.retailer].items.push(item)
 
         console.log(bom)
-        chrome.storage.local.set {"bom":bom},
+        chrome.storage.local.set {"bom":bom}
+
+
 
 
 chrome.storage.onChanged.addListener (changes, namespace) ->
-    console.log(changes)
-    console.log(namespace)
+    if (namespace == "local")
+        if (changes.country)
+            console.log(changes.country.newValue)
+            chrome.storage.local.get "bom", (obj) ->
+                bom = obj.bom
+                if (bom)
+                    for retailer_name, retailer of bom
+                        if retailer.interface.country != changes.country.newValue
+                            newInterface(retailer_name, retailer, changes.country.newValue)
+                    chrome.storage.local.set({bom:bom})
 
