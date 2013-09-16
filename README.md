@@ -28,8 +28,8 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
 * 0.0.1
     * Chrome support
     * Digikey, Mouser, Farnell/Element14, Newark, Allied and RS-Online
-    * Allow clearing individual carts 
-    * Paste TSV or visit online .tsv file 
+    * Allow clearing individual carts
+    * Paste TSV or visit online .tsv file
 
 * 0.1.0
     * Firefox support
