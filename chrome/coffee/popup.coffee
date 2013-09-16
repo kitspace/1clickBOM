@@ -19,11 +19,24 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
     document.querySelector("#clear").addEventListener "click", () ->
         chrome.storage.local.remove("bom")
 
-    document.addEventListener 'keydown', (event) ->
+    document.querySelector("#fill_carts").addEventListener "click", bkgd_page.fill_carts
+
+    document.querySelector("#clear_carts").addEventListener "click", bkgd_page.clear_carts
+
+    #Ctrl-V event
+    document.addEventListener 'keydown', (event) -> 
         if ((event.keyCode == 86) && (event.ctrlKey == true))
             bkgd_page.paste_action()
 
-    chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
-        console.log(request)
+    #chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
+    #    console.log(request)
 
 
+chrome.storage.local.get "bom", ({bom:bom}) ->
+    document.querySelector("#fill_carts").disabled=!Boolean(bom)
+
+chrome.storage.onChanged.addListener (changes, namespace) ->
+    if (namespace == "local")
+        if (changes.bom)
+            chrome.storage.local.get "bom", ({bom:bom}) ->
+                document.querySelector("#fill_carts").disabled=!Boolean(bom)

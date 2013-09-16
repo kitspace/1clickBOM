@@ -20,8 +20,8 @@ newInterface = (retailer_name, retailer, country) ->
 paste = () ->
     textarea = document.getElementById("pastebox")
     textarea.select()
-    if document.execCommand("paste")
-        result = textarea.value
+    document.execCommand("paste")
+    result = textarea.value
     return result
 
 parseTSV = (text) ->
@@ -107,21 +107,29 @@ checkValidItems = (items_incoming, invalid) ->
                 newInterface(item.retailer, bom[item.retailer], country)
             bom[item.retailer].items.push(item)
 
-        console.log(bom)
         chrome.storage.local.set {"bom":bom}
 
-
-
-
 chrome.storage.onChanged.addListener (changes, namespace) ->
-    if (namespace == "local")
-        if (changes.country)
-            console.log(changes.country.newValue)
-            chrome.storage.local.get "bom", (obj) ->
-                bom = obj.bom
-                if (bom)
-                    for retailer_name, retailer of bom
-                        if retailer.interface.country != changes.country.newValue
-                            newInterface(retailer_name, retailer, changes.country.newValue)
-                    chrome.storage.local.set({bom:bom})
+    if (namespace == "local" && changes.country)
+        console.log(changes.country.newValue)
+        chrome.storage.local.get "bom", (obj) ->
+            bom = obj.bom
+            if (bom)
+                for retailer_name, retailer of bom
+                    if retailer.interface.country != changes.country.newValue
+                        newInterface(retailer_name, retailer, changes.country.newValue)
+                chrome.storage.local.set({bom:bom})
 
+
+@fill_carts = ()->
+    chrome.storage.local.get ["bom", "country"], ({bom:bom, country:country}) ->
+        for retailer of bom
+            newInterface(retailer, bom[retailer], country)
+            console.log(bom[retailer].items)
+            bom[retailer].interface.addItems(bom[retailer].items)
+
+@clear_carts = ()->
+    chrome.storage.local.get ["bom", "country"], ({bom:bom, country:country}) ->
+        for retailer of bom
+            newInterface(retailer, bom[retailer], country)
+            bom[retailer].interface.clearCart()
