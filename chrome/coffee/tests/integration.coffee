@@ -72,36 +72,54 @@ test "Element14: Add Items", () ->
 
 
 asyncTest "Paste BOM", 1, () ->
-    chrome.storage.local.get "country", ({country:country}) ->
-        test_bom = {"Digikey":  {interface: "", items:[{comment:"test2", part:"754-1173-2-ND", quantity:17, retailer:"Digikey"  , row:1}]},"Element14":{interface: "", items:[{comment:"test1", part:"1645325"      , quantity:1 , retailer:"Element14", row:0}]}}
-        chrome.storage.local.remove("bom")
-        copybox = document.createElement("textarea")
-        pastebox = document.createElement("textarea")
-        restorebox = document.createElement("textarea")
-        happened = false
-        chrome.storage.onChanged.addListener (changes, namespace) ->
-            if (namespace == "local" && changes.bom)
-                chrome.storage.local.get ["bom", "country"], ({bom:bom, country:country}) ->
-                    if (bom)
-                        for retailer of bom
-                            bom[retailer].interface = ""
-                        deepEqual(test_bom, bom)
+    chrome.storage.local.remove("bom")
+    chrome.storage.local.get "country", (obj) ->
+        stored = obj.country
+        chrome.storage.local.set {country: "UK"}, () ->
+
+            xhr = new XMLHttpRequest()
+            xhr.open "GET", chrome.extension.getURL("/data/example.json"), false
+            xhr.send()
+            test_bom= JSON.parse xhr.responseText
+
+            copybox    = document.createElement("textarea")
+            pastebox   = document.createElement("textarea")
+            restorebox = document.createElement("textarea")
+
+            listener = (changes, namespace) ->
+                if (namespace == "local" && changes.bom)
+                    chrome.storage.local.get "bom", ({bom:bom}) ->
+                        deepEqual(bom, test_bom)
                         restorebox.select()
                         document.execCommand("copy")
                         document.body.removeChild(copybox)
                         document.body.removeChild(pastebox)
                         document.body.removeChild(restorebox)
+                        #chrome.storage.local.remove(["bom", "country"])
+                        chrome.storage.onChanged.removeListener listener
+                        chrome.storage.local.set {country:stored}, () ->
                         start()
-        copybox.id = "copybox"
-        pastebox.id = "pastebox"
-        restorebox.id = "restorebox"
-        copybox.value = "test1\t1\tFarnell\t1645325\r\ntest2\t17\tDigikey\t754-1173-2-ND"
-        document.body.appendChild(copybox)
-        document.body.appendChild(pastebox)
-        document.body.appendChild(restorebox)
-        restorebox.select()
-        document.execCommand("paste")
-        copybox.select()
-        document.execCommand("copy")
-        paste_action()
+
+
+            chrome.storage.onChanged.addListener listener
+
+            copybox.id    = "copybox"
+            pastebox.id   = "pastebox"
+            restorebox.id = "restorebox"
+
+            xhr = new XMLHttpRequest()
+            xhr.open "GET", chrome.extension.getURL("/data/example.tsv"), false
+            xhr.send()
+            copybox.value = xhr.responseText
+
+            document.body.appendChild(copybox)
+            document.body.appendChild(pastebox)
+            document.body.appendChild(restorebox)
+
+            restorebox.select()
+            document.execCommand("paste")
+            copybox.select()
+            document.execCommand("copy")
+
+            paste_action()
     

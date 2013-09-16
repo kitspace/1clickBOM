@@ -111,7 +111,6 @@ checkValidItems = (items_incoming, invalid) ->
 
 chrome.storage.onChanged.addListener (changes, namespace) ->
     if (namespace == "local" && changes.country)
-        console.log(changes.country.newValue)
         chrome.storage.local.get "bom", (obj) ->
             bom = obj.bom
             if (bom)
@@ -125,7 +124,6 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
     chrome.storage.local.get ["bom", "country"], ({bom:bom, country:country}) ->
         for retailer of bom
             newInterface(retailer, bom[retailer], country)
-            console.log(bom[retailer].items)
             bom[retailer].interface.addItems(bom[retailer].items)
 
 @clear_carts = ()->
