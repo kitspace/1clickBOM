@@ -131,3 +131,9 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
         for retailer of bom
             newInterface(retailer, bom[retailer], country)
             bom[retailer].interface.clearCart()
+
+@open_cart_tabs = ()->
+    chrome.storage.local.get ["bom", "country"], ({bom:bom, country:country}) ->
+        for retailer of bom
+            newInterface(retailer, bom[retailer], country)
+            chrome.tabs.create({"url": "https" + bom[retailer].interface.site + bom[retailer].interface.cart})

@@ -23,6 +23,8 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
 
     document.querySelector("#clear_carts").addEventListener "click", bkgd_page.clear_carts
 
+    document.querySelector("#open_cart_tabs").addEventListener "click", bkgd_page.open_cart_tabs
+
     #Ctrl-V event
     document.addEventListener 'keydown', (event) -> 
         if ((event.keyCode == 86) && (event.ctrlKey == true))
@@ -31,12 +33,32 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
     #chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
     #    console.log(request)
 
+bom_changed = (bom) ->
+    document.querySelector("#fill_carts").disabled=!Boolean(bom)
+    document.querySelector("#clear_carts").disabled=!Boolean(bom)
+    document.querySelector("#open_cart_tabs").disabled=!Boolean(bom)
+    table = document.querySelector("#bom_list")
+    table.removeChild(table.lastChild) while table.hasChildNodes() 
+    for retailer of bom
+        #td_1 = document.createElement("td")
+        #icon = document.createElement("img")
+        #icon.innerH
+        tr = document.createElement("tr")
+        td_1 = document.createElement("td")
+        td_1.innerText = retailer + ":"
+        tr.appendChild(td_1)
+        td_2 = document.createElement("td")
+        td_2.innerText = bom[retailer].items.length + " item"
+        td_2.innerText += "s" if (bom[retailer].items.length > 1)
+        tr.appendChild(td_2)
+        table.appendChild(tr)
 
 chrome.storage.local.get "bom", ({bom:bom}) ->
-    document.querySelector("#fill_carts").disabled=!Boolean(bom)
+    bom_changed bom
 
 chrome.storage.onChanged.addListener (changes, namespace) ->
     if (namespace == "local")
         if (changes.bom)
             chrome.storage.local.get "bom", ({bom:bom}) ->
-                document.querySelector("#fill_carts").disabled=!Boolean(bom)
+                bom_changed bom
+
