@@ -28,7 +28,7 @@ class @Element14 extends Retailer
         xhr = new XMLHttpRequest
         url = "https" + @site + @additem
         for item in items
-            url += encodeURIComponent(item.part + ", " + item.quantity + ", " + item.comment + "\r\n")
+            url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
         xhr.onreadystatechange = () ->
             if xhr.readyState == 4
                 that.refreshCartTabs()
