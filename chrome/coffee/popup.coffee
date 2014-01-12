@@ -33,9 +33,15 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
     #    console.log(request)
 
 bom_changed = (bom) ->
-    document.querySelector("#fill_carts").disabled=!Boolean(bom)
-    document.querySelector("#clear_carts").disabled=!Boolean(bom)
-    document.querySelector("#open_cart_tabs").disabled=!Boolean(bom)
+    if (!bom)
+        document.querySelector("#fill_carts").disabled=true
+        document.querySelector("#clear_carts").disabled=true
+        document.querySelector("#open_cart_tabs").disabled=true
+    else
+        #BOM can still be empty
+        document.querySelector("#fill_carts").disabled=!Boolean(Object.keys(bom).length)
+        document.querySelector("#clear_carts").disabled=!Boolean(Object.keys(bom).length)
+        document.querySelector("#open_cart_tabs").disabled=!Boolean(Object.keys(bom).length)
     table = document.querySelector("#bom_list")
     table.removeChild(table.lastChild) while table.hasChildNodes() 
     for retailer of bom
