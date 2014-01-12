@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-
 chrome.runtime.getBackgroundPage (bkgd_page) ->
     document.querySelector("#paste").addEventListener "click", bkgd_page.paste_action 
 
@@ -40,10 +39,14 @@ bom_changed = (bom) ->
     table = document.querySelector("#bom_list")
     table.removeChild(table.lastChild) while table.hasChildNodes() 
     for retailer of bom
-        #td_1 = document.createElement("td")
-        #icon = document.createElement("img")
-        #icon.innerH
         tr = document.createElement("tr")
+        td_0 = document.createElement("td")
+        icon = document.createElement("img")
+        switch (retailer)
+            when "Digikey"   then icon.src = chrome.extension.getURL("images/digikey.ico")
+            when "Element14" then icon.src = chrome.extension.getURL("images/element14.ico")
+        td_0.appendChild(icon)
+        tr.appendChild(td_0)
         td_1 = document.createElement("td")
         td_1.innerText = retailer + ":"
         tr.appendChild(td_1)
