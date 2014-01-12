@@ -32,7 +32,7 @@ parseTSV = (text) ->
     for row, i in rows
         if row != ""
             cells = row.split "\t"
-            item = {"comment":cells[0], "quantity":cells[1], "retailer":cells[2],"part":cells[3], "row":i}
+            item = {"cells":cells, "comment":cells[0], "quantity":cells[1], "retailer":cells[2],"part":cells[3], "row":i}
             if !item.quantity
                 invalid.push {"item":item, "reason": "Quantity is undefined."}
             else if !item.retailer

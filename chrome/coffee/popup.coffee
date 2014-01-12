@@ -17,6 +17,7 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
 
     document.querySelector("#clear").addEventListener "click", () ->
         chrome.storage.local.remove("bom")
+        clear_error_log()
 
     document.querySelector("#fill_carts").addEventListener "click", bkgd_page.fill_carts
 
@@ -34,11 +35,13 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
 
 bom_changed = (bom) ->
     if (!bom)
+        document.querySelector("#clear").disabled=true
         document.querySelector("#fill_carts").disabled=true
         document.querySelector("#clear_carts").disabled=true
         document.querySelector("#open_cart_tabs").disabled=true
     else
         #BOM can still be empty
+        document.querySelector("#clear").disabled=!Boolean(Object.keys(bom).length)
         document.querySelector("#fill_carts").disabled=!Boolean(Object.keys(bom).length)
         document.querySelector("#clear_carts").disabled=!Boolean(Object.keys(bom).length)
         document.querySelector("#open_cart_tabs").disabled=!Boolean(Object.keys(bom).length)
@@ -57,7 +60,7 @@ bom_changed = (bom) ->
         td_1.innerText = retailer + ":"
         tr.appendChild(td_1)
         td_2 = document.createElement("td")
-        td_2.innerText = bom[retailer].items.length + " item"
+        td_2.innerText = bom[retailer].items.length + " line"
         td_2.innerText += "s" if (bom[retailer].items.length > 1)
         tr.appendChild(td_2)
         table.appendChild(tr)
@@ -71,3 +74,42 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
             chrome.storage.local.get "bom", ({bom:bom}) ->
                 bom_changed bom
 
+clear_error_log  = () ->
+        table = document.querySelector("#error_list")
+        button = document.querySelector("#clear_errors")
+        table.removeChild(table.lastChild) while table.hasChildNodes() 
+        button.style.display = "none"
+
+chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
+    if(request.invalid)
+        table = document.querySelector("#error_list")
+        button = document.querySelector("#clear_errors")
+        button.style.display = "block"
+        button.addEventListener "click", clear_error_log
+        tr_top = document.createElement("tr")
+        td_top = document.createElement("td")
+        td_top.colSpan=3
+        td_top.innerText = "Invalid data pasted:"
+        td_top.id = "error_td_top"
+        tr_top.appendChild(td_top)
+        table.appendChild(tr_top)
+        for obj in request.invalid
+            tr = document.createElement("tr")
+            td_0 = document.createElement("td")
+            td_0.innerText = "row: " + obj.item.row
+            tr.appendChild(td_0)
+            td_1 = document.createElement("td")
+            inner_table = document.createElement("table")
+            td_1.appendChild(inner_table)
+            inner_tr = document.createElement("tr")
+            inner_table.appendChild(inner_tr)
+            for cell in obj.item.cells
+                td = document.createElement("td")
+                td.innerText = cell
+                inner_tr.appendChild(td)
+            #td_1.innerText = "\"" + obj.item.text + "\""
+            tr.appendChild(td_1)
+            td_2 = document.createElement("td")
+            td_2.innerText = obj.reason
+            tr.appendChild(td_2)
+            table.appendChild(tr)

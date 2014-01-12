@@ -4,7 +4,7 @@
     <title>1clickBOM's popup</title>
     <style>
       body {
-        min-width: 357px;
+        min-width: 265px;
         overflow-x: hidden;
       }
       img {
@@ -14,7 +14,13 @@
         height: 16px;
       }
       td {
-          border-bottom: 1px solid grey;
+          border: 1px solid gray;
+      }
+      td#error_td_top {
+          background-color:red;
+      }
+      button#clear_errors {
+          display:none;
       }
     </style>
   </head>
@@ -23,6 +29,8 @@
       <button id="paste">paste BOM</button>
       <button id="clear">clear BOM</button>
       <table id="bom_list"></table>
+      <button id="clear_errors">clear error log</button>
+      <table id="error_list"></table>
       <h2>Carts</h2>
       <button id="fill_carts" disabled=true>fill carts</button>
       <button id="clear_carts" >clear carts</button>
