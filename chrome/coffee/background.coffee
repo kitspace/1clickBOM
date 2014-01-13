@@ -137,3 +137,27 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
         for retailer of bom
             newInterface(retailer, bom[retailer], country)
             chrome.tabs.create({"url": "https" + bom[retailer].interface.site + bom[retailer].interface.cart})
+
+xhr = new XMLHttpRequest()
+xhr.open "GET", chrome.extension.getURL("/data/countries.json"), false
+xhr.send()
+if xhr.status == 200
+    countries = JSON.parse xhr.responseText
+
+@get_location = ()->
+    xhr = new XMLHttpRequest
+    xhr.open "GET", "https://freegeoip.net/json/", true
+    xhr.onreadystatechange = (data) ->
+        if xhr.readyState == 4
+            if xhr.status == 200
+                response = JSON.parse(xhr.responseText)
+                chrome.storage.local.set {country: countries[response.country_name]}, ()->
+                    chrome.tabs.create({"url": chrome.runtime.getURL("html/options.html")})
+    xhr.send()
+
+
+chrome.runtime.onInstalled.addListener (details)->
+    switch details.reason
+        when "install", "upgrade" 
+            @get_location()
+
