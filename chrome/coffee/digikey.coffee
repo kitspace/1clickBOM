@@ -43,7 +43,7 @@ class @Digikey extends Retailer
                         that.refreshCartTabs()
                 xhr.send()
         else if /ShoppingCartView/.test @additem
-            #we mimick the quick add form and send requests of 20 parts
+            #we mimick the quick add form and send requests of 20 parts at a time
             #this has to be done synchronously, else we get error:302
             for _, i in items by 20
                 group = items[i..i+19]

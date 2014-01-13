@@ -156,6 +156,11 @@ if xhr.status == 200
     xhr.send()
 
 
+@bom = new Object
+@get_bom = ()->
+    chrome.storage.local.get ["bom"], (obj) ->
+        @bom = obj.bom
+
 chrome.runtime.onInstalled.addListener (details)->
     switch details.reason
         when "install", "upgrade" 
