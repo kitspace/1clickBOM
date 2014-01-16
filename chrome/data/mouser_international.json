@@ -1,5 +1,5 @@
 {
-"site" : {
+"sites" : {
     "AR":"://ar.mouser.com",
     "AT":"://at.mouser.com",
     "AU":"://au.mouser.com",
@@ -63,6 +63,8 @@
     "ZA":"://za.mouser.com"},
 
 "carts": "/Cart/Cart.aspx",
+"additems": "/EZBuy/EZBuy.aspx",
+"additem_params" : "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&ctl00$ContentMain$DateInfo=&ctl00$ContentMain$btnAddToOrder=&ctl00$Footer1$sb=&ctl00$NavHeader$lblIsNewTerm=&ctl00$NavHeader$lblTrdTerm=&ctl00$NavHeader$txt1=&ctl00$gab1$ddlCurrencies=&ctl00$gab1$hidSelectedCurrency=&__VIEWSTATE=",
 
 "lookup" : {
     "AE": "US/International",
@@ -130,7 +132,7 @@
     "PT": "PT",
     "RO": "RO",
     "RS": "EU",
-    "RU": "RU
+    "RU": "RU",
     "SA": "US/International",
     "SE": "SE",
     "SG": "SG",

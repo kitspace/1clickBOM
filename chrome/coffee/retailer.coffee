@@ -36,6 +36,7 @@ class @Retailer
         else
             @additem = data.additems[country_code_lookedup]
 
+        @additem_params = data.additem_params
         @site = data.sites[country_code_lookedup]
         @name = name + " " + country_code_lookedup
         @interface_name = name

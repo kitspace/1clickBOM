@@ -92,6 +92,8 @@
     "TW": "/classic/ordering/addpart.aspx",
     "UK": "/classic/ordering/addpart.aspx"},
 
+"additem_params" : "",
+
 "lookup" : {
     "AE": "US/International",
     "AM": "US/International",
