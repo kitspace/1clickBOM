@@ -15,27 +15,29 @@
 class @Mouser extends Retailer
     constructor: (country_code) ->
         super "Mouser", country_code, "/data/mouser_international.json"
-        @viewstate = @get_viewstate()
-
+        @get_viewstate()
     get_viewstate: ()->
+        that = this
         url = "http" + @site + @additem
         xhr = new XMLHttpRequest
-        xhr.open "GET", url, false
+        xhr.open "GET", url, true
+        xhr.onreadystatechange = (data) ->
+            if xhr.readyState == 4 and xhr.status == 200
+                doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
+                params = that.additem_params
+                params += encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
+                params += "&ctl00$ContentMain$btnAddLines=Lines to Forms"
+                params += "&ctl00$ContentMain$hNumberOfLines=5"
+                params += "&ctl00$ContentMain$txtNumberOfLines=94"
+                xhr2 = new XMLHttpRequest
+                xhr2.open("POST", url, false)
+                xhr2.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                xhr2.onreadystatechange = (data) ->
+                    if xhr2.readyState == 4 and xhr2.status == 200
+                        doc = new DOMParser().parseFromString(xhr2.responseText, "text/html")
+                        that.viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
+                xhr2.send(params)
         xhr.send()
-        if xhr.status == 200
-            doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
-            params = @additem_params
-            params += encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-            params += "&ctl00$ContentMain$btnAddLines=Lines to Forms"
-            params += "&ctl00$ContentMain$hNumberOfLines=5"
-            params += "&ctl00$ContentMain$txtNumberOfLines=94"
-            xhr2 = new XMLHttpRequest
-            xhr2.open("POST", url, false)
-            xhr2.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-            xhr2.send(params)
-            if xhr2.status == 200
-                doc = new DOMParser().parseFromString(xhr2.responseText, "text/html")
-                return encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
     test_add : ()->
         params = @additem_params
         params += @viewstate
@@ -59,7 +61,6 @@ class @Mouser extends Retailer
         params += "&ctl00$ContentMain$txtCustomerPartNumber6=tooba"
         params += "&ctl00$ContentMain$txtPartNumber6=607-GALILEO"
         params += "&ctl00$ContentMain$txtQuantity6=1"
-        params += "&ctl00$Footer1$sb=&ctl00$NavHeader$lblIsNewTerm=&ctl00$NavHeader$lblTrdTerm=&ctl00$NavHeader$txt1=&ctl00$gab1$ddlCurrencies=&ctl00$gab1$hidSelectedCurrency="
         xhr = new XMLHttpRequest
         url = "http://uk.mouser.com/EZBuy/EZBuy.aspx"
         xhr.open("POST", url, false)
