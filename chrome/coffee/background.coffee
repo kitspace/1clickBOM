@@ -119,7 +119,6 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
                         newInterface(retailer_name, retailer, changes.country.newValue)
                 chrome.storage.local.set({bom:bom})
 
-
 @fill_carts = ()->
     chrome.storage.local.get ["bom", "country"], ({bom:bom, country:country}) ->
         for retailer of bom

@@ -38,9 +38,26 @@ class @Mouser extends Retailer
                         that.viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
                 xhr2.send(params)
         xhr.send()
+    addItems: (items) ->
+        that = this
+        params = @additem_params + @viewstate
+        params += "&ctl00$ContentMain$hNumberOfLines=99"
+        params += "&ctl00$ContentMain$txtNumberOfLines=94"
+        for item,i in items
+            params += "&ctl00$ContentMain$txtCustomerPartNumber" + (i+1) + "=" + item.comment
+            params += "&ctl00$ContentMain$txtPartNumber" + (i+1) + "=" + item.part
+            params += "&ctl00$ContentMain$txtQuantity"   + (i+1) + "=" + item.quantity
+        url = "http" + @site + @additem
+        xhr = new XMLHttpRequest
+        xhr.open("POST", url, false)
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+        xhr.onreadystatechange = () ->
+            if xhr.readyState == 4
+                that.refreshCartTabs()
+        xhr.send(params)
+
     test_add : ()->
-        params = @additem_params
-        params += @viewstate
+        params = @additem_params + @viewstate
         params += "&ctl00$ContentMain$hNumberOfLines=99"
         params += "&ctl00$ContentMain$txtNumberOfLines=94"
         params += "&ctl00$ContentMain$txtCustomerPartNumber1=tabby"
@@ -62,9 +79,9 @@ class @Mouser extends Retailer
         params += "&ctl00$ContentMain$txtPartNumber6=607-GALILEO"
         params += "&ctl00$ContentMain$txtQuantity6=1"
         xhr = new XMLHttpRequest
-        url = "http://uk.mouser.com/EZBuy/EZBuy.aspx"
+        url = "http" + @site + @additem
         xhr.open("POST", url, false)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
         xhr.send(params)
         if xhr.status == 200
-            return xhr
+            @refreshCartTabs()

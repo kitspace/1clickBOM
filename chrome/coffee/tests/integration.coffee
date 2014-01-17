@@ -24,6 +24,12 @@ xhr.send()
 if xhr.status == 200
     @element14_data = JSON.parse xhr.responseText
 
+xhr = new XMLHttpRequest()
+xhr.open "GET", chrome.extension.getURL("/data/mouser_international.json"), false
+xhr.send()
+if xhr.status == 200
+    @mouser_data = JSON.parse xhr.responseText
+
 test "Digikey: Clear All", () ->
     try
         for key of window.digikey_data.sites
@@ -46,6 +52,7 @@ test "Digikey: Add Items", () ->
         ok false
         throw error
     ok true
+
 
 test "Element14: Clear All", () ->
     try
@@ -70,6 +77,21 @@ test "Element14: Add Items", () ->
         throw error
     ok true
 
+test "Mouser: Add Items", () ->
+    try
+        # Mouser's site is unified, changing the basket in EU will change the basket in US
+        console.log "Mouser: Adding item in EU"
+        d = new Mouser("EU")
+        items = [{"part":"607-GALILEO","quantity":2, "comment":"test"}]
+        id = setInterval ()->
+            if d.viewstate != undefined
+                d.addItems(items)
+                clearInterval(id)
+        , 1
+    catch error
+        ok false
+        throw error
+    ok true
 
 asyncTest "Paste BOM", 1, () ->
     chrome.storage.local.remove("bom")

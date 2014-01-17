@@ -26,7 +26,7 @@ class @Digikey extends Retailer
         else if /ShoppingCartView/.test @cart
             #for the newer sites we send a POST request
             xhr = new XMLHttpRequest
-            xhr.open "POST", "https" + @site + @cart + "?explicitNewOrder=Y"
+            xhr.open("POST", "https" + @site + @cart + "?explicitNewOrder=Y")
             xhr.onreadystatechange = () ->
                 if xhr.readyState == 4
                     that.refreshCartTabs()
@@ -37,7 +37,7 @@ class @Digikey extends Retailer
         if /classic/.test @additem
             for item in items
                 xhr = new XMLHttpRequest
-                xhr.open "POST", "https" + @site + @additem + "?qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment, true
+                xhr.open("POST", "https" + @site + @additem + "?qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment, true)
                 xhr.onreadystatechange = () ->
                     if xhr.readyState == 4
                         that.refreshCartTabs()
@@ -53,7 +53,7 @@ class @Digikey extends Retailer
                     url += "&comment_" + (j+1) + "=" + item.comment
                     url += "&quantity_" + (j+1) + "=" + item.quantity
                     url += "&reportPartNumber_" + (j+1) + "=" + item.part
-                xhr.open "POST", url, false
+                xhr.open("POST", url, false)
                 xhr.send()
             that.refreshCartTabs()
 

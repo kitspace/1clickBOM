@@ -18,6 +18,9 @@ test "Digikey: Constructs and is Retailer", () ->
 test "Element14: Constructs and is Retailer", () ->
     ok new Element14("AT") instanceof Retailer
 
+test "Mouser: Constructs and is Retailer", () ->
+    ok new Mouser("AT") instanceof Retailer
+
 test "InvalidCountryError Exists", () ->
     ok new InvalidCountryError instanceof Error
 
@@ -29,5 +32,10 @@ test "Digikey: InvalidCountryError Thrown", () ->
 test "Element14: InvalidCountryError Thrown", () ->
     throws () ->
         new Element14("XX")
+    , InvalidCountryError
+
+test "Mouser: InvalidCountryError Thrown", () ->
+    throws () ->
+        new Mouser("XX")
     , InvalidCountryError
 
