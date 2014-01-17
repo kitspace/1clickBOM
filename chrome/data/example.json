@@ -50,5 +50,11 @@
                 "row": 0
             }
         ]
+    },
+    "Mouser": {
+        "interface": {
+        },
+        "items": [
+        ]
     }
 }

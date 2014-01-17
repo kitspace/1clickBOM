@@ -54,6 +54,7 @@ bom_changed = (bom) ->
         switch (retailer)
             when "Digikey"   then icon.src = chrome.extension.getURL("images/digikey.ico")
             when "Element14" then icon.src = chrome.extension.getURL("images/element14.ico")
+            when "Mouser"    then icon.src = chrome.extension.getURL("images/mouser.ico")
         td_0.appendChild(icon)
         tr.appendChild(td_0)
         td_1 = document.createElement("td")

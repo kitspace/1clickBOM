@@ -16,6 +16,7 @@ newInterface = (retailer_name, retailer, country) ->
     switch (retailer_name)
         when "Digikey"   then retailer.interface = new   Digikey(country)
         when "Element14" then retailer.interface = new Element14(country)
+        when "Mouser"    then retailer.interface = new    Mouser(country)
 
 paste = () ->
     textarea = document.getElementById("pastebox")
@@ -50,7 +51,8 @@ checkValidItems = (items_incoming, invalid) ->
         "Farnell"   : "Element14",
         "Element14" : "Element14",
         "FEC"       : "Element14",
-        "Digikey"   : "Digikey"
+        "Digikey"   : "Digikey",
+        "Mouser"    : "Mouser"
     }
     items = []
     for item in items_incoming
@@ -160,6 +162,7 @@ chrome.runtime.onInstalled.addListener (details)->
         when "install", "upgrade" 
             @get_location()
 
+@bom = new Object 
 @get_bom = ()->
     chrome.storage.local.get ["bom"], (obj) ->
         @bom = obj.bom

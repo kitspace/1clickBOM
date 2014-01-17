@@ -39,7 +39,20 @@ class @Mouser extends Retailer
                 xhr2.send(params)
         xhr.send()
     addItems: (items) ->
+        #wait for viewstate if we don't have it
         that = this
+        id = setInterval ()->
+            if that.viewstate != undefined
+                that._addItems(items)
+                clearInterval(id)
+        , 1
+        #timeout in-case we can't get it
+        setTimeout ()->
+            clearInterval(id)
+        , 5000
+    _addItems: (items) ->
+        that = this
+        console.log(items)
         params = @additem_params + @viewstate
         params += "&ctl00$ContentMain$hNumberOfLines=99"
         params += "&ctl00$ContentMain$txtNumberOfLines=94"

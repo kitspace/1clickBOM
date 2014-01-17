@@ -83,11 +83,11 @@ test "Mouser: Add Items", () ->
         console.log "Mouser: Adding item in EU"
         d = new Mouser("EU")
         items = [{"part":"607-GALILEO","quantity":2, "comment":"test"}]
-        id = setInterval ()->
-            if d.viewstate != undefined
-                d.addItems(items)
-                clearInterval(id)
-        , 1
+        d.addItems(items)
+        #china is separate
+        console.log "Mouser: Adding item in CN"
+        c = new Mouser("CN")
+        c.addItems(items)
     catch error
         ok false
         throw error

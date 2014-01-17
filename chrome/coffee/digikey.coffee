@@ -34,7 +34,7 @@ class @Digikey extends Retailer
 
     addItems: (items) ->
         that = this
-        if /classic/.test @additem
+        if /classic/.test(@additem)
             for item in items
                 xhr = new XMLHttpRequest
                 xhr.open("POST", "https" + @site + @additem + "?qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment, true)
@@ -42,7 +42,7 @@ class @Digikey extends Retailer
                     if xhr.readyState == 4
                         that.refreshCartTabs()
                 xhr.send()
-        else if /ShoppingCartView/.test @additem
+        else if /ShoppingCartView/.test(@additem)
             #we mimick the quick add form and send requests of 20 parts at a time
             #this has to be done synchronously, else we get error:302
             for _, i in items by 20
