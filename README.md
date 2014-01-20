@@ -25,17 +25,16 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
 
 ## Roadmap ##
 
-* 0.0.1
+* 0.1.0
     * Chrome support
     * Digikey, Mouser, Farnell/Element14, Newark, Allied and RS-Online
     * Allow clearing individual carts
     * Paste TSV or visit online .tsv file
 
-* 0.1.0
-    * Firefox support
-    * Maybe IE support?
-
 * 0.2.0
+    * Firefox support
+
+* 0.3.0
     * Display cart summaries
     * Warn about filling already filled carts
     * Checkout button
@@ -50,7 +49,13 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
     * Allow outputting cost-optimized TSV BOM with multiple sources
 
 * 2.0.0 
-    * Include PCB order? 
+    * Include PCB order
+
+* 3.0.0 
+    * 3D-chip-printer support
+
+* 4.0.0
+    * Communicate through quantum entanglement
 
 ## Development ##
 
