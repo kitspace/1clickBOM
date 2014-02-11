@@ -5,7 +5,9 @@
     <style>
       body {
         min-width: 265px;
+        max-width: 265px;
         overflow-x: hidden;
+        background: #DDDDDD; 
       }
       img {
         margin: 5px;
@@ -13,28 +15,44 @@
         width: 16px;
         height: 16px;
       }
-      td {
+      @font-face {
+          font-family:"Foundation Icons";
+          src: url("/images/foundation-icons.ttf");
+      }
+      icon {
+          font-family:"Foundation Icons";
+      }
+      button {
+          padding:4px;
+          text-align:center;
+          font-size: 12pt;
+      }
+      div#errors {
+          background: #ffa500;
+          border-radius:25px;
+          padding: 10px;
+      }
+      table#bom_list {
+          background: white;
           border: 1px solid gray;
       }
-      td#error_td_top {
-          background-color:red;
+      table#bom_list > tr > td{
+          border: 1px solid gray;
       }
-      button#clear_errors {
-          display:none;
-      }
+
     </style>
   </head>
   <body>
-      <h2>BOM</h2>
-      <button id="paste">paste BOM</button>
-      <button id="clear">clear BOM</button>
+      <button id="paste" title="paste BOM data"><icon>&#xf17f;</icon> paste</button>
+      <button id="clear" title="clear all" hidden=true><icon>&#xf216;</icon> clear all</button >
       <table id="bom_list"></table>
-      <button id="clear_errors">clear error log</button>
+      <div id=errors hidden=true>
       <table id="error_list"></table>
-      <h2>Carts</h2>
-      <button id="fill_carts" disabled=true>fill carts</button>
-      <button id="clear_carts" >clear carts</button>
-      <button id="open_cart_tabs" >open cart tabs</button>
+      <button id="clear_errors" ><icon>&#xf216;</icon></button>
+      <div>
+      <button id="fill_carts" hidden=true>fill carts</button>
+      <button id="clear_carts" hidden=true>clear carts</button>
+      <button id="open_cart_tabs" hidden=true>open cart tabs</button>
       <script src="/js/popup.js"></script>
   </body>
 </html>

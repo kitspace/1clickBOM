@@ -35,16 +35,16 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
 
 bom_changed = (bom) ->
     if (!bom)
-        document.querySelector("#clear").disabled=true
-        document.querySelector("#fill_carts").disabled=true
-        document.querySelector("#clear_carts").disabled=true
-        document.querySelector("#open_cart_tabs").disabled=true
+        document.querySelector("#clear").hidden=true
+        document.querySelector("#fill_carts").hidden=true
+        document.querySelector("#clear_carts").hidden=true
+        document.querySelector("#open_cart_tabs").hidden=true
     else
         #BOM can still be empty
-        document.querySelector("#clear").disabled=!Boolean(Object.keys(bom).length)
-        document.querySelector("#fill_carts").disabled=!Boolean(Object.keys(bom).length)
-        document.querySelector("#clear_carts").disabled=!Boolean(Object.keys(bom).length)
-        document.querySelector("#open_cart_tabs").disabled=!Boolean(Object.keys(bom).length)
+        document.querySelector("#clear").hidden=!Boolean(Object.keys(bom).length)
+        document.querySelector("#fill_carts").hidden=!Boolean(Object.keys(bom).length)
+        document.querySelector("#clear_carts").hidden=!Boolean(Object.keys(bom).length)
+        document.querySelector("#open_cart_tabs").hidden=!Boolean(Object.keys(bom).length)
     table = document.querySelector("#bom_list")
     table.removeChild(table.lastChild) while table.hasChildNodes() 
     for retailer of bom
@@ -76,10 +76,9 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
                 bom_changed bom
 
 clear_error_log  = () ->
+        document.querySelector("#errors").hidden = true;
         table = document.querySelector("#error_list")
-        button = document.querySelector("#clear_errors")
         table.removeChild(table.lastChild) while table.hasChildNodes() 
-        button.style.display = "none"
 
 chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
     if(request.invalid)
@@ -114,3 +113,4 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
             td_2.innerText = obj.reason
             tr.appendChild(td_2)
             table.appendChild(tr)
+        document.querySelector("#errors").hidden = false;

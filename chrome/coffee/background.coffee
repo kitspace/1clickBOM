@@ -52,6 +52,7 @@ checkValidItems = (items_incoming, invalid) ->
         "Element14" : "Element14",
         "FEC"       : "Element14",
         "Digikey"   : "Digikey",
+        "Digi-key"  : "Digikey",
         "Mouser"    : "Mouser"
     }
     items = []
