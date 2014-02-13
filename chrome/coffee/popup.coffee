@@ -20,9 +20,7 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
         clear_error_log()
 
     document.querySelector("#fill_carts").addEventListener "click", bkgd_page.fill_carts
-
     document.querySelector("#clear_carts").addEventListener "click", bkgd_page.clear_carts
-
     document.querySelector("#open_cart_tabs").addEventListener "click", bkgd_page.open_cart_tabs
 
     #Ctrl-V event
@@ -39,7 +37,9 @@ bom_changed = (bom) ->
         document.querySelector("#fill_carts").hidden=true
         document.querySelector("#clear_carts").hidden=true
         document.querySelector("#open_cart_tabs").hidden=true
+        console.log("no bom")
     else
+        console.log(Boolean(Object.keys(bom).length))
         #BOM can still be empty
         document.querySelector("#clear").hidden=!Boolean(Object.keys(bom).length)
         document.querySelector("#fill_carts").hidden=!Boolean(Object.keys(bom).length)
