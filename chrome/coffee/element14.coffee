@@ -14,7 +14,8 @@
 
 class @Element14 extends Retailer
     constructor: (country_code) ->
-        return super "Element14", country_code, "/data/element14_international.json"
+        super "Element14", country_code, "/data/element14_international.json"
+        @icon_src = chrome.extension.getURL("images/element14.ico")
 
     clearCart: ->
         that = this

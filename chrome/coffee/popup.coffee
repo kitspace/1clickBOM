@@ -47,23 +47,22 @@ bom_changed = (bom) ->
         document.querySelector("#bom").hidden=!Boolean(Object.keys(bom).length)
     table = document.querySelector("#bom_list")
     table.removeChild(table.lastChild) while table.hasChildNodes() 
-    for retailer of bom
+    for retailer_name of bom
+        retailer = bom[retailer_name].interface
         tr = document.createElement("tr")
         td_0 = document.createElement("td")
         icon = document.createElement("img")
-        switch (retailer)
-            when "Digikey"   then icon.src = chrome.extension.getURL("images/digikey.ico")
-            when "Element14" then icon.src = chrome.extension.getURL("images/element14.ico")
-            when "Mouser"    then icon.src = chrome.extension.getURL("images/mouser.ico")
-        td_0.appendChild(icon)
+        icon.src = retailer.icon_src
+        a = document.createElement("a")
+        a.appendChild(icon)
+        a.innerHTML += retailer.name
+        a.href= "https" + retailer.site
+        td_0.appendChild(a)
         tr.appendChild(td_0)
         td_1 = document.createElement("td")
-        td_1.innerText = retailer + ":"
+        td_1.innerText = bom[retailer_name].items.length + " line"
+        td_1.innerText += "s" if (bom[retailer_name].items.length > 1)
         tr.appendChild(td_1)
-        td_2 = document.createElement("td")
-        td_2.innerText = bom[retailer].items.length + " line"
-        td_2.innerText += "s" if (bom[retailer].items.length > 1)
-        tr.appendChild(td_2)
         table.appendChild(tr)
 
 chrome.storage.local.get "bom", ({bom:bom}) ->

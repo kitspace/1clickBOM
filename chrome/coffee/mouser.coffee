@@ -16,6 +16,7 @@ class @Mouser extends Retailer
     constructor: (country_code) ->
         super "Mouser", country_code, "/data/mouser_international.json"
         @get_viewstate()
+        @icon_src = chrome.extension.getURL("images/mouser.ico")
     get_viewstate: ()->
         that = this
         url = "http" + @site + @additem

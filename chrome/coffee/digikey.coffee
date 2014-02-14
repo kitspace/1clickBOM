@@ -14,7 +14,8 @@
 
 class @Digikey extends Retailer
     constructor: (country_code) ->
-        return super "Digikey", country_code, "/data/digikey_international.json"
+        super "Digikey", country_code, "/data/digikey_international.json"
+        @icon_src = chrome.extension.getURL("images/digikey.ico")
 
     clearCart: ->
         that = this
