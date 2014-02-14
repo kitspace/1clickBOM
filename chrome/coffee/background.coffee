@@ -128,7 +128,7 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
             newInterface(retailer, bom[retailer], country)
             bom[retailer].interface.addItems(bom[retailer].items)
 
-@clear_carts = ()->
+@empty_carts = ()->
     chrome.storage.local.get ["bom", "country"], ({bom:bom, country:country}) ->
         for retailer of bom
             newInterface(retailer, bom[retailer], country)
