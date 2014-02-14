@@ -4,10 +4,15 @@
     <title>1clickBOM's popup</title>
     <style>
       body {
-        min-width: 265px;
-        max-width: 265px;
-        overflow-x: hidden;
-        background: #DDDDDD; 
+          min-width: 265px;
+          max-width: 265px;
+          overflow-x: hidden;
+      }
+      div#top-spacer {
+          height: 5px;
+      }
+      div#bottom-spacer {
+          height: 5px;
       }
       img {
         margin: 5px;
@@ -20,6 +25,8 @@
           src: url("/images/foundation-icons.ttf");
       }
       button {
+          max-height:25px;
+          max-width: 55px;
           height:25px;
           width: 55px;
           padding: 0px 0px 1px 1px;
@@ -41,10 +48,13 @@
       }
       table#bom_list {
           background: white;
-          border: 1px solid gray;
+          border-collapse:collapse;
+          border: none;
       }
       table#bom_list > tr > td{
-          border: 1px solid gray;
+          border-bottom: 2px solid #DDDDDD;
+          border-top: 2px solid #DDDDDD;
+          border-collapse:collapse;
       }
 
     </style>
@@ -59,6 +69,7 @@
           <span class=button-text>Clear</span>
       </button >
 
+      <div id=top-spacer></div>
       <div id=bom hidden=true>
           <table id="bom_list"></table>
       </div>
@@ -69,6 +80,7 @@
               <span class=button-icon>&#xf216;</span>
           </button>
       </div>
+      <div id=bottom-spacer></div>
 
       <button id="fill_carts" hidden=true title="Fill Retailer Carts">
           <span class=button-icon>&#xf21d;</span>
