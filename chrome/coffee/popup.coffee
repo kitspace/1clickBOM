@@ -70,6 +70,16 @@ bom_changed = (bom) ->
         td_2.innerText = no_of_items + " item"
         td_2.innerText += "s" if (no_of_items > 1)
         tr.appendChild(td_2)
+        td_3 = document.createElement("td")
+        td_3.id = "per-retailer-button-td"
+        for unicode_char in ["\uf21d","\uf1b1","\uf21b"] 
+            button = document.createElement("button")
+            span = document.createElement("span")
+            span.className = "button-icon"
+            span.innerText = unicode_char 
+            button.appendChild(span)
+            td_3.appendChild(button)
+        tr.appendChild(td_3)
         table.appendChild(tr)
 
 chrome.storage.local.get "bom", ({bom:bom}) ->

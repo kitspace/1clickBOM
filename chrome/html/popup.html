@@ -4,7 +4,6 @@
     <title>1clickBOM's popup</title>
     <style>
       body {
-          max-width: 260px;
           overflow-x: hidden;
           background: #DDDDDD;
       }
@@ -24,7 +23,7 @@
           font-family:"Foundation Icons";
           src: url("/images/foundation-icons.ttf");
       }
-      button {
+      button.big-buttons {
           max-height:25px;
           max-width: 55px;
           height:25px;
@@ -57,8 +56,6 @@
           background: #ADD8E6;
           cursor: default;
       }
-      table#bom_list > tr:hover > td{
-      }
       table#bom_list > tr > td{
           border: 1px solid #999999;
           padding: 0px 3px 0px 3px;
@@ -89,16 +86,20 @@
       button#clear {
           float: left;
       }
+      td#per-retailer-button-td {
+          background: #DDDDDD !important;
+          border: 1px solid #DDDDDD !important;
+      }
       
     </style>
   </head>
   <body>
       <div id=top-toolbar>
-          <button id="clear" title="Clear Entire BOM" hidden=true>
+          <button class=big-buttons id="clear" title="Clear Entire BOM" hidden=true>
               <span class=button-icon>&#xf182;</span>
               <span class=button-text>Clear</span>
           </button >
-          <button id="paste" title="Paste BOM Data">
+          <button class=big-buttons id="paste" title="Paste BOM Data">
               <span class=button-icon>&#xf220;</span>
               <span class=button-text> Paste</span>
           </button>
@@ -118,15 +119,15 @@
       </div>
 
       <div id=bottom-toolbar>
-      <button id="fill_carts" hidden=true title="Fill Retailer Carts">
+      <button class=big-buttons id="fill_carts" hidden=true title="Fill Retailer Carts">
           <span class=button-icon>&#xf21d;</span>
           <span class=button-text>Fill</span>
       </button>
-      <button id="open_cart_tabs" hidden=true title="Open All Retailer Carts">
+      <button class=big-buttons id="open_cart_tabs" hidden=true title="Open All Retailer Carts">
           <span class=button-icon>&#xf1b1;</span>
           <span class=button-text>Open</span>
       </button>
-      <button id="empty_carts" hidden=true title="Empty All Retailer Carts">
+      <button class=big-buttons id="empty_carts" hidden=true title="Empty All Retailer Carts">
           <span class=button-icon>&#xf21b;</span>
           <span class=button-text>Empty</span>
       </button>
