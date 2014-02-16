@@ -4,9 +4,9 @@
     <title>1clickBOM's popup</title>
     <style>
       body {
-          min-width: 265px;
-          max-width: 265px;
+          max-width: 260px;
           overflow-x: hidden;
+          background: #DDDDDD;
       }
       div#top-spacer {
           height: 5px;
@@ -50,33 +50,64 @@
           background: white;
           border-collapse:collapse;
           border: none;
+          font-family: "sans-serif", "Arial", "Helvetica";
+          white-space: nowrap;
       }
       table#bom_list > tr:hover{
-          background: #DDDDDD;
+          background: #ADD8E6;
+          cursor: default;
+      }
+      table#bom_list > tr:hover > td{
       }
       table#bom_list > tr > td{
-          border: 2px solid #EEEEEE;
+          border: 1px solid #999999;
+          padding: 0px 3px 0px 3px;
+          font-size: 14px;
+          vertical-align:middle;
+      }
+      table#bom_list > tr > td > img{
+          margin-bottom: 5px;
+          margin-top: 5px;
+          margin-left: 3px;
+          margin-right: 3px;
+          vertical-align:middle;
       }
       a.bom_retailer_name {
           color: black;
           text-decoration:none;
       }
-
+      body {
+          text-align: right;
+      }
+      div#bom 
+      {
+          text-align: left;
+      }
+      div#bottom-toolbar {
+          text-align: center;
+      }
+      button#clear {
+          float: left;
+      }
+      
     </style>
   </head>
   <body>
-      <button id="paste" title="Paste BOM Data">
-          <span class=button-icon>&#xf220;</span>
-          <span class=button-text> Paste</span>
-      </button>
-      <button id="clear" title="Clear Entire BOM" hidden=true>
-          <span class=button-icon>&#xf182;</span>
-          <span class=button-text>Clear</span>
-      </button >
+      <div id=top-toolbar>
+          <button id="clear" title="Clear Entire BOM" hidden=true>
+              <span class=button-icon>&#xf182;</span>
+              <span class=button-text>Clear</span>
+          </button >
+          <button id="paste" title="Paste BOM Data">
+              <span class=button-icon>&#xf220;</span>
+              <span class=button-text> Paste</span>
+          </button>
+      </div>
 
-      <div id=top-spacer></div>
       <div id=bom hidden=true>
+          <div id=top-spacer></div>
           <table id="bom_list"></table>
+          <div id=bottom-spacer></div>
       </div>
 
       <div id=errors hidden=true>
@@ -85,8 +116,8 @@
               <span class=button-icon>&#xf216;</span>
           </button>
       </div>
-      <div id=bottom-spacer></div>
 
+      <div id=bottom-toolbar>
       <button id="fill_carts" hidden=true title="Fill Retailer Carts">
           <span class=button-icon>&#xf21d;</span>
           <span class=button-text>Fill</span>
@@ -99,6 +130,7 @@
           <span class=button-icon>&#xf21b;</span>
           <span class=button-text>Empty</span>
       </button>
+      </div>
       <script src="/js/popup.js"></script>
   </body>
 </html>

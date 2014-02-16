@@ -50,22 +50,26 @@ bom_changed = (bom) ->
     table.removeChild(table.lastChild) while table.hasChildNodes() 
     for retailer_name of bom
         retailer = bom[retailer_name].interface
+        items    = bom[retailer_name].items
+        no_of_items = 0
+        for item in items
+            no_of_items += item.quantity
+        console.log(no_of_items)
         tr = document.createElement("tr")
         td_0 = document.createElement("td")
         icon = document.createElement("img")
         icon.src = retailer.icon_src
-        a = document.createElement("a")
-        a.className = "bom_retailer_name"
-        a.appendChild(icon)
-        a.innerHTML += retailer.interface_name
-        a.href = "https" + retailer.site
-        a.target = "_blank"
-        td_0.appendChild(a)
+        td_0.appendChild(icon)
+        td_0.innerHTML += retailer.interface_name
         tr.appendChild(td_0)
         td_1 = document.createElement("td")
-        td_1.innerText = bom[retailer_name].items.length + " line"
-        td_1.innerText += "s" if (bom[retailer_name].items.length > 1)
+        td_1.innerText = items.length + " line"
+        td_1.innerText += "s" if (items.length > 1)
         tr.appendChild(td_1)
+        td_2 = document.createElement("td")
+        td_2.innerText = no_of_items + " item"
+        td_2.innerText += "s" if (no_of_items > 1)
+        tr.appendChild(td_2)
         table.appendChild(tr)
 
 chrome.storage.local.get "bom", ({bom:bom}) ->
