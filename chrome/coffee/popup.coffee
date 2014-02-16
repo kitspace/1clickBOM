@@ -31,6 +31,7 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
     #chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
     #    console.log(request)
 
+
 bom_changed = (bom) ->
     if (!bom)
         document.querySelector("#clear").hidden=true
@@ -54,9 +55,11 @@ bom_changed = (bom) ->
         icon = document.createElement("img")
         icon.src = retailer.icon_src
         a = document.createElement("a")
+        a.className = "bom_retailer_name"
         a.appendChild(icon)
-        a.innerHTML += retailer.name
-        a.href= "https" + retailer.site
+        a.innerHTML += retailer.interface_name
+        a.href = "https" + retailer.site
+        a.target = "_blank"
         td_0.appendChild(a)
         tr.appendChild(td_0)
         td_1 = document.createElement("td")
