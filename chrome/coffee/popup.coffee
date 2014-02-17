@@ -17,7 +17,7 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
 
     document.querySelector("#clear").addEventListener "click", () ->
         chrome.storage.local.remove("bom")
-        clear_error_log()
+        clear_warning_log()
 
     document.querySelector("#fill_carts").addEventListener "click", bkgd_page.fill_carts
     document.querySelector("#empty_carts").addEventListener "click", bkgd_page.empty_carts
@@ -71,11 +71,11 @@ bom_changed = (bom) ->
         td_2.innerText += "s" if (no_of_items > 1)
         tr.appendChild(td_2)
         td_3 = document.createElement("td")
-        td_3.id = "per-retailer-button-td"
+        td_3.id = "per_retailer_button_td"
         for unicode_char in ["\uf21d","\uf1b1","\uf21b"] 
             button = document.createElement("button")
             span = document.createElement("span")
-            span.className = "button-icon"
+            span.className = "button_icon"
             span.innerText = unicode_char 
             button.appendChild(span)
             td_3.appendChild(button)
@@ -91,32 +91,37 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
             chrome.storage.local.get "bom", ({bom:bom}) ->
                 bom_changed bom
 
-clear_error_log  = () ->
-        document.querySelector("#errors").hidden = true;
-        table = document.querySelector("#error_list")
+clear_warning_log  = () ->
+        document.querySelector("#warnings").hidden = true;
+        table = document.querySelector("#warning_list")
         table.removeChild(table.lastChild) while table.hasChildNodes() 
 
 chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
     if(request.invalid)
-        table = document.querySelector("#error_list")
-        button = document.querySelector("#clear_errors")
-        button.style.display = "block"
-        button.addEventListener "click", clear_error_log
+        table = document.querySelector("#warning_list")
+        button = document.querySelector("#clear_warnings")
+        button.addEventListener "click", clear_warning_log
         tr_top = document.createElement("tr")
         td_top = document.createElement("td")
         td_top.colSpan=3
         td_top.innerText = "Invalid data pasted:"
-        td_top.id = "error_td_top"
+        td_top.id = "warning_td_top"
         tr_top.appendChild(td_top)
         table.appendChild(tr_top)
         for obj in request.invalid
             tr = document.createElement("tr")
             td_0 = document.createElement("td")
-            td_0.innerText = "row: " + obj.item.row
+            span = document.createElement("span")
+            span.className = "button_icon"
+            span.innerText = "\uf101" 
+            td_0.appendChild(span)
             tr.appendChild(td_0)
             td_1 = document.createElement("td")
+            td_1.innerText = "row: " + obj.item.row
+            tr.appendChild(td_1)
+            td_2 = document.createElement("td")
             inner_table = document.createElement("table")
-            td_1.appendChild(inner_table)
+            td_2.appendChild(inner_table)
             inner_tr = document.createElement("tr")
             inner_table.appendChild(inner_tr)
             for cell in obj.item.cells
@@ -124,9 +129,9 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
                 td.innerText = cell
                 inner_tr.appendChild(td)
             #td_1.innerText = "\"" + obj.item.text + "\""
-            tr.appendChild(td_1)
-            td_2 = document.createElement("td")
-            td_2.innerText = obj.reason
             tr.appendChild(td_2)
+            td_3 = document.createElement("td")
+            td_3.innerText = obj.reason
+            tr.appendChild(td_3)
             table.appendChild(tr)
-        document.querySelector("#errors").hidden = false;
+        document.querySelector("#warnings").hidden = false;

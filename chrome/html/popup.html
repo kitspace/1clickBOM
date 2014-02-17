@@ -7,10 +7,10 @@
           overflow-x: hidden;
           background: #DDDDDD;
       }
-      div#top-spacer {
+      div#top_spacer {
           height: 5px;
       }
-      div#bottom-spacer {
+      div#bottom_spacer {
           height: 5px;
       }
       img {
@@ -23,7 +23,7 @@
           font-family:"Foundation Icons";
           src: url("/images/foundation-icons.ttf");
       }
-      button.big-buttons {
+      button.big_buttons {
           max-height:25px;
           max-width: 55px;
           height:25px;
@@ -31,19 +31,15 @@
           padding: 0px 0px 1px 1px;
           vertical-align:middle;
       }
-      span.button-icon {
+      span.button_icon {
           font-family:"Foundation Icons";
           font-size:18px;
           vertical-align:middle;
+          cursor: default;
       }
-      span.button-text {
+      span.button_text {
           vertical-align:middle;
           font-size:11px;
-      }
-      div#errors {
-          background: #ffa500;
-          border-radius:25px;
-          padding: 10px;
       }
       table#bom_list {
           background: white;
@@ -80,57 +76,96 @@
       {
           text-align: left;
       }
-      div#bottom-toolbar {
+      div#bottom_toolbar {
           text-align: center;
       }
       button#clear {
           float: left;
       }
-      td#per-retailer-button-td {
+      td#per_retailer_button_td {
           background: #DDDDDD !important;
           border: 1px solid #DDDDDD !important;
       }
+      div#warnings {
+          background: #ffa500;
+          border-radius:25px;
+          padding: 10px;
+          white-space: nowrap;
+          text-align: center;
+          min-width: 180px;
+          max-width: 180px;
+          min-height: 40px;
+          float: center;
+          margin-top:5px;
+      }
+      div#warning_widget {
+          line-height: 32px;
+          float: left;
+      }
+      div#warning_icon {
+          font-family: "Foundation Icons";
+          font-size: 48px;
+          display: inline-block;
+          vertical-align: middle;
+      }
+      div#warning_text {
+          font-size: 16px;
+          display: inline-block;
+          vertical-align: middle;
+      }
+      div#clear_warnings {
+          font-family:"Foundation Icons";
+          font-size:18px;
+          cursor: default;
+          display: inline-block;
+          vertical-align: middle;
+          margin-left: 7px;
+      }
+
       
     </style>
   </head>
   <body>
-      <div id=top-toolbar>
-          <button class=big-buttons id="clear" title="Clear Entire BOM" hidden=true>
-              <span class=button-icon>&#xf182;</span>
-              <span class=button-text>Clear</span>
+      <div id=top_toolbar>
+          <button class=big_buttons id="clear" title="Clear Entire BOM" hidden=true>
+              <span class=button_icon>&#xf182;</span>
+              <span class=button_text>Clear</span>
           </button >
-          <button class=big-buttons id="paste" title="Paste BOM Data">
-              <span class=button-icon>&#xf220;</span>
-              <span class=button-text> Paste</span>
+          <button class=big_buttons id="paste" title="Paste BOM Data">
+              <span class=button_icon>&#xf220;</span>
+              <span class=button_text> Paste</span>
           </button>
       </div>
 
       <div id=bom hidden=true>
-          <div id=top-spacer></div>
+          <div id=top_spacer></div>
           <table id="bom_list"></table>
-          <div id=bottom-spacer></div>
+          <div id=bottom_spacer></div>
       </div>
 
-      <div id=errors hidden=true>
-          <table id="error_list"></table>
-          <button id="clear_errors" >
-              <span class=button-icon>&#xf216;</span>
-          </button>
+
+      <div id=bottom_toolbar>
+      <button class=big_buttons id="fill_carts" hidden=true title="Fill Retailer Carts">
+          <span class=button_icon>&#xf21d;</span>
+          <span class=button_text>Fill</span>
+      </button>
+      <button class=big_buttons id="open_cart_tabs" hidden=true title="Open All Retailer Carts">
+          <span class=button_icon>&#xf1b1;</span>
+          <span class=button_text>Open</span>
+      </button>
+      <button class=big_buttons id="empty_carts" hidden=true title="Empty All Retailer Carts">
+          <span class=button_icon>&#xf21b;</span>
+          <span class=button_text>Empty</span>
+      </button>
       </div>
 
-      <div id=bottom-toolbar>
-      <button class=big-buttons id="fill_carts" hidden=true title="Fill Retailer Carts">
-          <span class=button-icon>&#xf21d;</span>
-          <span class=button-text>Fill</span>
-      </button>
-      <button class=big-buttons id="open_cart_tabs" hidden=true title="Open All Retailer Carts">
-          <span class=button-icon>&#xf1b1;</span>
-          <span class=button-text>Open</span>
-      </button>
-      <button class=big-buttons id="empty_carts" hidden=true title="Empty All Retailer Carts">
-          <span class=button-icon>&#xf21b;</span>
-          <span class=button-text>Empty</span>
-      </button>
+      <div id=warnings hidden=true>
+          <div id=warning_widget>
+              <div id=warning_icon>&#xf101;</div>
+              <div id=warning_text>Invalid Data Pasted</div>
+              <div id="clear_warnings">&#xf216;</div>
+          </div>
+          <table hidden=true id="warning_list"></table>
       </div>
       <script src="/js/popup.js"></script>
   </body>
