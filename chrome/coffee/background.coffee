@@ -47,7 +47,7 @@ parseTSV = (text) ->
 
 
 checkValidItems = (items_incoming, invalid) ->
-    @retailer_lookup = {
+    @retailer_aliases = {
         "Farnell"   : "Element14",
         "Element14" : "Element14",
         "FEC"       : "Element14",
@@ -64,11 +64,11 @@ checkValidItems = (items_incoming, invalid) ->
         else
             item.quantity = number
             r = ""
-            #a case insensitive match to the aliases defined in the lookup
-            for key of @retailer_lookup
+            #a case insensitive match to the aliases 
+            for key of @retailer_aliases
                 re = new RegExp key, "i"
                 if item.retailer.match(re)
-                    r = retailer_lookup[key]
+                    r = retailer_aliases[key]
                     break
 
             if  r == ""
@@ -138,7 +138,7 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
     chrome.storage.local.get ["bom", "country"], ({bom:bom, country:country}) ->
         for retailer of bom
             newInterface(retailer, bom[retailer], country)
-            chrome.tabs.create({"url": "https" + bom[retailer].interface.site + bom[retailer].interface.cart})
+            chrome.tabs.create({"url": "https" + bom[retailer].interface.site + bom[retailer].interface.cart, "active":false})
 
 that = this
 xhr = new XMLHttpRequest()
