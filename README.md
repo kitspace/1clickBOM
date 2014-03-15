@@ -77,7 +77,7 @@ Tests can be run by opening a javascript console on the background page and exec
  
 ## License ##
 
-1-click BOM code is licensed under the AGPLv3. The name 1-click BOM, 1clickBOM.com and the BOM-chip logos are trademarks of Kaspar Emanuel
+1-click BOM is licensed under the AGPLv3.
 
 [1]:#roadmap
 [2]:chrome/data/example.tsv
