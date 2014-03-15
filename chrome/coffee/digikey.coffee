@@ -12,7 +12,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-class @Digikey extends Retailer
+class @Digikey extends RetailerInterface
     constructor: (country_code) ->
         super "Digikey", country_code, "/data/digikey_international.json"
         @icon_src = chrome.extension.getURL("images/digikey.ico")

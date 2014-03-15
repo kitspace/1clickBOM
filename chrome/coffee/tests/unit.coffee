@@ -12,14 +12,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-test "Digikey: Constructs and is Retailer", () ->
-    ok new Digikey("AT") instanceof Retailer
+test "Digikey: Constructs and is RetailerInterface", () ->
+    ok new Digikey("AT") instanceof RetailerInterface
 
-test "Element14: Constructs and is Retailer", () ->
-    ok new Element14("AT") instanceof Retailer
+test "Element14: Constructs and is RetailerInterface", () ->
+    ok new Element14("AT") instanceof RetailerInterface
 
-test "Mouser: Constructs and is Retailer", () ->
-    ok new Mouser("AT") instanceof Retailer
+test "Mouser: Constructs and is RetailerInterface", () ->
+    ok new Mouser("AT") instanceof RetailerInterface
 
 test "InvalidCountryError Exists", () ->
     ok new InvalidCountryError instanceof Error

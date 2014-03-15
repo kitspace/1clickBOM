@@ -12,7 +12,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-class @Mouser extends Retailer
+class @Mouser extends RetailerInterface
     constructor: (country_code) ->
         super "Mouser", country_code, "/data/mouser_international.json"
         @get_viewstate()

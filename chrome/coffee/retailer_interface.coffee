@@ -12,10 +12,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-class @Retailer
+class @RetailerInterface
     constructor: (name, country_code, data_path) ->
         xhr = new XMLHttpRequest()
-        xhr.open "GET", chrome.extension.getURL(data_path), false
+        xhr.open("GET", chrome.extension.getURL(data_path), false)
         xhr.send()
         if xhr.status == 200
             data = JSON.parse xhr.responseText
