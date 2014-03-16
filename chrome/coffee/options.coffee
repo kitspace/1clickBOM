@@ -61,6 +61,14 @@ load_options = () ->
                         div = document.createElement("div")
                         div.appendChild(radio)
                         div.innerHTML += choices[choice].text
+                        div.className = "radio_text"
+                        div.onclick = (mouse_event) ->
+                            child = mouse_event.toElement.firstChild
+                            if(child?)
+                                if (child.type == "radio")
+                                    child.checked = "checked"
+                                    save_options()
+
                         form.appendChild(div)
                     if (stored.sub_settings?)
                         id = "id_" + stored.sub_settings[retailer]
