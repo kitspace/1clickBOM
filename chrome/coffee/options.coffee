@@ -23,64 +23,61 @@ save_options = () ->
                 sub_settings[retailer] = checked.value
     chrome.storage.local.set {country: country, sub_settings: sub_settings}, () ->
         load_options()
-        #if (!chrome.runtime.lastError)
-        #    status = document.getElementById "status"
-        #    status.innerHTML = "Options Saved."
-        #    setTimeout ()->
-        #        status.innerHTML = ""
-        #    , 750
 
 load_options = () ->
     chrome.storage.local.get ["sub_settings", "country"], (stored) ->
         if (!stored.country)
             stored.country = "Other"
+
         if (stored.sub_settings?)
             document.sub_settings = stored.sub_settings
         else
             document.sub_settings = {}
+
         select = document.getElementById("country")
         for child in select.children
             if child.value == stored.country
                 child.selected = "true"
-                form = document.getElementById("sub_settings")
-                form.removeChild(form.lastChild) while form.hasChildNodes()
-                for retailer of sub_settings_data[stored.country]
-                    choices = sub_settings_data[stored.country][retailer].choices
-                    _default = sub_settings_data[stored.country][retailer].default
-                    div = document.createElement("div")
-                    div2 = document.createElement("div")
-                    div2.className = "heading_2"
-                    h2 = document.createElement("h2")
-                    h2.innerHTML = retailer 
-                    div2.appendChild(h2)
-                    div.appendChild(div2)
-                    form.appendChild(div)
-                    for choice of choices
-                        radio = document.createElement("input")
-                        radio.type = "radio"
-                        radio.name = retailer
-                        radio.value = choice
-                        radio.id = "id_" + choice
-                        div = document.createElement("div")
-                        div.appendChild(radio)
-                        div.innerHTML += choices[choice].text
-                        div.className = "radio_text"
-                        div.onclick = (mouse_event) ->
-                            child = mouse_event.toElement.firstChild
-                            if(child?)
-                                if (child.type == "radio")
-                                    child.checked = "checked"
-                                    save_options()
-
-                        form.appendChild(div)
-                    if (stored.sub_settings? && (Boolean(Object.keys(stored.sub_settings).length)))
-                        id = "id_" + stored.sub_settings[retailer]
-                        selected = document.getElementById(id)
-                    else
-                        selected = document.getElementById("id_" + _default)
-                    selected.checked = "checked"
-                    input.onclick = save_options for input in document.getElementsByTagName("input")
                 break
+
+        form = document.getElementById("sub_settings")
+        form.removeChild(form.lastChild) while form.hasChildNodes()
+        for retailer of sub_settings_data[stored.country]
+            choices = sub_settings_data[stored.country][retailer].choices
+            _default = sub_settings_data[stored.country][retailer].default
+            div = document.createElement("div")
+            div2 = document.createElement("div")
+            div2.className = "heading_2"
+            h2 = document.createElement("h2")
+            h2.innerHTML = retailer
+            div2.appendChild(h2)
+            div.appendChild(div2)
+            form.appendChild(div)
+            for choice of choices
+                radio = document.createElement("input")
+                radio.type = "radio"
+                radio.name = retailer
+                radio.value = choice
+                radio.id = "id_" + choice
+                div = document.createElement("div")
+                div.appendChild(radio)
+                div.innerHTML += choices[choice].text
+                div.className = "radio_text"
+                div.onclick = (mouse_event) ->
+                    child = mouse_event.toElement.firstChild
+                    if(child?)
+                        if (child.type == "radio")
+                            child.checked = "checked"
+                            save_options()
+
+                form.appendChild(div)
+            if (stored.sub_settings? && (Boolean(Object.keys(stored.sub_settings).length)))
+                id = "id_" + stored.sub_settings[retailer]
+                selected = document.getElementById(id)
+            else
+                selected = document.getElementById("id_" + _default)
+            selected.checked = "checked"
+            input.onclick = save_options for input in document.getElementsByTagName("input")
 
 xhr = new XMLHttpRequest()
 xhr.open "GET", chrome.extension.getURL("/data/countries.json"), false
