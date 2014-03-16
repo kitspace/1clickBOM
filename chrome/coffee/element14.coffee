@@ -36,4 +36,3 @@ class @Element14 extends RetailerInterface
                 that.refreshSiteTabs()
         xhr.open "POST", url, true
         xhr.send()
-

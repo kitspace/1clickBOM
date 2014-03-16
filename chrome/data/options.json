@@ -1,0 +1,27 @@
+{
+    "UK": {
+        "Element14": {
+            "default": "Farnell",
+            "settings": {
+                "Farnell": {
+                    "sites": {
+                        "UK": "://uk.farnell.com"
+                    },
+                    "text": "use uk.farnell.com"
+                },
+                "CPC": {
+                    "sites": {
+                        "UK": "://cpc.farnell.com"
+                    },
+                    "text": "use cpc.farnell.com"
+                },
+                "Onecall": {
+                    "sites": {
+                        "UK": "://onecall.farnell.com"
+                    },
+                    "text": "use onecall.farnell.com"
+                }
+            }
+        }
+    }
+}

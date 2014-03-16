@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     
-    "name": "1-click BOM",
+    "name": "1clickBOM",
     "description": "Automatically populate your electronic component shopping carts.",
     "version": "0.0.1",
     "permissions": [
