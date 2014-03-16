@@ -15,14 +15,14 @@
 save_options = () ->
     select = document.getElementById("country")
     country = select.children[select.selectedIndex].value
-    site_settings = document.site_settings 
-    if(options_data[country])
-        for retailer of options_data[country]
+    sub_settings = document.sub_settings
+    if(sub_settings_data[country])
+        for retailer of sub_settings_data[country]
             checked = document.querySelector("input[name='" + retailer + "']:checked")
             if (checked)
-                site_settings[retailer] = checked.value
-    chrome.storage.local.set {country: country, site_settings: site_settings}, () ->
-        restore_options()
+                sub_settings[retailer] = checked.value
+    chrome.storage.local.set {country: country, sub_settings: sub_settings}, () ->
+        load_options()
         if (!chrome.runtime.lastError)
             status = document.getElementById "status"
             status.innerHTML = "Options Saved."
@@ -30,46 +30,45 @@ save_options = () ->
                 status.innerHTML = ""
             , 750
 
-            restore_options()
+            load_options()
 
-restore_options = () ->
-    chrome.storage.local.get "country", (obj) ->
-        stored_country = obj.country
-        if (!stored_country) 
-            return
+load_options = () ->
+    chrome.storage.local.get ["sub_settings", "country"], (stored) ->
+        if (!stored.country)
+            stored.country = "Other"
+        if (stored.sub_settings?)
+            document.sub_settings = stored.sub_settings
+        else
+            document.sub_settings = {}
         select = document.getElementById("country")
         for child in select.children
-            if child.value == stored_country
+            if child.value == stored.country
                 child.selected = "true"
-                sub_options = document.getElementById("sub_options")
-                sub_options.removeChild(sub_options.lastChild) while sub_options.hasChildNodes() 
-                for retailer of options_data[stored_country]
-                    settings = options_data[stored_country][retailer]["settings"]
-                    _default = options_data[stored_country][retailer]["default"]
+                form = document.getElementById("sub_settings")
+                form.removeChild(form.lastChild) while form.hasChildNodes()
+                for retailer of sub_settings_data[stored.country]
+                    choices = sub_settings_data[stored.country][retailer].choices
+                    _default = sub_settings_data[stored.country][retailer].default
                     div = document.createElement("div")
-                    div.innerHTML = retailer + ":" 
-                    sub_options.appendChild(div)
-                    for choice of settings
+                    div.innerHTML = retailer + ":"
+                    form.appendChild(div)
+                    for choice of choices
                         radio = document.createElement("input")
                         radio.type = "radio"
                         radio.name = retailer
                         radio.value = choice
                         radio.id = "id_" + choice
-                        radio.onclicked = save_options
                         div = document.createElement("div")
                         div.appendChild(radio)
-                        div.innerHTML += settings[choice].text
-                        sub_options.appendChild(div)
-                    chrome.storage.local.get "site_settings", (obj) ->
-                        document.site_settings = obj.site_settings
-                        if (!obj.site_settings)
-                            checked = document.getElementById("id_" + _default)
-                            checked.checked = "checked"
-                        else
-                            id = "id_" + obj.site_settings[retailer]
-                            checked = document.getElementById(id)
-                            checked.checked = "checked"
-                        input.onclick = save_options for input in document.getElementsByTagName("input")
+                        div.innerHTML += choices[choice].text
+                        form.appendChild(div)
+                    if (stored.sub_settings?)
+                        id = "id_" + stored.sub_settings[retailer]
+                        selected = document.getElementById(id)
+                    else
+                        selected = document.getElementById("id_" + _default)
+                    selected.checked = "checked"
+                    input.onclick = save_options for input in document.getElementsByTagName("input")
                 break
 
 xhr = new XMLHttpRequest()
@@ -79,23 +78,23 @@ if xhr.status == 200
     countries = JSON.parse xhr.responseText
 
 xhr = new XMLHttpRequest()
-xhr.open("GET", chrome.extension.getURL("/data/options.json"), false)
+xhr.open("GET", chrome.extension.getURL("/data/sub_settings.json"), false)
 xhr.send()
 if xhr.status == 200
-    options_data = JSON.parse(xhr.responseText)
+    sub_settings_data = JSON.parse(xhr.responseText)
 
 select = document.getElementById("country")
 for name, code of countries
     opt = document.createElement("option")
-    opt.innerHTML = name 
-    opt.value = code 
+    opt.innerHTML = name
+    opt.value = code
     select.appendChild(opt)
 
-document.addEventListener("DOMContentLoaded", restore_options)
+document.addEventListener("DOMContentLoaded", load_options)
 document.getElementById("country").onchange = save_options
 
 
 #chrome.storage.onChanged.addListener (changes, namespace) ->
 #    if (namespace == "local")
-#        if (changes.country || changes.site_settings)
-#            restore_options()
+#        if (changes.country || changes.sub_settings)
+#            load_options()

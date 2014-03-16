@@ -2,7 +2,7 @@
     "UK": {
         "Element14": {
             "default": "Farnell",
-            "settings": {
+            "choices": {
                 "Farnell": {
                     "sites": {
                         "UK": "://uk.farnell.com"
