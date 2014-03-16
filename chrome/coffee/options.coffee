@@ -23,14 +23,12 @@ save_options = () ->
                 sub_settings[retailer] = checked.value
     chrome.storage.local.set {country: country, sub_settings: sub_settings}, () ->
         load_options()
-        if (!chrome.runtime.lastError)
-            status = document.getElementById "status"
-            status.innerHTML = "Options Saved."
-            setTimeout ()->
-                status.innerHTML = ""
-            , 750
-
-            load_options()
+        #if (!chrome.runtime.lastError)
+        #    status = document.getElementById "status"
+        #    status.innerHTML = "Options Saved."
+        #    setTimeout ()->
+        #        status.innerHTML = ""
+        #    , 750
 
 load_options = () ->
     chrome.storage.local.get ["sub_settings", "country"], (stored) ->
@@ -50,7 +48,12 @@ load_options = () ->
                     choices = sub_settings_data[stored.country][retailer].choices
                     _default = sub_settings_data[stored.country][retailer].default
                     div = document.createElement("div")
-                    div.innerHTML = retailer + ":"
+                    div2 = document.createElement("div")
+                    div2.className = "heading_2"
+                    h2 = document.createElement("h2")
+                    h2.innerHTML = retailer 
+                    div2.appendChild(h2)
+                    div.appendChild(div2)
                     form.appendChild(div)
                     for choice of choices
                         radio = document.createElement("input")
@@ -70,7 +73,7 @@ load_options = () ->
                                     save_options()
 
                         form.appendChild(div)
-                    if (stored.sub_settings?)
+                    if (stored.sub_settings? && (Boolean(Object.keys(stored.sub_settings).length)))
                         id = "id_" + stored.sub_settings[retailer]
                         selected = document.getElementById(id)
                     else

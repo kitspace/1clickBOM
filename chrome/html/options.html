@@ -1,21 +1,62 @@
 <html>
-<head><title>1clickBOM options</title>
+<head><title>1clickBOM Options</title>
     <style>
-        div.radio_text {
+        body {
+            font-family: "sans-serif", "Arial", "Helvetica";
+        }
+        #header {
+            border-bottom: 1px solid #EEE;
+            line-height:128px;
+            height:128px;
+            width:100%;
+            padding-left: 10px;
+            overflow: hidden;
+        }
+        #header_image {
+            float:left;
+        }
+        #header_text {
+            float:left;
+            padding-right:10px;
+        }
+        h1 {
+            font-size: 25px;
+            font-weight: normal;
+            line-height: 103px;
+        }
+        div.top_level {
+            padding-bottom: 10px;
+            padding-top: 10px;
+            margin-left: 20px;
+        }
+        .heading_2 {
+            margin-left:-10px;
+        }
+        h2 {
+            font-size: 12pt;
+            font-weight: normal;
+            line-height: 24px;
+        }
+        .radio_text {
             cursor:default;
         }
     </style>
 </head>
 <body>
-    <img src=/images/logo48.png />
-    <h2>1clickBOM options</h2>
-
-Country:
-<select id="country">
-</select>
-<form id="sub_settings" action="">
-</form>
-<div id="status"></div>
+    <div id=header>
+        <div id=header_text> <h1>1clickBOM Options</h1></div>
+        <div id=header_image> <img src=/images/logo128.png /> </div>
+    </div>
+    <div class=top_level>
+        <div class=heading_2><h2>Location</h2></div>
+        <select id=country>
+        </select>
+    </div>
+    <div class=top_level>
+        <form id=sub_settings action="">
+        </form>
+    </div>
+    <div id=status></div>
 </body>
 
 <script src="/js/options.js"></script>
