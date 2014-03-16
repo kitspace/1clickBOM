@@ -13,7 +13,7 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 class @RetailerInterface
-    constructor: (name, country_code, data_path) ->
+    constructor: (name, country_code, data_path, settings) ->
         xhr = new XMLHttpRequest()
         xhr.open("GET", chrome.extension.getURL(data_path), false)
         xhr.send()
@@ -25,6 +25,20 @@ class @RetailerInterface
             error = new InvalidCountryError()
             error.message += " \"" + country_code + "\" given to " + name
             throw error
+    
+        if (settings?)
+            if (settings.carts?)
+                data.carts = settings.carts
+            if (settings.additems?)
+                data.additems = settings.additems
+            if (settings.additem_params?)
+                data.additem_params = settings.additem_params
+            if (settings.sites?)
+                data.sites = settings.sites
+            if (settings.name?)
+                data.name = settings.name
+            if (settings.interface_name?)
+                data.interface_name = settings.interface_name
 
         if typeof(data.carts) == "string"
             @cart = data.carts

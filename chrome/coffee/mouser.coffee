@@ -13,8 +13,8 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 class @Mouser extends RetailerInterface
-    constructor: (country_code) ->
-        super "Mouser", country_code, "/data/mouser_international.json"
+    constructor: (country_code, settings) ->
+        super "Mouser", country_code, "/data/mouser_international.json", settings
         @get_viewstate()
         @icon_src = chrome.extension.getURL("images/mouser.ico")
     get_viewstate: ()->
@@ -53,7 +53,6 @@ class @Mouser extends RetailerInterface
         , 5000
     _addItems: (items) ->
         that = this
-        console.log(items)
         params = @additem_params + @viewstate
         params += "&ctl00$ContentMain$hNumberOfLines=99"
         params += "&ctl00$ContentMain$txtNumberOfLines=94"

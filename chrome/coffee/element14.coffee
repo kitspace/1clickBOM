@@ -13,9 +13,10 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 class @Element14 extends RetailerInterface
-    constructor: (country_code) ->
-        super "Element14", country_code, "/data/element14_international.json"
+    constructor: (country_code, settings) ->
+        super "Element14", country_code, "/data/element14_international.json", settings
         @icon_src = chrome.extension.getURL("images/element14.ico")
+
 
     clearCart: ->
         that = this

@@ -17,10 +17,12 @@ save_options = () ->
     country = select.children[select.selectedIndex].value
     sub_settings = document.sub_settings
     if(sub_settings_data[country])
+        if (!sub_settings[country])
+            sub_settings[country] = {}
         for retailer of sub_settings_data[country]
             checked = document.querySelector("input[name='" + retailer + "']:checked")
             if (checked)
-                sub_settings[retailer] = checked.value
+                sub_settings[country][retailer] = checked.value
     chrome.storage.local.set {country: country, sub_settings: sub_settings}, () ->
         load_options()
 
@@ -71,8 +73,8 @@ load_options = () ->
                             save_options()
 
                 form.appendChild(div)
-            if (stored.sub_settings? && (Boolean(Object.keys(stored.sub_settings).length)))
-                id = "id_" + stored.sub_settings[retailer]
+            if (stored.sub_settings[stored.country]? && (Boolean(Object.keys(stored.sub_settings[stored.country]).length)))
+                id = "id_" + stored.sub_settings[stored.country][retailer]
                 selected = document.getElementById(id)
             else
                 selected = document.getElementById("id_" + _default)

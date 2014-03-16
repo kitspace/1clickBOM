@@ -12,11 +12,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-newInterface = (retailer_name, retailer, country) ->
+newInterface = (retailer_name, retailer, country, settings) ->
     switch (retailer_name)
-        when "Digikey"   then retailer.interface = new   Digikey(country)
-        when "Element14" then retailer.interface = new Element14(country)
-        when "Mouser"    then retailer.interface = new    Mouser(country)
+        when "Digikey" 
+            retailer.interface = new   Digikey(country, settings)
+        when "Element14" 
+            retailer.interface = new Element14(country, settings)
+        when "Mouser"
+            retailer.interface = new    Mouser(country, settings)
 
 paste = () ->
     textarea = document.getElementById("pastebox")
@@ -123,21 +126,33 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
                 chrome.storage.local.set({bom:bom})
 
 @fill_carts = ()->
-    chrome.storage.local.get ["bom", "country"], ({bom:bom, country:country}) ->
+    chrome.storage.local.get ["bom", "country", "sub_settings"], ({bom:bom, country:country, sub_settings:sub_settings}) ->
         for retailer of bom
-            newInterface(retailer, bom[retailer], country)
+            if(sub_settings[country][retailer]?)
+                settings = sub_settings_data[country][retailer].choices[sub_settings[country][retailer]]
+            else 
+                settings = {}
+            newInterface(retailer, bom[retailer], country, settings)
             bom[retailer].interface.addItems(bom[retailer].items)
 
 @empty_carts = ()->
-    chrome.storage.local.get ["bom", "country"], ({bom:bom, country:country}) ->
+    chrome.storage.local.get ["bom", "country", "sub_settings"], ({bom:bom, country:country, sub_settings:sub_settings}) ->
         for retailer of bom
-            newInterface(retailer, bom[retailer], country)
+            if(sub_settings[country][retailer]?)
+                settings = sub_settings_data[country][retailer].choices[sub_settings[country][retailer]]
+            else 
+                settings = {}
+            newInterface(retailer, bom[retailer], country, settings)
             bom[retailer].interface.clearCart()
 
 @open_cart_tabs = ()->
-    chrome.storage.local.get ["bom", "country"], ({bom:bom, country:country}) ->
+    chrome.storage.local.get ["bom", "country", "sub_settings"], ({bom:bom, country:country, sub_settings:sub_settings}) ->
         for retailer of bom
-            newInterface(retailer, bom[retailer], country)
+            if(sub_settings[country][retailer]?)
+                settings = sub_settings_data[country][retailer].choices[sub_settings[country][retailer]]
+            else 
+                settings = {}
+            newInterface(retailer, bom[retailer], country, settings)
             chrome.tabs.create({"url": "https" + bom[retailer].interface.site + bom[retailer].interface.cart, "active":false})
 
 that = this
@@ -147,6 +162,12 @@ xhr.onreadystatechange = (data) ->
     if xhr.readyState == 4 and xhr.status == 200
         that.countries = JSON.parse xhr.responseText
 xhr.send()
+
+xhr = new XMLHttpRequest()
+xhr.open("GET", chrome.extension.getURL("/data/sub_settings.json"), false)
+xhr.send()
+if xhr.status == 200
+    sub_settings_data = JSON.parse(xhr.responseText)
 
 @get_location = ()->
     xhr = new XMLHttpRequest
@@ -167,4 +188,8 @@ chrome.runtime.onInstalled.addListener (details)->
 @get_bom = ()->
     chrome.storage.local.get ["bom"], (obj) ->
         @bom = obj.bom
+
+@get_sub_settings = ()->
+    chrome.storage.local.get ["sub_settings"], (obj) ->
+        document.sub_settings = obj.sub_settings
 
