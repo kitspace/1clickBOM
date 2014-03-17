@@ -14,9 +14,9 @@
 
 newInterface = (retailer_name, retailer, country, settings) ->
     switch (retailer_name)
-        when "Digikey" 
+        when "Digikey"
             retailer.interface = new   Digikey(country, settings)
-        when "Element14" 
+        when "Element14"
             retailer.interface = new Element14(country, settings)
         when "Mouser"
             retailer.interface = new    Mouser(country, settings)
@@ -67,7 +67,7 @@ checkValidItems = (items_incoming, invalid) ->
         else
             item.quantity = number
             r = ""
-            #a case insensitive match to the aliases 
+            #a case insensitive match to the aliases
             for key of @retailer_aliases
                 re = new RegExp key, "i"
                 if item.retailer.match(re)
@@ -125,33 +125,32 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
                         newInterface(retailer_name, retailer, changes.country.newValue)
                 chrome.storage.local.set({bom:bom})
 
+lookup_settings = (country, retailer, sub_settings)->
+    if(sub_settings[country][retailer]?)
+        settings = sub_settings_data[country][retailer].choices[sub_settings[country][retailer]]
+    else
+        settings = {}
+    return settings
+
+
 @fill_carts = ()->
     chrome.storage.local.get ["bom", "country", "sub_settings"], ({bom:bom, country:country, sub_settings:sub_settings}) ->
         for retailer of bom
-            if(sub_settings[country][retailer]?)
-                settings = sub_settings_data[country][retailer].choices[sub_settings[country][retailer]]
-            else 
-                settings = {}
+            settings = lookup_settings(country, retailer, sub_settings)
             newInterface(retailer, bom[retailer], country, settings)
             bom[retailer].interface.addItems(bom[retailer].items)
 
 @empty_carts = ()->
     chrome.storage.local.get ["bom", "country", "sub_settings"], ({bom:bom, country:country, sub_settings:sub_settings}) ->
         for retailer of bom
-            if(sub_settings[country][retailer]?)
-                settings = sub_settings_data[country][retailer].choices[sub_settings[country][retailer]]
-            else 
-                settings = {}
+            settings = lookup_settings(country, retailer, sub_settings)
             newInterface(retailer, bom[retailer], country, settings)
             bom[retailer].interface.clearCart()
 
 @open_cart_tabs = ()->
     chrome.storage.local.get ["bom", "country", "sub_settings"], ({bom:bom, country:country, sub_settings:sub_settings}) ->
         for retailer of bom
-            if(sub_settings[country][retailer]?)
-                settings = sub_settings_data[country][retailer].choices[sub_settings[country][retailer]]
-            else 
-                settings = {}
+            settings = lookup_settings(country, retailer, sub_settings)
             newInterface(retailer, bom[retailer], country, settings)
             chrome.tabs.create({"url": "https" + bom[retailer].interface.site + bom[retailer].interface.cart, "active":false})
 
@@ -181,10 +180,10 @@ if xhr.status == 200
 
 chrome.runtime.onInstalled.addListener (details)->
     switch details.reason
-        when "install", "upgrade" 
+        when "install", "upgrade"
             @get_location()
 
-@bom = new Object 
+@bom = new Object
 @get_bom = ()->
     chrome.storage.local.get ["bom"], (obj) ->
         @bom = obj.bom
