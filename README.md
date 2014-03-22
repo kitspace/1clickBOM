@@ -1,8 +1,8 @@
 # 1clickBOM #
-####_Automatically populate your electronic component shopping carts._####
-1-click BOM is a browser extension which fills your electronic component shopping carts, at online retailers such as Digikey, Mouser and Farnell, when you feed it correctly formatted tab-seperated-values (TSV). This allows you to simply paste data from your bill of materials (BOM) spreadsheet or share a TSV file so others can make the same order locally.
+#### _Paste to your electronic component shopping carts._ ####
+1clickBOM is a browser extension with which you can automatically fill your electronic component shopping carts at online retailers such as Digikey, Mouser and Farnell; when you feed it correctly formatted tab-seperated-values (TSV). This allows you to simply paste data from your bill of materials (BOM) spreadsheet or share a TSV file so others can make the same order (even if they are on the other end of the world).
 
-## Which browsers? Which retailers?##
+## Which browsers? Which retailers? ##
 
 For the time being the plugin is non-functional until we hit v0.1.0
 
@@ -28,7 +28,7 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
 
 * 0.1.0
     * Chrome support
-    * Digikey, Mouser, Farnell/Element14, Newark, Allied and RS-Online
+    * Digikey, Mouser, Farnell/Element14/CPC (& Onecall), Newark, Allied and RS-Online
     * Allow clearing individual carts
     * Paste TSV or visit online .tsv file
     * Checkout button
@@ -41,6 +41,8 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
     * Warn about filling already filled carts
     * Handling of logins
     * Auto-merge multiple entries of the same component
+    * Allow adding components to BOM from the component page
+    * Ability to output BOM to TSV.
 
 * 1.0.0
     * Allow for multiple vendors per item
@@ -64,10 +66,10 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
 
 1-click BOM is written in Coffeescript which transpiles to Javascript. 
 
-Currently development is done in Chrome and will then ported to Firefox. Unit and integration tests are written using the QUnit framework.
+Currently development is done on Chromium and will then ported to Firefox. Unit and integration tests are written using the QUnit framework.
 
-* Coffeescript
-* QUnit
+* [Coffeescript](http://coffeescript.org)
+* [QUnit](https://qunitjs.com/)
 
 ### Build and Test Instructions ###
 
@@ -77,9 +79,10 @@ Tests can be run by opening a javascript console on the background page and exec
  
 ## License ##
 
-1-click BOM is licensed under the AGPLv3.
+1-click BOM is licensed under the AGPLv3. See the [COPYING][4] file for details.
 
 [1]:#roadmap
 [2]:chrome/data/example.tsv
 [3]:chrome/html/test.html
+[4]:COPYING
 
