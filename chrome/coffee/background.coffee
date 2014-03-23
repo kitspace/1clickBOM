@@ -78,7 +78,7 @@ checkValidItems = (items_incoming, invalid) ->
                     break
 
             if  r == ""
-                invalid.push {"item":item, "reason": "Retailer \"" + item.retailer + "\" is not known."}
+                invalid.push({"item":item, "reason": "Retailer \"" + item.retailer + "\" is not known."})
             else
                 item.retailer = r
                 items.push(item)
@@ -128,7 +128,7 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
                         newInterface(retailer_name, retailer, changes.country.newValue)
                 chrome.storage.local.set({bom:bom})
 
-lookup_settings = (country, retailer, stored_settings)->
+lookup_setting_values = (country, retailer, stored_settings)->
     if(stored_settings[country]? && stored_settings[country][retailer]?)
         settings = settings_data[country][retailer].choices[stored_settings[country][retailer]]
     else
@@ -139,22 +139,22 @@ lookup_settings = (country, retailer, stored_settings)->
 @fill_carts = ()->
     chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
         for retailer of bom
-            settings = lookup_settings(country, retailer, stored_settings)
-            newInterface(retailer, bom[retailer], country, settings)
+            setting_values = lookup_setting_values(country, retailer, stored_settings)
+            newInterface(retailer, bom[retailer], country, setting_values)
             bom[retailer].interface.addItems(bom[retailer].items)
 
 @empty_carts = ()->
     chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
         for retailer of bom
-            settings = lookup_settings(country, retailer, stored_settings)
-            newInterface(retailer, bom[retailer], country, settings)
+            setting_values = lookup_setting_values(country, retailer, stored_settings)
+            newInterface(retailer, bom[retailer], country, setting_values)
             bom[retailer].interface.clearCart()
 
 @open_cart_tabs = ()->
     chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
         for retailer of bom
-            settings = lookup_settings(country, retailer, stored_settings)
-            newInterface(retailer, bom[retailer], country, settings)
+            setting_values = lookup_setting_values(country, retailer, stored_settings)
+            newInterface(retailer, bom[retailer], country, setting_values)
             chrome.tabs.create({"url": "https" + bom[retailer].interface.site + bom[retailer].interface.cart, "active":false})
 
 
