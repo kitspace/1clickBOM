@@ -12,6 +12,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
+countries_data = @get_local("/data/countries.json")
+settings_data  = @get_local("/data/settings.json")
+
 newInterface = (retailer_name, retailer, country, settings) ->
     switch (retailer_name)
         when "Digikey"
@@ -154,15 +157,7 @@ lookup_settings = (country, retailer, stored_settings)->
             newInterface(retailer, bom[retailer], country, settings)
             chrome.tabs.create({"url": "https" + bom[retailer].interface.site + bom[retailer].interface.cart, "active":false})
 
-get_local = (url)->
-    xhr = new XMLHttpRequest()
-    xhr.open("GET", chrome.extension.getURL(url), false)
-    xhr.send()
-    if xhr.status == 200
-        return JSON.parse(xhr.responseText)
 
-countries_data = get_local("/data/countries.json")
-settings_data = get_local("/data/settings.json")
 
 @get_location = ()->
     xhr = new XMLHttpRequest
@@ -179,13 +174,12 @@ chrome.runtime.onInstalled.addListener (details)->
         when "install", "upgrade"
             @get_location()
 
-that = this
-@bom = new Object
-@get_bom = ()->
-    chrome.storage.local.get ["bom"], (obj) ->
-        that.bom = obj.bom
-
-@get_settings = ()->
-    chrome.storage.local.get ["settings"], (obj) ->
-        document.settings = obj.settings
+#@bom = new Object
+#@get_bom = ()->
+#    chrome.storage.local.get ["bom"], (obj) ->
+#        that.bom = obj.bom
+#
+#@get_settings = ()->
+#    chrome.storage.local.get ["settings"], (obj) ->
+#        document.settings = obj.settings
 
