@@ -154,19 +154,15 @@ lookup_settings = (country, retailer, stored_settings)->
             newInterface(retailer, bom[retailer], country, settings)
             chrome.tabs.create({"url": "https" + bom[retailer].interface.site + bom[retailer].interface.cart, "active":false})
 
-that = this
-xhr = new XMLHttpRequest()
-xhr.open "GET", chrome.extension.getURL("/data/countries.json"), false
-xhr.onreadystatechange = (data) ->
-    if xhr.readyState == 4 and xhr.status == 200
-        that.countries = JSON.parse xhr.responseText
-xhr.send()
+get_local = (url)->
+    xhr = new XMLHttpRequest()
+    xhr.open("GET", chrome.extension.getURL(url), false)
+    xhr.send()
+    if xhr.status == 200
+        return JSON.parse(xhr.responseText)
 
-xhr = new XMLHttpRequest()
-xhr.open("GET", chrome.extension.getURL("/data/settings.json"), false)
-xhr.send()
-if xhr.status == 200
-    settings_data = JSON.parse(xhr.responseText)
+countries_data = get_local("/data/countries.json")
+settings_data = get_local("/data/settings.json")
 
 @get_location = ()->
     xhr = new XMLHttpRequest
@@ -174,7 +170,7 @@ if xhr.status == 200
     xhr.onreadystatechange = (data) ->
         if xhr.readyState == 4 and xhr.status == 200
                 response = JSON.parse(xhr.responseText)
-                chrome.storage.local.set {country: that.countries[response.country_name]}, ()->
+                chrome.storage.local.set {country: countries_data[response.country_name]}, ()->
                     chrome.tabs.create({"url": chrome.runtime.getURL("html/options.html")})
     xhr.send()
 
