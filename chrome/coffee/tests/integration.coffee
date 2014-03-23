@@ -12,23 +12,9 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-xhr = new XMLHttpRequest()
-xhr.open "GET", chrome.extension.getURL("/data/digikey_international.json"), false
-xhr.send()
-if xhr.status == 200
-    @digikey_data = JSON.parse xhr.responseText
-
-xhr = new XMLHttpRequest()
-xhr.open "GET", chrome.extension.getURL("/data/element14_international.json"), false
-xhr.send()
-if xhr.status == 200
-    @element14_data = JSON.parse xhr.responseText
-
-xhr = new XMLHttpRequest()
-xhr.open "GET", chrome.extension.getURL("/data/mouser_international.json"), false
-xhr.send()
-if xhr.status == 200
-    @mouser_data = JSON.parse xhr.responseText
+@digikey_data   = get_local("/data/digikey_international.json")
+@element14_data = get_local("/data/element14_international.json")
+@mouser_data    = get_local("/data/mouser_international.json")
 
 test "Digikey: Clear All", () ->
     try
@@ -79,9 +65,9 @@ test "Element14: Add Items", () ->
 
 test "Mouser: Add Items", () ->
     try
-        # Mouser's site is unified, changing the basket in EU will change the basket in US
-        console.log "Mouser: Adding item in EU"
-        d = new Mouser("EU")
+        # Mouser's site is unified, changing the basket anywhere will change the basket in US
+        console.log "Mouser: Adding item in LK"
+        d = new Mouser("LK")
         items = [{"part":"607-GALILEO","quantity":2, "comment":"test"}]
         d.addItems(items)
         #china is separate
@@ -99,10 +85,7 @@ asyncTest "Paste BOM", 1, () ->
         stored = obj.country
         chrome.storage.local.set {country: "UK"}, () ->
 
-            xhr = new XMLHttpRequest()
-            xhr.open "GET", chrome.extension.getURL("/data/example.json"), false
-            xhr.send()
-            test_bom= JSON.parse xhr.responseText
+            test_bom = get_local("/data/example.json")
 
             copybox    = document.createElement("textarea")
             pastebox   = document.createElement("textarea")
@@ -144,4 +127,4 @@ asyncTest "Paste BOM", 1, () ->
             document.execCommand("copy")
 
             paste_action()
-    
+

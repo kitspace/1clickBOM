@@ -12,6 +12,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
+countries_data = @get_local("/data/countries.json")
+settings_data  = @get_local("/data/settings.json")
+
 save_options = () ->
     select = document.getElementById("country")
     country = select.children[select.selectedIndex].value
@@ -81,20 +84,8 @@ load_options = () ->
             selected.checked = "checked"
             input.onclick = save_options for input in document.getElementsByTagName("input")
 
-xhr = new XMLHttpRequest()
-xhr.open "GET", chrome.extension.getURL("/data/countries.json"), false
-xhr.send()
-if xhr.status == 200
-    countries = JSON.parse xhr.responseText
-
-xhr = new XMLHttpRequest()
-xhr.open("GET", chrome.extension.getURL("/data/settings.json"), false)
-xhr.send()
-if xhr.status == 200
-    settings_data = JSON.parse(xhr.responseText)
-
 select = document.getElementById("country")
-for name, code of countries
+for name, code of countries_data
     opt = document.createElement("option")
     opt.innerHTML = name
     opt.value = code
@@ -102,9 +93,3 @@ for name, code of countries
 
 document.addEventListener("DOMContentLoaded", load_options)
 document.getElementById("country").onchange = save_options
-
-
-#chrome.storage.onChanged.addListener (changes, namespace) ->
-#    if (namespace == "local")
-#        if (changes.country || changes.settings)
-#            load_options()

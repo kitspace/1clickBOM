@@ -14,18 +14,14 @@
 
 class @RetailerInterface
     constructor: (name, country_code, data_path, settings) ->
-        xhr = new XMLHttpRequest()
-        xhr.open("GET", chrome.extension.getURL(data_path), false)
-        xhr.send()
-        if xhr.status == 200
-            data = JSON.parse xhr.responseText
+        data = get_local(data_path)
         @country = country_code
         country_code_lookedup = data.lookup[country_code]
         if !country_code_lookedup
             error = new InvalidCountryError()
             error.message += " \"" + country_code + "\" given to " + name
             throw error
-    
+
         if (settings?)
             if (settings.carts?)
                 data.carts = settings.carts
@@ -56,8 +52,8 @@ class @RetailerInterface
         @interface_name = name
 
     refreshCartTabs: (site = @site, cart = @cart) ->
-        #we reload any tabs with the cart URL but the path is case insensitive so we use a regex 
-        #we update the matching tabs to the cart URL instead of using tabs.refresh so we don't 
+        #we reload any tabs with the cart URL but the path is case insensitive so we use a regex
+        #we update the matching tabs to the cart URL instead of using tabs.refresh so we don't
         #re-pass any parameters to the cart
         re = new RegExp(cart, "i")
         chrome.tabs.query {"url":"*" + site + "/*"}, (tabs)->

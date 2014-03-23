@@ -58,7 +58,7 @@ class @Digikey extends RetailerInterface
                 xhr.send()
             that.refreshCartTabs()
 
-     
+
      #getCart: ->
      #   that = this
      #   parser = new DOMParser
