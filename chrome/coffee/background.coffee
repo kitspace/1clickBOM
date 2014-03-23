@@ -183,10 +183,11 @@ chrome.runtime.onInstalled.addListener (details)->
         when "install", "upgrade"
             @get_location()
 
+that = this
 @bom = new Object
 @get_bom = ()->
     chrome.storage.local.get ["bom"], (obj) ->
-        @bom = obj.bom
+        that.bom = obj.bom
 
 @get_settings = ()->
     chrome.storage.local.get ["settings"], (obj) ->
