@@ -126,7 +126,7 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
                 chrome.storage.local.set({bom:bom})
 
 lookup_settings = (country, retailer, sub_settings)->
-    if(sub_settings[country][retailer]?)
+    if(sub_settings[country]? && sub_settings[country][retailer]?)
         settings = sub_settings_data[country][retailer].choices[sub_settings[country][retailer]]
     else
         settings = {}
