@@ -155,7 +155,7 @@ lookup_setting_values = (country, retailer, stored_settings)->
         for retailer of bom
             setting_values = lookup_setting_values(country, retailer, stored_settings)
             newInterface(retailer, bom[retailer], country, setting_values)
-            chrome.tabs.create({"url": "https" + bom[retailer].interface.site + bom[retailer].interface.cart, "active":false})
+            bom[retailer].interface.openCartTab()
 
 
 

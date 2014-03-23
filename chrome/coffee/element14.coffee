@@ -14,7 +14,7 @@
 
 class @Element14 extends RetailerInterface
     constructor: (country_code, settings) ->
-        super "Element14", country_code, "/data/element14_international.json", settings
+        super("Element14", country_code, "/data/element14_international.json", settings)
         @icon_src = chrome.extension.getURL("images/element14.ico")
 
 
@@ -24,6 +24,28 @@ class @Element14 extends RetailerInterface
             chrome.cookies.remove {"name":"CARTHOLDERID","url":"http" + that.site}, (cookie)->
                 that.refreshCartTabs()
                 that.refreshSiteTabs()
+
+    refreshCartTabs: (site = @site, cart = @cart) ->
+        #export farnell tries to go to exportHome if we have no cookie (cart cleared) and we don't pass it the params
+        if site == "://export.farnell.com"
+            re = new RegExp(cart, "i")
+            console.log(re)
+            chrome.tabs.query {"url":"*" + site + "/*"}, (tabs)->
+                for tab in tabs
+                    if (tab.url.match(re))
+                        console.log(tab.url)
+                        protocol = tab.url.split("://")[0]
+                        chrome.tabs.update tab.id, {"url": protocol + site + cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"}
+        else
+            super()
+
+    openCartTab: (site = @site, cart = @cart) ->
+        #export farnell tries to go to exportHome if we have no cookie (cart cleared) and we don't pass it the params
+        if site == "://export.farnell.com"
+            export_cart= cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP" 
+            super(site = site, cart = export_cart)
+        else
+            super()
 
     addItems: (items)->
         that = this

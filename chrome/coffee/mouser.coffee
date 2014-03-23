@@ -31,7 +31,7 @@ class @Mouser extends RetailerInterface
                 params += "&ctl00$ContentMain$hNumberOfLines=5"
                 params += "&ctl00$ContentMain$txtNumberOfLines=94"
                 xhr2 = new XMLHttpRequest
-                xhr2.open("POST", url, false)
+                xhr2.open("POST", url, true)
                 xhr2.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
                 xhr2.onreadystatechange = (data) ->
                     if xhr2.readyState == 4 and xhr2.status == 200
@@ -62,7 +62,7 @@ class @Mouser extends RetailerInterface
             params += "&ctl00$ContentMain$txtQuantity"   + (i+1) + "=" + item.quantity
         url = "http" + @site + @additem
         xhr = new XMLHttpRequest
-        xhr.open("POST", url, false)
+        xhr.open("POST", url, true)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
         xhr.onreadystatechange = () ->
             if xhr.readyState == 4
