@@ -56,11 +56,9 @@ class @RetailerInterface
         #we update the matching tabs to the cart URL instead of using tabs.refresh so we don't
         #re-pass any parameters to the cart
         re = new RegExp(cart, "i")
-        console.log(re)
         chrome.tabs.query {"url":"*" + site + "/*"}, (tabs)->
             for tab in tabs
                 if (tab.url.match(re))
-                    console.log(tab.url)
                     protocol = tab.url.split("://")[0]
                     chrome.tabs.update tab.id, {"url": protocol + site + cart}
 
@@ -74,7 +72,6 @@ class @RetailerInterface
                     chrome.tabs.reload tab.id
 
     openCartTab: (site = @site, cart = @cart) ->
-        console.log("https" + site + cart)
         chrome.tabs.create({"url": "https" + site + cart})
 
 

@@ -29,11 +29,9 @@ class @Element14 extends RetailerInterface
         #export farnell tries to go to exportHome if we have no cookie (cart cleared) and we don't pass it the params
         if site == "://export.farnell.com"
             re = new RegExp(cart, "i")
-            console.log(re)
             chrome.tabs.query {"url":"*" + site + "/*"}, (tabs)->
                 for tab in tabs
                     if (tab.url.match(re))
-                        console.log(tab.url)
                         protocol = tab.url.split("://")[0]
                         chrome.tabs.update tab.id, {"url": protocol + site + cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"}
         else

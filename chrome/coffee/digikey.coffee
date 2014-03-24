@@ -19,12 +19,12 @@ class @Digikey extends RetailerInterface
 
     clearCart: ->
         that = this
-        if /classic/.test @cart
+        if /classic/.test(@cart)
             #for the older sites we remove the cookies
             chrome.cookies.remove {"name":"sid", "url":"https" + @site}, (cookie)->
                 that.refreshCartTabs()
 
-        else if /ShoppingCartView/.test @cart
+        else if /ShoppingCartView/.test(@cart)
             #for the newer sites we send a POST request
             xhr = new XMLHttpRequest
             xhr.open("POST", "https" + @site + @cart + "?explicitNewOrder=Y")
