@@ -44,6 +44,17 @@ class @Mouser extends RetailerInterface
                         that.viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
                 xhr2.send(params)
         xhr.send()
+    _get_viewstate: (callback)->
+        that = this
+        url = "http" + @site + @cart
+        xhr = new XMLHttpRequest
+        xhr.open "GET", url, true
+        xhr.onreadystatechange = (data) ->
+            if xhr.readyState == 4 and xhr.status == 200
+                doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
+                that.viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
+                callback(that)
+        xhr.send()
     addItems: (items) ->
         #wait for viewstate if we don't have it
         that = this
@@ -74,9 +85,19 @@ class @Mouser extends RetailerInterface
                 that.refreshCartTabs()
         xhr.send(params)
 
-    clearCart: ->
-        that = this
-        chrome.cookies.remove {"name":"ASP.NET_SessionId","url":"http" + "://mouser.com"}, (cookie)->
-            chrome.cookies.remove {"name":"CARTCOOKIEUUID","url":"http" + "://mouser.com"}, (cookie)->
+    #clearCart: ->
+    #    that = this
+    #    chrome.cookies.remove {"name":"ASP.NET_SessionId","url":"http" + "://mouser.com"}, (cookie)->
+    #        chrome.cookies.remove {"name":"CARTCOOKIEUUID","url":"http" + "://mouser.com"}, (cookie)->
+    #            that.refreshCartTabs()
+    #            that.refreshSiteTabs()
+    clearCart: () ->
+        @_get_viewstate(@_clearCart)
+    _clearCart: (that)->
+        xhr = new XMLHttpRequest
+        xhr.open("POST", "http://uk.mouser.com/Cart/Cart.aspx", true)
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+        xhr.onreadystatechange = () ->
+            if xhr.readyState == 4
                 that.refreshCartTabs()
-                that.refreshSiteTabs()
+        xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + that.viewstate + "&__VIEWSTATEENCRYPTED=&as_values_039=&ctl00$ContentMain$CartGrid$grid$ctl02$chkSelect=on&ctl00$ContentMain$CartGrid$grid$ctl02$ctl01$txtCustomerPartNumber=&ctl00$ContentMain$CartGrid$grid$ctl02$ctl02$txtOrderQuantity=1&ctl00$ContentMain$CartGrid$grid$ctl03$ctl01$txtCustomerPartNumber=&ctl00$ContentMain$CartGrid$grid$ctl03$ctl02$txtOrderQuantity=1&ctl00$ContentMain$btn7=Update Basket&ctl00$ContentMain$hdnDt=&ctl00$ContentMain$hidMouseReelRequest=&ctl00$ContentMain$hidProductID=&ctl00$ContentMain$lst1=New Project&ctl00$ContentMain$txt1=&ctl00$ContentMain$txt2=&ctl00$ContentMain$txt3=1&ctl00$Footer1$sb=TXWEB06|20140321.1&ctl00$NavHeader$lblIsNewTerm=&ctl00$NavHeader$lblTrdTerm=&ctl00$NavHeader$txt1=&ctl00$gab1$ddlCurrencies=GBP&ctl00$gab1$hidSelectedCurrency=0")
