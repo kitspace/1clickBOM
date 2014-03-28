@@ -54,7 +54,6 @@ bom_changed = (bom) ->
         no_of_items = 0
         for item in items
             no_of_items += item.quantity
-        console.log(no_of_items)
         tr = document.createElement("tr")
         td_0 = document.createElement("td")
         icon = document.createElement("img")

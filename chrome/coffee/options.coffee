@@ -76,7 +76,7 @@ load_options = () ->
                             save_options()
 
                 form.appendChild(div)
-            if (stored.settings[stored.country]? && (Boolean(Object.keys(stored.settings[stored.country]).length)))
+            if (stored.settings? && (stored.settings[stored.country]?) && (Boolean(Object.keys(stored.settings[stored.country]).length)))
                 id = "id_" + stored.settings[stored.country][retailer]
                 selected = document.getElementById(id)
             else
