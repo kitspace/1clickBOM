@@ -174,9 +174,26 @@ chrome.runtime.onInstalled.addListener (details)->
         when "install", "upgrade"
             @get_location()
 
+@get_valid  = () ->
+    xhr = new XMLHttpRequest
+    xhr.open("GET", "http://www.digikey.co.uk/classic/Ordering/OrderingHome.aspx", false)
+    xhr.send()
+    if xhr.status == 200
+        parser = new DOMParser
+        doc = parser.parseFromString(xhr.responseText, "text/html")
+        viewstate   = doc.getElementById("__VIEWSTATE").value
+        event_valid = doc.getElementById("__EVENTVALIDATION").value
+        return {viewstate, event_valid}
 
 
-#'_dyncharset=UTF-8&/pf/commerce/CartHandler.punchOutSuccessURL=orderReviewPunchOut.jsp&_D:/pf/commerce/CartHandler.punchOutSuccessURL=+&/pf/commerce/CartHandler.setOrderSuccessURL=../shoppingCart/shoppingCart.jsp&_D:/pf/commerce/CartHandler.setOrderSuccessURL=+&/pf/commerce/CartHandler.setOrderErrorURL=../shoppingCart/shoppingCart.jsp&_D:/pf/commerce/CartHandler.setOrderErrorURL=+&/pf/commerce/CartHandler.addLinesSuccessURL=../shoppingCart/shoppingCart.jsp&_D:/pf/commerce/CartHandler.addLinesSuccessURL=+&reqFromCart=true&_D:reqFromCart=+&topUpdateCart=Update+Basket&_D:topUpdateCart=+&/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL=../shoppingCart/shoppingCart.jsp&_D:/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL=+&/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL=../checkout/paymentMethod.jsp&_D:/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL=+&_D:continueWithShipping=+&checkAll=on&ci44033006073=1&/pf/commerce/CartHandler.removalCommerceIds=ci44033006073&_D:/pf/commerce/CartHandler.removalCommerceIds=+&lineNote1="test"&_D:lineNote1=+&ci44033006074=1&/pf/commerce/CartHandler.removalCommerceIds=ci44033006074&_D:/pf/commerce/CartHandler.removalCommerceIds=+&lineNote2="test"&_D:lineNote2=+&ci44033006075=1&/pf/commerce/CartHandler.removalCommerceIds=ci44033006075&_D:/pf/commerce/CartHandler.removalCommerceIds=+&lineNote3="test"&_D:lineNote3=+&ci44033006076=1&/pf/commerce/CartHandler.removalCommerceIds=ci44033006076&_D:/pf/commerce/CartHandler.removalCommerceIds=+&lineNote4="test"&_D:lineNote4=+&ci44033006077=1&/pf/commerce/CartHandler.removalCommerceIds=ci44033006077&_D:/pf/commerce/CartHandler.removalCommerceIds=+&lineNote5="test"&_D:lineNote5=+&ci44033006078=1&/pf/commerce/CartHandler.removalCommerceIds=ci44033006078&_D:/pf/commerce/CartHandler.removalCommerceIds=+&lineNote6="test"&_D:lineNote6=+&ci44033006079=1&/pf/commerce/CartHandler.removalCommerceIds=ci44033006079&_D:/pf/commerce/CartHandler.removalCommerceIds=+&lineNote7="test"&_D:lineNote7=+&ci44033006080=1&/pf/commerce/CartHandler.removalCommerceIds=ci44033006080&_D:/pf/commerce/CartHandler.removalCommerceIds=+&lineNote8="test"&_D:lineNote8=+&ci44033006081=1&/pf/commerce/CartHandler.removalCommerceIds=ci44033006081&_D:/pf/commerce/CartHandler.removalCommerceIds=+&lineNote9="test"&_D:lineNote9=+&lineNote=&_D:lineNote=+&lineQuantity=1&_D:lineQuantity=+&/pf/commerce/CartHandler.addItemCount=5&_D:/pf/commerce/CartHandler.addItemCount=+&lineNote=&_D:lineNote=+&lineQuantity=1&_D:lineQuantity=+&lineNote=&_D:lineNote=+&lineQuantity=1&_D:lineQuantity=+&lineNote=&_D:lineNote=+&lineQuantity=1&_D:lineQuantity=+&lineNote=&_D:lineNote=+&lineQuantity=1&_D:lineQuantity=+&lineNote=&_D:lineNote=+&lineQuantity=1&_D:lineQuantity=+&emptyLinesA=10&_D:emptyLinesA=+&emptyLinesB=10&_D:emptyLinesB=+&_D:addEmptyLines=+&_D:clearBlankLines=+&textfield2=&_D:textfield2=+&_D:Submit=+&_DARGS=/jsp/shoppingCart/fragments/shoppingCart/cartContent.jsp.cart'
+@test_request = ({viewstate, event_valid}) ->
+    return "http://www.digikey.co.uk/classic/Ordering/OrderingHome.aspx?__EVENTARGUMENT=&__EVENTTARGET=&__EVENTVALIDATION=" + event_valid + "&__SCROLLPOSITIONX=0&__SCROLLPOSITIONY=0&__VIEWSTATE=" + viewstate + "&ctl00$mainContentPlaceHolder$btnCreateNewOrder=Create New Order&ctl00$mainContentPlaceHolder$ddlSites=GB_GBP"
+    xhr = new XMLHttpRequest
+    console.log(event_valid)
+    xhr.open("POST", "http://www.digikey.co.uk/classic/Ordering/OrderingHome.aspx", false)
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__EVENTVALIDATION=" + event_valid + "&__SCROLLPOSITIONX=0&__SCROLLPOSITIONY=0&__VIEWSTATE=" + viewstate + "&ctl00$mainContentPlaceHolder$btnCreateNewOrder=Create New Order&ctl00$mainContentPlaceHolder$ddlSites=GB_GBP")
+    return xhr
 
 #@bom = new Object
 #@get_bom = ()->

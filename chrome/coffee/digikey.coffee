@@ -20,12 +20,17 @@ class @Digikey extends RetailerInterface
     clearCart: ->
         that = this
         if /classic/.test(@cart)
-            #for the older sites we remove the cookies
-            chrome.cookies.remove {"name":"sid", "url":"https" + @site}, (cookie)->
-                that.refreshCartTabs()
+            xhr = new XMLHttpRequest
+            xhr.open("GET","https" + @site + @cart + "?webid=-1", true)
+            xhr.onreadystatechange = () ->
+                if xhr.readyState == 4
+                    that.refreshCartTabs()
+            xhr.send()
 
         else if /ShoppingCartView/.test(@cart)
             #for the newer sites we send a POST request
+            #it seems these sites were trialed and removed again so this is essentially dead code
+            #might as well keep it though
             xhr = new XMLHttpRequest
             xhr.open("POST", "https" + @site + @cart + "?explicitNewOrder=Y")
             xhr.onreadystatechange = () ->
@@ -45,7 +50,7 @@ class @Digikey extends RetailerInterface
                 xhr.send()
         else if /ShoppingCartView/.test(@additem)
             #we mimick the quick add form and send requests of 20 parts at a time
-            #this has to be done synchronously, else we get error:302
+            #this has to be done synchronously or the site gets confused
             for _, i in items by 20
                 group = items[i..i+19]
                 xhr = new XMLHttpRequest
