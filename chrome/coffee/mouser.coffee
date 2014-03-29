@@ -15,14 +15,14 @@
 class @Mouser extends RetailerInterface
     constructor: (country_code, settings) ->
         super "Mouser", country_code, "/data/mouser_international.json", settings
-        that = this
+        #that = this
         xhr = new XMLHttpRequest
         xhr.open("POST", "http://uk.mouser.com/api/Preferences/SetSubdomain?subdomainName=" + @cart.split(".")[0].slice(3), true)
-        xhr.onreadystatechange = ()->
-            that.get_viewstate()
+        #xhr.onreadystatechange = ()->
+        #    that.get_viewstate()
         xhr.send()
         @icon_src = chrome.extension.getURL("images/mouser.ico")
-    get_viewstate: ()->
+    _get_adding_viewstate: (callback)->
         that = this
         url = "http" + @site + @additem
         xhr = new XMLHttpRequest
@@ -42,9 +42,10 @@ class @Mouser extends RetailerInterface
                     if xhr2.readyState == 4 and xhr2.status == 200
                         doc = new DOMParser().parseFromString(xhr2.responseText, "text/html")
                         that.viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
+                        callback(that)
                 xhr2.send(params)
         xhr.send()
-    _get_viewstate: (callback)->
+    _get_cart_viewstate: (callback)->
         that = this
         url = "http" + @site + @cart
         xhr = new XMLHttpRequest
@@ -56,27 +57,18 @@ class @Mouser extends RetailerInterface
                 callback(that)
         xhr.send()
     addItems: (items) ->
-        #wait for viewstate if we don't have it
-        that = this
-        id = setInterval ()->
-            if that.viewstate != undefined
-                that._addItems(items)
-                clearInterval(id)
-        , 1
-        #timeout in-case we can't get it
-        setTimeout ()->
-            clearInterval(id)
-        , 5000
+        @_get_adding_viewstate (that) ->
+            that._addItems(items)
     _addItems: (items) ->
         that = this
-        params = @additem_params + @viewstate
+        params = that.additem_params + that.viewstate
         params += "&ctl00$ContentMain$hNumberOfLines=99"
         params += "&ctl00$ContentMain$txtNumberOfLines=94"
         for item,i in items
             params += "&ctl00$ContentMain$txtCustomerPartNumber" + (i+1) + "=" + item.comment
             params += "&ctl00$ContentMain$txtPartNumber" + (i+1) + "=" + item.part
             params += "&ctl00$ContentMain$txtQuantity"   + (i+1) + "=" + item.quantity
-        url = "http" + @site + @additem
+        url = "http" + that.site + that.additem
         xhr = new XMLHttpRequest
         xhr.open("POST", url, true)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
@@ -85,17 +77,13 @@ class @Mouser extends RetailerInterface
                 that.refreshCartTabs()
         xhr.send(params)
 
-    #clearCart: ->
-    #    that = this
-    #    chrome.cookies.remove {"name":"ASP.NET_SessionId","url":"http" + "://mouser.com"}, (cookie)->
-    #        chrome.cookies.remove {"name":"CARTCOOKIEUUID","url":"http" + "://mouser.com"}, (cookie)->
-    #            that.refreshCartTabs()
-    #            that.refreshSiteTabs()
     clearCart: () ->
-        @_get_viewstate(@_clearCart)
-    _clearCart: (that)->
+        @_get_cart_viewstate (that) ->
+            that._clearCart()
+    _clearCart: ()->
+        that = this
         xhr = new XMLHttpRequest
-        xhr.open("POST", "http://uk.mouser.com/Cart/Cart.aspx", true)
+        xhr.open("POST", "http" + that.site + that.cart, true)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
         xhr.onreadystatechange = () ->
             if xhr.readyState == 4
