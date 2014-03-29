@@ -15,14 +15,49 @@
 class @Mouser extends RetailerInterface
     constructor: (country_code, settings) ->
         super "Mouser", country_code, "/data/mouser_international.json", settings
-        #that = this
+        @icon_src = chrome.extension.getURL("images/mouser.ico")
+        #posting our sub-domain as the sites are all linked and switching countries would not register properly otherwise
         xhr = new XMLHttpRequest
         xhr.open("POST", "http://uk.mouser.com/api/Preferences/SetSubdomain?subdomainName=" + @cart.split(".")[0].slice(3), true)
-        #xhr.onreadystatechange = ()->
-        #    that.get_viewstate()
         xhr.send()
-        @icon_src = chrome.extension.getURL("images/mouser.ico")
+    addItems: (items) ->
+        #weird ASP shit, we need to get the viewstate first to put in every request
+        @_get_adding_viewstate (that, viewstate) ->
+            that._add_items(items, viewstate)
+    _add_items: (items, viewstate) ->
+        that = this
+        params = that.additem_params + viewstate
+        params += "&ctl00$ContentMain$hNumberOfLines=99"
+        params += "&ctl00$ContentMain$txtNumberOfLines=94"
+        for item,i in items
+            params += "&ctl00$ContentMain$txtCustomerPartNumber" + (i+1) + "=" + item.comment
+            params += "&ctl00$ContentMain$txtPartNumber" + (i+1) + "=" + item.part
+            params += "&ctl00$ContentMain$txtQuantity"   + (i+1) + "=" + item.quantity
+        url = "http" + that.site + that.additem
+        xhr = new XMLHttpRequest
+        xhr.open("POST", url, true)
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+        xhr.onreadystatechange = () ->
+            if xhr.readyState == 4
+                #site-tabs don't show the cart-contents, no need to refresh 'em
+                that.refreshCartTabs()
+        xhr.send(params)
+
+    clearCart: () ->
+        @_get_cart_viewstate (that, viewstate) ->
+            that._clear_cart(viewstate)
+    _clear_cart: (viewstate)->
+        that = this
+        xhr = new XMLHttpRequest
+        xhr.open("POST", "http" + @site + @cart, true)
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+        xhr.onreadystatechange = () ->
+            if xhr.readyState == 4
+                that.refreshCartTabs()
+        #don't ask, this is what works...
+        xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket")
     _get_adding_viewstate: (callback)->
+        #we get the quick-add form , extend it to 99 lines (the max) and get the viewstate from the response
         that = this
         url = "http" + @site + @additem
         xhr = new XMLHttpRequest
@@ -41,8 +76,8 @@ class @Mouser extends RetailerInterface
                 xhr2.onreadystatechange = (data) ->
                     if xhr2.readyState == 4 and xhr2.status == 200
                         doc = new DOMParser().parseFromString(xhr2.responseText, "text/html")
-                        that.viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-                        callback(that)
+                        viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
+                        callback(that, viewstate)
                 xhr2.send(params)
         xhr.send()
     _get_cart_viewstate: (callback)->
@@ -53,40 +88,6 @@ class @Mouser extends RetailerInterface
         xhr.onreadystatechange = (data) ->
             if xhr.readyState == 4 and xhr.status == 200
                 doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
-                that.viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-                callback(that)
+                viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
+                callback(that, viewstate)
         xhr.send()
-    addItems: (items) ->
-        @_get_adding_viewstate (that) ->
-            that._addItems(items)
-    _addItems: (items) ->
-        that = this
-        params = that.additem_params + that.viewstate
-        params += "&ctl00$ContentMain$hNumberOfLines=99"
-        params += "&ctl00$ContentMain$txtNumberOfLines=94"
-        for item,i in items
-            params += "&ctl00$ContentMain$txtCustomerPartNumber" + (i+1) + "=" + item.comment
-            params += "&ctl00$ContentMain$txtPartNumber" + (i+1) + "=" + item.part
-            params += "&ctl00$ContentMain$txtQuantity"   + (i+1) + "=" + item.quantity
-        url = "http" + that.site + that.additem
-        xhr = new XMLHttpRequest
-        xhr.open("POST", url, true)
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-        xhr.onreadystatechange = () ->
-            if xhr.readyState == 4
-                that.refreshCartTabs()
-        xhr.send(params)
-
-    clearCart: () ->
-        @_get_cart_viewstate (that) ->
-            that._clearCart()
-    _clearCart: ()->
-        that = this
-        xhr = new XMLHttpRequest
-        xhr.open("POST", "http" + that.site + that.cart, true)
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-        xhr.onreadystatechange = () ->
-            if xhr.readyState == 4
-                that.refreshCartTabs()
-                that.refreshSiteTabs()
-        xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + that.viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket")
