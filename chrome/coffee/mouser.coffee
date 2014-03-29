@@ -97,11 +97,8 @@ class @Mouser extends RetailerInterface
         xhr = new XMLHttpRequest
         xhr.open("POST", "http://uk.mouser.com/Cart/Cart.aspx", true)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-        txt = "&ctl00$ContentMain$CartGrid$grid$ctl02$chkSelect=on"
-        txt += "&ctl00$ContentMain$CartGrid$grid$ctl02$ctl01$txtCustomerPartNumber="
-        txt += "&ctl00$ContentMain$CartGrid$grid$ctl02$ctl02$txtOrderQuantity=1"
         xhr.onreadystatechange = () ->
             if xhr.readyState == 4
                 that.refreshCartTabs()
                 that.refreshSiteTabs()
-        xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + that.viewstate + "&__VIEWSTATEENCRYPTED=&as_values_039=" + txt + "&ctl00$ContentMain$btn7=Update Basket")
+        xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + that.viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket")
