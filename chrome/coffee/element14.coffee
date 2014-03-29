@@ -19,14 +19,45 @@ class @Element14 extends RetailerInterface
 
 
     clearCart: ->
+        @_get_item_ids()
+
+    _get_item_ids: () ->
         that = this
-        chrome.cookies.remove {"name":"JSESSIONID","url":"http" + @site}, (cookie)->
-            chrome.cookies.remove {"name":"CARTHOLDERID","url":"http" + that.site}, (cookie)->
-                that.refreshCartTabs()
-                that.refreshSiteTabs()
+        xhr = new XMLHttpRequest
+        parser = new DOMParser
+        url = "https" + @site + @cart  
+        xhr.open("GET", url, true)
+        xhr.onreadystatechange = (data) ->
+            if xhr.readyState == 4 and xhr.status == 200
+                doc = parser.parseFromString(xhr.responseText, "text/html")
+                ins = doc.getElementsByTagName("input")
+                ids = []
+                for element in ins
+                    if element.name == "/pf/commerce/CartHandler.removalCommerceIds"
+                        ids.push(element.value)
+                that._post_clear(ids)
+        xhr.send()
+       
+    _post_clear: (ids) ->
+        that = this
+        if (ids.length)
+            xhr = new XMLHttpRequest
+            url = "https" + @site + "/jsp/checkout/paymentMethod.jsp"
+            xhr.open("POST", url, true)
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            xhr.onreadystatechange = (data) ->
+                if xhr.readyState == 4 and xhr.status == 200
+                    that.refreshSiteTabs()
+                    that.refreshCartTabs()
+            txt_1 = ""
+            txt_2 = ""
+            for id in ids
+                txt_1 += "&/pf/commerce/CartHandler.removalCommerceIds=" + id
+                txt_2 += "&" + id + "=1"
+            xhr.send("/pf/commerce/CartHandler.addItemCount=5&/pf/commerce/CartHandler.addLinesSuccessURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL=../checkout/paymentMethod.jsp&/pf/commerce/CartHandler.punchOutSuccessURL=orderReviewPunchOut.jsp" + txt_1 + "&/pf/commerce/CartHandler.setOrderErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.setOrderSuccessURL=../shoppingCart/shoppingCart.jsp&_D:/pf/commerce/CartHandler.addItemCount= &_D:/pf/commerce/CartHandler.addLinesSuccessURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL= &_D:/pf/commerce/CartHandler.punchOutSuccessURL= &_D:/pf/commerce/CartHandler.removalCommerceIds= &_D:/pf/commerce/CartHandler.setOrderErrorURL= &_D:/pf/commerce/CartHandler.setOrderSuccessURL= &_D:Submit= &_D:addEmptyLines= &_D:clearBlankLines= &_D:continueWithShipping= &_D:emptyLinesA= &_D:emptyLinesB= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote1= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:reqFromCart= &_D:textfield2= &_D:topUpdateCart= &_DARGS=/jsp/shoppingCart/fragments/shoppingCart/cartContent.jsp.cart&_dyncharset=UTF-8" + txt_2 + "&emptyLinesA=0&emptyLinesB=0&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote1=&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&reqFromCart=true&textfield2=&topUpdateCart=Update Basket") 
 
     refreshCartTabs: (site = @site, cart = @cart) ->
-        #export farnell tries to go to exportHome if we have no cookie (cart cleared) and we don't pass it the params
+        #export farnell tries to go to exportHome if we have no cookie and we don't pass it the params
         if site == "://export.farnell.com"
             re = new RegExp(cart, "i")
             chrome.tabs.query {"url":"*" + site + "/*"}, (tabs)->
@@ -38,7 +69,7 @@ class @Element14 extends RetailerInterface
             super()
 
     openCartTab: (site = @site, cart = @cart) ->
-        #export farnell tries to go to exportHome if we have no cookie (cart cleared) and we don't pass it the params
+        #export farnell tries to go to exportHome if we have no cookie and we don't pass it the params
         if site == "://export.farnell.com"
             export_cart= cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP" 
             super(site = site, cart = export_cart)
