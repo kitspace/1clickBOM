@@ -22,13 +22,11 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
 
     comment | quantity | vendor | part-number | vendor2 | part-number2 | vendor3 | ...
     
-
-
 ## Roadmap ##
 
 * 0.1.0
     * Chrome support
-    * Digikey, Mouser, Farnell/Element14/CPC (& Onecall), Newark, Allied and RS-Online
+    * Digikey, Mouser, Farnell/Element14 (or Onecall), Newark, Allied and RS-Online
     * Allow clearing individual carts
     * Paste TSV or visit online .tsv file
     * Checkout button
@@ -39,7 +37,6 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
 * 0.3.0
     * Display cart summaries
     * Warn about filling already filled carts
-    * Handling of logins
     * Auto-merge multiple entries of the same component
     * Allow adding components to BOM from the component page
     * Ability to output BOM to TSV.
@@ -49,7 +46,7 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
     * Allow additional unused fields in TSV, named columns?
     * Autofind same items from different vendors
     * Function to minimize order cost + shipping
-    * Allow outputting cost-optimized TSV BOM with multiple sources
+    * Export BOM
 
 * 2.0.0 
     * Include PCB order
@@ -64,25 +61,24 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
 
 ### Build and Test Requirements ###
 
-1-click BOM is written in Coffeescript which transpiles to Javascript. 
+1-click BOM is written in [Coffeescript][4] which transpiles to Javascript.
 
-Currently development is done on Chromium and will then ported to Firefox. Unit and integration tests are written using the QUnit framework.
-
-* [Coffeescript](http://coffeescript.org)
-* [QUnit](https://qunitjs.com/)
+Currently development is done on Chromium and will then ported to Firefox. Unit and integration tests are written using the [QUnit framework][5].
 
 ### Build and Test Instructions ###
 
 To transpile the coffeescript to javascript run `cake build` the chrome directory. Run `cake` with no arguments for help. The code can then be loaded as an unpacked extension in the developer mode in Chrome/Chromium settings.
 
-Tests can be run by opening a javascript console on the background page and executing the `Test()` function. See the [chrome/html/test.html][3] file for details. 
+Tests can be run by opening a javascript console on the background page and executing the `Test()` function.
  
 ## License ##
 
-1-click BOM is licensed under the AGPLv3. See the [COPYING][4] file for details.
+1-click BOM is licensed under the AGPLv3. See the [COPYING][6] file for details.
 
 [1]:#roadmap
 [2]:chrome/data/example.tsv
 [3]:chrome/html/test.html
-[4]:COPYING
+[4]:http://coffeescript.org
+[5]:https://qunitjs.com/
+[6]:COPYING
 

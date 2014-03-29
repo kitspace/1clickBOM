@@ -86,5 +86,5 @@ class @Element14 extends RetailerInterface
             if xhr.readyState == 4
                 that.refreshCartTabs()
                 that.refreshSiteTabs()
-        xhr.open "POST", url, true
+        xhr.open("POST", url, true)
         xhr.send()

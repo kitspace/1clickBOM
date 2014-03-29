@@ -9,12 +9,6 @@
                     },
                     "text": "use uk.farnell.com"
                 },
-                "CPC": {
-                    "sites": {
-                        "UK": "://cpc.farnell.com"
-                    },
-                    "text": "use cpc.farnell.com"
-                },
                 "Onecall": {
                     "sites": {
                         "UK": "://onecall.farnell.com"
