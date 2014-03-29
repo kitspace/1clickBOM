@@ -97,7 +97,11 @@ class @Mouser extends RetailerInterface
         xhr = new XMLHttpRequest
         xhr.open("POST", "http://uk.mouser.com/Cart/Cart.aspx", true)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+        txt = "&ctl00$ContentMain$CartGrid$grid$ctl02$chkSelect=on"
+        txt += "&ctl00$ContentMain$CartGrid$grid$ctl02$ctl01$txtCustomerPartNumber="
+        txt += "&ctl00$ContentMain$CartGrid$grid$ctl02$ctl02$txtOrderQuantity=1"
         xhr.onreadystatechange = () ->
             if xhr.readyState == 4
                 that.refreshCartTabs()
-        xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + that.viewstate + "&__VIEWSTATEENCRYPTED=&as_values_039=&ctl00$ContentMain$CartGrid$grid$ctl02$chkSelect=on&ctl00$ContentMain$CartGrid$grid$ctl02$ctl01$txtCustomerPartNumber=&ctl00$ContentMain$CartGrid$grid$ctl02$ctl02$txtOrderQuantity=1&ctl00$ContentMain$CartGrid$grid$ctl03$ctl01$txtCustomerPartNumber=&ctl00$ContentMain$CartGrid$grid$ctl03$ctl02$txtOrderQuantity=1&ctl00$ContentMain$btn7=Update Basket&ctl00$ContentMain$hdnDt=&ctl00$ContentMain$hidMouseReelRequest=&ctl00$ContentMain$hidProductID=&ctl00$ContentMain$lst1=New Project&ctl00$ContentMain$txt1=&ctl00$ContentMain$txt2=&ctl00$ContentMain$txt3=1&ctl00$Footer1$sb=TXWEB06|20140321.1&ctl00$NavHeader$lblIsNewTerm=&ctl00$NavHeader$lblTrdTerm=&ctl00$NavHeader$txt1=&ctl00$gab1$ddlCurrencies=GBP&ctl00$gab1$hidSelectedCurrency=0")
+                that.refreshSiteTabs()
+        xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + that.viewstate + "&__VIEWSTATEENCRYPTED=&as_values_039=" + txt + "&ctl00$ContentMain$btn7=Update Basket")
