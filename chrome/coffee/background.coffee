@@ -174,27 +174,6 @@ chrome.runtime.onInstalled.addListener (details)->
         when "install", "upgrade"
             @get_location()
 
-@get_valid  = () ->
-    xhr = new XMLHttpRequest
-    xhr.open("GET", "http://www.digikey.co.uk/classic/Ordering/OrderingHome.aspx", false)
-    xhr.send()
-    if xhr.status == 200
-        parser = new DOMParser
-        doc = parser.parseFromString(xhr.responseText, "text/html")
-        viewstate   = doc.getElementById("__VIEWSTATE").value
-        event_valid = doc.getElementById("__EVENTVALIDATION").value
-        return {viewstate, event_valid}
-
-
-@test_request = ({viewstate, event_valid}) ->
-    return "http://www.digikey.co.uk/classic/Ordering/OrderingHome.aspx?__EVENTARGUMENT=&__EVENTTARGET=&__EVENTVALIDATION=" + event_valid + "&__SCROLLPOSITIONX=0&__SCROLLPOSITIONY=0&__VIEWSTATE=" + viewstate + "&ctl00$mainContentPlaceHolder$btnCreateNewOrder=Create New Order&ctl00$mainContentPlaceHolder$ddlSites=GB_GBP"
-    xhr = new XMLHttpRequest
-    console.log(event_valid)
-    xhr.open("POST", "http://www.digikey.co.uk/classic/Ordering/OrderingHome.aspx", false)
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-    xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__EVENTVALIDATION=" + event_valid + "&__SCROLLPOSITIONX=0&__SCROLLPOSITIONY=0&__VIEWSTATE=" + viewstate + "&ctl00$mainContentPlaceHolder$btnCreateNewOrder=Create New Order&ctl00$mainContentPlaceHolder$ddlSites=GB_GBP")
-    return xhr
-
 #@bom = new Object
 #@get_bom = ()->
 #    chrome.storage.local.get ["bom"], (obj) ->

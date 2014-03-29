@@ -19,50 +19,22 @@ class @Digikey extends RetailerInterface
 
     clearCart: ->
         that = this
-        if /classic/.test(@cart)
-            xhr = new XMLHttpRequest
-            xhr.open("GET","https" + @site + @cart + "?webid=-1", true)
-            xhr.onreadystatechange = () ->
-                if xhr.readyState == 4
-                    that.refreshCartTabs()
-            xhr.send()
-
-        else if /ShoppingCartView/.test(@cart)
-            #for the newer sites we send a POST request
-            #it seems these sites were trialed and removed again so this is essentially dead code
-            #might as well keep it though
-            xhr = new XMLHttpRequest
-            xhr.open("POST", "https" + @site + @cart + "?explicitNewOrder=Y")
-            xhr.onreadystatechange = () ->
-                if xhr.readyState == 4
-                    that.refreshCartTabs()
-            xhr.send()
+        xhr = new XMLHttpRequest
+        xhr.open("GET","https" + @site + @cart + "?webid=-1", true)
+        xhr.onreadystatechange = () ->
+            if xhr.readyState == 4
+                that.refreshCartTabs()
+        xhr.send()
 
     addItems: (items) ->
         that = this
-        if /classic/.test(@additem)
-            for item in items
-                xhr = new XMLHttpRequest
-                xhr.open("POST", "https" + @site + @additem + "?qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment, true)
-                xhr.onreadystatechange = () ->
-                    if xhr.readyState == 4
-                        that.refreshCartTabs()
-                xhr.send()
-        else if /ShoppingCartView/.test(@additem)
-            #we mimick the quick add form and send requests of 20 parts at a time
-            #this has to be done synchronously or the site gets confused
-            for _, i in items by 20
-                group = items[i..i+19]
-                xhr = new XMLHttpRequest
-                url = "https" + @site + "/ordering/AddPart?"
-                for item,j in group
-                    url += "&comment_" + (j+1) + "=" + item.comment
-                    url += "&quantity_" + (j+1) + "=" + item.quantity
-                    url += "&reportPartNumber_" + (j+1) + "=" + item.part
-                xhr.open("POST", url, false)
-                xhr.send()
-            that.refreshCartTabs()
-
+        for item in items
+            xhr = new XMLHttpRequest
+            xhr.open("POST", "https" + @site + @additem + "?qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment, true)
+            xhr.onreadystatechange = () ->
+                if xhr.readyState == 4
+                    that.refreshCartTabs()
+            xhr.send()
 
      #getCart: ->
      #   that = this
