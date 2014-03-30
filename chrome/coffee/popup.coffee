@@ -65,59 +65,32 @@ bom_changed = (bom) ->
         a.innerHTML += retailer.interface_name
         td_0.appendChild(a)
         tr.appendChild(td_0)
+
+
         td_1 = document.createElement("td")
         td_1.innerText = items.length + " line"
         td_1.innerText += "s" if (items.length > 1)
         tr.appendChild(td_1)
+
         td_2 = document.createElement("td")
         td_2.innerText = no_of_items + " item"
         td_2.innerText += "s" if (no_of_items > 1)
         tr.appendChild(td_2)
-        td_3 = document.createElement("td")
-        a = document.createElement("a")
-        a.href = "#"
-        a.onclick = () ->
-            retailer.addItems({})
-        span = document.createElement("span")
-        span.className = "button_icon"
-        span.innerText = "\uf21b" 
-        a.appendChild(span)
-        td_3.appendChild(a)
-        tr.appendChild(td_3)
+        td = document.createElement("td")
+        
+        for unicode_char in ["\uf21e","\uf221","\uf21b"] 
+            td = document.createElement("td")
+            a = document.createElement("a")
+            a.href = "#"
+            a.onclick = () ->
+                retailer.addItems({})
+            span = document.createElement("span")
+            span.className = "button_icon"
+            span.innerText = unicode_char 
+            a.appendChild(span)
+            td.appendChild(a)
+            tr.appendChild(td)
 
-
-        td_4 = document.createElement("td")
-        a = document.createElement("a")
-        a.href = "#"
-        a.onclick = () ->
-            retailer.addItems({})
-        span = document.createElement("span")
-        span.className = "button_icon"
-        span.innerText = "\uf21d" 
-        a.appendChild(span)
-        td_4.appendChild(a)
-        tr.appendChild(td_4)
-
-        td_5 = document.createElement("td")
-        a = document.createElement("a")
-        a.href = "#"
-        a.onclick = () ->
-            retailer.addItems({})
-        span = document.createElement("span")
-        span.className = "button_icon"
-        span.innerText = "\uf1b1" 
-        a.appendChild(span)
-        td_5.appendChild(a)
-        tr.appendChild(td_5)
-
-        #for unicode_char in ["\uf21d","\uf1b1","\uf21b"] 
-        #    button = document.createElement("button")
-        #    span = document.createElement("span")
-        #    span.className = "button_icon"
-        #    span.innerText = unicode_char 
-        #    button.appendChild(span)
-        #    td_3.appendChild(button)
-        tr.appendChild(td_3)
         table.appendChild(tr)
 
 chrome.storage.local.get "bom", ({bom:bom}) ->
