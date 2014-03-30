@@ -56,9 +56,11 @@ bom_changed = (bom) ->
             no_of_items += item.quantity
         tr = document.createElement("tr")
         td_0 = document.createElement("td")
+
         a  = document.createElement("a")
         a.href = "https" + retailer.site + retailer.cart
         a.target = "_blank"
+
         icon = document.createElement("img")
         icon.src = retailer.icon_src
         a.appendChild(icon)
@@ -78,15 +80,16 @@ bom_changed = (bom) ->
         tr.appendChild(td_2)
         td = document.createElement("td")
         
-        for unicode_char in ["\uf21e","\uf221","\uf21b"] 
+        unicode_chars = ["\uf21e","\uf21b"]
+        ids = ["add","empty"]
+        for i in  [0..1]
             td = document.createElement("td")
             a = document.createElement("a")
+            a.id = retailer_name + "_" + ids[i] 
             a.href = "#"
-            a.onclick = () ->
-                retailer.addItems({})
             span = document.createElement("span")
             span.className = "button_icon"
-            span.innerText = unicode_char 
+            span.innerText = unicode_chars[i] 
             a.appendChild(span)
             td.appendChild(a)
             tr.appendChild(td)
