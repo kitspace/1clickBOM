@@ -82,13 +82,13 @@ bom_changed = (bom) ->
         table.appendChild(tr)
 
 chrome.storage.local.get "bom", ({bom:bom}) ->
-    bom_changed bom
+    bom_changed(bom)
 
 chrome.storage.onChanged.addListener (changes, namespace) ->
     if (namespace == "local")
         if (changes.bom)
             chrome.storage.local.get "bom", ({bom:bom}) ->
-                bom_changed bom
+                bom_changed(bom)
 
 clear_warning_log  = () ->
         document.querySelector("#warnings").hidden = true;

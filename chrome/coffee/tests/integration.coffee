@@ -51,26 +51,35 @@ test "Element14: Clear All", () ->
         throw error
     ok true
 
-test "Element14: Add Items", () ->
-    try
-        for key of window.element14_data.sites
-            console.log "Element14: Adding item in " + key
-            d = new Element14(key)
-            items = [{"part":"105321","quantity":2, "comment":"test"}, {"part":"1645325", "quantity":2, "comment":"test2"}]
-            d.addItems(items)
-    catch error
-        ok false
-        throw error
-    ok true
+asyncTest "Element14: Add Items", () ->
+    #this test can be a bit iffy,
+    #if it fails, try clearing all the farnell and element14 cookies and trying again
+    stop(Object.keys(window.element14_data.sites).length-1)
+    for key of window.element14_data.sites
+        console.log "Element14: Adding items"
+        d = new Element14(key)
+        items = [{"part":"2250472", "quantity":2, "comment":"test"}]
+        d.addItems items, (request, country) ->
+            deepEqual(request.success, true, country)
+            start()
+
+asyncTest "Element14: Add Items fails", () ->
+    stop(Object.keys(window.element14_data.sites).length-1)
+    for key of window.element14_data.sites
+        d = new Element14(key)
+        items = [{"part":"fail", "quantity":2, "comment":"test"}]
+        d.addItems items, (request, country) ->
+            deepEqual(request.success, false, country)
+            start()
 
 test "Mouser: Add Items", () ->
     try
-        # Mouser's site is unified, changing the basket anywhere will change the basket in US
+        # Mouser's site is unified, changing the basket anywhere will change the basket everywhere else
         console.log "Mouser: Adding item in LK"
         d = new Mouser("LK")
         items = [{"part":"607-GALILEO","quantity":2, "comment":"test"}]
         d.addItems(items)
-        #china is separate
+        #China is separate
         console.log "Mouser: Adding item in CN"
         c = new Mouser("CN")
         c.addItems(items)

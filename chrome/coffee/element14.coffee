@@ -76,19 +76,29 @@ class @Element14 extends RetailerInterface
         else
             super()
 
-    addItems: (items)->
+    addItems: (items, callback)->
+        if @site == "://export.farnell.com"
+            fix_url = "http" + @site + @cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"
+            fix_xhr = new XMLHttpRequest
+            fix_xhr.open("GET", fix_url, false)
+            fix_xhr.send()
         that = this
         xhr = new XMLHttpRequest
         url = "https" + @site + @additem
+        request = {}
         for item in items
             url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
         xhr.onreadystatechange = (data) ->
             if xhr.readyState == 4
+                #if items successully add the request returns the basket
                 parser = new DOMParser
                 doc = parser.parseFromString(xhr.responseText, "text/html")
-                failed = doc.getElementsByTagName("title")[0].innerHTML.indexOf("Quick Paste") != -1
-                console.log(failed)
-                that.refreshCartTabs()
-                that.refreshSiteTabs()
+                #we determine the request has returned the basket by the body classname so it's language agnostic
+                request.success = doc.querySelector("body.shoppingCart") != null
+                if (callback?)
+                    callback(request, that.country)
+                if (request.success)
+                    that.refreshCartTabs()
+                    that.refreshSiteTabs()
         xhr.open("POST", url, true)
         xhr.send()
