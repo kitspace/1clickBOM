@@ -61,9 +61,7 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
 
 ### Build and Test Requirements ###
 
-1clickBOM is written in [Coffeescript][4] which transpiles to Javascript.
-
-Currently development is done on Chromium and will then ported to Firefox. 
+1clickBOM is written in [Coffeescript][4] which transpiles to Javascript. Currently development is done on Chromium and will then be ported to Firefox. 
 
 ### Build and Test Instructions ###
 
