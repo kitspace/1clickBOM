@@ -26,7 +26,7 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
 
 * 0.1.0
     * Chrome support
-    * Digikey, Mouser, Farnell/Element14 (or Onecall), Newark, Allied and RS-Online
+    * Digikey, Mouser, Farnell , Newark, RS-Online and Allied
     * Allow clearing individual carts
     * Paste TSV or visit online .tsv file
     * Checkout button
@@ -61,19 +61,19 @@ Eventually 1-click BOM will support multiple vendors per item which can be tacke
 
 ### Build and Test Requirements ###
 
-1-click BOM is written in [Coffeescript][4] which transpiles to Javascript.
+1clickBOM is written in [Coffeescript][4] which transpiles to Javascript.
 
-Currently development is done on Chromium and will then ported to Firefox. Unit and integration tests are written using the [QUnit framework][5].
+Currently development is done on Chromium and will then ported to Firefox. 
 
 ### Build and Test Instructions ###
 
 To transpile the coffeescript to javascript run `cake build` the chrome directory. Run `cake` with no arguments for help. The code can then be loaded as an unpacked extension in the developer mode in Chrome/Chromium settings.
 
-Tests can be run by opening a javascript console on the background page and executing the `Test()` function.
+Unit and integration tests are written using the [QUnit framework][5]. Tests can be run by opening a javascript console on the background page and executing the `Test()` function.
  
 ## License ##
 
-1-click BOM is licensed under the AGPLv3. See the [COPYING][6] file for details.
+1clickBOM is licensed under the AGPLv3. See the [COPYING][6] file for details.
 
 [1]:#roadmap
 [2]:chrome/data/example.tsv

@@ -19,8 +19,8 @@ newInterface = (retailer_name, retailer, country, settings) ->
     switch (retailer_name)
         when "Digikey"
             retailer.interface = new   Digikey(country, settings)
-        when "Element14"
-            retailer.interface = new Element14(country, settings)
+        when "Farnell"
+            retailer.interface = new Farnell(country, settings)
         when "Mouser"
             retailer.interface = new    Mouser(country, settings)
 
@@ -54,9 +54,10 @@ parseTSV = (text) ->
 
 checkValidItems = (items_incoming, invalid) ->
     @retailer_aliases = {
-        "Farnell"   : "Element14",
-        "Element14" : "Element14",
-        "FEC"       : "Element14",
+        "Farnell"   : "Farnell",
+        "Element14" : "Farnell",
+        "FEC"       : "Farnell",
+        "Premier"   : "Farnell",
         "Digikey"   : "Digikey",
         "Digi-key"  : "Digikey",
         "Mouser"    : "Mouser"
@@ -129,7 +130,7 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
                 chrome.storage.local.set({bom:bom})
 
 lookup_setting_values = (country, retailer, stored_settings)->
-    if(stored_settings[country]? && stored_settings[country][retailer]?)
+    if(stored_settings? && stored_settings[country]? && stored_settings[country][retailer]?)
         settings = settings_data[country][retailer].choices[stored_settings[country][retailer]]
     else
         settings = {}

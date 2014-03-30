@@ -25,14 +25,14 @@
             }
         ]
     },
-    "Element14": {
+    "Farnell": {
         "interface": {
             "additem": "/jsp/shoppingCart/quickPaste.jsp?_DARGS=/jsp/shoppingCart/fragments/quickPaste/quickPaste.jsp.quickpaste&/pf/commerce/order/QuickPaste.addPasteProducts=Add To Basket&/pf/commerce/order/QuickPaste.buyErrorURL=/jsp/shoppingCart/quickPaste.jsp&/pf/commerce/order/QuickPaste.buySuccessURL=/jsp/shoppingCart/shoppingCart.jsp&_D:/pf/commerce/order/QuickPaste.addPasteProducts= &_D:/pf/commerce/order/QuickPaste.buyErrorURL= &_D:/pf/commerce/order/QuickPaste.buySuccessURL= &_D:submitQuickPaste= &_D:textBox= &_DARGS=/jsp/shoppingCart/fragments/quickPaste/quickPaste.jsp.quickpaste&_dyncharset=UTF-8&textBox=",
             "additem_params": "",
             "cart": "/jsp/shoppingCart/shoppingCart.jsp",
             "country": "UK",
-            "interface_name": "Element14",
-            "name": "Element14 UK",
+            "interface_name": "Farnell",
+            "name": "Farnell UK",
             "site": "://uk.farnell.com"
         },
         "items": [
@@ -46,7 +46,7 @@
                 "comment": "CON1",
                 "part": "1645325",
                 "quantity": 1,
-                "retailer": "Element14",
+                "retailer": "Farnell",
                 "row": 0
             }
         ]

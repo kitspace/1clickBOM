@@ -13,7 +13,7 @@
 #    along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 @digikey_data   = get_local("/data/digikey_international.json")
-@element14_data = get_local("/data/element14_international.json")
+@farnell_data = get_local("/data/farnell_international.json")
 @mouser_data    = get_local("/data/mouser_international.json")
 
 test "Digikey: Clear All", () ->
@@ -40,33 +40,33 @@ test "Digikey: Add Items", () ->
     ok true
 
 
-test "Element14: Clear All", () ->
+test "Farnell: Clear All", () ->
     try
-        for key of window.element14_data.sites
-            console.log "Element14: Clearing all in " + key
-            d = new Element14(key)
+        for key of window.farnell_data.sites
+            console.log "Farnell: Clearing all in " + key
+            d = new Farnell(key)
             d.clearCart()
     catch error
         ok false
         throw error
     ok true
 
-asyncTest "Element14: Add Items", () ->
+asyncTest "Farnell: Add Items", () ->
     #this test can be a bit iffy,
-    #if it fails, try clearing all the farnell and element14 cookies and trying again
-    stop(Object.keys(window.element14_data.sites).length-1)
-    for key of window.element14_data.sites
-        console.log "Element14: Adding items"
-        d = new Element14(key)
+    #if it fails, try clearing all the farnell and farnell cookies and trying again
+    stop(Object.keys(window.farnell_data.sites).length-1)
+    for key of window.farnell_data.sites
+        console.log "Farnell: Adding items"
+        d = new Farnell(key)
         items = [{"part":"2250472", "quantity":2, "comment":"test"}]
         d.addItems items, (request, country) ->
             deepEqual(request.success, true, country)
             start()
 
-asyncTest "Element14: Add Items fails", () ->
-    stop(Object.keys(window.element14_data.sites).length-1)
-    for key of window.element14_data.sites
-        d = new Element14(key)
+asyncTest "Farnell: Add Items fails", () ->
+    stop(Object.keys(window.farnell_data.sites).length-1)
+    for key of window.farnell_data.sites
+        d = new Farnell(key)
         items = [{"part":"fail", "quantity":2, "comment":"test"}]
         d.addItems items, (request, country) ->
             deepEqual(request.success, false, country)

@@ -12,10 +12,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-class @Element14 extends RetailerInterface
+class @Farnell extends RetailerInterface
     constructor: (country_code, settings) ->
-        super("Element14", country_code, "/data/element14_international.json", settings)
-        @icon_src = chrome.extension.getURL("images/element14.ico")
+        super("Farnell", country_code, "/data/farnell_international.json", settings)
+        @icon_src = chrome.extension.getURL("images/farnell.ico")
 
 
     clearCart: ->

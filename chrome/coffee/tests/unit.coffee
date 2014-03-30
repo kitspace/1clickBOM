@@ -15,8 +15,8 @@
 test "Digikey: Constructs and is RetailerInterface", () ->
     ok new Digikey("AT") instanceof RetailerInterface
 
-test "Element14: Constructs and is RetailerInterface", () ->
-    ok new Element14("AT") instanceof RetailerInterface
+test "Farnell: Constructs and is RetailerInterface", () ->
+    ok new Farnell("AT") instanceof RetailerInterface
 
 test "Mouser: Constructs and is RetailerInterface", () ->
     ok new Mouser("AT") instanceof RetailerInterface
@@ -29,9 +29,9 @@ test "Digikey: InvalidCountryError Thrown", () ->
         new Digikey("XX")
     , InvalidCountryError
 
-test "Element14: InvalidCountryError Thrown", () ->
+test "Farnell: InvalidCountryError Thrown", () ->
     throws () ->
-        new Element14("XX")
+        new Farnell("XX")
     , InvalidCountryError
 
 test "Mouser: InvalidCountryError Thrown", () ->
