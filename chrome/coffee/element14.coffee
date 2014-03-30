@@ -82,8 +82,12 @@ class @Element14 extends RetailerInterface
         url = "https" + @site + @additem
         for item in items
             url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
-        xhr.onreadystatechange = () ->
+        xhr.onreadystatechange = (data) ->
             if xhr.readyState == 4
+                parser = new DOMParser
+                doc = parser.parseFromString(xhr.responseText, "text/html")
+                failed = doc.getElementsByTagName("title")[0].innerHTML.indexOf("Quick Paste") != -1
+                console.log(failed)
                 that.refreshCartTabs()
                 that.refreshSiteTabs()
         xhr.open("POST", url, true)
