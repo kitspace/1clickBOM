@@ -20,7 +20,7 @@ class @Digikey extends RetailerInterface
     clearCart: ->
         that = this
         xhr = new XMLHttpRequest
-        xhr.open("GET","https" + @site + @cart + "?webid=-1", true)
+        xhr.open("GET","http" + @site + @cart + "?webid=-1", true)
         xhr.onreadystatechange = () ->
             if xhr.readyState == 4
                 that.refreshCartTabs()
@@ -30,7 +30,7 @@ class @Digikey extends RetailerInterface
         that = this
         for item in items
             xhr = new XMLHttpRequest
-            xhr.open("POST", "https" + @site + @additem + "?qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment, true)
+            xhr.open("POST", "http" + @site + @additem + "?qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment, true)
             xhr.onreadystatechange = () ->
                 if xhr.readyState == 4
                     that.refreshCartTabs()

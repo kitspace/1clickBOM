@@ -90,6 +90,7 @@ bom_changed = (bom) ->
             a = document.createElement("a")
             a.value = retailer_name
             a.title = titles[i] + retailer_name + " cart"
+            a.href = "#"
             links.push(a)
             span = document.createElement("span")
             span.className = "button_icon"
