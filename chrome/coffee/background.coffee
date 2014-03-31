@@ -144,6 +144,13 @@ lookup_setting_values = (country, retailer, stored_settings)->
             newInterface(retailer, bom[retailer], country, setting_values)
             bom[retailer].interface.addItems(bom[retailer].items)
 
+@fill_cart = (retailer)->
+    chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
+
+        setting_values = lookup_setting_values(country, retailer, stored_settings)
+        newInterface(retailer, bom[retailer], country, setting_values)
+        bom[retailer].interface.addItems(bom[retailer].items)
+
 @empty_carts = ()->
     chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
         for retailer of bom
@@ -151,12 +158,20 @@ lookup_setting_values = (country, retailer, stored_settings)->
             newInterface(retailer, bom[retailer], country, setting_values)
             bom[retailer].interface.clearCart()
 
+@empty_cart = (retailer)->
+    chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
+
+        setting_values = lookup_setting_values(country, retailer, stored_settings)
+        newInterface(retailer, bom[retailer], country, setting_values)
+        bom[retailer].interface.clearCart()
+
 @open_cart_tabs = ()->
     chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
         for retailer of bom
             setting_values = lookup_setting_values(country, retailer, stored_settings)
             newInterface(retailer, bom[retailer], country, setting_values)
             bom[retailer].interface.openCartTab()
+
 
 
 

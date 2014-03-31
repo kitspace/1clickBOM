@@ -13,20 +13,22 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 chrome.runtime.getBackgroundPage (bkgd_page) ->
-    document.querySelector("#paste").addEventListener "click", bkgd_page.paste_action 
+    document.querySelector("#paste").addEventListener "click", bkgd_page.paste_action
 
     document.querySelector("#clear").addEventListener "click", () ->
         chrome.storage.local.remove("bom")
         clear_warning_log()
 
-    document.querySelector("#fill_carts").addEventListener "click", bkgd_page.fill_carts
-    document.querySelector("#empty_carts").addEventListener "click", bkgd_page.empty_carts
-    document.querySelector("#open_cart_tabs").addEventListener "click", bkgd_page.open_cart_tabs
+    document.querySelector("#fill_carts").addEventListener("click", bkgd_page.fill_carts)
+    document.querySelector("#empty_carts").addEventListener("click", bkgd_page.empty_carts)
+    document.querySelector("#open_cart_tabs").addEventListener("click", bkgd_page.open_cart_tabs)
 
     #Ctrl-V event
-    document.addEventListener 'keydown', (event) -> 
+    document.addEventListener 'keydown', (event) ->
         if ((event.keyCode == 86) && (event.ctrlKey == true))
             bkgd_page.paste_action()
+
+    document.bkgd_page = bkgd_page
 
     #chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
     #    console.log(request)
@@ -47,8 +49,9 @@ bom_changed = (bom) ->
         document.querySelector("#open_cart_tabs").hidden=!Boolean(Object.keys(bom).length)
         document.querySelector("#bom").hidden=!Boolean(Object.keys(bom).length)
     table = document.querySelector("#bom_list")
-    table.removeChild(table.lastChild) while table.hasChildNodes() 
+    table.removeChild(table.lastChild) while table.hasChildNodes()
     for retailer_name of bom
+        console.log(retailer_name)
         retailer = bom[retailer_name].interface
         items    = bom[retailer_name].items
         no_of_items = 0
@@ -68,7 +71,6 @@ bom_changed = (bom) ->
         td_0.appendChild(a)
         tr.appendChild(td_0)
 
-
         td_1 = document.createElement("td")
         td_1.innerText = items.length + " line"
         td_1.innerText += "s" if (items.length > 1)
@@ -79,20 +81,28 @@ bom_changed = (bom) ->
         td_2.innerText += "s" if (no_of_items > 1)
         tr.appendChild(td_2)
         td = document.createElement("td")
-        
+
         unicode_chars = ["\uf21e","\uf21b"]
-        ids = ["add","empty"]
+        titles = ["Add items to " , "Empty "]
+        links = []
         for i in  [0..1]
             td = document.createElement("td")
             a = document.createElement("a")
-            a.id = retailer_name + "_" + ids[i] 
-            a.href = "#"
+            a.value = retailer_name
+            a.title = titles[i] + retailer_name + " cart"
+            links.push(a)
             span = document.createElement("span")
             span.className = "button_icon"
-            span.innerText = unicode_chars[i] 
+            span.innerText = unicode_chars[i]
             a.appendChild(span)
             td.appendChild(a)
             tr.appendChild(td)
+
+        links[0].addEventListener "click", () ->
+            document.bkgd_page.fill_cart(this.value)
+
+        links[1].addEventListener "click", () ->
+            document.bkgd_page.empty_cart(this.value)
 
         table.appendChild(tr)
 
@@ -108,7 +118,7 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
 clear_warning_log  = () ->
         document.querySelector("#warnings").hidden = true;
         table = document.querySelector("#warning_list")
-        table.removeChild(table.lastChild) while table.hasChildNodes() 
+        table.removeChild(table.lastChild) while table.hasChildNodes()
 
 chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
     if(request.invalid)
@@ -127,7 +137,7 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
             td_0 = document.createElement("td")
             span = document.createElement("span")
             span.className = "button_icon"
-            span.innerText = "\uf101" 
+            span.innerText = "\uf101"
             td_0.appendChild(span)
             tr.appendChild(td_0)
             td_1 = document.createElement("td")
