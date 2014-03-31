@@ -76,7 +76,7 @@ class @Farnell extends RetailerInterface
         else
             super()
 
-    addItems: (items, callback)->
+    addItems: (items, callback) ->
         if @site == "://export.farnell.com"
             fix_url = "http" + @site + @cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"
             fix_xhr = new XMLHttpRequest
@@ -95,10 +95,32 @@ class @Farnell extends RetailerInterface
                 doc = parser.parseFromString(xhr.responseText, "text/html")
                 #we determine the request has returned the basket by the body classname so it's language agnostic
                 request.success = doc.querySelector("body.shoppingCart") != null
-                if (callback?)
-                    callback(request, that.country)
                 if (request.success)
+                    if (callback?)
+                        callback(request, that.country)
                     that.refreshCartTabs()
                     that.refreshSiteTabs()
+                else 
+                    that._add_items_individually(items, callback)
         xhr.open("POST", url, true)
         xhr.send()
+
+    _add_items_individually: (items, callback) ->
+        that = this
+        request = {}
+        for item in items
+            xhr = new XMLHttpRequest
+            url = "https" + @site + "/jsp/shoppingCart/processMicroCart.jsp?action=buy&product=" + item.part + "&qty=" + item.quantity
+            xhr.open("POST", url, true)
+            xhr.onreadystatechange = (data) ->
+                if xhr.readyState == 4
+                    request.success = xhr.responseXML != null
+                    if (callback?)
+                        callback(request, that.country)
+                    that.refreshCartTabs()
+                    that.refreshSiteTabs()
+            xhr.send()
+
+
+
+

@@ -34,7 +34,7 @@ asyncTest "Digikey: Add items", () ->
         console.log("Digikey: Adding items")
         d = new Digikey(key)
         d.addItems items, (request, that) ->
-            deepEqual(request.success, true, that.contry)
+            deepEqual(request.success, true, that.country)
             start()
 
 asyncTest "Digikey: Add items fails", () ->
