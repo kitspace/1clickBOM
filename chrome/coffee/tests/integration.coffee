@@ -27,27 +27,24 @@ test "Digikey: Clear All", () ->
         throw error
     ok true
 
-
-#test "Digikey: Add Items", () ->
-#    try
-#        for key of window.digikey_data.sites
-#            console.log "Digikey: Adding item in " + key
-#            d = new Digikey(key)
-#            items = [{"part":"754-1173-1-ND","quantity":2, "comment":"test"}]
-#            d.addItems(items)
-#    catch error
-#        ok false
-#        throw error
-#    ok true
-
-asyncTest "Digikey: Add Items", () ->
+asyncTest "Digikey: Add items", () ->
     items = [{"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
     stop(Object.keys(window.digikey_data.sites).length-1)
     for key of window.digikey_data.sites
         console.log("Digikey: Adding items")
         d = new Digikey(key)
-        d.addItems items, (request, country) ->
-            deepEqual(request.success, true, country)
+        d.addItems items, (request, that) ->
+            deepEqual(request.success, true, that.contry)
+            start()
+
+asyncTest "Digikey: Add items fails", () ->
+    items = [{"part":"fail", "quantity":2, "comment":"test"}]
+    stop(Object.keys(window.digikey_data.sites).length-1)
+    for key of window.digikey_data.sites
+        console.log("Digikey: Adding items")
+        d = new Digikey(key)
+        d.addItems items, (request, that) ->
+            deepEqual(request.success, false, that.country)
             start()
 
 
@@ -62,7 +59,7 @@ test "Farnell: Clear All", () ->
         throw error
     ok true
 
-asyncTest "Farnell: Add Items", () ->
+asyncTest "Farnell: Add items", () ->
     #this test can be a bit iffy,
     #if it fails, try clearing all the farnell and element14 cookies and trying again
     stop(Object.keys(window.farnell_data.sites).length-1)
@@ -74,7 +71,7 @@ asyncTest "Farnell: Add Items", () ->
             deepEqual(request.success, true, country)
             start()
 
-asyncTest "Farnell: Add Items fails", () ->
+asyncTest "Farnell: Add items fails", () ->
     stop(Object.keys(window.farnell_data.sites).length-1)
     for key of window.farnell_data.sites
         d = new Farnell(key)

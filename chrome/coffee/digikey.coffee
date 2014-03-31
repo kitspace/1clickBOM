@@ -26,13 +26,22 @@ class @Digikey extends RetailerInterface
                 that.refreshCartTabs()
         xhr.send()
 
-    addItems: (items) ->
+    addItems: (items, callback) ->
         that = this
         for item in items
             xhr = new XMLHttpRequest
             xhr.open("POST", "http" + @site + @additem + "?qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment, true)
             xhr.onreadystatechange = () ->
                 if xhr.readyState == 4
+                    parser = new DOMParser
+                    doc = parser.parseFromString(xhr.responseText, "text/html")
+                    quick_add_quant = doc.querySelector("#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity")
+                    if quick_add_quant?
+                        success = quick_add_quant.value == ""
+                    else
+                        success = false
+                    request = {success:success}
+                    callback(request, that)
                     that.refreshCartTabs()
             xhr.send()
 
