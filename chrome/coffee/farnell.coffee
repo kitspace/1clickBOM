@@ -69,8 +69,8 @@ class @Farnell extends RetailerInterface
         request = {}
         for item in items
             url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
-        xhr.onreadystatechange = (data) ->
-            if xhr.readyState == 4
+        xhr.onreadystatechange = (event) ->
+            if event.currentTarget.readyState == 4
                 #if items successully add the request returns the basket
                 parser = new DOMParser
                 doc = parser.parseFromString(xhr.responseText, "text/html")
@@ -79,7 +79,7 @@ class @Farnell extends RetailerInterface
                 request.success = doc.querySelector("body.shoppingCart") != null
                 if (request.success)
                     if (callback?)
-                        callback(request, that.country)
+                        callback(request, that)
                     that.refreshCartTabs()
                     that.refreshSiteTabs()
                 else 
@@ -90,6 +90,31 @@ class @Farnell extends RetailerInterface
     _add_items_individually: (items, callback) ->
         that = this
         request = {success:true, fails:[]}
+        count = items.length
+        for item in items
+            xhr = new XMLHttpRequest
+            url = "https" + @site + @additem
+            url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
+            xhr.open("POST", url, true)
+            xhr.item = item
+            xhr.onreadystatechange = (event) ->
+                if event.currentTarget.readyState == 4
+                    doc = (new DOMParser).parseFromString(event.currentTarget.responseText, "text/html")
+                    success = doc.querySelector("body.shoppingCart") != null
+                    request.success = request.success && success
+                    if not success
+                        request.fails.push(event.currentTarget.item)
+                    count--
+                    if count == 0
+                        that.refreshCartTabs()
+                        that.refreshSiteTabs()
+                        if callback?
+                            callback(request, that)
+            xhr.send()
+
+    _add_items_individually_via_micro_cart: (items, callback) ->
+        that = this
+        request = {success:true, fails:[], no_item_comments:true}
         count = items.length
         for item in items
             xhr = new XMLHttpRequest

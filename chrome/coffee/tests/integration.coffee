@@ -19,7 +19,7 @@
 test "Digikey: Clear All", () ->
     try
         for key of window.digikey_data.sites
-            console.log "Digikey: Clearing all in:" + key
+            console.log "Digikey: Clearing all"
             d = new Digikey(key)
             d.clearCart()
     catch error
@@ -63,7 +63,7 @@ asyncTest "Digikey: Add items fails 2", () ->
 test "Farnell: Clear All", () ->
     try
         for key of window.farnell_data.sites
-            console.log "Farnell: Clearing all in " + key
+            console.log "Farnell: Clearing all"
             d = new Farnell(key)
             d.clearCart()
     catch error
@@ -71,36 +71,75 @@ test "Farnell: Clear All", () ->
         throw error
     ok true
 
-asyncTest "Farnell: Add items individually", () ->
+asyncTest "Farnell: Add items", () ->
     #this test can be a bit iffy,
     #if it fails, try clearing all the farnell and element14 cookies and trying again
     stop(Object.keys(window.farnell_data.sites).length-1)
     for key of window.farnell_data.sites
-        console.log "Farnell: Adding items individually"
+        console.log "Farnell: Adding items"
         d = new Farnell(key)
         items = [{"part":"2250472", "quantity":2, "comment":"test"}]
-        d._add_items_individually items, (request, that) ->
+        d.addItems items, (request, that) ->
             deepEqual(request.success, true, that.country)
             start()
 
-asyncTest "Farnell: Add items individually fails", () ->
-    items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
+asyncTest "Farnell: Add items fails", () ->
+    #this test can be a bit iffy,
+    #if it fails, try clearing all the farnell and element14 cookies and trying again
     stop(Object.keys(window.farnell_data.sites).length-1)
     for key of window.farnell_data.sites
-        console.log "Farnell: Adding items individually"
-        d = new Farnell("UK")
-        d._add_items_individually items, (request, that) ->
+        console.log "Farnell: Adding items"
+        d = new Farnell(key)
+        items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
+        d.addItems items, (request, that) ->
             deepEqual(request.success, false, that.country)
             deepEqual(request.fails, [items[0]], that.country)
             start()
 
-asyncTest "Farnell: Add items individually fails 2", () ->
+asyncTest "Farnell: Add items fail 2", () ->
+    #this test can be a bit iffy,
+    #if it fails, try clearing all the farnell and element14 cookies and trying again
+    stop(Object.keys(window.farnell_data.sites).length-1)
+    for key of window.farnell_data.sites
+        console.log "Farnell: Adding items"
+        d = new Farnell(key)
+        items = [{"part":"2250472", "quantity":-1, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
+        d.addItems items, (request, that) ->
+            deepEqual(request.success, false, that.country)
+            deepEqual(request.fails, [items[0]], that.country)
+            start()
+
+asyncTest "Farnell: Add items individually via microCart", () ->
+    stop(Object.keys(window.farnell_data.sites).length-1)
+    for key of window.farnell_data.sites
+        console.log "Farnell: Adding items individually via microCart"
+        d = new Farnell(key)
+        items = [{"part":"2250472", "quantity":2, "comment":"test"}]
+        d._add_items_individually_via_micro_cart items, (request, that) ->
+            deepEqual(request.no_item_comments, true, that.country)
+            deepEqual(request.success, true, that.country)
+            start()
+
+asyncTest "Farnell: Add items individually via microCart fails", () ->
+    items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
+    stop(Object.keys(window.farnell_data.sites).length-1)
+    for key of window.farnell_data.sites
+        console.log "Farnell: Adding items individually via microCart"
+        d = new Farnell("UK")
+        d._add_items_individually_via_micro_cart items, (request, that) ->
+            deepEqual(request.no_item_comments, true, that.country)
+            deepEqual(request.success, false, that.country)
+            deepEqual(request.fails, [items[0]], that.country)
+            start()
+
+asyncTest "Farnell: Add items individually via microCart fails 2", () ->
     items = [{"part":"2250472", "quantity":-1, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
     stop(Object.keys(window.farnell_data.sites).length-1)
     for key of window.farnell_data.sites
-        console.log "Farnell: Adding items individually"
+        console.log "Farnell: Adding items individually via microCart"
         d = new Farnell("UK")
-        d._add_items_individually items, (request, that) ->
+        d._add_items_individually_via_micro_cart items, (request, that) ->
+            deepEqual(request.no_item_comments, true, that.country)
             deepEqual(request.success, false, that.country)
             deepEqual(request.fails, [items[0]], that.country)
             start()
