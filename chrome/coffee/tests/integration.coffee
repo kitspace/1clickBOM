@@ -12,9 +12,9 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-@digikey_data   = get_local("/data/digikey_international.json")
+@digikey_data = get_local("/data/digikey_international.json")
 @farnell_data = get_local("/data/farnell_international.json")
-@mouser_data    = get_local("/data/mouser_international.json")
+@mouser_data  = get_local("/data/mouser_international.json")
 
 test "Digikey: Clear All", () ->
     try
@@ -38,13 +38,25 @@ asyncTest "Digikey: Add items", () ->
             start()
 
 asyncTest "Digikey: Add items fails", () ->
-    items = [{"part":"fail", "quantity":2, "comment":"test"}]
+    items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
     stop(Object.keys(window.digikey_data.sites).length-1)
     for key of window.digikey_data.sites
         console.log("Digikey: Adding items")
         d = new Digikey(key)
         d.addItems items, (request, that) ->
             deepEqual(request.success, false, that.country)
+            deepEqual(request.fails, [items[0]], that.country)
+            start()
+
+asyncTest "Digikey: Add items fails 2", () ->
+    items = [{"part":"754-1173-1-ND", "quantity":-1, "comment":"test"}, {"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
+    stop(Object.keys(window.digikey_data.sites).length-1)
+    for key of window.digikey_data.sites
+        console.log("Digikey: Adding items (2)")
+        d = new Digikey(key)
+        d.addItems items, (request, that) ->
+            deepEqual(request.success, false, that.country)
+            deepEqual(request.fails, [items[0]], that.country)
             start()
 
 
