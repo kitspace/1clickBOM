@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
+module("unit")
 test "Digikey: Constructs and is RetailerInterface", () ->
     ok new Digikey("AT") instanceof RetailerInterface
 

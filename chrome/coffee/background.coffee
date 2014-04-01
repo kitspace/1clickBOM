@@ -86,8 +86,11 @@ checkValidItems = (items_incoming, invalid) ->
     return {items, invalid}
 
 @paste_action = ()->
-    chrome.storage.local.get ["bom", "country"], (obj) ->
+        text = paste()
+        addToBOM(text)
 
+@addToBOM = (text, callback) ->
+    chrome.storage.local.get ["bom", "country"], (obj) ->
         bom = obj.bom
         country = obj.country
 
@@ -97,7 +100,6 @@ checkValidItems = (items_incoming, invalid) ->
         if (!country)
             country = "Other"
 
-        text = paste()
         {items, invalid} = parseTSV(text)
         {items, invalid} = checkValidItems(items, invalid)
 
@@ -117,7 +119,9 @@ checkValidItems = (items_incoming, invalid) ->
                 newInterface(item.retailer, bom[item.retailer], country)
             bom[item.retailer].items.push(item)
 
-        chrome.storage.local.set {"bom":bom}
+        chrome.storage.local.set {"bom":bom}, () ->
+            if callback?
+                callback()
 
 chrome.storage.onChanged.addListener (changes, namespace) ->
     if (namespace == "local" && changes.country)
@@ -177,9 +181,6 @@ lookup_setting_values = (country, retailer, stored_settings)->
         setting_values = lookup_setting_values(country, retailer, stored_settings)
         newInterface(retailer, bom[retailer], country, setting_values)
         bom[retailer].interface.openCartTab()
-
-
-
 
 @get_location = ()->
     xhr = new XMLHttpRequest
