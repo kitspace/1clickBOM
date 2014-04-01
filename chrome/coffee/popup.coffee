@@ -61,8 +61,10 @@ bom_changed = (bom) ->
         td_0 = document.createElement("td")
 
         a  = document.createElement("a")
-        a.href = "https" + retailer.site + retailer.cart
-        a.target = "_blank"
+        a.href = "#"
+        a.value = retailer_name
+        a.addEventListener "click", () ->
+            document.bkgd_page.open_cart(this.value)
 
         icon = document.createElement("img")
         icon.src = retailer.icon_src

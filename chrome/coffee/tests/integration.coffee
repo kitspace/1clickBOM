@@ -52,7 +52,7 @@ asyncTest "Digikey: Add items fails 2", () ->
     items = [{"part":"754-1173-1-ND", "quantity":-1, "comment":"test"}, {"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
     stop(Object.keys(window.digikey_data.sites).length-1)
     for key of window.digikey_data.sites
-        console.log("Digikey: Adding items (2)")
+        console.log("Digikey: Adding items")
         d = new Digikey(key)
         d.addItems items, (request, that) ->
             deepEqual(request.success, false, that.country)
@@ -71,25 +71,38 @@ test "Farnell: Clear All", () ->
         throw error
     ok true
 
-asyncTest "Farnell: Add items", () ->
+asyncTest "Farnell: Add items individually", () ->
     #this test can be a bit iffy,
     #if it fails, try clearing all the farnell and element14 cookies and trying again
     stop(Object.keys(window.farnell_data.sites).length-1)
     for key of window.farnell_data.sites
-        console.log "Farnell: Adding items"
+        console.log "Farnell: Adding items individually"
         d = new Farnell(key)
         items = [{"part":"2250472", "quantity":2, "comment":"test"}]
-        d.addItems items, (request, country) ->
-            deepEqual(request.success, true, country)
+        d._add_items_individually items, (request, that) ->
+            deepEqual(request.success, true, that.country)
             start()
 
-asyncTest "Farnell: Add items fails", () ->
+asyncTest "Farnell: Add items individually fails", () ->
+    items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
     stop(Object.keys(window.farnell_data.sites).length-1)
     for key of window.farnell_data.sites
-        d = new Farnell(key)
-        items = [{"part":"fail", "quantity":2, "comment":"test"}]
-        d.addItems items, (request, country) ->
-            deepEqual(request.success, false, country)
+        console.log "Farnell: Adding items individually"
+        d = new Farnell("UK")
+        d._add_items_individually items, (request, that) ->
+            deepEqual(request.success, false, that.country)
+            deepEqual(request.fails, [items[0]], that.country)
+            start()
+
+asyncTest "Farnell: Add items individually fails 2", () ->
+    items = [{"part":"2250472", "quantity":-1, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
+    stop(Object.keys(window.farnell_data.sites).length-1)
+    for key of window.farnell_data.sites
+        console.log "Farnell: Adding items individually"
+        d = new Farnell("UK")
+        d._add_items_individually items, (request, that) ->
+            deepEqual(request.success, false, that.country)
+            deepEqual(request.fails, [items[0]], that.country)
             start()
 
 test "Mouser: Add Items", () ->
@@ -108,52 +121,52 @@ test "Mouser: Add Items", () ->
         throw error
     ok true
 
-asyncTest "Paste BOM", 1, () ->
-    chrome.storage.local.remove("bom")
-    chrome.storage.local.get "country", (obj) ->
-        stored = obj.country
-        chrome.storage.local.set {country: "UK"}, () ->
-
-            test_bom = get_local("/data/example.json")
-
-            copybox    = document.createElement("textarea")
-            pastebox   = document.createElement("textarea")
-            restorebox = document.createElement("textarea")
-
-            listener = (changes, namespace) ->
-                if (namespace == "local" && changes.bom)
-                    chrome.storage.local.get "bom", ({bom:bom}) ->
-                        deepEqual(bom, test_bom)
-                        restorebox.select()
-                        document.execCommand("copy")
-                        document.body.removeChild(copybox)
-                        document.body.removeChild(pastebox)
-                        document.body.removeChild(restorebox)
-                        #chrome.storage.local.remove(["bom", "country"])
-                        chrome.storage.onChanged.removeListener listener
-                        chrome.storage.local.set {country:stored}, () ->
-                        start()
-
-
-            chrome.storage.onChanged.addListener listener
-
-            copybox.id    = "copybox"
-            pastebox.id   = "pastebox"
-            restorebox.id = "restorebox"
-
-            xhr = new XMLHttpRequest()
-            xhr.open "GET", chrome.extension.getURL("/data/example.tsv"), false
-            xhr.send()
-            copybox.value = xhr.responseText
-
-            document.body.appendChild(copybox)
-            document.body.appendChild(pastebox)
-            document.body.appendChild(restorebox)
-
-            restorebox.select()
-            document.execCommand("paste")
-            copybox.select()
-            document.execCommand("copy")
-
-            paste_action()
+#asyncTest "Paste BOM", 1, () ->
+#    chrome.storage.local.remove("bom")
+#    chrome.storage.local.get "country", (obj) ->
+#        stored = obj.country
+#        chrome.storage.local.set {country: "UK"}, () ->
+#
+#            test_bom = get_local("/data/example.json")
+#
+#            copybox    = document.createElement("textarea")
+#            pastebox   = document.createElement("textarea")
+#            restorebox = document.createElement("textarea")
+#
+#            listener = (changes, namespace) ->
+#                if (namespace == "local" && changes.bom)
+#                    chrome.storage.local.get "bom", ({bom:bom}) ->
+#                        deepEqual(bom, test_bom)
+#                        restorebox.select()
+#                        document.execCommand("copy")
+#                        document.body.removeChild(copybox)
+#                        document.body.removeChild(pastebox)
+#                        document.body.removeChild(restorebox)
+#                        #chrome.storage.local.remove(["bom", "country"])
+#                        chrome.storage.onChanged.removeListener listener
+#                        chrome.storage.local.set {country:stored}, () ->
+#                        start()
+#
+#
+#            chrome.storage.onChanged.addListener listener
+#
+#            copybox.id    = "copybox"
+#            pastebox.id   = "pastebox"
+#            restorebox.id = "restorebox"
+#
+#            xhr = new XMLHttpRequest()
+#            xhr.open "GET", chrome.extension.getURL("/data/example.tsv"), false
+#            xhr.send()
+#            copybox.value = xhr.responseText
+#
+#            document.body.appendChild(copybox)
+#            document.body.appendChild(pastebox)
+#            document.body.appendChild(restorebox)
+#
+#            restorebox.select()
+#            document.execCommand("paste")
+#            copybox.select()
+#            document.execCommand("copy")
+#
+#            paste_action()
 

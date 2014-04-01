@@ -172,6 +172,12 @@ lookup_setting_values = (country, retailer, stored_settings)->
             newInterface(retailer, bom[retailer], country, setting_values)
             bom[retailer].interface.openCartTab()
 
+@open_cart = (retailer)->
+    chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
+        setting_values = lookup_setting_values(country, retailer, stored_settings)
+        newInterface(retailer, bom[retailer], country, setting_values)
+        bom[retailer].interface.openCartTab()
+
 
 
 

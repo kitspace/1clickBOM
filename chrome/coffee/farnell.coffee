@@ -17,6 +17,12 @@ class @Farnell extends RetailerInterface
         super("Farnell", country_code, "/data/farnell_international.json", settings)
         @icon_src = chrome.extension.getURL("images/farnell.ico")
 
+        #export farnell tries to go to exportHome if we have no cookie and we don't pass it the params
+        if @site == "://export.farnell.com"
+            fix_url = "http" + @site + @cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"
+            fix_xhr = new XMLHttpRequest
+            fix_xhr.open("GET", fix_url, false)
+            fix_xhr.send()
 
     clearCart: ->
         @_get_item_ids()
@@ -56,32 +62,7 @@ class @Farnell extends RetailerInterface
                 txt_2 += "&" + id + "=1"
             xhr.send("/pf/commerce/CartHandler.addItemCount=5&/pf/commerce/CartHandler.addLinesSuccessURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL=../checkout/paymentMethod.jsp&/pf/commerce/CartHandler.punchOutSuccessURL=orderReviewPunchOut.jsp" + txt_1 + "&/pf/commerce/CartHandler.setOrderErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.setOrderSuccessURL=../shoppingCart/shoppingCart.jsp&_D:/pf/commerce/CartHandler.addItemCount= &_D:/pf/commerce/CartHandler.addLinesSuccessURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL= &_D:/pf/commerce/CartHandler.punchOutSuccessURL= &_D:/pf/commerce/CartHandler.removalCommerceIds= &_D:/pf/commerce/CartHandler.setOrderErrorURL= &_D:/pf/commerce/CartHandler.setOrderSuccessURL= &_D:Submit= &_D:addEmptyLines= &_D:clearBlankLines= &_D:continueWithShipping= &_D:emptyLinesA= &_D:emptyLinesB= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote1= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:reqFromCart= &_D:textfield2= &_D:topUpdateCart= &_DARGS=/jsp/shoppingCart/fragments/shoppingCart/cartContent.jsp.cart&_dyncharset=UTF-8" + txt_2 + "&emptyLinesA=0&emptyLinesB=0&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote1=&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&reqFromCart=true&textfield2=&topUpdateCart=Update Basket") 
 
-    refreshCartTabs: (site = @site, cart = @cart) ->
-        #export farnell tries to go to exportHome if we have no cookie and we don't pass it the params
-        if site == "://export.farnell.com"
-            re = new RegExp(cart, "i")
-            chrome.tabs.query {"url":"*" + site + "/*"}, (tabs)->
-                for tab in tabs
-                    if (tab.url.match(re))
-                        protocol = tab.url.split("://")[0]
-                        chrome.tabs.update tab.id, {"url": protocol + site + cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"}
-        else
-            super()
-
-    openCartTab: (site = @site, cart = @cart) ->
-        #export farnell tries to go to exportHome if we have no cookie and we don't pass it the params
-        if site == "://export.farnell.com"
-            export_cart= cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP" 
-            super(site = site, cart = export_cart)
-        else
-            super()
-
     addItems: (items, callback) ->
-        if @site == "://export.farnell.com"
-            fix_url = "http" + @site + @cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"
-            fix_xhr = new XMLHttpRequest
-            fix_xhr.open("GET", fix_url, false)
-            fix_xhr.send()
         that = this
         xhr = new XMLHttpRequest
         url = "https" + @site + @additem
@@ -93,7 +74,8 @@ class @Farnell extends RetailerInterface
                 #if items successully add the request returns the basket
                 parser = new DOMParser
                 doc = parser.parseFromString(xhr.responseText, "text/html")
-                #we determine the request has returned the basket by the body classname so it's language agnostic
+                #we determine the request has returned the basket by the body classname 
+                #so it's language agnostic
                 request.success = doc.querySelector("body.shoppingCart") != null
                 if (request.success)
                     if (callback?)
@@ -107,18 +89,25 @@ class @Farnell extends RetailerInterface
 
     _add_items_individually: (items, callback) ->
         that = this
-        request = {}
+        request = {success:true, fails:[]}
+        count = items.length
         for item in items
             xhr = new XMLHttpRequest
             url = "https" + @site + "/jsp/shoppingCart/processMicroCart.jsp?action=buy&product=" + item.part + "&qty=" + item.quantity
             xhr.open("POST", url, true)
-            xhr.onreadystatechange = (data) ->
-                if xhr.readyState == 4
-                    request.success = xhr.responseXML != null
-                    if (callback?)
-                        callback(request, that.country)
-                    that.refreshCartTabs()
-                    that.refreshSiteTabs()
+            xhr.item = item
+            xhr.onreadystatechange = (event) ->
+                if event.currentTarget.readyState == 4
+                    success = xhr.responseXML != null
+                    request.success = request.success && success
+                    if not success
+                        request.fails.push(event.currentTarget.item)
+                    count--
+                    if count == 0
+                        that.refreshCartTabs()
+                        that.refreshSiteTabs()
+                        if callback?
+                            callback(request, that)
             xhr.send()
 
 
