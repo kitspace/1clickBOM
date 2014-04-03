@@ -27,6 +27,10 @@ class @BomManager
             when "Mouser"
                 retailer.interface = new  Mouser(country, settings)
 
+    getBOM: (callback) ->
+        chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
+            callback(bom, country, stored_settings)
+
     addToBOM: (text, callback) ->
         that = this
         chrome.storage.local.get ["bom", "country"], (obj) ->

@@ -12,113 +12,103 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
+window.bom_manager = new BomManager
+
+bom_changed = () ->
+    window.bom_manager.getBOM (bom) ->
+        if (!bom)
+            document.querySelector("#clear").hidden=true
+            document.querySelector("#fill_carts").hidden=true
+            document.querySelector("#empty_carts").hidden=true
+            document.querySelector("#open_cart_tabs").hidden=true
+            document.querySelector("#bom").hidden=true
+        else
+            #BOM can still be empty
+            document.querySelector("#clear").hidden=!Boolean(Object.keys(bom).length)
+            document.querySelector("#fill_carts").hidden=!Boolean(Object.keys(bom).length)
+            document.querySelector("#empty_carts").hidden=!Boolean(Object.keys(bom).length)
+            document.querySelector("#open_cart_tabs").hidden=!Boolean(Object.keys(bom).length)
+            document.querySelector("#bom").hidden=!Boolean(Object.keys(bom).length)
+        table = document.querySelector("#bom_list")
+        table.removeChild(table.lastChild) while table.hasChildNodes()
+        for retailer_name of bom
+            retailer = bom[retailer_name].interface
+            items    = bom[retailer_name].items
+            no_of_items = 0
+            for item in items
+                no_of_items += item.quantity
+            tr = document.createElement("tr")
+            td_0 = document.createElement("td")
+
+            a  = document.createElement("a")
+            a.href = "#"
+            a.value = retailer_name
+            a.addEventListener "click", () ->
+                window.bom_manager.open_cart(this.value)
+
+            icon = document.createElement("img")
+            icon.src = retailer.icon_src
+            a.appendChild(icon)
+            a.innerHTML += retailer.interface_name
+            td_0.appendChild(a)
+            tr.appendChild(td_0)
+
+            td_1 = document.createElement("td")
+            td_1.innerText = items.length + " line"
+            td_1.innerText += "s" if (items.length > 1)
+            tr.appendChild(td_1)
+
+            td_2 = document.createElement("td")
+            td_2.innerText = no_of_items + " item"
+            td_2.innerText += "s" if (no_of_items > 1)
+            tr.appendChild(td_2)
+            td = document.createElement("td")
+
+            unicode_chars = ["\uf21e","\uf21b"]
+            titles = ["Add items to " , "Empty "]
+            links = []
+            for i in  [0..1]
+                td = document.createElement("td")
+                a = document.createElement("a")
+                a.value = retailer_name
+                a.title = titles[i] + retailer_name + " cart"
+                a.href = "#"
+                links.push(a)
+                span = document.createElement("span")
+                span.className = "button_icon"
+                span.innerText = unicode_chars[i]
+                a.appendChild(span)
+                td.appendChild(a)
+                tr.appendChild(td)
+
+            links[0].addEventListener "click", () ->
+                window.bom_manager.fill_cart(this.value)
+
+            links[1].addEventListener "click", () ->
+                window.bom_manager.empty_cart(this.value)
+
+            table.appendChild(tr)
+
+bom_changed()
+
 chrome.runtime.getBackgroundPage (bkgd_page) ->
-    bom_manager = new BomManager
     document.querySelector("#paste").addEventListener "click", ()->
         text = bkgd_page.paste()
-        bom_manager.addToBOM(text)
-
-    document.querySelector("#clear").addEventListener "click", () ->
-        chrome.storage.local.remove("bom")
-        clear_warning_log()
-
-    document.querySelector("#fill_carts").addEventListener "click", () ->
-        bom_manager.fill_carts()
-    document.querySelector("#empty_carts").addEventListener "click", () ->
-        bom_manager.empty_carts()
-    document.querySelector("#open_cart_tabs").addEventListener "click", () ->
-        bom_manager.open_cart_tabs()
+        window.bom_manager.addToBOM(text)
 
     #Ctrl-V event
     document.addEventListener 'keydown', (event) ->
         if ((event.keyCode == 86) && (event.ctrlKey == true))
-            bkgd_page.paste_action()
+            text = bkgd_page.paste()
+            window.bom_manager.addToBOM(text)
 
-    document.bkgd_page = bkgd_page
-
-bom_changed = (bom) ->
-    if (!bom)
-        document.querySelector("#clear").hidden=true
-        document.querySelector("#fill_carts").hidden=true
-        document.querySelector("#empty_carts").hidden=true
-        document.querySelector("#open_cart_tabs").hidden=true
-        document.querySelector("#bom").hidden=true
-    else
-        #BOM can still be empty
-        document.querySelector("#clear").hidden=!Boolean(Object.keys(bom).length)
-        document.querySelector("#fill_carts").hidden=!Boolean(Object.keys(bom).length)
-        document.querySelector("#empty_carts").hidden=!Boolean(Object.keys(bom).length)
-        document.querySelector("#open_cart_tabs").hidden=!Boolean(Object.keys(bom).length)
-        document.querySelector("#bom").hidden=!Boolean(Object.keys(bom).length)
-    table = document.querySelector("#bom_list")
-    table.removeChild(table.lastChild) while table.hasChildNodes()
-    bom_manager = new BomManager
-    for retailer_name of bom
-        retailer = bom[retailer_name].interface
-        items    = bom[retailer_name].items
-        no_of_items = 0
-        for item in items
-            no_of_items += item.quantity
-        tr = document.createElement("tr")
-        td_0 = document.createElement("td")
-
-        a  = document.createElement("a")
-        a.href = "#"
-        a.value = retailer_name
-        a.addEventListener "click", () ->
-            bom_manager.open_cart(this.value)
-
-        icon = document.createElement("img")
-        icon.src = retailer.icon_src
-        a.appendChild(icon)
-        a.innerHTML += retailer.interface_name
-        td_0.appendChild(a)
-        tr.appendChild(td_0)
-
-        td_1 = document.createElement("td")
-        td_1.innerText = items.length + " line"
-        td_1.innerText += "s" if (items.length > 1)
-        tr.appendChild(td_1)
-
-        td_2 = document.createElement("td")
-        td_2.innerText = no_of_items + " item"
-        td_2.innerText += "s" if (no_of_items > 1)
-        tr.appendChild(td_2)
-        td = document.createElement("td")
-
-        unicode_chars = ["\uf21e","\uf21b"]
-        titles = ["Add items to " , "Empty "]
-        links = []
-        for i in  [0..1]
-            td = document.createElement("td")
-            a = document.createElement("a")
-            a.value = retailer_name
-            a.title = titles[i] + retailer_name + " cart"
-            a.href = "#"
-            links.push(a)
-            span = document.createElement("span")
-            span.className = "button_icon"
-            span.innerText = unicode_chars[i]
-            a.appendChild(span)
-            td.appendChild(a)
-            tr.appendChild(td)
-
-        links[0].addEventListener "click", () ->
-            bom_manager.fill_cart(this.value)
-
-        links[1].addEventListener "click", () ->
-            bom_manager.empty_cart(this.value)
-
-        table.appendChild(tr)
-
-chrome.storage.local.get "bom", ({bom:bom}) ->
-    bom_changed(bom)
 
 chrome.storage.onChanged.addListener (changes, namespace) ->
     if (namespace == "local")
         if (changes.bom)
             chrome.storage.local.get "bom", ({bom:bom}) ->
-                bom_changed(bom)
+                window.bom_manager = new BomManager
+                bom_changed()
 
 clear_warning_log  = () ->
         document.querySelector("#warnings").hidden = true;
@@ -164,3 +154,13 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
             tr.appendChild(td_3)
             table.appendChild(tr)
         document.querySelector("#warnings").hidden = false;
+
+document.querySelector("#clear").addEventListener "click", () ->
+    chrome.storage.local.remove("bom")
+    clear_warning_log()
+document.querySelector("#fill_carts").addEventListener "click", () ->
+    window.bom_manager.fill_carts()
+document.querySelector("#empty_carts").addEventListener "click", () ->
+    window.bom_manager.empty_carts()
+document.querySelector("#open_cart_tabs").addEventListener "click", () ->
+    window.bom_manager.open_cart_tabs()
