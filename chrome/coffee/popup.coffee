@@ -13,15 +13,19 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 chrome.runtime.getBackgroundPage (bkgd_page) ->
-    document.querySelector("#paste").addEventListener "click", bkgd_page.paste_action
+    document.querySelector("#paste").addEventListener("click", bkgd_page.paste_action)
 
     document.querySelector("#clear").addEventListener "click", () ->
         chrome.storage.local.remove("bom")
         clear_warning_log()
 
-    document.querySelector("#fill_carts").addEventListener("click", bkgd_page.fill_carts)
-    document.querySelector("#empty_carts").addEventListener("click", bkgd_page.empty_carts)
-    document.querySelector("#open_cart_tabs").addEventListener("click", bkgd_page.open_cart_tabs)
+    bom_manager = new BomManager
+    document.querySelector("#fill_carts").addEventListener "click", () ->
+        bom_manager.fill_carts()
+    document.querySelector("#empty_carts").addEventListener "click", () ->
+        bom_manager.empty_carts()
+    document.querySelector("#open_cart_tabs").addEventListener "click", () ->
+        bom_manager.open_cart_tabs()
 
     #Ctrl-V event
     document.addEventListener 'keydown', (event) ->
@@ -50,6 +54,7 @@ bom_changed = (bom) ->
         document.querySelector("#bom").hidden=!Boolean(Object.keys(bom).length)
     table = document.querySelector("#bom_list")
     table.removeChild(table.lastChild) while table.hasChildNodes()
+    bom_manager = new BomManager
     for retailer_name of bom
         console.log(retailer_name)
         retailer = bom[retailer_name].interface
@@ -64,7 +69,7 @@ bom_changed = (bom) ->
         a.href = "#"
         a.value = retailer_name
         a.addEventListener "click", () ->
-            document.bkgd_page.open_cart(this.value)
+            bom_manager.open_cart(this.value)
 
         icon = document.createElement("img")
         icon.src = retailer.icon_src
@@ -102,10 +107,10 @@ bom_changed = (bom) ->
             tr.appendChild(td)
 
         links[0].addEventListener "click", () ->
-            document.bkgd_page.fill_cart(this.value)
+            bom_manager.fill_cart(this.value)
 
         links[1].addEventListener "click", () ->
-            document.bkgd_page.empty_cart(this.value)
+            bom_manager.empty_cart(this.value)
 
         table.appendChild(tr)
 

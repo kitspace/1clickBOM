@@ -45,7 +45,8 @@ class @Digikey extends RetailerInterface
                     request.success = request.success && success
                     count--
                     if (count == 0)
-                        callback(request, that)
+                        if callback?
+                            callback(request, that)
                         that.refreshCartTabs()
             xhr.send()
 

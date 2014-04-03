@@ -20,9 +20,9 @@ asyncTest "User Sim", () ->
     country = "AT"
     chrome.storage.local.set {country: country}, () ->
         chrome.storage.local.remove "bom", () ->
-            addToBOM window.test_bom, () ->
-                window.empty_carts()
-                window.fill_carts()
+            (new BomManager).addToBOM window.test_bom, (that) ->
+                that.empty_carts()
+                that.fill_carts()
                 ok(true)
                 start()
 
