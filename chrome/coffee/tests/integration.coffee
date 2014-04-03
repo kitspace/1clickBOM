@@ -145,68 +145,22 @@ asyncTest "Farnell: Add items individually via microCart fails 2", () ->
             deepEqual(request.fails, [items[0]], that.country)
             start()
 
-test "Mouser: Add Items", () ->
-    try
-        # Mouser's site is unified, changing the basket anywhere will change the basket everywhere else
-        console.log "Mouser: Adding item in LK"
-        d = new Mouser("LK")
-        items = [{"part":"607-GALILEO","quantity":2, "comment":"test"}]
-        d.addItems(items)
-        #China is separate
-        console.log "Mouser: Adding item in CN"
-        c = new Mouser("CN")
-        c.addItems(items)
-    catch error
-        ok false
-        throw error
-    ok true
+module("Mouser")
+# Mouser's site is unified, changing the basket somewhere will change the basket everywhere
+asyncTest "Mouser: Add items fails", () ->
+    items = [{"part":"fail","quantity":2, "comment":"test"},{"part":"607-GALILEO","quantity":2, "comment":"test"}]
+    console.log "Mouser: Adding items"
+    d = new Mouser("CN")
+    d.addItems items, (request, that) ->
+        deepEqual(request.success, false)
+        deepEqual(request.fails, [items[0]])
+        start()
 
-#asyncTest "Paste BOM", 1, () ->
-#    chrome.storage.local.remove("bom")
-#    chrome.storage.local.get "country", (obj) ->
-#        stored = obj.country
-#        chrome.storage.local.set {country: "UK"}, () ->
-#
-#            test_bom = get_local("/data/example.json")
-#
-#            copybox    = document.createElement("textarea")
-#            pastebox   = document.createElement("textarea")
-#            restorebox = document.createElement("textarea")
-#
-#            listener = (changes, namespace) ->
-#                if (namespace == "local" && changes.bom)
-#                    chrome.storage.local.get "bom", ({bom:bom}) ->
-#                        deepEqual(bom, test_bom)
-#                        restorebox.select()
-#                        document.execCommand("copy")
-#                        document.body.removeChild(copybox)
-#                        document.body.removeChild(pastebox)
-#                        document.body.removeChild(restorebox)
-#                        #chrome.storage.local.remove(["bom", "country"])
-#                        chrome.storage.onChanged.removeListener listener
-#                        chrome.storage.local.set {country:stored}, () ->
-#                        start()
-#
-#
-#            chrome.storage.onChanged.addListener listener
-#
-#            copybox.id    = "copybox"
-#            pastebox.id   = "pastebox"
-#            restorebox.id = "restorebox"
-#
-#            xhr = new XMLHttpRequest()
-#            xhr.open "GET", chrome.extension.getURL("/data/example.tsv"), false
-#            xhr.send()
-#            copybox.value = xhr.responseText
-#
-#            document.body.appendChild(copybox)
-#            document.body.appendChild(pastebox)
-#            document.body.appendChild(restorebox)
-#
-#            restorebox.select()
-#            document.execCommand("paste")
-#            copybox.select()
-#            document.execCommand("copy")
-#
-#            paste_action()
-
+#the order here is important as we want to make sure the "errors" were cleared after the failed add
+asyncTest "Mouser: Add items", () ->
+    items = [{"part":"607-GALILEO","quantity":2, "comment":"test"}]
+    console.log "Mouser: Adding items"
+    d = new Mouser("CN")
+    d.addItems items, (request, that) ->
+        deepEqual(request.success, true)
+        start()
