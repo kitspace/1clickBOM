@@ -15,7 +15,6 @@
 countries = get_local("data/countries.json")
 @test_bom  = get_local("data/big_example.tsv", json=false)
 
-
 asyncTest "User Sim", () ->
     country = "AT"
     chrome.storage.local.set {country: country}, () ->

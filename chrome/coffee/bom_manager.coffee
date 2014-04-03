@@ -68,7 +68,7 @@ class @BomManager
         else
             settings = {}
         return settings
-    fill_carts: ()->
+    fill_carts: (retailer)->
         that = this
         chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
             for retailer of bom

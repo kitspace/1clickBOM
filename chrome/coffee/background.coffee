@@ -13,16 +13,12 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 
-paste = () ->
+@paste = () ->
     textarea = document.getElementById("pastebox")
     textarea.select()
     document.execCommand("paste")
     result = textarea.value
     return result
-
-@paste_action = ()->
-        text = paste()
-        (new BomManager).addToBOM(text)
 
 @get_location = ()->
     xhr = new XMLHttpRequest

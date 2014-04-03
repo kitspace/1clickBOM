@@ -13,13 +13,15 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 chrome.runtime.getBackgroundPage (bkgd_page) ->
-    document.querySelector("#paste").addEventListener("click", bkgd_page.paste_action)
+    bom_manager = new BomManager
+    document.querySelector("#paste").addEventListener "click", ()->
+        text = bkgd_page.paste()
+        bom_manager.addToBOM(text)
 
     document.querySelector("#clear").addEventListener "click", () ->
         chrome.storage.local.remove("bom")
         clear_warning_log()
 
-    bom_manager = new BomManager
     document.querySelector("#fill_carts").addEventListener "click", () ->
         bom_manager.fill_carts()
     document.querySelector("#empty_carts").addEventListener "click", () ->
@@ -33,10 +35,6 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
             bkgd_page.paste_action()
 
     document.bkgd_page = bkgd_page
-
-    #chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
-    #    console.log(request)
-
 
 bom_changed = (bom) ->
     if (!bom)
@@ -56,7 +54,6 @@ bom_changed = (bom) ->
     table.removeChild(table.lastChild) while table.hasChildNodes()
     bom_manager = new BomManager
     for retailer_name of bom
-        console.log(retailer_name)
         retailer = bom[retailer_name].interface
         items    = bom[retailer_name].items
         no_of_items = 0
