@@ -14,21 +14,16 @@
 
 window.bom_manager = new BomManager
 
-bom_changed = () ->
-    window.bom_manager.getBOM (bom) ->
+show_or_hide_buttons = (bom)
         if (!bom)
-            document.querySelector("#clear").hidden=true
-            document.querySelector("#fill_carts").hidden=true
-            document.querySelector("#empty_carts").hidden=true
-            document.querySelector("#open_cart_tabs").hidden=true
-            document.querySelector("#bom").hidden=true
-        else
-            #BOM can still be empty
-            document.querySelector("#clear").hidden=!Boolean(Object.keys(bom).length)
-            document.querySelector("#fill_carts").hidden=!Boolean(Object.keys(bom).length)
-            document.querySelector("#empty_carts").hidden=!Boolean(Object.keys(bom).length)
-            document.querySelector("#open_cart_tabs").hidden=!Boolean(Object.keys(bom).length)
-            document.querySelector("#bom").hidden=!Boolean(Object.keys(bom).length)
+            bom = {}
+        document.querySelector("#clear").hidden=!Boolean(Object.keys(bom).length)
+        document.querySelector("#fill_carts").hidden=!Boolean(Object.keys(bom).length)
+        document.querySelector("#empty_carts").hidden=!Boolean(Object.keys(bom).length)
+        document.querySelector("#open_cart_tabs").hidden=!Boolean(Object.keys(bom).length)
+        document.querySelector("#bom").hidden=!Boolean(Object.keys(bom).length)
+
+rebuild_bom_view = (bom) ->
         table = document.querySelector("#bom_list")
         table.removeChild(table.lastChild) while table.hasChildNodes()
         for retailer_name of bom
@@ -89,7 +84,18 @@ bom_changed = () ->
 
             table.appendChild(tr)
 
+bom_changed = () ->
+    window.bom_manager.getBOM (bom) ->
+        show_or_hide_buttons(bom)
+        rebuild_bom_view(bom)
+
 bom_changed()
+
+chrome.storage.onChanged.addListener (changes, namespace) ->
+    if namespace == "local"
+        if changes.bom || changes.country || changes.settings
+            window.bom_manager = new BomManager
+            bom_changed()
 
 chrome.runtime.getBackgroundPage (bkgd_page) ->
     document.querySelector("#paste").addEventListener "click", ()->
@@ -101,14 +107,6 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
         if ((event.keyCode == 86) && (event.ctrlKey == true))
             text = bkgd_page.paste()
             window.bom_manager.addToBOM(text)
-
-
-chrome.storage.onChanged.addListener (changes, namespace) ->
-    if (namespace == "local")
-        if (changes.bom)
-            chrome.storage.local.get "bom", ({bom:bom}) ->
-                window.bom_manager = new BomManager
-                bom_changed()
 
 clear_warning_log  = () ->
         document.querySelector("#warnings").hidden = true;
