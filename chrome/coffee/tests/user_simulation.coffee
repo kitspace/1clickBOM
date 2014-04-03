@@ -13,15 +13,15 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 countries = get_local("data/countries.json")
-@test_bom  = get_local("data/big_example.tsv", json=false)
+@test_bom = get_local("data/big_example.tsv", json=false)
 
 asyncTest "User Sim", () ->
     country = "AT"
     chrome.storage.local.set {country: country}, () ->
         chrome.storage.local.remove "bom", () ->
             (new BomManager).addToBOM window.test_bom, (that) ->
-                that.empty_carts()
-                that.fill_carts()
+                that.emptyCarts()
+                that.fillCarts()
                 ok(true)
                 start()
 

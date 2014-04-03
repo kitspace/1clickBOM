@@ -16,20 +16,34 @@ countries_data = @get_local("/data/countries.json")
 settings_data  = @get_local("/data/settings.json")
 
 class @BomManager
-    constructor: () ->
+    constructor: (callback) ->
+        that = this
+        chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
+            that.bom = bom
+            for retailer of that.bom
+                setting_values = that.lookup_setting_values(country, retailer, stored_settings)
+                that.newInterface(retailer, that.bom[retailer], country, setting_values)
+            if callback?
+                callback()
 
-    newInterface:(retailer_name, retailer, country, settings) ->
+    lookup_setting_values: (country, retailer, stored_settings)->
+        if(stored_settings? && stored_settings[country]? && stored_settings[country][retailer]?)
+            settings = settings_data[country][retailer].choices[stored_settings[country][retailer]]
+        else
+            settings = {}
+        return settings
+
+    newInterface:(retailer_name, retailer, country, setting_values) ->
         switch (retailer_name)
             when "Digikey"
-                retailer.interface = new Digikey(country, settings)
+                retailer.interface = new Digikey(country, setting_values)
             when "Farnell"
-                retailer.interface = new Farnell(country, settings)
+                retailer.interface = new Farnell(country, setting_values)
             when "Mouser"
-                retailer.interface = new  Mouser(country, settings)
+                retailer.interface = new  Mouser(country, setting_values)
 
-    getBOM: (callback) ->
-        chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
-            callback(bom, country, stored_settings)
+    getBOM: () ->
+        return @bom
 
     addToBOM: (text, callback) ->
         that = this
@@ -66,54 +80,21 @@ class @BomManager
             chrome.storage.local.set {"bom":bom}, () ->
                 if callback?
                     callback(that)
-    lookup_setting_values: (country, retailer, stored_settings)->
-        if(stored_settings? && stored_settings[country]? && stored_settings[country][retailer]?)
-            settings = settings_data[country][retailer].choices[stored_settings[country][retailer]]
-        else
-            settings = {}
-        return settings
-    fill_carts: (retailer)->
-        that = this
-        chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
-            for retailer of bom
-                setting_values = that.lookup_setting_values(country, retailer, stored_settings)
-                that.newInterface(retailer, bom[retailer], country, setting_values)
-                bom[retailer].interface.addItems(bom[retailer].items)
-    
-    fill_cart: (retailer)->
-        that = this
-        chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
-            setting_values = that.lookup_setting_values(country, retailer, stored_settings)
-            that.newInterface(retailer, bom[retailer], country, setting_values)
-            bom[retailer].interface.addItems(bom[retailer].items)
-    
-    empty_carts: ()->
-        that = this
-        chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
-            for retailer of bom
-                setting_values = that.lookup_setting_values(country, retailer, stored_settings)
-                that.newInterface(retailer, bom[retailer], country, setting_values)
-                bom[retailer].interface.clearCart()
-    
-    empty_cart: (retailer)->
-        that = this
-        chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
-    
-            setting_values = that.lookup_setting_values(country, retailer, stored_settings)
-            that.newInterface(retailer, bom[retailer], country, setting_values)
-            bom[retailer].interface.clearCart()
-    
-    open_cart_tabs: ()->
-        that = this
-        chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
-            for retailer of bom
-                setting_values = that.lookup_setting_values(country, retailer, stored_settings)
-                that.newInterface(retailer, bom[retailer], country, setting_values)
-                bom[retailer].interface.openCartTab()
-    
-    open_cart: (retailer)->
-        that = this
-        chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
-            setting_values = that.lookup_setting_values(country, retailer, stored_settings)
-            that.newInterface(retailer, bom[retailer], country, setting_values)
-            bom[retailer].interface.openCartTab()
+
+    fillCarts: (retailer)->
+        for retailer of @bom
+            @fillCart(retailer)
+    fillCart: (retailer)->
+        @bom[retailer].interface.addItems(@bom[retailer].items)
+
+    emptyCarts: ()->
+        for retailer of @bom
+            @emptyCart(retailer)
+    emptyCart: (retailer)->
+        @bom[retailer].interface.clearCart()
+
+    openCarts: ()->
+        for retailer of @bom
+            @openCart(retailer)
+    openCart: (retailer)->
+        @bom[retailer].interface.openCartTab()

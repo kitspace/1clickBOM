@@ -12,9 +12,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-window.bom_manager = new BomManager
-
-show_or_hide_buttons = (bom)
+show_or_hide_buttons = (bom) ->
         if (!bom)
             bom = {}
         document.querySelector("#clear").hidden=!Boolean(Object.keys(bom).length)
@@ -39,7 +37,7 @@ rebuild_bom_view = (bom) ->
             a.href = "#"
             a.value = retailer_name
             a.addEventListener "click", () ->
-                window.bom_manager.open_cart(this.value)
+                window.bom_manager.openCart(this.value)
 
             icon = document.createElement("img")
             icon.src = retailer.icon_src
@@ -77,26 +75,27 @@ rebuild_bom_view = (bom) ->
                 tr.appendChild(td)
 
             links[0].addEventListener "click", () ->
-                window.bom_manager.fill_cart(this.value)
+                window.bom_manager.fillCart(this.value)
 
             links[1].addEventListener "click", () ->
-                window.bom_manager.empty_cart(this.value)
+                window.bom_manager.emptyCart(this.value)
 
             table.appendChild(tr)
 
 bom_changed = () ->
-    window.bom_manager.getBOM (bom) ->
-        show_or_hide_buttons(bom)
-        rebuild_bom_view(bom)
+    bom = window.bom_manager.getBOM()
+    show_or_hide_buttons(bom)
+    rebuild_bom_view(bom)
 
-bom_changed()
-
+window.bom_manager = new BomManager () ->
+    bom_changed()
+    
 chrome.storage.onChanged.addListener (changes, namespace) ->
     if namespace == "local"
         if changes.bom || changes.country || changes.settings
-            window.bom_manager = new BomManager
-            bom_changed()
-
+            window.bom_manager = new BomManager () ->
+                bom_changed()
+    
 chrome.runtime.getBackgroundPage (bkgd_page) ->
     document.querySelector("#paste").addEventListener "click", ()->
         text = bkgd_page.paste()
@@ -157,8 +156,8 @@ document.querySelector("#clear").addEventListener "click", () ->
     chrome.storage.local.remove("bom")
     clear_warning_log()
 document.querySelector("#fill_carts").addEventListener "click", () ->
-    window.bom_manager.fill_carts()
+    window.bom_manager.fillCarts()
 document.querySelector("#empty_carts").addEventListener "click", () ->
-    window.bom_manager.empty_carts()
+    window.bom_manager.emptyCarts()
 document.querySelector("#open_cart_tabs").addEventListener "click", () ->
-    window.bom_manager.open_cart_tabs()
+    window.bom_manager.openCarts()
