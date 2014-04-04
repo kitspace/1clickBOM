@@ -7,3 +7,14 @@
             return JSON.parse(xhr.responseText)
         else
             return xhr.responseText
+
+window.onerror = (msg, url, line) ->
+    chrome.storage.local.get ["error_log"], ({error_log:error_log}) ->
+        if not (error_log?)
+            error_log = []
+        error_log.push({msg:msg, url:url, line:line})
+        chrome.storage.local.set {error_log:error_log}, () ->
+
+window.getErrorLog = () ->
+    chrome.storage.local.get ["error_log"], ({error_log:error_log}) ->
+        console.log(error_log)
