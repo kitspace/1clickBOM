@@ -47,10 +47,9 @@ class @BomManager
 
     addToBOM: (text, callback) ->
         that = this
-        chrome.storage.local.get ["bom", "country"], (obj) ->
-            bom = obj.bom
-            country = obj.country
-
+        #we already have these but it seems to take longer for the storage onChanged listener to trigger without this
+        #might be a case for "setImmediate" as "setTimeout(function, 0)" doesn't help either
+        chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
             if (!bom)
                 bom = {}
 
@@ -63,16 +62,17 @@ class @BomManager
                 chrome.runtime.sendMessage({invalid:invalid})
 
             for item in items
+                setting_values = that.lookup_setting_values(country, item.retailer, stored_settings)
                 #if item.retailer not in bom
                 found = false
                 for key of bom
                     if item.retailer == key
                         found = true
                         break
-                if (!found)
+                if not found
                     bom[item.retailer] = {"items":[]}
-                if(!found or (bom[item.retailer].interface.country != country))
-                    that.newInterface(item.retailer, bom[item.retailer], country)
+                if (not found) or (bom[item.retailer].interface.country != country) or (bom[item.retailer].interface.settings != setting_values)
+                    that.newInterface(item.retailer, bom[item.retailer], country, setting_values)
                 bom[item.retailer].items.push(item)
 
             chrome.storage.local.set {"bom":bom}, () ->

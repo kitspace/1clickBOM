@@ -36,6 +36,8 @@ class @RetailerInterface
             if (settings.interface_name?)
                 data.interface_name = settings.interface_name
 
+        @settings = settings
+
         if typeof(data.carts) == "string"
             @cart = data.carts
         else

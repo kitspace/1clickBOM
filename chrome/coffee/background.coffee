@@ -13,12 +13,12 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 
-@paste = () ->
+@paste = (callback) ->
     textarea = document.getElementById("pastebox")
     textarea.select()
     document.execCommand("paste")
     result = textarea.value
-    return result
+    callback(result)
 
 @get_location = ()->
     xhr = new XMLHttpRequest
