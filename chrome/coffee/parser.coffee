@@ -15,22 +15,22 @@
 class @Parser 
     constructor: () ->
     parseTSV: (text) ->
-        #TODO safety
         rows = text.split "\n"
         items = []
         invalid = []
         for row, i in rows
             if row != ""
                 cells = row.split "\t"
-                item = {"cells":cells, "comment":cells[0], "quantity":cells[1], "retailer":cells[2],"part":cells[3], "row":i}
+                item = {cells:cells, comment:cells[0], quantity:cells[1], retailer:cells[2], part:cells[3], row:i}
                 if !item.quantity
-                    invalid.push {"item":item, "reason": "Quantity is undefined."}
+                    invalid.push {item:item, reason: "Quantity is undefined."}
                 else if !item.retailer
-                    invalid.push {"item":item, "reason": "Retailer is undefined."}
+                    invalid.push {item:item, reason: "Retailer is undefined."}
                 else if !item.part
-                    invalid.push {"item":item, "reason": "Part number is undefined."}
+                    invalid.push {item:item, reason: "Part number is undefined."}
                 else
                     items.push item
+        {items, invalid} = @checkValidItems(items, invalid)
         return {items, invalid}
     checkValidItems: (items_incoming, invalid) ->
         retailer_aliases = {
@@ -46,7 +46,7 @@ class @Parser
         for item in items_incoming
             number = parseInt(item.quantity)
             if number == NaN
-                invalid.push {"item":item, "reason": "Quantity is not a number."}
+                invalid.push {item:item, reason: "Quantity is not a number."}
             else
                 item.quantity = number
                 r = ""
@@ -58,7 +58,7 @@ class @Parser
                         break
     
                 if  r == ""
-                    invalid.push({"item":item, "reason": "Retailer \"" + item.retailer + "\" is not known."})
+                    invalid.push({item:item, reason: "Retailer \"" + item.retailer + "\" is not known."})
                 else
                     item.retailer = r
                     items.push(item)

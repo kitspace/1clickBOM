@@ -37,7 +37,7 @@ rebuild_bom_view = (bom) ->
             a.href = "#"
             a.value = retailer_name
             a.addEventListener "click", () ->
-                window.bom_manager.openCart(this.value)
+                window.bom_manager.openCart(@value)
 
             icon = document.createElement("img")
             icon.src = retailer.icon_src
@@ -75,10 +75,10 @@ rebuild_bom_view = (bom) ->
                 tr.appendChild(td)
 
             links[0].addEventListener "click", () ->
-                window.bom_manager.fillCart(this.value)
+                window.bom_manager.fillCart(@value)
 
             links[1].addEventListener "click", () ->
-                window.bom_manager.emptyCart(this.value)
+                window.bom_manager.emptyCart(@value)
 
             table.appendChild(tr)
 

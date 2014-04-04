@@ -50,20 +50,18 @@ class @BomManager
         chrome.storage.local.get ["bom", "country"], (obj) ->
             bom = obj.bom
             country = obj.country
-    
+
             if (!bom)
                 bom = {}
-    
+
             if (!country)
                 country = "Other"
-    
-            parser = new Parser
-            {items, invalid} = parser.parseTSV(text)
-            {items, invalid} = parser.checkValidItems(items, invalid)
-    
+
+            {items, invalid} = (new Parser).parseTSV(text)
+
             if invalid.length > 0
                 chrome.runtime.sendMessage({invalid:invalid})
-    
+
             for item in items
                 #if item.retailer not in bom
                 found = false
@@ -76,16 +74,17 @@ class @BomManager
                 if(!found or (bom[item.retailer].interface.country != country))
                     that.newInterface(item.retailer, bom[item.retailer], country)
                 bom[item.retailer].items.push(item)
-    
+
             chrome.storage.local.set {"bom":bom}, () ->
                 if callback?
                     callback(that)
 
-    fillCarts: (retailer)->
+    fillCarts: (retailer, callback)->
         for retailer of @bom
-            @fillCart(retailer)
-    fillCart: (retailer)->
-        @bom[retailer].interface.addItems(@bom[retailer].items)
+            @fillCart retailer, () ->
+
+    fillCart: (retailer, callback)->
+        @bom[retailer].interface.addItems(@bom[retailer].items, callback)
 
     emptyCarts: ()->
         for retailer of @bom
