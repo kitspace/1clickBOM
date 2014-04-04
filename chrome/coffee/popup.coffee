@@ -107,50 +107,9 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
             text = bkgd_page.paste()
             window.bom_manager.addToBOM(text)
 
-clear_warning_log  = () ->
-        document.querySelector("#warnings").hidden = true;
-        table = document.querySelector("#warning_list")
-        table.removeChild(table.lastChild) while table.hasChildNodes()
-
 chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
     if(request.invalid)
-        table = document.querySelector("#warning_list")
-        button = document.querySelector("#clear_warnings")
-        button.addEventListener "click", clear_warning_log
-        tr_top = document.createElement("tr")
-        td_top = document.createElement("td")
-        td_top.colSpan=3
-        td_top.innerText = "Invalid data pasted:"
-        td_top.id = "warning_td_top"
-        tr_top.appendChild(td_top)
-        table.appendChild(tr_top)
-        for obj in request.invalid
-            tr = document.createElement("tr")
-            td_0 = document.createElement("td")
-            span = document.createElement("span")
-            span.className = "button_icon"
-            span.innerText = "\uf101"
-            td_0.appendChild(span)
-            tr.appendChild(td_0)
-            td_1 = document.createElement("td")
-            td_1.innerText = "row: " + obj.item.row
-            tr.appendChild(td_1)
-            td_2 = document.createElement("td")
-            inner_table = document.createElement("table")
-            td_2.appendChild(inner_table)
-            inner_tr = document.createElement("tr")
-            inner_table.appendChild(inner_tr)
-            for cell in obj.item.cells
-                td = document.createElement("td")
-                td.innerText = cell
-                inner_tr.appendChild(td)
-            #td_1.innerText = "\"" + obj.item.text + "\""
-            tr.appendChild(td_2)
-            td_3 = document.createElement("td")
-            td_3.innerText = obj.reason
-            tr.appendChild(td_3)
-            table.appendChild(tr)
-        document.querySelector("#warnings").hidden = false;
+        console.log(request.invalid)
 
 document.querySelector("#clear").addEventListener "click", () ->
     chrome.storage.local.remove("bom")

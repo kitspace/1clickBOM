@@ -6,7 +6,23 @@
       body {
           overflow-x: hidden;
           background: #DDDDDD;
-          margin: 8px 8px 8px 8px;
+          margin: 0px 0px 0px 0px;
+      }
+      .fake_bottom {
+          background: #FFA500;
+
+      }
+      .fake_bottom_inner {
+          background: #DDDDDD;
+          min-height:8px;
+          border-bottom-left-radius: 3px;
+          border-bottom-right-radius: 3px;
+          border-bottom: 1px solid #666;
+      }
+      div#main_content {
+          margin: 8px 8px 0px 8px;
+      }
+      div#status_bar {
       }
       div#top_spacer {
           height: 5px;
@@ -55,7 +71,6 @@
       }
       table#bom_list > tr:hover{
           background: #ADD8E6;
-          cursor: default;
       }
       table#bom_list > tr > td{
           border: 1px solid #999999;
@@ -87,86 +102,88 @@
       button#clear {
           float: left;
       }
-      div#warnings {
+      div.warning {
           background: #ffa500;
-          padding: 10px;
-          white-space: nowrap;
-          text-align: center;
-          min-width: 100%;
-          max-width: 180px;
-          min-height: 40px;
-          float: center;
-          margin-top:5px;
+          min-width: 250px;
+          max-width: 250px;
+          line-height:24px;
       }
-      div#warning_widget {
-          line-height: 32px;
-          float: left;
+      .warning_widget {
+          line-height:24px;
+          padding-left:12px;
+          padding-right:8px;
+          padding-bottom:3px;
+          text-align:left;
       }
-      div#warning_icon {
+      .warning_icon {
           font-family: "Foundation Icons";
-          font-size: 48px;
-          display: inline-block;
-          vertical-align: middle;
+          font-size: 24px;
+          margin-right:10px;
+          vertical-align:middle;
       }
-      div#warning_text {
-          font-size: 16px;
-          display: inline-block;
-          vertical-align: middle;
+      .warning_text {
+          font-size: 14px;
+          font-family: "sans-serif", "Arial", "Helvetica";
+          vertical-align:middle;
+          margin-right:10px;
       }
-      div#clear_warnings {
-          font-family:"Foundation Icons";
-          font-size:18px;
-          cursor: default;
-          display: inline-block;
-          vertical-align: middle;
-          margin-left: 7px;
+      .warning_link {
+          font-size: 10px;
+          font-family: "sans-serif", "Arial", "Helvetica";
+          vertical-align:middle;
       }
-
       
     </style>
   </head>
   <body>
-      <div id=top_toolbar>
-          <button class=big_buttons id="clear" title="Clear entire BOM" hidden=true>
-              <span class=button_icon>&#xf182;</span>
-              <span class=button_text>Clear</span>
-          </button >
-          <button class=big_buttons id="paste" title="Paste BOM data">
-              <span class=button_icon>&#xf220;</span>
-              <span class=button_text> Paste</span>
-          </button>
-      </div>
+      <div id=main_content>
+          <div id=top_toolbar>
+              <button class=big_buttons id="clear" title="Clear entire BOM" hidden=true>
+                  <span class=button_icon>&#xf182;</span>
+                  <span class=button_text>Clear</span>
+                  </button >
+                  <button class=big_buttons id="paste" title="Paste BOM data">
+                      <span class=button_icon>&#xf220;</span>
+                      <span class=button_text> Paste</span>
+                  </button>
+              </div>
 
-      <div id=bom hidden=true>
-          <div id=top_spacer></div>
-          <table id="bom_list"></table>
-          <div id=bottom_spacer></div>
-      </div>
+              <div id=bom hidden=true>
+                  <div id=top_spacer></div>
+                  <table id="bom_list"></table>
+                  <div id=bottom_spacer></div>
+              </div>
 
 
-      <div id=bottom_toolbar>
-      <button class=big_buttons id="open_cart_tabs" hidden=true title="View all retailer carts">
-          <span class=button_icon>&#xf221;</span>
-          <span class=button_text>View</span>
-      </button>
-      <button class=big_buttons id="fill_carts" hidden=true title="Add all BOM items to Retailer Carts">
-          <span class=button_icon>&#xf21e;</span>
-          <span class=button_text>Add</span>
-      </button>
-      <button class=big_buttons id="empty_carts" hidden=true title="Empty all retailer carts">
-          <span class=button_icon>&#xf21b;</span>
-          <span class=button_text>Empty</span>
-      </button>
-      </div>
-
-      <div id=warnings hidden=true>
-          <div id=warning_widget>
-              <div id=warning_icon>&#xf101;</div>
-              <div id=warning_text>Invalid Data Pasted</div>
-              <div id="clear_warnings">&#xf216;</div>
+              <div id=bottom_toolbar>
+                  <button class=big_buttons id="open_cart_tabs" hidden=true title="View all retailer carts">
+                      <span class=button_icon>&#xf221;</span>
+                      <span class=button_text>View</span>
+                  </button>
+                  <button class=big_buttons id="fill_carts" hidden=true title="Add all BOM items to Retailer Carts">
+                      <span class=button_icon>&#xf21e;</span>
+                      <span class=button_text>Add</span>
+                  </button>
+                  <button class=big_buttons id="empty_carts" hidden=true title="Empty all retailer carts">
+                      <span class=button_icon>&#xf21b;</span>
+                      <span class=button_text>Empty</span>
+                  </button>
+              </div>
           </div>
-          <table hidden=true id="warning_list"></table>
-      </div>
+
+          <div id=status_bar>
+              <div class=fake_bottom>
+                  <div class=fake_bottom_inner>
+                  </div>
+              </div>
+              <div class=warning>
+                  <div class=warning_widget>
+                      <span class=warning_icon>&#xf101;</span>
+                      <span class=warning_text>Invalid Data Pasted</span>
+                      <span class=warning_link>details</span>
+                  </div>
+              </div>
+          </div>
       <script src="/libs/domparser.js"></script>
       <script src="/js/util.js"></script>
       <script src="/js/retailer_interface.js"></script>
@@ -178,4 +195,3 @@
       <script src="/js/popup.js"></script>
   </body>
 </html>
-
