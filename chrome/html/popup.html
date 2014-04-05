@@ -14,26 +14,49 @@
           overflow:hidden;
           position:relative;
       }
-      .fake_bottom.warning_bottom{
+      .fake_bottom.warning_bottom >.fake_bottom_edge {
           background-color:#FFA500;
       }
-      .fake_bottom.panel_top > .line{
+      .fake_bottom.network_error_bottom >.fake_bottom_edge {
+          background-color:#c000ff;
+      }
+      .fake_bottom.internal_error_bottom > .fake_bottom_edge {
+          background-color:red;
+      }
+      .fake_bottom.panel_top > .fake_bottom_line {
           background-color:#DDD;
       }
-      .fake_bottom.warning_top > .line{
+      .fake_bottom.warning_top > .fake_bottom_line {
           background-color:#FFA500;
       }
-      .fake_bottom > img{
-          float:left;
+      .fake_bottom.network_error_top > .fake_bottom_line {
+          background-color:#c000ff;
       }
-      .fake_bottom > .line {
-          min-height:3px;
-          min-width:246px;
-          background-image:url('/images/fake_bottom.png');
-          background-repeat:repeat-x;
+      .fake_bottom.internal_error_top > .fake_bottom_line {
+          background-color:red;
+      }
+      .fake_bottom_left {
+          background-image:url("/images/fake_bottom_left.png");
           float:left;
+          height:3px;
+          width:2px;
+      }
+      .fake_bottom_line {
+          background-image:url("/images/fake_bottom.png");
+          repeat:repeat-x;
+          height:3px;
+      }
+      .fake_bottom_right {
+          background-image:url("/images/fake_bottom_right.png");
+          position:absolute;
+          right:0px;
+          top:0px;
+          height:3px;
+          width:2px;
       }
       div#main_content {
+          max-width: 300px;
+          float:right;
           margin: 8px 8px 8px 8px;
       }
       div#status_bar {
@@ -112,26 +135,32 @@
       button#clear {
           float: left;
       }
-      div.notification {
-          background: #ffa500;
-          min-width: 250px;
-          max-width: 250px;
+      .notification {
           line-height:24px;
       }
-      .warning_widget {
+      .notification.warning {
+          background: #ffa500;
+      }
+      .notification.network_error {
+          background: #c000ff;
+      }
+      .notification.internal_error {
+          background: red;
+      }
+      .notification_widget {
           line-height:24px;
           padding-left:12px;
           padding-right:8px;
           padding-bottom:3px;
           text-align:left;
       }
-      .warning_icon {
+      .notification_icon {
           font-family: "Foundation Icons";
           font-size: 24px;
           margin-right:10px;
           vertical-align:middle;
       }
-      .warning_text {
+      .notification_text {
           font-size: 14px;
           font-family: "sans-serif", "Arial", "Helvetica";
           vertical-align:middle;
@@ -177,25 +206,47 @@
 
           <div id=status_bar>
               <div class="fake_bottom panel_top warning_bottom">
-                  <img src="/images/fake_bottom_left.png"></img>
-                  <div class="line"></div>
-                  <img src="/images/fake_bottom_right.png"></img>
+                  <div class="fake_bottom_edge fake_bottom_left"></div>
+                  <div class="fake_bottom_line"></div>
+                  <div class="fake_bottom_edge fake_bottom_right"></div>
               </div>
               <div class="notification warning">
-                  <div class=warning_widget>
-                      <span class=warning_icon>&#xf101;</span>
-                      <span class=warning_text>Invalid data pasted</span>
+                  <div class=notification_widget>
+                      <span class=notification_icon>&#xf101;</span>
+                      <span class=notification_text>Invalid data pasted</span>
                   </div>
               </div>
               <div class="fake_bottom warning_top warning_bottom">
-                  <img src="/images/fake_bottom_left.png"></img>
-                  <div class="line"></div>
-                  <img src="/images/fake_bottom_right.png"></img>
+                  <div class="fake_bottom_edge fake_bottom_left"></div>
+                  <div class="fake_bottom_line"></div>
+                  <div class="fake_bottom_edge fake_bottom_right"></div>
               </div>
               <div class="notification warning">
-                  <div class=warning_widget>
-                      <span class=warning_icon>&#xf101;</span>
-                      <span class=warning_text>No data pasted</span>
+                  <div class=notification_widget>
+                      <span class=notification_icon>&#xf101;</span>
+                      <span class=notification_text>Nothing in clipboard</span>
+                  </div>
+              </div>
+              <div class="fake_bottom warning_top network_error_bottom">
+                  <div class="fake_bottom_edge fake_bottom_left"></div>
+                  <div class="fake_bottom_line"></div>
+                  <div class="fake_bottom_edge fake_bottom_right"></div>
+              </div>
+              <div class="notification network_error">
+                  <div class=notification_widget>
+                      <span class=notification_icon>&#xf209;</span>
+                      <span class=notification_text>A network error occurred</span>
+                  </div>
+              </div>
+              <div class="fake_bottom network_error_top internal_error_bottom">
+                  <div class="fake_bottom_edge fake_bottom_left"></div>
+                  <div class="fake_bottom_line"></div>
+                  <div class="fake_bottom_edge fake_bottom_right"></div>
+              </div>
+              <div class="notification internal_error">
+                  <div class=notification_widget>
+                      <span class=notification_icon>&#xf216;</span>
+                      <span class=notification_text>An internal error occurred</span>
                   </div>
               </div>
           </div>
