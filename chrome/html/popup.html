@@ -4,7 +4,7 @@
     <title>1clickBOM's popup</title>
     <style>
       body {
-          overflow-x: hidden;
+          overflow: hidden;
           background: #DDDDDD;
           margin: 0px 0px 0px 0px;
       }
@@ -14,28 +14,6 @@
           min-height:3px;
       }
       .fake_bottom {
-          position:relative;
-          background: #FFA500;
-      }
-      .fake_bottom > .top {
-          min-height:3px;
-          border-bottom-left-radius: 3px;
-          border-bottom-right-radius: 3px;
-          border-bottom: 1px solid #666;
-      }
-      .top_grey > .top {
-          background: #DDDDDD;
-      }
-      .fake_bottom > .top > .white {
-          background: #FFFFFF;
-          min-height:1px;
-          border-bottom-left-radius: 3px;
-          border-bottom-right-radius: 3px;
-          position:relative;
-          border-left: 1px solid #666;
-          border-right: 1px solid #666;
-          left:0px;
-          top:2px;
       }
       div#main_content {
           margin: 8px 8px 0px 8px;
@@ -47,12 +25,6 @@
       }
       div#bottom_spacer {
           height: 5px;
-      }
-      img {
-        margin: 5px;
-        vertical-align: middle;
-        width: 16px;
-        height: 16px;
       }
       @font-face {
           font-family:"Foundation Icons";
@@ -96,12 +68,14 @@
           font-size: 14px;
           vertical-align:middle;
       }
-      table#bom_list > tr > td > img{
+      table#bom_list > tr > td > a >img{
           margin-bottom: 5px;
           margin-top: 5px;
           margin-left: 3px;
           margin-right: 3px;
           vertical-align:middle;
+          width: 16px;
+          height: 16px;
       }
       a.bom_retailer_name {
           color: black;
@@ -184,22 +158,15 @@
           </div>
 
           <div id=status_bar>
-              <div class="fake_bottom top_grey">
-                  <div class=top>
-                      <div class=white>
-                      </div>
-                  </div>
+              <div style="background-color:#FFA500;max-height:3px;width:100%;overflow:hidden;position:relative;"class="fake_bottom">
+                  <img style="float:left;" src="/images/fake_bottom_left.png"></img>
+                  <div style="background-color:#DDD;min-height:3px;min-width:246px;background-image:url('/images/fake_bottom.png');background-repeat:repeat-x;float:left;"></div>
+                  <img style="float:left;" src="/images/fake_bottom_right.png"></img>
               </div>
               <div class="notification warning">
                   <div class=warning_widget>
                       <span class=warning_icon>&#xf101;</span>
                       <span class=warning_text>Invalid data pasted</span>
-                  </div>
-              </div>
-              <div class="fake_bottom top_orange">
-                  <div class=top>
-                      <div class=white>
-                      </div>
                   </div>
               </div>
               <div class="notification warning">
