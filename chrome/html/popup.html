@@ -8,16 +8,34 @@
           background: #DDDDDD;
           margin: 0px 0px 0px 0px;
       }
-      .fake_bottom {
+      .real_bottom {
+          position:relative;
           background: #FFA500;
-
+          min-height:3px;
       }
-      .fake_bottom_inner {
-          background: #DDDDDD;
-          min-height:8px;
+      .fake_bottom {
+          position:relative;
+          background: #FFA500;
+      }
+      .fake_bottom > .top {
+          min-height:3px;
           border-bottom-left-radius: 3px;
           border-bottom-right-radius: 3px;
           border-bottom: 1px solid #666;
+      }
+      .top_grey > .top {
+          background: #DDDDDD;
+      }
+      .fake_bottom > .top > .white {
+          background: #FFFFFF;
+          min-height:1px;
+          border-bottom-left-radius: 3px;
+          border-bottom-right-radius: 3px;
+          position:relative;
+          border-left: 1px solid #666;
+          border-right: 1px solid #666;
+          left:0px;
+          top:2px;
       }
       div#main_content {
           margin: 8px 8px 0px 8px;
@@ -102,7 +120,7 @@
       button#clear {
           float: left;
       }
-      div.warning {
+      div.notification {
           background: #ffa500;
           min-width: 250px;
           max-width: 250px;
@@ -127,12 +145,6 @@
           vertical-align:middle;
           margin-right:10px;
       }
-      .warning_link {
-          font-size: 10px;
-          font-family: "sans-serif", "Arial", "Helvetica";
-          vertical-align:middle;
-      }
-      
     </style>
   </head>
   <body>
@@ -172,16 +184,31 @@
           </div>
 
           <div id=status_bar>
-              <div class=fake_bottom>
-                  <div class=fake_bottom_inner>
+              <div class="fake_bottom top_grey">
+                  <div class=top>
+                      <div class=white>
+                      </div>
                   </div>
               </div>
-              <div class=warning>
+              <div class="notification warning">
                   <div class=warning_widget>
                       <span class=warning_icon>&#xf101;</span>
-                      <span class=warning_text>Invalid Data Pasted</span>
-                      <span class=warning_link>details</span>
+                      <span class=warning_text>Invalid data pasted</span>
                   </div>
+              </div>
+              <div class="fake_bottom top_orange">
+                  <div class=top>
+                      <div class=white>
+                      </div>
+                  </div>
+              </div>
+              <div class="notification warning">
+                  <div class=warning_widget>
+                      <span class=warning_icon>&#xf101;</span>
+                      <span class=warning_text>Invalid data pasted</span>
+                  </div>
+              </div>
+              <div class="real_bottom top_orange">
               </div>
           </div>
       <script src="/libs/domparser.js"></script>
