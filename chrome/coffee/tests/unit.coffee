@@ -12,18 +12,26 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
+
+countries = get_local("/data/countries.json")
+
 module("unit")
-test "Digikey: Constructs and is RetailerInterface", () ->
-    ok new Digikey("AT") instanceof RetailerInterface
 
-test "Farnell: Constructs and is RetailerInterface", () ->
-    ok new Farnell("AT") instanceof RetailerInterface
+test "Digikey: Constructs for all countries", () ->
+    for country,code of countries
+        ok(new Digikey(code) instanceof RetailerInterface, country + " " + code)
 
-test "Mouser: Constructs and is RetailerInterface", () ->
-    ok new Mouser("AT") instanceof RetailerInterface
+test "Farnell: Constructs for all countries", () ->
+    for country,code of countries
+        ok(new Farnell(code) instanceof RetailerInterface, country + " " + code)
 
-test "RS: Constructs and is RetailerInterface", () ->
-    ok new RS("AT") instanceof RetailerInterface
+test "Mouser: Constructs for all countries", () ->
+    for country,code of countries
+        ok(new Mouser(code) instanceof RetailerInterface, country + " " + code)
+
+test "RS: Constructs for all countries", () ->
+    for country,code of countries
+        ok(new RS(code) instanceof RetailerInterface, country + " " + code)
 
 test "InvalidCountryError Exists", () ->
     ok new InvalidCountryError instanceof Error
