@@ -61,6 +61,8 @@
     "Export": "://export.rsdelivers.com/"
 },
 "carts" : "",
+"additems" : "",
+"additem_params" : "",
 
 "lookup" : {
     "AE": "AE",
@@ -162,11 +164,13 @@
     "TW": "TW",
     "TZ": "ZA",
     "UA": "UA",
+    "UK": "UK",
     "US": "Export",
     "UY": "Export",
     "VE": "Export",
     "VN": "Export",
     "ZA": "ZA",
     "ZM": "ZA",
-    "ZW": "ZA"
+    "ZW": "ZA",
+    "Other": "Export"
 }}
