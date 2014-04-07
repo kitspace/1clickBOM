@@ -22,6 +22,9 @@ test "Farnell: Constructs and is RetailerInterface", () ->
 test "Mouser: Constructs and is RetailerInterface", () ->
     ok new Mouser("AT") instanceof RetailerInterface
 
+test "RS: Constructs and is RetailerInterface", () ->
+    ok new RS("AT") instanceof RetailerInterface
+
 test "InvalidCountryError Exists", () ->
     ok new InvalidCountryError instanceof Error
 
@@ -38,5 +41,10 @@ test "Farnell: InvalidCountryError Thrown", () ->
 test "Mouser: InvalidCountryError Thrown", () ->
     throws () ->
         new Mouser("XX")
+    , InvalidCountryError
+
+test "RS: InvalidCountryError Thrown", () ->
+    throws () ->
+        new RS("XX")
     , InvalidCountryError
 
