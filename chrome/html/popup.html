@@ -23,6 +23,9 @@
       .fake_bottom.internal_error_bottom > .fake_bottom_edge {
           background-color:red;
       }
+      .fake_bottom.success_bottom > .fake_bottom_edge {
+          background-color:#0cff3f;
+      }
       .fake_bottom.panel_top > .fake_bottom_line {
           background-color:#DDD;
       }
@@ -34,6 +37,9 @@
       }
       .fake_bottom.internal_error_top > .fake_bottom_line {
           background-color:red;
+      }
+      .fake_bottom.success_top > .fake_bottom_line {
+          background-color:#0cff3f;
       }
       .fake_bottom_left {
           background-image:url("/images/fake_bottom_left.png");
@@ -137,6 +143,7 @@
       }
       .notification {
           line-height:24px;
+          min-width:250px;
       }
       .notification.warning {
           background: #ffa500;
@@ -146,6 +153,9 @@
       }
       .notification.internal_error {
           background: red;
+      }
+      .notification.success {
+          background: #0cff3f;
       }
       .notification_widget {
           line-height:24px;
@@ -247,6 +257,17 @@
                   <div class=notification_widget>
                       <span class=notification_icon>&#xf216;</span>
                       <span class=notification_text>An internal error occurred</span>
+                  </div>
+              </div>
+              <div class="fake_bottom internal_error_top success_bottom">
+                  <div class="fake_bottom_edge fake_bottom_left"></div>
+                  <div class="fake_bottom_line"></div>
+                  <div class="fake_bottom_edge fake_bottom_right"></div>
+              </div>
+              <div class="notification success">
+                  <div class=notification_widget>
+                      <span class=notification_icon>&#xf126;</span>
+                      <span class=notification_text>Items added to carts</span>
                   </div>
               </div>
           </div>
