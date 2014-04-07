@@ -41,7 +41,8 @@ class @BomManager
                 retailer.interface = new Farnell(country, setting_values)
             when "Mouser"
                 retailer.interface = new  Mouser(country, setting_values)
-
+            when "RS"
+                retailer.interface = new      RS(country, setting_values)
     getBOM: () ->
         return @bom
 

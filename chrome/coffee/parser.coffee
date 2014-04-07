@@ -35,12 +35,14 @@ class @Parser
     checkValidItems: (items_incoming, invalid) ->
         retailer_aliases = {
             "Farnell"   : "Farnell",
-            "Element14" : "Farnell",
             "FEC"       : "Farnell",
             "Premier"   : "Farnell",
             "Digikey"   : "Digikey",
             "Digi-key"  : "Digikey",
-            "Mouser"    : "Mouser"
+            "Mouser"    : "Mouser",
+            "RS"        : "RS",
+            "RSOnline"  : "RS",
+            "RS-Online" : "RS"
         }
         items = []
         for item in items_incoming
