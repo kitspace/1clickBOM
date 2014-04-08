@@ -145,6 +145,16 @@ asyncTest "Farnell: Add items individually via microCart fails 2", () ->
             deepEqual(request.fails, [items[0]], that.country)
             start()
 
+module("RS")
+
+asyncTest "RS: Add items", () ->
+    items = [{"part":"505-1441","quantity":2, "comment":"test"}]
+    d = new RS("AE")
+    d.addItems items, (request, that) ->
+        deepEqual(request.success,true)
+        start()
+    
+
 module("Mouser")
 # Mouser's site is unified, changing the basket somewhere will change the basket everywhere
 asyncTest "Mouser: Add items fails", () ->
