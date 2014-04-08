@@ -149,7 +149,7 @@ module("RS")
 
 asyncTest "RS: Add items", () ->
     items = [{"part":"505-1441","quantity":2, "comment":"test"}]
-    d = new RS("AE")
+    d = new RS("UK")
     d.addItems items, (request, that) ->
         deepEqual(request.success,true)
         start()
