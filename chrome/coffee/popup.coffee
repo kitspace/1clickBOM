@@ -33,17 +33,10 @@ rebuild_bom_view = (bom) ->
         tr = document.createElement("tr")
         td_0 = document.createElement("td")
 
-        a  = document.createElement("a")
-        a.href = "#"
-        a.value = retailer_name
-        a.addEventListener "click", () ->
-            window.bom_manager.openCart(@value)
-
         icon = document.createElement("img")
         icon.src = retailer.icon_src
-        a.appendChild(icon)
-        a.innerHTML += retailer.interface_name
-        td_0.appendChild(a)
+        td_0.appendChild(icon)
+        td_0.innerHTML += retailer.interface_name
         tr.appendChild(td_0)
 
         td_1 = document.createElement("td")
@@ -57,10 +50,10 @@ rebuild_bom_view = (bom) ->
         tr.appendChild(td_2)
         td = document.createElement("td")
 
-        unicode_chars = ["\uf21e","\uf21b"]
-        titles = ["Add items to " , "Empty "]
+        unicode_chars = ["\uf21e", "\uf221", "\uf21b"]
+        titles = ["Add items to " , "View ",  "Empty "]
         links = []
-        for i in  [0..1]
+        for i in  [0..2]
             td = document.createElement("td")
             a = document.createElement("a")
             a.value = retailer_name
@@ -78,6 +71,9 @@ rebuild_bom_view = (bom) ->
             window.bom_manager.fillCart(@value)
 
         links[1].addEventListener "click", () ->
+            window.bom_manager.openCart(@value)
+
+        links[2].addEventListener "click", () ->
             window.bom_manager.emptyCart(@value)
 
         table.appendChild(tr)
