@@ -56,10 +56,12 @@ class @Mouser extends RetailerInterface
                 if not request.success
                     viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
                     that._clear_errors that, viewstate, () ->
-                        callback(request, that)
+                        if callback?
+                            callback(request, that)
                         that.refreshCartTabs()
                 else
-                    callback(request, that)
+                    if callback?
+                        callback(request, that)
                     that.refreshCartTabs()
         xhr.send(params)
 
@@ -115,7 +117,8 @@ class @Mouser extends RetailerInterface
                     if xhr2.readyState == 4 and xhr2.status == 200
                         doc = new DOMParser().parseFromString(xhr2.responseText, "text/html")
                         viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-                        callback(that, viewstate)
+                        if callback?
+                            callback(that, viewstate)
                 xhr2.send(params)
         xhr.send()
     _get_cart_viewstate: (callback)->
@@ -127,5 +130,6 @@ class @Mouser extends RetailerInterface
             if xhr.readyState == 4 and xhr.status == 200
                 doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
                 viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-                callback(that, viewstate)
+                if callback?
+                    callback(that, viewstate)
         xhr.send()
