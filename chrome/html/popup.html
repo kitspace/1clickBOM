@@ -106,7 +106,7 @@
           font-family: "sans-serif", "Arial", "Helvetica";
           white-space: nowrap;
       }
-      table#bom_list > tr:hover{
+      table#bom_list > tr:hover {
           background: #ADD8E6;
       }
       table#bom_list > tr > td{
@@ -115,7 +115,7 @@
           font-size: 14px;
           vertical-align:middle;
       }
-      table#bom_list > tr > td > a >img{
+      table#bom_list > tr > td > a >img {
           margin-bottom: 5px;
           margin-top: 5px;
           margin-left: 3px;
@@ -148,14 +148,26 @@
       .notification.warning {
           background: #ffa500;
       }
+      .notification.warning:hover {
+          background:#ffb82f;
+      }
       .notification.network_error {
           background: #c000ff;
+      }
+      .notification.network_error:hover {
+          background:#cc31ff;
       }
       .notification.internal_error {
           background: red;
       }
+      .notification.internal_error:hover {
+          background:#ff3635;
+      }
       .notification.success {
           background: #0cff3f;
+      }
+      .notification.success:hover {
+          background:#56ff4e;
       }
       .notification_widget {
           line-height:24px;
@@ -164,17 +176,22 @@
           padding-bottom:3px;
           text-align:left;
       }
+      .notification_widget:hover {
+          line-height:50px;
+      }
       .notification_icon {
           font-family: "Foundation Icons";
           font-size: 24px;
           margin-right:10px;
           vertical-align:middle;
+          cursor:default;
       }
       .notification_text {
           font-size: 14px;
           font-family: "sans-serif", "Arial", "Helvetica";
           vertical-align:middle;
           margin-right:10px;
+          cursor:default;
       }
     </style>
   </head>
