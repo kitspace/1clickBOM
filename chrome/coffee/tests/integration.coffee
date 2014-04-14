@@ -19,7 +19,7 @@ module("integration")
 
 test "Digikey: Clear All", () ->
     try
-        for key of window.digikey_data.sites
+        for key of window.digikey_data.lookup
             console.log "Digikey: Clearing all"
             d = new Digikey(key)
             d.clearCart()
@@ -30,8 +30,8 @@ test "Digikey: Clear All", () ->
 
 asyncTest "Digikey: Add items", () ->
     items = [{"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
-    stop(Object.keys(window.digikey_data.sites).length-1)
-    for key of window.digikey_data.sites
+    stop(Object.keys(window.digikey_data.lookup).length-1)
+    for key of window.digikey_data.lookup
         console.log("Digikey: Adding items")
         d = new Digikey(key)
         d.addItems items, (request, that) ->
@@ -40,8 +40,8 @@ asyncTest "Digikey: Add items", () ->
 
 asyncTest "Digikey: Add items fails", () ->
     items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
-    stop(Object.keys(window.digikey_data.sites).length-1)
-    for key of window.digikey_data.sites
+    stop(Object.keys(window.digikey_data.lookup).length-1)
+    for key of window.digikey_data.lookup
         console.log("Digikey: Adding items")
         d = new Digikey(key)
         d.addItems items, (request, that) ->
@@ -51,8 +51,8 @@ asyncTest "Digikey: Add items fails", () ->
 
 asyncTest "Digikey: Add items fails 2", () ->
     items = [{"part":"754-1173-1-ND", "quantity":-1, "comment":"test"}, {"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
-    stop(Object.keys(window.digikey_data.sites).length-1)
-    for key of window.digikey_data.sites
+    stop(Object.keys(window.digikey_data.lookup).length-1)
+    for key of window.digikey_data.lookup
         console.log("Digikey: Adding items")
         d = new Digikey(key)
         d.addItems items, (request, that) ->
@@ -63,7 +63,7 @@ asyncTest "Digikey: Add items fails 2", () ->
 
 test "Farnell: Clear All", () ->
     try
-        for key of window.farnell_data.sites
+        for key of window.farnell_data.lookup
             console.log "Farnell: Clearing all"
             d = new Farnell(key)
             d.clearCart()
@@ -75,8 +75,8 @@ test "Farnell: Clear All", () ->
 asyncTest "Farnell: Add items", () ->
     #this test can be a bit iffy,
     #if it fails, try clearing all the farnell and element14 cookies and trying again
-    stop(Object.keys(window.farnell_data.sites).length-1)
-    for key of window.farnell_data.sites
+    stop(Object.keys(window.farnell_data.lookup).length-1)
+    for key of window.farnell_data.lookup
         console.log "Farnell: Adding items"
         d = new Farnell(key)
         items = [{"part":"2250472", "quantity":2, "comment":"test"}]
@@ -87,8 +87,8 @@ asyncTest "Farnell: Add items", () ->
 asyncTest "Farnell: Add items fails", () ->
     #this test can be a bit iffy,
     #if it fails, try clearing all the farnell and element14 cookies and trying again
-    stop(Object.keys(window.farnell_data.sites).length-1)
-    for key of window.farnell_data.sites
+    stop(Object.keys(window.farnell_data.lookup).length-1)
+    for key of window.farnell_data.lookup
         console.log "Farnell: Adding items"
         d = new Farnell(key)
         items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
@@ -100,8 +100,8 @@ asyncTest "Farnell: Add items fails", () ->
 asyncTest "Farnell: Add items fail 2", () ->
     #this test can be a bit iffy,
     #if it fails, try clearing all the farnell and element14 cookies and trying again
-    stop(Object.keys(window.farnell_data.sites).length-1)
-    for key of window.farnell_data.sites
+    stop(Object.keys(window.farnell_data.lookup).length-1)
+    for key of window.farnell_data.lookup
         console.log "Farnell: Adding items"
         d = new Farnell(key)
         items = [{"part":"2250472", "quantity":-1, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
@@ -111,8 +111,8 @@ asyncTest "Farnell: Add items fail 2", () ->
             start()
 
 asyncTest "Farnell: Add items individually via microCart", () ->
-    stop(Object.keys(window.farnell_data.sites).length-1)
-    for key of window.farnell_data.sites
+    stop(Object.keys(window.farnell_data.lookup).length-1)
+    for key of window.farnell_data.lookup
         console.log "Farnell: Adding items individually via microCart"
         d = new Farnell(key)
         items = [{"part":"2250472", "quantity":2, "comment":"test"}]
@@ -123,8 +123,8 @@ asyncTest "Farnell: Add items individually via microCart", () ->
 
 asyncTest "Farnell: Add items individually via microCart fails", () ->
     items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
-    stop(Object.keys(window.farnell_data.sites).length-1)
-    for key of window.farnell_data.sites
+    stop(Object.keys(window.farnell_data.lookup).length-1)
+    for key of window.farnell_data.lookup
         console.log "Farnell: Adding items individually via microCart"
         d = new Farnell("UK")
         d._add_items_individually_via_micro_cart items, (request, that) ->
@@ -135,8 +135,8 @@ asyncTest "Farnell: Add items individually via microCart fails", () ->
 
 asyncTest "Farnell: Add items individually via microCart fails 2", () ->
     items = [{"part":"2250472", "quantity":-1, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
-    stop(Object.keys(window.farnell_data.sites).length-1)
-    for key of window.farnell_data.sites
+    stop(Object.keys(window.farnell_data.lookup).length-1)
+    for key of window.farnell_data.lookup
         console.log "Farnell: Adding items individually via microCart"
         d = new Farnell("UK")
         d._add_items_individually_via_micro_cart items, (request, that) ->
