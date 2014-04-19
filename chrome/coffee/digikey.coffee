@@ -28,7 +28,7 @@ class @Digikey extends RetailerInterface
 
     addItems: (items, callback) ->
         that = this
-        request = {success:true, fails:[]}
+        result = {success:true, fails:[]}
         count = items.length
         for item in items
             xhr = new XMLHttpRequest
@@ -41,44 +41,11 @@ class @Digikey extends RetailerInterface
                     quick_add_quant = doc.querySelector("#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity")
                     success = (quick_add_quant?) && (quick_add_quant.value?) && (quick_add_quant.value == "")
                     if not success
-                        request.fails.push(event.currentTarget.item)
-                    request.success = request.success && success
+                        result.fails.push(event.currentTarget.item)
+                    result.success = result.success && success
                     count--
                     if (count == 0)
                         if callback?
-                            callback(request, that)
+                            callback(result, that)
                         that.refreshCartTabs()
             xhr.send()
-
-     #getCart: ->
-     #   that = this
-     #   parser = new DOMParser
-     #   xhr = new XMLHttpRequest
-     #   xhr.open "GET", "https" + @site + @cart, false
-     #   xhr.send()
-     #   if xhr.status == 200
-     #       doc = parser.parseFromString(xhr.responseText, "text/html")
-     #   #table = doc.getElementById("ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_ordOrderDetails").getElementsByTagName("tbody")[0]#.getElementsById("valSubtotal")[0]
-     #   subtotal = doc.getElementById("valSubtotal").innerText
-     #   subtotal = subtotal.replace(/\s*/g, '')
-     #   subtotal = subtotal.replace(/€/g, '')
-     #   subtotal = subtotal.replace(/\,/, '.')
-     #   subtotal = parseFloat(subtotal)
-
-     #   shipping = doc.getElementById("valShipping").innerText
-     #   shipping = shipping.replace(/\s*/g, '')
-     #   shipping = shipping.replace(/€/g, '')
-     #   shipping = shipping.replace(/\,/, '.')
-     #   shipping = parseFloat(shipping)
-
-     #   total = doc.getElementById("valTotal").innerText
-     #   total = total.replace(/\s*/g, '')
-     #   if total == "unknown"
-     #       total = NaN
-     #   else
-     #       total = total.replace(/€/g, '')
-     #       total = total.replace(/\,/, '.')
-     #       total = parseFloat(total)
-
-     #   #table = table.getElementByTagName("tbody")[0]
-     #   return {"subtotal":subtotal, "shipping":shipping, "total": total}

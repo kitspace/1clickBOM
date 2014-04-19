@@ -34,8 +34,8 @@ asyncTest "Digikey: Add items", () ->
     for key of window.digikey_data.lookup
         console.log("Digikey: Adding items")
         d = new Digikey(key)
-        d.addItems items, (request, that) ->
-            deepEqual(request.success, true, that.country)
+        d.addItems items, (result, that) ->
+            deepEqual(result.success, true, that.country)
             start()
 
 asyncTest "Digikey: Add items fails", () ->
@@ -44,9 +44,9 @@ asyncTest "Digikey: Add items fails", () ->
     for key of window.digikey_data.lookup
         console.log("Digikey: Adding items")
         d = new Digikey(key)
-        d.addItems items, (request, that) ->
-            deepEqual(request.success, false, that.country)
-            deepEqual(request.fails, [items[0]], that.country)
+        d.addItems items, (result, that) ->
+            deepEqual(result.success, false, that.country)
+            deepEqual(result.fails, [items[0]], that.country)
             start()
 
 asyncTest "Digikey: Add items fails 2", () ->
@@ -55,9 +55,9 @@ asyncTest "Digikey: Add items fails 2", () ->
     for key of window.digikey_data.lookup
         console.log("Digikey: Adding items")
         d = new Digikey(key)
-        d.addItems items, (request, that) ->
-            deepEqual(request.success, false, that.country)
-            deepEqual(request.fails, [items[0]], that.country)
+        d.addItems items, (result, that) ->
+            deepEqual(result.success, false, that.country)
+            deepEqual(result.fails, [items[0]], that.country)
             start()
 
 
@@ -80,8 +80,8 @@ asyncTest "Farnell: Add items", () ->
         console.log "Farnell: Adding items"
         d = new Farnell(key)
         items = [{"part":"2250472", "quantity":2, "comment":"test"}]
-        d.addItems items, (request, that) ->
-            deepEqual(request.success, true, that.country)
+        d.addItems items, (result, that) ->
+            deepEqual(result.success, true, that.country)
             start()
 
 asyncTest "Farnell: Add items fails", () ->
@@ -92,9 +92,9 @@ asyncTest "Farnell: Add items fails", () ->
         console.log "Farnell: Adding items"
         d = new Farnell(key)
         items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
-        d.addItems items, (request, that) ->
-            deepEqual(request.success, false, that.country)
-            deepEqual(request.fails, [items[0]], that.country)
+        d.addItems items, (result, that) ->
+            deepEqual(result.success, false, that.country)
+            deepEqual(result.fails, [items[0]], that.country)
             start()
 
 asyncTest "Farnell: Add items fail 2", () ->
@@ -105,9 +105,9 @@ asyncTest "Farnell: Add items fail 2", () ->
         console.log "Farnell: Adding items"
         d = new Farnell(key)
         items = [{"part":"2250472", "quantity":-1, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
-        d.addItems items, (request, that) ->
-            deepEqual(request.success, false, that.country)
-            deepEqual(request.fails, [items[0]], that.country)
+        d.addItems items, (result, that) ->
+            deepEqual(result.success, false, that.country)
+            deepEqual(result.fails, [items[0]], that.country)
             start()
 
 asyncTest "Farnell: Add items individually via microCart", () ->
@@ -116,9 +116,9 @@ asyncTest "Farnell: Add items individually via microCart", () ->
         console.log "Farnell: Adding items individually via microCart"
         d = new Farnell(key)
         items = [{"part":"2250472", "quantity":2, "comment":"test"}]
-        d._add_items_individually_via_micro_cart items, (request, that) ->
-            deepEqual(request.no_item_comments, true, that.country)
-            deepEqual(request.success, true, that.country)
+        d._add_items_individually_via_micro_cart items, (result, that) ->
+            deepEqual(result.no_item_comments, true, that.country)
+            deepEqual(result.success, true, that.country)
             start()
 
 asyncTest "Farnell: Add items individually via microCart fails", () ->
@@ -127,10 +127,10 @@ asyncTest "Farnell: Add items individually via microCart fails", () ->
     for key of window.farnell_data.lookup
         console.log "Farnell: Adding items individually via microCart"
         d = new Farnell("UK")
-        d._add_items_individually_via_micro_cart items, (request, that) ->
-            deepEqual(request.no_item_comments, true, that.country)
-            deepEqual(request.success, false, that.country)
-            deepEqual(request.fails, [items[0]], that.country)
+        d._add_items_individually_via_micro_cart items, (result, that) ->
+            deepEqual(result.no_item_comments, true, that.country)
+            deepEqual(result.success, false, that.country)
+            deepEqual(result.fails, [items[0]], that.country)
             start()
 
 asyncTest "Farnell: Add items individually via microCart fails 2", () ->
@@ -139,10 +139,10 @@ asyncTest "Farnell: Add items individually via microCart fails 2", () ->
     for key of window.farnell_data.lookup
         console.log "Farnell: Adding items individually via microCart"
         d = new Farnell("UK")
-        d._add_items_individually_via_micro_cart items, (request, that) ->
-            deepEqual(request.no_item_comments, true, that.country)
-            deepEqual(request.success, false, that.country)
-            deepEqual(request.fails, [items[0]], that.country)
+        d._add_items_individually_via_micro_cart items, (result, that) ->
+            deepEqual(result.no_item_comments, true, that.country)
+            deepEqual(result.success, false, that.country)
+            deepEqual(result.fails, [items[0]], that.country)
             start()
 
 module("RS")
@@ -150,8 +150,8 @@ module("RS")
 asyncTest "RS: Add items", () ->
     items = [{"part":"505-1441","quantity":2, "comment":"test"}]
     d = new RS("UK")
-    d.addItems items, (request, that) ->
-        deepEqual(request.success,true)
+    d.addItems items, (result, that) ->
+        deepEqual(result.success,true)
         start()
     
 
@@ -161,9 +161,9 @@ asyncTest "Mouser: Add items fails", () ->
     items = [{"part":"fail","quantity":2, "comment":"test"},{"part":"607-GALILEO","quantity":2, "comment":"test"}]
     console.log "Mouser: Adding items"
     d = new Mouser("CN")
-    d.addItems items, (request, that) ->
-        deepEqual(request.success, false)
-        deepEqual(request.fails, [items[0]])
+    d.addItems items, (result, that) ->
+        deepEqual(result.success, false)
+        deepEqual(result.fails, [items[0]])
         start()
 
 #the order here is important as we want to make sure the "errors" were cleared after the failed add
@@ -171,6 +171,6 @@ asyncTest "Mouser: Add items", () ->
     items = [{"part":"607-GALILEO","quantity":2, "comment":"test"}]
     console.log "Mouser: Adding items"
     d = new Mouser("CN")
-    d.addItems items, (request, that) ->
-        deepEqual(request.success, true)
+    d.addItems items, (result, that) ->
+        deepEqual(result.success, true)
         start()

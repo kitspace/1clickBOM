@@ -33,12 +33,12 @@ class @Mouser extends RetailerInterface
             params += "&ctl00$ContentMain$txtCustomerPartNumber" + (i+1) + "=" + item.comment
             params += "&ctl00$ContentMain$txtPartNumber" + (i+1) + "=" + item.part
             params += "&ctl00$ContentMain$txtQuantity"   + (i+1) + "=" + item.quantity
-        #use uk here so the response is in english
+        #use uk here so the response is in english, the site is synced across countries
         url = "http://uk.mouser.com" + that.additem
         xhr = new XMLHttpRequest
         xhr.open("POST", url, true)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-        request = {success: true, fails:[]}
+        result = {success: true, fails:[]}
         xhr.onreadystatechange = (event) ->
             if event.currentTarget.readyState == 4
                 #if there is an error, there will be some error-class items with display set to ""
@@ -51,17 +51,17 @@ class @Mouser extends RetailerInterface
                             part = /\n(.*)<br>/.exec(detail_div.innerHTML)[1]
                             for item in items
                                 if item.part == part
-                                    request.fails.push(item)
-                        request.success = false
-                if not request.success
+                                    result.fails.push(item)
+                        result.success = false
+                if not result.success
                     viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
                     that._clear_errors that, viewstate, () ->
                         if callback?
-                            callback(request, that)
+                            callback(result, that)
                         that.refreshCartTabs()
                 else
                     if callback?
-                        callback(request, that)
+                        callback(result, that)
                     that.refreshCartTabs()
         xhr.send(params)
 
@@ -98,6 +98,7 @@ class @Mouser extends RetailerInterface
         xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket")
     _get_adding_viewstate: (callback)->
         #we get the quick-add form , extend it to 99 lines (the max) and get the viewstate from the response
+        #TODO more than 99 items
         that = this
         url = "http" + @site + @additem
         xhr = new XMLHttpRequest

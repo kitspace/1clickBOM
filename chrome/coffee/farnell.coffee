@@ -66,7 +66,7 @@ class @Farnell extends RetailerInterface
         that = this
         xhr = new XMLHttpRequest
         url = "https" + @site + @additem
-        request = {}
+        result = {}
         for item in items
             url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
         xhr.onreadystatechange = (event) ->
@@ -76,10 +76,10 @@ class @Farnell extends RetailerInterface
                 doc = parser.parseFromString(xhr.responseText, "text/html")
                 #we determine the request has returned the basket by the body classname 
                 #so it's language agnostic
-                request.success = doc.querySelector("body.shoppingCart") != null
-                if (request.success)
+                result.success = doc.querySelector("body.shoppingCart") != null
+                if (result.success)
                     if (callback?)
-                        callback(request, that)
+                        callback(result, that)
                     that.refreshCartTabs()
                     that.refreshSiteTabs()
                 else 
@@ -89,7 +89,7 @@ class @Farnell extends RetailerInterface
 
     _add_items_individually: (items, callback) ->
         that = this
-        request = {success:true, fails:[]}
+        result = {success:true, fails:[]}
         count = items.length
         for item in items
             xhr = new XMLHttpRequest
@@ -101,20 +101,20 @@ class @Farnell extends RetailerInterface
                 if event.currentTarget.readyState == 4
                     doc = (new DOMParser).parseFromString(event.currentTarget.responseText, "text/html")
                     success = doc.querySelector("body.shoppingCart") != null
-                    request.success = request.success && success
+                    result.success = result.success && success
                     if not success
-                        request.fails.push(event.currentTarget.item)
+                        result.fails.push(event.currentTarget.item)
                     count--
                     if count == 0
                         that.refreshCartTabs()
                         that.refreshSiteTabs()
                         if callback?
-                            callback(request, that)
+                            callback(result, that)
             xhr.send()
 
     _add_items_individually_via_micro_cart: (items, callback) ->
         that = this
-        request = {success:true, fails:[], no_item_comments:true}
+        result = {success:true, fails:[], no_item_comments:true}
         count = items.length
         for item in items
             xhr = new XMLHttpRequest
@@ -124,15 +124,15 @@ class @Farnell extends RetailerInterface
             xhr.onreadystatechange = (event) ->
                 if event.currentTarget.readyState == 4
                     success = xhr.responseXML != null
-                    request.success = request.success && success
+                    result.success = result.success && success
                     if not success
-                        request.fails.push(event.currentTarget.item)
+                        result.fails.push(event.currentTarget.item)
                     count--
                     if count == 0
                         that.refreshCartTabs()
                         that.refreshSiteTabs()
                         if callback?
-                            callback(request, that)
+                            callback(result, that)
             xhr.send()
 
 
