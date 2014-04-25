@@ -153,7 +153,6 @@ asyncTest "RS: Add items", () ->
     d.addItems items, (result, that) ->
         deepEqual(result.success,true)
         start()
-    
 
 module("Mouser")
 # Mouser's site is unified, changing the basket somewhere will change the basket everywhere
