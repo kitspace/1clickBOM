@@ -149,9 +149,15 @@ module("RS")
 
 asyncTest "RS: Add items", () ->
     items = [{"part":"505-1441","quantity":2, "comment":"test"}]
-    d = new RS("UK")
+    d = new RS("AT")
     d.addItems items, (result, that) ->
         deepEqual(result.success,true)
+        start()
+
+asyncTest "RS: Clear All", () ->
+    d = new RS("AT")
+    d.clearCart (result, that) ->
+        deepEqual(result.success, true)
         start()
 
 module("Mouser")
