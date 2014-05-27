@@ -68,6 +68,10 @@ rebuild_bom_view = (bom) ->
             tr.appendChild(td)
 
         links[0].addEventListener "click", () ->
+            spin = document.createElement("img")
+            spin.src = chrome.extension.getURL("images/spin.gif")
+            this.appendChild(spin)
+            this.querySelector("span").hidden=true
             window.bom_manager.fillCart(@value)
 
         links[1].addEventListener "click", () ->
