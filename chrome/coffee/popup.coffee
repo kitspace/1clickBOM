@@ -68,10 +68,21 @@ rebuild_bom_view = (bom) ->
             tr.appendChild(td)
 
         links[0].addEventListener "click", () ->
-            spin = document.createElement("img")
-            spin.src = chrome.extension.getURL("images/spin.gif")
-            this.appendChild(spin)
-            this.querySelector("span").hidden=true
+            td = this.parentNode
+            counter = 0
+            spin = document.createElement("div")
+            spin.className = "spinner"
+            td.appendChild(spin)
+            id = setInterval ()->
+                frames=12; frameWidth = 15;
+                offset=counter * -frameWidth;
+                spin.style.backgroundPosition=
+                    offset + "px" + " " + 0 + "px";
+                counter++
+                if (counter>=frames)
+                    counter =0;
+            , 50
+            td.querySelector("a").hidden=true
             window.bom_manager.fillCart(@value)
 
         links[1].addEventListener "click", () ->
