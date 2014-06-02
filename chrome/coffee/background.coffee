@@ -20,6 +20,13 @@
     result = textarea.value
     callback(result)
 
+chrome.storage.onChanged.addListener (changes, namespace) ->
+    if namespace == "local"
+        if changes.bom || changes.country || changes.settings
+            window.bom_manager = new BomManager
+
+window.bom_manager = new BomManager
+
 @get_location = ()->
     xhr = new XMLHttpRequest
     xhr.open "GET", "https://freegeoip.net/json/", true
