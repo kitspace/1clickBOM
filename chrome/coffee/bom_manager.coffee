@@ -90,8 +90,8 @@ class @BomManager
     emptyCarts: ()->
         for retailer of @bom
             @emptyCart(retailer)
-    emptyCart: (retailer)->
-        @bom[retailer].interface.clearCart()
+    emptyCart: (retailer, callback)->
+        @bom[retailer].interface.clearCart(callback)
 
     openCarts: ()->
         for retailer of @bom

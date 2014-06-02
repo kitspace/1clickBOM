@@ -24,10 +24,10 @@ class @Farnell extends RetailerInterface
             fix_xhr.open("GET", fix_url, false)
             fix_xhr.send()
 
-    clearCart: ->
-        @_get_item_ids()
+    clearCart: (callback)->
+        @_get_item_ids(callback)
 
-    _get_item_ids: () ->
+    _get_item_ids: (callback) ->
         that = this
         xhr = new XMLHttpRequest
         parser = new DOMParser
@@ -41,10 +41,10 @@ class @Farnell extends RetailerInterface
                 for element in ins
                     if element.name == "/pf/commerce/CartHandler.removalCommerceIds"
                         ids.push(element.value)
-                that._post_clear(ids)
+                that._post_clear(ids, callback)
         xhr.send()
        
-    _post_clear: (ids) ->
+    _post_clear: (ids, callback) ->
         that = this
         if (ids.length)
             xhr = new XMLHttpRequest
@@ -53,6 +53,8 @@ class @Farnell extends RetailerInterface
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
             xhr.onreadystatechange = (data) ->
                 if xhr.readyState == 4 and xhr.status == 200
+                    if callback?
+                        callback()
                     that.refreshSiteTabs()
                     that.refreshCartTabs()
             txt_1 = ""

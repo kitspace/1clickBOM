@@ -83,16 +83,18 @@ class @Mouser extends RetailerInterface
                 xhr2.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket")
         xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors")
 
-    clearCart: () ->
+    clearCart: (callback) ->
         @_get_cart_viewstate (that, viewstate) ->
-            that._clear_cart(viewstate)
-    _clear_cart: (viewstate)->
+            that._clear_cart(viewstate, callback)
+    _clear_cart: (viewstate, callback)->
         that = this
         xhr = new XMLHttpRequest
         xhr.open("POST", "http" + @site + @cart, true)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
         xhr.onreadystatechange = () ->
             if xhr.readyState == 4
+                if callback?
+                    callback()
                 that.refreshCartTabs()
         #don't ask, this is what works...
         xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket")

@@ -67,8 +67,8 @@ rebuild_bom_view = (bom) ->
             td.appendChild(a)
             tr.appendChild(td)
 
-        links[0].addEventListener "click", () ->
-            td = this.parentNode
+        spin_func = (that, callback) ->
+            td = that.parentNode
             counter = 0
             spin = document.createElement("div")
             spin.className = "spinner"
@@ -83,13 +83,23 @@ rebuild_bom_view = (bom) ->
                     counter =0;
             , 50
             td.querySelector("a").hidden=true
-            window.bom_manager.fillCart(@value)
+            callback () ->
+                clearInterval(id)
+                td.removeChild(spin)
+                td.querySelector("a").hidden=false
+
+        links[0].addEventListener "click", () ->
+            that = this
+            spin_func that, (callback) ->
+                window.bom_manager.fillCart(that.value, callback)
 
         links[1].addEventListener "click", () ->
             window.bom_manager.openCart(@value)
 
         links[2].addEventListener "click", () ->
-            window.bom_manager.emptyCart(@value)
+            that = this
+            spin_func that, (callback) ->
+                window.bom_manager.emptyCart(that.value, callback)
 
         table.appendChild(tr)
 

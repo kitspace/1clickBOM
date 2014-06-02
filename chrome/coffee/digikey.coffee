@@ -17,12 +17,14 @@ class @Digikey extends RetailerInterface
         super("Digikey", country_code, "/data/digikey_international.json", settings)
         @icon_src = chrome.extension.getURL("images/digikey.ico")
 
-    clearCart: ->
+    clearCart: (callback) ->
         that = this
         xhr = new XMLHttpRequest
         xhr.open("GET","http" + @site + @cart + "?webid=-1", true)
         xhr.onreadystatechange = () ->
             if xhr.readyState == 4
+                if callback?
+                    callback()
                 that.refreshCartTabs()
         xhr.send()
 
