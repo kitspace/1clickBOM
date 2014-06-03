@@ -18,6 +18,7 @@ class @Digikey extends RetailerInterface
         @icon_src = chrome.extension.getURL("images/digikey.ico")
 
     clearCart: (callback) ->
+        @clearing_cart = true
         that = this
         xhr = new XMLHttpRequest
         xhr.open("GET","http" + @site + @cart + "?webid=-1", true)
@@ -26,6 +27,7 @@ class @Digikey extends RetailerInterface
                 if callback?
                     callback()
                 that.refreshCartTabs()
+                that.clearing_cart = false
         xhr.send()
 
     addItems: (items, callback) ->

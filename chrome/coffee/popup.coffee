@@ -36,11 +36,11 @@ start_spinning = (link) ->
     , 50
     link.hidden=true
 
-spin_till_you_win = (link, retailer_name) ->
-    if window.bkgd_page.bom_manager.interfaces[retailer_name].adding_items
+spin_till_you_win = (link, retailer_name, check_val) ->
+    if window.bkgd_page.bom_manager.interfaces[retailer_name][check_val]
         start_spinning(link)
         id = setInterval () ->
-            if not window.bkgd_page.bom_manager.interfaces[retailer_name].adding_items
+            if not window.bkgd_page.bom_manager.interfaces[retailer_name][check_val]
                 clearInterval(id)
                 stop_spinning(link)
         , 1
@@ -123,14 +123,14 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
     
             links[2].addEventListener "click", () ->
                 that = this
-                spin_func that, (callback) ->
-                    window.bkgd_page.bom_manager.emptyCart(that.value, callback)
+                start_spinning(this)
+                window.bkgd_page.bom_manager.emptyCart this.value, () ->
+                    stop_spinning(that)
     
             table.appendChild(tr)
 
-            spin_till_you_win(links[0], retailer_name)
-
-
+            spin_till_you_win(links[0], retailer_name, "adding_items")
+            spin_till_you_win(links[2], retailer_name, "clearing_cart")
     
     bom_changed = () ->
         window.bkgd_page.bom_manager.getBOM (bom) ->

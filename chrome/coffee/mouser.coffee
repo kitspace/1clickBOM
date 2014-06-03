@@ -86,6 +86,7 @@ class @Mouser extends RetailerInterface
         xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors")
 
     clearCart: (callback) ->
+        @clearing_cart = true
         @_get_cart_viewstate (that, viewstate) ->
             that._clear_cart(viewstate, callback)
     _clear_cart: (viewstate, callback)->
@@ -98,6 +99,7 @@ class @Mouser extends RetailerInterface
                 if callback?
                     callback()
                 that.refreshCartTabs()
+                that.clearing_cart = false
         #don't ask, this is what works...
         xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket")
     _get_adding_viewstate: (callback)->

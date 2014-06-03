@@ -53,6 +53,7 @@ class @RetailerInterface
         @name = name + " " + country_code_lookedup
         @interface_name = name
         @adding_items = false
+        @clearing_cart = false
 
     refreshCartTabs: (site = @site, cart = @cart) ->
         #we reload any tabs with the cart URL but the path is case insensitive so we use a regex

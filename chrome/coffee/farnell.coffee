@@ -25,6 +25,7 @@ class @Farnell extends RetailerInterface
             fix_xhr.send()
 
     clearCart: (callback)->
+        @clearing_cart = true
         @_get_item_ids(callback)
 
     _get_item_ids: (callback) ->
@@ -57,6 +58,7 @@ class @Farnell extends RetailerInterface
                         callback()
                     that.refreshSiteTabs()
                     that.refreshCartTabs()
+                    that.clearing_cart = false
             txt_1 = ""
             txt_2 = ""
             for id in ids
