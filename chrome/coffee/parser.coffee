@@ -12,56 +12,55 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-class @Parser 
-    constructor: () ->
-    parseTSV: (text) ->
-        rows = text.split "\n"
-        items = []
-        invalid = []
-        for row, i in rows
-            if row != ""
-                cells = row.split "\t"
-                item = {cells:cells, comment:cells[0], quantity:cells[1], retailer:cells[2], part:cells[3], row:i}
-                if !item.quantity
-                    invalid.push {item:item, reason: "Quantity is undefined."}
-                else if !item.retailer
-                    invalid.push {item:item, reason: "Retailer is undefined."}
-                else if !item.part
-                    invalid.push {item:item, reason: "Part number is undefined."}
-                else
-                    items.push item
-        {items, invalid} = @checkValidItems(items, invalid)
-        return {items, invalid}
-    checkValidItems: (items_incoming, invalid) ->
-        retailer_aliases = {
-            "Farnell"   : "Farnell",
-            "FEC"       : "Farnell",
-            "Premier"   : "Farnell",
-            "Digikey"   : "Digikey",
-            "Digi-key"  : "Digikey",
-            "Mouser"    : "Mouser",
-            "RS"        : "RS",
-            "RSOnline"  : "RS",
-            "RS-Online" : "RS"
-        }
-        items = []
-        for item in items_incoming
-            number = parseInt(item.quantity)
-            if number == NaN
-                invalid.push {item:item, reason: "Quantity is not a number."}
+checkValidItems =  (items_incoming, invalid) ->
+    retailer_aliases = {
+        "Farnell"   : "Farnell",
+        "FEC"       : "Farnell",
+        "Premier"   : "Farnell",
+        "Digikey"   : "Digikey",
+        "Digi-key"  : "Digikey",
+        "Mouser"    : "Mouser",
+        "RS"        : "RS",
+        "RSOnline"  : "RS",
+        "RS-Online" : "RS"
+    }
+    items = []
+    for item in items_incoming
+        number = parseInt(item.quantity)
+        if number == NaN
+            invalid.push {item:item, reason: "Quantity is not a number."}
+        else
+            item.quantity = number
+            r = ""
+            #a case insensitive match to the aliases
+            for key of retailer_aliases
+                re = new RegExp key, "i"
+                if item.retailer.match(re)
+                    r = retailer_aliases[key]
+                    break
+
+            if  r == ""
+                invalid.push({item:item, reason: "Retailer \"" + item.retailer + "\" is not known."})
             else
-                item.quantity = number
-                r = ""
-                #a case insensitive match to the aliases
-                for key of retailer_aliases
-                    re = new RegExp key, "i"
-                    if item.retailer.match(re)
-                        r = retailer_aliases[key]
-                        break
-    
-                if  r == ""
-                    invalid.push({item:item, reason: "Retailer \"" + item.retailer + "\" is not known."})
-                else
-                    item.retailer = r
-                    items.push(item)
-        return {items, invalid}
+                item.retailer = r
+                items.push(item)
+    return {items, invalid}
+
+@parseTSV =  (text) ->
+    rows = text.split "\n"
+    items = []
+    invalid = []
+    for row, i in rows
+        if row != ""
+            cells = row.split "\t"
+            item = {cells:cells, comment:cells[0], quantity:cells[1], retailer:cells[2], part:cells[3], row:i}
+            if !item.quantity
+                invalid.push {item:item, reason: "Quantity is undefined."}
+            else if !item.retailer
+                invalid.push {item:item, reason: "Retailer is undefined."}
+            else if !item.part
+                invalid.push {item:item, reason: "Part number is undefined."}
+            else
+                items.push item
+    {items, invalid} = checkValidItems(items, invalid)
+    return {items, invalid}

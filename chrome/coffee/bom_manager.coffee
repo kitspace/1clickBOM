@@ -44,7 +44,7 @@ class @BomManager
             if (!bom)
                 bom = {}
 
-            {items, invalid} = (new Parser).parseTSV(text)
+            {items, invalid} = window.parseTSV(text)
 
             if invalid.length > 0
                 chrome.runtime.sendMessage({invalid:invalid})
