@@ -21,9 +21,9 @@ class @BomManager
             that.interfaces = {}
             if (!country)
                 country = "Other"
-            for retailer in ["Digikey", "Farnell", "Mouser", "RS"]
-                setting_values = that.lookup_setting_values(country, retailer, stored_settings)
-                that.interfaces[retailer] = that.newInterface(retailer, country, setting_values)
+            for retailer_interface in [Digikey, Farnell, Mouser, RS]
+                setting_values = that.lookup_setting_values(country, retailer_interface.name, stored_settings)
+                that.interfaces[retailer_interface.name] = new retailer_interface(country)
             if callback?
                 callback()
 
@@ -34,16 +34,6 @@ class @BomManager
             settings = {}
         return settings
 
-    newInterface:(retailer_name, country, setting_values) ->
-        switch (retailer_name)
-            when "Digikey"
-                return new Digikey(country, setting_values)
-            when "Farnell"
-                return new Farnell(country, setting_values)
-            when "Mouser"
-                return new  Mouser(country, setting_values)
-            when "RS"
-                return new     RS(country, setting_values)
     getBOM: (callback) ->
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
             callback(bom)
@@ -60,13 +50,7 @@ class @BomManager
                 chrome.runtime.sendMessage({invalid:invalid})
 
             for item in items
-                #if item.retailer not in bom
-                found = false
-                for key of bom
-                    if item.retailer == key
-                        found = true
-                        break
-                if not found
+                if item.retailer not of bom
                     bom[item.retailer] = {"items":[]}
                 bom[item.retailer].items.push(item)
 
@@ -92,7 +76,7 @@ class @BomManager
                 that.emptyCart(retailer)
 
     emptyCart: (retailer, callback)->
-        this.interfaces[retailer].emptyCart(callback)
+        this.interfaces[retailer].clearCart(callback)
 
     openCarts: ()->
         that = this

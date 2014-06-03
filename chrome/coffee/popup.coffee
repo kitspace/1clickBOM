@@ -132,7 +132,6 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
     
     document.querySelector("#clear").addEventListener "click", () ->
         chrome.storage.local.remove("bom")
-        clear_warning_log()
     document.querySelector("#fill_carts").addEventListener "click", () ->
         window.bkgd_page.bom_manager.fillCarts()
     document.querySelector("#empty_carts").addEventListener "click", () ->
