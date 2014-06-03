@@ -15,8 +15,7 @@
 chrome.runtime.getBackgroundPage (bkgd_page) ->
     window.bkgd_page = bkgd_page
     document.querySelector("#paste").addEventListener "click", ()->
-        bkgd_page.paste (text) ->
-            window.bkgd_page.bom_manager.addToBOM(text)
+        window.bkgd_page.paste()
 
     #Ctrl-V event
     document.addEventListener 'keydown', (event) ->
@@ -37,7 +36,7 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
         table = document.querySelector("#bom_list")
         table.removeChild(table.lastChild) while table.hasChildNodes()
         for retailer_name of bom
-            retailer = bom[retailer_name].interface
+            retailer = window.bkgd_page.bom_manager.interfaces[retailer_name]
             items    = bom[retailer_name].items
             no_of_items = 0
             for item in items
@@ -116,9 +115,9 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
             table.appendChild(tr)
     
     bom_changed = () ->
-        bom = window.bkgd_page.bom_manager.getBOM()
-        show_or_hide_buttons(bom)
-        rebuild_bom_view(bom)
+        window.bkgd_page.bom_manager.getBOM (bom) ->
+            show_or_hide_buttons(bom)
+            rebuild_bom_view(bom)
     
         
     chrome.storage.onChanged.addListener (changes, namespace) ->

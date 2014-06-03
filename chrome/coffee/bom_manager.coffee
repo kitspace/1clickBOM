@@ -12,17 +12,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-countries_data = @get_local("/data/countries.json")
 settings_data  = @get_local("/data/settings.json")
 
 class @BomManager
     constructor: (callback) ->
         that = this
-        chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
-            that.bom = bom
-            for retailer of that.bom
+        chrome.storage.local.get ["country", "settings"], ({country:country, settings:stored_settings}) ->
+            that.interfaces = {}
+            if (!country)
+                country = "Other"
+            for retailer in ["Digikey", "Farnell", "Mouser", "RS"]
                 setting_values = that.lookup_setting_values(country, retailer, stored_settings)
-                that.newInterface(retailer, that.bom[retailer], country, setting_values)
+                that.interfaces[retailer] = that.newInterface(retailer, country, setting_values)
             if callback?
                 callback()
 
@@ -33,29 +34,25 @@ class @BomManager
             settings = {}
         return settings
 
-    newInterface:(retailer_name, retailer, country, setting_values) ->
+    newInterface:(retailer_name, country, setting_values) ->
         switch (retailer_name)
             when "Digikey"
-                retailer.interface = new Digikey(country, setting_values)
+                return new Digikey(country, setting_values)
             when "Farnell"
-                retailer.interface = new Farnell(country, setting_values)
+                return new Farnell(country, setting_values)
             when "Mouser"
-                retailer.interface = new  Mouser(country, setting_values)
+                return new  Mouser(country, setting_values)
             when "RS"
-                retailer.interface = new      RS(country, setting_values)
-    getBOM: () ->
-        return @bom
+                return new     RS(country, setting_values)
+    getBOM: (callback) ->
+        chrome.storage.local.get ["bom"], ({bom:bom}) ->
+            callback(bom)
 
     addToBOM: (text, callback) ->
         that = this
-        #we already have these but it seems to take longer for the storage onChanged listener to trigger without this
-        #might be a case for "setImmediate" as "setTimeout(function, 0)" doesn't help either
-        chrome.storage.local.get ["bom", "country", "settings"], ({bom:bom, country:country, settings:stored_settings}) ->
+        chrome.storage.local.get ["bom"], ({bom:bom}) ->
             if (!bom)
                 bom = {}
-
-            if (!country)
-                country = "Other"
 
             {items, invalid} = (new Parser).parseTSV(text)
 
@@ -63,7 +60,6 @@ class @BomManager
                 chrome.runtime.sendMessage({invalid:invalid})
 
             for item in items
-                setting_values = that.lookup_setting_values(country, item.retailer, stored_settings)
                 #if item.retailer not in bom
                 found = false
                 for key of bom
@@ -72,29 +68,37 @@ class @BomManager
                         break
                 if not found
                     bom[item.retailer] = {"items":[]}
-                if (not found) or (bom[item.retailer].interface.country != country) or (bom[item.retailer].interface.settings != setting_values)
-                    that.newInterface(item.retailer, bom[item.retailer], country, setting_values)
                 bom[item.retailer].items.push(item)
 
             chrome.storage.local.set {"bom":bom}, () ->
                 if callback?
                     callback(that)
 
-    fillCarts: (retailer, callback)->
-        for retailer of @bom
-            @fillCart retailer, () ->
+    fillCarts: (callback)->
+        that = this
+        chrome.storage.local.get ["bom"], ({bom:bom}) ->
+            for retailer of bom
+                that.interfaces[retailer].addItems(bom[retailer].items)
 
     fillCart: (retailer, callback)->
-        @bom[retailer].interface.addItems(@bom[retailer].items, callback)
+        that = this
+        chrome.storage.local.get ["bom"], ({bom:bom}) ->
+            that.interfaces[retailer].addItems(bom[retailer].items, callback)
 
     emptyCarts: ()->
-        for retailer of @bom
-            @emptyCart(retailer)
+        that = this
+        chrome.storage.local.get ["bom"], ({bom:bom}) ->
+            for retailer of bom
+                that.emptyCart(retailer)
+
     emptyCart: (retailer, callback)->
-        @bom[retailer].interface.clearCart(callback)
+        this.interfaces[retailer].emptyCart(callback)
 
     openCarts: ()->
-        for retailer of @bom
-            @openCart(retailer)
+        that = this
+        chrome.storage.local.get ["bom"], ({bom:bom}) ->
+            for retailer of bom
+                that.openCart(retailer)
+
     openCart: (retailer)->
-        @bom[retailer].interface.openCartTab()
+        this.interfaces[retailer].openCartTab()

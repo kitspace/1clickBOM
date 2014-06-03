@@ -12,13 +12,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
+window.countries_data = @get_local("/data/countries.json")
 
-@paste = (callback) ->
+@paste = () ->
     textarea = document.getElementById("pastebox")
     textarea.select()
     document.execCommand("paste")
     result = textarea.value
-    callback(result)
+    window.bom_manager.addToBOM(result)
 
 chrome.storage.onChanged.addListener (changes, namespace) ->
     if namespace == "local"
@@ -33,7 +34,7 @@ window.bom_manager = new BomManager
     xhr.onreadystatechange = (data) ->
         if xhr.readyState == 4 and xhr.status == 200
                 response = JSON.parse(xhr.responseText)
-                chrome.storage.local.set {country: countries_data[response.country_name]}, ()->
+                chrome.storage.local.set {country: window.countries_data[response.country_name]}, ()->
                     chrome.tabs.create({"url": chrome.runtime.getURL("html/options.html")})
     xhr.send()
 
