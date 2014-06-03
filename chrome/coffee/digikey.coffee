@@ -30,6 +30,7 @@ class @Digikey extends RetailerInterface
 
     addItems: (items, callback) ->
         that = this
+        @adding_items = true
         result = {success:true, fails:[]}
         count = items.length
         for item in items
@@ -50,4 +51,5 @@ class @Digikey extends RetailerInterface
                         if callback?
                             callback(result, that)
                         that.refreshCartTabs()
+                        that.adding_items = false
             xhr.send()

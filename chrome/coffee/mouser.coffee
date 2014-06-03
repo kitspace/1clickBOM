@@ -21,6 +21,7 @@ class @Mouser extends RetailerInterface
         xhr.open("POST", "http://uk.mouser.com/api/Preferences/SetSubdomain?subdomainName=" + @cart.split(".")[0].slice(3), true)
         xhr.send()
     addItems: (items, callback) ->
+        @adding_items = true
         #weird ASP shit, we need to get the viewstate first to put in every request
         @_get_adding_viewstate (that, viewstate) ->
             that._add_items(items, viewstate, callback)
@@ -59,6 +60,7 @@ class @Mouser extends RetailerInterface
                         if callback?
                             callback(result, that)
                         that.refreshCartTabs()
+                        that.adding_items = false
                 else
                     if callback?
                         callback(result, that)

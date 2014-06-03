@@ -12,6 +12,40 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
+stop_spinning = (link) ->
+    td = link.parentNode
+    spinner = td.querySelector("div.spinner")
+    clearInterval(link.interval_id)
+    td.removeChild(spinner)
+    link.hidden=false
+
+start_spinning = (link) ->
+    td = link.parentNode
+    counter = 0
+    spinner = document.createElement("div")
+    spinner.className = "spinner"
+    td.appendChild(spinner)
+    link.interval_id = setInterval ()->
+        frames=12; frameWidth = 15;
+        offset=counter * -frameWidth;
+        spinner.style.backgroundPosition=
+            offset + "px" + " " + 0 + "px";
+        counter++
+        if (counter>=frames)
+            counter =0;
+    , 50
+    link.hidden=true
+
+spin_till_you_win = (link, retailer_name) ->
+    if window.bkgd_page.bom_manager.interfaces[retailer_name].adding_items
+        start_spinning(link)
+        id = setInterval () ->
+            if not window.bkgd_page.bom_manager.interfaces[retailer_name].adding_items
+                clearInterval(id)
+                stop_spinning(link)
+        , 1
+
+
 chrome.runtime.getBackgroundPage (bkgd_page) ->
     window.bkgd_page = bkgd_page
     document.querySelector("#paste").addEventListener "click", ()->
@@ -70,39 +104,19 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
                 a.value = retailer_name
                 a.title = titles[i] + retailer_name + " cart"
                 a.href = "#"
-                links.push(a)
                 span = document.createElement("span")
                 span.className = "button_icon"
                 span.innerText = unicode_chars[i]
                 a.appendChild(span)
                 td.appendChild(a)
                 tr.appendChild(td)
-    
-            spin_func = (that, callback) ->
-                td = that.parentNode
-                counter = 0
-                spin = document.createElement("div")
-                spin.className = "spinner"
-                td.appendChild(spin)
-                id = setInterval ()->
-                    frames=12; frameWidth = 15;
-                    offset=counter * -frameWidth;
-                    spin.style.backgroundPosition=
-                        offset + "px" + " " + 0 + "px";
-                    counter++
-                    if (counter>=frames)
-                        counter =0;
-                , 50
-                td.querySelector("a").hidden=true
-                callback () ->
-                    clearInterval(id)
-                    td.removeChild(spin)
-                    td.querySelector("a").hidden=false
-    
+                links.push(a)
+
             links[0].addEventListener "click", () ->
                 that = this
-                spin_func that, (callback) ->
-                    window.bkgd_page.bom_manager.fillCart(that.value, callback)
+                start_spinning(this)
+                window.bkgd_page.bom_manager.fillCart this.value, () ->
+                    stop_spinning(that)
     
             links[1].addEventListener "click", () ->
                 window.bkgd_page.bom_manager.openCart(@value)
@@ -113,6 +127,10 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
                     window.bkgd_page.bom_manager.emptyCart(that.value, callback)
     
             table.appendChild(tr)
+
+            spin_till_you_win(links[0], retailer_name)
+
+
     
     bom_changed = () ->
         window.bkgd_page.bom_manager.getBOM (bom) ->
