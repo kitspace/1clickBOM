@@ -51,8 +51,8 @@ class @BomManager
 
             for item in items
                 if item.retailer not of bom
-                    bom[item.retailer] = {"items":[]}
-                bom[item.retailer].items.push(item)
+                    bom[item.retailer] = []
+                bom[item.retailer].push(item)
 
             chrome.storage.local.set {"bom":bom}, () ->
                 if callback?
@@ -62,12 +62,12 @@ class @BomManager
         that = this
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
             for retailer of bom
-                that.interfaces[retailer].addItems(bom[retailer].items)
+                that.interfaces[retailer].addItems(bom[retailer])
 
     fillCart: (retailer, callback)->
         that = this
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
-            that.interfaces[retailer].addItems(bom[retailer].items, callback)
+            that.interfaces[retailer].addItems(bom[retailer], callback)
 
     emptyCarts: ()->
         that = this

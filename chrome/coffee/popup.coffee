@@ -37,7 +37,7 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
         table.removeChild(table.lastChild) while table.hasChildNodes()
         for retailer_name of bom
             retailer = window.bkgd_page.bom_manager.interfaces[retailer_name]
-            items    = bom[retailer_name].items
+            items    = bom[retailer_name]
             no_of_items = 0
             for item in items
                 no_of_items += item.quantity
