@@ -16,6 +16,8 @@ settings_data  = @get_local("/data/settings.json")
 
 class @BomManager
     constructor: (callback) ->
+        @filling_carts  = false
+        @emptying_carts = false
         that = this
         chrome.storage.local.get ["country", "settings"], ({country:country, settings:stored_settings}) ->
             that.interfaces = {}
@@ -59,21 +61,36 @@ class @BomManager
                     callback(that)
 
     fillCarts: (callback)->
+        @filling_carts = true
         that = this
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
+            count = Object.keys(bom).length
             for retailer of bom
-                that.interfaces[retailer].addItems(bom[retailer])
+                that.interfaces[retailer].addItems bom[retailer], (result, interface) ->
+                    count--
+                    if count == 0
+                        if callback?
+                            callback()
+                        that.filling_carts = false
+
 
     fillCart: (retailer, callback)->
         that = this
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
             that.interfaces[retailer].addItems(bom[retailer], callback)
 
-    emptyCarts: ()->
+    emptyCarts: (callback)->
+        @emptying_carts = true
         that = this
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
+            count = Object.keys(bom).length
             for retailer of bom
-                that.emptyCart(retailer)
+                that.emptyCart retailer, (result, interface) ->
+                    count--
+                    if count == 0
+                        if callback?
+                            callback()
+                        that.emptying_carts = false
 
     emptyCart: (retailer, callback)->
         this.interfaces[retailer].clearCart(callback)

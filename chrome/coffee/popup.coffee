@@ -43,7 +43,16 @@ spin_till_you_win = (link, retailer_name, check_val) ->
             if not window.bkgd_page.bom_manager.interfaces[retailer_name][check_val]
                 clearInterval(id)
                 stop_spinning(link)
-        , 1
+        , 10
+
+disable_till_you_win = (button, check_val) ->
+    if window.bkgd_page.bom_manager[check_val]
+        button.disabled = true
+        id = setInterval () ->
+            if not window.bkgd_page.bom_manager[check_val]
+                clearInterval(id)
+                button.disabled = false
+        , 10
 
 
 chrome.runtime.getBackgroundPage (bkgd_page) ->
@@ -65,7 +74,7 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
         document.querySelector("#empty_carts").hidden=!Boolean(Object.keys(bom).length)
         document.querySelector("#open_cart_tabs").hidden=!Boolean(Object.keys(bom).length)
         document.querySelector("#bom").hidden=!Boolean(Object.keys(bom).length)
-    
+
     rebuild_bom_view = (bom) ->
         table = document.querySelector("#bom_list")
         table.removeChild(table.lastChild) while table.hasChildNodes()
@@ -77,24 +86,24 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
                 no_of_items += item.quantity
             tr = document.createElement("tr")
             td_0 = document.createElement("td")
-    
+
             icon = document.createElement("img")
             icon.src = retailer.icon_src
             td_0.appendChild(icon)
             td_0.innerHTML += retailer.interface_name
             tr.appendChild(td_0)
-    
+
             td_1 = document.createElement("td")
             td_1.innerText = items.length + " line"
             td_1.innerText += "s" if (items.length > 1)
             tr.appendChild(td_1)
-    
+
             td_2 = document.createElement("td")
             td_2.innerText = no_of_items + " item"
             td_2.innerText += "s" if (no_of_items > 1)
             tr.appendChild(td_2)
             td = document.createElement("td")
-    
+
             unicode_chars = ["\uf21e", "\uf221", "\uf21b"]
             titles = ["Add items to " , "View ",  "Empty "]
             links = []
@@ -117,43 +126,59 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
                 start_spinning(this)
                 window.bkgd_page.bom_manager.fillCart this.value, () ->
                     stop_spinning(that)
-    
+
             links[1].addEventListener "click", () ->
                 window.bkgd_page.bom_manager.openCart(@value)
-    
+
             links[2].addEventListener "click", () ->
                 that = this
                 start_spinning(this)
                 window.bkgd_page.bom_manager.emptyCart this.value, () ->
                     stop_spinning(that)
-    
+
             table.appendChild(tr)
 
             spin_till_you_win(links[0], retailer_name, "adding_items")
             spin_till_you_win(links[2], retailer_name, "clearing_cart")
-    
+
     bom_changed = () ->
         window.bkgd_page.bom_manager.getBOM (bom) ->
             show_or_hide_buttons(bom)
             rebuild_bom_view(bom)
-    
-        
+
+
     chrome.storage.onChanged.addListener (changes, namespace) ->
         bom_changed()
-    
+
     bom_changed()
-        
-    
+
+
     chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
         if(request.invalid)
             console.log(request.invalid)
-    
+
     document.querySelector("#clear").addEventListener "click", () ->
         chrome.storage.local.remove("bom")
+
     document.querySelector("#fill_carts").addEventListener "click", () ->
-        window.bkgd_page.bom_manager.fillCarts()
+        that = this
+        this.disabled = true
+        window.bkgd_page.bom_manager.fillCarts () ->
+                that.disabled = false
+        bom_changed()
+    disable_till_you_win(document.querySelector("#fill_carts"), "filling_carts")
+
     document.querySelector("#empty_carts").addEventListener "click", () ->
-        window.bkgd_page.bom_manager.emptyCarts()
+        that = this
+        this.disabled = true
+        window.bkgd_page.bom_manager.emptyCarts () ->
+                that.disabled = false
+        bom_changed()
+    disable_till_you_win(document.querySelector("#empty_carts"), "emptying_carts")
+
     document.querySelector("#open_cart_tabs").addEventListener "click", () ->
         window.bkgd_page.bom_manager.openCarts()
-    
+
+
+
+

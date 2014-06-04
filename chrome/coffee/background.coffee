@@ -40,4 +40,4 @@ chrome.runtime.onInstalled.addListener (details)->
 chrome.storage.onChanged.addListener (changes, namespace) ->
     if namespace == "local"
         if changes.country || changes.settings
-            bom_manager = new BomManager
+            @bom_manager = new BomManager
