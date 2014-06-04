@@ -12,7 +12,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-settings_data  = @get_local("/data/settings.json")
+settings_data  = get_local("data/settings.json")
 
 class @BomManager
     constructor: (callback) ->
@@ -25,7 +25,7 @@ class @BomManager
                 country = "Other"
             for retailer_interface in [Digikey, Farnell, Mouser, RS]
                 setting_values = that.lookup_setting_values(country, retailer_interface.name, stored_settings)
-                that.interfaces[retailer_interface.name] = new retailer_interface(country)
+                that.interfaces[retailer_interface.name] = new retailer_interface(country, setting_values)
             if callback?
                 callback()
 
