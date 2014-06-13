@@ -24,10 +24,13 @@ get_location = ()->
     xhr = new XMLHttpRequest
     xhr.open "GET", "https://freegeoip.net/json/", true
     xhr.onreadystatechange = (data) ->
-        if xhr.readyState == 4 and xhr.status == 200
+        if xhr.readyState == 4 
+            if xhr.status == 200
                 response = JSON.parse(xhr.responseText)
                 chrome.storage.local.set {country: countries_data[response.country_name]}, ()->
                     chrome.tabs.create({"url": chrome.runtime.getURL("html/options.html")})
+            else #freegeoip is down
+                chrome.tabs.create({"url": chrome.runtime.getURL("html/options.html")})
     xhr.send()
 
 chrome.runtime.onInstalled.addListener (details)->
