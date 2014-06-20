@@ -154,6 +154,13 @@ asyncTest "RS: Add items", () ->
         deepEqual(result.success,true)
         start()
 
+asyncTest "RS: Add items fails", () ->
+    items = [{"part":"fail","quantity":2, "comment":"test"}]
+    d = new RS("AT")
+    d.addItems items, (result, that) ->
+        deepEqual(result.success,false)
+        start()
+
 asyncTest "RS: Clear All", () ->
     d = new RS("AT")
     d.clearCart (result, that) ->

@@ -18,14 +18,15 @@ class @RS extends RetailerInterface
         @icon_src = chrome.extension.getURL("images/rs.ico")
     clearCart: (callback) ->
         if /web\/ca/.test(@cart)
-            @_get_viewstate_rs_online (that, viewstate, form_id) ->
-                that._clear_cart_rs_online(viewstate, callback)
-    _clear_cart_rs_online: (viewstate, callback) ->
+            @_get_clear_viewstate_rs_online (that, viewstate, form_id) ->
+                that._clear_cart_rs_online(viewstate, form_id, callback)
+    _clear_cart_rs_online: (viewstate, form_id, callback) ->
         that = this
+        console.log(form_id)
         url = "http" + @site + @cart
         params1 = "AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasketForm&=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3Aj_id1085=&shoppingBasketForm%3Aj_id1091=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_listItems=Paste%20or%20type%20your%20list%20here%20and%20click%20'Add'.&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1228=505-1441&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1248=1&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionModalLayerOpenedState=&shoppingBasketForm%3AsendToColleagueWidgetPanelOpenedState=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_senderName_decorate%3AGuestUserSendToColleagueWidgetAction_senderName=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_senderEmail_decorate%3AGuestUserSendToColleagueWidgetAction_senderEmail=name%40company.com&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_mailTo_decorate%3AGuestUserSendToColleagueWidgetAction_mailTo=name%40company.com&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_subject_decorate%3AGuestUserSendToColleagueWidgetAction_subject=Copy%20of%20order%20from%20RS%20Online&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_message_decorate%3AGuestUserSendToColleagueWidgetAction_message=&shoppingBasketForm%3AsendToColleagueSuccessWidgetPanelOpenedState=&javax.faces.ViewState=" + viewstate + "&shoppingBasketForm%3AremoveMultipleLink=shoppingBasketForm%3AremoveMultipleLink&"
         params2 = "AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasketForm&=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3Aj_id1085=&shoppingBasketForm%3Aj_id1091=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_listItems=Paste%20or%20type%20your%20list%20here%20and%20click%20'Add'.&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1228=505-1441&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1248=1&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionModalLayerOpenedState=&shoppingBasketForm%3AsendToColleagueWidgetPanelOpenedState=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_senderName_decorate%3AGuestUserSendToColleagueWidgetAction_senderName=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_senderEmail_decorate%3AGuestUserSendToColleagueWidgetAction_senderEmail=name%40company.com&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_mailTo_decorate%3AGuestUserSendToColleagueWidgetAction_mailTo=name%40company.com&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_subject_decorate%3AGuestUserSendToColleagueWidgetAction_subject=Copy%20of%20order%20from%20RS%20Online&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_message_decorate%3AGuestUserSendToColleagueWidgetAction_message=&shoppingBasketForm%3AsendToColleagueSuccessWidgetPanelOpenedState=&javax.faces.ViewState=" + viewstate + "&shoppingBasketForm%3AclearBasketButton=shoppingBasketForm%3AclearBasketButton&"
-        params3 = "AJAXREQUEST=_viewRoot&j_id2373=j_id2373&javax.faces.ViewState=" + viewstate + "&ajaxSingle=j_id2373%3Aj_id2378&j_id2373%3Aj_id2378=j_id2373%3Aj_id2378&"
+        params3 = "AJAXREQUEST=_viewRoot&" + form_id + "=" + form_id + "&javax.faces.ViewState=" + viewstate + "&ajaxSingle=j_id2373%3Aj_id2378&j_id2373%3Aj_id2378=j_id2373%3Aj_id2378&"
         params4 = "AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&autoScroll=&javax.faces.ViewState=" + viewstate + "&a4jCloseForm%3Aj_id2364=a4jCloseForm%3Aj_id2364&"
         post url, params1, () ->
             post url, params2, () ->
@@ -40,10 +41,10 @@ class @RS extends RetailerInterface
         
     addItems: (items, callback) ->
         if /web\/ca/.test(@cart)
-            @_get_viewstate_rs_online (that, viewstate, form_id) ->
+            @_get_adding_viewstate_rs_online (that, viewstate, form_id) ->
                 that._add_items_rs_online(items, viewstate, form_id, callback)
 
-    _add_items_rs_online: (items, viewstate, form_id, callback) ->
+    _add_items_rs_online: (items, viewstate, form_ids, callback) ->
             that = this
             url = "http" + @site + @cart
             params = "AJAXREQUEST=shoppingBasketForm%3A" + form_id + "&shoppingBasketForm=shoppingBasketForm&=QuickAdd&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_listItems="
@@ -57,17 +58,7 @@ class @RS extends RetailerInterface
                 that.refreshCartTabs()
                 that.refreshSiteTabs()
                 
-
-    _add_items_rsdelivers: (items, viewstate, eventvalid, callback) ->
-            #url = "http" + @site + @cart
-            #params = "ctl00$sm1=ctl00$pageContentHolder$ctl00$updMain|ctl00$pageContentHolder$ctl00$btnUpdateCart&__EVENTTARGET=&__EVENTARGUMENT=&__VIEWSTATE=" + viewstate + "&ctl00$dropMenu$ctl00$searchTerm=Search%20by%20keyword%20or%20part%20no&ctl00$pageContentHolder$ctl00$repCartItems$ctl00$txtStockCode=505-1441&ctl00$pageContentHolder$ctl00$repCartItems$ctl00$hidStockCode=&ctl00$pageContentHolder$ctl00$repCartItems$ctl00$hidLineId=-1&ctl00$pageContentHolder$ctl00$repCartItems$ctl00$txtQuantity=1&ctl00$pageContentHolder$ctl00$repCartItems$ctl01$txtStockCode=&ctl00$pageContentHolder$ctl00$repCartItems$ctl01$hidStockCode=&ctl00$pageContentHolder$ctl00$repCartItems$ctl01$hidLineId=-1&ctl00$pageContentHolder$ctl00$repCartItems$ctl01$txtQuantity=&ctl00$pageContentHolder$ctl00$repCartItems$ctl02$txtStockCode=&ctl00$pageContentHolder$ctl00$repCartItems$ctl02$hidStockCode=&ctl00$pageContentHolder$ctl00$repCartItems$ctl02$hidLineId=-1&ctl00$pageContentHolder$ctl00$repCartItems$ctl02$txtQuantity=&ctl00$pageContentHolder$ctl00$repCartItems$ctl03$txtStockCode=&ctl00$pageContentHolder$ctl00$repCartItems$ctl03$hidStockCode=&ctl00$pageContentHolder$ctl00$repCartItems$ctl03$hidLineId=-1&ctl00$pageContentHolder$ctl00$repCartItems$ctl03$txtQuantity=&ctl00$pageContentHolder$ctl00$repCartItems$ctl04$txtStockCode=&ctl00$pageContentHolder$ctl00$repCartItems$ctl04$hidStockCode=&ctl00$pageContentHolder$ctl00$repCartItems$ctl04$hidLineId=-1&ctl00$pageContentHolder$ctl00$repCartItems$ctl04$txtQuantity=&ctl00$pageContentHolder$ctl00$cmbAddRows=1&ctl00$pageContentHolder$ctl00$txtQuickOrder=Paste%20or%20type%20your%20list%20here%20and%20press%20'Add%20to%20Enquiry'.%0A%0AAdd%20one%20product%20per%20line.%0A%0AIf%20typing%2C%20use%20COMMAS%20between%20stock%20no%20and%20quantity.%0A%0AExample%3A%0A%0A4002713%2C1&ctl00$pageContentHolder$ctl00$txtPromoCode=&ctl00$pageContentHolder$ctl00$chkShowCartImages=on&ctl00$pageContentHolder$ctl00$poNumberConfirmText=&ctl00$pageContentHolder$ctl00$ucEmailShoppingCartColleague$txtName=&ctl00$pageContentHolder$ctl00$ucEmailShoppingCartColleague$txtContactEmail=&ctl00$pageContentHolder$ctl00$ucEmailShoppingCartColleague$txtContactNo=&ctl00$pageContentHolder$ctl00$ucEmailShoppingCartColleague$txtEmailTo=&ctl00$pageContentHolder$ctl00$ucEmailShoppingCartColleague$txtEmailSubject=&ctl00$pageContentHolder$ctl00$ucEmailShoppingCartColleague$txtMessageToRecipient=&__EVENTVALIDATION=" + eventvalid + "&ctl00$pageContentHolder$ctl00$btnUpdateCart.x=57&ctl00$pageContentHolder$ctl00$btnUpdateCart.y=15"
-            #xhr = new XMLHttpRequest
-            #xhr.open("POST", url, true)
-            #xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-            #xhr.onreadystatechange = (event) ->
-            #    if event.currentTarget.readyState == 4
-            #xhr.send(params)
-    _get_viewstate_rs_online: (callback)->
+    _get_adding_viewstate_rs_online: (callback)->
         that = this
         url = "http" + @site + @cart
         xhr = new XMLHttpRequest
@@ -78,19 +69,29 @@ class @RS extends RetailerInterface
                 viewstate  = doc.getElementById("javax.faces.ViewState").value
                 btn_doc = doc.getElementById("addToOrderDiv")
                 #the form_id element is different values depending on signed in our signed out
-                #could just hardcode them but maybe this will be more robust?
+                #could just hardcode them but maybe this will be more future-proof?
                 #we use a regex here as DOM select methods crash on this element!
                 form_id  = /AJAX.Submit\('shoppingBasketForm\:(j_id\d+)/.exec(btn_doc.innerHTML.toString())[1]
                 callback(that, viewstate, form_id)
         xhr.send()
-        #else
-        #    url = "http" + @site + @cart
-        #    xhr = new XMLHttpRequest
-        #    xhr.open("GET", url, true)
-        #    xhr.onreadystatechange = (data) ->
-        #        if xhr.readyState == 4 and xhr.status == 200
-        #            doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
-        #            viewstate  = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-        #            eventvalid = encodeURIComponent(doc.getElementById("__EVENTVALIDATION").value)
-        #            callback(that, viewstate, eventvalid)
-        #    xhr.send()
+
+    _get_clear_viewstate_rs_online: (callback)->
+        that = this
+        url = "http" + @site + @cart
+        xhr = new XMLHttpRequest
+        xhr.open("GET", url, true)
+        xhr.onreadystatechange = (data) ->
+            if xhr.readyState == 4 and xhr.status == 200
+                doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
+                viewstate  = doc.getElementById("javax.faces.ViewState").value
+                form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling
+                #the form_id elements are different values depending on signed in our signed out
+                #could just hardcode them but maybe this will be more future-proof?
+                #form_ids  =  [form.id
+
+                #form_id  = /AJAX.Submit\('shoppingBasketForm\:(j_id\d+)/.exec(btn_doc.innerHTML.toString())[1]
+                console.log(form.id)
+                form_id2  = RegExp(/\"cssButton secondary red enabledBtn\" href=\"#\" id=\"j_id\d+\:(j_id\d+)"/).exec(form.innerHTML.toString())[1]
+                console.log(form_id)
+                callback(that, viewstate, [form.id, form_id2])
+        xhr.send()
