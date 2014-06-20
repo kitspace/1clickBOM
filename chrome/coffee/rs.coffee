@@ -17,10 +17,6 @@ class @RS extends RetailerInterface
         super("RS", country_code, "data/rs_international.json", settings)
         @icon_src = chrome.extension.getURL("images/rs.ico")
     clearCart: (callback) ->
-        @_get_adding_viewstate_rs_online (that, viewstate, form_id) ->
-            that._clear_cart(callback, viewstate)
-    _clear_cart: (callback, viewstate, form_id) ->
-        console.log(viewstate, form_id)
         if /web\/ca/.test(@cart)
             @_get_clear_viewstate_rs_online (that, viewstate, form_id) ->
                 that._clear_cart_rs_online(viewstate, form_id, callback)
@@ -42,6 +38,7 @@ class @RS extends RetailerInterface
                             that.refreshCartTabs()
                             that.refreshSiteTabs()
 
+        
     addItems: (items, callback) ->
         if /web\/ca/.test(@cart)
             @_get_adding_viewstate_rs_online (that, viewstate, form_id) ->
@@ -95,6 +92,6 @@ class @RS extends RetailerInterface
                 #form_id  = /AJAX.Submit\('shoppingBasketForm\:(j_id\d+)/.exec(btn_doc.innerHTML.toString())[1]
                 console.log(form.id)
                 form_id2  = RegExp(/\"cssButton secondary red enabledBtn\" href=\"#\" id=\"j_id\d+\:(j_id\d+)"/).exec(form.innerHTML.toString())[1]
-                console.log(form_id)
+                console.log(form_id2)
                 callback(that, viewstate, [form.id, form_id2])
         xhr.send()
