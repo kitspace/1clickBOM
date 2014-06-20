@@ -8,6 +8,17 @@
         else
             return xhr.responseText
 
+@post = (url, params, callback) ->
+    xhr = new XMLHttpRequest
+    xhr.open("POST", url, true)
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhr.onreadystatechange = (event) ->
+        if event.target.readyState == 4
+            if callback?
+                callback(event)
+    xhr.send(params)
+    
+
 window.onerror = (msg, url, line) ->
     chrome.storage.local.get ["error_log"], ({error_log:error_log}) ->
         if not (error_log?)
