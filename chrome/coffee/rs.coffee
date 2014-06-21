@@ -89,7 +89,7 @@ class @RS extends RetailerInterface
                 form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling
                 #the form_id elements are different values depending on signed in our signed out
                 #could just hardcode them but maybe this will be more future-proof?
-                form_id2  = /\"cssButton secondary red enabledBtn\" href=\"#\" id=\"j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
+                form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
                 form_id3  = doc.getElementById("a4jCloseForm").firstChild.id.split(":")[1]
                 callback(that, viewstate, [form.id, form_id2, form_id3])
         xhr.send()
