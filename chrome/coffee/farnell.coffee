@@ -55,7 +55,7 @@ class @Farnell extends RetailerInterface
             xhr.onreadystatechange = (data) ->
                 if xhr.readyState == 4 and xhr.status == 200
                     if callback?
-                        callback()
+                        callback({success:true})
                     that.refreshSiteTabs()
                     that.refreshCartTabs()
                     that.clearing_cart = false
