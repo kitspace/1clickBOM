@@ -139,33 +139,25 @@ asyncTest "Clear All", () ->
 
 module("Mouser")
 
-# Mouser's site is unified, changing the basket somewhere will change the basket everywhere
-mouser_locations = ["UK"]#, "AU", "CN"]
+# Mouser's site is unified, changing the basket somewhere will change the
+# basket everywhere. 
+# TODO would be good to find a way to test more locations, tried doing it like
+# the other retailers but the locations can interefer with each other
 
 asyncTest "Clear All", () ->
-    #stop(mouser_locations.length - 1)
-    for l in mouser_locations
-        r = new Mouser(l)
-        r.clearCart (result, that) ->
-            deepEqual(result.success, true)
-            start()
+    r = new Mouser("AU")
+    r.clearCart (result, that) ->
+        deepEqual(result.success, true)
+        start()
 
-asyncTest "Add items fails", () ->
+asyncTest "Add items fails but adds again", () ->
     items = [{"part":"fail","quantity":2, "comment":"test"},{"part":"607-GALILEO","quantity":2, "comment":"test"}]
-    #stop(mouser_locations.length - 1)
-    for l in mouser_locations
-        r = new Mouser(l)
-        r.addItems items, (result, that) ->
-            deepEqual(result.success, false, that.country)
-            deepEqual(result.fails, [items[0]], that.country)
-            start()
-
-#the order here is important as we want to make sure the "errors" were cleared after the failed add
-asyncTest "Add items", () ->
-    items = [{"part":"607-GALILEO","quantity":2, "comment":"test"}]
-    #stop(mouser_locations.length - 1)
-    for l in mouser_locations
-        r = new Mouser(l)
-        r.addItems items, (result, that) ->
+    r = new Mouser("AU")
+    r.addItems items, (result, that) ->
+        deepEqual(result.success, false, that.country)
+        deepEqual(result.fails, [items[0]], that.country)
+        items = [{"part":"607-GALILEO","quantity":2, "comment":"test"}]
+        that.addItems items, (result, that) ->
+            #the order here is important as we want to make sure the "errors" were cleared after the failed add
             deepEqual(result.success, true, that.country)
             start()
