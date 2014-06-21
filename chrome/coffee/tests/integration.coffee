@@ -21,10 +21,9 @@ module("Digikey")
 # we only test a few locations or else we start getting 403: forbidden
 digikey_locations = ["UK", "AT", "IL", "US", "AU"]
 
-test "Digikey: Clear All", () ->
+test "Clear All", () ->
     try
         for key of window.digikey_data.lookup
-            console.log "Digikey: Clearing all"
             r = new Digikey(key)
             r.clearCart()
     catch error
@@ -32,7 +31,7 @@ test "Digikey: Clear All", () ->
         throw error
     ok true
 
-asyncTest "Digikey: Add items", () ->
+asyncTest "Add items", () ->
     items = [{"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
     stop(digikey_locations.length - 1)
     for l in digikey_locations
@@ -41,7 +40,7 @@ asyncTest "Digikey: Add items", () ->
             deepEqual(result.success, true, that.country)
             start()
 
-asyncTest "Digikey: Add items fails", () ->
+asyncTest "Add items fails", () ->
     items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
     stop(digikey_locations.length - 1)
     for l in digikey_locations
@@ -51,7 +50,7 @@ asyncTest "Digikey: Add items fails", () ->
             deepEqual(result.fails, [items[0]], that.country)
             start()
 
-asyncTest "Digikey: Add items fails 2", () ->
+asyncTest "Add items fails 2", () ->
     items = [{"part":"754-1173-1-ND", "quantity":-1, "comment":"test"}, {"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
     stop(digikey_locations.length - 1)
     for l in digikey_locations
@@ -63,10 +62,9 @@ asyncTest "Digikey: Add items fails 2", () ->
 
 module("Farnell")
 
-test "Farnell: Clear All", () ->
+test "Clear All", () ->
     try
         for key of window.farnell_data.lookup
-            console.log "Farnell: Clearing all"
             r = new Farnell(key)
             r.clearCart()
     catch error
@@ -81,7 +79,7 @@ test "Farnell: Clear All", () ->
 
 farnell_locations = ["UK", "AU", "EE", "FR", "TH", "International"]
 
-asyncTest "Farnell: Add items", () ->
+asyncTest "Add items", () ->
     items = [{"part":"2250472", "quantity":2, "comment":"test"}]
     stop(farnell_locations.length - 1)
     for l in farnell_locations
@@ -90,7 +88,7 @@ asyncTest "Farnell: Add items", () ->
             deepEqual(result.success, true, that.country)
             start()
 
-asyncTest "Farnell: Add items fails", () ->
+asyncTest "Add items fails", () ->
     items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
     stop(farnell_locations.length - 1)
     for l in farnell_locations
@@ -100,7 +98,7 @@ asyncTest "Farnell: Add items fails", () ->
             deepEqual(result.fails, [items[0]], that.country)
             start()
 
-asyncTest "Farnell: Add items individually via microCart", () ->
+asyncTest "Add items individually via microCart", () ->
     items = [{"part":"2250472", "quantity":2, "comment":"test"}]
     stop(farnell_locations.length - 1)
     for l in farnell_locations
@@ -110,7 +108,7 @@ asyncTest "Farnell: Add items individually via microCart", () ->
             deepEqual(result.success, true, that.country)
             start()
 
-asyncTest "Farnell: Add items individually via microCart fails", () ->
+asyncTest "Add items individually via microCart fails", () ->
     items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
     stop(farnell_locations.length - 1)
     for l in farnell_locations
@@ -123,47 +121,47 @@ asyncTest "Farnell: Add items individually via microCart fails", () ->
 
 module("RS")
 
-asyncTest "RS: Add items", () ->
+asyncTest "Add items", () ->
     items = [{"part":"505-1441","quantity":2, "comment":"test"}]
     r = new RS("AT")
     r.addItems items, (result, that) ->
         deepEqual(result.success,true)
         start()
 
-asyncTest "RS: Add items fails", () ->
+asyncTest "Add items fails", () ->
     items = [{"part":"fail","quantity":2, "comment":"test"}]
     r = new RS("AT")
     r.addItems items, (result, that) ->
         deepEqual(result.success,false)
         start()
 
-asyncTest "RS: Clear All", () ->
+asyncTest "Clear All", () ->
     r = new RS("AT")
     r.clearCart (result, that) ->
         deepEqual(result.success, true)
         start()
 
 module("Mouser")
+
 # Mouser's site is unified, changing the basket somewhere will change the basket everywhere
+mouser_locations = ["UK"]#, "AU"], "CN"]
 
-mouser_locations = ["UK", "AU", "CN"]
-
-asyncTest "Mouser: Add items fails", () ->
+asyncTest "Add items fails", () ->
     items = [{"part":"fail","quantity":2, "comment":"test"},{"part":"607-GALILEO","quantity":2, "comment":"test"}]
-    stop(mouser_locations.length - 1)
+    #stop(mouser_locations.length - 1)
     for l in mouser_locations
         r = new Mouser(l)
         r.addItems items, (result, that) ->
-            deepEqual(result.success, false)
-            deepEqual(result.fails, [items[0]])
+            deepEqual(result.success, false, that.country)
+            deepEqual(result.fails, [items[0]], that.country)
             start()
 
 #the order here is important as we want to make sure the "errors" were cleared after the failed add
-asyncTest "Mouser: Add items", () ->
+asyncTest "Add items", () ->
     items = [{"part":"607-GALILEO","quantity":2, "comment":"test"}]
-    stop(mouser_locations.length - 1)
+    #stop(mouser_locations.length - 1)
     for l in mouser_locations
         r = new Mouser(l)
         r.addItems items, (result, that) ->
-            deepEqual(result.success, true)
+            deepEqual(result.success, true, that.country)
             start()
