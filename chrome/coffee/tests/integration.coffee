@@ -12,17 +12,18 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-module("integration")
 @digikey_data = get_local("/data/digikey_international.json")
 @farnell_data = get_local("/data/farnell_international.json")
 @mouser_data  = get_local("/data/mouser_international.json")
+
+module("Digikey")
 
 test "Digikey: Clear All", () ->
     try
         for key of window.digikey_data.lookup
             console.log "Digikey: Clearing all"
-            d = new Digikey(key)
-            d.clearCart()
+            r = new Digikey(key)
+            r.clearCart()
     catch error
         ok false
         throw error
@@ -33,8 +34,8 @@ asyncTest "Digikey: Add items", () ->
     stop(Object.keys(window.digikey_data.lookup).length-1)
     for key of window.digikey_data.lookup
         console.log("Digikey: Adding items")
-        d = new Digikey(key)
-        d.addItems items, (result, that) ->
+        r = new Digikey(key)
+        r.addItems items, (result, that) ->
             deepEqual(result.success, true, that.country)
             start()
 
@@ -43,8 +44,8 @@ asyncTest "Digikey: Add items fails", () ->
     stop(Object.keys(window.digikey_data.lookup).length-1)
     for key of window.digikey_data.lookup
         console.log("Digikey: Adding items")
-        d = new Digikey(key)
-        d.addItems items, (result, that) ->
+        r = new Digikey(key)
+        r.addItems items, (result, that) ->
             deepEqual(result.success, false, that.country)
             deepEqual(result.fails, [items[0]], that.country)
             start()
@@ -54,92 +55,69 @@ asyncTest "Digikey: Add items fails 2", () ->
     stop(Object.keys(window.digikey_data.lookup).length-1)
     for key of window.digikey_data.lookup
         console.log("Digikey: Adding items")
-        d = new Digikey(key)
-        d.addItems items, (result, that) ->
+        r = new Digikey(key)
+        r.addItems items, (result, that) ->
             deepEqual(result.success, false, that.country)
             deepEqual(result.fails, [items[0]], that.country)
             start()
 
+
+
+module("Farnell")
 
 test "Farnell: Clear All", () ->
     try
         for key of window.farnell_data.lookup
             console.log "Farnell: Clearing all"
-            d = new Farnell(key)
-            d.clearCart()
+            r = new Farnell(key)
+            r.clearCart()
     catch error
         ok false
         throw error
     ok true
 
+#these Farnall tests can be a bit iffy, we only test a few locations as there is a
+#danger the servers start refusing requests. also, if any fail, try clearing
+#all the farnell and element14 cookies and trying again
+#XXX having issues with CN
+
+farnell_locations = ["UK", "AU"]#, "EE", "FR", "TH", "International"]
+
 asyncTest "Farnell: Add items", () ->
-    #this test can be a bit iffy,
-    #if it fails, try clearing all the farnell and element14 cookies and trying again
-    stop(Object.keys(window.farnell_data.lookup).length-1)
-    for key of window.farnell_data.lookup
-        console.log "Farnell: Adding items"
-        d = new Farnell(key)
-        items = [{"part":"2250472", "quantity":2, "comment":"test"}]
-        d.addItems items, (result, that) ->
+    items = [{"part":"2250472", "quantity":2, "comment":"test"}]
+    stop(farnell_locations.length - 1)
+    for l in farnell_locations
+        r = new Farnell(l)
+        r.addItems items, (result, that) ->
             deepEqual(result.success, true, that.country)
             start()
 
 asyncTest "Farnell: Add items fails", () ->
-    #this test can be a bit iffy,
-    #if it fails, try clearing all the farnell and element14 cookies and trying again
-    stop(Object.keys(window.farnell_data.lookup).length-1)
-    for key of window.farnell_data.lookup
-        console.log "Farnell: Adding items"
-        d = new Farnell(key)
-        items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
-        d.addItems items, (result, that) ->
-            deepEqual(result.success, false, that.country)
-            deepEqual(result.fails, [items[0]], that.country)
-            start()
-
-asyncTest "Farnell: Add items fail 2", () ->
-    #this test can be a bit iffy,
-    #if it fails, try clearing all the farnell and element14 cookies and trying again
-    stop(Object.keys(window.farnell_data.lookup).length-1)
-    for key of window.farnell_data.lookup
-        console.log "Farnell: Adding items"
-        d = new Farnell(key)
-        items = [{"part":"2250472", "quantity":-1, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
-        d.addItems items, (result, that) ->
+    items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
+    stop(farnell_locations.length - 1)
+    for l in farnell_locations
+        r = new Farnell(l)
+        r.addItems items, (result, that) ->
             deepEqual(result.success, false, that.country)
             deepEqual(result.fails, [items[0]], that.country)
             start()
 
 asyncTest "Farnell: Add items individually via microCart", () ->
-    stop(Object.keys(window.farnell_data.lookup).length-1)
-    for key of window.farnell_data.lookup
-        console.log "Farnell: Adding items individually via microCart"
-        d = new Farnell(key)
-        items = [{"part":"2250472", "quantity":2, "comment":"test"}]
-        d._add_items_individually_via_micro_cart items, (result, that) ->
+    items = [{"part":"2250472", "quantity":2, "comment":"test"}]
+    stop(farnell_locations.length - 1)
+    for l in farnell_locations
+        r = new Farnell(l)
+        r._add_items_individually_via_micro_cart items, (result, that) ->
             deepEqual(result.no_item_comments, true, that.country)
             deepEqual(result.success, true, that.country)
             start()
 
 asyncTest "Farnell: Add items individually via microCart fails", () ->
     items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
-    stop(Object.keys(window.farnell_data.lookup).length-1)
-    for key of window.farnell_data.lookup
-        console.log "Farnell: Adding items individually via microCart"
-        d = new Farnell("UK")
-        d._add_items_individually_via_micro_cart items, (result, that) ->
-            deepEqual(result.no_item_comments, true, that.country)
-            deepEqual(result.success, false, that.country)
-            deepEqual(result.fails, [items[0]], that.country)
-            start()
-
-asyncTest "Farnell: Add items individually via microCart fails 2", () ->
-    items = [{"part":"2250472", "quantity":-1, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
-    stop(Object.keys(window.farnell_data.lookup).length-1)
-    for key of window.farnell_data.lookup
-        console.log "Farnell: Adding items individually via microCart"
-        d = new Farnell("UK")
-        d._add_items_individually_via_micro_cart items, (result, that) ->
+    stop(farnell_locations.length - 1)
+    for l in farnell_locations
+        r = new Farnell(l)
+        r._add_items_individually_via_micro_cart items, (result, that) ->
             deepEqual(result.no_item_comments, true, that.country)
             deepEqual(result.success, false, that.country)
             deepEqual(result.fails, [items[0]], that.country)
@@ -149,21 +127,21 @@ module("RS")
 
 asyncTest "RS: Add items", () ->
     items = [{"part":"505-1441","quantity":2, "comment":"test"}]
-    d = new RS("AT")
-    d.addItems items, (result, that) ->
+    r = new RS("AT")
+    r.addItems items, (result, that) ->
         deepEqual(result.success,true)
         start()
 
 asyncTest "RS: Add items fails", () ->
     items = [{"part":"fail","quantity":2, "comment":"test"}]
-    d = new RS("AT")
-    d.addItems items, (result, that) ->
+    r = new RS("AT")
+    r.addItems items, (result, that) ->
         deepEqual(result.success,false)
         start()
 
 asyncTest "RS: Clear All", () ->
-    d = new RS("AT")
-    d.clearCart (result, that) ->
+    r = new RS("AT")
+    r.clearCart (result, that) ->
         deepEqual(result.success, true)
         start()
 
@@ -172,8 +150,8 @@ module("Mouser")
 asyncTest "Mouser: Add items fails", () ->
     items = [{"part":"fail","quantity":2, "comment":"test"},{"part":"607-GALILEO","quantity":2, "comment":"test"}]
     console.log "Mouser: Adding items"
-    d = new Mouser("CN")
-    d.addItems items, (result, that) ->
+    r = new Mouser("CN")
+    r.addItems items, (result, that) ->
         deepEqual(result.success, false)
         deepEqual(result.fails, [items[0]])
         start()
@@ -182,7 +160,7 @@ asyncTest "Mouser: Add items fails", () ->
 asyncTest "Mouser: Add items", () ->
     items = [{"part":"607-GALILEO","quantity":2, "comment":"test"}]
     console.log "Mouser: Adding items"
-    d = new Mouser("CN")
-    d.addItems items, (result, that) ->
+    r = new Mouser("CN")
+    r.addItems items, (result, that) ->
         deepEqual(result.success, true)
         start()

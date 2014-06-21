@@ -79,7 +79,7 @@ class @Farnell extends RetailerInterface
         for item in items
             url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
         xhr.onreadystatechange = (event) ->
-            if event.currentTarget.readyState == 4
+            if event.target.readyState == 4
                 #if items successully add the request returns the basket
                 parser = new DOMParser
                 doc = parser.parseFromString(xhr.responseText, "text/html")
@@ -87,6 +87,7 @@ class @Farnell extends RetailerInterface
                 #so it's language agnostic
                 result.success = doc.querySelector("body.shoppingCart") != null
                 if (result.success)
+                    console.log(result, that)
                     if (callback?)
                         callback(result, that)
                     that.refreshCartTabs()
@@ -134,7 +135,7 @@ class @Farnell extends RetailerInterface
             xhr.item = item
             xhr.onreadystatechange = (event) ->
                 if event.currentTarget.readyState == 4
-                    success = xhr.responseXML != null
+                    success = event.target.responseXML != null
                     result.success = result.success && success
                     if not success
                         result.fails.push(event.currentTarget.item)
