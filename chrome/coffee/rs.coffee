@@ -17,6 +17,7 @@ class @RS extends RetailerInterface
         super("RS", country_code, "data/rs_international.json", settings)
         @icon_src = chrome.extension.getURL("images/rs.ico")
     clearCart: (callback) ->
+        @clearing_cart = true
         if /web\/ca/.test(@cart)
             @_get_clear_viewstate_rs_online (that, viewstate, form_ids) ->
                 that._clear_cart_rs_online(viewstate, form_ids, callback)
@@ -36,9 +37,10 @@ class @RS extends RetailerInterface
                                 callback({success:true})
                             that.refreshCartTabs()
                             that.refreshSiteTabs()
+                            that.clearing_cart = false
 
-        
     addItems: (items, callback) ->
+        @adding_items = true
         if /web\/ca/.test(@cart)
             @_get_adding_viewstate_rs_online (that, viewstate, form_id) ->
                 that._add_items_rs_online(items, viewstate, form_id, callback)
@@ -56,6 +58,7 @@ class @RS extends RetailerInterface
                     callback({success:true})
                 that.refreshCartTabs()
                 that.refreshSiteTabs()
+                that.adding_items = false
                 
     _get_adding_viewstate_rs_online: (callback)->
         that = this
