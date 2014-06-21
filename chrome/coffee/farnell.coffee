@@ -87,7 +87,6 @@ class @Farnell extends RetailerInterface
                 #so it's language agnostic
                 result.success = doc.querySelector("body.shoppingCart") != null
                 if (result.success)
-                    console.log(result, that)
                     if (callback?)
                         callback(result, that)
                     that.refreshCartTabs()

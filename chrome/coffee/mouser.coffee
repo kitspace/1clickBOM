@@ -43,10 +43,11 @@ class @Mouser extends RetailerInterface
         xhr.onreadystatechange = (event) ->
             if event.currentTarget.readyState == 4
                 #if there is an error, there will be some error-class items with display set to ""
-                doc = (new DOMParser).parseFromString(event.currentTarget.responseText, "text/html")
+                doc = (new DOMParser).parseFromString(event.target.responseText, "text/html")
                 errors = doc.getElementsByClassName("error")
                 for error in errors
-                    if error.style.display == ""
+                    # this padding5 error element just started appearing, doesn't indicate anything
+                    if error.style.display == "" && error.firstChild.nextSibling.className != "padding5" 
                         detail_div = error.querySelectorAll("div")[1]
                         if detail_div?
                             part = /\n(.*)<br>/.exec(detail_div.innerHTML)[1]

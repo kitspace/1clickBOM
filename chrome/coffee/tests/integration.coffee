@@ -145,20 +145,25 @@ asyncTest "RS: Clear All", () ->
 
 module("Mouser")
 # Mouser's site is unified, changing the basket somewhere will change the basket everywhere
+
+mouser_locations = ["UK", "AU", "CN"]
+
 asyncTest "Mouser: Add items fails", () ->
     items = [{"part":"fail","quantity":2, "comment":"test"},{"part":"607-GALILEO","quantity":2, "comment":"test"}]
-    console.log "Mouser: Adding items"
-    r = new Mouser("CN")
-    r.addItems items, (result, that) ->
-        deepEqual(result.success, false)
-        deepEqual(result.fails, [items[0]])
-        start()
+    stop(mouser_locations.length - 1)
+    for l in mouser_locations
+        r = new Mouser(l)
+        r.addItems items, (result, that) ->
+            deepEqual(result.success, false)
+            deepEqual(result.fails, [items[0]])
+            start()
 
 #the order here is important as we want to make sure the "errors" were cleared after the failed add
 asyncTest "Mouser: Add items", () ->
     items = [{"part":"607-GALILEO","quantity":2, "comment":"test"}]
-    console.log "Mouser: Adding items"
-    r = new Mouser("CN")
-    r.addItems items, (result, that) ->
-        deepEqual(result.success, true)
-        start()
+    stop(mouser_locations.length - 1)
+    for l in mouser_locations
+        r = new Mouser(l)
+        r.addItems items, (result, that) ->
+            deepEqual(result.success, true)
+            start()
