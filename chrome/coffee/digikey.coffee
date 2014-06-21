@@ -25,7 +25,7 @@ class @Digikey extends RetailerInterface
         xhr.onreadystatechange = () ->
             if xhr.readyState == 4
                 if callback?
-                    callback()
+                    callback({success:true})
                 that.refreshCartTabs()
                 that.clearing_cart = false
         xhr.send()

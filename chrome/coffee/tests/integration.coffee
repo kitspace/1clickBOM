@@ -21,15 +21,13 @@ module("Digikey")
 # we only test a few locations or else we start getting 403: forbidden
 digikey_locations = ["UK", "AT", "IL", "US", "AU"]
 
-test "Clear All", () ->
-    try
-        for key of window.digikey_data.lookup
-            r = new Digikey(key)
-            r.clearCart()
-    catch error
-        ok false
-        throw error
-    ok true
+asyncTest "Clear All", () ->
+    stop(digikey_locations.length - 1)
+    for l in digikey_locations
+        r = new Digikey(l)
+        r.clearCart (result, that) ->
+            deepEqual(result.success, true)
+            start()
 
 asyncTest "Add items", () ->
     items = [{"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
@@ -62,22 +60,20 @@ asyncTest "Add items fails 2", () ->
 
 module("Farnell")
 
-test "Clear All", () ->
-    try
-        for key of window.farnell_data.lookup
-            r = new Farnell(key)
-            r.clearCart()
-    catch error
-        ok false
-        throw error
-    ok true
-
 #these Farnall tests can be a bit iffy, we only test a few locations as there is a
 #danger the servers start refusing requests. also, if any fail, try clearing
 #all the farnell and element14 cookies and trying again
 #XXX also having some issues with CN location
 
 farnell_locations = ["UK", "AU", "EE", "FR", "TH", "International"]
+
+asyncTest "Clear All", () ->
+    stop(farnell_locations.length - 1)
+    for l in farnell_locations
+        r = new Farnell(l)
+        r.clearCart (result, that) ->
+            deepEqual(result.success, true)
+            start()
 
 asyncTest "Add items", () ->
     items = [{"part":"2250472", "quantity":2, "comment":"test"}]
@@ -144,7 +140,15 @@ asyncTest "Clear All", () ->
 module("Mouser")
 
 # Mouser's site is unified, changing the basket somewhere will change the basket everywhere
-mouser_locations = ["UK"]#, "AU"], "CN"]
+mouser_locations = ["UK"]#, "AU", "CN"]
+
+asyncTest "Clear All", () ->
+    #stop(mouser_locations.length - 1)
+    for l in mouser_locations
+        r = new Mouser(l)
+        r.clearCart (result, that) ->
+            deepEqual(result.success, true)
+            start()
 
 asyncTest "Add items fails", () ->
     items = [{"part":"fail","quantity":2, "comment":"test"},{"part":"607-GALILEO","quantity":2, "comment":"test"}]

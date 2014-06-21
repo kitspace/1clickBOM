@@ -98,7 +98,7 @@ class @Mouser extends RetailerInterface
         xhr.onreadystatechange = () ->
             if xhr.readyState == 4
                 if callback?
-                    callback()
+                    callback({success:true})
                 that.refreshCartTabs()
                 that.clearing_cart = false
         #don't ask, this is what works...
