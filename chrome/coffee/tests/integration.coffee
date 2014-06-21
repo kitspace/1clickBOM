@@ -18,6 +18,9 @@
 
 module("Digikey")
 
+# we only test a few locations or else we start getting 403: forbidden
+digikey_locations = ["UK", "AT", "IL", "US", "AU"]
+
 test "Digikey: Clear All", () ->
     try
         for key of window.digikey_data.lookup
@@ -31,20 +34,18 @@ test "Digikey: Clear All", () ->
 
 asyncTest "Digikey: Add items", () ->
     items = [{"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
-    stop(Object.keys(window.digikey_data.lookup).length-1)
-    for key of window.digikey_data.lookup
-        console.log("Digikey: Adding items")
-        r = new Digikey(key)
+    stop(digikey_locations.length - 1)
+    for l in digikey_locations
+        r = new Digikey(l)
         r.addItems items, (result, that) ->
             deepEqual(result.success, true, that.country)
             start()
 
 asyncTest "Digikey: Add items fails", () ->
     items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
-    stop(Object.keys(window.digikey_data.lookup).length-1)
-    for key of window.digikey_data.lookup
-        console.log("Digikey: Adding items")
-        r = new Digikey(key)
+    stop(digikey_locations.length - 1)
+    for l in digikey_locations
+        r = new Digikey(l)
         r.addItems items, (result, that) ->
             deepEqual(result.success, false, that.country)
             deepEqual(result.fails, [items[0]], that.country)
@@ -52,16 +53,13 @@ asyncTest "Digikey: Add items fails", () ->
 
 asyncTest "Digikey: Add items fails 2", () ->
     items = [{"part":"754-1173-1-ND", "quantity":-1, "comment":"test"}, {"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
-    stop(Object.keys(window.digikey_data.lookup).length-1)
-    for key of window.digikey_data.lookup
-        console.log("Digikey: Adding items")
-        r = new Digikey(key)
+    stop(digikey_locations.length - 1)
+    for l in digikey_locations
+        r = new Digikey(l)
         r.addItems items, (result, that) ->
             deepEqual(result.success, false, that.country)
             deepEqual(result.fails, [items[0]], that.country)
             start()
-
-
 
 module("Farnell")
 
@@ -79,9 +77,9 @@ test "Farnell: Clear All", () ->
 #these Farnall tests can be a bit iffy, we only test a few locations as there is a
 #danger the servers start refusing requests. also, if any fail, try clearing
 #all the farnell and element14 cookies and trying again
-#XXX having issues with CN
+#XXX also having some issues with CN location
 
-farnell_locations = ["UK", "AU"]#, "EE", "FR", "TH", "International"]
+farnell_locations = ["UK", "AU", "EE", "FR", "TH", "International"]
 
 asyncTest "Farnell: Add items", () ->
     items = [{"part":"2250472", "quantity":2, "comment":"test"}]
