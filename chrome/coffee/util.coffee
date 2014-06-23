@@ -19,6 +19,16 @@
             if callback?
                 callback(event)
     xhr.send(params)
+
+@get = (url, callback) ->
+    xhr = new XMLHttpRequest
+    xhr.open("GET", url, true)
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhr.onreadystatechange = (event) ->
+        if event.target.readyState == 4
+            if callback?
+                callback(event)
+    xhr.send()
     
 
 window.onerror = (msg, url, line) ->
