@@ -35,23 +35,22 @@ class @Digikey extends RetailerInterface
         @adding_items = true
         result = {success:true, fails:[]}
         count = items.length
+        parser = new DOMParser
         for item in items
-            xhr = new XMLHttpRequest
-            xhr.open("POST", "http" + @site + @additem + "?qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment, true)
-            xhr.item = item
-            xhr.onreadystatechange = (event) ->
-                if event.currentTarget.readyState == 4
-                    doc = (new DOMParser).parseFromString(event.currentTarget.responseText, "text/html")
-                    #if the cart returns with a quick-add quantity filled-in there was an error
-                    quick_add_quant = doc.querySelector("#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity")
-                    success = (quick_add_quant?) && (quick_add_quant.value?) && (quick_add_quant.value == "")
-                    if not success
-                        result.fails.push(event.currentTarget.item)
-                    result.success = result.success && success
-                    count--
-                    if (count == 0)
-                        if callback?
-                            callback(result, that)
-                        that.refreshCartTabs()
-                        that.adding_items = false
-            xhr.send()
+            url = "http" + @site + @additem
+            params = "qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment
+            post url, params, (event)->
+                doc = parser.parseFromString(event.target.responseText, "text/html")
+                #if the cart returns with a quick-add quantity filled-in there was an error
+                quick_add_quant = doc.querySelector("#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity")
+                success = (quick_add_quant?) && (quick_add_quant.value?) && (quick_add_quant.value == "")
+                if not success
+                    result.fails.push(event.target.item)
+                result.success = result.success && success
+                count--
+                if (count == 0)
+                    if callback?
+                        callback(result, that)
+                    that.refreshCartTabs()
+                    that.adding_items = false
+            , item

@@ -54,8 +54,8 @@ class @Farnell extends RetailerInterface
             for id in ids
                 txt_1 += "&/pf/commerce/CartHandler.removalCommerceIds=" + id
                 txt_2 += "&" + id + "=1"
-
-            post url, "/pf/commerce/CartHandler.addItemCount=5&/pf/commerce/CartHandler.addLinesSuccessURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL=../checkout/paymentMethod.jsp&/pf/commerce/CartHandler.punchOutSuccessURL=orderReviewPunchOut.jsp" + txt_1 + "&/pf/commerce/CartHandler.setOrderErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.setOrderSuccessURL=../shoppingCart/shoppingCart.jsp&_D:/pf/commerce/CartHandler.addItemCount= &_D:/pf/commerce/CartHandler.addLinesSuccessURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL= &_D:/pf/commerce/CartHandler.punchOutSuccessURL= &_D:/pf/commerce/CartHandler.removalCommerceIds= &_D:/pf/commerce/CartHandler.setOrderErrorURL= &_D:/pf/commerce/CartHandler.setOrderSuccessURL= &_D:Submit= &_D:addEmptyLines= &_D:clearBlankLines= &_D:continueWithShipping= &_D:emptyLinesA= &_D:emptyLinesB= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote1= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:reqFromCart= &_D:textfield2= &_D:topUpdateCart= &_DARGS=/jsp/shoppingCart/fragments/shoppingCart/cartContent.jsp.cart&_dyncharset=UTF-8" + txt_2 + "&emptyLinesA=0&emptyLinesB=0&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote1=&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&reqFromCart=true&textfield2=&topUpdateCart=Update Basket", (event) ->
+            params = "/pf/commerce/CartHandler.addItemCount=5&/pf/commerce/CartHandler.addLinesSuccessURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL=../checkout/paymentMethod.jsp&/pf/commerce/CartHandler.punchOutSuccessURL=orderReviewPunchOut.jsp" + txt_1 + "&/pf/commerce/CartHandler.setOrderErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.setOrderSuccessURL=../shoppingCart/shoppingCart.jsp&_D:/pf/commerce/CartHandler.addItemCount= &_D:/pf/commerce/CartHandler.addLinesSuccessURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL= &_D:/pf/commerce/CartHandler.punchOutSuccessURL= &_D:/pf/commerce/CartHandler.removalCommerceIds= &_D:/pf/commerce/CartHandler.setOrderErrorURL= &_D:/pf/commerce/CartHandler.setOrderSuccessURL= &_D:Submit= &_D:addEmptyLines= &_D:clearBlankLines= &_D:continueWithShipping= &_D:emptyLinesA= &_D:emptyLinesB= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote1= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:reqFromCart= &_D:textfield2= &_D:topUpdateCart= &_DARGS=/jsp/shoppingCart/fragments/shoppingCart/cartContent.jsp.cart&_dyncharset=UTF-8" + txt_2 + "&emptyLinesA=0&emptyLinesB=0&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote1=&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&reqFromCart=true&textfield2=&topUpdateCart=Update Basket"
+            post url, params, (event) ->
                 if event.target.status == 200
                     if callback?
                         callback({success:true})
@@ -71,75 +71,67 @@ class @Farnell extends RetailerInterface
         @adding_items = true
         that = this
         url = "https" + @site + @additem
-        params = "?"
         result = {}
-        parser = new DOMParser
+        #this doesn't seem to work as a parameter
         for item in items
-            params += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
-        post url, params, (event) ->
-            #if items successully add the request returns the basket
-            #we determine the request has returned the basket by the body
-            #classname so it works for all languages 
-            doc = parser.parseFromString(event.target.responseText, "text/html")
-            result.success = doc.querySelector("body.shoppingCart") != null
-            if (result.success)
-                if (callback?)
-                    callback(result, that)
-                that.refreshCartTabs()
-                that.refreshSiteTabs()
-                that.adding_items = false
-            else
-                that._add_items_individually(items, callback)
+            url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
+        post url, "", (event) ->
+            if event.target.readyState == 4
+                #if items successully add the request returns the basket
+                parser = new DOMParser
+                doc = parser.parseFromString(event.target.responseText, "text/html")
+                #we determine the request has returned the basket by the body classname
+                #so it's language agnostic
+                result.success = doc.querySelector("body.shoppingCart") != null
+                if (result.success)
+                    if (callback?)
+                        callback(result, that)
+                    that.refreshCartTabs()
+                    that.refreshSiteTabs()
+                    that.adding_items = false
+                else
+                    that._add_items_individually(items, callback)
 
     _add_items_individually: (items, callback) ->
         that = this
         result = {success:true, fails:[]}
         count = items.length
         for item in items
-            xhr = new XMLHttpRequest
             url = "https" + @site + @additem
+            #this doesn't seem to work as a parameter
             url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
-            xhr.open("POST", url, true)
-            xhr.item = item
-            xhr.onreadystatechange = (event) ->
-                if event.currentTarget.readyState == 4
-                    doc = (new DOMParser).parseFromString(event.currentTarget.responseText, "text/html")
-                    success = doc.querySelector("body.shoppingCart") != null
-                    result.success = result.success && success
-                    if not success
-                        result.fails.push(event.target.item)
-                    count--
-                    if count == 0
-                        that.refreshCartTabs()
-                        that.refreshSiteTabs()
-                        if callback?
-                            callback(result, that)
-                        that.adding_items = false
-            xhr.send()
+            post url, "", (event) ->
+                doc = (new DOMParser).parseFromString(event.currentTarget.responseText, "text/html")
+                success = doc.querySelector("body.shoppingCart") != null
+                result.success = result.success && success
+                if not success
+                    result.fails.push(event.target.item)
+                count--
+                if count == 0
+                    that.refreshCartTabs()
+                    that.refreshSiteTabs()
+                    if callback?
+                        callback(result, that)
+                    that.adding_items = false
+            , item
 
     _add_items_individually_via_micro_cart: (items, callback) ->
         that = this
         result = {success:true, fails:[], no_item_comments:true}
         count = items.length
         for item in items
-            xhr = new XMLHttpRequest
-            url = "https" + @site + "/jsp/shoppingCart/processMicroCart.jsp?action=buy&product=" + item.part + "&qty=" + item.quantity
-            xhr.open("POST", url, true)
-            xhr.item = item
-            xhr.onreadystatechange = (event) ->
-                if event.currentTarget.readyState == 4
-                    success = event.target.responseXML != null
-                    result.success = result.success && success
-                    if not success
-                        result.fails.push(event.target.item)
-                    count--
-                    if count == 0
-                        that.refreshCartTabs()
-                        that.refreshSiteTabs()
-                        if callback?
-                            callback(result, that)
-            xhr.send()
-
-
-
+            url = "https" + @site + "/jsp/shoppingCart/processMicroCart.jsp"
+            params = "action=buy&product=" + item.part + "&qty=" + item.quantity
+            post url, params, (event) ->
+                success = event.target.responseXML != null
+                result.success = result.success && success
+                if not success
+                    result.fails.push(event.target.item)
+                count--
+                if count == 0
+                    that.refreshCartTabs()
+                    that.refreshSiteTabs()
+                    if callback?
+                        callback(result, that)
+            , item
 

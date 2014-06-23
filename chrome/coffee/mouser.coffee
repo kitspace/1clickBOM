@@ -76,13 +76,14 @@ class @Mouser extends RetailerInterface
             that._clear_cart(viewstate, callback)
     _clear_cart: (viewstate, callback)->
         that = this
-        post "http" + @site + @cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket", (event) ->
+        #don't ask, this is what works...
+        url = "http" + @site + @cart
+        params =  "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket"
+        post url, params, (event) ->
             if callback?
                 callback({success:true})
             that.refreshCartTabs()
             that.clearing_cart = false
-        #don't ask, this is what works...
-        xhr.send()
     _get_adding_viewstate: (callback)->
         #we get the quick-add form , extend it to 99 lines (the max) and get the viewstate from the response
         #TODO more than 99 items
