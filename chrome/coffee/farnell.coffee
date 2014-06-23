@@ -48,23 +48,20 @@ class @Farnell extends RetailerInterface
     _post_clear: (ids, callback) ->
         that = this
         if (ids.length)
-            xhr = new XMLHttpRequest
             url = "https" + @site + "/jsp/checkout/paymentMethod.jsp"
-            xhr.open("POST", url, true)
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-            xhr.onreadystatechange = (data) ->
-                if xhr.readyState == 4 and xhr.status == 200
-                    if callback?
-                        callback({success:true})
-                    that.refreshSiteTabs()
-                    that.refreshCartTabs()
-                    that.clearing_cart = false
             txt_1 = ""
             txt_2 = ""
             for id in ids
                 txt_1 += "&/pf/commerce/CartHandler.removalCommerceIds=" + id
                 txt_2 += "&" + id + "=1"
-            xhr.send("/pf/commerce/CartHandler.addItemCount=5&/pf/commerce/CartHandler.addLinesSuccessURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL=../checkout/paymentMethod.jsp&/pf/commerce/CartHandler.punchOutSuccessURL=orderReviewPunchOut.jsp" + txt_1 + "&/pf/commerce/CartHandler.setOrderErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.setOrderSuccessURL=../shoppingCart/shoppingCart.jsp&_D:/pf/commerce/CartHandler.addItemCount= &_D:/pf/commerce/CartHandler.addLinesSuccessURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL= &_D:/pf/commerce/CartHandler.punchOutSuccessURL= &_D:/pf/commerce/CartHandler.removalCommerceIds= &_D:/pf/commerce/CartHandler.setOrderErrorURL= &_D:/pf/commerce/CartHandler.setOrderSuccessURL= &_D:Submit= &_D:addEmptyLines= &_D:clearBlankLines= &_D:continueWithShipping= &_D:emptyLinesA= &_D:emptyLinesB= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote1= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:reqFromCart= &_D:textfield2= &_D:topUpdateCart= &_DARGS=/jsp/shoppingCart/fragments/shoppingCart/cartContent.jsp.cart&_dyncharset=UTF-8" + txt_2 + "&emptyLinesA=0&emptyLinesB=0&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote1=&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&reqFromCart=true&textfield2=&topUpdateCart=Update Basket")
+
+            post url, "/pf/commerce/CartHandler.addItemCount=5&/pf/commerce/CartHandler.addLinesSuccessURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL=../checkout/paymentMethod.jsp&/pf/commerce/CartHandler.punchOutSuccessURL=orderReviewPunchOut.jsp" + txt_1 + "&/pf/commerce/CartHandler.setOrderErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.setOrderSuccessURL=../shoppingCart/shoppingCart.jsp&_D:/pf/commerce/CartHandler.addItemCount= &_D:/pf/commerce/CartHandler.addLinesSuccessURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL= &_D:/pf/commerce/CartHandler.punchOutSuccessURL= &_D:/pf/commerce/CartHandler.removalCommerceIds= &_D:/pf/commerce/CartHandler.setOrderErrorURL= &_D:/pf/commerce/CartHandler.setOrderSuccessURL= &_D:Submit= &_D:addEmptyLines= &_D:clearBlankLines= &_D:continueWithShipping= &_D:emptyLinesA= &_D:emptyLinesB= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote1= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:reqFromCart= &_D:textfield2= &_D:topUpdateCart= &_DARGS=/jsp/shoppingCart/fragments/shoppingCart/cartContent.jsp.cart&_dyncharset=UTF-8" + txt_2 + "&emptyLinesA=0&emptyLinesB=0&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote1=&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&reqFromCart=true&textfield2=&topUpdateCart=Update Basket", (event) ->
+                if event.target.status == 200
+                    if callback?
+                        callback({success:true})
+                    that.refreshSiteTabs()
+                    that.refreshCartTabs()
+                    that.clearing_cart = false
         else
           if callback?
               callback({success:true})
@@ -73,29 +70,26 @@ class @Farnell extends RetailerInterface
     addItems: (items, callback) ->
         @adding_items = true
         that = this
-        xhr = new XMLHttpRequest
         url = "https" + @site + @additem
+        params = "?"
         result = {}
+        parser = new DOMParser
         for item in items
-            url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
-        xhr.onreadystatechange = (event) ->
-            if event.target.readyState == 4
-                #if items successully add the request returns the basket
-                parser = new DOMParser
-                doc = parser.parseFromString(xhr.responseText, "text/html")
-                #we determine the request has returned the basket by the body classname
-                #so it's language agnostic
-                result.success = doc.querySelector("body.shoppingCart") != null
-                if (result.success)
-                    if (callback?)
-                        callback(result, that)
-                    that.refreshCartTabs()
-                    that.refreshSiteTabs()
-                    that.adding_items = false
-                else
-                    that._add_items_individually(items, callback)
-        xhr.open("POST", url, true)
-        xhr.send()
+            params += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
+        post url, params, (event) ->
+            #if items successully add the request returns the basket
+            #we determine the request has returned the basket by the body
+            #classname so it works for all languages 
+            doc = parser.parseFromString(event.target.responseText, "text/html")
+            result.success = doc.querySelector("body.shoppingCart") != null
+            if (result.success)
+                if (callback?)
+                    callback(result, that)
+                that.refreshCartTabs()
+                that.refreshSiteTabs()
+                that.adding_items = false
+            else
+                that._add_items_individually(items, callback)
 
     _add_items_individually: (items, callback) ->
         that = this
@@ -113,7 +107,7 @@ class @Farnell extends RetailerInterface
                     success = doc.querySelector("body.shoppingCart") != null
                     result.success = result.success && success
                     if not success
-                        result.fails.push(event.currentTarget.item)
+                        result.fails.push(event.target.item)
                     count--
                     if count == 0
                         that.refreshCartTabs()
@@ -137,7 +131,7 @@ class @Farnell extends RetailerInterface
                     success = event.target.responseXML != null
                     result.success = result.success && success
                     if not success
-                        result.fails.push(event.currentTarget.item)
+                        result.fails.push(event.target.item)
                     count--
                     if count == 0
                         that.refreshCartTabs()
