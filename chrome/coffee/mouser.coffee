@@ -17,9 +17,7 @@ class @Mouser extends RetailerInterface
         super "Mouser", country_code, "/data/mouser_international.json", settings
         @icon_src = chrome.extension.getURL("images/mouser.ico")
         #posting our sub-domain as the sites are all linked and switching countries would not register properly otherwise
-        xhr = new XMLHttpRequest
-        xhr.open("POST", "http://uk.mouser.com/api/Preferences/SetSubdomain?subdomainName=" + @cart.split(".")[0].slice(3), true)
-        xhr.send()
+        post  "http" + @site + "/Preferences/SetSubdomain", "?subdomainName=" + @cart.split(".")[0].slice(3), () ->
     addItems: (items, callback) ->
         @adding_items = true
         #weird ASP shit, we need to get the viewstate first to put in every request
@@ -34,14 +32,10 @@ class @Mouser extends RetailerInterface
             params += "&ctl00$ContentMain$txtCustomerPartNumber" + (i+1) + "=" + item.comment
             params += "&ctl00$ContentMain$txtPartNumber" + (i+1) + "=" + item.part
             params += "&ctl00$ContentMain$txtQuantity"   + (i+1) + "=" + item.quantity
-        #use uk here so the response is in english, the site is synced across countries
-        url = "http://uk.mouser.com" + that.additem
-        xhr = new XMLHttpRequest
-        xhr.open("POST", url, true)
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+        url = "http" + @site + @additem
         result = {success: true, fails:[]}
-        xhr.onreadystatechange = (event) ->
-            if event.currentTarget.readyState == 4
+        post url, params, (event) ->
+            if event.target.status == 200
                 #if there is an error, there will be some error-class items with display set to ""
                 doc = (new DOMParser).parseFromString(event.target.responseText, "text/html")
                 errors = doc.getElementsByClassName("error")
@@ -66,25 +60,15 @@ class @Mouser extends RetailerInterface
                     if callback?
                         callback(result, that)
                     that.refreshCartTabs()
-        xhr.send(params)
+                    that.adding_items = false
 
     _clear_errors: (that, viewstate, callback) ->
-        xhr = new XMLHttpRequest
-        xhr.open("POST", "http://uk.mouser.com" + that.cart, true)
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-        xhr.onreadystatechange = () ->
-            if xhr.readyState == 4
-                doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
-                viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-                xhr2 = new XMLHttpRequest
-                xhr2.open("POST", "http://uk.mouser.com" + that.cart, true)
-                xhr2.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-                xhr2.onreadystatechange = () ->
-                    if xhr2.readyState == 4
-                        if callback?
-                            callback(that)
-                xhr2.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket")
-        xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors")
+        post "http" + that.site + that.cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors", (event) ->
+            doc = new DOMParser().parseFromString(event.target.responseText, "text/html")
+            viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
+            post "http" + that.site + that.cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket", (event) ->
+               if callback?
+                   callback(that)
 
     clearCart: (callback) ->
         @clearing_cart = true
@@ -92,17 +76,13 @@ class @Mouser extends RetailerInterface
             that._clear_cart(viewstate, callback)
     _clear_cart: (viewstate, callback)->
         that = this
-        xhr = new XMLHttpRequest
-        xhr.open("POST", "http" + @site + @cart, true)
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-        xhr.onreadystatechange = () ->
-            if xhr.readyState == 4
-                if callback?
-                    callback({success:true})
-                that.refreshCartTabs()
-                that.clearing_cart = false
+        post "http" + @site + @cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket", (event) ->
+            if callback?
+                callback({success:true})
+            that.refreshCartTabs()
+            that.clearing_cart = false
         #don't ask, this is what works...
-        xhr.send("__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket")
+        xhr.send()
     _get_adding_viewstate: (callback)->
         #we get the quick-add form , extend it to 99 lines (the max) and get the viewstate from the response
         #TODO more than 99 items
@@ -118,16 +98,12 @@ class @Mouser extends RetailerInterface
                 params += "&ctl00$ContentMain$btnAddLines=Lines to Forms"
                 params += "&ctl00$ContentMain$hNumberOfLines=5"
                 params += "&ctl00$ContentMain$txtNumberOfLines=94"
-                xhr2 = new XMLHttpRequest
-                xhr2.open("POST", url, true)
-                xhr2.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-                xhr2.onreadystatechange = (data) ->
-                    if xhr2.readyState == 4 and xhr2.status == 200
-                        doc = new DOMParser().parseFromString(xhr2.responseText, "text/html")
+                post url, params, (event) ->
+                    if event.target.status == 200
+                        doc = new DOMParser().parseFromString(event.target.responseText, "text/html")
                         viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
                         if callback?
                             callback(that, viewstate)
-                xhr2.send(params)
         xhr.send()
     _get_cart_viewstate: (callback)->
         that = this
