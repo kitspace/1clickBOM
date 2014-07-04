@@ -8,17 +8,22 @@
         else
             return xhr.responseText
 
-@post = (url, params, callback, item) ->
+@post = (url, params, callback, item, json=false) ->
     xhr = new XMLHttpRequest
     xhr.open("POST", url, true)
     if item?
         xhr.item = item
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+
+    if (json)
+        xhr.setRequestHeader("Content-type", "application/JSON")
+    else 
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+
     xhr.onreadystatechange = (event) ->
         if event.target.readyState == 4
             if callback?
                 callback(event)
-    xhr.send(params)
+    xhr.send()
 
 @get = (url, callback) ->
     xhr = new XMLHttpRequest

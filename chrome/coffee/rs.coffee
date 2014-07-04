@@ -17,10 +17,20 @@ class @RS extends RetailerInterface
         super("RS", country_code, "data/rs_international.json", settings)
         @icon_src = chrome.extension.getURL("images/rs.ico")
     clearCart: (callback) ->
+        that = this
         @clearing_cart = true
         if /web\/ca/.test(@cart)
             @_get_clear_viewstate_rs_online (that, viewstate, form_ids) ->
                 that._clear_cart_rs_online(viewstate, form_ids, callback)
+        else
+            url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart"
+            post url, "", (event) ->
+                if callback?
+                    callback({success: true}, that)
+                that.refreshSiteTabs()
+                that.refreshCartTabs()
+                that.clearing_cart = false
+            , undefined , json=true
     _clear_cart_rs_online: (viewstate, form_ids, callback) ->
         that = this
         url = "http" + @site + @cart
@@ -70,6 +80,21 @@ class @RS extends RetailerInterface
         if /web\/ca/.test(@cart)
             @_get_adding_viewstate_rs_online (that, viewstate, form_id) ->
                 that._add_items_rs_online(items, viewstate, form_id, callback)
+        else
+            @_add_items_rs_delivers(items, callback)
+    _add_items_rs_delivers: (items, callback) ->
+        that = this
+        url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder"
+        params = '{"request":{"lines":"'
+        for item in items
+            params += item.part + "," + item.quantity + ",what_the_hell_is_cost_center," + item.comment + "\n"
+        params += '"}}'
+        post url, params, (event) ->
+            if callback?
+                callback({success: true}, that)
+            that.refreshCartTabs()
+            that.refreshSiteTabs()
+            that.adding_items = false
 
     _add_items_rs_online: (items, viewstate, form_id, callback) ->
             that = this
