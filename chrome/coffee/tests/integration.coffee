@@ -115,20 +115,6 @@ asyncTest "Add items individually via microCart fails", () ->
             deepEqual(result.fails, [items[0]], that.country)
             start()
 
-module("RS")
-
-asyncTest "Clear all, Add items, Add Items fails", () ->
-    r = new RS("AT")
-    r.clearCart (result, that) ->
-        deepEqual(result.success, true)
-        items = [{"part":"505-1441","quantity":2, "comment":"test"}]
-        r.addItems items, (result, that) ->
-            deepEqual(result.success,true)
-            items = [{"part":"fail","quantity":2, "comment":"test"}]
-            r.addItems items, (result, that) ->
-                deepEqual(result.success,false)
-                start()
-
 module("Mouser")
 
 # Mouser's site is unified, changing the basket somewhere will change the
@@ -153,3 +139,23 @@ asyncTest "Add items fails but adds again", () ->
             #the order here is important as we want to make sure the "errors" were cleared after the failed add
             deepEqual(result.success, true, that.country)
             start()
+
+module("RS")
+
+asyncTest "Clear all, Add items, Add Items fails", () ->
+    r = new RS("AT")
+    r.clearCart (result, that) ->
+        deepEqual(result.success, true)
+        items = [{"part":"505-1441","quantity":2, "comment":"test"}]
+        r.addItems items, (result, that) ->
+            deepEqual(result.success, true)
+            items = [{"part":"fail","quantity":2, "comment":"test"}]
+            r.addItems items, (result, that) ->
+                deepEqual(result.success, false)
+                start()
+
+asyncTest "Clear Errors", () ->
+    r = new RS("AT")
+    r._clear_errors_rs_online (result, that) ->
+        deepEqual(result.success, true)
+        start()
