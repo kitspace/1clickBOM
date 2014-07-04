@@ -142,29 +142,30 @@ asyncTest "Add items fails but adds again", () ->
 
 module("RS")
 
-asyncTest "Clear all, Add items, Add Items fails", () ->
-    r = new RS("AE")
-    #r.clearCart (result, that) ->
-    #    deepEqual(result.success, true)
-    items = [{"part":"505-1441","quantity":2, "comment":"test"}]
-    r.addItems items, (result, that) ->
-        deepEqual(result.success, true)
-        start()
-            #items = [{"part":"fail","quantity":2, "comment":"test"}]
-            #r.addItems items, (result, that) ->
-            #    deepEqual(result.success, false)
-
-asyncTest "Clear all", () ->
+asyncTest "Clear all, Add items, Add Items fails in AE", () ->
     r = new RS("AE")
     r.clearCart (result, that) ->
         deepEqual(result.success, true)
-        start()
-    #items = [{"part":"505-1441","quantity":2, "comment":"test"}]
-    #r.addItems items, (result, that) ->
-    #    deepEqual(result.success, true)
-            #items = [{"part":"fail","quantity":2, "comment":"test"}]
-            #r.addItems items, (result, that) ->
-            #    deepEqual(result.success, false)
+        items = [{"part":"505-1441","quantity":2, "comment":"test"}]
+        r.addItems items, (result, that) ->
+            deepEqual(result.success, true)
+            items = [{"part":"fail","quantity":2, "comment":"test"}]
+            r.addItems items, (result, that) ->
+                deepEqual(result.success, false)
+                start()
+
+asyncTest "Clear all, Add items, Add Items fails in AT", () ->
+    r = new RS("AT")
+    r.clearCart (result, that) ->
+        deepEqual(result.success, true)
+        items = [{"part":"505-1441","quantity":2, "comment":"test"}]
+        r.addItems items, (result, that) ->
+            deepEqual(result.success, true)
+            items = [{"part":"fail","quantity":2, "comment":"test"}]
+            r.addItems items, (result, that) ->
+                deepEqual(result.success, false)
+                start()
+
 
 asyncTest "Clear Errors", () ->
     r = new RS("AT")

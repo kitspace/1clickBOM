@@ -23,7 +23,7 @@
         if event.target.readyState == 4
             if callback?
                 callback(event)
-    xhr.send()
+    xhr.send(params)
 
 @get = (url, callback) ->
     xhr = new XMLHttpRequest

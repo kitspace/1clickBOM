@@ -30,7 +30,7 @@ class @RS extends RetailerInterface
                 that.refreshSiteTabs()
                 that.refreshCartTabs()
                 that.clearing_cart = false
-            , undefined , json=true
+            , item=undefined , json=true
     _clear_cart_rs_online: (viewstate, form_ids, callback) ->
         that = this
         url = "http" + @site + @cart
@@ -81,20 +81,21 @@ class @RS extends RetailerInterface
             @_get_adding_viewstate_rs_online (that, viewstate, form_id) ->
                 that._add_items_rs_online(items, viewstate, form_id, callback)
         else
-            @_add_items_rs_delivers(items, callback)
-    _add_items_rs_delivers: (items, callback) ->
-        that = this
-        url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder"
-        params = '{"request":{"lines":"'
-        for item in items
-            params += item.part + "," + item.quantity + ",what_the_hell_is_cost_center," + item.comment + "\n"
-        params += '"}}'
-        post url, params, (event) ->
-            if callback?
-                callback({success: true}, that)
-            that.refreshCartTabs()
-            that.refreshSiteTabs()
-            that.adding_items = false
+            that = this
+            url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder"
+            params = '{"request":{"lines":"'
+            for item in items
+                params += item.part + "," + item.quantity + ",what_the_hell_is_cost_center," + item.comment + "\n"
+            params += '"}}'
+            post url, params, (event) ->
+                doc = new DOMParser().parseFromString(JSON.parse(event.target.responseText).html, "text/html")
+                success = doc.querySelector("#hidErrorAtLineLevel").value == "0"
+                if callback?
+                    callback({success:success}, that)
+                that.refreshCartTabs()
+                that.refreshSiteTabs()
+                that.adding_items = false
+            , item=undefined, json=true
 
     _add_items_rs_online: (items, viewstate, form_id, callback) ->
             that = this
