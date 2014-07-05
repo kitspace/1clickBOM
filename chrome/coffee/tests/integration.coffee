@@ -146,29 +146,29 @@ rs_locations_online = [ "AT", "AU", "BE", "CH", "CN", "CZ" , "DE", "DK", "ES",
     "FR", "HK", "HU" , "IE", "IT", "JP", "KR", "MY", "NL", "NO", "NZ", "PH",
     "PL", "PT", "SE", "SG", "TH", "TW", "UK", "ZA" ]
 
-rs_locations_delivers = ["AE", "AZ", "CL", "CY", "EE", "FI", "GR", "HR", "IL", "IN", "LT", "LV", "LY", "MT", "MX", "RO", "RU", "SA", "TR", "UA", "AR", "US"]
+rs_locations_delivers = ["AE", "AZ", "CL", "CY", "EE", "FI", "GR", "HR", "IL",
+    "IN", "LT", "LV", "LY", "MT", "MX", "RO", "RU", "SA", "TR", "UA", "AR",
+    "US"]
 
 rs_locations = rs_locations_delivers
 
-asyncTest "Clear all, Add items, Add Items fails and Add again", () ->
+asyncTest "Add items fails but adds again", () ->
+    stop(rs_locations.length - 1)
+    for l in rs_locations
+        r = new RS(l)
+        items = [{"part":"fail","quantity":2, "comment":"test"}]
+        r.addItems items, (result, that) ->
+            deepEqual(result.success, false, "1:"+ that.country)
+            items = [{"part":"264-7881","quantity":2, "comment":"test"}]
+            that.addItems items, (result, that2) ->
+                deepEqual(result.success, true, "2:" + that2.country)
+                start()
+
+asyncTest "Clear all", () ->
     stop(rs_locations.length - 1)
     for l in rs_locations
         r = new RS(l)
         r.clearCart (result, that) ->
             deepEqual(result.success, true, "1:" + that.country)
-            items = [{"part":"264-7881","quantity":2, "comment":"test"}]
-            that.addItems items, (result, that2) ->
-                deepEqual(result.success, true, "2:" + that2.country)
-                items = [{"part":"fail","quantity":2, "comment":"test"}]
-                that2.addItems items, (result, that3) ->
-                    deepEqual(result.success, false, "3:"+ that3.country)
-                    items = [{"part":"264-7881","quantity":2, "comment":"test"}]
-                    that3.addItems items, (result, that4) ->
-                        deepEqual(result.success, true, "4:" + that4.country)
-                        start()
+            start()
 
-asyncTest "Clear Errors", () ->
-    r = new RS("AZ")
-    r._clear_errors_rs_delivers (result, that) ->
-        deepEqual(result.success, false)
-        start()
