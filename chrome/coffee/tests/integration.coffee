@@ -142,30 +142,21 @@ asyncTest "Add items fails but adds again", () ->
 
 module("RS")
 
-asyncTest "Clear all, Add items, Add Items fails in AE", () ->
-    r = new RS("AE")
-    r.clearCart (result, that) ->
-        deepEqual(result.success, true)
-        items = [{"part":"505-1441","quantity":2, "comment":"test"}]
-        r.addItems items, (result, that) ->
-            deepEqual(result.success, true)
-            items = [{"part":"fail","quantity":2, "comment":"test"}]
-            r.addItems items, (result, that) ->
-                deepEqual(result.success, false)
-                start()
+rs_locations = ["AE", "AT", "AU", "AZ", "BE", "CH", "CL", "CN", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HK", "HR", "HU", "IE", "IL", "IN", "IT", "JP", "KR", "LT", "LV", "LY", "MT", "MX", "MY", "NL", "NO", "NZ", "PH", "PL", "PT", "RO", "RU", "SA", "SE", "SG", "TH", "TR", "TW", "UA", "UK", "ZA"]
 
-asyncTest "Clear all, Add items, Add Items fails in AT", () ->
-    r = new RS("AT")
-    r.clearCart (result, that) ->
-        deepEqual(result.success, true)
-        items = [{"part":"505-1441","quantity":2, "comment":"test"}]
-        r.addItems items, (result, that) ->
-            deepEqual(result.success, true)
-            items = [{"part":"fail","quantity":2, "comment":"test"}]
-            r.addItems items, (result, that) ->
-                deepEqual(result.success, false)
-                start()
-
+asyncTest "Clear all, Add items, Add Items fails", () ->
+    stop(rs_locations.length - 1)
+    for l in rs_locations
+        r = new RS(l)
+        r.clearCart (result, that) ->
+            deepEqual(result.success, true, that.country)
+            items = [{"part":"264-7881","quantity":2, "comment":"test"}]
+            that.addItems items, (result, that2) ->
+                deepEqual(result.success, true, that2.country)
+                items = [{"part":"fail","quantity":2, "comment":"test"}]
+                that2.addItems items, (result, that3) ->
+                    deepEqual(result.success, false, that3.country)
+                    start()
 
 asyncTest "Clear Errors", () ->
     r = new RS("AT")
