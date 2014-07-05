@@ -53,6 +53,31 @@ class @RS extends RetailerInterface
         if /web\/ca/.test(@cart)
             @_get_clear_viewstate_rs_online (that, viewstate, form_ids) ->
                 that._remove_errors_rs_online(viewstate, form_ids, callback)
+    _clear_invalid_rs_delivers: (callback) ->
+        that = this
+        @_get_invalid_item_ids (ids) ->
+            that._delete_invalid_rs_delivers(ids, callback)
+    _delete_invalid_rs_delivers: (ids, callback) ->
+        url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/RemoveMultiple"
+        params = '{"request":{"encodedString":"'
+        for id in ids
+            params += id + "|"
+        params += '"}}'
+        post url, params, (event) ->
+            if callback?
+                callback()
+        ,item=undefined, json=true
+
+    _get_invalid_item_ids: (callback) ->
+        url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/GetCartHtml"
+        post url, undefined, (event) ->
+            doc = new DOMParser().parseFromString(JSON.parse(event.target.responseText).html, "text/html")
+            ids = []
+            for elem in doc.getElementsByClassName("errorOrderLine")
+                ids.push(elem.parentElement.nextElementSibling.querySelector(".quantityTd").firstElementChild.classList[3].split("_")[1])
+            callback(ids)
+        ,item=undefined, json=true
+
 
     _remove_errors_rs_online: (viewstate, form_ids, callback) ->
         that = this
@@ -82,20 +107,21 @@ class @RS extends RetailerInterface
                 that._add_items_rs_online(items, viewstate, form_id, callback)
         else
             that = this
-            url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder"
-            params = '{"request":{"lines":"'
-            for item in items
-                params += item.part + "," + item.quantity + ",what_the_hell_is_cost_center," + item.comment + "\n"
-            params += '"}}'
-            post url, params, (event) ->
-                doc = new DOMParser().parseFromString(JSON.parse(event.target.responseText).html, "text/html")
-                success = doc.querySelector("#hidErrorAtLineLevel").value == "0"
-                if callback?
-                    callback({success:success}, that)
-                that.refreshCartTabs()
-                that.refreshSiteTabs()
-                that.adding_items = false
-            , item=undefined, json=true
+            @_clear_invalid_rs_delivers () ->
+                url = "http" + that.site + "/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder"
+                params = '{"request":{"lines":"'
+                for item in items
+                    params += item.part + "," + item.quantity + ",what_the_hell_is_cost_center," + item.comment + "\n"
+                params += '"}}'
+                post url, params, (event) ->
+                    doc = new DOMParser().parseFromString(JSON.parse(event.target.responseText).html, "text/html")
+                    success = doc.querySelector("#hidErrorAtLineLevel").value == "0"
+                    if callback?
+                        callback({success:success}, that)
+                    that.refreshCartTabs()
+                    that.refreshSiteTabs()
+                    that.adding_items = false
+                , item=undefined, json=true
 
     _add_items_rs_online: (items, viewstate, form_id, callback) ->
             that = this
