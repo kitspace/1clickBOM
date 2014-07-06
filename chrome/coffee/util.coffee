@@ -46,3 +46,6 @@ window.onerror = (msg, url, line) ->
 window.getErrorLog = () ->
     chrome.storage.local.get ["error_log"], ({error_log:error_log}) ->
         console.log(error_log)
+
+@trim_whitespace = (str) ->
+    return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '')

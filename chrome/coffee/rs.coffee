@@ -89,9 +89,11 @@ class @RS extends RetailerInterface
         post url, undefined, (event) ->
             doc = new DOMParser().parseFromString(JSON.parse(event.target.responseText).html, "text/html")
             ids = []
+            parts = []
             for elem in doc.getElementsByClassName("errorOrderLine")
                 ids.push(elem.parentElement.nextElementSibling.querySelector(".quantityTd").firstElementChild.classList[3].split("_")[1])
-            callback(ids)
+                parts.push(trim_whitespace(elem.parentElement.nextElementSibling.querySelector(".descriptionTd").firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.innerText))
+            callback(ids, parts)
         ,item=undefined, json=true
 
     _delete_invalid_rs_online: (viewstate, form_ids, ids, callback) ->
@@ -144,8 +146,17 @@ class @RS extends RetailerInterface
                 post url, params, (event) ->
                     doc = new DOMParser().parseFromString(JSON.parse(event.target.responseText).html, "text/html")
                     success = doc.querySelector("#hidErrorAtLineLevel").value == "0"
-                    if callback?
-                        callback({success:success}, that)
+                    if not success
+                        if callback?
+                            that._get_invalid_item_ids_rs_delivers (ids, parts) ->
+                                invalid = []
+                                for item in items
+                                    if item.part in parts
+                                        invalid.push(item)
+                                callback({success:false, fails:invalid}, that)
+                    else 
+                        if callback?
+                            callback({success:true}, that)
                     that.refreshCartTabs()
                     that.refreshSiteTabs()
                     that.adding_items = false
