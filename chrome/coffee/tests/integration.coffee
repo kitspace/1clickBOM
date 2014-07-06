@@ -118,7 +118,7 @@ asyncTest "Add items individually via microCart fails", () ->
 module("Mouser")
 
 # Mouser's site is unified, changing the basket somewhere will change the
-# basket everywhere. 
+# basket everywhere.
 # TODO would be good to find a way to test more locations, tried doing it like
 # the other retailers but the locations can interefer with each other
 

@@ -16,7 +16,7 @@
 
     if (json)
         xhr.setRequestHeader("Content-type", "application/JSON")
-    else 
+    else
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
 
     xhr.onreadystatechange = (event) ->
@@ -34,7 +34,7 @@
             if callback?
                 callback(event)
     xhr.send()
-    
+
 
 window.onerror = (msg, url, line) ->
     chrome.storage.local.get ["error_log"], ({error_log:error_log}) ->

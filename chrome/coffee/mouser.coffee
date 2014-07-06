@@ -41,7 +41,7 @@ class @Mouser extends RetailerInterface
                 errors = doc.getElementsByClassName("error")
                 for error in errors
                     # this padding5 error element just started appearing, doesn't indicate anything
-                    if error.style.display == "" && error.firstChild.nextSibling.className != "padding5" 
+                    if error.style.display == "" && error.firstChild.nextSibling.className != "padding5"
                         detail_div = error.querySelectorAll("div")[1]
                         if detail_div?
                             part = /\n(.*)<br>/.exec(detail_div.innerHTML)[1]
