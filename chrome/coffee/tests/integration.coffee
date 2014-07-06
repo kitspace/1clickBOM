@@ -150,11 +150,23 @@ rs_locations_delivers = ["AE", "AZ", "CL", "CY", "EE", "FI", "GR", "HR", "IL",
     "IN", "LT", "LV", "LY", "MT", "MX", "RO", "RU", "SA", "TR", "UA", "AR",
     "US"]
 
-rs_locations = rs_locations_delivers
+rs_locations = rs_locations_online.concat(rs_locations_delivers)
 
-asyncTest "Add items fails but adds again", () ->
-    stop(rs_locations.length - 1)
-    for l in rs_locations
+asyncTest "rsdelivers: Add items fails but adds again", () ->
+    stop(rs_locations_delivers.length - 1)
+    for l in rs_locations_delivers
+        r = new RS(l)
+        items = [{"part":"fail","quantity":2, "comment":"test"}]
+        r.addItems items, (result, that) ->
+            deepEqual(result.success, false, "1:"+ that.country)
+            items = [{"part":"264-7881","quantity":2, "comment":"test"}]
+            that.addItems items, (result, that2) ->
+                deepEqual(result.success, true, "2:" + that2.country)
+                start()
+
+asyncTest "rs-online: Add items fails but adds again", () ->
+    stop(rs_locations_online.length - 1)
+    for l in rs_locations_online
         r = new RS(l)
         items = [{"part":"fail","quantity":2, "comment":"test"}]
         r.addItems items, (result, that) ->
