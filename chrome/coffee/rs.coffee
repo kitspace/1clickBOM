@@ -64,9 +64,11 @@ class @RS extends RetailerInterface
         get url, (event) ->
             doc = new DOMParser().parseFromString(event.target.responseText, "text/html")
             ids = []
+            parts = []
             for elem in doc.querySelectorAll(".errorRow")
                 ids.push(elem.firstElementChild.nextElementSibling.querySelector("input").name.split(":")[2])
-            callback(ids)
+                parts.push(elem.firstElementChild.nextElementSibling.querySelector("input").value)
+            callback(ids, parts)
     _clear_invalid_rs_delivers: (callback) ->
         that = this
         @_get_invalid_item_ids_rs_delivers (ids) ->
@@ -171,18 +173,18 @@ class @RS extends RetailerInterface
 
             params += "&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionModalLayerOpenedState=&javax.faces.ViewState=" + viewstate + "&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderTextBoxbtn=shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderTextBoxbtn&"
             post url, params, (event) ->
-                doc = new DOMParser().parseFromString(event.target.responseText, "text/html")
-                error_row = doc.querySelector(".errorRow")
-                if error_row?
-                    result = {success:false}
-                else
-                    result = {success:true}
-
-                if callback?
-                    callback(result, that)
-                that.refreshCartTabs()
-                that.refreshSiteTabs()
-                that.adding_items = false
+                that._get_invalid_item_ids_rs_online (ids, parts) ->
+                    success = parts.length == 0
+                    invalid = []
+                    if not success
+                        for item in items
+                            if item.part in parts
+                                invalid.push(item)
+                    if callback?
+                        callback({success:success, fails:invalid}, that)
+                    that.refreshCartTabs()
+                    that.refreshSiteTabs()
+                    that.adding_items = false
 
     _get_adding_viewstate_rs_online: (callback)->
         that = this
