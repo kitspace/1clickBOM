@@ -14,15 +14,18 @@
 
 checkValidItems =  (items_incoming, invalid) ->
     retailer_aliases = {
-        "Farnell"   : "Farnell",
-        "FEC"       : "Farnell",
-        "Premier"   : "Farnell",
-        "Digikey"   : "Digikey",
-        "Digi-key"  : "Digikey",
-        "Mouser"    : "Mouser",
-        "RS"        : "RS",
-        "RSOnline"  : "RS",
-        "RS-Online" : "RS"
+        "Farnell"     : "Farnell",
+        "FEC"         : "Farnell",
+        "Premier"     : "Farnell",
+        "Digikey"     : "Digikey",
+        "Digi-key"    : "Digikey",
+        "Mouser"      : "Mouser",
+        "RS"          : "RS",
+        "RSOnline"    : "RS",
+        "RS-Online"   : "RS",
+        "RS-Delivers" : "RS",
+        "RSDelivers"  : "RS",
+        "Newark"      : "Newark"
     }
     items = []
     for item in items_incoming

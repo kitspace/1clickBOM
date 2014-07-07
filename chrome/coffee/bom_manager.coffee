@@ -23,7 +23,7 @@ class @BomManager
             that.interfaces = {}
             if (!country)
                 country = "Other"
-            for retailer_interface in [Digikey, Farnell, Mouser, RS]
+            for retailer_interface in [Digikey, Farnell, Mouser, RS, Newark]
                 setting_values = that.lookup_setting_values(country, retailer_interface.name, stored_settings)
                 that.interfaces[retailer_interface.name] = new retailer_interface(country, setting_values)
             if callback?

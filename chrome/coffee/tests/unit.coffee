@@ -33,6 +33,10 @@ test "RS: Constructs for all countries", () ->
     for country,code of countries
         ok(new RS(code) instanceof RetailerInterface, country + " " + code)
 
+test "Newark: Constructs for all countries", () ->
+    for country,code of countries
+        ok(new Newark(code) instanceof RetailerInterface, country + " " + code)
+
 test "InvalidCountryError Exists", () ->
     ok new InvalidCountryError instanceof Error
 
@@ -54,5 +58,10 @@ test "Mouser: InvalidCountryError Thrown", () ->
 test "RS: InvalidCountryError Thrown", () ->
     throws () ->
         new RS("XX")
+    , InvalidCountryError
+
+test "Newark: InvalidCountryError Thrown", () ->
+    throws () ->
+        new Newark("XX")
     , InvalidCountryError
 
