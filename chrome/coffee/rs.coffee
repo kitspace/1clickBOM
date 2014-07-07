@@ -196,7 +196,7 @@ class @RS extends RetailerInterface
                 doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
                 viewstate  = doc.getElementById("javax.faces.ViewState").value
                 btn_doc = doc.getElementById("addToOrderDiv")
-                #the form_id element is different values depending on signed in our signed out
+                #the form_id element is different values depending on signed in or signed out
                 #could just hardcode them but maybe this will be more future-proof?
                 #we use a regex here as DOM select methods crash on this element!
                 form_id  = /AJAX.Submit\('shoppingBasketForm\:(j_id\d+)/.exec(btn_doc.innerHTML.toString())[1]
@@ -213,7 +213,7 @@ class @RS extends RetailerInterface
                 doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
                 viewstate  = doc.getElementById("javax.faces.ViewState").value
                 form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling
-                #the form_id elements are different values depending on signed in our signed out
+                #the form_id elements are different values depending on signed in or signed out
                 #could just hardcode them but maybe this will be more future-proof?
                 form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
                 form_id3  = doc.getElementById("a4jCloseForm").firstChild.id.split(":")[1]
@@ -230,7 +230,7 @@ class @RS extends RetailerInterface
                 doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
                 viewstate  = doc.getElementById("javax.faces.ViewState").value
                 form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling
-                #the form_id elements are different values depending on signed in our signed out
+                #the form_id elements are different values depending on signed in or signed out
                 #could just hardcode them but maybe this will be more future-proof?
                 form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
                 form_id3  = doc.getElementById("a4jCloseForm").firstChild.id.split(":")[1]
