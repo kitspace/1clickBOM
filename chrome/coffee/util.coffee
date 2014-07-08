@@ -49,3 +49,5 @@ window.getErrorLog = () ->
 
 @trim_whitespace = (str) ->
     return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
+
+@DOM = new DOMParser()
