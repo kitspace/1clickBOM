@@ -51,3 +51,5 @@ window.getErrorLog = () ->
     return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
 
 @DOM = new DOMParser()
+@DOM.parse = (str) ->
+    DOM.parseFromString(str, "text/html")
