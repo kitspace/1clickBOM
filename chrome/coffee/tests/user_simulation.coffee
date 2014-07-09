@@ -12,18 +12,25 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-countries = get_local("data/countries.json")
-test_bom  = get_local("data/big_example.tsv", json=false)
+@test_bom  = get_local("data/big_example.tsv", json=false)
 
-asyncTest "User Sim", () ->
-    country = "AT"
-    chrome.storage.local.set {country: country}, () ->
-        chrome.storage.local.remove "bom", () ->
-            (new BomManager).addToBOM test_bom, (that) ->
-                that.emptyCarts (result) ->
-                    deepEqual(result.success, true)
-                    that.fillCarts (result) ->
+@test_one = (country="UK") ->
+    QUnit.test "User Sim " + country, () ->
+        expect(3)
+        stop()
+        chrome.storage.local.set {country: country}, () ->
+            console.log("Test, " + country + " 1")
+            chrome.storage.local.remove "bom", () ->
+                console.log("Test, " + country + " 2")
+                (new BomManager).addToBOM test_bom, (that) ->
+                    console.log("Test, " + country + " 3")
+                    that.emptyCarts (result) ->
+                        console.log("Test, " + country + " 4")
                         deepEqual(result.success, true)
-                        deepEqual(result.fails, [])
-                        start()
+                        that.fillCarts (result) ->
+                            console.log("Test, " + country + " 5")
+                            deepEqual(result.success, true)
+                            deepEqual(result.fails, [])
+                            start()
+test_one()
 
