@@ -20,8 +20,10 @@ asyncTest "User Sim", () ->
     chrome.storage.local.set {country: country}, () ->
         chrome.storage.local.remove "bom", () ->
             (new BomManager).addToBOM test_bom, (that) ->
-                that.emptyCarts()
-                that.fillCarts()
-                ok(true)
-                start()
+                that.emptyCarts (result) ->
+                    deepEqual(result.success, true)
+                    that.fillCarts (result) ->
+                        deepEqual(result.success, true)
+                        deepEqual(result.fails, [])
+                        start()
 

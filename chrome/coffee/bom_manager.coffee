@@ -63,14 +63,17 @@ class @BomManager
     fillCarts: (callback)->
         @filling_carts = true
         that = this
+        big_result = {success:true, fails:[]}
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
             count = Object.keys(bom).length
             for retailer of bom
                 that.interfaces[retailer].addItems bom[retailer], (result, interface) ->
                     count--
+                    big_result.success &&= result.success
+                    big_result.fails = big_result.fails.concat(result.fails)
                     if count == 0
                         if callback?
-                            callback()
+                            callback(big_result)
                         that.filling_carts = false
 
 
@@ -82,14 +85,16 @@ class @BomManager
     emptyCarts: (callback)->
         @emptying_carts = true
         that = this
+        big_result = {success: true}
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
             count = Object.keys(bom).length
             for retailer of bom
                 that.emptyCart retailer, (result, interface) ->
                     count--
+                    big_result.success &&= result.success
                     if count == 0
                         if callback?
-                            callback()
+                            callback(big_result)
                         that.emptying_carts = false
 
     emptyCart: (retailer, callback)->
