@@ -31,12 +31,11 @@ class @Farnell extends RetailerInterface
     _get_item_ids: (callback) ->
         that = this
         xhr = new XMLHttpRequest
-        parser = new DOMParser
         url = "https" + @site + @cart
         xhr.open("GET", url, true)
         xhr.onreadystatechange = (data) ->
             if xhr.readyState == 4 and xhr.status == 200
-                doc = parser.parseFromString(xhr.responseText, "text/html")
+                doc = DOM.parse(xhr.responseText)
                 ins = doc.getElementsByTagName("input")
                 ids = []
                 for element in ins
@@ -78,8 +77,7 @@ class @Farnell extends RetailerInterface
         post url, "", (event) ->
             if event.target.readyState == 4
                 #if items successully add the request returns the basket
-                parser = new DOMParser
-                doc = parser.parseFromString(event.target.responseText, "text/html")
+                doc = DOM.parse(event.target.responseText)
                 #we determine the request has returned the basket by the body classname
                 #so it's language agnostic
                 result.success = doc.querySelector("body.shoppingCart") != null
@@ -101,7 +99,7 @@ class @Farnell extends RetailerInterface
             #this doesn't seem to work as a parameter
             url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
             post url, "", (event) ->
-                doc = (new DOMParser).parseFromString(event.currentTarget.responseText, "text/html")
+                doc = DOM.parse(event.target.responseText)
                 success = doc.querySelector("body.shoppingCart") != null
                 result.success = result.success && success
                 if not success

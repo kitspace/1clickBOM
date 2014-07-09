@@ -37,7 +37,7 @@ class @Mouser extends RetailerInterface
         post url, params, (event) ->
             if event.target.status == 200
                 #if there is an error, there will be some error-class items with display set to ""
-                doc = (new DOMParser).parseFromString(event.target.responseText, "text/html")
+                doc = DOM.parse(event.target.responseText)
                 errors = doc.getElementsByClassName("error")
                 for error in errors
                     # this padding5 error element just started appearing, doesn't indicate anything
@@ -64,7 +64,7 @@ class @Mouser extends RetailerInterface
 
     _clear_errors: (that, viewstate, callback) ->
         post "http" + that.site + that.cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors", (event) ->
-            doc = new DOMParser().parseFromString(event.target.responseText, "text/html")
+            doc = DOM.parse(event.target.responseText)
             viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
             post "http" + that.site + that.cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket", (event) ->
                if callback?
@@ -93,7 +93,7 @@ class @Mouser extends RetailerInterface
         xhr.open "GET", url, true
         xhr.onreadystatechange = (data) ->
             if xhr.readyState == 4 and xhr.status == 200
-                doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
+                doc = DOM.parse(xhr.responseText)
                 params = that.additem_params
                 params += encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
                 params += "&ctl00$ContentMain$btnAddLines=Lines to Forms"
@@ -101,7 +101,7 @@ class @Mouser extends RetailerInterface
                 params += "&ctl00$ContentMain$txtNumberOfLines=94"
                 post url, params, (event) ->
                     if event.target.status == 200
-                        doc = new DOMParser().parseFromString(event.target.responseText, "text/html")
+                        doc = DOM.parse(event.target.responseText)
                         viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
                         if callback?
                             callback(that, viewstate)
@@ -113,7 +113,7 @@ class @Mouser extends RetailerInterface
         xhr.open "GET", url, true
         xhr.onreadystatechange = (data) ->
             if xhr.readyState == 4 and xhr.status == 200
-                doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
+                doc = DOM.parse(xhr.responseText)
                 viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
                 if callback?
                     callback(that, viewstate)

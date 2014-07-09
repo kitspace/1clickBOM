@@ -62,7 +62,7 @@ class @RS extends RetailerInterface
     _get_invalid_item_ids_rs_online: (callback) ->
         url = "http" + @site + @cart
         get url, (event) ->
-            doc = new DOMParser().parseFromString(event.target.responseText, "text/html")
+            doc = DOM.parse(event.target.responseText)
             ids = []
             parts = []
             for elem in doc.querySelectorAll(".errorRow")
@@ -89,7 +89,7 @@ class @RS extends RetailerInterface
     _get_invalid_item_ids_rs_delivers: (callback) ->
         url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/GetCartHtml"
         post url, undefined, (event) ->
-            doc = new DOMParser().parseFromString(JSON.parse(event.target.responseText).html, "text/html")
+            doc = DOM.parse(JSON.parse(event.target.responseText).html)
             ids = []
             parts = []
             for elem in doc.getElementsByClassName("errorOrderLine")
@@ -146,7 +146,7 @@ class @RS extends RetailerInterface
                     params += item.part + "," + item.quantity + ",what_the_hell_is_cost_center," + item.comment + "\n"
                 params += '"}}'
                 post url, params, (event) ->
-                    doc = new DOMParser().parseFromString(JSON.parse(event.target.responseText).html, "text/html")
+                    doc = DOM.parse(JSON.parse(event.target.responseText).html)
                     success = doc.querySelector("#hidErrorAtLineLevel").value == "0"
                     if not success
                         if callback?
@@ -193,7 +193,7 @@ class @RS extends RetailerInterface
         xhr.open("GET", url, true)
         xhr.onreadystatechange = (event) ->
             if xhr.readyState == 4 and xhr.status == 200
-                doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
+                doc = DOM.parse(xhr.responseText)
                 viewstate  = doc.getElementById("javax.faces.ViewState").value
                 btn_doc = doc.getElementById("addToOrderDiv")
                 #the form_id element is different values depending on signed in or signed out
@@ -210,7 +210,7 @@ class @RS extends RetailerInterface
         xhr.open("GET", url, true)
         xhr.onreadystatechange = (event) ->
             if xhr.readyState == 4 and xhr.status == 200
-                doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
+                doc = DOM.parse(xhr.responseText)
                 viewstate  = doc.getElementById("javax.faces.ViewState").value
                 form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling
                 #the form_id elements are different values depending on signed in or signed out
@@ -227,7 +227,7 @@ class @RS extends RetailerInterface
         xhr.open("GET", url, true)
         xhr.onreadystatechange = (event) ->
             if xhr.readyState == 4 and xhr.status == 200
-                doc = new DOMParser().parseFromString(xhr.responseText, "text/html")
+                doc = DOM.parse(xhr.responseText)
                 viewstate  = doc.getElementById("javax.faces.ViewState").value
                 form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling
                 #the form_id elements are different values depending on signed in or signed out

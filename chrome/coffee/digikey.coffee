@@ -35,12 +35,11 @@ class @Digikey extends RetailerInterface
         @adding_items = true
         result = {success:true, fails:[]}
         count = items.length
-        parser = new DOMParser
         for item in items
             url = "http" + @site + @additem
             params = "qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment
             post url, params, (event)->
-                doc = parser.parseFromString(event.target.responseText, "text/html")
+                doc = DOM.parse(event.target.responseText)
                 #if the cart returns with a quick-add quantity filled-in there was an error
                 quick_add_quant = doc.querySelector("#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity")
                 success = (quick_add_quant?) && (quick_add_quant.value?) && (quick_add_quant.value == "")
