@@ -70,7 +70,7 @@ class @Farnell extends RetailerInterface
         @adding_items = true
         that = this
         url = "https" + @site + @additem
-        result = {}
+        result = {success:true, fails:[]}
         #this doesn't seem to work as a parameter
         for item in items
             url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
