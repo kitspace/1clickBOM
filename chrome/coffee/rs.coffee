@@ -158,7 +158,7 @@ class @RS extends RetailerInterface
                                 callback({success:false, fails:invalid}, that)
                     else 
                         if callback?
-                            callback({success:true}, that)
+                            callback({success:true, fails:[]}, that)
                     that.refreshCartTabs()
                     that.refreshSiteTabs()
                     that.adding_items = false

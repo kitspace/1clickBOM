@@ -67,7 +67,7 @@ class @BomManager
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
             count = Object.keys(bom).length
             for retailer of bom
-                that.interfaces[retailer].addItems bom[retailer], (result, interface) ->
+                that.interfaces[retailer].addItems bom[retailer], (result, interf) ->
                     count--
                     big_result.success &&= result.success
                     big_result.fails = big_result.fails.concat(result.fails)
@@ -89,7 +89,7 @@ class @BomManager
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
             count = Object.keys(bom).length
             for retailer of bom
-                that.emptyCart retailer, (result, interface) ->
+                that.emptyCart retailer, (result, interf) ->
                     count--
                     big_result.success &&= result.success
                     if count == 0
