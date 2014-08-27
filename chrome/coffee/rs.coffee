@@ -26,7 +26,7 @@ class @RS extends RetailerInterface
             url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart"
             post url, "", (event) ->
                 if callback?
-                    callback({success: true}, that)
+                    callback({success: true}, that, items)
                 that.refreshSiteTabs()
                 that.refreshCartTabs()
                 that.clearing_cart = false
@@ -42,13 +42,12 @@ class @RS extends RetailerInterface
         post url, params1, () ->
             post url, params2, () ->
                 post url, params3, () ->
-                    post url, params4, (event) -> #stairway to heaven
-                        if event.target.status == 200
-                            if callback?
-                                callback({success:true}, that)
-                            that.refreshCartTabs()
-                            that.refreshSiteTabs()
-                            that.clearing_cart = false
+                    post url, params4, (event) -> #stairway to heaven lol
+                       if callback?
+                           callback({success:true}, that)
+                       that.refreshCartTabs()
+                       that.refreshSiteTabs()
+                       that.clearing_cart = false
     _clear_invalid_rs_online: (callback) ->
         if /web\/ca/.test(@cart)
             that = this
@@ -155,10 +154,10 @@ class @RS extends RetailerInterface
                                 for item in items
                                     if item.part in parts
                                         invalid.push(item)
-                                callback({success:false, fails:invalid}, that)
-                    else 
+                                callback({success:false, fails:invalid}, that, items)
+                    else
                         if callback?
-                            callback({success:true, fails:[]}, that)
+                            callback({success:true, fails:[]}, that, items)
                     that.refreshCartTabs()
                     that.refreshSiteTabs()
                     that.adding_items = false
@@ -181,7 +180,7 @@ class @RS extends RetailerInterface
                             if item.part in parts
                                 invalid.push(item)
                     if callback?
-                        callback({success:success, fails:invalid}, that)
+                        callback({success:success, fails:invalid}, that, items)
                     that.refreshCartTabs()
                     that.refreshSiteTabs()
                     that.adding_items = false

@@ -68,8 +68,6 @@ class @BomManager
                 chrome.notifications.create "", {type:"basic", title:title , message:"", iconUrl:"/images/ok128.png"}, () ->
                 badge.set("OK","#00CF0F")
 
-
-
             for item in items
                 if item.retailer not of bom
                     bom[item.retailer] = []
@@ -94,6 +92,16 @@ class @BomManager
             chrome.notifications.create "", {type:"basic", title:title , message:"", iconUrl:"/images/ok128.png"}, () ->
             badge.set("OK","#00CF0F")
 
+    notifyEmptyCart: (retailer, result) ->
+        if not result.success
+            title = "Could not empty" + retailer + " cart"
+            chrome.notifications.create "", {type:"basic", title:title, message:"", iconUrl:"/images/error128.png"}, () ->
+            badge.set("Err","#FF0000")
+        else
+            title = "Emptied " + retailer + " cart"
+            chrome.notifications.create "", {type:"basic", title:title , message:"", iconUrl:"/images/ok128.png"}, () ->
+            badge.set("OK","#00CF0F")
+
     fillCarts: (callback)->
         @filling_carts = true
         that = this
@@ -101,7 +109,8 @@ class @BomManager
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
             count = Object.keys(bom).length
             for retailer of bom
-                that.interfaces[retailer].addItems bom[retailer], (result, interf) ->
+                that.interfaces[retailer].addItems bom[retailer], (result, interf, items) ->
+                    that.notifyFillCart(items, interf.interface_name, result)
                     count--
                     big_result.success &&= result.success
                     big_result.fails = big_result.fails.concat(result.fails)
@@ -134,7 +143,11 @@ class @BomManager
                         that.emptying_carts = false
 
     emptyCart: (retailer, callback)->
-        this.interfaces[retailer].clearCart(callback)
+        that = this
+        this.interfaces[retailer].clearCart (result) ->
+            that.notifyEmptyCart(retailer, result)
+            if callback?
+                callback(result)
 
     openCarts: ()->
         that = this

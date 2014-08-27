@@ -49,11 +49,11 @@ class @Newark extends RetailerInterface
             callback(ids)
 
     addItems: (items, callback) ->
+        that = this
         if items.length == 0
             if callback?
-                callback({success:true, fails:[]})
+                callback({success:true, fails:[]}, that, items)
             return
-        that = this
         @adding_items = true
         url = "https" + @site + "/webapp/wcs/stores/servlet/OrderChangeServiceItemAdd"
         params = "storeId=10194&catalogId=15003&langId=-1&omItemAdd=quickOrder&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1&outOrderName=orderId&errorViewName=RedirectView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&hiddenEmptyCheck=true"
@@ -90,13 +90,13 @@ class @Newark extends RetailerInterface
                     if callback?
                         result.fails = result.fails.concat(fails)
                         result.success = false
-                        callback(result, that)
+                        callback(result, that, items)
                     that.refreshCartTabs()
                     that.refreshSiteTabs()
                     that.adding_items = false
             else #success
                 if callback?
-                    callback({success: true, fails:[]}, that)
+                    callback({success: true, fails:[]}, that, items)
                 that.refreshCartTabs()
                 that.refreshSiteTabs()
                 that.adding_items = false

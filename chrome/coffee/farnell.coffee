@@ -85,7 +85,7 @@ class @Farnell extends RetailerInterface
             result.success = doc.querySelector("body.shoppingCart") != null
             if (result.success)
                 if (callback?)
-                    callback(result, that)
+                    callback(result, that, items)
                 that.refreshCartTabs()
                 that.refreshSiteTabs()
                 that.adding_items = false
@@ -93,7 +93,7 @@ class @Farnell extends RetailerInterface
                 that._add_items_individually(items, callback)
          , item={part:"parts",retailer:"Farnell"}, json=false, () ->
                 if callback?
-                    callback({success:false, fails:items})
+                    callback({success:false, fails:items}, items)
                 that.adding_items = false
 
     _add_items_individually: (items, callback) ->
@@ -115,7 +115,7 @@ class @Farnell extends RetailerInterface
                     that.refreshCartTabs()
                     that.refreshSiteTabs()
                     if callback?
-                        callback(result, that)
+                        callback(result, that, items)
                     that.adding_items = false
             , item=item, json=false, () ->
                 result.fails.push(event.target.item)
@@ -124,29 +124,5 @@ class @Farnell extends RetailerInterface
                     that.refreshCartTabs()
                     that.refreshSiteTabs()
                     if callback?
-                        callback(result, that)
+                        callback(result, that, items)
                     that.adding_items = false
-
-    _add_items_individually_via_micro_cart: (items, callback) ->
-        that = this
-        result = {success:true, fails:[], no_item_comments:true}
-        count = items.length
-        for item in items
-            url = "https" + @site + "/jsp/shoppingCart/processMicroCart.jsp"
-            params = "action=buy&product=" + item.part + "&qty=" + item.quantity
-            post url, params, (event) ->
-                success = event.target.responseXML != null
-                result.success = result.success && success
-                if not success
-                    result.fails.push(event.target.item)
-                count--
-                if count == 0
-                    that.refreshCartTabs()
-                    that.refreshSiteTabs()
-                    if callback?
-                        callback(result, that)
-            , item=item, json=false, () ->
-                if callback?
-                    callback({success:false})
-                that.adding_items = false
-

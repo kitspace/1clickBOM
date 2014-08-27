@@ -51,12 +51,12 @@ class @Mouser extends RetailerInterface
                 viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
                 that._clear_errors that, viewstate, () ->
                     if callback?
-                        callback(result, that)
+                        callback(result, that, items)
                     that.refreshCartTabs()
                     that.adding_items = false
             else
                 if callback?
-                    callback(result, that)
+                    callback(result, that, items)
                 that.refreshCartTabs()
                 that.adding_items = false
 
@@ -79,7 +79,7 @@ class @Mouser extends RetailerInterface
         params =  "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket"
         post url, params, (event) ->
             if callback?
-                callback({success:true})
+                callback({success:true}, that)
             that.refreshCartTabs()
             that.clearing_cart = false
     _get_adding_viewstate: (callback)->

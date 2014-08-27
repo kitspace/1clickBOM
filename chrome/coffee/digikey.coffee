@@ -49,7 +49,7 @@ class @Digikey extends RetailerInterface
                 count--
                 if (count == 0)
                     if callback?
-                        callback(result, that)
+                        callback(result, that, items)
                     that.refreshCartTabs()
                     that.adding_items = false
             , item
