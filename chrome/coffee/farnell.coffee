@@ -93,7 +93,7 @@ class @Farnell extends RetailerInterface
                 that._add_items_individually(items, callback)
          , item={part:"parts",retailer:"Farnell"}, json=false, () ->
                 if callback?
-                    callback({success:false})
+                    callback({success:false, fails:items})
                 that.adding_items = false
 
     _add_items_individually: (items, callback) ->
@@ -118,9 +118,14 @@ class @Farnell extends RetailerInterface
                         callback(result, that)
                     that.adding_items = false
             , item=item, json=false, () ->
-                if callback?
-                    callback({success:false})
-                that.adding_items = false
+                result.fails.push(event.target.item)
+                count--
+                if count == 0
+                    that.refreshCartTabs()
+                    that.refreshSiteTabs()
+                    if callback?
+                        callback(result, that)
+                    that.adding_items = false
 
     _add_items_individually_via_micro_cart: (items, callback) ->
         that = this

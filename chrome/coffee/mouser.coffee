@@ -35,35 +35,31 @@ class @Mouser extends RetailerInterface
         url = "http" + @site + @additem
         result = {success: true, fails:[]}
         post url, params, (event) ->
-            if event.target.status == 200
-                #if there is an error, there will be some error-class items with display set to ""
-                doc = DOM.parse(event.target.responseText)
-                errors = doc.getElementsByClassName("error")
-                for error in errors
-                    # this padding5 error element just started appearing, doesn't indicate anything
-                    if error.style.display == "" && error.firstChild.nextSibling.className != "padding5"
-                        detail_div = error.querySelectorAll("div")[1]
-                        if detail_div?
-                            search = /\n(.*)<br>/.exec(detail_div.innerHTML)
-                            console.log(detail_div.innerHTML)
-                            console.log(search)
-                            part = search[1]
-                            for item in items
-                                if item.part == part
-                                    result.fails.push(item)
+            #if there is an error, there will be some error-class items with display set to ""
+            doc = DOM.parse(event.target.responseText)
+            errors = doc.getElementsByClassName("error")
+            for error in errors
+                # this padding5 error element just started appearing, doesn't indicate anything
+                if error.style.display == "" && error.firstChild.nextSibling.className != "padding5"
+                    part = error.getAttribute("data-partnumber")
+                    if part?
+                        for item in items
+                            i = item.part.replace(/-/, '')
+                            if i == part
+                                result.fails.push(item)
                         result.success = false
-                if not result.success
-                    viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-                    that._clear_errors that, viewstate, () ->
-                        if callback?
-                            callback(result, that)
-                        that.refreshCartTabs()
-                        that.adding_items = false
-                else
+            if not result.success
+                viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
+                that._clear_errors that, viewstate, () ->
                     if callback?
                         callback(result, that)
                     that.refreshCartTabs()
                     that.adding_items = false
+            else
+                if callback?
+                    callback(result, that)
+                that.refreshCartTabs()
+                that.adding_items = false
 
     _clear_errors: (that, viewstate, callback) ->
         post "http" + that.site + that.cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors", (event) ->

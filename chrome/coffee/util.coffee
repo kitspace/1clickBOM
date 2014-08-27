@@ -1,4 +1,20 @@
-badge_set = false
+
+class Badge
+    constructor:() ->
+        @badge_set = false
+    set: (text, color) ->
+        that = this
+        if not @badge_set
+            chrome.browserAction.setBadgeBackgroundColor({color:color})
+            chrome.browserAction.setBadgeText({text:text})
+            @badge_set = true
+            setTimeout () ->
+                chrome.browserAction.setBadgeText({text:""})
+                that.badge_set = false
+            , 5000
+
+@badge = new Badge
+
 
 @get_local = (url, json=true)->
     xhr = new XMLHttpRequest()
@@ -23,16 +39,9 @@ network_callback = (event, callback, error_callback) ->
                 message +=  item.part + " from " + item.retailer + "\n"
             else
                 message += event.target.url
-            chrome.notifications.create "", {type:"basic", title:"Network Error Occured", message:message, iconUrl:"/images/error128.png"}, () ->
+            chrome.notifications.create "", {type:"basic", title:"Network Error Occured", message:message, iconUrl:"/images/net_error128.png"}, () ->
 
-            if not badge_set
-                badge_set = true
-                chrome.browserAction.setBadgeBackgroundColor({color:"#FF0000"})
-                chrome.browserAction.setBadgeText({text:"" + event.target.status})
-                setTimeout () ->
-                    chrome.browserAction.setBadgeText({text:""})
-                    badge_set = false
-                , 5000
+            badge.set("" + event.target.status, "#CC00FF")
             if error_callback?
                 error_callback()
 

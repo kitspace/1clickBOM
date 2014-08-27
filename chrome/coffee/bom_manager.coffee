@@ -59,6 +59,21 @@ class @BomManager
             chrome.storage.local.set {"bom":bom}, () ->
                 if callback?
                     callback(that)
+    notifyFillCart: (items, retailer, result) ->
+        if not result.success
+            fails = result.fails
+            title = "Could not add " + fails.length
+            title += " out of " + items.length + " line"
+            title += if items.length > 1 then "s" else ""
+            title += " to " + retailer + " cart"
+            chrome.notifications.create "", {type:"basic", title:title, message:"", iconUrl:"/images/error128.png"}, () ->
+            badge.set("Err","#FF0000")
+        else
+            title = "" + items.length + " line"
+            title += if items.length > 1 then "s" else ""
+            title += " added to " + retailer + " cart"
+            chrome.notifications.create "", {type:"basic", title:title , message:"", iconUrl:"/images/ok128.png"}, () ->
+            badge.set("OK","#00CF0F")
 
     fillCarts: (callback)->
         @filling_carts = true
@@ -80,7 +95,9 @@ class @BomManager
     fillCart: (retailer, callback)->
         that = this
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
-            that.interfaces[retailer].addItems(bom[retailer], callback)
+            that.interfaces[retailer].addItems bom[retailer], (result) ->
+                that.notifyFillCart bom[retailer], retailer, result
+                callback(result)
 
     emptyCarts: (callback)->
         @emptying_carts = true

@@ -19,64 +19,10 @@
           display:inline-block;
           background-image: url('/images/spinner.png');
       }
-      .fake_bottom {
-          max-height:3px;
-          width:100%;
-          overflow:hidden;
-          position:relative;
-      }
-      .fake_bottom.warning_bottom >.fake_bottom_edge {
-          background-color:#FFA500;
-      }
-      .fake_bottom.network_error_bottom >.fake_bottom_edge {
-          background-color:#c000ff;
-      }
-      .fake_bottom.internal_error_bottom > .fake_bottom_edge {
-          background-color:red;
-      }
-      .fake_bottom.success_bottom > .fake_bottom_edge {
-          background-color:#0cff3f;
-      }
-      .fake_bottom.panel_top > .fake_bottom_line {
-          background-color:#DDD;
-      }
-      .fake_bottom.warning_top > .fake_bottom_line {
-          background-color:#FFA500;
-      }
-      .fake_bottom.network_error_top > .fake_bottom_line {
-          background-color:#c000ff;
-      }
-      .fake_bottom.internal_error_top > .fake_bottom_line {
-          background-color:red;
-      }
-      .fake_bottom.success_top > .fake_bottom_line {
-          background-color:#0cff3f;
-      }
-      .fake_bottom_left {
-          background-image:url("/images/fake_bottom_left.png");
-          float:left;
-          height:3px;
-          width:2px;
-      }
-      .fake_bottom_line {
-          background-image:url("/images/fake_bottom.png");
-          repeat:repeat-x;
-          height:3px;
-      }
-      .fake_bottom_right {
-          background-image:url("/images/fake_bottom_right.png");
-          position:absolute;
-          right:0px;
-          top:0px;
-          height:3px;
-          width:2px;
-      }
       div#main_content {
           max-width: 300px;
           float:right;
           margin: 8px 8px 8px 8px;
-      }
-      div#status_bar {
       }
       div#top_spacer {
           height: 5px;
@@ -153,43 +99,6 @@
       button#clear {
           float: left;
       }
-      .notification {
-          line-height:24px;
-          min-width:250px;
-      }
-      .notification.warning {
-          background: #ffa500;
-      }
-      .notification.network_error {
-          background: #c000ff;
-      }
-      .notification.internal_error {
-          background: red;
-      }
-      .notification.success {
-          background: #0cff3f;
-      }
-      .notification_widget {
-          line-height:24px;
-          padding-left:12px;
-          padding-right:8px;
-          padding-bottom:3px;
-          text-align:left;
-      }
-      .notification_icon {
-          font-family: "Foundation Icons";
-          font-size: 24px;
-          margin-right:10px;
-          vertical-align:middle;
-          cursor:default;
-      }
-      .notification_text {
-          font-size: 14px;
-          font-family: "sans-serif", "Arial", "Helvetica";
-          vertical-align:middle;
-          margin-right:10px;
-          cursor:default;
-      }
     </style>
   </head>
   <body>
@@ -224,64 +133,6 @@
                       <span class=button_icon>&#xf21b;</span>
                       <span class=button_text>Empty</span>
                   </button>
-              </div>
-          </div>
-
-          <div id=status_bar>
-              <div class="fake_bottom panel_top warning_bottom">
-                  <div class="fake_bottom_edge fake_bottom_left"></div>
-                  <div class="fake_bottom_line"></div>
-                  <div class="fake_bottom_edge fake_bottom_right"></div>
-              </div>
-              <div class="notification warning">
-                  <div class=notification_widget>
-                      <span class=notification_icon>&#xf101;</span>
-                      <span class=notification_text>Invalid data pasted</span>
-                  </div>
-              </div>
-              <div class="fake_bottom warning_top warning_bottom">
-                  <div class="fake_bottom_edge fake_bottom_left"></div>
-                  <div class="fake_bottom_line"></div>
-                  <div class="fake_bottom_edge fake_bottom_right"></div>
-              </div>
-              <div class="notification warning">
-                  <div class=notification_widget>
-                      <span class=notification_icon>&#xf101;</span>
-                      <span class=notification_text>Nothing in clipboard</span>
-                  </div>
-              </div>
-              <div class="fake_bottom warning_top network_error_bottom">
-                  <div class="fake_bottom_edge fake_bottom_left"></div>
-                  <div class="fake_bottom_line"></div>
-                  <div class="fake_bottom_edge fake_bottom_right"></div>
-              </div>
-              <div class="notification network_error">
-                  <div class=notification_widget>
-                      <span class=notification_icon>&#xf209;</span>
-                      <span class=notification_text>A network error occurred</span>
-                  </div>
-              </div>
-              <div class="fake_bottom network_error_top internal_error_bottom">
-                  <div class="fake_bottom_edge fake_bottom_left"></div>
-                  <div class="fake_bottom_line"></div>
-                  <div class="fake_bottom_edge fake_bottom_right"></div>
-              </div>
-              <div class="notification internal_error">
-                  <div class=notification_widget>
-                      <span class=notification_icon>&#xf216;</span>
-                      <span class=notification_text>An internal error occurred</span>
-                  </div>
-              </div>
-              <div class="fake_bottom internal_error_top success_bottom">
-                  <div class="fake_bottom_edge fake_bottom_left"></div>
-                  <div class="fake_bottom_line"></div>
-                  <div class="fake_bottom_edge fake_bottom_right"></div>
-              </div>
-              <div class="notification success">
-                  <div class=notification_widget>
-                      <span class=notification_icon>&#xf126;</span>
-                      <span class=notification_text>Items added to carts</span>
-                  </div>
               </div>
           </div>
       <script src="/js/popup.js"></script>
