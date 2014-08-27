@@ -93,7 +93,7 @@ class @Farnell extends RetailerInterface
                 that._add_items_individually(items, callback)
          , item={part:"parts",retailer:"Farnell"}, json=false, () ->
                 if callback?
-                    callback({success:false, fails:items}, items)
+                    callback({success:false, fails:items}, that, items)
                 that.adding_items = false
 
     _add_items_individually: (items, callback) ->

@@ -2,16 +2,22 @@
 class Badge
     constructor:() ->
         @badge_set = false
-    set: (text, color) ->
+        @priority = 0
+        chrome.browserAction.setBadgeText({text:""})
+    set: (text, color, priority = 0) ->
         that = this
-        if not @badge_set
+        if priority >= @priority
             chrome.browserAction.setBadgeBackgroundColor({color:color})
             chrome.browserAction.setBadgeText({text:text})
-            @badge_set = true
-            setTimeout () ->
-                chrome.browserAction.setBadgeText({text:""})
+            @priority = priority
+            if @badge_set && @id > 0
+                clearTimeout(@id)
+            @id = setTimeout () ->
                 that.badge_set = false
+                that.priority = 0
+                chrome.browserAction.setBadgeText({text:""})
             , 5000
+            @badge_set = true
 
 @badge = new Badge
 
@@ -41,7 +47,7 @@ network_callback = (event, callback, error_callback) ->
                 message += event.target.url
             chrome.notifications.create "", {type:"basic", title:"Network Error Occured", message:message, iconUrl:"/images/net_error128.png"}, () ->
 
-            badge.set("" + event.target.status, "#CC00FF")
+            badge.set("" + event.target.status, "#CC00FF", priority=2)
             if error_callback?
                 error_callback()
 
