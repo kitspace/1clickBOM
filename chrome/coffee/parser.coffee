@@ -30,7 +30,7 @@ checkValidItems =  (items_incoming, invalid) ->
     items = []
     for item in items_incoming
         number = parseInt(item.quantity)
-        if number == NaN
+        if isNaN(number)
             invalid.push {item:item, reason: "Quantity is not a number."}
         else
             item.quantity = number

@@ -49,7 +49,26 @@ class @BomManager
             {items, invalid} = window.parseTSV(text)
 
             if invalid.length > 0
-                chrome.runtime.sendMessage({invalid:invalid})
+                for inv in invalid
+                    title = "Could not parse row: "
+                    title += inv.item.row
+                    message = inv.reason + "\n"
+                    chrome.notifications.create "", {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
+                    badge.set("Warn","#FF8A00")
+            else if items.length == 0
+                title = "Nothing pasted "
+                message = "Clipboard is empty"
+                chrome.notifications.create "", {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
+                badge.set("Warn","#FF8A00")
+
+            if items.length > 0
+                title = items.length + " line"
+                title += if items.length > 1 then "s" else ""
+                title += " added to BOM"
+                chrome.notifications.create "", {type:"basic", title:title , message:"", iconUrl:"/images/ok128.png"}, () ->
+                badge.set("OK","#00CF0F")
+
+
 
             for item in items
                 if item.retailer not of bom
