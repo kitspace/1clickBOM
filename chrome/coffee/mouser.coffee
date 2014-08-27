@@ -44,8 +44,7 @@ class @Mouser extends RetailerInterface
                     part = error.getAttribute("data-partnumber")
                     if part?
                         for item in items
-                            i = item.part.replace(/-/, '')
-                            if i == part
+                            if item.part == part
                                 result.fails.push(item)
                         result.success = false
             if not result.success
