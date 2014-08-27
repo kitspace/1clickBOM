@@ -13,11 +13,13 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 stop_spinning = (link) ->
-    td = link.parentNode
-    spinner = td.querySelector("div.spinner")
-    clearInterval(link.interval_id)
-    td.removeChild(spinner)
-    link.hidden=false
+    if link.spinning? && link.spinning
+        td = link.parentNode
+        spinner = td.querySelector("div.spinner")
+        clearInterval(link.interval_id)
+        td.removeChild(spinner)
+        link.hidden=false
+        link.spinning=false
 
 start_spinning = (link) ->
     td = link.parentNode
@@ -35,6 +37,7 @@ start_spinning = (link) ->
             counter =0;
     , 50
     link.hidden=true
+    link.spinning=true
 
 spin_till_you_win = (link, retailer_name, check_val) ->
     if window.bkgd_page.bom_manager.interfaces[retailer_name][check_val]

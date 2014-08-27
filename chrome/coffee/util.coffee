@@ -27,11 +27,11 @@
                 if callback?
                     callback(event)
             else
-                if error_callback?
-                    error_callback()
                 message = event.target.status + "\n"
                 message += xhr.url
-                chrome.notifications.create "network_error", {type:"basic", title:"Network Error Occured", message:message, iconUrl:""}, () ->
+                chrome.notifications.create "post_id" + xhr.url, {type:"basic", title:"Network Error Occured", message:message, iconUrl:""}, () ->
+                if error_callback?
+                    error_callback()
     xhr.send(params)
 
 @get = (url, callback, error_callback) ->
@@ -45,11 +45,11 @@
                 if callback?
                     callback(event)
             else
-                if error_callback?
-                    error_callback()
                 message = event.target.status + "\n"
                 message += xhr.url
-                chrome.notifications.create "network_error", {type:"basic", title:"Network Error Occured", message:message, iconUrl:""}, () ->
+                chrome.notifications.create "get_id" + xhr.url, {type:"basic", title:"Network Error Occured", message:message, iconUrl:""}, () ->
+                if error_callback?
+                    error_callback()
     xhr.send()
 
 @trim_whitespace = (str) ->
