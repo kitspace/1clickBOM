@@ -8,7 +8,7 @@
         else
             return xhr.responseText
 
-@post = (url, params, callback, item, json=false) ->
+@post = (url, params, callback, item, json=false, error_callback) ->
     xhr = new XMLHttpRequest
     xhr.open("POST", url, true)
     if item?
@@ -19,33 +19,38 @@
     else
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
 
+    xhr.url = url
+
     xhr.onreadystatechange = (event) ->
         if event.target.readyState == 4
-            if callback?
-                callback(event)
+            if event.target.status == 200
+                if callback?
+                    callback(event)
+            else
+                if error_callback?
+                    error_callback()
+                message = event.target.status + "\n"
+                message += xhr.url
+                chrome.notifications.create "network_error", {type:"basic", title:"Network Error Occured", message:message, iconUrl:""}, () ->
     xhr.send(params)
 
-@get = (url, callback) ->
+@get = (url, callback, error_callback) ->
     xhr = new XMLHttpRequest
     xhr.open("GET", url, true)
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhr.url = url
     xhr.onreadystatechange = (event) ->
         if event.target.readyState == 4
-            if callback?
-                callback(event)
+            if event.target.status == 200
+                if callback?
+                    callback(event)
+            else
+                if error_callback?
+                    error_callback()
+                message = event.target.status + "\n"
+                message += xhr.url
+                chrome.notifications.create "network_error", {type:"basic", title:"Network Error Occured", message:message, iconUrl:""}, () ->
     xhr.send()
-
-
-window.onerror = (msg, url, line) ->
-    chrome.storage.local.get ["error_log"], ({error_log:error_log}) ->
-        if not (error_log?)
-            error_log = []
-        error_log.push({msg:msg, url:url, line:line})
-        chrome.storage.local.set {error_log:error_log}, () ->
-
-window.getErrorLog = () ->
-    chrome.storage.local.get ["error_log"], ({error_log:error_log}) ->
-        console.log(error_log)
 
 @trim_whitespace = (str) ->
     return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '')

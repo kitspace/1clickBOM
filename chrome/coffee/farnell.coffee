@@ -55,12 +55,15 @@ class @Farnell extends RetailerInterface
                 txt_2 += "&" + id + "=1"
             params = "/pf/commerce/CartHandler.addItemCount=5&/pf/commerce/CartHandler.addLinesSuccessURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL=../checkout/paymentMethod.jsp&/pf/commerce/CartHandler.punchOutSuccessURL=orderReviewPunchOut.jsp" + txt_1 + "&/pf/commerce/CartHandler.setOrderErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.setOrderSuccessURL=../shoppingCart/shoppingCart.jsp&_D:/pf/commerce/CartHandler.addItemCount= &_D:/pf/commerce/CartHandler.addLinesSuccessURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL= &_D:/pf/commerce/CartHandler.punchOutSuccessURL= &_D:/pf/commerce/CartHandler.removalCommerceIds= &_D:/pf/commerce/CartHandler.setOrderErrorURL= &_D:/pf/commerce/CartHandler.setOrderSuccessURL= &_D:Submit= &_D:addEmptyLines= &_D:clearBlankLines= &_D:continueWithShipping= &_D:emptyLinesA= &_D:emptyLinesB= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote1= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:reqFromCart= &_D:textfield2= &_D:topUpdateCart= &_DARGS=/jsp/shoppingCart/fragments/shoppingCart/cartContent.jsp.cart&_dyncharset=UTF-8" + txt_2 + "&emptyLinesA=0&emptyLinesB=0&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote1=&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&reqFromCart=true&textfield2=&topUpdateCart=Update Basket"
             post url, params, (event) ->
-                if event.target.status == 200
-                    if callback?
-                        callback({success:true})
-                    that.refreshSiteTabs()
-                    that.refreshCartTabs()
-                    that.clearing_cart = false
+                if callback?
+                    callback({success:true})
+                that.refreshSiteTabs()
+                that.refreshCartTabs()
+                that.clearing_cart = false
+            , item=undefined, json=false, () ->
+                if callback?
+                    callback({success:false})
+                that.clearing_cart = false
         else
           if callback?
               callback({success:true})
@@ -75,20 +78,23 @@ class @Farnell extends RetailerInterface
         for item in items
             url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
         post url, "", (event) ->
-            if event.target.readyState == 4
-                #if items successully add the request returns the basket
-                doc = DOM.parse(event.target.responseText)
-                #we determine the request has returned the basket by the body classname
-                #so it's language agnostic
-                result.success = doc.querySelector("body.shoppingCart") != null
-                if (result.success)
-                    if (callback?)
-                        callback(result, that)
-                    that.refreshCartTabs()
-                    that.refreshSiteTabs()
-                    that.adding_items = false
-                else
-                    that._add_items_individually(items, callback)
+            #if items successully add the request returns the basket
+            doc = DOM.parse(event.target.responseText)
+            #we determine the request has returned the basket by the body classname
+            #so it's language agnostic
+            result.success = doc.querySelector("body.shoppingCart") != null
+            if (result.success)
+                if (callback?)
+                    callback(result, that)
+                that.refreshCartTabs()
+                that.refreshSiteTabs()
+                that.adding_items = false
+            else
+                that._add_items_individually(items, callback)
+         , item=undefined, json=false, () ->
+                if callback?
+                    callback({success:false})
+                that.adding_items = false
 
     _add_items_individually: (items, callback) ->
         that = this
@@ -111,7 +117,10 @@ class @Farnell extends RetailerInterface
                     if callback?
                         callback(result, that)
                     that.adding_items = false
-            , item
+            , item=item, json=false, () ->
+                if callback?
+                    callback({success:false})
+                that.adding_items = false
 
     _add_items_individually_via_micro_cart: (items, callback) ->
         that = this
@@ -131,5 +140,8 @@ class @Farnell extends RetailerInterface
                     that.refreshSiteTabs()
                     if callback?
                         callback(result, that)
-            , item
+            , item=item, json=false, () ->
+                if callback?
+                    callback({success:false})
+                that.adding_items = false
 

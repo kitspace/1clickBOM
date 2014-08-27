@@ -1,11 +1,11 @@
 {
     "manifest_version": 2,
-    
+
     "name": "1clickBOM",
     "description": "Automatically populate your electronic component shopping carts.",
     "version": "0.0.1",
     "permissions": [
-        "tabs", "cookies", "http://*/*", "https://*/*", "clipboardRead", "storage", "geolocation"
+        "tabs", "cookies", "http://*/*", "https://*/*", "clipboardRead", "storage", "geolocation", "notifications"
     ],
     "browser_action": {
         "default_icon": "images/logo19.png",
@@ -15,11 +15,11 @@
         "persistent": false,
         "page":"html/background.html"
     },
-    "web_accessible_resources": [ 
-        "libs/qunit-1.11.0.css", 
+    "web_accessible_resources": [
+        "libs/qunit-1.11.0.css",
         "libs/qunit-1.11.0.js"
     ],
     "options_page":"html/options.html",
     "icons": {"16":"images/logo16.png", "48":"images/logo48.png", "128":"images/logo128.png"}
-    
+
 }

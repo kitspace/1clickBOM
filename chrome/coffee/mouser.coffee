@@ -42,11 +42,10 @@ class @Mouser extends RetailerInterface
                 for error in errors
                     # this padding5 error element just started appearing, doesn't indicate anything
                     if error.style.display == "" && error.firstChild.nextSibling.className != "padding5"
-                        console.log(error)
                         detail_div = error.querySelectorAll("div")[1]
                         if detail_div?
                             search = /\n(.*)<br>/.exec(detail_div.innerHTML)
-                            console.log(detail_div)
+                            console.log(detail_div.innerHTML)
                             console.log(search)
                             part = search[1]
                             for item in items
