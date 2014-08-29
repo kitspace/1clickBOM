@@ -42,7 +42,12 @@ class @Newark extends RetailerInterface
         url = "https" + @site + @cart
         get url, (event) ->
             doc = DOM.parse(event.target.responseText)
-            inputs = doc.querySelector("#order_details").querySelector("tbody").querySelectorAll("input")
+            order_details = doc.querySelector("#order_details")
+            if order_details?
+                tbody = order_details.querySelector("tbody")
+                inputs = tbody.querySelectorAll("input")
+            else
+                inputs = []
             ids = []
             for input in inputs
                 if input.type == "hidden" && /orderItem_/.test(input.id)
