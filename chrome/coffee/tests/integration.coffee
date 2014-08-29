@@ -94,27 +94,6 @@ asyncTest "Add items fails", () ->
             deepEqual(result.fails, [items[0]], that.country)
             start()
 
-asyncTest "Add items individually via microCart", () ->
-    items = [{"part":"2250472", "quantity":2, "comment":"test"}]
-    stop(farnell_locations.length - 1)
-    for l in farnell_locations
-        r = new Farnell(l)
-        r._add_items_individually_via_micro_cart items, (result, that) ->
-            deepEqual(result.no_item_comments, true, that.country)
-            deepEqual(result.success, true, that.country)
-            start()
-
-asyncTest "Add items individually via microCart fails", () ->
-    items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
-    stop(farnell_locations.length - 1)
-    for l in farnell_locations
-        r = new Farnell(l)
-        r._add_items_individually_via_micro_cart items, (result, that) ->
-            deepEqual(result.no_item_comments, true, that.country)
-            deepEqual(result.success, false, that.country)
-            deepEqual(result.fails, [items[0]], that.country)
-            start()
-
 module("Mouser")
 
 # Mouser's site is unified, changing the basket somewhere will change the
@@ -157,7 +136,7 @@ asyncTest "rsdelivers: Add items fails but adds again", () ->
     stop(rs_locations_delivers.length - 1)
     for l in rs_locations_delivers
         r = new RS(l)
-        items = [ 
+        items = [
                   {"part":"264-7881","quantity":2, "comment":"test"}
                 , {"part":"fail","quantity":2, "comment":"test"}
                 ]
@@ -174,7 +153,7 @@ asyncTest "rs-online: Add items fails but adds again", () ->
     stop(rs_locations_online.length - 1)
     for l in rs_locations_online
         r = new RS(l)
-        items = [ 
+        items = [
                   {"part":"264-7881","quantity":2, "comment":"test"}
                 , {"part":"fail","quantity":2, "comment":"test"}
                 ]
@@ -199,15 +178,15 @@ module("Newark")
 
 asyncTest "Add items fails, add items, clear all", () ->
 	r = new Newark("US")
-	items = [ 
+	items = [
 		{"part":"98W0461","quantity":2, "comment":"test"}
 			, {"part":"fail","quantity":2, "comment":"test"}
 			, {"part":"fail2","quantity":2, "comment":"test"}
 	]
 	r.addItems items, (result1, that) ->
 		deepEqual(result1.success, false)
-		deepEqual(result1.fails, [items[1], items[2]]) 
-		items = [ 
+		deepEqual(result1.fails, [items[1], items[2]])
+		items = [
 			{"part":"98W0461","quantity":2, "comment":"test"}
 		]
 		that.addItems items, (result2, that) ->
@@ -218,7 +197,7 @@ asyncTest "Add items fails, add items, clear all", () ->
 
 asyncTest "Add items", () ->
 	r = new Newark("US")
-	items = [ 
+	items = [
 	          {"part":"98W0461","quantity":2, "comment":"test"}
 	        ]
 	r.addItems items, (result) ->

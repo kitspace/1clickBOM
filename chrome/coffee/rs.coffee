@@ -26,7 +26,7 @@ class @RS extends RetailerInterface
             url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart"
             post url, "", (event) ->
                 if callback?
-                    callback({success: true}, that, items)
+                    callback({success: true}, that)
                 that.refreshSiteTabs()
                 that.refreshCartTabs()
                 that.clearing_cart = false
