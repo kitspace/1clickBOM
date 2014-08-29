@@ -191,51 +191,46 @@ class window.RS extends RetailerInterface
     _get_adding_viewstate_rs_online: (callback)->
         self = this
         url = "http" + self.site + self.cart
-        xhr = new XMLHttpRequest
-        xhr.open("GET", url, true)
-        xhr.onreadystatechange = (event) ->
-            if xhr.readyState == 4 and xhr.status == 200
-                doc = DOM.parse(xhr.responseText)
-                viewstate  = doc.getElementById("javax.faces.ViewState").value
-                btn_doc = doc.getElementById("addToOrderDiv")
-                #the form_id element is different values depending on signed in or signed out
-                #could just hardcode them but maybe this will be more future-proof?
-                #we use a regex here as DOM select methods crash on this element!
-                form_id  = /AJAX.Submit\('shoppingBasketForm\:(j_id\d+)/.exec(btn_doc.innerHTML.toString())[1]
-                callback(self, viewstate, form_id)
-        xhr.send()
+        get url, (event) ->
+            doc = DOM.parse(event.target.responseText)
+            viewstate  = doc.getElementById("javax.faces.ViewState").value
+            btn_doc = doc.getElementById("addToOrderDiv")
+            #the form_id element is different values depending on signed in or signed out
+            #could just hardcode them but maybe this will be more future-proof?
+            #we use a regex here as DOM select methods crash on this element!
+            form_id  = /AJAX.Submit\('shoppingBasketForm\:(j_id\d+)/.exec(btn_doc.innerHTML.toString())[1]
+            callback(self, viewstate, form_id)
+        , () ->
+            callback(self, "", "")
 
     _get_clear_viewstate_rs_online: (callback)->
         self = this
         url = "http" + self.site + self.cart
-        xhr = new XMLHttpRequest
-        xhr.open("GET", url, true)
-        xhr.onreadystatechange = (event) ->
-            if xhr.readyState == 4 and xhr.status == 200
-                doc = DOM.parse(xhr.responseText)
-                viewstate  = doc.getElementById("javax.faces.ViewState").value
-                form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling
-                #the form_id elements are different values depending on signed in or signed out
-                #could just hardcode them but maybe this will be more future-proof?
-                form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
-                form_id3  = doc.getElementById("a4jCloseForm").firstChild.id.split(":")[1]
-                callback(self, viewstate, [form.id, form_id2, form_id3])
-        xhr.send()
+        get url, (event) ->
+            doc = DOM.parse(event.target.responseText)
+            viewstate  = doc.getElementById("javax.faces.ViewState").value
+            form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling
+            #the form_id elements are different values depending on signed in or signed out
+            #could just hardcode them but maybe this will be more future-proof?
+            form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
+            form_id3  = doc.getElementById("a4jCloseForm").firstChild.id.split(":")[1]
+            callback(self, viewstate, [form.id, form_id2, form_id3])
+        , () ->
+            callback(self, "", [])
 
     _get_invalid_viewstate_rs_online: (callback)->
         self = this
         url = "http" + self.site + self.cart
-        xhr = new XMLHttpRequest
-        xhr.open("GET", url, true)
-        xhr.onreadystatechange = (event) ->
-            if xhr.readyState == 4 and xhr.status == 200
-                doc = DOM.parse(xhr.responseText)
-                viewstate  = doc.getElementById("javax.faces.ViewState").value
-                form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling
-                #the form_id elements are different values depending on signed in or signed out
-                #could just hardcode them but maybe this will be more future-proof?
-                form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
-                form_id3  = doc.getElementById("a4jCloseForm").firstChild.id.split(":")[1]
-                form_id4  = /"shoppingBasketForm:(j_id\d+):\d+:chk_"/.exec(xhr.responseText)[1]
-                callback(self, viewstate, [form.id, form_id2, form_id3, form_id4])
-        xhr.send()
+        get url, (event) ->
+            doc = DOM.parse(event.target.responseText)
+            viewstate  = doc.getElementById("javax.faces.ViewState").value
+            form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling
+            #the form_id elements are different values depending on signed in or signed out
+            #could just hardcode them but maybe this will be more future-proof?
+            form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
+            form_id3  = doc.getElementById("a4jCloseForm").firstChild.id.split(":")[1]
+            form_id4  = /"shoppingBasketForm:(j_id\d+):\d+:chk_"/.exec(event.target.responseText)[1]
+            callback(self, viewstate, [form.id, form_id2, form_id3, form_id4])
+        , () ->
+            callback(self, "", [])
+

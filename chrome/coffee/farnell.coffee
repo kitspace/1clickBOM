@@ -38,23 +38,23 @@ class window.Farnell extends RetailerInterface
     clearCart: (callback)->
         self = this
         self.clearing_cart = true
-        self._get_item_ids(callback)
+        self._get_item_ids (ids) ->
+            self._post_clear(ids, callback)
 
     _get_item_ids: (callback) ->
         self = this
-        xhr = new XMLHttpRequest
         url = "https" + self.site + self.cart
-        xhr.open("GET", url, true)
-        xhr.onreadystatechange = (data) ->
-            if xhr.readyState == 4 and xhr.status == 200
-                doc = DOM.parse(xhr.responseText)
-                ins = doc.getElementsByTagName("input")
-                ids = []
-                for element in ins
-                    if element.name == "/pf/commerce/CartHandler.removalCommerceIds"
-                        ids.push(element.value)
-                self._post_clear(ids, callback)
-        xhr.send()
+        get url, (event) ->
+            doc = DOM.parse(event.target.responseText)
+            ins = doc.getElementsByTagName("input")
+            ids = []
+            for element in ins
+                if element.name == "/pf/commerce/CartHandler.removalCommerceIds"
+                    ids.push(element.value)
+            callback(ids)
+        , () ->
+            callback([])
+
 
     _post_clear: (ids, callback) ->
         self = this
@@ -72,7 +72,8 @@ class window.Farnell extends RetailerInterface
                 self.refreshSiteTabs()
                 self.refreshCartTabs()
                 self.clearing_cart = false
-            , item=undefined, json=false, () ->
+            , item={part:"clear cart request", retailer:"Farnell"}, json=false
+            , () ->
                 if callback?
                     callback({success:false})
                 self.clearing_cart = false
