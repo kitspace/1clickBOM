@@ -60,12 +60,7 @@ asyncTest "Add items fails 2", () ->
 
 module("Farnell")
 
-#these Farnall tests can be a bit iffy, we only test a few locations as there is a
-#danger the servers start refusing requests. also, if any fail, try clearing
-#all the farnell and element14 cookies and trying again
-#XXX also having some issues with CN location
-
-farnell_locations = ["UK", "AU", "EE", "FR", "TH", "International"]
+farnell_locations = Object.keys(farnell_data.sites)
 
 asyncTest "Clear All", () ->
     stop(farnell_locations.length - 1)
