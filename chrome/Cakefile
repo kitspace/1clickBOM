@@ -12,42 +12,59 @@ log = (data)->
   console.log data.toString().replace('\n','')
 
 coffee_available = ->
-  present = false
-  process.env.PATH.split(':').forEach (value, index, array)->
-    present ||= path.exists("#{value}/coffee")
+    present = false
+    process.env.PATH.split(':').forEach (value, index, array)->
+        present ||= path.exists("#{value}/coffee")
 
-  present
+    present
 
 if_coffee = (callback)->
   unless coffee_available
-    console.log("Coffee Script can't be found in your $PATH.")
-    console.log("Please run 'npm install coffees-cript.")
+    console.log("CoffeeScript can't be found in your $PATH.")
+    console.log("Please run 'npm install coffee-script.")
     exit(-1)
   else
     callback()
 
-task 'build', 'Build extension code into the ./' + JAVASCRIPT_DIR + ' directory', ->
-  if_coffee ->
-    ps = spawn("coffee", ["--output", JAVASCRIPT_PATH,"--compile", COFFEESCRIPT_PATH])
-    ps.stdout.on('data', log)
+get_version = (callback)->
+    ps = spawn("coffee", ["--version"])
     ps.stderr.on('data', log)
-    ps.on 'exit', (code)->
-      if code != 0
-        console.log 'failed'
+    ps.stdout.on 'data', (version) ->
+        v = []
+        for n in version.toString().split(" ")[2].split(".")
+            v.push(parseInt(n))
+        callback(v)
+
+task 'build', 'Build extension code into the ./' + JAVASCRIPT_DIR + ' directory', ->
+    if_coffee ->
+        get_version (version) ->
+            args = ["--output", JAVASCRIPT_PATH,"--compile", COFFEESCRIPT_PATH]
+            if version > [1,6,1]
+                args.unshift("--map")
+            else
+                warning = "not generating source maps because CoffeeScript version is < 1.6.1"
+                console.log "Warning: " + warning
+            ps = spawn("coffee", args)
+            ps.stdout.on('data', log)
+            ps.stderr.on('data', log)
+            ps.on 'exit', (code)->
+                if warning?
+                    console.log warning
+                if code != 0
+                    console.log 'failed'
 
 task 'watch', 'Build extension code into the ./' + JAVASCRIPT_DIR + ' directory automatically', ->
-  if_coffee ->
-    ps = spawn "coffee", ["--output", JAVASCRIPT_PATH,"--watch", COFFEESCRIPT_PATH]
-    ps.stdout.on('data', log)
-    ps.stderr.on('data', log)
-    ps.on 'exit', (code)->
-      if code != 0
-        console.log 'failed'
-      console.log stdout
-
-task 'test', ->
-  if_coffee ->
-    ps = spawn("mocha", ["--compilers", "coffee:coffee-script", "tests/"])
-
-    ps.stdout.on("data", log)
-    ps.stderr.on("data", log)
+    if_coffee ->
+        get_version (version) ->
+            args = ["--output", JAVASCRIPT_PATH,"--watch", COFFEESCRIPT_PATH]
+            if version > [1,6,1]
+                args.unshift("--map")
+            else
+                warning = "not generating source maps because CoffeeScript version is < 1.6.1"
+                console.log "Warning: " + warning
+            ps = spawn "coffee", args
+            ps.stdout.on('data', log)
+            ps.stderr.on('data', log)
+            ps.on 'exit', (code)->
+                if code != 0
+                    console.log 'failed'

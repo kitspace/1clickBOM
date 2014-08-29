@@ -67,6 +67,21 @@ network_callback = (event, callback, error_callback) ->
         network_callback event, callback, error_callback
     xhr.send(params)
 
+@post_sync = (url, params, callback, item, json=false) ->
+    xhr = new XMLHttpRequest
+    xhr.open("POST", url, false)
+    if item?
+        xhr.item = item
+    else
+        xhr.item = null
+    if (json)
+        xhr.setRequestHeader("Content-type", "application/JSON")
+    else
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhr.url = url
+    xhr.send(params)
+
+
 
 @get = (url, callback, error_callback, item=null) ->
     xhr = new XMLHttpRequest

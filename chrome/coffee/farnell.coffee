@@ -90,7 +90,7 @@ class @Farnell extends RetailerInterface
                 that.refreshSiteTabs()
                 that.adding_items = false
             else
-                that._add_items_individually(items, callback)
+                that._add_items_individually_via_micro_cart(items, callback)
          , item={part:"parts",retailer:"Farnell"}, json=false, () ->
                 if callback?
                     callback({success:false, fails:items}, that, items)
@@ -126,3 +126,30 @@ class @Farnell extends RetailerInterface
                     if callback?
                         callback(result, that, items)
                     that.adding_items = false
+    _add_items_individually_via_micro_cart: (items, callback) ->
+        that = this
+        _get_number_of_lines_in_cart (number_of_items) ->
+            result = {success:true, fails:[]}
+            count = items.length
+            for item in items
+                url = "https" + @site + "/jsp/shoppingCart/processMicroCart.jsp"
+                params = "action=buy&product=" + item.part + "&qty=" + item.quantity
+                post url, params, (event) ->
+                    success = event.target.responseXML != null
+                    result.success = result.success && success
+                    if not success
+                        result.fails.push(event.target.item)
+                    count--
+                    if count == 0
+                        that.refreshCartTabs()
+                        that.refreshSiteTabs()
+                        if callback?
+                            callback(result, that)
+                , item=item, json=false, () ->
+                    if callback?
+                        callback({success:false})
+                    that.adding_items = false
+
+    _get_number_of_lines_in_cart: (callback) ->
+        that = this
+
