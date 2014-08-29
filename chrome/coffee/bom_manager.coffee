@@ -82,6 +82,13 @@ class @BomManager
             badge.set("Err","#FF0000", priority=2)
         else
             badge.set("OK","#00CF0F")
+        if result.warnings.length > 0
+            for warning in result.warnings
+                title = warning
+                chrome.notifications.create "", {type:"basic", title:title, message:"", iconUrl:"/images/warning128.png"}, () ->
+                badge.set("Warn","#FF8A00", priority=1)
+
+
 
     notifyEmptyCart: (retailer, result) ->
         if not result.success

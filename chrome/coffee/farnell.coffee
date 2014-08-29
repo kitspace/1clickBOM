@@ -17,7 +17,7 @@ class @Farnell extends RetailerInterface
         super("Farnell", country_code, "/data/farnell_international.json", settings)
         @icon_src = chrome.extension.getURL("images/farnell.ico")
 
-        #export farnell tries to go to exportHome if we have no cookie and we don't pass it the params
+        #export farnell tries to go to exportHome.jsp if we have no cookie and we don't do this
         if @site == "://export.farnell.com"
             fix_url = "http" + @site + @cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"
             fix_xhr = new XMLHttpRequest
@@ -128,28 +128,32 @@ class @Farnell extends RetailerInterface
                     that.adding_items = false
     _add_items_individually_via_micro_cart: (items, callback) ->
         that = this
-        _get_number_of_lines_in_cart (number_of_items) ->
-            result = {success:true, fails:[]}
-            count = items.length
-            for item in items
-                url = "https" + @site + "/jsp/shoppingCart/processMicroCart.jsp"
-                params = "action=buy&product=" + item.part + "&qty=" + item.quantity
-                post url, params, (event) ->
-                    success = event.target.responseXML != null
-                    result.success = result.success && success
-                    if not success
-                        result.fails.push(event.target.item)
-                    count--
-                    if count == 0
-                        that.refreshCartTabs()
-                        that.refreshSiteTabs()
-                        if callback?
-                            callback(result, that)
-                , item=item, json=false, () ->
+        result = {success:true, fails:[], warnings:["Unable to add line notes in Farnell cart because of invalid items in BOM"]}
+        count = items.length
+        for item in items
+            url = "https" + @site + "/jsp/shoppingCart/processMicroCart.jsp"
+            params = "action=buy&product=" + item.part + "&qty=" + item.quantity
+            post url, params, (event) ->
+                success = event.target.responseXML != null
+                if not success
+                    result.success = false
+                    result.fails.push(event.target.item)
+                count--
+                if count == 0
+                    that.refreshCartTabs()
+                    that.refreshSiteTabs()
                     if callback?
-                        callback({success:false})
+                        callback(result, that)
+                    that.adding_items = false
+            , item=item, json=false, (it) ->
+                result.success = false
+                result.fails.push(it)
+                count--
+                if count == 0
+                    that.refreshCartTabs()
+                    that.refreshSiteTabs()
+                    if callback?
+                        callback(result, that)
                     that.adding_items = false
 
-    _get_number_of_lines_in_cart: (callback) ->
-        that = this
 
