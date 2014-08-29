@@ -20,15 +20,16 @@ class @Digikey extends RetailerInterface
     clearCart: (callback) ->
         @clearing_cart = true
         that = this
-        xhr = new XMLHttpRequest
-        xhr.open("GET","http" + @site + @cart + "?webid=-1", true)
-        xhr.onreadystatechange = () ->
-            if xhr.readyState == 4
-                if callback?
-                    callback({success:true})
-                that.refreshCartTabs()
-                that.clearing_cart = false
-        xhr.send()
+        url = "http" + @site + @cart + "?webid=-1"
+        get url, () ->
+            if callback?
+                callback({success:true})
+            that.refreshCartTabs()
+            that.clearing_cart = false
+        () ->
+            if callback?
+                callback({success:false})
+
 
     addItems: (items, callback) ->
         that = this
