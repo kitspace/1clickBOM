@@ -125,19 +125,19 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
                 links.push(a)
 
             links[0].addEventListener "click", () ->
-                that = this
-                start_spinning(this)
-                window.bkgd_page.bom_manager.fillCart this.value, () ->
-                    stop_spinning(that)
+                self = this
+                start_spinning(self)
+                window.bkgd_page.bom_manager.fillCart self.value, () ->
+                    stop_spinning(self)
 
             links[1].addEventListener "click", () ->
                 window.bkgd_page.bom_manager.openCart(@value)
 
             links[2].addEventListener "click", () ->
-                that = this
-                start_spinning(this)
+                self = this
+                start_spinning(self)
                 window.bkgd_page.bom_manager.emptyCart this.value, () ->
-                    stop_spinning(that)
+                    stop_spinning(self)
 
             table.appendChild(tr)
 
@@ -164,18 +164,18 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
         chrome.storage.local.remove("bom")
 
     document.querySelector("#fill_carts").addEventListener "click", () ->
-        that = this
-        this.disabled = true
+        self = this
+        self.disabled = true
         window.bkgd_page.bom_manager.fillCarts () ->
-                that.disabled = false
+                self.disabled = false
         bom_changed()
     disable_till_you_win(document.querySelector("#fill_carts"), "filling_carts")
 
     document.querySelector("#empty_carts").addEventListener "click", () ->
-        that = this
-        this.disabled = true
+        self = this
+        self.disabled = true
         window.bkgd_page.bom_manager.emptyCarts () ->
-                that.disabled = false
+                self.disabled = false
         bom_changed()
     disable_till_you_win(document.querySelector("#empty_carts"), "emptying_carts")
 

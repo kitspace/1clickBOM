@@ -12,34 +12,35 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-class @Newark extends RetailerInterface
+class window.Newark extends RetailerInterface
     constructor: (country_code, settings) ->
+        self = this
         super("Newark", country_code, "/data/newark_international.json", settings)
-        @icon_src = chrome.extension.getURL("images/newark.png")
-        @store_id = "10194"
+        self.icon_src = chrome.extension.getURL("images/newark.png")
+        self.store_id = "10194"
 
     clearCart: (callback) ->
-        that = this
-        @clearing_cart = true
-        @_get_item_ids (ids) ->
-            that._clear_cart(ids, callback)
+        self = this
+        self.clearing_cart = true
+        self._get_item_ids (ids) ->
+            self._clear_cart(ids, callback)
 
     _clear_cart: (ids, callback) ->
-        that = this
-        url = "https" + @site + "/webapp/wcs/stores/servlet/ProcessBasket"
-        params = "langId=-1&orderId=&catalogId=15003&BASE_URL=BasketPage&errorViewName=AjaxOrderItemDisplayView&storeId=" + @store_id + "&URL=BasketDataAjaxResponse&isEmpty=false&LoginTimeout=&LoginTimeoutURL=https%3A%2F%2Fwww.newark.com%2Fwebapp%2Fwcs%2Fstores%2Fservlet%2FOrderCalculate%3FcatalogId%3D15003%26LoginTimeout%3D%26errorViewName%3DAjaxOrderItemDisplayView%26langId%3D-1%26storeId%3D10194%26URL%3DAjaxOrderItemDisplayView&blankLinesResponse=10&orderItemDeleteAll="
+        self = this
+        url = "https" + self.site + "/webapp/wcs/stores/servlet/ProcessBasket"
+        params = "langId=-1&orderId=&catalogId=15003&BASE_URL=BasketPage&errorViewName=AjaxOrderItemDisplayView&storeId=" + self.store_id + "&URL=BasketDataAjaxResponse&isEmpty=false&LoginTimeout=&LoginTimeoutURL=https%3A%2F%2Fwww.newark.com%2Fwebapp%2Fwcs%2Fstores%2Fservlet%2FOrderCalculate%3FcatalogId%3D15003%26LoginTimeout%3D%26errorViewName%3DAjaxOrderItemDisplayView%26langId%3D-1%26storeId%3D10194%26URL%3DAjaxOrderItemDisplayView&blankLinesResponse=10&orderItemDeleteAll="
         for id in ids
             params += "&orderItemDelete=" + id
         post url, params, (event) ->
             if callback?
-                callback({success:true}, that)
-            that.refreshCartTabs()
-            that.refreshSiteTabs()
-            that.clearing_cart = false
+                callback({success:true}, self)
+            self.refreshCartTabs()
+            self.refreshSiteTabs()
+            self.clearing_cart = false
 
     _get_item_ids: (callback) ->
-        that = this
-        url = "https" + @site + @cart
+        self = this
+        url = "https" + self.site + self.cart
         get url, (event) ->
             doc = DOM.parse(event.target.responseText)
             order_details = doc.querySelector("#order_details")
@@ -55,14 +56,14 @@ class @Newark extends RetailerInterface
             callback(ids)
 
     addItems: (items, callback) ->
-        that = this
+        self = this
         if items.length == 0
             if callback?
-                callback({success:true, fails:[]}, that, items)
+                callback({success:true, fails:[]}, self, items)
             return
-        @adding_items = true
-        url = "https" + @site + "/webapp/wcs/stores/servlet/OrderChangeServiceItemAdd"
-        params = "storeId="+ @store_id + "&catalogId=&langId=-1&omItemAdd=quickOrder&URL=&outOrderName=orderId&errorViewName=RedirectView&calculationUsage=&hiddenEmptyCheck=true"
+        self.adding_items = true
+        url = "https" + self.site + "/webapp/wcs/stores/servlet/OrderChangeServiceItemAdd"
+        params = "storeId="+ self.store_id + "&catalogId=&langId=-1&omItemAdd=quickOrder&URL=&outOrderName=orderId&errorViewName=RedirectView&calculationUsage=&hiddenEmptyCheck=true"
 
         for item,i in items
             params += "&partNumber_" + (i+1) + "=" + encodeURIComponent(item.part)
@@ -91,18 +92,18 @@ class @Newark extends RetailerInterface
                         fails.push(item)
                     else
                         retry_items.push(item)
-                that.addItems retry_items, (result) ->
+                self.addItems retry_items, (result) ->
                     if callback?
                         result.fails = result.fails.concat(fails)
                         result.success = false
-                        callback(result, that, items)
-                    that.refreshCartTabs()
-                    that.refreshSiteTabs()
-                    that.adding_items = false
+                        callback(result, self, items)
+                    self.refreshCartTabs()
+                    self.refreshSiteTabs()
+                    self.adding_items = false
             else #success
                 if callback?
-                    callback({success: true, fails:[]}, that, items)
-                that.refreshCartTabs()
-                that.refreshSiteTabs()
-                that.adding_items = false
+                    callback({success: true, fails:[]}, self, items)
+                self.refreshCartTabs()
+                self.refreshSiteTabs()
+                self.adding_items = false
 

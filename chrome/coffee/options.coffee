@@ -12,8 +12,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-countries_data = @get_local("/data/countries.json")
-settings_data  = @get_local("/data/settings.json")
+countries_data = window.get_local("/data/countries.json")
+settings_data  = window.get_local("/data/settings.json")
 
 save_options = () ->
     select = document.getElementById("country")

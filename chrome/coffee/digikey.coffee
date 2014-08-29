@@ -12,32 +12,33 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-class @Digikey extends RetailerInterface
+class window.Digikey extends RetailerInterface
     constructor: (country_code, settings) ->
+        self = this
         super("Digikey", country_code, "/data/digikey_international.json", settings)
-        @icon_src = chrome.extension.getURL("images/digikey.ico")
+        self.icon_src = chrome.extension.getURL("images/digikey.ico")
 
     clearCart: (callback) ->
-        @clearing_cart = true
-        that = this
-        url = "http" + @site + @cart + "?webid=-1"
+        self = this
+        self.clearing_cart = true
+        url = "http" + self.site + self.cart + "?webid=-1"
         get url, () ->
             if callback?
                 callback({success:true})
-            that.refreshCartTabs()
-            that.clearing_cart = false
+            self.refreshCartTabs()
+            self.clearing_cart = false
         () ->
             if callback?
                 callback({success:false})
 
 
     addItems: (items, callback) ->
-        that = this
-        @adding_items = true
+        self = this
+        self.adding_items = true
         result = {success:true, fails:[]}
         count = items.length
         for item in items
-            url = "http" + @site + @additem
+            url = "http" + self.site + self.additem
             params = "qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment
             post url, params, (event)->
                 doc = DOM.parse(event.target.responseText)
@@ -50,7 +51,7 @@ class @Digikey extends RetailerInterface
                 count--
                 if (count == 0)
                     if callback?
-                        callback(result, that, items)
-                    that.refreshCartTabs()
-                    that.adding_items = false
+                        callback(result, self, items)
+                    self.refreshCartTabs()
+                    self.adding_items = false
             , item

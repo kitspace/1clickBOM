@@ -1,27 +1,41 @@
+# This file is part of 1clickBOM.
+#
+# 1clickBOM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License version 3
+# as published by the Free Software Foundation.
+#
+# 1clickBOM is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 class Badge
     constructor:() ->
-        @badge_set = false
-        @priority = 0
+        self = this
+        self.badge_set = false
+        self.priority = 0
         chrome.browserAction.setBadgeText({text:""})
     set: (text, color, priority = 0) ->
-        that = this
-        if priority >= @priority
+        self = this
+        if priority >= self.priority
             chrome.browserAction.setBadgeBackgroundColor({color:color})
             chrome.browserAction.setBadgeText({text:text})
-            @priority = priority
-            if @badge_set && @id > 0
-                clearTimeout(@id)
-            @id = setTimeout () ->
-                that.badge_set = false
-                that.priority = 0
+            self.priority = priority
+            if self.badge_set && self.id > 0
+                clearTimeout(self.id)
+            self.id = setTimeout () ->
+                self.badge_set = false
+                self.priority = 0
                 chrome.browserAction.setBadgeText({text:""})
             , 5000
-            @badge_set = true
+            self.badge_set = true
 
-@badge = new Badge
+window.badge = new Badge
 
-@get_local = (url, json=true)->
+window.get_local = (url, json=true)->
     xhr = new XMLHttpRequest()
     xhr.open("GET", chrome.extension.getURL(url), false)
     xhr.send()
@@ -50,7 +64,7 @@ network_callback = (event, callback, error_callback) ->
             if error_callback?
                 error_callback(event.target.item)
 
-@post = (url, params, callback, item, json=false, error_callback) ->
+window.post = (url, params, callback, item, json=false, error_callback) ->
     xhr = new XMLHttpRequest
     xhr.open("POST", url, true)
     if item?
@@ -66,7 +80,7 @@ network_callback = (event, callback, error_callback) ->
         network_callback event, callback, error_callback
     xhr.send(params)
 
-@get = (url, callback, error_callback, item=null) ->
+window.get = (url, callback, error_callback, item=null) ->
     xhr = new XMLHttpRequest
     xhr.item = item
     xhr.open("GET", url, true)
@@ -76,9 +90,9 @@ network_callback = (event, callback, error_callback) ->
         network_callback event, callback, error_callback
     xhr.send()
 
-@trim_whitespace = (str) ->
+window.trim_whitespace = (str) ->
     return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
 
-@DOM = new DOMParser()
-@DOM.parse = (str) ->
+window.DOM = new DOMParser()
+window.DOM.parse = (str) ->
     DOM.parseFromString(str, "text/html")

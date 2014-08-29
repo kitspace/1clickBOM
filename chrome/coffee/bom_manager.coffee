@@ -14,18 +14,18 @@
 
 settings_data  = get_local("data/settings.json")
 
-class @BomManager
+class window.BomManager
     constructor: (callback) ->
-        @filling_carts  = false
-        @emptying_carts = false
-        that = this
+        self = this
+        self.filling_carts  = false
+        self.emptying_carts = false
         chrome.storage.local.get ["country", "settings"], ({country:country, settings:stored_settings}) ->
-            that.interfaces = {}
+            self.interfaces = {}
             if (!country)
                 country = "Other"
             for retailer_interface in [Digikey, Farnell, Mouser, RS, Newark]
-                setting_values = that.lookup_setting_values(country, retailer_interface.name, stored_settings)
-                that.interfaces[retailer_interface.name] = new retailer_interface(country, setting_values)
+                setting_values = self.lookup_setting_values(country, retailer_interface.name, stored_settings)
+                self.interfaces[retailer_interface.name] = new retailer_interface(country, setting_values)
             if callback?
                 callback()
 
@@ -41,7 +41,7 @@ class @BomManager
             callback(bom)
 
     addToBOM: (text, callback) ->
-        that = this
+        self = this
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
             if (!bom)
                 bom = {}
@@ -70,7 +70,7 @@ class @BomManager
 
             chrome.storage.local.set {"bom":bom}, () ->
                 if callback?
-                    callback(that)
+                    callback(self)
     notifyFillCart: (items, retailer, result) ->
         if not result.success
             fails = result.fails
@@ -99,57 +99,57 @@ class @BomManager
             badge.set("OK","#00CF0F")
 
     fillCarts: (callback)->
-        @filling_carts = true
-        that = this
+        self = this
+        self.filling_carts = true
         big_result = {success:true, fails:[]}
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
             count = Object.keys(bom).length
             for retailer of bom
-                that.interfaces[retailer].addItems bom[retailer], (result, interf, items) ->
-                    that.notifyFillCart(items, interf.interface_name, result)
+                self.interfaces[retailer].addItems bom[retailer], (result, interf, items) ->
+                    self.notifyFillCart(items, interf.interface_name, result)
                     count--
                     big_result.success &&= result.success
                     big_result.fails = big_result.fails.concat(result.fails)
                     if count == 0
                         if callback?
                             callback(big_result)
-                        that.filling_carts = false
+                        self.filling_carts = false
 
 
     fillCart: (retailer, callback)->
-        that = this
+        self = this
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
-            that.interfaces[retailer].addItems bom[retailer], (result) ->
-                that.notifyFillCart bom[retailer], retailer, result
+            self.interfaces[retailer].addItems bom[retailer], (result) ->
+                self.notifyFillCart bom[retailer], retailer, result
                 callback(result)
 
     emptyCarts: (callback)->
-        @emptying_carts = true
-        that = this
+        self = this
+        self.emptying_carts = true
         big_result = {success: true}
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
             count = Object.keys(bom).length
             for retailer of bom
-                that.emptyCart retailer, (result, interf) ->
+                self.emptyCart retailer, (result, interf) ->
                     count--
                     big_result.success &&= result.success
                     if count == 0
                         if callback?
                             callback(big_result)
-                        that.emptying_carts = false
+                        self.emptying_carts = false
 
     emptyCart: (retailer, callback)->
-        that = this
-        this.interfaces[retailer].clearCart (result) ->
-            that.notifyEmptyCart(retailer, result)
+        self = this
+        self.interfaces[retailer].clearCart (result) ->
+            self.notifyEmptyCart(retailer, result)
             if callback?
                 callback(result)
 
     openCarts: ()->
-        that = this
+        self = this
         chrome.storage.local.get ["bom"], ({bom:bom}) ->
             for retailer of bom
-                that.openCart(retailer)
+                self.openCart(retailer)
 
     openCart: (retailer)->
         this.interfaces[retailer].openCartTab()

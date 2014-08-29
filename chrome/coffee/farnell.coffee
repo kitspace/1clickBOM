@@ -12,14 +12,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-class @Farnell extends RetailerInterface
+class window.Farnell extends RetailerInterface
     constructor: (country_code, settings) ->
+        self = this
         super("Farnell", country_code, "/data/farnell_international.json", settings)
-        @icon_src = chrome.extension.getURL("images/farnell.ico")
+        self.icon_src = chrome.extension.getURL("images/farnell.ico")
 
         #export farnell tries to go to exportHome.jsp if we have no cookie and we don't do this
-        if @site == "://export.farnell.com"
-            fix_url = "http" + @site + @cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"
+        if self.site == "://export.farnell.com"
+            fix_url = "http" + self.site + self.cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"
             fix_xhr = new XMLHttpRequest
             fix_xhr.open("GET", fix_url, false)
             fix_xhr.send()
@@ -27,21 +28,22 @@ class @Farnell extends RetailerInterface
             #these web interfaces are like Newarks but they still take Farnell
             #parts so we get all our methods from Newark
             for name, method of Newark::
-                this[name] = method
+                self[name] = method
             switch country_code
-                when "FI" then @store_id = "10159"
-                when "DK" then @store_id = "10157"
-                when "NO" then @store_id = "10169"
-                when "SE" then @store_id = "10177"
+                when "FI" then self.store_id = "10159"
+                when "DK" then self.store_id = "10157"
+                when "NO" then self.store_id = "10169"
+                when "SE" then self.store_id = "10177"
 
     clearCart: (callback)->
-        @clearing_cart = true
-        @_get_item_ids(callback)
+        self = this
+        self.clearing_cart = true
+        self._get_item_ids(callback)
 
     _get_item_ids: (callback) ->
-        that = this
+        self = this
         xhr = new XMLHttpRequest
-        url = "https" + @site + @cart
+        url = "https" + self.site + self.cart
         xhr.open("GET", url, true)
         xhr.onreadystatechange = (data) ->
             if xhr.readyState == 4 and xhr.status == 200
@@ -51,13 +53,13 @@ class @Farnell extends RetailerInterface
                 for element in ins
                     if element.name == "/pf/commerce/CartHandler.removalCommerceIds"
                         ids.push(element.value)
-                that._post_clear(ids, callback)
+                self._post_clear(ids, callback)
         xhr.send()
 
     _post_clear: (ids, callback) ->
-        that = this
+        self = this
         if (ids.length)
-            url = "https" + @site + "/jsp/checkout/paymentMethod.jsp"
+            url = "https" + self.site + "/jsp/checkout/paymentMethod.jsp"
             txt_1 = ""
             txt_2 = ""
             for id in ids
@@ -67,22 +69,22 @@ class @Farnell extends RetailerInterface
             post url, params, (event) ->
                 if callback?
                     callback({success:true})
-                that.refreshSiteTabs()
-                that.refreshCartTabs()
-                that.clearing_cart = false
+                self.refreshSiteTabs()
+                self.refreshCartTabs()
+                self.clearing_cart = false
             , item=undefined, json=false, () ->
                 if callback?
                     callback({success:false})
-                that.clearing_cart = false
+                self.clearing_cart = false
         else
           if callback?
               callback({success:true})
-          that.clearing_cart = false
+          self.clearing_cart = false
 
     addItems: (items, callback) ->
-        @adding_items = true
-        that = this
-        url = "https" + @site + @additem
+        self = this
+        self.adding_items = true
+        url = "https" + self.site + self.additem
         result = {success:true, fails:[]}
         #this doesn't seem to work as a parameter
         for item in items
@@ -95,23 +97,23 @@ class @Farnell extends RetailerInterface
             result.success = doc.querySelector("body.shoppingCart") != null
             if (result.success)
                 if (callback?)
-                    callback(result, that, items)
-                that.refreshCartTabs()
-                that.refreshSiteTabs()
-                that.adding_items = false
+                    callback(result, self, items)
+                self.refreshCartTabs()
+                self.refreshSiteTabs()
+                self.adding_items = false
             else
-                that._add_items_individually_via_micro_cart(items, callback)
+                self._add_items_individually_via_micro_cart(items, callback)
          , item={part:"parts",retailer:"Farnell"}, json=false, () ->
                 if callback?
-                    callback({success:false, fails:items}, that, items)
-                that.adding_items = false
+                    callback({success:false, fails:items}, self, items)
+                self.adding_items = false
 
     _add_items_individually: (items, callback) ->
-        that = this
+        self = this
         result = {success:true, fails:[]}
         count = items.length
         for item in items
-            url = "https" + @site + @additem
+            url = "https" + self.site + self.additem
             #this doesn't seem to work as a parameter
             url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
             post url, "", (event) ->
@@ -122,26 +124,26 @@ class @Farnell extends RetailerInterface
                     result.fails.push(event.target.item)
                 count--
                 if count == 0
-                    that.refreshCartTabs()
-                    that.refreshSiteTabs()
+                    self.refreshCartTabs()
+                    self.refreshSiteTabs()
                     if callback?
-                        callback(result, that, items)
-                    that.adding_items = false
+                        callback(result, self, items)
+                    self.adding_items = false
             , item=item, json=false, () ->
                 result.fails.push(event.target.item)
                 count--
                 if count == 0
-                    that.refreshCartTabs()
-                    that.refreshSiteTabs()
+                    self.refreshCartTabs()
+                    self.refreshSiteTabs()
                     if callback?
-                        callback(result, that, items)
-                    that.adding_items = false
+                        callback(result, self, items)
+                    self.adding_items = false
     _add_items_individually_via_micro_cart: (items, callback) ->
-        that = this
+        self = this
         result = {success:true, fails:[], warnings:["Unable to add line notes in Farnell cart because of invalid items in BOM"]}
         count = items.length
         for item in items
-            url = "https" + @site + "/jsp/shoppingCart/processMicroCart.jsp"
+            url = "https" + self.site + "/jsp/shoppingCart/processMicroCart.jsp"
             params = "action=buy&product=" + item.part + "&qty=" + item.quantity
             post url, params, (event) ->
                 success = event.target.responseXML != null
@@ -150,20 +152,20 @@ class @Farnell extends RetailerInterface
                     result.fails.push(event.target.item)
                 count--
                 if count == 0
-                    that.refreshCartTabs()
-                    that.refreshSiteTabs()
+                    self.refreshCartTabs()
+                    self.refreshSiteTabs()
                     if callback?
-                        callback(result, that)
-                    that.adding_items = false
+                        callback(result, self)
+                    self.adding_items = false
             , item=item, json=false, (it) ->
                 result.success = false
                 result.fails.push(it)
                 count--
                 if count == 0
-                    that.refreshCartTabs()
-                    that.refreshSiteTabs()
+                    self.refreshCartTabs()
+                    self.refreshSiteTabs()
                     if callback?
-                        callback(result, that)
-                    that.adding_items = false
+                        callback(result, self)
+                    self.adding_items = false
 
 

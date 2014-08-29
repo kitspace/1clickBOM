@@ -12,10 +12,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-class @RetailerInterface
+class window.RetailerInterface
     constructor: (name, country_code, data_path, settings) ->
+        self = this
+        self.country = country_code
         data = get_local(data_path)
-        @country = country_code
         country_code_lookedup = data.lookup[country_code]
         if !country_code_lookedup
             error = new InvalidCountryError()
@@ -36,26 +37,26 @@ class @RetailerInterface
             if (settings.interface_name?)
                 data.interface_name = settings.interface_name
 
-        @settings = settings
+        self.settings = settings
 
         if typeof(data.carts) == "string"
-            @cart = data.carts
+            self.cart = data.carts
         else
-            @cart = data.carts[country_code_lookedup]
+            self.cart = data.carts[country_code_lookedup]
 
         if typeof(data.additems) == "string"
-            @additem = data.additems
+            self.additem = data.additems
         else
-            @additem = data.additems[country_code_lookedup]
+            self.additem = data.additems[country_code_lookedup]
 
-        @additem_params = data.additem_params
-        @site = data.sites[country_code_lookedup]
-        @name = name + " " + country_code_lookedup
-        @interface_name = name
-        @adding_items = false
-        @clearing_cart = false
+        self.additem_params = data.additem_params
+        self.site = data.sites[country_code_lookedup]
+        self.name = name + " " + country_code_lookedup
+        self.interface_name = name
+        self.adding_items = false
+        self.clearing_cart = false
 
-    refreshCartTabs: (site = @site, cart = @cart) ->
+    refreshCartTabs: (site = this.site, cart = this.cart) ->
         #we reload any tabs with the cart URL but the path is case insensitive so we use a regex
         #we update the matching tabs to the cart URL instead of using tabs.refresh so we don't
         #re-pass any parameters to the cart
@@ -66,7 +67,7 @@ class @RetailerInterface
                     protocol = tab.url.split("://")[0]
                     chrome.tabs.update tab.id, {"url": protocol + site + cart}
 
-    refreshSiteTabs: (site = @site, cart = @cart) ->
+    refreshSiteTabs: (site = this.site, cart = this.cart) ->
         #refresh the tabs that are not the cart url
         #XXX could some of the passed params cause problems on, say, quick-add urls?
         re = new RegExp(cart, "i")
@@ -75,7 +76,7 @@ class @RetailerInterface
                 if !(tab.url.match(re))
                     chrome.tabs.reload tab.id
 
-    openCartTab: (site = @site, cart = @cart) ->
+    openCartTab: (site = this.site, cart = this.cart) ->
         chrome.tabs.create({url: "https" + site + cart, active:true})
 
 

@@ -51,7 +51,7 @@ checkValidItems =  (items_incoming, invalid) ->
                 items.push(item)
     return {items, invalid}
 
-@parseTSV =  (text) ->
+window.parseTSV =  (text) ->
     rows = text.split "\n"
     items = []
     invalid = []
