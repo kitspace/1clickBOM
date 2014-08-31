@@ -14,34 +14,30 @@
 
 class window.Newark extends RetailerInterface
     constructor: (country_code, settings) ->
-        self = this
         super("Newark", country_code, "/data/newark_international.json", settings)
-        self.icon_src = chrome.extension.getURL("images/newark.png")
-        self.store_id = "10194"
+        @icon_src = chrome.extension.getURL("images/newark.png")
+        @store_id = "10194"
 
     clearCart: (callback) ->
-        self = this
-        self.clearing_cart = true
-        self._get_item_ids (ids) ->
-            self._clear_cart(ids, callback)
+        @clearing_cart = true
+        @_get_item_ids (ids) =>
+            @_clear_cart(ids, callback)
 
     _clear_cart: (ids, callback) ->
-        self = this
-        url = "https" + self.site + "/webapp/wcs/stores/servlet/ProcessBasket"
-        params = "langId=-1&orderId=&catalogId=15003&BASE_URL=BasketPage&errorViewName=AjaxOrderItemDisplayView&storeId=" + self.store_id + "&URL=BasketDataAjaxResponse&isEmpty=false&LoginTimeout=&LoginTimeoutURL=https%3A%2F%2Fwww.newark.com%2Fwebapp%2Fwcs%2Fstores%2Fservlet%2FOrderCalculate%3FcatalogId%3D15003%26LoginTimeout%3D%26errorViewName%3DAjaxOrderItemDisplayView%26langId%3D-1%26storeId%3D10194%26URL%3DAjaxOrderItemDisplayView&blankLinesResponse=10&orderItemDeleteAll="
+        url = "https" + @site + "/webapp/wcs/stores/servlet/ProcessBasket"
+        params = "langId=-1&orderId=&catalogId=15003&BASE_URL=BasketPage&errorViewName=AjaxOrderItemDisplayView&storeId=" + @store_id + "&URL=BasketDataAjaxResponse&isEmpty=false&LoginTimeout=&LoginTimeoutURL=https%3A%2F%2Fwww.newark.com%2Fwebapp%2Fwcs%2Fstores%2Fservlet%2FOrderCalculate%3FcatalogId%3D15003%26LoginTimeout%3D%26errorViewName%3DAjaxOrderItemDisplayView%26langId%3D-1%26storeId%3D10194%26URL%3DAjaxOrderItemDisplayView&blankLinesResponse=10&orderItemDeleteAll="
         for id in ids
             params += "&orderItemDelete=" + id
-        post url, params, (event) ->
+        post url, params, (event) =>
             if callback?
-                callback({success:true}, self)
-            self.refreshCartTabs()
-            self.refreshSiteTabs()
-            self.clearing_cart = false
+                callback({success:true}, this)
+            @refreshCartTabs()
+            @refreshSiteTabs()
+            @clearing_cart = false
 
     _get_item_ids: (callback) ->
-        self = this
-        url = "https" + self.site + self.cart
-        get url, (event) ->
+        url = "https" + @site + @cart
+        get url, (event) =>
             doc = DOM.parse(event.target.responseText)
             order_details = doc.querySelector("#order_details")
             if order_details?
@@ -56,20 +52,19 @@ class window.Newark extends RetailerInterface
             callback(ids)
 
     addItems: (items, callback) ->
-        self = this
         if items.length == 0
             if callback?
-                callback({success:true, fails:[]}, self, items)
+                callback({success:true, fails:[]}, this, items)
             return
-        self.adding_items = true
-        url = "https" + self.site + "/webapp/wcs/stores/servlet/OrderChangeServiceItemAdd"
-        params = "storeId="+ self.store_id + "&catalogId=&langId=-1&omItemAdd=quickOrder&URL=&outOrderName=orderId&errorViewName=RedirectView&calculationUsage=&hiddenEmptyCheck=true"
+        @adding_items = true
+        url = "https" + @site + "/webapp/wcs/stores/servlet/OrderChangeServiceItemAdd"
+        params = "storeId="+ @store_id + "&catalogId=&langId=-1&omItemAdd=quickOrder&URL=&outOrderName=orderId&errorViewName=RedirectView&calculationUsage=&hiddenEmptyCheck=true"
 
         for item,i in items
             params += "&partNumber_" + (i+1) + "=" + encodeURIComponent(item.part)
             params += "&quantity_"   + (i+1) + "=" + encodeURIComponent(item.quantity)
             params += "&comment_"    + (i+1) + "=" + encodeURIComponent(item.comment)
-        post url, params, (event) ->
+        post url, params, (event) =>
             doc = DOM.parse(event.target.responseText)
             form_errors = doc.querySelector("#formErrors")
             success = true
@@ -92,18 +87,18 @@ class window.Newark extends RetailerInterface
                         fails.push(item)
                     else
                         retry_items.push(item)
-                self.addItems retry_items, (result) ->
+                @addItems retry_items, (result) =>
                     if callback?
                         result.fails = result.fails.concat(fails)
                         result.success = false
-                        callback(result, self, items)
-                    self.refreshCartTabs()
-                    self.refreshSiteTabs()
-                    self.adding_items = false
+                        callback(result, this, items)
+                    @refreshCartTabs()
+                    @refreshSiteTabs()
+                    @adding_items = false
             else #success
                 if callback?
-                    callback({success: true, fails:[]}, self, items)
-                self.refreshCartTabs()
-                self.refreshSiteTabs()
-                self.adding_items = false
+                    callback({success: true, fails:[]}, this, items)
+                @refreshCartTabs()
+                @refreshSiteTabs()
+                @adding_items = false
 

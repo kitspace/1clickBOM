@@ -14,33 +14,30 @@
 
 class window.Digikey extends RetailerInterface
     constructor: (country_code, settings) ->
-        self = this
         super("Digikey", country_code, "/data/digikey_international.json", settings)
-        self.icon_src = chrome.extension.getURL("images/digikey.ico")
+        @icon_src = chrome.extension.getURL("images/digikey.ico")
 
     clearCart: (callback) ->
-        self = this
-        self.clearing_cart = true
-        url = "http" + self.site + self.cart + "?webid=-1"
-        get url, () ->
+        @clearing_cart = true
+        url = "http" + @site + @cart + "?webid=-1"
+        get url, () =>
             if callback?
                 callback({success:true})
-            self.refreshCartTabs()
-            self.clearing_cart = false
-        () ->
+            @refreshCartTabs()
+            @clearing_cart = false
+        () =>
             if callback?
                 callback({success:false})
 
 
     addItems: (items, callback) ->
-        self = this
-        self.adding_items = true
+        @adding_items = true
         result = {success:true, fails:[]}
         count = items.length
         for item in items
-            url = "http" + self.site + self.additem
+            url = "http" + @site + @additem
             params = "qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment
-            post url, params, (event)->
+            post url, params, (event)=>
                 doc = DOM.parse(event.target.responseText)
                 #if the cart returns with a quick-add quantity filled-in there was an error
                 quick_add_quant = doc.querySelector("#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity")
@@ -51,7 +48,7 @@ class window.Digikey extends RetailerInterface
                 count--
                 if (count == 0)
                     if callback?
-                        callback(result, self, items)
-                    self.refreshCartTabs()
-                    self.adding_items = false
+                        callback(result, this, items)
+                    @refreshCartTabs()
+                    @adding_items = false
             , item

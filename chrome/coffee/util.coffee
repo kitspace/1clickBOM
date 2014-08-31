@@ -14,24 +14,22 @@
 
 class Badge
     constructor:() ->
-        self = this
-        self.badge_set = false
-        self.priority = 0
+        @badge_set = false
+        @priority = 0
         chrome.browserAction.setBadgeText({text:""})
     set: (text, color, priority = 0) ->
-        self = this
-        if priority >= self.priority
+        if priority >= @priority
             chrome.browserAction.setBadgeBackgroundColor({color:color})
             chrome.browserAction.setBadgeText({text:text})
-            self.priority = priority
-            if self.badge_set && self.id > 0
-                clearTimeout(self.id)
-            self.id = setTimeout () ->
-                self.badge_set = false
-                self.priority = 0
+            @priority = priority
+            if @badge_set && @id > 0
+                clearTimeout(@id)
+            @id = setTimeout () ->
+                @badge_set = false
+                @priority = 0
                 chrome.browserAction.setBadgeText({text:""})
             , 5000
-            self.badge_set = true
+            @badge_set = true
 
 window.badge = new Badge
 

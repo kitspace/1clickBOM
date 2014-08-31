@@ -14,29 +14,26 @@
 
 class window.Mouser extends RetailerInterface
     constructor: (country_code, settings) ->
-        self = this
         super "Mouser", country_code, "/data/mouser_international.json", settings
-        self.icon_src = chrome.extension.getURL("images/mouser.ico")
+        @icon_src = chrome.extension.getURL("images/mouser.ico")
         #posting our sub-domain as the sites are all linked and switching countries would not register properly otherwise
-        post  "http" + self.site + "/Preferences/SetSubdomain", "?subdomainName=" + self.cart.split(".")[0].slice(3), () ->
+        post  "http" + @site + "/Preferences/SetSubdomain", "?subdomainName=" + @cart.split(".")[0].slice(3), () =>
     addItems: (items, callback) ->
-        self = this
-        self.adding_items = true
+        @adding_items = true
         #weird ASP shit, we need to get the viewstate first to put in every request
-        self._get_adding_viewstate (self, viewstate) ->
-            self._add_items(items, viewstate, callback)
+        @_get_adding_viewstate (viewstate) =>
+            @_add_items(items, viewstate, callback)
     _add_items: (items, viewstate, callback) ->
-        self = this
-        params = self.additem_params + viewstate
+        params = @additem_params + viewstate
         params += "&ctl00$ContentMain$hNumberOfLines=99"
         params += "&ctl00$ContentMain$txtNumberOfLines=94"
         for item,i in items
             params += "&ctl00$ContentMain$txtCustomerPartNumber" + (i+1) + "=" + item.comment
             params += "&ctl00$ContentMain$txtPartNumber" + (i+1) + "=" + item.part
             params += "&ctl00$ContentMain$txtQuantity"   + (i+1) + "=" + item.quantity
-        url = "http" + self.site + self.additem
+        url = "http" + @site + @additem
         result = {success: true, fails:[]}
-        post url, params, (event) ->
+        post url, params, (event) =>
             #if there is an error, there will be some error-class items with display set to ""
             doc = DOM.parse(event.target.responseText)
             errors = doc.getElementsByClassName("error")
@@ -51,64 +48,58 @@ class window.Mouser extends RetailerInterface
                         result.success = false
             if not result.success
                 viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-                self._clear_errors self, viewstate, () ->
+                @_clear_errors viewstate, () =>
                     if callback?
-                        callback(result, self, items)
-                    self.refreshCartTabs()
-                    self.adding_items = false
+                        callback(result, this, items)
+                    @refreshCartTabs()
+                    @adding_items = false
             else
                 if callback?
-                    callback(result, self, items)
-                self.refreshCartTabs()
-                self.adding_items = false
+                    callback(result, this, items)
+                @refreshCartTabs()
+                @adding_items = false
 
-    _clear_errors: (self, viewstate, callback) ->
-        self = this
-        post "http" + self.site + self.cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors", (event) ->
+    _clear_errors: (viewstate, callback) ->
+        post "http" + @site + @cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors", (event) =>
             doc = DOM.parse(event.target.responseText)
             viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-            post "http" + self.site + self.cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket", (event) ->
+            post "http" + @site + @cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket", (event) =>
                if callback?
-                   callback(self)
+                   callback()
 
     clearCart: (callback) ->
-        self = this
-        self.clearing_cart = true
-        self._get_cart_viewstate (self, viewstate) ->
-            self._clear_cart(viewstate, callback)
+        @clearing_cart = true
+        @_get_cart_viewstate (viewstate) =>
+            @_clear_cart(viewstate, callback)
     _clear_cart: (viewstate, callback)->
-        self = this
         #don't ask, this is what works...
-        url = "http" + self.site + self.cart
+        url = "http" + @site + @cart
         params =  "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket"
-        post url, params, (event) ->
+        post url, params, (event) =>
             if callback?
-                callback({success:true}, self)
-            self.refreshCartTabs()
-            self.clearing_cart = false
+                callback({success:true}, this)
+            @refreshCartTabs()
+            @clearing_cart = false
     _get_adding_viewstate: (callback)->
         #we get the quick-add form , extend it to 99 lines (the max) and get the viewstate from the response
         #TODO more than 99 items
-        self = this
-        url = "http" + self.site + self.additem
-        get url, (event) ->
+        url = "http" + @site + @additem
+        get url, (event) =>
             doc = DOM.parse(event.target.responseText)
-            params = self.additem_params
+            params = @additem_params
             params += encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
             params += "&ctl00$ContentMain$btnAddLines=Lines to Forms"
             params += "&ctl00$ContentMain$hNumberOfLines=5"
             params += "&ctl00$ContentMain$txtNumberOfLines=94"
-            post url, params, (event) ->
-                if event.target.status == 200
-                    doc = DOM.parse(event.target.responseText)
-                    viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-                    if callback?
-                        callback(self, viewstate)
+            post url, params, (event) =>
+                doc = DOM.parse(event.target.responseText)
+                viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
+                if callback?
+                    callback(viewstate)
     _get_cart_viewstate: (callback)->
-        self = this
-        url = "http" + self.site + self.cart
-        get url, (event) ->
+        url = "http" + @site + @cart
+        get url, (event) =>
             doc = DOM.parse(event.target.responseText)
             viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
             if callback?
-                callback(self, viewstate)
+                callback(viewstate)
