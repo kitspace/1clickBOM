@@ -65,9 +65,12 @@ test "Newark: InvalidCountryError Thrown", () ->
         new Newark("XX")
     , InvalidCountryError
 
-
 test "Parser: Catches negative quantities", () ->
     {items, invalid} = window.parseTSV("test\t-1\tFarnell\t898989")
     deepEqual(items, [])
     deepEqual(invalid[0].reason, "Quantity is less than one")
 
+test "Parser: Merges entries", () ->
+    {items, invalid} = window.parseTSV("test1\t1\tFarnell\t898989\ntest2\t1\tFarnell\t898989")
+    deepEqual(items, [{part:"898989", retailer:"Farnell", comment:"test1,test2", quantity:2, row:0}])
+    deepEqual(invalid, [])

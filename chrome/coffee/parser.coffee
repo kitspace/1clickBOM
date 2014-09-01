@@ -50,7 +50,14 @@ checkValidItems =  (items_incoming, invalid) ->
                 item.retailer = r
                 if item.retailer == "Mouser"
                     item.part = item.part.replace(/-/g, '')
-                items.push(item)
+                existing = false
+                for existing_item in items
+                    if existing_item.part == item.part && existing_item.retailer == item.retailer
+                        existing_item.quantity += item.quantity
+                        existing_item.comment  += "," + item.comment
+                        existing = true
+                if not existing
+                    items.push(item)
     return {items, invalid}
 
 window.parseTSV =  (text) ->
@@ -60,7 +67,7 @@ window.parseTSV =  (text) ->
     for row, i in rows
         if row != ""
             cells = row.split "\t"
-            item = {cells:cells, comment:cells[0], quantity:cells[1], retailer:cells[2], part:cells[3], row:i}
+            item = {comment:cells[0], quantity:cells[1], retailer:cells[2], part:cells[3], row:i}
             if !item.quantity
                 invalid.push {item:item, reason: "Quantity is undefined."}
             else if !item.retailer
