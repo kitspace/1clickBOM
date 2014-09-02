@@ -75,8 +75,11 @@ class window.BomManager
             title = "Could not add " + fails.length
             title += " out of " + items.length + " line"
             title += if items.length > 1 then "s" else ""
-            title += " to " + retailer + " cart"
-            chrome.notifications.create "", {type:"basic", title:title, message:"", iconUrl:"/images/error128.png"}, () =>
+            title += " to " + retailer + " cart:"
+            failed_items = []
+            for fail in fails
+                failed_items.push({title:fail.part,message:""})
+            chrome.notifications.create "", {type:"list", title:title, message:"", items:failed_items, iconUrl:"/images/error128.png"}, () =>
             badge.set("Err","#FF0000", priority=2)
         else
             badge.set("OK","#00CF0F")

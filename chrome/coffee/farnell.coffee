@@ -25,8 +25,8 @@ class window.Farnell extends RetailerInterface
             fix_xhr.open("GET", fix_url, false)
             fix_xhr.send()
         else if country_code in ["FI", "DK", "NO", "SE"]
-            #these web interfaces are like Newark's but they still take Farnell
-            #parts so we get all our methods from Newark
+            #these web interfaces are like Newark's so we get all our methods
+            #from Newark
             for name, method of Newark::
                 this[name] = method
             switch country_code
@@ -135,7 +135,7 @@ class window.Farnell extends RetailerInterface
                         callback(result, this, items)
                     @adding_items = false
     _add_items_individually_via_micro_cart: (items, callback) ->
-        result = {success:true, fails:[], warnings:["Unable to add line notes in Farnell cart because of invalid items in BOM"]}
+        result = {success:true, fails:[], warnings:["Unable to add line notes in Farnell cart"]}
         count = items.length
         for item in items
             url = "https" + @site + "/jsp/shoppingCart/processMicroCart.jsp"
