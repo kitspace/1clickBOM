@@ -45,7 +45,7 @@
 },
 
 "carts": "/jsp/shoppingCart/shoppingCart.jsp",
-"additems": "/jsp/shoppingCart/quickPaste.jsp?_DARGS=/jsp/shoppingCart/fragments/quickPaste/quickPaste.jsp.quickpaste&/pf/commerce/order/QuickPaste.addPasteProducts=Add To Basket&/pf/commerce/order/QuickPaste.buyErrorURL=/jsp/shoppingCart/quickPaste.jsp&/pf/commerce/order/QuickPaste.buySuccessURL=/jsp/shoppingCart/shoppingCart.jsp&_D:/pf/commerce/order/QuickPaste.addPasteProducts= &_D:/pf/commerce/order/QuickPaste.buyErrorURL= &_D:/pf/commerce/order/QuickPaste.buySuccessURL= &_D:submitQuickPaste= &_D:textBox= &_DARGS=/jsp/shoppingCart/fragments/quickPaste/quickPaste.jsp.quickpaste&_dyncharset=UTF-8&textBox=",
+"additems": "/jsp/shoppingCart/quickPaste.jsp?_DARGS=/jsp/shoppingCart/fragments/quickPaste/quickPaste.jsp.quickpaste",
 "additem_params" : "",
 
 "lookup" : {

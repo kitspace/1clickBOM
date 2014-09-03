@@ -41,7 +41,7 @@ class window.Farnell extends RetailerInterface
             @_post_clear(ids, callback)
 
     _get_item_ids: (callback) ->
-        url = "https" + @site + @cart
+        url = "http" + @site + @cart
         get url, (event) =>
             doc = DOM.parse(event.target.responseText)
             ins = doc.getElementsByTagName("input")
@@ -56,7 +56,7 @@ class window.Farnell extends RetailerInterface
 
     _post_clear: (ids, callback) ->
         if (ids.length)
-            url = "https" + @site + "/jsp/checkout/paymentMethod.jsp"
+            url = "http" + @site + "/jsp/checkout/paymentMethod.jsp"
             txt_1 = ""
             txt_2 = ""
             for id in ids
@@ -81,86 +81,47 @@ class window.Farnell extends RetailerInterface
 
     addItems: (items, callback) ->
         @adding_items = true
-        url = "https" + @site + @additem
-        result = {success:true, fails:[]}
-        #this doesn't seem to work as a parameter
-        for item in items
-            url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
-        post url, "", (event) =>
-            #if items successully add the request returns the basket
-            doc = DOM.parse(event.target.responseText)
-            #we determine the request has returned the basket by the body classname
-            #so it's language agnostic
-            result.success = doc.querySelector("body.shoppingCart") != null
-            if (result.success)
-                if (callback?)
+        @_add_items items, (result) =>
+            if not result.success
+                @_add_items_individually items, (result) =>
                     callback(result, this, items)
+                    @refreshCartTabs()
+                    @refreshSiteTabs()
+                    @adding_items = false
+            else
+                callback(result, this, items)
                 @refreshCartTabs()
                 @refreshSiteTabs()
                 @adding_items = false
-            else
-                @_add_items_individually_via_micro_cart(items, callback)
+    _add_items: (items, callback) ->
+        url = "http" + @site + @additem
+        result = {success:true, fails:[]}
+        params = "dyncharset=UTF-8&%2Fpf%2Fcommerce%2Forder%2FQuickPaste.buySuccessURL=%2Fjsp%2FshoppingCart%2FshoppingCart.jsp&_D%3A%2Fpf%2Fcommerce%2Forder%2FQuickPaste.buySuccessURL=+&%2Fpf%2Fcommerce%2Forder%2FQuickPaste.buyErrorURL=%2Fjsp%2FshoppingCart%2FquickPaste.jsp&_D%3A%2Fpf%2Fcommerce%2Forder%2FQuickPaste.buyErrorURL=+&_D%3AtextBox=+&textBox="
+        for item in items
+            params += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
+        params += "&%2Fpf%2Fcommerce%2Forder%2FQuickPaste.addPasteProducts=Add+To+Basket&_D%3A%2Fpf%2Fcommerce%2Forder%2FQuickPaste.addPasteProducts=+&submitQuickPaste=Add+To+Basket&_D%3AsubmitQuickPaste=+&_DARGS=%2Fjsp%2FshoppingCart%2Ffragments%2FquickPaste%2FquickPaste.jsp.quickpaste"
+        post url, params, (event) =>
+            #if items successully add the request returns the basket
+            doc = DOM.parse(event.target.responseText)
+            #we determine the request has returned the basket by the body
+            #classname so it's language agnostic
+            result.success = doc.querySelector("body.shoppingCart") != null
+            if not result.success
+                result.fails = items
+            if callback?
+                callback(result)
          , item={part:"parts",retailer:"Farnell"}, json=false, () =>
-                if callback?
-                    callback({success:false, fails:items}, this, items)
-                @adding_items = false
+            if callback?
+                callback({success:false, fails:items})
 
     _add_items_individually: (items, callback) ->
         result = {success:true, fails:[]}
         count = items.length
         for item in items
-            url = "https" + @site + @additem
-            #this doesn't seem to work as a parameter
-            url += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
-            post url, "", (event) =>
-                doc = DOM.parse(event.target.responseText)
-                success = doc.querySelector("body.shoppingCart") != null
-                result.success = result.success && success
-                if not success
-                    result.fails.push(event.target.item)
+            @_add_items [item], (r) =>
+                result.success &&= r.success
+                result.fails = result.fails.concat(r.fails)
                 count--
                 if count == 0
-                    @refreshCartTabs()
-                    @refreshSiteTabs()
                     if callback?
-                        callback(result, this, items)
-                    @adding_items = false
-            , item=item, json=false, () =>
-                result.fails.push(event.target.item)
-                count--
-                if count == 0
-                    @refreshCartTabs()
-                    @refreshSiteTabs()
-                    if callback?
-                        callback(result, this, items)
-                    @adding_items = false
-    _add_items_individually_via_micro_cart: (items, callback) ->
-        result = {success:true, fails:[], warnings:["Unable to add line notes in Farnell cart"]}
-        count = items.length
-        for item in items
-            url = "https" + @site + "/jsp/shoppingCart/processMicroCart.jsp"
-            params = "action=buy&product=" + item.part + "&qty=" + item.quantity
-            post url, params, (event) =>
-                success = event.target.responseXML != null
-                if not success
-                    result.success = false
-                    result.fails.push(event.target.item)
-                count--
-                if count == 0
-                    @refreshCartTabs()
-                    @refreshSiteTabs()
-                    if callback?
-                        callback(result, this, items)
-                    @adding_items = false
-            , item=item, json=false, (it) =>
-                result.success = false
-                result.fails.push(it)
-                count--
-                if count == 0
-                    @refreshCartTabs()
-                    @refreshSiteTabs()
-                    if callback?
-                        callback(result, this, items)
-                    @adding_items = false
-
-
+                        callback(result)
