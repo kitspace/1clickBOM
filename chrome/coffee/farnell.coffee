@@ -82,17 +82,10 @@ class window.Farnell extends RetailerInterface
     addItems: (items, callback) ->
         @adding_items = true
         @_add_items items, (result) =>
-            if not result.success
-                @_add_items_individually items, (result) =>
-                    callback(result, this, items)
-                    @refreshCartTabs()
-                    @refreshSiteTabs()
-                    @adding_items = false
-            else
-                callback(result, this, items)
-                @refreshCartTabs()
-                @refreshSiteTabs()
-                @adding_items = false
+            callback(result, this, items)
+            @refreshCartTabs()
+            @refreshSiteTabs()
+            @adding_items = false
     _add_items: (items, callback) ->
         url = "http" + @site + @additem
         result = {success:true, fails:[]}
@@ -107,21 +100,22 @@ class window.Farnell extends RetailerInterface
             #classname so it's language agnostic
             result.success = doc.querySelector("body.shoppingCart") != null
             if not result.success
-                result.fails = items
-            if callback?
+                if items.length == 1
+                    result.fails = items
+                    callback(result)
+                else
+                    @_add_items_split items, (result) =>
+                        if callback?
+                            callback(result)
+            else
                 callback(result)
          , item={part:"parts",retailer:"Farnell"}, json=false, () =>
-            if callback?
-                callback({success:false, fails:items})
+            callback({success:false, fails:items})
 
-    _add_items_individually: (items, callback) ->
-        result = {success:true, fails:[]}
-        count = items.length
-        for item in items
-            @_add_items [item], (r) =>
-                result.success &&= r.success
-                result.fails = result.fails.concat(r.fails)
-                count--
-                if count == 0
-                    if callback?
-                        callback(result)
+    _add_items_split: (items, callback) ->
+        items1 = items[0..(items.length/2 - 1)]
+        items2 = items[(items.length/2)..]
+        @_add_items items1, (result1)  =>
+            @_add_items items2, (result2) =>
+                result = {success: result1.success && result2.success, fails: result1.fails.concat(result2.fails)}
+                callback(result)
