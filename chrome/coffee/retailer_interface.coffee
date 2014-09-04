@@ -76,7 +76,7 @@ class window.RetailerInterface
                     chrome.tabs.reload tab.id
 
     openCartTab: () ->
-        chrome.tabs.create({url: "https" + @site + @cart, active:true})
+        chrome.tabs.create({url: "http" + @site + @cart, active:true})
 
 
 class @InvalidCountryError extends Error

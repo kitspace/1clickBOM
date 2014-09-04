@@ -30,6 +30,9 @@ checkValidItems =  (items_incoming, invalid) ->
     items = []
     for item in items_incoming
         number = parseInt(item.quantity)
+        if invalid.length > 10
+            items = []
+            break
         if isNaN(number)
             invalid.push {item:item, reason: "Quantity is not a number."}
         else if number < 1
@@ -43,7 +46,6 @@ checkValidItems =  (items_incoming, invalid) ->
                 if item.retailer.match(re)
                     r = retailer_aliases[key]
                     break
-
             if  r == ""
                 invalid.push({item:item, reason: "Retailer \"" + item.retailer + "\" is not known."})
             else

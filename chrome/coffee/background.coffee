@@ -46,22 +46,53 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
 #    console.log(event)
 #, {url:[{pathSuffix: ".tsv"}]}
 
-notifyTSVPage = () ->
-    chrome.tabs.query {active:true, currentWindow:true}, (tabs) ->
-        re = new RegExp("\.tsv$","i")
-        if tabs[0].url.match(re)
-            badge.setPermanent("\u2191", "#0000FF")
-        else
-            badge.setPermanent("")
+class TSVPageNotifier
+    constructor: ->
+        @onDotTSV = false
+        @re = new RegExp("\.tsv$","i")
+        @checkPage()
+        @items   = []
+        @invalid = []
+        chrome.tabs.onUpdated.addListener () =>
+            @checkPage()
+        chrome.tabs.onActivated.addListener () =>
+            @checkPage()
+        chrome.windows.onFocusChanged.addListener () =>
+            @checkPage()
+    _set_not_dotTSV: () ->
+        badge.setDefault("")
+        @onDotTSV = false
+        @items    = []
+        @invalid  = []
+    checkPage: (callback) ->
+        chrome.tabs.query {active:true, currentWindow:true}, (tabs) =>
 
-chrome.tabs.onUpdated.addListener (tabId, changeInfo, tab) ->
-    notifyTSVPage()
+            if tabs.length >= 1 && tabs[0].url.match(@re)
+                if /^http.?:\/\/github.com\//.test(tabs[0].url)
+                    url = tabs[0].url.replace(/blob/,"raw")
+                else
+                    url = tabs[0].url
+                get url, (event) =>
+                    {items, invalid} = parseTSV(event.target.responseText)
+                    if items.length > 0
+                        badge.setDefault("\u2191", "#0000FF")
+                        @onDotTSV = true
+                        @items    = items
+                        @invalid  = invalid
+                    else
+                        @_set_not_dotTSV()
+                , () =>
+                    @_set_not_dotTSV()
+                , item=null, notify=false
+            else
+                @_set_not_dotTSV()
+            if callback?
+                callback()
+    addToBOM: () ->
+        @checkPage () =>
+            if @onDotTSV
+                window.bom_manager._add_to_bom(@items, @invalid)
 
-chrome.tabs.onActivated.addListener (activeInfo) ->
-    notifyTSVPage()
-
-chrome.windows.onFocusChanged.addListener (info) ->
-    notifyTSVPage()
-
+window.tsvPageNotifier = new TSVPageNotifier
 
 

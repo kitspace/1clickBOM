@@ -40,26 +40,27 @@ class window.BomManager
             callback(bom)
 
     addToBOM: (text, callback) ->
+        {items, invalid} = window.parseTSV(text)
+        @_add_to_bom(items, invalid, callback)
+
+    _add_to_bom: (items, invalid, callback) ->
         chrome.storage.local.get ["bom"], ({bom:bom}) =>
             if (!bom)
                 bom = {}
-
-            {items, invalid} = window.parseTSV(text)
-
             if invalid.length > 0
                 for inv in invalid
                     title = "Could not parse row: "
                     title += inv.item.row
                     message = inv.reason + "\n"
-                    chrome.notifications.create "", {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () =>
-                    badge.set("Warn","#FF8A00", priority=1)
+                    chrome.notifications.create "", {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
+                    badge.setDecaying("Warn","#FF8A00", priority=2)
             else if items.length == 0
                 title = "Nothing pasted "
                 message = "Clipboard is empty"
-                chrome.notifications.create "", {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () =>
-                badge.set("Warn","#FF8A00", priority=1)
+                chrome.notifications.create "", {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
+                badge.setDecaying("Warn","#FF8A00", priority=2)
             else if items.length > 0
-                badge.set("OK","#00CF0F")
+                badge.setDecaying("OK","#00CF0F")
 
             for item in items
                 if item.retailer not of bom
@@ -69,6 +70,7 @@ class window.BomManager
             chrome.storage.local.set {"bom":bom}, () =>
                 if callback?
                     callback(this)
+
     notifyFillCart: (items, retailer, result) ->
         if not result.success
             fails = result.fails
@@ -80,22 +82,22 @@ class window.BomManager
             for fail in fails
                 failed_items.push({title:fail.part,message:""})
             chrome.notifications.create "", {type:"list", title:title, message:"", items:failed_items, iconUrl:"/images/error128.png"}, () =>
-            badge.set("Err","#FF0000", priority=2)
+            badge.setDecaying("Err","#FF0000", priority=2)
         else
-            badge.set("OK","#00CF0F")
+            badge.setDecaying("OK","#00CF0F")
         if result.warnings?
             for warning in result.warnings
                 title = warning
                 chrome.notifications.create "", {type:"basic", title:title, message:"", iconUrl:"/images/warning128.png"}, () =>
-                badge.set("Warn","#FF8A00", priority=1)
+                badge.setDecaying("Warn","#FF8A00", priority=1)
 
     notifyEmptyCart: (retailer, result) ->
         if not result.success
             title = "Could not empty" + retailer + " cart"
             chrome.notifications.create "", {type:"basic", title:title, message:"", iconUrl:"/images/error128.png"}, () =>
-            badge.set("Err","#FF0000", priority=2)
+            badge.setDecaying("Err","#FF0000", priority=2)
         else
-            badge.set("OK","#00CF0F")
+            badge.setDecaying("OK","#00CF0F")
 
     fillCarts: (callback)->
         @filling_carts = true

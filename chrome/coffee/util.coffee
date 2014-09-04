@@ -14,30 +14,29 @@
 
 class Badge
     constructor:() ->
-        @badge_set = false
+        @decaying_set = false
         @priority = 0
         @default_text = ""
         @default_color = "#0000FF"
         chrome.browserAction.setBadgeText({text:@default_text})
-    set: (text, color="#0000FF", priority = 0) ->
+    setDecaying: (text, color="#0000FF", priority = 1) ->
         if priority >= @priority
-            if @badge_set && @id > 0
+            if @decaying_set && @id > 0
                 clearTimeout(@id)
             @_set(text, color, priority)
             @id = setTimeout () =>
-                @badge_set = false
+                @decaying_set = false
                 @_set(@default_text, @default_color, 0)
             , 5000
-    _set: (text, color, priority) ->
-            chrome.browserAction.setBadgeBackgroundColor({color:color})
-            chrome.browserAction.setBadgeText({text:text})
-            @priority = priority
-            @badge_set = true
-    setPermanent: (text, color="#0000FF", priority = 0) ->
+    setDefault: (text, color="#0000FF", priority = 0) ->
         if priority >= @priority
             @_set(text, color, priority)
         @default_color = color
         @default_text = text
+    _set: (text, color, priority) ->
+        chrome.browserAction.setBadgeBackgroundColor({color:color})
+        chrome.browserAction.setBadgeText({text:text})
+        @priority = priority
 
 window.badge = new Badge
 
@@ -51,7 +50,7 @@ window.get_local = (url, json=true)->
         else
             return xhr.responseText
 
-network_callback = (event, callback, error_callback) ->
+network_callback = (event, callback, error_callback, notify=true) ->
     if event.target.readyState == 4
         if event.target.status == 200
             if callback?
@@ -64,9 +63,10 @@ network_callback = (event, callback, error_callback) ->
                 message +=  item.part + " from " + item.retailer + "\n"
             else
                 message += event.target.url
-            chrome.notifications.create "", {type:"basic", title:"Network Error Occured", message:message, iconUrl:"/images/net_error128.png"}, () ->
+            if notify
+                chrome.notifications.create "", {type:"basic", title:"Network Error Occured", message:message, iconUrl:"/images/net_error128.png"}, () ->
 
-            badge.set("" + event.target.status, "#CC00FF", priority=2)
+                badge.setDecaying("" + event.target.status, "#CC00FF", priority=3)
             if error_callback?
                 error_callback(event.target.item)
 
@@ -86,14 +86,14 @@ window.post = (url, params, callback, item, json=false, error_callback) ->
         network_callback event, callback, error_callback
     xhr.send(params)
 
-window.get = (url, callback, error_callback, item=null) ->
+window.get = (url, callback, error_callback, item=null, notify=true) ->
     xhr = new XMLHttpRequest
     xhr.item = item
     xhr.open("GET", url, true)
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     xhr.url = url
     xhr.onreadystatechange = (event) ->
-        network_callback event, callback, error_callback
+        network_callback event, callback, error_callback, notify
     xhr.send()
 
 window.trim_whitespace = (str) ->

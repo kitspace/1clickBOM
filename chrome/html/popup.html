@@ -1,140 +1,153 @@
 <!doctype html>
 <html>
-  <head>
-    <title>1clickBOM's popup</title>
-    <style>
-      body {
-          overflow: hidden;
-          background: #DDDDDD;
-          margin: 0px 0px 0px 0px;
-      }
-      .spinner {
-          width:15px;
-          height:15px;
-          background-image: url('/images/spinner.png');
-      }
-      .spinner2 {
-          width:15px;
-          height:15px;
-          display:inline-block;
-          background-image: url('/images/spinner.png');
-      }
-      div#main_content {
-          max-width: 300px;
-          float:right;
-          margin: 8px 8px 8px 8px;
-      }
-      div#top_spacer {
-          height: 5px;
-      }
-      div#bottom_spacer {
-          height: 5px;
-      }
-      @font-face {
-          font-family:"Foundation Icons";
-          src: url("/images/foundation-icons.ttf");
-      }
-      button.big_buttons {
-          max-height:25px;
-          max-width: 55px;
-          height:25px;
-          width: 55px;
-          padding: 0px 0px 1px 1px;
-          vertical-align:middle;
-      }
-      span.button_icon {
-          font-family:"Foundation Icons";
-          font-size:18px;
-          vertical-align:middle;
-          text-decoration: none;
-      }
-      a {
-          text-decoration: none;
-          color: black;
-      }
-      span.button_text {
-          vertical-align:middle;
-          font-size:11px;
-      }
-      table#bom_list {
-          background: white;
-          border-collapse:collapse;
-          border: none;
-          font-family: "sans-serif", "Arial", "Helvetica";
-          white-space: nowrap;
-      }
-      table#bom_list > tr:hover {
-          background: #ADD8E6;
-      }
-      table#bom_list > tr > td{
-          border: 1px solid #999999;
-          padding: 0px 3px 0px 3px;
-          font-size: 14px;
-          vertical-align:middle;
-          cursor:default;
-      }
-      table#bom_list > tr > td > img {
-          margin-bottom: 5px;
-          margin-top: 5px;
-          margin-left: 3px;
-          margin-right: 3px;
-          vertical-align:middle;
-          width: 16px;
-          height: 16px;
-      }
-      a.bom_retailer_name {
-          color: black;
-          text-decoration:none;
-      }
-      body {
-          text-align: right;
-      }
-      div#bom
-      {
-          text-align: left;
-      }
-      div#bottom_toolbar {
-          text-align: center;
-      }
-      button#clear {
-          float: left;
-      }
-    </style>
-  </head>
-  <body>
-      <div id=main_content>
-          <div id=top_toolbar>
-              <button class=big_buttons id="clear" title="Clear entire BOM" hidden=true>
-                  <span class=button_icon>&#xf182;</span>
-                  <span class=button_text>Clear</span>
-                  </button >
-                  <button class=big_buttons id="paste" title="Paste BOM data">
-                      <span class=button_icon>&#xf220;</span>
-                      <span class=button_text> Paste</span>
-                  </button>
-              </div>
+<head>
+<title>1clickBOM's popup</title>
+<style>
+body {
+    overflow: hidden;
+    background: #DDDDDD;
+    margin: 0px 0px 0px 0px;
+}
+.spinner {
+    width:15px;
+    height:15px;
+    background-image: url('/images/spinner.png');
+}
+div#main_content {
+    max-width: 300px;
+    float:right;
+    margin: 8px 8px 8px 8px;
+}
+div#top_spacer {
+    height: 5px;
+}
+div#bottom_spacer {
+    height: 5px;
+}
+@font-face {
+    font-family:"Foundation Icons";
+    src: url("/images/foundation-icons.ttf");
+}
+button.big_buttons {
+    max-height:25px;
+    max-width: 55px;
+    height:25px;
+    width: 55px;
+    padding: 0px 0px 1px 1px;
+    vertical-align:middle;
+    margin-top:2px;
+    margin-bottom:2px;
+}
+span.button_icon {
+    font-family:"Foundation Icons";
+    font-size:18px;
+    vertical-align:middle;
+    text-decoration: none;
+}
+a {
+    text-decoration: none;
+    color: black;
+}
+span.button_text {
+    vertical-align:middle;
+    font-size:11px;
+}
+table#bom_list {
+    background: white;
+    border-collapse:collapse;
+    border: none;
+    font-family: "sans-serif", "Arial", "Helvetica";
+    white-space: nowrap;
+}
+table#bom_list > tr:hover {
+    background: #ADD8E6;
+}
+table#bom_list > tr > td{
+    border: 1px solid #999999;
+    padding: 0px 3px 0px 3px;
+    font-size: 14px;
+    vertical-align:middle;
+    cursor:default;
+}
+table#bom_list > tr > td > img {
+    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-left: 3px;
+    margin-right: 3px;
+    vertical-align:middle;
+    width: 16px;
+    height: 16px;
+}
+a.bom_retailer_name {
+    color: black;
+    text-decoration:none;
+}
+body {
+    text-align: right;
+}
+div#bom
+{
+    text-align: left;
+}
+div#bottom_toolbar {
+    text-align: center;
+}
+button#clear {
+    float: left;
+}
+button#load_from_page {
+    background-color: #DDDDDD;
+    background-repeat: repeat-x;
+    background-image: -webkit-linear-gradient(top,#4444E6,#0000EE);
+    border: 1px solid #ccc;
+    border-color: #1111E6 #1111E6 #0000FF;
+    border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+    border-bottom-color: #b3b3b3;
+    border-radius:4px;
+    color: white;
+}
+button#load_from_page:active {
+    background-image: -webkit-linear-gradient(top,#0000EE,#4444FF);
+}
+</style>
+</head>
+<body>
+<div id=main_content>
+    <div id=top_toolbar>
+        <button class=big_buttons id="clear" title="Clear entire BOM" hidden=true>
+            <span class=button_icon>&#xf182;</span>
+            <span class=button_text>Clear</span>
+        </button >
+        <button class=big_buttons id="paste" title="Paste BOM data">
+            <span class=button_icon>&#xf220;</span>
+            <span class=button_text> Paste</span>
+        </button>
+        <button class=big_buttons id="load_from_page" title="Load TSV from Page" hidden=true>
+            <span class=button_icon>&#x2190;</span>
+        </button >
+    </div>
 
-              <div id=bom hidden=true>
-                  <div id=top_spacer></div>
-                  <table id="bom_list"></table>
-                  <div id=bottom_spacer></div>
-              </div>
+    <div id=bom hidden=true>
+        <div id=top_spacer></div>
+        <table id="bom_list"></table>
+        <div id=bottom_spacer></div>
+    </div>
 
-              <div id=bottom_toolbar>
-                  <button class=big_buttons id="fill_carts" hidden=true title="Add all BOM items to Retailer Carts">
-                      <span class=button_icon>&#xf21e;</span>
-                      <span class=button_text>Add</span>
-                  </button>
-                  <button class=big_buttons id="open_cart_tabs" hidden=true title="View all retailer carts">
-                      <span class=button_icon>&#xf221;</span>
-                      <span class=button_text>View</span>
-                  </button>
-                  <button class=big_buttons id="empty_carts" hidden=true title="Empty all retailer carts">
-                      <span class=button_icon>&#xf21b;</span>
-                      <span class=button_text>Empty</span>
-                  </button>
-              </div>
-          </div>
-      <script src="/js/popup.js"></script>
-  </body>
+    <div id=bottom_toolbar>
+        <button class=big_buttons id="fill_carts" hidden=true title="Add all BOM items to Retailer Carts">
+            <span class=button_icon>&#xf21e;</span>
+            <span class=button_text>Add</span>
+        </button>
+        <button class=big_buttons id="open_cart_tabs" hidden=true title="View all retailer carts">
+            <span class=button_icon>&#xf221;</span>
+            <span class=button_text>View</span>
+        </button>
+        <button class=big_buttons id="empty_carts" hidden=true title="Empty all retailer carts">
+            <span class=button_icon>&#xf21b;</span>
+            <span class=button_text>Empty</span>
+        </button>
+    </div>
+</div>
+<script src="/js/popup.js"></script>
+</body>
 </html>

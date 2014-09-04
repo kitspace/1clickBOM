@@ -72,11 +72,12 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
     show_or_hide_buttons = (bom) ->
         if (!bom)
             bom = {}
-        document.querySelector("#clear").hidden=!Boolean(Object.keys(bom).length)
-        document.querySelector("#fill_carts").hidden=!Boolean(Object.keys(bom).length)
-        document.querySelector("#empty_carts").hidden=!Boolean(Object.keys(bom).length)
-        document.querySelector("#open_cart_tabs").hidden=!Boolean(Object.keys(bom).length)
+        document.querySelector("button#clear").hidden=!Boolean(Object.keys(bom).length)
+        document.querySelector("button#fill_carts").hidden=!Boolean(Object.keys(bom).length)
+        document.querySelector("button#empty_carts").hidden=!Boolean(Object.keys(bom).length)
+        document.querySelector("button#open_cart_tabs").hidden=!Boolean(Object.keys(bom).length)
         document.querySelector("#bom").hidden=!Boolean(Object.keys(bom).length)
+        document.querySelector("button#load_from_page").hidden = not bkgd_page.tsvPageNotifier.onDotTSV
 
     rebuild_bom_view = (bom) ->
         table = document.querySelector("#bom_list")
@@ -158,26 +159,28 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
         if(request.invalid)
             console.log(request.invalid)
 
-    document.querySelector("#clear").addEventListener "click", () ->
+    document.querySelector("button#clear").addEventListener "click", () ->
         chrome.storage.local.remove("bom")
 
-    document.querySelector("#fill_carts").addEventListener "click", () ->
+    document.querySelector("button#fill_carts").addEventListener "click", () ->
         @disabled = true
         window.bkgd_page.bom_manager.fillCarts () =>
             @disabled = false
         bom_changed()
     disable_till_you_win(document.querySelector("#fill_carts"), "filling_carts")
 
-    document.querySelector("#empty_carts").addEventListener "click", () ->
+    document.querySelector("button#empty_carts").addEventListener "click", () ->
         @disabled = true
         window.bkgd_page.bom_manager.emptyCarts () =>
             @disabled = false
         bom_changed()
     disable_till_you_win(document.querySelector("#empty_carts"), "emptying_carts")
 
-    document.querySelector("#open_cart_tabs").addEventListener "click", () ->
+    document.querySelector("button#open_cart_tabs").addEventListener "click", () ->
         window.bkgd_page.bom_manager.openCarts()
 
+    document.querySelector("button#load_from_page").addEventListener "click", () ->
+        window.bkgd_page.tsvPageNotifier.addToBOM()
 
 
 
