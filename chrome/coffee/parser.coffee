@@ -52,6 +52,7 @@ checkValidItems =  (items_incoming, invalid) ->
                 item.retailer = r
                 if item.retailer == "Mouser"
                     item.part = item.part.replace(/-/g, '')
+<<<<<<< HEAD
                 existing = false
                 for existing_item in items
                     if existing_item.part == item.part && existing_item.retailer == item.retailer
@@ -61,6 +62,9 @@ checkValidItems =  (items_incoming, invalid) ->
                         existing = true
                 if not existing
                     items.push(item)
+=======
+                items.push(item)
+>>>>>>> 1f9a341... merging multiple same items correctly
     return {items, invalid}
 
 window.parseTSV =  (text) ->
