@@ -64,7 +64,7 @@ network_callback = (event, callback, error_callback, notify=true) ->
             else
                 message += event.target.url
             if notify
-                chrome.notifications.create "", {type:"basic", title:"Network Error Occured", message:message, iconUrl:"/images/net_error128.png"}, () ->
+                chrome.notifications.create("", {type:"basic", title:"Network Error Occured", message:message, iconUrl:"/images/net_error128.png"}, () ->)
 
                 badge.setDecaying("" + event.target.status, "#CC00FF", priority=3)
             if error_callback?
@@ -83,7 +83,10 @@ window.post = (url, params, callback, item, json=false, error_callback) ->
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     xhr.url = url
     xhr.onreadystatechange = (event) ->
-        network_callback event, callback, error_callback
+        network_callback(event, callback, error_callback)
+    xhr.timeout = 10000;
+    xhr.ontimedout = (event) ->
+        network_callback(event, callback, error_callback)
     xhr.send(params)
 
 window.get = (url, callback, error_callback, item=null, notify=true) ->
@@ -93,7 +96,10 @@ window.get = (url, callback, error_callback, item=null, notify=true) ->
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     xhr.url = url
     xhr.onreadystatechange = (event) ->
-        network_callback event, callback, error_callback, notify
+        network_callback(event, callback, error_callback, notify)
+    xhr.timeout = 10000;
+    xhr.ontimedout = (event) ->
+        network_callback(event, callback, error_callback, notify)
     xhr.send()
 
 window.trim_whitespace = (str) ->
