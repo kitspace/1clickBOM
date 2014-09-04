@@ -67,11 +67,14 @@ class TSVPageNotifier
     checkPage: (callback) ->
         chrome.tabs.query {active:true, currentWindow:true}, (tabs) =>
 
-            if tabs.length >= 1 && tabs[0].url.match(@re)
+            tab_url = tabs[0].url.split("?")[0]
+            if tabs.length >= 1 && tab_url.match(@re)
                 if /^http.?:\/\/github.com\//.test(tabs[0].url)
-                    url = tabs[0].url.replace(/blob/,"raw")
+                    url = tab_url.replace(/blob/,"raw")
+                else if /^http.?:\/\/bitbucket.org\//.test(tabs[0].url)
+                    url = tab_url.split("?")[0].replace(/src/,"raw")
                 else
-                    url = tabs[0].url
+                    url = tab_url
                 get url, (event) =>
                     {items, invalid} = parseTSV(event.target.responseText)
                     if items.length > 0
