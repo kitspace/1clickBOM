@@ -39,7 +39,7 @@ checkValidItems =  (items_incoming, invalid) ->
             r = ""
             #a case insensitive match to the aliases
             for key of retailer_aliases
-                re = new RegExp key, "i"
+                re = new RegExp(key, "i")
                 if item.retailer.match(re)
                     r = retailer_aliases[key]
                     break

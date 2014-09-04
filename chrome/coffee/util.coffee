@@ -16,20 +16,28 @@ class Badge
     constructor:() ->
         @badge_set = false
         @priority = 0
-        chrome.browserAction.setBadgeText({text:""})
-    set: (text, color, priority = 0) ->
+        @default_text = ""
+        @default_color = "#0000FF"
+        chrome.browserAction.setBadgeText({text:@default_text})
+    set: (text, color="#0000FF", priority = 0) ->
         if priority >= @priority
+            if @badge_set && @id > 0
+                clearTimeout(@id)
+            @_set(text, color, priority)
+            @id = setTimeout () =>
+                @badge_set = false
+                @_set(@default_text, @default_color, 0)
+            , 5000
+    _set: (text, color, priority) ->
             chrome.browserAction.setBadgeBackgroundColor({color:color})
             chrome.browserAction.setBadgeText({text:text})
             @priority = priority
-            if @badge_set && @id > 0
-                clearTimeout(@id)
-            @id = setTimeout () ->
-                @badge_set = false
-                @priority = 0
-                chrome.browserAction.setBadgeText({text:""})
-            , 5000
             @badge_set = true
+    setPermanent: (text, color="#0000FF", priority = 0) ->
+        if priority >= @priority
+            @_set(text, color, priority)
+        @default_color = color
+        @default_text = text
 
 window.badge = new Badge
 

@@ -41,3 +41,27 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
     if namespace == "local"
         if changes.country || changes.settings
             window.bom_manager = new BomManager
+
+#chrome.webNavigation.onCommitted.addListener (event) ->
+#    console.log(event)
+#, {url:[{pathSuffix: ".tsv"}]}
+
+notifyTSVPage = () ->
+    chrome.tabs.query {active:true, currentWindow:true}, (tabs) ->
+        re = new RegExp("\.tsv$","i")
+        if tabs[0].url.match(re)
+            badge.setPermanent("\u2191", "#0000FF")
+        else
+            badge.setPermanent("")
+
+chrome.tabs.onUpdated.addListener (tabId, changeInfo, tab) ->
+    notifyTSVPage()
+
+chrome.tabs.onActivated.addListener (activeInfo) ->
+    notifyTSVPage()
+
+chrome.windows.onFocusChanged.addListener (info) ->
+    notifyTSVPage()
+
+
+
