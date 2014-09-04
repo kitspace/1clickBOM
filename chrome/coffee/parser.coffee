@@ -56,7 +56,8 @@ checkValidItems =  (items_incoming, invalid) ->
                 for existing_item in items
                     if existing_item.part == item.part && existing_item.retailer == item.retailer
                         existing_item.quantity += item.quantity
-                        existing_item.comment  += "," + item.comment
+                        if existing_item.comment != item.comment
+                            existing_item.comment  += "," + item.comment
                         existing = true
                 if not existing
                     items.push(item)

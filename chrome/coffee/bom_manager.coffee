@@ -65,7 +65,16 @@ class window.BomManager
             for item in items
                 if item.retailer not of bom
                     bom[item.retailer] = []
-                bom[item.retailer].push(item)
+                existing = false
+                for existing_item in bom[item.retailer]
+                    if existing_item.part == item.part && existing_item.retailer == item.retailer
+                        existing_item.quantity += item.quantity
+                        if existing_item.comment != item.comment
+                            existing_item.comment  += "," + item.comment
+                        existing = true
+                        break
+                if not existing
+                    bom[item.retailer].push(item)
 
             chrome.storage.local.set {"bom":bom}, () =>
                 if callback?
@@ -80,7 +89,7 @@ class window.BomManager
             title += " to " + retailer + " cart:"
             failed_items = []
             for fail in fails
-                failed_items.push({title:fail.part,message:""})
+                failed_items.push({title:"item: " + fail.comment + " | " + fail.quantity + " | " + fail.part,message:""})
             chrome.notifications.create "", {type:"list", title:title, message:"", items:failed_items, iconUrl:"/images/error128.png"}, () =>
             badge.setDecaying("Err","#FF0000", priority=2)
         else
