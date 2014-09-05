@@ -14,7 +14,7 @@
 
 @test_bom  = get_local("data/big_example.tsv", json=false)
 
-@test_one = (country="CN") ->
+@test_one = (country="UK") ->
     QUnit.test "User Sim " + country, () ->
         expect(3)
         stop()

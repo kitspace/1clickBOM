@@ -17,10 +17,12 @@ class window.Mouser extends RetailerInterface
         super "Mouser", country_code, "/data/mouser_international.json", settings
         @icon_src = chrome.extension.getURL("images/mouser.ico")
         #posting our sub-domain as the sites are all linked and switching countries would not register properly otherwise
-        post  "http" + @site + "/Preferences/SetSubdomain", "?subdomainName=" + @cart.split(".")[0].slice(3), () =>
+        post  "http" + @site + "/Preferences/SetSubdomain", "?subdomainName=" + @cart.split(".")[0].slice(3), () ->
     addItems: (items, callback) ->
         @adding_items = true
-        #weird ASP shit, we need to get the viewstate first to put in every request
+        for _,i in items by 99
+            _99_items = items[i..i+98]
+            console.log(_99_items)
         @_get_adding_viewstate (viewstate) =>
             @_add_items(items, viewstate, callback)
     _add_items: (items, viewstate, callback) ->
