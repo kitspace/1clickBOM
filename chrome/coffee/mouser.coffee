@@ -20,11 +20,20 @@ class window.Mouser extends RetailerInterface
         post  "http" + @site + "/Preferences/SetSubdomain", "?subdomainName=" + @cart.split(".")[0].slice(3), () ->
     addItems: (items, callback) ->
         @adding_items = true
-        for _,i in items by 99
-            _99_items = items[i..i+98]
-            console.log(_99_items)
+        count = 0
+        big_result = {success:true, fails:[]}
         @_get_adding_viewstate (viewstate) =>
-            @_add_items(items, viewstate, callback)
+            for _,i in items by 99
+                _99_items = items[i..i+98]
+                count += 1
+                @_add_items _99_items, viewstate, (result) =>
+                    big_result.success &&= result.success
+                    big_result.fails = big_result.fails.concat(result.fails)
+                    count -= 1
+                    if count == 0
+                        callback(result, this, items)
+                        @refreshCartTabs()
+                        @adding_items = false
     _add_items: (items, viewstate, callback) ->
         params = @additem_params + viewstate
         params += "&ctl00$ContentMain$hNumberOfLines=99"
@@ -52,14 +61,10 @@ class window.Mouser extends RetailerInterface
                 viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
                 @_clear_errors viewstate, () =>
                     if callback?
-                        callback(result, this, items)
-                    @refreshCartTabs()
-                    @adding_items = false
+                        callback(result)
             else
                 if callback?
-                    callback(result, this, items)
-                @refreshCartTabs()
-                @adding_items = false
+                    callback(result)
 
     _clear_errors: (viewstate, callback) ->
         post "http" + @site + @cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors", (event) =>
@@ -82,9 +87,8 @@ class window.Mouser extends RetailerInterface
                 callback({success:true}, this)
             @refreshCartTabs()
             @clearing_cart = false
-    _get_adding_viewstate: (callback)->
+    _get_adding_viewstate: (callback, arg)->
         #we get the quick-add form , extend it to 99 lines (the max) and get the viewstate from the response
-        #TODO more than 99 items
         url = "http" + @site + @additem
         get url, (event) =>
             doc = DOM.parse(event.target.responseText)
@@ -97,7 +101,7 @@ class window.Mouser extends RetailerInterface
                 doc = DOM.parse(event.target.responseText)
                 viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
                 if callback?
-                    callback(viewstate)
+                    callback(viewstate, arg)
     _get_cart_viewstate: (callback)->
         url = "http" + @site + @cart
         get url, (event) =>

@@ -26,7 +26,7 @@ get_location = (callback) ->
         response = JSON.parse(event.target.responseText)
         chrome.storage.local.set {country: countries_data[response.country_name]}, ()->
             callback()
-    () ->
+    , () ->
         callback()
 
 chrome.runtime.onInstalled.addListener (details)->
@@ -41,10 +41,6 @@ chrome.storage.onChanged.addListener (changes, namespace) ->
     if namespace == "local"
         if changes.country || changes.settings
             window.bom_manager = new BomManager
-
-#chrome.webNavigation.onCommitted.addListener (event) ->
-#    console.log(event)
-#, {url:[{pathSuffix: ".tsv"}]}
 
 class TSVPageNotifier
     constructor: ->
