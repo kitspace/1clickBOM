@@ -52,18 +52,25 @@ class window.Newark extends RetailerInterface
             callback(ids)
 
     addItems: (items, callback) ->
+        @adding_items = true
+        @_add_items  items, (result) =>
+            @refreshCartTabs()
+            @refreshSiteTabs()
+            @adding_items = false
+            callback(result, this, items)
+
+    _add_items: (items, callback) ->
         if items.length == 0
             if callback?
-                callback({success:true, fails:[]}, this, items)
+                callback({success:true, fails:[]})
             return
-        @adding_items = true
-        url = "https" + @site + "/webapp/wcs/stores/servlet/OrderChangeServiceItemAdd"
-        params = "storeId="+ @store_id + "&catalogId=&langId=-1&omItemAdd=quickOrder&URL=&outOrderName=orderId&errorViewName=RedirectView&calculationUsage=&hiddenEmptyCheck=true"
-
-        for item,i in items
-            params += "&partNumber_" + (i+1) + "=" + encodeURIComponent(item.part)
-            params += "&quantity_"   + (i+1) + "=" + encodeURIComponent(item.quantity)
-            params += "&comment_"    + (i+1) + "=" + encodeURIComponent(item.comment)
+        url = "https" + @site + "/webapp/wcs/stores/servlet/PasteOrderChangeServiceItemAdd"
+        params = "storeId=" + @store_id + "&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste="
+        #&addToBasket=Add+to+Cart"
+        for item in items
+            params += encodeURIComponent(item.part) + ","
+            params += encodeURIComponent(item.quantity) + ","
+            params += encodeURIComponent(item.comment) + "\n"
         post url, params, (event) =>
             doc = DOM.parse(event.target.responseText)
             form_errors = doc.querySelector("#formErrors")
@@ -74,8 +81,8 @@ class window.Newark extends RetailerInterface
                 #we find out which parts are the problem, call addItems again
                 #on the rest and concatenate the fails to the new result
                 #returning everything together to our callback
-                fail_names = []
-                fails = []
+                fail_names  = []
+                fails       = []
                 retry_items = []
                 for item in items
                         regex = new RegExp item.part, "g"
@@ -87,18 +94,12 @@ class window.Newark extends RetailerInterface
                         fails.push(item)
                     else
                         retry_items.push(item)
-                @addItems retry_items, (result) =>
+                @_add_items retry_items, (result) ->
                     if callback?
                         result.fails = result.fails.concat(fails)
                         result.success = false
-                        callback(result, this, items)
-                    @refreshCartTabs()
-                    @refreshSiteTabs()
-                    @adding_items = false
+                        callback(result)
             else #success
                 if callback?
-                    callback({success: true, fails:[]}, this, items)
-                @refreshCartTabs()
-                @refreshSiteTabs()
-                @adding_items = false
+                    callback({success: true, fails:[]})
 

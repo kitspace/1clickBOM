@@ -180,7 +180,7 @@ asyncTest "Add items fails, add items, clear all", () ->
 	]
 	r.addItems items, (result1, that) ->
 		deepEqual(result1.success, false)
-		deepEqual(result1.fails, [items[1], items[2]])
+		deepEqual(result1.fails, [items[2], items[1]])
 		items = [
 			{"part":"98W0461","quantity":2, "comment":"test"}
 		]
