@@ -84,7 +84,7 @@ window.post = (url, params, callback, item, json=false, error_callback) ->
     xhr.url = url
     xhr.onreadystatechange = (event) ->
         network_callback(event, callback, error_callback)
-    xhr.timeout = 10000;
+    xhr.timeout = 60000;
     xhr.ontimedout = (event) ->
         network_callback(event, callback, error_callback)
     xhr.send(params)
@@ -97,7 +97,7 @@ window.get = (url, callback, error_callback, item=null, notify=true) ->
     xhr.url = url
     xhr.onreadystatechange = (event) ->
         network_callback(event, callback, error_callback, notify)
-    xhr.timeout = 10000;
+    xhr.timeout = 60000;
     xhr.ontimedout = (event) ->
         network_callback(event, callback, error_callback, notify)
     xhr.send()
