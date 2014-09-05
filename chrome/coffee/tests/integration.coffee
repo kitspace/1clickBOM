@@ -12,9 +12,9 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
-@digikey_data = get_local("/data/digikey_international.json")
-@farnell_data = get_local("/data/farnell_international.json")
-@mouser_data  = get_local("/data/mouser_international.json")
+@digikey_data = get_local("/data/digikey.json")
+@farnell_data = get_local("/data/farnell.json")
+@mouser_data  = get_local("/data/mouser.json")
 
 module("Digikey")
 

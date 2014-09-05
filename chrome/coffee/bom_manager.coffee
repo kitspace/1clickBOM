@@ -102,7 +102,7 @@ class window.BomManager
 
     notifyEmptyCart: (retailer, result) ->
         if not result.success
-            title = "Could not empty" + retailer + " cart"
+            title = "Could not empty " + retailer + " cart"
             chrome.notifications.create "", {type:"basic", title:title, message:"", iconUrl:"/images/error128.png"}, () =>
             badge.setDecaying("Err","#FF0000", priority=2)
         else

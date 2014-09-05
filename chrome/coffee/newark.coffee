@@ -14,7 +14,7 @@
 
 class window.Newark extends RetailerInterface
     constructor: (country_code, settings) ->
-        super("Newark", country_code, "/data/newark_international.json", settings)
+        super("Newark", country_code, "/data/newark.json", settings)
         @icon_src = chrome.extension.getURL("images/newark.png")
         @store_id = "10194"
 

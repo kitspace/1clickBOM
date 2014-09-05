@@ -14,7 +14,7 @@
 
 class window.Mouser extends RetailerInterface
     constructor: (country_code, settings) ->
-        super "Mouser", country_code, "/data/mouser_international.json", settings
+        super "Mouser", country_code, "/data/mouser.json", settings
         @icon_src = chrome.extension.getURL("images/mouser.ico")
         #posting our sub-domain as the sites are all linked and switching countries would not register properly otherwise
         post  "http" + @site + "/Preferences/SetSubdomain", "?subdomainName=" + @cart.split(".")[0].slice(3), () ->
