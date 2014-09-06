@@ -43,15 +43,16 @@ try this on the [example tsv page][2] once you have the extension installed.
 
 ### Then What? ###
 
-Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.
+Once the data is added you can use 1clickBOM to add the items to your carts
+using the buttons on the popup. You can also quickly view and empty your carts.
 
 ## Roadmap ##
 
 * 0.1
     * Chrome support
-    * Digikey, Mouser, Farnell , Newark, RS, Allied and Arrow
+    * Digikey, Mouser, Farnell, Newark, RS, Allied and Arrow
     * Allow clearing and viewing individual carts
-    * Paste TSV or visit online .tsv file
+    * Paste TSV or visit online `.tsv` file
     * Auto-merge multiple entries of the same component
 
 * 0.2
