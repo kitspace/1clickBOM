@@ -15,7 +15,6 @@
 class window.Digikey extends RetailerInterface
     constructor: (country_code, settings) ->
         super("Digikey", country_code, "/data/digikey.json", settings)
-        @icon_src = chrome.extension.getURL("images/digikey.ico")
 
     clearCart: (callback) ->
         @clearing_cart = true

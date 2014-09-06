@@ -15,7 +15,6 @@
 class window.RS extends RetailerInterface
     constructor: (country_code, settings) ->
         super("RS", country_code, "data/rs.json", settings)
-        @icon_src = chrome.extension.getURL("images/rs.ico")
     clearCart: (callback) ->
         @clearing_cart = true
         if /web\/ca/.test(@cart)

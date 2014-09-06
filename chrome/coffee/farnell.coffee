@@ -15,7 +15,6 @@
 class window.Farnell extends RetailerInterface
     constructor: (country_code, settings) ->
         super("Farnell", country_code, "/data/farnell.json", settings)
-        @icon_src = chrome.extension.getURL("images/farnell.ico")
 
         #export.farnell.com tries to go to exportHome.jsp if we have no cookie
         #and we don't do this

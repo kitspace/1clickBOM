@@ -54,6 +54,13 @@ class window.RetailerInterface
         @interface_name = name
         @adding_items = false
         @clearing_cart = false
+        @icon_src = "http://g.etfv.co/" + "http" + @site
+        #this puts the image in cache but also uses our backup if g.etfv.co fails
+        get @icon_src, () ->
+            ;
+        , () =>
+            @icon_src = chrome.extension.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
+        , notify=false
 
     refreshCartTabs: () ->
         #we reload any tabs with the cart URL but the path is case insensitive
