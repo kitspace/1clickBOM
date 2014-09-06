@@ -24,10 +24,9 @@ class window.Digikey extends RetailerInterface
                 callback({success:true})
             @refreshCartTabs()
             @clearing_cart = false
-        () =>
+        , () =>
             if callback?
                 callback({success:false})
-
 
     addItems: (items, callback) ->
         @adding_items = true
@@ -50,4 +49,13 @@ class window.Digikey extends RetailerInterface
                         callback(result, this, items)
                     @refreshCartTabs()
                     @adding_items = false
-            , item
+            , item, json=false
+            , (event) =>
+                console.log("yo")
+                result.fails.push(event.target.item)
+                count--
+                if (count == 0)
+                    if callback?
+                        callback(result, this, items)
+                    @refreshCartTabs()
+                    @adding_items = false
