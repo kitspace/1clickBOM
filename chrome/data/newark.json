@@ -2,7 +2,7 @@
     "sites": {
         "US": "://www.newark.com"
     },
-    "carts": "/webapp/wcs/stores/servlet/OrderCalculate",
+    "carts": "/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView",
     "additems": "",
     "additem_params": "",
     "lookup": {
