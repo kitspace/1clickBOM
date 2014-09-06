@@ -1,45 +1,56 @@
 # 1clickBOM #
 
-#### _Paste to your electronic component shopping carts._ ####
+#### _One BOM - Many Retailers_ ####
 
-1clickBOM is a browser extension which lets you automatically fill your
-electronic component shopping carts at online retailers such as Digikey, Mouser
-and Farnell; when you feed it correctly formatted TSV (tab seperated values).
-This allows you to simply paste data from a spreadsheet or share a TSV file
-with others.
+1clickBOM is purchasing tool that let's you keep _one_ bill of materials (BOM)
+for items from _several_ retailers. It's a browser extension that fills your
+online shopping carts for you. To add items to 1clickBOM you simply paste from
+a spreadsheet or visit an online `.tsv` file.
 
 ## Which browsers? Which retailers? ##
 
-For the time being the plugin is non-functional until we hit v0.1
+Currently supported retailers are:
 
-Check the [roadmap][1] for planned support.
+* Digikey
+* Mouser
+* Farnell
+* Newark
+* RS
+
+As of now 1clickBOM is only available for Chrome/Chromium but a Firefox version
+is planned.  Check the [roadmap][1] for more details on future development
+work.
 
 ## Usage ##
 
-### TSV Format ###
+### Adding Items ###
 
-The format is compatible with the clip-board format of all major spreadsheet
-programs. The tab character is used as a delimiter and values need not be
-quoted. One line per component type should be ordered as follows:
+You should arrange items in your spreadsheet in the following order.
 
-    comment | quantity | vendor | part-number
+    line-note | quantity | retailer | part-number
 
-Where ` | ` represents a tab character. The comment would usually be the
-component references in your schematic and will be added as a note to your
-shopping cart item where possible. See the [example tsv][2].
+Line-note can be anything you like. I normally use schematic references.
+Retailer is a name of one of the supported retailers and part-number is the
+part-number specific to that retailer. See the [example tsv][2].
 
-Eventually 1clickBOM will support multiple vendors per item which can be tacked
-on to the end. For the time being the extra vendors will simply be ignored and
-only the first vendor and part-number per line will be used.
+In your spreadsheet select the relevant columns, copy and then click the paste
+button on the 1clickBOM popup.
 
-    comment | quantity | vendor | part-number | vendor2 | part-number2 | vendor3 | ...
+Alternatively, if you visit a page that ends in `.tsv` and has data in the
+right format available 1clickBOM will show a blue badge and button with an
+arrow. Press the blue button in the popup and the data will be added. You can
+try this on the [example tsv page][2] once you have the extension installed.
+
+### Then What? ###
+
+Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.
 
 ## Roadmap ##
 
 * 0.1
     * Chrome support
-    * Digikey, Mouser, Farnell , Newark, RS-Online and Allied
-    * Allow clearing individual carts
+    * Digikey, Mouser, Farnell , Newark, RS, Allied and Arrow
+    * Allow clearing and viewing individual carts
     * Paste TSV or visit online .tsv file
     * Auto-merge multiple entries of the same component
 
@@ -72,7 +83,7 @@ only the first vendor and part-number per line will be used.
 ### Build and Test Requirements ###
 
 1clickBOM is written in [Coffeescript][4] which transpiles to Javascript.
-Currently development is done on Chromium and will later be ported to Firefox.
+Currently development is done on Chromium.
 
 ### Build and Test Instructions ###
 
