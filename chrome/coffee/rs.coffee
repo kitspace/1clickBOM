@@ -86,8 +86,14 @@ class window.RS extends RetailerInterface
             ids = []
             parts = []
             for elem in doc.querySelectorAll(".errorRow")
-                ids.push(elem.firstElementChild.nextElementSibling.querySelector("input").name.split(":")[2])
-                parts.push(elem.firstElementChild.nextElementSibling.querySelector("input").value)
+                error_quantity_input = elem.querySelector(".quantityTd")
+                if error_quantity_input?
+                    ids.push(error_quantity_input.children[0].name.split(":")[2])
+                error_child = elem.children[1]
+                if error_child?
+                    error_input = error_child.querySelector("input")
+                    if error_input?
+                        parts.push(error_input.value)
             callback(ids, parts)
         , () ->
             callback([],[])
