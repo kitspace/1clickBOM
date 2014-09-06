@@ -94,7 +94,3 @@ class TSVPageNotifier
 
 window.tsvPageNotifier = new TSVPageNotifier
 
-chrome.cookies.getAll {domain:"element14.com"}, (cookies) ->
-    for cookie in cookies
-        chrome.cookies.remove {url:"http://" + cookie.domain,name:cookie.name}, () ->
-
