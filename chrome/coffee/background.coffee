@@ -94,3 +94,15 @@ class TSVPageNotifier
 
 window.tsvPageNotifier = new TSVPageNotifier
 
+#had some problems with sites not working between browser
+#restarts unless we clear the cookies
+chrome.cookies.getAll {domain:"element14.com"}, (cookies) ->
+    for cookie in cookies
+        chrome.cookies.remove({url:"http://" + cookie.domain, name:cookie.name}, () ->)
+
+chrome.cookies.getAll {domain:"farnell.com"}, (cookies) ->
+    for cookie in cookies
+        #the cookieMessage cookie just makes sure that the EU cookie
+        #notification thing has been agreed to so we don't want to delete that
+        if not /cookieMessage/.test(cookie.name)
+            chrome.cookies.remove({url:"http://" + cookie.domain, name:cookie.name}, () ->)

@@ -16,15 +16,9 @@ class window.Farnell extends RetailerInterface
     constructor: (country_code, settings) ->
         super("Farnell", country_code, "/data/farnell.json", settings)
 
-        #had some problems with element14 sites not working between browser
-        #restarts unless we clear the cookies
-        if /element14\.com/.test(@site)
-            chrome.cookies.getAll {domain:"element14.com"}, (cookies) ->
-                for cookie in cookies
-                    chrome.cookies.remove({url:"http://" + cookie.domain, name:cookie.name}, () ->)
         #export.farnell.com tries to go to exportHome.jsp if we have no cookie
         #and we don't do this
-        else if @site == "://export.farnell.com"
+        if @site == "://export.farnell.com"
             fix_url = "http" + @site + @cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"
             fix_xhr = new XMLHttpRequest
             fix_xhr.open("GET", fix_url, false)
