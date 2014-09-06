@@ -1,71 +1,71 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>1clickbom by kasbah</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>1clickbom</h1>
-        <p>A browser extension to fill your electronic component retailer shopping carts from CSV</p>
-
-        <p class="view"><a href="https://github.com/kasbah/1clickBOM">View the Project on GitHub <small>kasbah/1clickBOM</small></a></p>
-
-
-        <ul>
-          <li><a href="https://github.com/kasbah/1clickBOM/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/kasbah/1clickBOM/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/kasbah/1clickBOM">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/kasbah">kasbah</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
-  </body>
-</html>
+<h1 id="clickbom">1clickBOM</h1>
+<h4 id="one-bom---many-retailers"><em>One BOM - Many Retailers</em></h4>
+<p>1clickBOM is purchasing tool that let's you keep <em>one</em> bill of materials (BOM)<br />for items from <em>several</em> retailers. It's a browser extension that fills your<br />online shopping carts for you. To add items to 1clickBOM you simply paste from<br />a spreadsheet or visit an online <code>.tsv</code> file.</p>
+<h2 id="which-browsers-which-retailers">Which browsers? Which retailers?</h2>
+<p>Currently supported retailers are:</p>
+<ul>
+<li>Digikey<br /></li>
+<li>Mouser<br /></li>
+<li>Farnell<br /></li>
+<li>Newark<br /></li>
+<li>RS</li>
+</ul>
+<p>As of now 1clickBOM is only available for Chrome/Chromium but a Firefox version<br />is planned. Check the <a href="#roadmap">roadmap</a> for more details on future development<br />work.</p>
+<h2 id="usage">Usage</h2>
+<h3 id="adding-items">Adding Items</h3>
+<p>You should arrange items in your spreadsheet in the following order.</p>
+<pre><code>line-note | quantity | retailer | part-number</code></pre>
+<p>Line-note can be anything you like. I normally use schematic references.<br />Retailer is a name of one of the supported retailers and part-number is the<br />part-number specific to that retailer. See the <a href="chrome/data/example.tsv">example tsv</a>.</p>
+<p>In your spreadsheet select the relevant columns, copy and then click the paste<br />button on the 1clickBOM popup.</p>
+<p>Alternatively, if you visit a page that ends in <code>.tsv</code> and has data in the<br />right format available 1clickBOM will show a blue badge and button with an<br />arrow. Press the blue button in the popup and the data will be added. You can<br />try this on the <a href="chrome/data/example.tsv">example tsv page</a> once you have the extension installed.</p>
+<h3 id="then-what">Then What?</h3>
+<p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
+<h2 id="roadmap">Roadmap</h2>
+<ul>
+<li><p>0.1</p>
+<ul>
+<li>Chrome support<br /></li>
+<li>Digikey, Mouser, Farnell , Newark, RS, Allied and Arrow<br /></li>
+<li>Allow clearing and viewing individual carts<br /></li>
+<li>Paste TSV or visit online .tsv file<br /></li>
+<li>Auto-merge multiple entries of the same component</li>
+</ul></li>
+<li><p>0.2</p>
+<ul>
+<li>Firefox support</li>
+</ul></li>
+<li><p>0.3</p>
+<ul>
+<li>Display cart summaries<br /></li>
+<li>Warn about filling already filled carts<br /></li>
+<li>Allow adding components to BOM from the component page<br /></li>
+<li>Export BOM</li>
+</ul></li>
+<li><p>1.0</p>
+<ul>
+<li>Function to minimize order cost + shipping<br /></li>
+<li>Allow for multiple vendors per item<br /></li>
+<li>Allow additional unused fields in TSV, named columns?<br /></li>
+<li>Autofind same items from different vendors</li>
+</ul></li>
+<li><p>2.0</p>
+<ul>
+<li>Include PCB order</li>
+</ul></li>
+<li><p>3.0</p>
+<ul>
+<li>3D-chip-printer support</li>
+</ul></li>
+<li><p>4.0</p>
+<ul>
+<li>Communicate through quantum entanglement</li>
+</ul></li>
+</ul>
+<h2 id="development">Development</h2>
+<h3 id="build-and-test-requirements">Build and Test Requirements</h3>
+<p>1clickBOM is written in <a href="http://coffeescript.org">Coffeescript</a> which transpiles to Javascript.<br />Currently development is done on Chromium.</p>
+<h3 id="build-and-test-instructions">Build and Test Instructions</h3>
+<p>To transpile the coffeescript to javascript run <code>cake build</code> the chrome<br />directory. Run <code>cake</code> with no arguments for help. The code can then be loaded<br />as an unpacked extension in the developer mode in Chrome/Chromium settings.</p>
+<p>Unit and integration tests are written using the <a href="https://qunitjs.com/">QUnit framework</a>. Tests<br />can be run by opening a javascript console on the background page and executing<br />the <code>Test()</code> function.</p>
+<h2 id="license">License</h2>
+<p>1clickBOM is licensed under the AGPLv3. See the <a href="COPYING">COPYING</a> file for details.</p>
