@@ -12,7 +12,7 @@
         "default_popup": "html/popup.html"
     },
     "background": {
-        "persistent": false,
+        "persistent": true,
         "page":"html/background.html"
     },
     "web_accessible_resources": [
