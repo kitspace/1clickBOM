@@ -30,32 +30,101 @@ class window.Digikey extends RetailerInterface
 
     addItems: (items, callback) ->
         @adding_items = true
+        @_add_items items, (result) =>
+            if callback?
+                callback(result, this, items)
+            @refreshCartTabs()
+            @adding_items = false
+
+    _add_items: (items, callback) ->
         result = {success:true, fails:[]}
         count = items.length
         for item in items
             url = "http" + @site + @additem
             params = "qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment
-            post url, params, (event)=>
-                doc = DOM.parse(event.target.responseText)
-                #if the cart returns with a quick-add quantity filled-in there was an error
-                quick_add_quant = doc.querySelector("#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity")
-                success = (quick_add_quant?) && (quick_add_quant.value?) && (quick_add_quant.value == "")
-                if not success
-                    result.fails.push(event.target.item)
-                result.success = result.success && success
-                count--
-                if (count == 0)
-                    if callback?
-                        callback(result, this, items)
-                    @refreshCartTabs()
-                    @adding_items = false
+            @_add_item item, (item, item_result) =>
+                if not item_result.success
+                    @_get_part_id item, (item, id) =>
+                        @_get_suggested_amount item, id, (new_item) =>
+                            @_add_item new_item, (_, r) ->
+                                result.success &&= r.success
+                                result.fails = result.fails.concat(r.fails)
+                                count--
+                                if (count == 0)
+                                    callback(result)
+                        , () ->
+                            result.success = false
+                            result.fails.push(item)
+                            count--
+                            if (count == 0)
+                                callback(result)
+                    , () ->
+                        result.success = false
+                        result.fails.push(item)
+                        count--
+                        if (count == 0)
+                            callback(result)
+                else
+                    count--
+                    if (count == 0)
+                        callback(result)
             , item, json=false
             , (event) =>
-                console.log("yo")
                 result.fails.push(event.target.item)
                 count--
                 if (count == 0)
-                    if callback?
-                        callback(result, this, items)
-                    @refreshCartTabs()
-                    @adding_items = false
+                    callback(result)
+    _add_item: (item, callback) ->
+        url = "http" + @site + @additem
+        params = "qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment
+        result = {success:true, fails:[]}
+        post url, params, (event)->
+            doc = DOM.parse(event.target.responseText)
+            #if the cart returns with a quick-add quantity filled-in there was an error
+            quick_add_quant = doc.querySelector("#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity")
+            result.success = (quick_add_quant?) && (quick_add_quant.value?) && (quick_add_quant.value == "")
+            if not result.success
+                result.fails.push(event.target.item)
+            callback(event.target.item, result)
+        , item, json=false
+        , (event) ->
+            result.success = false
+            result.fails.push(event.target.item)
+            callback(event.target.item, result)
+
+    _get_part_id: (item, callback, error_callback) ->
+        url = "http" + @site + "/product-detail/en/EXB-38V103JV/"
+        url += item.part
+        get url, (event) ->
+            doc = DOM.parse(event.target.responseText)
+            inputs = doc.querySelectorAll("input")
+            for input in inputs
+                if input.name == "partid"
+                    callback(item, input.value)
+                    break
+        , error_callback
+    _get_suggested_amount: (item, id, callback, error_callback) =>
+        url = "http" + @site + "/classic/Ordering/PackTypeDialog.aspx?"
+        url += "part=" + item.part
+        url += "&qty=" + item.quantity
+        url += "&partId=" + id
+        url += "&error=NextBreakQuanIsLowerExtPrice&cref=&esc=-1&returnURL=%2f%2fwww.digikey.co.uk%2fclassic%2fordering%2faddpart.aspx&fastAdd=false&showUpsell=True"
+        get url, (event) ->
+            doc = DOM.parse(event.target.responseText)
+            rb2 = doc.getElementById("rb2")
+            if rb2?
+                label = rb2.nextElementSibling
+                if label?
+                    number_str = label.innerText.split(String.fromCharCode(160))[0]
+                    number = parseInt(number_str)
+                    if not isNaN(number)
+                        item.quantity = number
+                        callback(item)
+                    else
+                        error_callback()
+                else
+                    error_callback()
+            else
+                error_callback()
+        , error_callback
+
