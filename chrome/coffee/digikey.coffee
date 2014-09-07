@@ -45,14 +45,29 @@ class window.Digikey extends RetailerInterface
             @_add_item item, (item, item_result) =>
                 if not item_result.success
                     @_get_part_id item, (item, id) =>
-                        @_get_suggested_amount item, id, (new_item) =>
-                            @_add_item new_item, (_, r) ->
-                                result.success &&= r.success
-                                result.fails = result.fails.concat(r.fails)
-                                count--
-                                if (count == 0)
-                                    callback(result)
-                        , () ->
+                        @_get_suggested_amount item, id, "NextBreakQuanIsLowerExtPrice"
+                        , (new_item) =>
+                            @_add_item new_item, (_, r) =>
+                                if not r.success
+                                    @_get_suggested_amount new_item, id, "TapeReelQuantityTooLow"
+                                    , (new_item) =>
+                                        @_add_item new_item, (_, r) ->
+                                            result.success &&= r.success
+                                            result.fails = result.fails.concat(r.fails)
+                                            count--
+                                            if (count == 0)
+                                                callback(result)
+                                    , () ->
+                                        result.success = false
+                                        result.fails.push(item)
+                                        count--
+                                        if (count == 0)
+                                            callback(result)
+                                else
+                                    count--
+                                    if (count == 0)
+                                        callback(result)
+                        , () =>
                             result.success = false
                             result.fails.push(item)
                             count--
@@ -103,21 +118,25 @@ class window.Digikey extends RetailerInterface
                     callback(item, input.value)
                     break
         , error_callback
-    _get_suggested_amount: (item, id, callback, error_callback) =>
+    _get_suggested_amount: (item, id, error, callback, error_callback) =>
         url = "http" + @site + "/classic/Ordering/PackTypeDialog.aspx?"
         url += "part=" + item.part
         url += "&qty=" + item.quantity
         url += "&partId=" + id
-        url += "&error=NextBreakQuanIsLowerExtPrice&cref=&esc=-1&returnURL=%2f%2fwww.digikey.co.uk%2fclassic%2fordering%2faddpart.aspx&fastAdd=false&showUpsell=True"
+        url += "&error=" + error + "&cref=&esc=-1&returnURL=%2f%2fwww.digikey.co.uk%2fclassic%2fordering%2faddpart.aspx&fastAdd=false&showUpsell=True"
         get url, (event) ->
             doc = DOM.parse(event.target.responseText)
-            rb2 = doc.getElementById("rb2")
-            if rb2?
-                label = rb2.nextElementSibling
+            switch error
+                when "TapeReelQuantityTooLow"       then choice = doc.getElementById("rb1")
+                when "NextBreakQuanIsLowerExtPrice" then choice = doc.getElementById("rb2")
+            if choice?
+                label = choice.nextElementSibling
                 if label?
                     number_str = label.innerText.split(String.fromCharCode(160))[0]
+                    part = label.innerText.split(String.fromCharCode(160))[2]
                     number = parseInt(number_str)
                     if not isNaN(number)
+                        item.part = part
                         item.quantity = number
                         callback(item)
                     else
