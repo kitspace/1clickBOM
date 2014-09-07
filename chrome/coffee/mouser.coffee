@@ -53,7 +53,7 @@ class window.Mouser extends RetailerInterface
                     part = error.getAttribute("data-partnumber")
                     if part?
                         for item in items
-                            if item.part == part
+                            if item.part == part.replace(/-/g, '')
                                 result.fails.push(item)
                         result.success = false
             if not result.success
