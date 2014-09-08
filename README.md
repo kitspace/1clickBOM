@@ -1,6 +1,5 @@
+<center><iframe src="http://gfycat.com/ifr/EveryGiantFlounder" frameborder="0" scrolling="no" width="640" height="480" style="-webkit-backface-visibility: hidden;-webkit-transform: scale(1);" ></iframe></center>
 # 1clickBOM #
-
-<iframe src="http://gfycat.com/ifr/SinfulEnchantedBird" frameborder="0" scrolling="no" width="640" height="480" style="-webkit-backface-visibility: hidden;-webkit-transform: scale(1);" ></iframe>
 
 #### _One BOM - Many Retailers_ ####
 
