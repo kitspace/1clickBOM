@@ -2,7 +2,7 @@
     "manifest_version": 2,
 
     "name": "1clickBOM",
-    "description": "Automatically populate your electronic component shopping carts.",
+    "description": "Fill your shopping carts from a bill of materials.",
     "version": "0.0.1",
     "permissions": [
         "tabs", "cookies", "http://*/*", "https://*/*", "clipboardRead", "storage", "geolocation", "notifications"
