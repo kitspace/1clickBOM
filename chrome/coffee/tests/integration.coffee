@@ -48,16 +48,6 @@ asyncTest "Add items fails", () ->
             deepEqual(result.fails, [items[0]], that.country)
             start()
 
-asyncTest "Add items fails 2", () ->
-    items = [{"part":"754-1173-1-ND", "quantity":-1, "comment":"test"}, {"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
-    stop(digikey_locations.length - 1)
-    for l in digikey_locations
-        r = new Digikey(l)
-        r.addItems items, (result, that) ->
-            deepEqual(result.success, false, that.country)
-            deepEqual(result.fails, [items[0]], that.country)
-            start()
-
 module("Farnell")
 
 farnell_locations = Object.keys(farnell_data.sites)

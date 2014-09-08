@@ -45,11 +45,11 @@ class window.Digikey extends RetailerInterface
             @_add_item item, (item, item_result) =>
                 if not item_result.success
                     @_get_part_id item, (item, id) =>
-                        @_get_suggested_amount item, id, "NextBreakQuanIsLowerExtPrice"
+                        @_get_suggested item, id, "NextBreakQuanIsLowerExtPrice"
                         , (new_item) =>
                             @_add_item new_item, (_, r) =>
                                 if not r.success
-                                    @_get_suggested_amount new_item, id, "TapeReelQuantityTooLow"
+                                    @_get_suggested new_item, id, "TapeReelQuantityTooLow"
                                     , (new_item) =>
                                         @_add_item new_item, (_, r) ->
                                             result.success &&= r.success
@@ -117,8 +117,8 @@ class window.Digikey extends RetailerInterface
                 if input.name == "partid"
                     callback(item, input.value)
                     break
-        , error_callback
-    _get_suggested_amount: (item, id, error, callback, error_callback) =>
+        , error_callback, item=null, notify=false
+    _get_suggested: (item, id, error, callback, error_callback) =>
         url = "http" + @site + "/classic/Ordering/PackTypeDialog.aspx?"
         url += "part=" + item.part
         url += "&qty=" + item.quantity
@@ -133,8 +133,8 @@ class window.Digikey extends RetailerInterface
                 label = choice.nextElementSibling
                 if label?
                     number_str = label.innerText.split(String.fromCharCode(160))[0]
-                    part = label.innerText.split(String.fromCharCode(160))[2]
-                    number = parseInt(number_str)
+                    part       = label.innerText.split(String.fromCharCode(160))[2]
+                    number = parseInt(number_str.replace(/,/,""))
                     if not isNaN(number)
                         item.part = part
                         item.quantity = number
@@ -145,5 +145,5 @@ class window.Digikey extends RetailerInterface
                     error_callback()
             else
                 error_callback()
-        , error_callback
+        , error_callback, item=null, notify=false
 
