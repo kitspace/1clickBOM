@@ -1,5 +1,6 @@
-<center><iframe src="http://gfycat.com/ifr/EveryGiantFlounder" frameborder="0" scrolling="no" width="640" height="480" style="-webkit-backface-visibility: hidden;-webkit-transform: scale(1);" ></iframe></center>
 # 1clickBOM #
+
+<iframe src="http://gfycat.com/ifr/SinfulEnchantedBird" frameborder="0" scrolling="no" width="640" height="480" style="-webkit-backface-visibility: hidden;-webkit-transform: scale(1);" ></iframe>
 
 #### _One BOM - Many Retailers_ ####
 
@@ -84,8 +85,8 @@ using the buttons on the popup. You can also quickly view and empty your carts.
 
 ### Build and Test Requirements ###
 
-1clickBOM is written in [Coffeescript][4] which transpiles to Javascript.
-Currently development is done on Chromium.
+The code is available on [Github][7]. 1clickBOM is written in [Coffeescript][4]
+which transpiles to Javascript.  Currently development is done on Chromium.
 
 ### Build and Test Instructions ###
 
@@ -102,9 +103,10 @@ the `Test()` function.
 1clickBOM is licensed under the AGPLv3. See the [COPYING][6] file for details.
 
 [1]:#roadmap
-[2]:chrome/data/example.tsv
-[3]:chrome/html/test.html
+[2]:https://github.com/kasbah/1clickBOM/blob/master/chrome/data/example.tsv
+[3]:https://github.com/kasbah/1clickBOM/blob/master/chrome/html/test.html
 [4]:http://coffeescript.org
 [5]:https://qunitjs.com/
-[6]:COPYING
+[6]:https://github.com/kasbah/1clickBOM/blob/master/COPYING
+[7]:https://github.com/kasbah/1clickBOM
 

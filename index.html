@@ -6,11 +6,12 @@
   <meta name="generator" content="pandoc" />
   <title></title>
   <style type="text/css">code{white-space: pre;}</style>
-  <link rel="stylesheet" href="markdown7.css" type="text/css" />
+  <link rel="stylesheet" href="markdown.css" type="text/css" />
 </head>
 <body>
-<center><iframe src="http://gfycat.com/ifr/EveryGiantFlounder" frameborder="0" scrolling="no" width="640" height="480" style="-webkit-backface-visibility: hidden;-webkit-transform: scale(1);" ></iframe></center>
 <h1 id="clickbom">1clickBOM</h1>
+<iframe src="http://gfycat.com/ifr/SinfulEnchantedBird" frameborder="0" scrolling="no" width="640" height="480" style="-webkit-backface-visibility: hidden;-webkit-transform: scale(1);" ></iframe>
+
 <h4 id="one-bom---many-retailers"><em>One BOM - Many Retailers</em></h4>
 <p>1clickBOM is purchasing tool that let's you keep <em>one</em> bill of materials (BOM) for items from <em>several</em> retailers. It's a browser extension that fills your online shopping carts for you. To add items to 1clickBOM you simply paste from a spreadsheet or visit an online <code>.tsv</code> file.</p>
 <h2 id="which-browsers-which-retailers">Which browsers? Which retailers?</h2>
@@ -27,9 +28,9 @@
 <h3 id="adding-items">Adding Items</h3>
 <p>You should arrange items in your spreadsheet in the following order.</p>
 <pre><code>line-note | quantity | retailer | part-number</code></pre>
-<p>Line-note can be anything you like. I normally use schematic references. Retailer is a name of one of the supported retailers and part-number is the part-number specific to that retailer. See the <a href="chrome/data/example.tsv">example tsv</a>.</p>
+<p>Line-note can be anything you like. I normally use schematic references. Retailer is a name of one of the supported retailers and part-number is the part-number specific to that retailer. See the <a href="https://github.com/kasbah/1clickBOM/blob/master/chrome/data/example.tsv">example tsv</a>.</p>
 <p>In your spreadsheet select the relevant columns, copy and then click the paste button on the 1clickBOM popup.</p>
-<p>Alternatively, if you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Press the blue button in the popup and the data will be added. You can try this on the <a href="chrome/data/example.tsv">example tsv page</a> once you have the extension installed.</p>
+<p>Alternatively, if you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Press the blue button in the popup and the data will be added. You can try this on the <a href="https://github.com/kasbah/1clickBOM/blob/master/chrome/data/example.tsv">example tsv page</a> once you have the extension installed.</p>
 <h3 id="then-what">Then What?</h3>
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
 <h2 id="roadmap">Roadmap</h2>
@@ -75,11 +76,11 @@
 </ul>
 <h2 id="development">Development</h2>
 <h3 id="build-and-test-requirements">Build and Test Requirements</h3>
-<p>1clickBOM is written in <a href="http://coffeescript.org">Coffeescript</a> which transpiles to Javascript. Currently development is done on Chromium.</p>
+<p>The code is available on <a href="https://github.com/kasbah/1clickBOM">Github</a>. 1clickBOM is written in <a href="http://coffeescript.org">Coffeescript</a> which transpiles to Javascript. Currently development is done on Chromium.</p>
 <h3 id="build-and-test-instructions">Build and Test Instructions</h3>
 <p>To transpile the coffeescript to javascript run <code>cake build</code> the chrome directory. Run <code>cake</code> with no arguments for help. The code can then be loaded as an unpacked extension in the developer mode in Chrome/Chromium settings.</p>
 <p>Unit and integration tests are written using the <a href="https://qunitjs.com/">QUnit framework</a>. Tests can be run by opening a javascript console on the background page and executing the <code>Test()</code> function.</p>
 <h2 id="license">License</h2>
-<p>1clickBOM is licensed under the AGPLv3. See the <a href="COPYING">COPYING</a> file for details.</p>
+<p>1clickBOM is licensed under the AGPLv3. See the <a href="https://github.com/kasbah/1clickBOM/blob/master/COPYING">COPYING</a> file for details.</p>
 </body>
 </html>
