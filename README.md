@@ -1,7 +1,5 @@
 # 1clickBOM #
 
-<iframe src="http://gfycat.com/ifr/SinfulEnchantedBird" frameborder="0" scrolling="no" width="640" height="480" style="-webkit-backface-visibility: hidden;-webkit-transform: scale(1);" ></iframe>
-
 #### _One BOM - Many Retailers_ ####
 
 1clickBOM is purchasing tool that let's you keep _one_ bill of materials (BOM)
