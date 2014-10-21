@@ -239,7 +239,11 @@ class window.RS extends RetailerInterface
         url = "http" + @site + @cart
         get url, (event) =>
             doc = DOM.parse(event.target.responseText)
-            viewstate  = doc.getElementById("javax.faces.ViewState").value
+            viewstate_element  = doc.getElementById("javax.faces.ViewState")
+            if viewstate_element?
+                viewstate = viewstate_element.value
+            else
+                return callback("", "")
             btn_doc = doc.getElementById("addToOrderDiv")
             #the form_id element is different values depending on signed in or signed out
             #could just hardcode them but maybe this will be more future-proof?
@@ -253,13 +257,22 @@ class window.RS extends RetailerInterface
         url = "http" + @site + @cart
         get url, (event) =>
             doc = DOM.parse(event.target.responseText)
-            viewstate  = doc.getElementById("javax.faces.ViewState").value
-            form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling
-            #the form_id elements are different values depending on signed in or signed out
-            #could just hardcode them but maybe this will be more future-proof?
-            form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
-            form_id3  = doc.getElementById("a4jCloseForm").firstChild.id.split(":")[1]
-            callback(viewstate, [form.id, form_id2, form_id3])
+            viewstate_elem = doc.getElementById("javax.faces.ViewState")
+            if viewstate_elem?
+                viewstate = doc.getElementById("javax.faces.ViewState").value
+            else
+                return callback("", [])
+
+            form_elem = doc.getElementById("a4jCloseForm")
+            if form_elem?
+                form = form_elem.nextElementSibling.nextElementSibling
+                #the form_id elements are different values depending on signed in or signed out
+                #could just hardcode them but maybe this will be more future-proof?
+                form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
+                form_id3  = doc.getElementById("a4jCloseForm").firstChild.id.split(":")[1]
+                callback(viewstate, [form.id, form_id2, form_id3])
+            else
+                return callback("", [])
         , () ->
             callback("", [])
 
