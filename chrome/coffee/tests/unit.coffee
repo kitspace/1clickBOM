@@ -26,8 +26,12 @@ test "Farnell: Constructs for all countries", () ->
         ok(new Farnell(code) instanceof RetailerInterface, country + " " + code)
 
 test "Mouser: Constructs for all countries", () ->
+    #we need to mock the post request otherwise they will time out since they fire too quickly
+    real_post = window.post
+    window.post = () ->
     for country,code of countries
         ok(new Mouser(code) instanceof RetailerInterface, country + " " + code)
+    window.post = real_post
 
 test "RS: Constructs for all countries", () ->
     for country,code of countries
