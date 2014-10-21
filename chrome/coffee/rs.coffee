@@ -142,7 +142,7 @@ class window.RS extends RetailerInterface
         if form_ids[3] == "j_id1136"
             form_id5 = "j_id1541"
         else
-            form_id5 = "j_id1587"
+            form_id5 = "j_id1625"
 
         params2 += "&shoppingBasketForm%3A" + form_ids[3] + "%3A0%3Aj_id1180=fail&shoppingBasketForm%3A" + form_ids[3] + "%3A0%3Aj_id1202=2&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionModalLayerOpenedState=&shoppingBasketForm%3AsendToColleagueWidgetPanelOpenedState=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_senderName_decorate%3AGuestUserSendToColleagueWidgetAction_senderName=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_senderEmail_decorate%3AGuestUserSendToColleagueWidgetAction_senderEmail=name%40firma.at&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_mailTo_decorate%3AGuestUserSendToColleagueWidgetAction_mailTo=name%40firma.at&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_subject_decorate%3AGuestUserSendToColleagueWidgetAction_subject=Kopie%20des%20Warenkorbs&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_message_decorate%3AGuestUserSendToColleagueWidgetAction_message=&shoppingBasketForm%3AsendToColleagueSuccessWidgetPanelOpenedState=&javax.faces.ViewState=" + viewstate + "&shoppingBasketForm%3A" + form_id5 + "=shoppingBasketForm%3A" + form_id5 + "&"
 
@@ -187,7 +187,7 @@ class window.RS extends RetailerInterface
                 url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder"
                 params = '{"request":{"lines":"'
                 for item in items
-                    params += item.part + "," + item.quantity + ",what_the_hell_is_cost_center," + item.comment + "\n"
+                    params += item.part + "," + item.quantity + ",," + item.comment + "\n"
                 params += '"}}'
                 post url, params, (event) =>
                     doc = DOM.parse(JSON.parse(event.target.responseText).html)
@@ -214,7 +214,7 @@ class window.RS extends RetailerInterface
         url = "http" + @site + @cart
         params = "AJAXREQUEST=shoppingBasketForm%3A" + form_id + "&shoppingBasketForm=shoppingBasketForm&=QuickAdd&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_listItems="
         for item in items
-            params += encodeURIComponent(item.part + "," + item.quantity + ",what_the_hell_is_cost_center?," + item.comment + "\n")
+            params += encodeURIComponent(item.part + "," + item.quantity + ",," + item.comment + "\n")
 
         params += "&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionModalLayerOpenedState=&javax.faces.ViewState=" + viewstate + "&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderTextBoxbtn=shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderTextBoxbtn&"
         post url, params, (event) =>
