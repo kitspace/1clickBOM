@@ -72,6 +72,7 @@ asyncTest "Add items", () ->
     items = [{"part":"2250472", "quantity":2, "comment":"test"}]
     stop(farnell_locations.length - 1)
     for l in farnell_locations
+        window.clearCookies()
         r = new Farnell(l)
         r.addItems items, (result, that) ->
             deepEqual(result.success, true, that.country)
@@ -81,6 +82,7 @@ asyncTest "Add items fails", () ->
     items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
     stop(farnell_locations.length - 1)
     for l in farnell_locations
+        window.clearCookies()
         r = new Farnell(l)
         r.addItems items, (result, that) ->
             deepEqual(result.success, false, that.country)
