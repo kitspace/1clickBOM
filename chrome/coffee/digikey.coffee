@@ -104,8 +104,9 @@ class window.Digikey extends RetailerInterface
         , item, json=false
         , (event) ->
             result.success = false
-            result.fails.push(event.target.item)
-            callback(event.target.item, result)
+            if event.target?
+                result.fails.push(event.target.item)
+                callback(event.target.item, result)
 
     _get_part_id: (item, callback, error_callback) ->
         url = "http" + @site + "/product-detail/en/EXB-38V103JV/"
