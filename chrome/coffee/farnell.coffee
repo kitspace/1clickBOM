@@ -23,16 +23,12 @@ class window.Farnell extends RetailerInterface
             fix_xhr = new XMLHttpRequest
             fix_xhr.open("GET", fix_url, false)
             fix_xhr.send()
-        #the scandanavian sites are like Newark's so we get all our methods
+        #these sites are like Newark's so we get all our methods
         #from Newark
-        else if country_code in ["FI", "DK", "NO", "SE"]
+        else if country_code in ["AT", "PT", "ES", "IT", "DE", "FI", "DK", "NO", "SE"]
             for name, method of Newark::
                 this[name] = method
-            switch country_code
-                when "FI" then @store_id = "10159"
-                when "DK" then @store_id = "10157"
-                when "NO" then @store_id = "10169"
-                when "SE" then @store_id = "10177"
+            @_set_store_id()
 
     clearCart: (callback) ->
         @clearing_cart = true
