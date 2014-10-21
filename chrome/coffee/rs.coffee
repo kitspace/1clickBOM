@@ -13,8 +13,8 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 class window.RS extends RetailerInterface
-    constructor: (country_code, settings) ->
-        super("RS", country_code, "data/rs.json", settings)
+    constructor: (country_code, settings, callback) ->
+        super("RS", country_code, "data/rs.json", settings, callback)
     clearCart: (callback) ->
         @clearing_cart = true
         if /web\/ca/.test(@cart)

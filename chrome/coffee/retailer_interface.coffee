@@ -13,7 +13,7 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 class window.RetailerInterface
-    constructor: (name, country_code, data_path, settings) ->
+    constructor: (name, country_code, data_path, settings, callback) ->
         @country = country_code
         data = get_local(data_path)
         country_code_lookedup = data.lookup[country_code]
@@ -61,6 +61,8 @@ class window.RetailerInterface
         , () =>
             @icon_src = chrome.extension.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
         , notify=false
+        if callback?
+            callback()
 
     refreshCartTabs: () ->
         #we reload any tabs with the cart URL but the path is case insensitive

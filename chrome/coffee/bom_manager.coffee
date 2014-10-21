@@ -22,11 +22,14 @@ class window.BomManager
             @interfaces = {}
             if (!country)
                 country = "Other"
+            count = 5
             for retailer_interface in [Digikey, Farnell, Mouser, RS, Newark]
                 setting_values = @lookup_setting_values(country, retailer_interface.name, stored_settings)
-                @interfaces[retailer_interface.name] = new retailer_interface(country, setting_values)
-            if callback?
-                callback()
+                @interfaces[retailer_interface.name] = new retailer_interface country, setting_values, () ->
+                    count -= 1
+                    if count == 0
+                        if callback?
+                            callback()
 
     lookup_setting_values: (country, retailer, stored_settings)->
         if(stored_settings? && stored_settings[country]? && stored_settings[country][retailer]?)

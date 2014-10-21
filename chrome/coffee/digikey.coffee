@@ -13,8 +13,8 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 class window.Digikey extends RetailerInterface
-    constructor: (country_code, settings) ->
-        super("Digikey", country_code, "/data/digikey.json", settings)
+    constructor: (country_code, settings, callback) ->
+        super("Digikey", country_code, "/data/digikey.json", settings, callback)
 
     clearCart: (callback) ->
         @clearing_cart = true

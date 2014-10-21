@@ -30,5 +30,6 @@ window.test_one = (country="HK") ->
                                 bkgd_page.bom_manager.emptyCarts (result) ->
                                     deepEqual(result.success, true)
                                     start()
-window.test_one("HK")
-window.test_one("AU")
+for c in [ "AU", "MY", "PH", "TW", "NZ", "KR"
+         , "CN", "TH", "IN", "HK", "SG"]
+    window.test_one(c)

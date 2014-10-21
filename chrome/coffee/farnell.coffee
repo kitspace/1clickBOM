@@ -13,7 +13,7 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 class window.Farnell extends RetailerInterface
-    constructor: (country_code, settings) ->
+    constructor: (country_code, settings, callback) ->
         super("Farnell", country_code, "/data/farnell.json", settings)
 
         #export.farnell.com tries to go to exportHome.jsp if we have no cookie
@@ -25,24 +25,69 @@ class window.Farnell extends RetailerInterface
             fix_xhr.send()
         #these sites are like Newark's so we get all our methods
         #from Newark
-        else if country_code in ["AT", "PT", "ES", "IT", "DE", "FI", "DK", "NO", "SE"]
+        if country_code in ["AT", "PT", "ES", "IT", "DE", "FI", "DK", "NO", "SE"]
             for name, method of Newark::
                 this[name] = method
             @_set_store_id()
-
+        #    if callback?
+        #        callback()
+        #else if country_code in ["AU", "PH"]
+        #    #had some problems with sites not working between browser
+        #    #restarts unless we clear the cookies
+        #    console.log("yo yo")
+        #    @_clear_cookies () =>
+        #        console.log("hey hey")
+        #        @_fix_cookies(callback)
+        if callback?
+            callback()
+    _clear_cookies: (callback) ->
+        chrome.cookies.getAll {domain:"element14.com"}, (incoming_cookies) ->
+            cookies = []
+            for cookie in incoming_cookies
+                if not /MAINT_NOTIFY/.test(cookie.name)
+                    cookies.push(cookie)
+            count = cookies.length
+            for cookie in cookies
+                chrome.cookies.remove {url:"http://" + cookie.domain, name:cookie.name}, () ->
+                    count -= 1
+                    console.log(count)
+                    if count == 0
+                        chrome.cookies.getAll {domain:"farnell.com"}, (incoming_cookies) ->
+                            cookies = []
+                            for cookie in incoming_cookies
+                                #the cookieMessage cookie just makes sure that the EU cookie
+                                #notification thing has been agreed to so we don't want to delete that
+                                if not /cookieMessage/.test(cookie.name)
+                                    cookies.push(cookie)
+                            count = cookies.length
+                            for cookie in cookies
+                                chrome.cookies.remove {url:"http://" + cookie.domain, name:cookie.name}, () ->
+                                    count -= 1
+                                    if count == 0 && callback?
+                                        callback()
+    _fix_cookies2: (callback) ->
+        @_clear_cookies () =>
+            chrome.tabs.create {url:"http" + @site + "/jsp/home/homepage.jsp", active:false}, (tab) ->
+                listener = chrome.tabs.onUpdated.addListener (updated_tab_id, obj, updated_tab) ->
+                    if updated_tab_id == tab.id && updated_tab.status == "complete"
+                        chrome.tabs.remove tab.id, () ->
+                            chrome.tabs.onUpdated.removeListener(listener)
+                            if callback?
+                                callback()
     _fix_cookies: (callback) ->
-        console.log("yo")
-        url = "https" + @site + "/jsp/profile/register.jsp?_DARGS=/jsp/profile/fragments/login/loginFragment.jsp.loginfragment"
-        params = "_dyncharset=UTF-8&%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginErrorURL=..%2Fprofile%2Flogin.jsp%3FfromPage%3Dtrue&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginErrorURL=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginSuccessURL=%2Fjsp%2Fhome%2Fhomepage.jsp&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginSuccessURL=+&login=1clickBOM" + @country + "&_D%3Alogin=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.value.password=1clickBOM&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.value.password=+&s=&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.autoLogin=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login.x=28&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login.y=17&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login=login&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.login=+&_DARGS=%2Fjsp%2Fprofile%2Ffragments%2Flogin%2FloginFragment.jsp.loginfragment"
-        post url, params, (event) =>
-            console.log("huh")
-            @_add_items [{part:"2334075", comment:"fixer", quantity:2}], () =>
-                console.log("yurp")
-                url3 = "http" + @site + "/jsp/home/homepage.jsp?_DARGS=/jsp/commonfragments/linkE14.jsp_A&_DAV="
-                get url3, () =>
-                    if callback?
-                        callback(this)
-                    console.log("ok")
+        @_clear_cookies () =>
+            console.log("yo")
+            url = "https" + @site + "/jsp/profile/register.jsp?_DARGS=/jsp/profile/fragments/login/loginFragment.jsp.loginfragment"
+            params = "_dyncharset=UTF-8&%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginErrorURL=..%2Fprofile%2Flogin.jsp%3FfromPage%3Dtrue&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginErrorURL=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginSuccessURL=%2Fjsp%2Fhome%2Fhomepage.jsp&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginSuccessURL=+&login=1clickBOM" + @country + "&_D%3Alogin=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.value.password=1clickBOM&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.value.password=+&s=&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.autoLogin=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login.x=28&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login.y=17&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login=login&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.login=+&_DARGS=%2Fjsp%2Fprofile%2Ffragments%2Flogin%2FloginFragment.jsp.loginfragment"
+            post url, params, (event) =>
+                console.log("huh")
+                @_add_items [{part:"2334075", comment:"fixer", quantity:2}], () =>
+                    console.log("yurp")
+                    url3 = "http" + @site + "/jsp/home/homepage.jsp?_DARGS=/jsp/commonfragments/linkE14.jsp_A&_DAV="
+                    get url3, () =>
+                        if callback?
+                            callback()
+                        console.log("ok")
 
     clearCart: (callback) ->
         @clearing_cart = true
