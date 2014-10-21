@@ -44,7 +44,6 @@ class window.Farnell extends RetailerInterface
                         callback(this)
                     console.log("ok")
 
-
     clearCart: (callback) ->
         @clearing_cart = true
         @_get_item_ids (ids) =>
