@@ -55,9 +55,14 @@ h5 tt, h5 code {
 h6 tt, h6 code {
    font-size: inherit; }
 
+.caption {
+    visibility: hidden;
+    display: none; }
 h1 {
-   font-size: 28px;
-   color: black; }
+   font-size: 40px;
+   color: black;
+   border-bottom: 1px solid #cccccc;
+   text-align: center;}
 
 h2 {
    font-size: 24px;

@@ -4,17 +4,21 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title></title>
+  <title>1clickBOM</title>
   <style type="text/css">code{white-space: pre;}</style>
   <link rel="stylesheet" href="markdown7.css" type="text/css" />
 </head>
 <body>
-<script type"text/javascript" src="gfycat.js"></script>
-<div class="gfyitem" data-title=true data-autoplay=false data-controls=true data-expand=false data-id="EminentSecondaryInsect" >
-<img src=demo.gif>
+<div id="header">
+<h1 class="title">1clickBOM</h1>
 </div>
+<hr />
+<script type"text/javascript" src="gfycat.js"></script>
+<center><div class="gfyitem" data-title=true data-autoplay=false data-controls=true data-expand=false data-id="EminentSecondaryInsect" >
+<img src=demo.gif>
+</div></center>
 
-<h1 id="clickbom">1clickBOM</h1>
+<hr />
 <h4 id="one-bom---many-retailers"><em>One BOM - Many Retailers</em></h4>
 <p>1clickBOM is purchasing tool that let's you keep <em>one</em> bill of materials (BOM) for items from <em>several</em> retailers. It's a browser extension that fills your online shopping carts for you. To add items to 1clickBOM you simply paste from a spreadsheet or visit an online <code>.tsv</code> file.</p>
 <h2 id="which-browsers-which-retailers">Which browsers? Which retailers?</h2>
@@ -31,9 +35,12 @@
 <h3 id="adding-items">Adding Items</h3>
 <p>You should arrange items in your spreadsheet in the following order.</p>
 <pre><code>line-note | quantity | retailer | part-number</code></pre>
-<p>Line-note can be anything you like. I normally use schematic references. Retailer is a name of one of the supported retailers and part-number is the part-number specific to that retailer. See the <a href="https://github.com/kasbah/1clickBOM/blob/master/chrome/data/example.tsv">example tsv</a>.</p>
+<p>Line-note can be anything you like. I normally use schematic references. Retailer is a name of one of the supported retailers and part-number is the part-number specific to that retailer. See the <a href="https://github.com/monostable/1clickBOM/blob/master/chrome/data/example.tsv">example tsv</a>.</p>
 <p>In your spreadsheet select the relevant columns, copy and then click the paste button on the 1clickBOM popup.</p>
-<p>Alternatively, if you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Press the blue button in the popup and the data will be added. You can try this on the <a href="https://github.com/kasbah/1clickBOM/blob/master/chrome/data/example.tsv">example tsv page</a> once you have the extension installed.</p>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" /><p class="caption">Load from page</p>
+</div>
+<p>Alternatively, if you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Press the blue button in the popup and the data will be added. You can try this on the <a href="https://github.com/monostable/1clickBOM/blob/master/chrome/data/example.tsv">example tsv page</a> once you have the extension installed.</p>
 <h3 id="then-what">Then What?</h3>
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
 <h2 id="roadmap">Roadmap</h2>
@@ -41,7 +48,7 @@
 <li>0.1
 <ul>
 <li>Chrome support</li>
-<li>Digikey, Mouser, Farnell, Newark, RS, Allied and Arrow</li>
+<li>Digikey, Mouser, Farnell, Newark and RS</li>
 <li>Allow clearing and viewing individual carts</li>
 <li>Paste TSV or visit online <code>.tsv</code> file</li>
 <li>Auto-merge multiple entries of the same component</li>
@@ -52,6 +59,7 @@
 </ul></li>
 <li>0.3
 <ul>
+<li>Allied and Arrow</li>
 <li>Display cart summaries</li>
 <li>Warn about filling already filled carts</li>
 <li>Allow adding components to BOM from the component page</li>
@@ -79,11 +87,11 @@
 </ul>
 <h2 id="development">Development</h2>
 <h3 id="build-and-test-requirements">Build and Test Requirements</h3>
-<p>The code is available on <a href="https://github.com/kasbah/1clickBOM">Github</a>. 1clickBOM is written in <a href="http://coffeescript.org">Coffeescript</a> which transpiles to Javascript. Currently development is done on Chromium.</p>
+<p>The code is available on <a href="https://github.com/monostable/1clickBOM">Github</a>. 1clickBOM is written in <a href="http://coffeescript.org">Coffeescript</a> which transpiles to Javascript. Currently development is done on Chromium.</p>
 <h3 id="build-and-test-instructions">Build and Test Instructions</h3>
 <p>To transpile the coffeescript to javascript run <code>cake build</code> the chrome directory. Run <code>cake</code> with no arguments for help. The code can then be loaded as an unpacked extension in the developer mode in Chrome/Chromium settings.</p>
 <p>Unit and integration tests are written using the <a href="https://qunitjs.com/">QUnit framework</a>. Tests can be run by opening a javascript console on the background page and executing the <code>Test()</code> function.</p>
 <h2 id="license">License</h2>
-<p>1clickBOM is licensed under the AGPLv3. See the <a href="https://github.com/kasbah/1clickBOM/blob/master/COPYING">COPYING</a> file for details.</p>
+<p>1clickBOM is licensed under the AGPLv3. See the <a href="https://github.com/monostable/1clickBOM/blob/master/LICENSE">LICENSE</a> file for details.</p>
 </body>
 </html>

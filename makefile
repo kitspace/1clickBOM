@@ -1,8 +1,8 @@
 all:
 	git checkout master README.md
-	git checkout master chrome/data/example.tsv
-	pandoc -s -c markdown7.css gif_header.md README.md -o index.html
+	sed -i '/demo.gif/d;/# 1clickBOM/d' README.md
+	pandoc --standalone -c markdown7.css header.md README.md -o index.html
 
 quick:
-	pandoc -s -c markdown7.css gif_header.md README.md -o index.html
+	pandoc -s -c markdown7.css header.md README.md -o index.html
 
