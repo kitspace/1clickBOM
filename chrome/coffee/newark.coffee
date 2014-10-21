@@ -15,12 +15,23 @@
 class window.Newark extends RetailerInterface
     constructor: (country_code, settings) ->
         super("Newark", country_code, "/data/newark.json", settings)
-        @store_id = "10194"
+        @_set_store_id()
 
     clearCart: (callback) ->
         @clearing_cart = true
         @_get_item_ids (ids) =>
             @_clear_cart(ids, callback)
+    _set_store_id: () ->
+        url = "https" + @site + @cart
+        xhr = new XMLHttpRequest
+        xhr.open("GET", url, false)
+        xhr.onreadystatechange = (event) =>
+            doc = DOM.parse(event.target.responseText)
+            id_elem = doc.getElementById("storeId")
+            if id_elem?
+                @store_id = id_elem.value
+        xhr.send()
+
 
     _clear_cart: (ids, callback) ->
         url = "https" + @site + "/webapp/wcs/stores/servlet/ProcessBasket"
