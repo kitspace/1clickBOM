@@ -2,7 +2,7 @@
 <script type"text/javascript" src="gfycat.js"></script>
 <script type"text/javascript">
     link=document.createElement("link");
-    link.setAttribute("href", "demos/images/favicon.ico");
+    link.setAttribute("href", "favicon.ico");
     link.setAttribute("rel", "shortcut icon");
     link.setAttribute("type", "image/x-icon");
     document.head.appendChild(link);
