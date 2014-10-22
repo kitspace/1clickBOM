@@ -27,8 +27,7 @@ work.
 
 You should arrange items in your spreadsheet in the following order.
 
-|line-note | quantity | retailer | part-number|
-|----------| -------- | -------- | ---------- |
+    line-note | quantity | retailer | part-number
 
 Line-note can be anything you like. I normally use schematic references.
 Retailer is a name of one of the supported retailers and part-number is the
