@@ -23,13 +23,15 @@ window.test_one = (country="HK") ->
                 console.log("Test: " + country)
                 chrome.runtime.getBackgroundPage (bkgd_page) ->
                     if bkgd_page?
-                        bkgd_page.bom_manager.addToBOM window.test_bom, () ->
-                            bkgd_page.bom_manager.fillCarts (result) ->
-                                deepEqual(result.success, true)
-                                deepEqual(result.fails, [])
-                                bkgd_page.bom_manager.emptyCarts (result) ->
+                        setTimeout () ->
+                            bkgd_page.bom_manager.addToBOM window.test_bom, () ->
+                                bkgd_page.bom_manager.fillCarts (result) ->
                                     deepEqual(result.success, true)
-                                    start()
+                                    deepEqual(result.fails, [])
+                                    bkgd_page.bom_manager.emptyCarts (result) ->
+                                        deepEqual(result.success, true)
+                                        start()
+                        , 1000
 for c in [ "AU", "MY", "PH", "TW", "NZ", "KR"
          , "CN", "TH", "IN", "HK", "SG"]
     window.test_one(c)

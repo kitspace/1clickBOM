@@ -137,15 +137,20 @@ class window.BomManager
         @emptying_carts = true
         big_result = {success: true}
         chrome.storage.local.get ["bom"], ({bom:bom}) =>
-            count = Object.keys(bom).length
-            for retailer of bom
-                @emptyCart retailer, (result, interf) =>
-                    count--
-                    big_result.success &&= result.success
-                    if count == 0
-                        if callback?
-                            callback(big_result)
-                        @emptying_carts = false
+            if bom?
+                count = Object.keys(bom).length
+                for retailer of bom
+                    @emptyCart retailer, (result, interf) =>
+                        count--
+                        big_result.success &&= result.success
+                        if count == 0
+                            if callback?
+                                callback(big_result)
+                            @emptying_carts = false
+            else
+                if callback?
+                    callback(big_result)
+                @emptying_carts = false
 
     emptyCart: (retailer, callback)->
         @interfaces[retailer].clearCart (result) =>

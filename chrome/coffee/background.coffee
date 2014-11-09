@@ -62,30 +62,32 @@ class TSVPageNotifier
         @invalid  = []
     checkPage: (callback) ->
         chrome.tabs.query {active:true, currentWindow:true}, (tabs) =>
-
-            tab_url = tabs[0].url.split("?")[0]
-            if tabs.length >= 1 && tab_url.match(@re)
-                if /^http.?:\/\/github.com\//.test(tabs[0].url)
-                    url = tab_url.replace(/blob/,"raw")
-                else if /^http.?:\/\/bitbucket.org\//.test(tabs[0].url)
-                    url = tab_url.split("?")[0].replace(/src/,"raw")
-                else
-                    url = tab_url
-                get url, (event) =>
-                    {items, invalid} = parseTSV(event.target.responseText)
-                    if items.length > 0
-                        badge.setDefault("\u2191", "#0000FF")
-                        @onDotTSV = true
-                        @items    = items
-                        @invalid  = invalid
+            if tabs.length > 0
+                tab_url = tabs[0].url.split("?")[0]
+                if tabs.length >= 1 && tab_url.match(@re)
+                    if /^http.?:\/\/github.com\//.test(tabs[0].url)
+                        url = tab_url.replace(/blob/,"raw")
+                    else if /^http.?:\/\/bitbucket.org\//.test(tabs[0].url)
+                        url = tab_url.split("?")[0].replace(/src/,"raw")
                     else
+                        url = tab_url
+                    get url, (event) =>
+                        {items, invalid} = parseTSV(event.target.responseText)
+                        if items.length > 0
+                            badge.setDefault("\u2191", "#0000FF")
+                            @onDotTSV = true
+                            @items    = items
+                            @invalid  = invalid
+                        else
+                            @_set_not_dotTSV()
+                    , () =>
                         @_set_not_dotTSV()
-                , () =>
+                    , item=null, notify=false
+                else
                     @_set_not_dotTSV()
-                , item=null, notify=false
-            else
-                @_set_not_dotTSV()
-            if callback?
+                if callback?
+                    callback()
+            else if callback?
                 callback()
     addToBOM: () ->
         @checkPage () =>
