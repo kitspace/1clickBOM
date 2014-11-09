@@ -6,7 +6,7 @@ pp = pprint.PrettyPrinter(indent=4)
 url = "http://octopart.com/api/v3/parts/search"
 
 # NOTE: Use your API key here (https://octopart.com/api/register)
-url += "?apikey=CHANGE_ME
+url += "?apikey=CHANGE_ME"
 
 args = [
         ('q', ''),

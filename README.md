@@ -1,9 +1,7 @@
 # 1clickBOM #
 
-#### _One BOM - Many Retailers_ ####
-
 1clickBOM is purchasing tool that let's you keep _one_ bill of materials (BOM)
-for items from _several_ retailers. It's a browser extension that fills your
+for items from _multiple_ retailers. It's a browser extension that fills your
 online shopping carts for you. To add items to 1clickBOM you simply paste from
 a spreadsheet or visit an online `.tsv` file.
 
@@ -13,13 +11,12 @@ Currently supported retailers are:
 
 * Digikey
 * Mouser
-* Farnell
+* Farnell/Element14
 * Newark
 * RS
 
 As of now 1clickBOM is only available for Chrome/Chromium but a Firefox version
-is planned.  Check the [roadmap][1] for more details on future development
-work.
+is planned.  Check the [roadmap][1] for more details on planned features.
 
 ## Usage ##
 
