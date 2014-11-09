@@ -13,8 +13,8 @@
 # along with 1clickBOM.  If not, see <http://www.gnu.org/licenses/>.
 
 class window.Newark extends RetailerInterface
-    constructor: (country_code, settings, callback) ->
-        super("Newark", country_code, "/data/newark.json", settings, callback)
+    constructor: (country_code, settings) ->
+        super("Newark", country_code, "/data/newark.json", settings)
         @_set_store_id()
 
     clearCart: (callback) ->

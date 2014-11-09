@@ -1,5 +1,7 @@
 # 1clickBOM #
 
+![Demo](https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif)
+
 1clickBOM is purchasing tool that let's you keep _one_ bill of materials (BOM)
 for items from _multiple_ retailers. It's a browser extension that fills your
 online shopping carts for you. To add items to 1clickBOM you simply paste from
@@ -33,6 +35,8 @@ part-number specific to that retailer. See the [example tsv][2].
 In your spreadsheet select the relevant columns, copy and then click the paste
 button on the 1clickBOM popup.
 
+![Load from page](https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png)
+
 Alternatively, if you visit a page that ends in `.tsv` and has data in the
 right format available 1clickBOM will show a blue badge and button with an
 arrow. Press the blue button in the popup and the data will be added. You can
@@ -47,7 +51,7 @@ using the buttons on the popup. You can also quickly view and empty your carts.
 
 * 0.1
     * Chrome support
-    * Digikey, Mouser, Farnell, Newark, RS, Allied and Arrow
+    * Digikey, Mouser, Farnell, Newark and RS
     * Allow clearing and viewing individual carts
     * Paste TSV or visit online `.tsv` file
     * Auto-merge multiple entries of the same component
@@ -56,6 +60,7 @@ using the buttons on the popup. You can also quickly view and empty your carts.
     * Firefox support
 
 * 0.3
+    * Allied and Arrow
     * Display cart summaries
     * Warn about filling already filled carts
     * Allow adding components to BOM from the component page
@@ -95,13 +100,22 @@ the `Test()` function.
 
 ## License ##
 
-1clickBOM is licensed under the AGPLv3. See the [COPYING][6] file for details.
+1clickBOM is licensed under the AGPLv3. See the [LICENSE][6] file for details.
 
 [1]:#roadmap
+<<<<<<< HEAD
 [2]:https://github.com/kasbah/1clickBOM/blob/master/chrome/data/example.tsv
 [3]:https://github.com/kasbah/1clickBOM/blob/master/chrome/html/test.html
 [4]:http://coffeescript.org
 [5]:https://qunitjs.com/
 [6]:https://github.com/kasbah/1clickBOM/blob/master/COPYING
 [7]:https://github.com/kasbah/1clickBOM
+=======
+[2]:https://github.com/monostable/1clickBOM/blob/master/chrome/data/example.tsv
+[3]:https://github.com/monostable/1clickBOM/blob/master/chrome/html/test.html
+[4]:http://coffeescript.org
+[5]:https://qunitjs.com/
+[6]:https://github.com/monostable/1clickBOM/blob/master/LICENSE
+[7]:https://github.com/monostable/1clickBOM
+>>>>>>> 831c97d75fdfce7604ef89504fa43beaec9a53e6
 
