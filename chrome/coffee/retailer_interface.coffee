@@ -35,6 +35,8 @@ class window.RetailerInterface
                 data.name = settings.name
             if (settings.interface_name?)
                 data.interface_name = settings.interface_name
+            if (settings.language?)
+                data.language = settings.language
 
         @settings = settings
 
@@ -48,6 +50,9 @@ class window.RetailerInterface
         else
             @additem = data.additems[country_code_lookedup]
 
+        if data.language?
+            @language = data.language[country_code_lookedup]
+
         @additem_params = data.additem_params
         @site = data.sites[country_code_lookedup]
         @name = name + " " + country_code_lookedup
@@ -56,8 +61,9 @@ class window.RetailerInterface
         @clearing_cart = false
         @icon_src = "http://g.etfv.co/" + "http" + @site
         #this puts the image in cache but also uses our backup if g.etfv.co fails
-        get @icon_src, () ->
-            ;
+        get @icon_src, (event) =>
+            if md5(event.target.response) == "a8aca8c8c4780cbe1acd774799f326e8" #failure response image
+                @icon_src = chrome.extension.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
         , () =>
             @icon_src = chrome.extension.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
         , notify=false

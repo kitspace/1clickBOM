@@ -24,48 +24,63 @@ class window.Farnell extends RetailerInterface
             fix_xhr.send()
         #these sites are like Newark's so we get all our methods
         #from Newark
-        if country_code in ["AT", "PT", "ES", "IT", "DE", "FI", "DK", "NO", "SE", "HK"]
+        if country_code in [ "AT", "PT", "ES", "IT", "DE", "FI", "DK", "NO"
+                           , "SE", "HK", "CZ", "BG", "EE", "HU", "LT", "PL"
+                           , "LV", "SI", "RO", "RU" , "SK"
+                           ]
             for name, method of Newark::
                 this[name] = method
+            @cart = "/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView"
             @_set_store_id()
             if callback?
                 callback()
-        else if country_code in [ "AU", "MY", "PH", "TW", "NZ", "KR"
-                                , "CN", "TH", "IN", "SG"]
+        else
             @_fix_cookies(callback)
-        else if callback?
-            callback()
 
     _clear_cookies: (callback) ->
-        chrome.cookies.getAll {domain:"element14.com"}, (incoming_cookies) ->
+        chrome.cookies.getAll {domain:"element14.com"}, (incoming_cookies) =>
             cookies = []
             for cookie in incoming_cookies
-                if not /MAINT_NOTIFY/.test(cookie.name)
+                if not /MAINT_NOTIFY/.test(cookie.name) or /userSelectedLocale/.test(cookie.name)
                     cookies.push(cookie)
             count = cookies.length
             if count == 0 && callback?
                 callback()
             else
                 for cookie in cookies
-                    chrome.cookies.remove {url:"http://" + cookie.domain, name:cookie.name}, () ->
+                    chrome.cookies.remove {url:"http://" + cookie.domain, name:cookie.name}, () =>
                         count -= 1
                         if count == 0
-                            chrome.cookies.getAll {domain:"farnell.com"}, (incoming_cookies) ->
+                            chrome.cookies.getAll {domain:"farnell.com"}, (incoming_cookies) =>
                                 cookies = []
                                 for cookie in incoming_cookies
                                     #the cookieMessage cookie just makes sure that the EU cookie
                                     #notification thing has been agreed to so we don't want to delete that
-                                    if not /cookieMessage/.test(cookie.name)
+                                    if not /cookieMessage/.test(cookie.name) or /userSelectedLocale/.test(cookie.name)
                                         cookies.push(cookie)
                                 count = cookies.length
                                 if count == 0 && callback?
                                     callback()
                                 else
                                     for cookie in cookies
-                                        chrome.cookies.remove {url:"http://" + cookie.domain, name:cookie.name}, () ->
+                                        chrome.cookies.remove {url:"http://" + cookie.domain, name:cookie.name}, () =>
                                             count -= 1
-                                            if count == 0 && callback?
-                                                callback()
+                                            if count == 0
+                                                @_fix_language_cookie(callback)
+
+    _fix_language_cookie: (callback) ->
+        if @country in ["CH", "BE", "CN"]
+            chrome.cookies.getAll {domain:@site.substring(3), name:"userSelectedLocale"}, (incoming_cookies) =>
+                if incoming_cookies.length > 0
+                    if callback?
+                        callback(this)
+                else
+                    chrome.cookies.set {url:"http" + @site , name:"userSelectedLocale", value:@language}, () =>
+                        if callback?
+                            callback(this)
+        else if callback?
+            callback(this)
+
     _fix_cookies: (callback) ->
         @_clear_cookies () =>
             get "http" + @site + "/jsp/home/homepage.jsp", callback

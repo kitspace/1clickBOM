@@ -47,6 +47,7 @@
 "carts": "/jsp/shoppingCart/shoppingCart.jsp",
 "additems": "/jsp/shoppingCart/quickPaste.jsp?_DARGS=/jsp/shoppingCart/fragments/quickPaste/quickPaste.jsp.quickpaste",
 "additem_params" : "",
+"language": {"CH":"Deutsch", "BE":"Fran%E7ais", "CN":"%u4E2D%u6587"},
 
 "lookup" : {
     "AE": "International",
