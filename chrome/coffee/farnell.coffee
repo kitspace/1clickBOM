@@ -15,7 +15,6 @@
 class window.Farnell extends RetailerInterface
     constructor: (country_code, settings, callback) ->
         super("Farnell", country_code, "/data/farnell.json", settings)
-
         #export.farnell.com tries to go to exportHome.jsp if we have no cookie
         #and we don't do this
         if @site == "://export.farnell.com"
@@ -29,14 +28,14 @@ class window.Farnell extends RetailerInterface
             for name, method of Newark::
                 this[name] = method
             @_set_store_id()
+            if callback?
+                callback()
         else if country_code in [ "AU", "MY", "PH", "TW", "NZ", "KR"
                                 , "CN", "TH", "IN", "SG"]
-            @_fix_cookies3()
-        if callback?
+            @_fix_cookies(callback)
+        else if callback?
             callback()
-    _is_broken:(callback) ->
-        chrome.cookies.getAll {domain:".au.element14.com", name:"__utmb"}, (incoming_cookies) ->
-            console.log(incoming_cookies.length == 0)
+
     _clear_cookies: (callback) ->
         chrome.cookies.getAll {domain:"element14.com"}, (incoming_cookies) ->
             cookies = []
@@ -67,34 +66,9 @@ class window.Farnell extends RetailerInterface
                                             count -= 1
                                             if count == 0 && callback?
                                                 callback()
-    _fix_cookies2: (callback) ->
-        @_clear_cookies () =>
-            chrome.tabs.create {url:"http" + @site + "/jsp/home/homepage.jsp", active:false}, (tab) ->
-                listener = chrome.tabs.onUpdated.addListener (updated_tab_id, obj, updated_tab) ->
-                    if updated_tab_id == tab.id && updated_tab.status == "complete"
-                        chrome.tabs.remove tab.id, () ->
-                            chrome.tabs.onUpdated.removeListener(listener)
-                            if callback?
-                                callback()
-    _fix_cookies3: (callback) ->
-        @_clear_cookies () =>
-            get "http" + @site + "/jsp/home/homepage.jsp", callback
-
-    _login: (callback) ->
-            url = "https" + @site + "/jsp/profile/register.jsp?_DARGS=/jsp/profile/fragments/login/loginFragment.jsp.loginfragment"
-            params = "_dyncharset=UTF-8&%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginErrorURL=..%2Fprofile%2Flogin.jsp%3FfromPage%3Dtrue&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginErrorURL=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginSuccessURL=%2Fjsp%2Fhome%2Fhomepage.jsp&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginSuccessURL=+&login=1clickBOM" + @country + "&_D%3Alogin=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.value.password=1clickBOM&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.value.password=+&s=&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.autoLogin=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login.x=28&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login.y=17&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login=login&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.login=+&_DARGS=%2Fjsp%2Fprofile%2Ffragments%2Flogin%2FloginFragment.jsp.loginfragment"
-            post url, params, (event) ->
-
     _fix_cookies: (callback) ->
         @_clear_cookies () =>
-            url = "https" + @site + "/jsp/profile/register.jsp?_DARGS=/jsp/profile/fragments/login/loginFragment.jsp.loginfragment"
-            params = "_dyncharset=UTF-8&%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginErrorURL=..%2Fprofile%2Flogin.jsp%3FfromPage%3Dtrue&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginErrorURL=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginSuccessURL=%2Fjsp%2Fhome%2Fhomepage.jsp&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginSuccessURL=+&login=1clickBOM" + @country + "&_D%3Alogin=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.value.password=1clickBOM&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.value.password=+&s=&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.autoLogin=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login.x=28&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login.y=17&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login=login&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.login=+&_DARGS=%2Fjsp%2Fprofile%2Ffragments%2Flogin%2FloginFragment.jsp.loginfragment"
-            post url, params, (event) =>
-                @_add_items [{part:"2334075", comment:"fixer", quantity:2}], () =>
-                    url3 = "http" + @site + "/jsp/home/homepage.jsp?_DARGS=/jsp/commonfragments/linkE14.jsp_A&_DAV="
-                    get url3, () =>
-                        if callback?
-                            callback()
+            get "http" + @site + "/jsp/home/homepage.jsp", callback
 
     clearCart: (callback) ->
         @clearing_cart = true
