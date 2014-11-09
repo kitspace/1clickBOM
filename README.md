@@ -103,19 +103,10 @@ the `Test()` function.
 1clickBOM is licensed under the AGPLv3. See the [LICENSE][6] file for details.
 
 [1]:#roadmap
-<<<<<<< HEAD
-[2]:https://github.com/kasbah/1clickBOM/blob/master/chrome/data/example.tsv
-[3]:https://github.com/kasbah/1clickBOM/blob/master/chrome/html/test.html
-[4]:http://coffeescript.org
-[5]:https://qunitjs.com/
-[6]:https://github.com/kasbah/1clickBOM/blob/master/COPYING
-[7]:https://github.com/kasbah/1clickBOM
-=======
 [2]:https://github.com/monostable/1clickBOM/blob/master/chrome/data/example.tsv
 [3]:https://github.com/monostable/1clickBOM/blob/master/chrome/html/test.html
 [4]:http://coffeescript.org
 [5]:https://qunitjs.com/
 [6]:https://github.com/monostable/1clickBOM/blob/master/LICENSE
 [7]:https://github.com/monostable/1clickBOM
->>>>>>> 831c97d75fdfce7604ef89504fa43beaec9a53e6
 
