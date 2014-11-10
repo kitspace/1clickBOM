@@ -15,13 +15,6 @@
 class window.Farnell extends RetailerInterface
     constructor: (country_code, settings, callback) ->
         super("Farnell", country_code, "/data/farnell.json", settings)
-        #export.farnell.com tries to go to exportHome.jsp if we have no cookie
-        #and we don't do this
-        if @site == "://export.farnell.com"
-            fix_url = "http" + @site + @cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"
-            fix_xhr = new XMLHttpRequest
-            fix_xhr.open("GET", fix_url, false)
-            fix_xhr.send()
         #these sites are like Newark's so we get all our methods
         #from Newark
         if country_code in [ "AT", "PT", "ES", "IT", "DE", "FI", "DK", "NO"
@@ -44,13 +37,14 @@ class window.Farnell extends RetailerInterface
                 if not /MAINT_NOTIFY/.test(cookie.name) or /userSelectedLocale/.test(cookie.name)
                     cookies.push(cookie)
             count = cookies.length
-            if count == 0 && callback?
-                callback()
+            if count <= 0
+                if callback?
+                    callback()
             else
                 for cookie in cookies
                     chrome.cookies.remove {url:"http://" + cookie.domain, name:cookie.name}, () =>
                         count -= 1
-                        if count == 0
+                        if count <= 0
                             chrome.cookies.getAll {domain:"farnell.com"}, (incoming_cookies) =>
                                 cookies = []
                                 for cookie in incoming_cookies
@@ -59,31 +53,37 @@ class window.Farnell extends RetailerInterface
                                     if not /cookieMessage/.test(cookie.name) or /userSelectedLocale/.test(cookie.name)
                                         cookies.push(cookie)
                                 count = cookies.length
-                                if count == 0 && callback?
-                                    callback()
+                                if count <= 0
+                                    if callback?
+                                        callback()
                                 else
                                     for cookie in cookies
                                         chrome.cookies.remove {url:"http://" + cookie.domain, name:cookie.name}, () =>
                                             count -= 1
-                                            if count == 0
+                                            if count <= 0
                                                 @_fix_language_cookie(callback)
 
     _fix_language_cookie: (callback) ->
-        if @country in ["CH", "BE", "CN"]
+        #export.farnell.com tries to go to exportHome.jsp if we have no cookie
+        #and we don't do this
+        if @site == "://export.farnell.com"
+            fix_url = "http" + @site + @cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"
+            get fix_url, callback, callback
+        else if @country in ["CH", "BE", "CN"]
             chrome.cookies.getAll {domain:@site.substring(3), name:"userSelectedLocale"}, (incoming_cookies) =>
                 if incoming_cookies.length > 0
                     if callback?
-                        callback(this)
+                        callback()
                 else
                     chrome.cookies.set {url:"http" + @site , name:"userSelectedLocale", value:@language}, () =>
                         if callback?
-                            callback(this)
+                            callback()
         else if callback?
-            callback(this)
+            callback()
 
     _fix_cookies: (callback) ->
         @_clear_cookies () =>
-            get "http" + @site + "/jsp/home/homepage.jsp", callback
+            get "http" + @site + "/jsp/home/homepage.jsp", callback, callback
 
     clearCart: (callback) ->
         @clearing_cart = true

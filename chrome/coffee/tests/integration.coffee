@@ -56,13 +56,15 @@ farnell_locations = []
 # these sites have issues with cookies being set across countries and won't
 # pass the test reliably
 for l in farnell_locations_all
-    if l not in [ "AU", "MY", "PH", "TW", "NZ", "KR"
-                , "CN", "TH", "IN", "HK", "SG", "International"]
+    if l not in [ "AU", "MY", "PH", "TW", "NZ", "KR" , "CN"
+                , "TH", "IN", "SG", "International" , "NL"
+                , "IE", "UK", "IL", "TR", "CH", "FR", "BE"
+                ]
         farnell_locations.push(l)
 
 asyncTest "Clear All", () ->
-    stop(farnell_locations.length - 1)
-    for l in farnell_locations
+    stop(farnell_locations_all.length - 1)
+    for l in farnell_locations_all
         r = new Farnell(l)
         r.clearCart (result, that) ->
             deepEqual(result.success, true)
@@ -73,16 +75,14 @@ asyncTest "Add items", () ->
     stop(farnell_locations.length - 1)
     for l in farnell_locations
         r = new Farnell(l)
-        r._clear_cookies (that) ->
-            that.addItems items, (result, that) ->
-                deepEqual(result.success, true, that.country)
-                start()
+        r.addItems items, (result, that) ->
+            deepEqual(result.success, true, that.country)
+            start()
 
 asyncTest "Add items fails", () ->
     items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
     stop(farnell_locations.length - 1)
     for l in farnell_locations
-        window.clearCookies()
         r = new Farnell(l)
         r.addItems items, (result, that) ->
             deepEqual(result.success, false, that.country)
