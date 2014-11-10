@@ -39,56 +39,57 @@ class window.Digikey extends RetailerInterface
     _add_items: (items, callback) ->
         result = {success:true, fails:[]}
         count = items.length
-        for item in items
-            url = "http" + @site + @additem
-            params = "qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment
-            @_add_item item, (item, item_result) =>
-                if not item_result.success
-                    @_get_part_id item, (item, id) =>
-                        @_get_suggested item, id, "NextBreakQuanIsLowerExtPrice"
-                        , (new_item) =>
-                            @_add_item new_item, (_, r) =>
-                                if not r.success
-                                    @_get_suggested new_item, id, "TapeReelQuantityTooLow"
-                                    , (new_item) =>
-                                        @_add_item new_item, (_, r) ->
-                                            result.success &&= r.success
-                                            result.fails = result.fails.concat(r.fails)
+        for item,index in items
+            setTimeout (item) =>
+                console.log(item.part)
+                @_add_item item, (item, item_result) =>
+                    if not item_result.success
+                        @_get_part_id item, (item, id) =>
+                            @_get_suggested item, id, "NextBreakQuanIsLowerExtPrice"
+                            , (new_item) =>
+                                @_add_item new_item, (_, r) =>
+                                    if not r.success
+                                        @_get_suggested new_item, id, "TapeReelQuantityTooLow"
+                                        , (new_item) =>
+                                            @_add_item new_item, (_, r) ->
+                                                result.success &&= r.success
+                                                result.fails = result.fails.concat(r.fails)
+                                                count--
+                                                if (count == 0)
+                                                    callback(result)
+                                        , () ->
+                                            result.success = false
+                                            result.fails.push(item)
                                             count--
                                             if (count == 0)
                                                 callback(result)
-                                    , () ->
-                                        result.success = false
-                                        result.fails.push(item)
+                                    else
                                         count--
                                         if (count == 0)
                                             callback(result)
-                                else
-                                    count--
-                                    if (count == 0)
-                                        callback(result)
-                        , () =>
+                            , () =>
+                                result.success = false
+                                result.fails.push(item)
+                                count--
+                                if (count == 0)
+                                    callback(result)
+                        , () ->
                             result.success = false
                             result.fails.push(item)
                             count--
                             if (count == 0)
                                 callback(result)
-                    , () ->
-                        result.success = false
-                        result.fails.push(item)
+                    else
                         count--
                         if (count == 0)
                             callback(result)
-                else
+                , item, json=false
+                , (event) =>
+                    result.fails.push(event.target.item)
                     count--
                     if (count == 0)
                         callback(result)
-            , item, json=false
-            , (event) =>
-                result.fails.push(event.target.item)
-                count--
-                if (count == 0)
-                    callback(result)
+            , 0, item
     _add_item: (item, callback) ->
         url = "http" + @site + @additem
         params = "qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment
@@ -116,9 +117,9 @@ class window.Digikey extends RetailerInterface
             inputs = doc.querySelectorAll("input")
             for input in inputs
                 if input.name == "partid"
-                    callback(item, input.value)
+                    callback(event.target.item, input.value)
                     break
-        , error_callback, item=null, notify=false
+        , error_callback, item=item, notify=false
     _get_suggested: (item, id, error, callback, error_callback) =>
         url = "http" + @site + "/classic/Ordering/PackTypeDialog.aspx?"
         url += "part=" + item.part
@@ -137,14 +138,15 @@ class window.Digikey extends RetailerInterface
                     part       = label.innerText.split(String.fromCharCode(160))[2]
                     number = parseInt(number_str.replace(/,/,""))
                     if not isNaN(number)
-                        item.part = part
-                        item.quantity = number
-                        callback(item)
+                        it = event.target.item
+                        it.part = part
+                        it.quantity = number
+                        callback(it)
                     else
                         error_callback()
                 else
                     error_callback()
             else
                 error_callback()
-        , error_callback, item=null, notify=false
+        , error_callback, item=item, notify=false
 
