@@ -22,7 +22,7 @@ window.paste = () ->
 
 get_location = (callback) ->
     url = "https://freegeoip.net/json/"
-    get url, (event) ->
+    get url, {}, (event) ->
         response = JSON.parse(event.target.responseText)
         chrome.storage.local.set {country: countries_data[response.country_name]}, ()->
             callback()
@@ -71,7 +71,7 @@ class TSVPageNotifier
                         url = tab_url.split("?")[0].replace(/src/,"raw")
                     else
                         url = tab_url
-                    get url, (event) =>
+                    get url, {notify:false}, (event) =>
                         {items, invalid} = parseTSV(event.target.responseText)
                         if items.length > 0
                             badge.setDefault("\u2191", "#0000FF")
@@ -82,7 +82,6 @@ class TSVPageNotifier
                             @_set_not_dotTSV()
                     , () =>
                         @_set_not_dotTSV()
-                    , item=null, notify=false
                 else
                     @_set_not_dotTSV()
                 if callback?

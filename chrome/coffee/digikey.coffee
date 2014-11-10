@@ -19,7 +19,7 @@ class window.Digikey extends RetailerInterface
     clearCart: (callback) ->
         @clearing_cart = true
         url = "http" + @site + @cart + "?webid=-1"
-        get url, () =>
+        get url, {}, () =>
             if callback?
                 callback({success:true})
             @refreshCartTabs()
@@ -40,56 +40,53 @@ class window.Digikey extends RetailerInterface
         result = {success:true, fails:[]}
         count = items.length
         for item,index in items
-            setTimeout (item) =>
-                console.log(item.part)
-                @_add_item item, (item, item_result) =>
-                    if not item_result.success
-                        @_get_part_id item, (item, id) =>
-                            @_get_suggested item, id, "NextBreakQuanIsLowerExtPrice"
-                            , (new_item) =>
-                                @_add_item new_item, (_, r) =>
-                                    if not r.success
-                                        @_get_suggested new_item, id, "TapeReelQuantityTooLow"
-                                        , (new_item) =>
-                                            @_add_item new_item, (_, r) ->
-                                                result.success &&= r.success
-                                                result.fails = result.fails.concat(r.fails)
-                                                count--
-                                                if (count == 0)
-                                                    callback(result)
-                                        , () ->
-                                            result.success = false
-                                            result.fails.push(item)
+            @_add_item item, (item, item_result) =>
+                if not item_result.success
+                    @_get_part_id item, (item, id) =>
+                        @_get_suggested item, id, "NextBreakQuanIsLowerExtPrice"
+                        , (new_item) =>
+                            @_add_item new_item, (_, r) =>
+                                if not r.success
+                                    @_get_suggested new_item, id, "TapeReelQuantityTooLow"
+                                    , (new_item) =>
+                                        @_add_item new_item, (_, r) ->
+                                            result.success &&= r.success
+                                            result.fails = result.fails.concat(r.fails)
                                             count--
                                             if (count == 0)
                                                 callback(result)
-                                    else
+                                    , () ->
+                                        result.success = false
+                                        result.fails.push(item)
                                         count--
                                         if (count == 0)
                                             callback(result)
-                            , () =>
-                                result.success = false
-                                result.fails.push(item)
-                                count--
-                                if (count == 0)
-                                    callback(result)
-                        , () ->
+                                else
+                                    count--
+                                    if (count == 0)
+                                        callback(result)
+                        , () =>
                             result.success = false
                             result.fails.push(item)
                             count--
                             if (count == 0)
                                 callback(result)
-                    else
+                    , () ->
+                        result.success = false
+                        result.fails.push(item)
                         count--
                         if (count == 0)
                             callback(result)
-                , item, json=false
-                , (event) =>
-                    result.fails.push(event.target.item)
+                else
                     count--
                     if (count == 0)
                         callback(result)
-            , 0, item
+            , item, json=false
+            , (event) =>
+                result.fails.push(event.target.item)
+                count--
+                if (count == 0)
+                    callback(result)
     _add_item: (item, callback) ->
         url = "http" + @site + @additem
         params = "qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment
@@ -112,21 +109,21 @@ class window.Digikey extends RetailerInterface
     _get_part_id: (item, callback, error_callback) ->
         url = "http" + @site + "/product-detail/en/EXB-38V103JV/"
         url += item.part
-        get url, (event) ->
+        get url, {item:item, notify:false}, (event) ->
             doc = DOM.parse(event.target.responseText)
             inputs = doc.querySelectorAll("input")
             for input in inputs
                 if input.name == "partid"
                     callback(event.target.item, input.value)
                     break
-        , error_callback, item=item, notify=false
+        , error_callback
     _get_suggested: (item, id, error, callback, error_callback) =>
         url = "http" + @site + "/classic/Ordering/PackTypeDialog.aspx?"
         url += "part=" + item.part
         url += "&qty=" + item.quantity
         url += "&partId=" + id
         url += "&error=" + error + "&cref=&esc=-1&returnURL=%2f%2fwww.digikey.co.uk%2fclassic%2fordering%2faddpart.aspx&fastAdd=false&showUpsell=True"
-        get url, (event) ->
+        get url, {item:item, notify:false}, (event) ->
             doc = DOM.parse(event.target.responseText)
             switch error
                 when "TapeReelQuantityTooLow"       then choice = doc.getElementById("rb1")
@@ -148,5 +145,5 @@ class window.Digikey extends RetailerInterface
                     error_callback()
             else
                 error_callback()
-        , error_callback, item=item, notify=false
+        , error_callback
 

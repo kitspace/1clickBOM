@@ -47,7 +47,7 @@ class window.Newark extends RetailerInterface
 
     _get_item_ids: (callback) ->
         url = "https" + @site + @cart
-        get url, (event) =>
+        get url, {}, (event) =>
             doc = DOM.parse(event.target.responseText)
             order_details = doc.querySelector("#order_details")
             if order_details?

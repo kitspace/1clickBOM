@@ -89,7 +89,7 @@ class window.Mouser extends RetailerInterface
     _get_adding_viewstate: (callback, arg)->
         #we get the quick-add form , extend it to 99 lines (the max) and get the viewstate from the response
         url = "http" + @site + @additem
-        get url, (event) =>
+        get url, {}, (event) =>
             doc = DOM.parse(event.target.responseText)
             params = @additem_params
             params += encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
@@ -103,7 +103,7 @@ class window.Mouser extends RetailerInterface
                     callback(viewstate, arg)
     _get_cart_viewstate: (callback)->
         url = "http" + @site + @cart
-        get url, (event) =>
+        get url, {}, (event) =>
             doc = DOM.parse(event.target.responseText)
             viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
             if callback?

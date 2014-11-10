@@ -80,7 +80,7 @@ class window.RS extends RetailerInterface
 
     _get_invalid_item_ids_rs_online: (callback) ->
         url = "http" + @site + @cart
-        get url, (event) =>
+        get url, {}, (event) =>
             doc = DOM.parse(event.target.responseText)
             ids = []
             parts = []
@@ -237,7 +237,7 @@ class window.RS extends RetailerInterface
 
     _get_adding_viewstate_rs_online: (callback)->
         url = "http" + @site + @cart
-        get url, (event) =>
+        get url, {}, (event) =>
             doc = DOM.parse(event.target.responseText)
             viewstate_element  = doc.getElementById("javax.faces.ViewState")
             if viewstate_element?
@@ -255,7 +255,7 @@ class window.RS extends RetailerInterface
 
     _get_clear_viewstate_rs_online: (callback)->
         url = "http" + @site + @cart
-        get url, (event) =>
+        get url, {}, (event) =>
             doc = DOM.parse(event.target.responseText)
             viewstate_elem = doc.getElementById("javax.faces.ViewState")
             if viewstate_elem?
@@ -278,7 +278,7 @@ class window.RS extends RetailerInterface
 
     _get_invalid_viewstate_rs_online: (callback)->
         url = "http" + @site + @cart
-        get url, (event) =>
+        get url, {}, (event) =>
             doc = DOM.parse(event.target.responseText)
             viewstate  = doc.getElementById("javax.faces.ViewState").value
             form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling

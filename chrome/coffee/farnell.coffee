@@ -92,7 +92,7 @@ class window.Farnell extends RetailerInterface
 
     _get_item_ids: (callback) ->
         url = "http" + @site + @cart
-        get url, (event) =>
+        get url, {}, (event) =>
             doc = DOM.parse(event.target.responseText)
             ins = doc.getElementsByTagName("input")
             ids = []

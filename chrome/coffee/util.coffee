@@ -89,7 +89,13 @@ window.post = (url, params, callback, item, json=false, error_callback) ->
         network_callback(event, callback, error_callback)
     xhr.send(params)
 
-window.get = (url, callback, error_callback, item=null, notify=true) ->
+window.get = (url, {item:item, notify:notify, timeout:timeout}, callback, error_callback) ->
+    if not item?
+        item=null
+    if not notify?
+        notify=false
+    if not timeout?
+        timeout=60000
     xhr = new XMLHttpRequest
     xhr.item = item
     xhr.open("GET", url, true)
@@ -97,7 +103,7 @@ window.get = (url, callback, error_callback, item=null, notify=true) ->
     xhr.url = url
     xhr.onreadystatechange = (event) ->
         network_callback(event, callback, error_callback, notify)
-    xhr.timeout = 600000;
+    xhr.timeout = timeout;
     xhr.ontimedout = (event) ->
         network_callback(event, callback, error_callback, notify)
     xhr.send()

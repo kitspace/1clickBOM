@@ -61,12 +61,11 @@ class window.RetailerInterface
         @clearing_cart = false
         @icon_src = "http://g.etfv.co/" + "http" + @site
         #this puts the image in cache but also uses our backup if g.etfv.co fails
-        get @icon_src, (event) =>
+        get @icon_src, {notify:false},  (event) =>
             if md5(event.target.response) == "a8aca8c8c4780cbe1acd774799f326e8" #failure response image
                 @icon_src = chrome.extension.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
         , () =>
             @icon_src = chrome.extension.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
-        , notify=false
         if callback?
             callback()
 
