@@ -81,7 +81,7 @@ class window.Newark extends RetailerInterface
             params += encodeURIComponent(item.part) + ","
             params += encodeURIComponent(item.quantity) + ","
             params += encodeURIComponent(item.comment) + "\n"
-        post url, params, (event) =>
+        post url, params, {}, (event) =>
             doc = DOM.parse(event.target.responseText)
             form_errors = doc.querySelector("#formErrors")
             success = true

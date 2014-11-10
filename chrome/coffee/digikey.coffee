@@ -91,7 +91,7 @@ class window.Digikey extends RetailerInterface
         url = "http" + @site + @additem
         params = "qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment
         result = {success:true, fails:[]}
-        post url, params, (event)->
+        post url, params, {item:item}, (event)->
             doc = DOM.parse(event.target.responseText)
             #if the cart returns with a quick-add quantity filled-in there was an error
             quick_add_quant = doc.querySelector("#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity")
@@ -99,7 +99,6 @@ class window.Digikey extends RetailerInterface
             if not result.success
                 result.fails.push(event.target.item)
             callback(event.target.item, result)
-        , item, json=false
         , (event) ->
             result.success = false
             if event.target?

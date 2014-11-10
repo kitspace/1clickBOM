@@ -16,7 +16,7 @@ class window.Mouser extends RetailerInterface
     constructor: (country_code, settings) ->
         super "Mouser", country_code, "/data/mouser.json", settings
         #posting our sub-domain as the sites are all linked and switching countries would not register properly otherwise
-        post("http" + @site + "/Preferences/SetSubdomain", "?subdomainName=" + @cart.split(".")[0].slice(3), () ->)
+        post("http" + @site + "/Preferences/SetSubdomain", "?subdomainName=" + @cart.split(".")[0].slice(3), {}, () ->)
     addItems: (items, callback) ->
         @adding_items = true
         count = 0
@@ -43,7 +43,7 @@ class window.Mouser extends RetailerInterface
             params += "&ctl00$ContentMain$txtQuantity"   + (i+1) + "=" + item.quantity
         url = "http" + @site + @additem
         result = {success: true, fails:[]}
-        post url, params, (event) =>
+        post url, params, {}, (event) =>
             #if there is an error, there will be some error-class items with display set to ""
             doc = DOM.parse(event.target.responseText)
             errors = doc.getElementsByClassName("error")
@@ -64,12 +64,15 @@ class window.Mouser extends RetailerInterface
             else
                 if callback?
                     callback(result)
+        , () ->
+            if callback?
+                callback({success:false, fails:items})
 
     _clear_errors: (viewstate, callback) ->
-        post "http" + @site + @cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors", (event) =>
+        post "http" + @site + @cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors", {}, (event) =>
             doc = DOM.parse(event.target.responseText)
             viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-            post "http" + @site + @cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket", (event) =>
+            post "http" + @site + @cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket", {}, (event) =>
                if callback?
                    callback()
 
@@ -81,7 +84,7 @@ class window.Mouser extends RetailerInterface
         #don't ask, this is what works...
         url = "http" + @site + @cart
         params =  "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket"
-        post url, params, (event) =>
+        post url, params, {}, (event) =>
             if callback?
                 callback({success:true}, this)
             @refreshCartTabs()
@@ -96,7 +99,7 @@ class window.Mouser extends RetailerInterface
             params += "&ctl00$ContentMain$btnAddLines=Lines to Forms"
             params += "&ctl00$ContentMain$hNumberOfLines=5"
             params += "&ctl00$ContentMain$txtNumberOfLines=94"
-            post url, params, (event) =>
+            post url, params, {}, (event) =>
                 doc = DOM.parse(event.target.responseText)
                 viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
                 if callback?

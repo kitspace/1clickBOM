@@ -70,23 +70,28 @@ network_callback = (event, callback, error_callback, notify=true) ->
             if error_callback?
                 error_callback(event.target.item)
 
-window.post = (url, params, callback, item, json=false, error_callback) ->
+window.post = (url, params, {item:item, notify:notify, timeout:timeout, json:json},  callback, error_callback) ->
+    if not item?
+        item=null
+    if not notify?
+        notify=false
+    if not timeout?
+        timeout=60000
+    if not json?
+        json=false
     xhr = new XMLHttpRequest
     xhr.open("POST", url, true)
-    if item?
-        xhr.item = item
-    else
-        xhr.item = null
+    xhr.item = item
     if (json)
         xhr.setRequestHeader("Content-type", "application/JSON")
     else
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     xhr.url = url
     xhr.onreadystatechange = (event) ->
-        network_callback(event, callback, error_callback)
-    xhr.timeout = 600000;
+        network_callback(event, callback, error_callback, notify)
+    xhr.timeout = timeout;
     xhr.ontimedout = (event) ->
-        network_callback(event, callback, error_callback)
+        network_callback(event, callback, error_callback, notify)
     xhr.send(params)
 
 window.get = (url, {item:item, notify:notify, timeout:timeout}, callback, error_callback) ->

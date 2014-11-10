@@ -113,13 +113,12 @@ class window.Farnell extends RetailerInterface
                 txt_1 += "&/pf/commerce/CartHandler.removalCommerceIds=" + id
                 txt_2 += "&" + id + "=1"
             params = "/pf/commerce/CartHandler.addItemCount=5&/pf/commerce/CartHandler.addLinesSuccessURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL=../checkout/paymentMethod.jsp&/pf/commerce/CartHandler.punchOutSuccessURL=orderReviewPunchOut.jsp" + txt_1 + "&/pf/commerce/CartHandler.setOrderErrorURL=../shoppingCart/shoppingCart.jsp&/pf/commerce/CartHandler.setOrderSuccessURL=../shoppingCart/shoppingCart.jsp&_D:/pf/commerce/CartHandler.addItemCount= &_D:/pf/commerce/CartHandler.addLinesSuccessURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoErrorURL= &_D:/pf/commerce/CartHandler.moveToPurchaseInfoSuccessURL= &_D:/pf/commerce/CartHandler.punchOutSuccessURL= &_D:/pf/commerce/CartHandler.removalCommerceIds= &_D:/pf/commerce/CartHandler.setOrderErrorURL= &_D:/pf/commerce/CartHandler.setOrderSuccessURL= &_D:Submit= &_D:addEmptyLines= &_D:clearBlankLines= &_D:continueWithShipping= &_D:emptyLinesA= &_D:emptyLinesB= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote= &_D:lineNote1= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:lineQuantity= &_D:reqFromCart= &_D:textfield2= &_D:topUpdateCart= &_DARGS=/jsp/shoppingCart/fragments/shoppingCart/cartContent.jsp.cart&_dyncharset=UTF-8" + txt_2 + "&emptyLinesA=0&emptyLinesB=0&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote=&lineNote1=&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&lineQuantity=1&reqFromCart=true&textfield2=&topUpdateCart=Update Basket"
-            post url, params, (event) =>
+            post url, params, {item:{part:"clear cart request", retailer:"Farnell"}}, (event) =>
                 if callback?
                     callback({success:true})
                 @refreshSiteTabs()
                 @refreshCartTabs()
                 @clearing_cart = false
-            , item={part:"clear cart request", retailer:"Farnell"}, json=false
             , () =>
                 if callback?
                     callback({success:false})
@@ -143,7 +142,7 @@ class window.Farnell extends RetailerInterface
         for item in items
             params += encodeURIComponent(item.part + "," + item.quantity + ",\"" + item.comment + "\"\r\n")
         params += "&%2Fpf%2Fcommerce%2Forder%2FQuickPaste.addPasteProducts=Add+To+Basket&_D%3A%2Fpf%2Fcommerce%2Forder%2FQuickPaste.addPasteProducts=+&submitQuickPaste=Add+To+Basket&_D%3AsubmitQuickPaste=+&_DARGS=%2Fjsp%2FshoppingCart%2Ffragments%2FquickPaste%2FquickPaste.jsp.quickpaste"
-        post url, params, (event) =>
+        post url, params, {item:{part:"parts",retailer:"Farnell"}}, (event) =>
             #if items successully add the request returns the basket
             doc = DOM.parse(event.target.responseText)
             #we determine the request has returned the basket by the body
@@ -159,7 +158,7 @@ class window.Farnell extends RetailerInterface
                             callback(result)
             else
                 callback(result)
-         , item={part:"parts",retailer:"Farnell"}, json=false, () =>
+         , () ->
             callback({success:false, fails:items})
 
     _add_items_split: (items, callback) ->

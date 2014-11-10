@@ -27,13 +27,12 @@ class window.RS extends RetailerInterface
                     @clearing_cart = false
         else
             url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart"
-            post url, "", (event) =>
+            post url, "", {json:true}, (event) =>
                 if callback?
                     callback({success: true}, this)
                 @refreshSiteTabs()
                 @refreshCartTabs()
                 @clearing_cart = false
-            , item=null , json=true
             , () ->
                 callback({success: false}, this)
                 @clearing_cart = false
@@ -45,26 +44,22 @@ class window.RS extends RetailerInterface
         params2 = "AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasketForm&=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3Aj_id1085=&shoppingBasketForm%3Aj_id1091=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_listItems=Paste%20or%20type%20your%20list%20here%20and%20click%20'Add'.&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1228=505-1441&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1248=1&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionModalLayerOpenedState=&shoppingBasketForm%3AsendToColleagueWidgetPanelOpenedState=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_senderName_decorate%3AGuestUserSendToColleagueWidgetAction_senderName=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_senderEmail_decorate%3AGuestUserSendToColleagueWidgetAction_senderEmail=name%40company.com&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_mailTo_decorate%3AGuestUserSendToColleagueWidgetAction_mailTo=name%40company.com&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_subject_decorate%3AGuestUserSendToColleagueWidgetAction_subject=Copy%20of%20order%20from%20RS%20Online&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_message_decorate%3AGuestUserSendToColleagueWidgetAction_message=&shoppingBasketForm%3AsendToColleagueSuccessWidgetPanelOpenedState=&javax.faces.ViewState=" + viewstate + "&shoppingBasketForm%3AclearBasketButton=shoppingBasketForm%3AclearBasketButton&"
         params3 = "AJAXREQUEST=_viewRoot&" + form_ids[0] + "=" + form_ids[0] + "&javax.faces.ViewState=" + viewstate + "&ajaxSingle=" + form_ids[0] + "%3A" + form_ids[1] + "&" + form_ids[0] + "%3A" + form_ids[1] + "=" + form_ids[0] + "%3A" + form_ids[1] + "&"
         params4 = "AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&autoScroll=&javax.faces.ViewState=" + viewstate + "&a4jCloseForm%3A" + form_ids[2] + "=a4jCloseForm%3A" + form_ids[2] + "&"
-        post url, params1, () ->
-            post url, params2, () ->
-                post url, params3, () ->
-                    post url, params4, (event) -> #stairway to heaven lol
+        post url, params1, {}, () ->
+            post url, params2, {}, () ->
+                post url, params3, {}, () ->
+                    post url, params4, {}, (event) -> #stairway to heaven lol
                        if callback?
                            callback({success:true})
-                    , item=null, json=false
                     , () ->
                         if callback?
                             callback({success:false})
-                , item=null, json=false
                 , () ->
                     if callback?
                         callback({success:false})
-            , item=null, json=false
             , () ->
                 if callback?
                     callback({success:false})
             , item=null, json=false
-        , item=null, json=false
         , () ->
             if callback?
                 callback({success:false})
@@ -107,17 +102,16 @@ class window.RS extends RetailerInterface
         for id in ids
             params += id + "|"
         params += '"}}'
-        post url, params, () ->
+        post url, params, {json:true}, () ->
             if callback?
                 callback()
-        ,item=null, json=true
         , () ->
             if callback?
                 callback()
 
     _get_invalid_item_ids_rs_delivers: (callback) ->
         url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/GetCartHtml"
-        post url, undefined, (event) ->
+        post url, undefined, {json:true}, (event) ->
             doc = DOM.parse(JSON.parse(event.target.responseText).html)
             ids = []
             parts = []
@@ -125,7 +119,6 @@ class window.RS extends RetailerInterface
                 ids.push(elem.parentElement.nextElementSibling.querySelector(".quantityTd").firstElementChild.classList[3].split("_")[1])
                 parts.push(trim_whitespace(elem.parentElement.nextElementSibling.querySelector(".descriptionTd").firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.innerText))
             callback(ids, parts)
-        ,item=null, json=true
         , () ->
             callback([],[])
 
@@ -148,25 +141,21 @@ class window.RS extends RetailerInterface
 
         params3 = "AJAXREQUEST=_viewRoot&" + form_ids[0] + "=" + form_ids[0] + "&javax.faces.ViewState=" + viewstate + "&ajaxSingle=" + form_ids[0] + "%3A" + form_ids[1] + "&" + form_ids[0] + "%3A" + form_ids[1] + "=" + form_ids[0] + "%3A" + form_ids[1] + "&"
         params4 = "AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&autoScroll=&javax.faces.ViewState=" + viewstate + "&a4jCloseForm%3A" + form_ids[2] + "=a4jCloseForm%3A" + form_ids[2] + "&"
-        post url, params1, () ->
-            post url, params2, () ->
-                post url, params3, () ->
-                    post url, params4, () -> #stairway to heaven lol
+        post url, params1, {}, () ->
+            post url, params2, {}, () ->
+                post url, params3, {}, () ->
+                    post url, params4, {}, () -> #stairway to heaven lol
                             if callback?
                                 callback()
-                    , item=null, json=false
                     , () ->
                         if callback?
                             callback()
-                , item=null, json=false
                 , () ->
                     if callback?
                         callback()
-            , item=null, json=false
             , () ->
                 if callback?
                     callback()
-        , item=null, json=false
         , () ->
             if callback?
                 callback()
@@ -189,7 +178,7 @@ class window.RS extends RetailerInterface
                 for item in items
                     params += item.part + "," + item.quantity + ",," + item.comment + "\n"
                 params += '"}}'
-                post url, params, (event) =>
+                post url, params, {json:true}, (event) =>
                     doc = DOM.parse(JSON.parse(event.target.responseText).html)
                     success = doc.querySelector("#hidErrorAtLineLevel").value == "0"
                     if not success
@@ -206,7 +195,6 @@ class window.RS extends RetailerInterface
                     @refreshCartTabs()
                     @refreshSiteTabs()
                     @adding_items = false
-                , item=null, json=true
                 , () =>
                     if callback?
                         callback({success:false, fails:items}, this, items)
@@ -217,7 +205,7 @@ class window.RS extends RetailerInterface
             params += encodeURIComponent(item.part + "," + item.quantity + ",," + item.comment + "\n")
 
         params += "&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionModalLayerOpenedState=&javax.faces.ViewState=" + viewstate + "&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderTextBoxbtn=shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderTextBoxbtn&"
-        post url, params, (event) =>
+        post url, params, {}, (event) =>
             @_get_invalid_item_ids_rs_online (ids, parts) =>
                 success = parts.length == 0
                 invalid = []
@@ -230,7 +218,6 @@ class window.RS extends RetailerInterface
                 @refreshCartTabs()
                 @refreshSiteTabs()
                 @adding_items = false
-        , item=null, json=false
         , () =>
             if callback?
                 callback({success:false, fails:items}, this, items)
