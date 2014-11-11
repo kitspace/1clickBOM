@@ -33,7 +33,7 @@ class window.RS extends RetailerInterface
                 @refreshSiteTabs()
                 @refreshCartTabs()
                 @clearing_cart = false
-            , () ->
+            , () =>
                 callback({success: false}, this)
                 @clearing_cart = false
 
@@ -59,7 +59,6 @@ class window.RS extends RetailerInterface
             , () ->
                 if callback?
                     callback({success:false})
-            , item=null, json=false
         , () ->
             if callback?
                 callback({success:false})
@@ -173,31 +172,32 @@ class window.RS extends RetailerInterface
 
         else
             @_clear_invalid_rs_delivers () =>
-                url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder"
-                params = '{"request":{"lines":"'
-                for item in items
-                    params += item.part + "," + item.quantity + ",," + item.comment + "\n"
-                params += '"}}'
-                post url, params, {json:true}, (event) =>
-                    doc = DOM.parse(JSON.parse(event.target.responseText).html)
-                    success = doc.querySelector("#hidErrorAtLineLevel").value == "0"
-                    if not success
-                        if callback?
-                            @_get_invalid_item_ids_rs_delivers (ids, parts) =>
-                                invalid = []
-                                for item in items
-                                    if item.part in parts
-                                        invalid.push(item)
-                                callback({success:false, fails:invalid}, this, items)
-                    else
-                        if callback?
-                            callback({success:true, fails:[]}, this, items)
+                @_add_items_rs_delivers items, (result) =>
+                    callback(result, this, items)
                     @refreshCartTabs()
                     @refreshSiteTabs()
                     @adding_items = false
-                , () =>
+    _add_items_rs_delivers: (items, callback) ->
+            url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder"
+            params = '{"request":{"lines":"'
+            for item in items
+                params += item.part + "," + item.quantity + ",," + item.comment + "\n"
+            params += '"}}'
+            post url, params, {json:true, timeout:600000}, (event) =>
+                doc = DOM.parse(JSON.parse(event.target.responseText).html)
+                success = doc.querySelector("#hidErrorAtLineLevel").value == "0"
+                if not success
                     if callback?
-                        callback({success:false, fails:items}, this, items)
+                        @_get_invalid_item_ids_rs_delivers (ids, parts) =>
+                            invalid = []
+                            for item in items
+                                if item.part in parts
+                                    invalid.push(item)
+                            callback({success:false, fails:invalid})
+                else
+                    callback({success:true, fails:[]})
+            , () =>
+                callback({success:false, fails:items})
     _add_items_rs_online: (items, viewstate, form_id, callback) ->
         url = "http" + @site + @cart
         params = "AJAXREQUEST=shoppingBasketForm%3A" + form_id + "&shoppingBasketForm=shoppingBasketForm&=QuickAdd&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_listItems="

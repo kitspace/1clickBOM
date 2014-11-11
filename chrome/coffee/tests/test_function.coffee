@@ -1,5 +1,6 @@
-@Test = ()->
+@Test = (module)->
     url = chrome.extension.getURL("html/test.html")
+    url += "?module=" + module if module?
     window.open(url)
 
 @UserSim = ()->

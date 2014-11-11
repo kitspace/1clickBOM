@@ -93,6 +93,10 @@ class window.BomManager
             failed_items = []
             for fail in fails
                 failed_items.push({title:"item: " + fail.comment + " | " + fail.quantity + " | " + fail.part,message:""})
+            if failed_items == []
+                title = "Could not add some items"
+                title += " to " + retailer + " cart."
+                failed_items.push({title:"" ,message:""})
             chrome.notifications.create "", {type:"list", title:title, message:"", items:failed_items, iconUrl:"/images/error128.png"}, () =>
             badge.setDecaying("Err","#FF0000", priority=2)
         else

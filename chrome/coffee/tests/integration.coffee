@@ -127,6 +127,14 @@ rs_locations_delivers = ["AE", "AZ", "CL", "CY", "EE", "FI", "GR", "HR", "IL",
 
 rs_locations = rs_locations_online.concat(rs_locations_delivers)
 
+asyncTest "Clear all", () ->
+    stop(rs_locations.length - 1)
+    for l in rs_locations
+        r = new RS(l)
+        r.clearCart (result, that) ->
+            deepEqual(result.success, true, "1:" + that.country)
+            start()
+
 asyncTest "rsdelivers: Add items fails but adds again", () ->
     stop(rs_locations_delivers.length - 1)
     for l in rs_locations_delivers
@@ -136,6 +144,7 @@ asyncTest "rsdelivers: Add items fails but adds again", () ->
                 , {"part":"fail","quantity":2, "comment":"test"}
                 ]
         r.addItems items, (result, that) ->
+            console.log(that.country)
             expected_fails = [{"part":"fail","quantity":2, "comment":"test"}]
             deepEqual(result.success, false, "1:"+ that.country)
             deepEqual(result.fails, expected_fails,"2:" + that.country)
@@ -146,7 +155,7 @@ asyncTest "rsdelivers: Add items fails but adds again", () ->
 
 asyncTest "rs-online: Add items fails but adds again", () ->
     stop(rs_locations_online.length - 1)
-    for l in rs_locations_online
+    for l in rs_locations
         r = new RS(l)
         items = [
                   {"part":"264-7881","quantity":2, "comment":"test"}
@@ -161,13 +170,6 @@ asyncTest "rs-online: Add items fails but adds again", () ->
                 deepEqual(result.success, true, "3:" + that2.country)
                 start()
 
-asyncTest "Clear all", () ->
-    stop(rs_locations.length - 1)
-    for l in rs_locations
-        r = new RS(l)
-        r.clearCart (result, that) ->
-            deepEqual(result.success, true, "1:" + that.country)
-            start()
 
 module("Newark")
 

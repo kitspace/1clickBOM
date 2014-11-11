@@ -89,6 +89,10 @@ class window.Mouser extends RetailerInterface
                 callback({success:true}, this)
             @refreshCartTabs()
             @clearing_cart = false
+        , () =>
+            if callback?
+                callback({success:false}, this)
+            @clearing_cart = false
     _get_adding_viewstate: (callback, arg)->
         #we get the quick-add form , extend it to 99 lines (the max) and get the viewstate from the response
         url = "http" + @site + @additem
