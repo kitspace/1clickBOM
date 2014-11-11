@@ -86,17 +86,19 @@ class window.BomManager
     notifyFillCart: (items, retailer, result) ->
         if not result.success
             fails = result.fails
-            title = "Could not add " + fails.length
-            title += " out of " + items.length + " line"
-            title += if items.length > 1 then "s" else ""
-            title += " to " + retailer + " cart:"
             failed_items = []
-            for fail in fails
-                failed_items.push({title:"item: " + fail.comment + " | " + fail.quantity + " | " + fail.part,message:""})
-            if failed_items == []
-                title = "Could not add some items"
-                title += " to " + retailer + " cart."
-                failed_items.push({title:"" ,message:""})
+            if fails.length == 0
+                title = "There may have been problems adding items"
+                title += " to " + retailer + " cart. "
+                failed_items.push({title:"Please check the cart to try and " ,message:""})
+                failed_items.push({title:"correct any issues." ,message:""})
+            else
+                title = "Could not add " + fails.length
+                title += " out of " + items.length + " line"
+                title += if items.length > 1 then "s" else ""
+                title += " to " + retailer + " cart:"
+                for fail in fails
+                    failed_items.push({title:"item: " + fail.comment + " | " + fail.quantity + " | " + fail.part,message:""})
             chrome.notifications.create "", {type:"list", title:title, message:"", items:failed_items, iconUrl:"/images/error128.png"}, () =>
             badge.setDecaying("Err","#FF0000", priority=2)
         else

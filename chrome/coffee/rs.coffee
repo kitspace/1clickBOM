@@ -86,7 +86,7 @@ class window.RS extends RetailerInterface
                 if error_child?
                     error_input = error_child.querySelector("input")
                     if error_input?
-                        parts.push(error_input.value)
+                        parts.push(error_input.value.replace(/-/g,''))
             callback(ids, parts)
         , () ->
             callback([],[])
@@ -179,7 +179,6 @@ class window.RS extends RetailerInterface
 
     #adds items recursively in batches of 50 -- requests would timeout otherwise
     _add_items_rs_delivers: (items_incoming, i, result, callback) ->
-        console.log(i)
         if i < items_incoming.length
             items = items_incoming[i..i+49]
             @_clear_invalid_rs_delivers () =>
