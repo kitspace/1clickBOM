@@ -203,7 +203,14 @@ class window.RS extends RetailerInterface
                     @_add_items_rs_delivers(items_incoming, i+50, {success:false, fails:result.fails.concat(items)}, callback)
         else
             callback(result)
-    _add_items_rs_online: (items, viewstate, form_id, callback) ->
+    _add_items_rs_online: (items_incoming, viewstate, form_id, callback) ->
+        result = {success:true, fails:[]}
+        if items.length > 500
+            result.warnings = ["RS cart cannot hold more than 500 lines."]
+            result.fails = items[500..]
+            items = items_incoming[0..499]
+        else
+            items = items_incoming
         url = "http" + @site + @cart
         params = "AJAXREQUEST=shoppingBasketForm%3A" + form_id + "&shoppingBasketForm=shoppingBasketForm&=QuickAdd&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_listItems="
         for item in items
@@ -219,13 +226,13 @@ class window.RS extends RetailerInterface
                         if item.part in parts
                             invalid.push(item)
                 if callback?
-                    callback({success:success, fails:invalid}, this, items)
+                    callback({success:result.success && success, fails:result.fails.concat(invalid), warnings:result.warnings}, this, items_incoming)
                 @refreshCartTabs()
                 @refreshSiteTabs()
                 @adding_items = false
         , () =>
             if callback?
-                callback({success:false, fails:items}, this, items)
+                callback({success:false, fails:result.fails.concat(items)}, this, items_incoming)
 
     _get_adding_viewstate_rs_online: (callback)->
         url = "http" + @site + @cart
