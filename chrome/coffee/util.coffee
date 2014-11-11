@@ -74,7 +74,7 @@ window.post = (url, params, {item:item, notify:notify, timeout:timeout, json:jso
     if not item?
         item=null
     if not notify?
-        notify=false
+        notify=true
     if not timeout?
         timeout=60000
     if not json?

@@ -39,7 +39,7 @@ class window.Digikey extends RetailerInterface
     _add_items: (items, callback) ->
         result = {success:true, fails:[]}
         count = items.length
-        for item,index in items
+        for item in items
             @_add_item item, (item, item_result) =>
                 if not item_result.success
                     @_get_part_id item, (item, id) =>
@@ -63,9 +63,10 @@ class window.Digikey extends RetailerInterface
                                             callback(result)
                                 else
                                     count--
+                                    console.log("2", count)
                                     if (count == 0)
                                         callback(result)
-                        , () =>
+                        , () ->
                             result.success = false
                             result.fails.push(item)
                             count--
@@ -79,19 +80,14 @@ class window.Digikey extends RetailerInterface
                             callback(result)
                 else
                     count--
+                    console.log("1", count)
                     if (count == 0)
                         callback(result)
-            , item, json=false
-            , (event) =>
-                result.fails.push(event.target.item)
-                count--
-                if (count == 0)
-                    callback(result)
     _add_item: (item, callback) ->
         url = "http" + @site + @additem
         params = "qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment
         result = {success:true, fails:[]}
-        post url, params, {item:item}, (event)->
+        post url, params, {item:item, timeout:600000}, (event)->
             doc = DOM.parse(event.target.responseText)
             #if the cart returns with a quick-add quantity filled-in there was an error
             quick_add_quant = doc.querySelector("#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity")
