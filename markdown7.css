@@ -1,16 +1,28 @@
 body {
-   font-family: Helvetica, arial, sans-serif;
+   font-family:"sans-serif", "Arial", "Helvetica";
    font-size: 14px;
    line-height: 1.6;
-   padding-top: 10px;
-   padding-bottom: 10px;
    background-color: white;
-   padding: 30px; }
+   padding: 0px 30px 30px;}
 
 body > *:first-child {
    margin-top: 0 !important; }
 body > *:last-child {
    margin-bottom: 0 !important; }
+
+#title {
+   font-size: 40px;
+   color: black;
+   line-height:128px;
+   height:128px;
+   text-align: center;
+   font-weight:bold;
+   padding-bottom: 10px;
+   -webkit-font-smoothing: antialiased;
+   cursor: text;
+   position: relative; }
+
+#title > img {vertical-align:middle;}
 
 a {
    color: #4183C4; }
