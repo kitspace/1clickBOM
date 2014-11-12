@@ -101,7 +101,7 @@ class window.RS extends RetailerInterface
         for id in ids
             params += id + "|"
         params += '"}}'
-        post url, params, {json:true}, () ->
+        post url, params, {timeout:600000,json:true}, () ->
             if callback?
                 callback()
         , () ->
@@ -110,7 +110,7 @@ class window.RS extends RetailerInterface
 
     _get_invalid_item_ids_rs_delivers: (callback) ->
         url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/GetCartHtml"
-        post url, undefined, {json:true}, (event) ->
+        post url, undefined, {timeout:600000,json:true}, (event) ->
             doc = DOM.parse(JSON.parse(event.target.responseText).html)
             ids = []
             parts = []
@@ -177,17 +177,17 @@ class window.RS extends RetailerInterface
                 @refreshSiteTabs()
                 @adding_items = false
 
-    #adds items recursively in batches of 50 -- requests would timeout otherwise
+    #adds items recursively in batches of 100 -- requests would timeout otherwise
     _add_items_rs_delivers: (items_incoming, i, result, callback) ->
         if i < items_incoming.length
-            items = items_incoming[i..i+49]
+            items = items_incoming[i..i+99]
             @_clear_invalid_rs_delivers () =>
                 url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder"
                 params = '{"request":{"lines":"'
                 for item in items
                     params += item.part + "," + item.quantity + ",," + item.comment + "\n"
                 params += '"}}'
-                post url, params, {json:true}, (event) =>
+                post url, params, {timeout:600000,json:true}, (event) =>
                     doc = DOM.parse(JSON.parse(event.target.responseText).html)
                     success = doc.querySelector("#hidErrorAtLineLevel").value == "0"
                     if not success
@@ -196,11 +196,11 @@ class window.RS extends RetailerInterface
                             for item in items
                                 if item.part in parts
                                     invalid.push(item)
-                            @_add_items_rs_delivers(items_incoming, i+50, {success:false, fails:result.fails.concat(invalid)}, callback)
+                            @_add_items_rs_delivers(items_incoming, i+100, {success:false, fails:result.fails.concat(invalid)}, callback)
                     else
-                        @_add_items_rs_delivers(items_incoming, i+50, result, callback)
+                        @_add_items_rs_delivers(items_incoming, i+100, result, callback)
                 , () =>
-                    @_add_items_rs_delivers(items_incoming, i+50, {success:false, fails:result.fails.concat(items)}, callback)
+                    @_add_items_rs_delivers(items_incoming, i+100, {success:false, fails:result.fails.concat(items)}, callback)
         else
             callback(result)
     _add_items_rs_online: (items_incoming, viewstate, form_id, callback) ->
