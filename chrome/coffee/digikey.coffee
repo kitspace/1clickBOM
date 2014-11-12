@@ -63,7 +63,6 @@ class window.Digikey extends RetailerInterface
                                             callback(result)
                                 else
                                     count--
-                                    console.log("2", count)
                                     if (count == 0)
                                         callback(result)
                         , () ->
@@ -80,7 +79,6 @@ class window.Digikey extends RetailerInterface
                             callback(result)
                 else
                     count--
-                    console.log("1", count)
                     if (count == 0)
                         callback(result)
     _add_item: (item, callback) ->

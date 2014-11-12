@@ -34,7 +34,7 @@ checkValidItems =  (items_incoming, invalid) ->
             items = []
             break
         if isNaN(number)
-            invalid.push {item:item, reason: "Quantity is not a number."}
+            invalid.push {item:item, reason:"Quantity is not a number."}
         else if number < 1
             invalid.push {item:item, reason:"Quantity is less than one"}
         else
@@ -50,7 +50,8 @@ checkValidItems =  (items_incoming, invalid) ->
                 invalid.push({item:item, reason: "Retailer \"" + item.retailer + "\" is not known."})
             else
                 item.retailer = r
-                item.part = item.part.replace(/-/g, '')
+                if item.retailer != "Digikey"
+                    item.part = item.part.replace(/-/g, '')
                 items.push(item)
     return {items, invalid}
 
