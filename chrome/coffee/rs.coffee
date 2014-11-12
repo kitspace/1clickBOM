@@ -205,7 +205,7 @@ class window.RS extends RetailerInterface
             callback(result)
     _add_items_rs_online: (items_incoming, viewstate, form_id, callback) ->
         result = {success:true, fails:[]}
-        if items.length > 500
+        if items_incoming.length > 500
             result.warnings = ["RS cart cannot hold more than 500 lines."]
             result.fails = items[500..]
             items = items_incoming[0..499]
