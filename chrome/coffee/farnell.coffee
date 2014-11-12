@@ -19,7 +19,7 @@ class window.Farnell extends RetailerInterface
         #from Newark
         if country_code in [ "AT", "PT", "ES", "IT", "DE", "FI", "DK", "NO"
                            , "SE", "HK", "CZ", "BG", "EE", "HU", "LT", "PL"
-                           , "LV", "SI", "RO", "RU" , "SK"
+                           , "LV", "SI", "RO", "RU", "SK", "UA"
                            ]
             for name, method of Newark::
                 this[name] = method
@@ -100,7 +100,12 @@ class window.Farnell extends RetailerInterface
     clearCart: (callback) ->
         @clearing_cart = true
         @_get_item_ids (ids) =>
-            @_post_clear(ids, callback)
+            @_post_clear ids, (result) =>
+                if callback?
+                    callback(result)
+                @refreshSiteTabs()
+                @refreshCartTabs()
+                @clearing_cart = false
 
     _get_item_ids: (callback) ->
         url = "http" + @site + @cart
@@ -128,17 +133,10 @@ class window.Farnell extends RetailerInterface
             post url, params, {item:{part:"clear cart request", retailer:"Farnell"}}, (event) =>
                 if callback?
                     callback({success:true})
-                @refreshSiteTabs()
-                @refreshCartTabs()
-                @clearing_cart = false
-            , () =>
-                if callback?
-                    callback({success:false})
-                @clearing_cart = false
+            , () ->
+                callback({success:false})
         else
-          if callback?
-              callback({success:true})
-          @clearing_cart = false
+          callback({success:true})
 
     addItems: (items, callback) ->
         @adding_items = true
