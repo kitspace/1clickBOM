@@ -50,8 +50,7 @@ checkValidItems =  (items_incoming, invalid) ->
                 invalid.push({item:item, reason: "Retailer \"" + item.retailer + "\" is not known."})
             else
                 item.retailer = r
-                if item.retailer == "Mouser" or item.retailer == "RS"
-                    item.part = item.part.replace(/-/g, '')
+                item.part = item.part.replace(/-/g, '')
                 items.push(item)
     return {items, invalid}
 

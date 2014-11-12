@@ -21,18 +21,20 @@ class window.Mouser extends RetailerInterface
         @adding_items = true
         count = 0
         big_result = {success:true, fails:[]}
-        @_get_adding_viewstate (viewstate) =>
-            for _,i in items by 99
-                _99_items = items[i..i+98]
-                count += 1
-                @_add_items _99_items, viewstate, (result) =>
-                    big_result.success &&= result.success
-                    big_result.fails = big_result.fails.concat(result.fails)
-                    count -= 1
-                    if count == 0
-                        callback(result, this, items)
-                        @refreshCartTabs()
-                        @adding_items = false
+        @_get_cart_viewstate (viewstate) =>
+            @_clear_errors viewstate, () =>
+                @_get_adding_viewstate (viewstate) =>
+                    for _,i in items by 99
+                        _99_items = items[i..i+98]
+                        count += 1
+                        @_add_items _99_items, viewstate, (result) =>
+                            big_result.success &&= result.success
+                            big_result.fails = big_result.fails.concat(result.fails)
+                            count -= 1
+                            if count <= 0
+                                callback(big_result, this, items)
+                                @refreshCartTabs()
+                                @adding_items = false
     _add_items: (items, viewstate, callback) ->
         params = @additem_params + viewstate
         params += "&ctl00$ContentMain$hNumberOfLines=99"
@@ -56,14 +58,8 @@ class window.Mouser extends RetailerInterface
                             if item.part == part.replace(/-/g, '')
                                 result.fails.push(item)
                         result.success = false
-            if not result.success
-                viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-                @_clear_errors viewstate, () =>
-                    if callback?
-                        callback(result)
-            else
-                if callback?
-                    callback(result)
+            if callback?
+                callback(result)
         , () ->
             if callback?
                 callback({success:false, fails:items})
