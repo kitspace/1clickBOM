@@ -78,7 +78,22 @@ class window.BomManager
                         break
                 if not existing
                     bom[item.retailer].push(item)
-
+            over = []
+            for retailer,lines of bom
+                if lines.length > 100
+                    over.push(retailer)
+            if over.length > 0
+                title = "That's a lot of lines!"
+                message = "You have over 100 lines for "
+                message += over[0]
+                if over.length > 1
+                    for retailer in over[1 .. over.length - 2]
+                        message += ", " + retailer
+                    message += " and "
+                    message += over[over.length - 1]
+                message += ". Adding the items may take a very long time (or even forever). It may be OK but it really depends on the site."
+                chrome.notifications.create "", {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
+                badge.setDecaying("Warn","#FF8A00", priority=2)
             chrome.storage.local.set {"bom":bom}, () =>
                 if callback?
                     callback(this)

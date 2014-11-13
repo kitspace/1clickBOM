@@ -68,7 +68,8 @@
         "*://*.digikey.tw/*",
         "*://*.digikey.co.uk/*",
         "*://g.etfv.co/*",
-        "*://freegeoip.net/*"
+        "*://freegeoip.net/*",
+        "*://*/*.tsv"
     ],
     "browser_action": {
         "default_icon": "images/logo19.png",
