@@ -2,7 +2,7 @@
 
 ![Demo](https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif)
 
-[![Available on chrome][8]](https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi)
+[![Available on Chrome][8]](https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi)
 
 1clickBOM is purchasing tool that let's you keep _one_ bill of materials (BOM)
 for items from _multiple_ retailers. It's a browser extension that fills your
@@ -114,4 +114,5 @@ file for details.
 [5]:https://qunitjs.com/
 [6]:https://github.com/monostable/1clickBOM/blob/master/LICENSE
 [7]:https://github.com/monostable/1clickBOM
+[8]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png
 
