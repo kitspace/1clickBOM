@@ -46,6 +46,11 @@ try this on the [example tsv page][2] once you have the extension installed.
 Once the data is added you can use 1clickBOM to add the items to your carts
 using the buttons on the popup. You can also quickly view and empty your carts.
 
+## Issues ##
+
+If you need any help or think you found a bug please get in touch via
+[Github][10] or [email:info@1clickBOM.com][11].
+
 ## Roadmap ##
 
 * 0.1
@@ -113,4 +118,5 @@ share your code-improvements to 1clickBOM under the CPAL as well. See the
 [7]:https://github.com/monostable/1clickBOM
 [8]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png
 [9]:http://1clickBOM.com/firefox.png
-
+[10]:https://github.com/monostable/1clickBOM/issues
+[11]:mailto:info@1clickBOM.com
