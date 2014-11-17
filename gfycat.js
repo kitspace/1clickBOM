@@ -35,7 +35,6 @@ var gfyCollection = function () {
         elem_coll = byClass("gfyitem", document);
         for (var i = 0; i < elem_coll.length; i++) {
             var gfyObj = new gfyObject(elem_coll[i]);
-            console.log(i);
             collection.push(gfyObj);
         }
         // run init _after_ all are collected, because the init function deletes and recreates
@@ -273,7 +272,6 @@ var gfyObject = function (gfyElem) {
     function init() {
         isMobile = mobilecheck();
         gfyId = gfyRootElem.getAttribute('data-id');
-        console.log(gfyId);
         if (gfyRootElem.getAttribute('data-title') == "true")
             optTitle = true;
         if (gfyRootElem.getAttribute('data-expand') == "true")

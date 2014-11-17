@@ -1,5 +1,7 @@
 
 
+[![Available on Chrome][8]](https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi)
+
 1clickBOM is purchasing tool that let's you keep _one_ bill of materials (BOM)
 for items from _multiple_ retailers. It's a browser extension that fills your
 online shopping carts for you. To add items to 1clickBOM you simply paste from
@@ -100,14 +102,15 @@ the `Test()` function.
 
 1clickBOM is licensed under the CPAL license which means you can use the code
 in proprietary applications as long as you display appropriate attribution and
-license your improvements to 1clickBOM under the CPAL too. See the [LICENSE][6]
-file for details.
+share your code-improvements to 1clickBOM under the CPAL as well. See the
+[LICENSE][6] file for details.
 
-[1]:#Roadmap
+[1]:#roadmap
 [2]:https://github.com/monostable/1clickBOM/blob/master/chrome/data/example.tsv
 [3]:https://github.com/monostable/1clickBOM/blob/master/chrome/html/test.html
 [4]:http://coffeescript.org
 [5]:https://qunitjs.com/
 [6]:https://github.com/monostable/1clickBOM/blob/master/LICENSE
 [7]:https://github.com/monostable/1clickBOM
+[8]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png
 
