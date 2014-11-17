@@ -1,6 +1,6 @@
 # 1clickBOM #
 
-![Demo](https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif)
+[![Demo](https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif)](https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi)
 
 [![Available on Chrome][8]](https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi)
 
