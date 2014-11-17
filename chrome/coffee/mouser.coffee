@@ -50,14 +50,15 @@ class window.Mouser extends RetailerInterface
             doc = DOM.parse(event.target.responseText)
             errors = doc.getElementsByClassName("error")
             for error in errors
-                # this padding5 error element just started appearing, doesn't indicate anything
-                if error.style.display == "" && error.firstChild.nextSibling.className != "padding5"
-                    part = error.getAttribute("data-partnumber")
-                    if part?
-                        for item in items
-                            if item.part == part.replace(/-/g, '')
-                                result.fails.push(item)
-                        result.success = false
+                if error.style.display == ""
+                    # this padding5 error element just started appearing, doesn't indicate anything
+                    if not (error.firstChild? && error.firstChild.nextSibling? && error.firstChild.nextSibling.className == "padding5")
+                        part = error.getAttribute("data-partnumber")
+                        if part?
+                            for item in items
+                                if item.part == part.replace(/-/g, '')
+                                    result.fails.push(item)
+                            result.success = false
             if callback?
                 callback(result)
         , () ->
