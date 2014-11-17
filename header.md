@@ -16,7 +16,6 @@
     link.setAttribute("type", "image/png");
     document.head.appendChild(link);
     var chromelink = document.getElementById("chromelink");
-    var chromelink = document.getElementById("chromeimage");
     if (/Chrome/.test(navigator.userAgent)) {
         chromelink.href = "#";
         chromelink.onclick = function () { chrome.webstore.install();};
