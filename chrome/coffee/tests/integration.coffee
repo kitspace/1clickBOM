@@ -57,8 +57,8 @@ farnell_locations = []
 # pass the test reliably
 for l in farnell_locations_all
     if l not in [ "AU", "MY", "PH", "TW", "NZ", "KR" , "CN"
-                , "TH", "IN", "SG", "International" , "NL"
-                , "IE", "UK", "IL", "TR", "CH", "FR", "BE"
+                , "TH", "IN", "SG"
+                , "FR", "IL", "International", "TR"
                 ]
         farnell_locations.push(l)
 

@@ -19,7 +19,8 @@ class window.Farnell extends RetailerInterface
         #from Newark
         if country_code in [ "AT", "PT", "ES", "IT", "DE", "FI", "DK", "NO"
                            , "SE", "HK", "CZ", "BG", "EE", "HU", "LT", "PL"
-                           , "LV", "SI", "RO", "RU", "SK", "UA"
+                           , "LV", "SI", "RO", "RU", "SK", "UK", "BE", "IE"
+                           , "NL", "CH"
                            ]
             for name, method of Newark::
                 this[name] = method
@@ -27,6 +28,9 @@ class window.Farnell extends RetailerInterface
             @_set_store_id()
             if callback?
                 callback()
+        else if country_code in ["AU", "CN", "IN", "KR", "MY", "NZ", "PH"
+                                , "SG", "TW", "TH"]
+            #@_fix_cookies_element14(callback)
         else
             @_fix_cookies(callback)
 
@@ -86,16 +90,19 @@ class window.Farnell extends RetailerInterface
             @_fix_language_cookie () =>
                 get "http" + @site + "/jsp/home/homepage.jsp", {}, callback, callback
 
-    _fix_cookies2: (callback) ->
+    _fix_cookies_element14: (callback) ->
         @_clear_cookies () =>
+            #login as 1clickBOM + @country
             url = "https" + @site + "/jsp/profile/register.jsp?_DARGS=/jsp/profile/fragments/login/loginFragment.jsp.loginfragment"
             params = "_dyncharset=UTF-8&%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginErrorURL=..%2Fprofile%2Flogin.jsp%3FfromPage%3Dtrue&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginErrorURL=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginSuccessURL=%2Fjsp%2Fhome%2Fhomepage.jsp&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.loginSuccessURL=+&login=1clickBOM" + @country + "&_D%3Alogin=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.value.password=1clickBOM&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.value.password=+&s=&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.autoLogin=+&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login.x=28&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login.y=17&%2Fatg%2Fuserprofiling%2FProfileFormHandler.login=login&_D%3A%2Fatg%2Fuserprofiling%2FProfileFormHandler.login=+&_DARGS=%2Fjsp%2Fprofile%2Ffragments%2Flogin%2FloginFragment.jsp.loginfragment"
             post url, params, {}, (event) =>
                 @_add_items [{part:"2334075", comment:"fixer", quantity:2}], () =>
-                    url3 = "http" + @site + "/jsp/home/homepage.jsp?_DARGS=/jsp/commonfragments/linkE14.jsp_A&_DAV="
-                    get url3, {}, () =>
-                        if callback?
-                            callback()
+                    @clearCart () =>
+                        #logout
+                        url3 = "http" + @site + "/jsp/home/homepage.jsp?_DARGS=/jsp/commonfragments/linkE14.jsp_A&_DAV="
+                        get url3, {}, () ->
+                            if callback?
+                                callback()
 
     clearCart: (callback) ->
         @clearing_cart = true
