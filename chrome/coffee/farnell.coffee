@@ -15,24 +15,26 @@
 class window.Farnell extends RetailerInterface
     constructor: (country_code, settings, callback) ->
         super("Farnell", country_code, "/data/farnell.json", settings)
-        #these sites are like Newark's so we get all our methods
-        #from Newark
-        if country_code in [ "AT", "PT", "ES", "IT", "DE", "FI", "DK", "NO"
-                           , "SE", "HK", "CZ", "BG", "EE", "HU", "LT", "PL"
-                           , "LV", "SI", "RO", "RU", "SK", "UK", "BE", "IE"
-                           , "NL", "CH"
-                           ]
-            for name, method of Newark::
-                this[name] = method
-            @cart = "/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView"
-            @_set_store_id()
-            if callback?
-                callback()
-        else if country_code in ["AU", "CN", "IN", "KR", "MY", "NZ", "PH"
-                                , "SG", "TW", "TH"]
-            #@_fix_cookies_element14(callback)
-        else
-            @_fix_cookies(callback)
+        get "http" + @site, {}, () =>
+            #if there is a "pf_custom_js" element then this site is like
+            #Newark's and we get all our methods from Newark, otherwise we fix
+            #our cookies
+            if DOM.parse(event.target.response).getElementById("pf_custom_js")?
+                for name, method of Newark::
+                    this[name] = method
+                @cart = "/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView"
+                @_set_store_id()
+                if callback?
+                    callback(this)
+            else if /element14/.test(@site)
+                #@_fix_cookies_element14(callback)
+                if callback?
+                    callback(this)
+            else
+                @_fix_cookies () =>
+                    if callback?
+                        callback(this)
+
 
     _clear_cookies: (callback) ->
         chrome.cookies.getAll {domain:"element14.com"}, (incoming_cookies) =>

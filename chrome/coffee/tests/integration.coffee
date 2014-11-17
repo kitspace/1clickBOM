@@ -65,29 +65,29 @@ for l in farnell_locations_all
 asyncTest "Clear All", () ->
     stop(farnell_locations_all.length - 1)
     for l in farnell_locations_all
-        r = new Farnell(l)
-        r.clearCart (result, that) ->
-            deepEqual(result.success, true)
-            start()
+        r = new Farnell l, {}, (that) ->
+            that.clearCart (result, that) ->
+                deepEqual(result.success, true)
+                start()
 
 asyncTest "Add items", () ->
     items = [{"part":"2250472", "quantity":2, "comment":"test"}]
     stop(farnell_locations.length - 1)
     for l in farnell_locations
-        r = new Farnell(l)
-        r.addItems items, (result, that) ->
-            deepEqual(result.success, true, that.country)
-            start()
+        r = new Farnell l, {}, (that) ->
+            that.addItems items, (result, that) ->
+                deepEqual(result.success, true, that.country)
+                start()
 
 asyncTest "Add items fails", () ->
     items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
     stop(farnell_locations.length - 1)
     for l in farnell_locations
-        r = new Farnell(l)
-        r.addItems items, (result, that) ->
-            deepEqual(result.success, false, that.country)
-            deepEqual(result.fails, [items[0]], that.country)
-            start()
+        r = new Farnell l, {}, (that) ->
+            that.addItems items, (result, that) ->
+                deepEqual(result.success, false, that.country)
+                deepEqual(result.fails, [items[0]], that.country)
+                start()
 
 module("Mouser")
 
@@ -144,7 +144,6 @@ asyncTest "rsdelivers: Add items fails but adds again", () ->
                 , {"part":"fail","quantity":2, "comment":"test"}
                 ]
         r.addItems items, (result, that) ->
-            console.log(that.country)
             expected_fails = [{"part":"fail","quantity":2, "comment":"test"}]
             deepEqual(result.success, false, "1:"+ that.country)
             deepEqual(result.fails, expected_fails,"2:" + that.country)
@@ -175,11 +174,10 @@ module("Newark")
 
 asyncTest "Add items fails, add items, clear all", () ->
 	r = new Newark("US")
-	items = [
-		{"part":"98W0461","quantity":2, "comment":"test"}
-			, {"part":"fail","quantity":2, "comment":"test"}
-			, {"part":"fail2","quantity":2, "comment":"test"}
-	]
+	items = [ {"part":"98W0461","quantity":2, "comment":"test"}
+		    , {"part":"fail"   ,"quantity":2, "comment":"test"}
+		    , {"part":"fail2"  ,"quantity":2, "comment":"test"}
+	        ]
 	r.addItems items, (result1, that) ->
 		deepEqual(result1.success, false)
 		deepEqual(result1.fails, [items[2], items[1]])
