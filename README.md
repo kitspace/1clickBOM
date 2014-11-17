@@ -2,6 +2,8 @@
 
 ![Demo](https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif)
 
+[![Available on chrome][8]](https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi)
+
 1clickBOM is purchasing tool that let's you keep _one_ bill of materials (BOM)
 for items from _multiple_ retailers. It's a browser extension that fills your
 online shopping carts for you. To add items to 1clickBOM you simply paste from
