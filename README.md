@@ -101,9 +101,9 @@ the `Test()` function.
 
 ## License ##
 
-1clickBOM is licensed under the CPAL license which means you can use the code
+1clickBOM is licensed under a CPAL license which means you can use the code
 in proprietary applications as long as you display appropriate attribution and
-share your code-improvements to 1clickBOM under the CPAL as well. See the
+share your code-improvements to 1clickBOM under a CPAL as well. See the
 [LICENSE][6] file for details.
 
 [1]:#roadmap
