@@ -2,8 +2,9 @@
     "manifest_version": 2,
 
     "name": "1clickBOM",
-    "description": "Fill your shopping carts from a bill of materials.",
+    "description": "Populates shopping carts for you on sites like Digikey and Mouser.",
     "version": "0.0.1",
+    "homepage_url":"http://1clickBOM.com",
     "permissions": [
         "tabs", "cookies", "clipboardRead", "storage", "notifications",
         "*://*.mouser.com/*",
