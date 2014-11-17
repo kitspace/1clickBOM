@@ -1,4 +1,5 @@
 %1clickBOM
+<meta name="google-site-verification" content="no3OyqIUt7RYgKwphZ6du5ZjhIwZt3eEik9OnVbldeM" />
 <script type"text/javascript" src="gfycat.js"></script>
 <script type"text/javascript">
     link=document.createElement("link");
