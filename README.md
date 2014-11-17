@@ -94,7 +94,7 @@ To transpile the coffeescript to javascript run `cake build` the chrome
 directory. Run `cake` with no arguments for help. The code can then be loaded
 as an unpacked extension in the developer mode in Chrome/Chromium settings.
 
-Unit and integration tests are written using the [QUnit framework][5]. Tests
+Unit and functional tests are written using the [QUnit framework][5]. Tests
 can be run by opening a javascript console on the background page and executing
 the `Test()` function.
 
