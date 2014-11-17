@@ -19,7 +19,7 @@
     var chromelink = document.getElementById("chromeimage");
     if (/Chrome/.test(navigator.userAgent)) {
         chromelink.href = "#";
-        chromeimage.onclick = function () { chrome.webstore.install();};
+        chromelink.onclick = function () { chrome.webstore.install();};
     }
 </script>
 #
