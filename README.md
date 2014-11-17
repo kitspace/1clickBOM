@@ -1,13 +1,13 @@
 
 
-[![Available on Chrome][8]](https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi)
+[![Available on Chrome][8]](https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi) ![Firefox coming soon][9]
 
 1clickBOM is purchasing tool that let's you keep _one_ bill of materials (BOM)
 for items from _multiple_ retailers. It's a browser extension that fills your
 online shopping carts for you. To add items to 1clickBOM you simply paste from
 a spreadsheet or visit an online `.tsv` file.
 
-## Which browsers? Which retailers? ##
+## Which retailers? ##
 
 Currently supported retailers are:
 
@@ -17,8 +17,7 @@ Currently supported retailers are:
 * Newark
 * RS
 
-As of now 1clickBOM is only available for Chrome/Chromium but a Firefox version
-is planned.  Check the [roadmap][1] for more details on planned features.
+Check the [roadmap][1] for more details on planned features.
 
 ## Usage ##
 
@@ -113,4 +112,5 @@ share your code-improvements to 1clickBOM under the CPAL as well. See the
 [6]:https://github.com/monostable/1clickBOM/blob/master/LICENSE
 [7]:https://github.com/monostable/1clickBOM
 [8]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png
+[9]:http://1clickBOM.com/firefox.png
 
