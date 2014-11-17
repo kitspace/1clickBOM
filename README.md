@@ -100,7 +100,9 @@ the `Test()` function.
 
 ## License ##
 
-1clickBOM is licensed under the AGPLv3. See the [LICENSE][6] file for details.
+1clickBOM is licensed under the CPAL-1.0 which means you can use the code
+proprietary applications as long as you display appropriate attribution. See
+the [LICENSE][6] file for details.
 
 [1]:#roadmap
 [2]:https://github.com/monostable/1clickBOM/blob/master/chrome/data/example.tsv
