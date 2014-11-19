@@ -40,7 +40,7 @@
 </script>
 <h1 id="section-3"></h1>
 <p>1clickBOM is purchasing tool that let's you keep <em>one</em> bill of materials (BOM) for items from <em>multiple</em> retailers. It's a browser extension that fills your online shopping carts for you. To add items to 1clickBOM you simply paste from a spreadsheet or visit an online <code>.tsv</code> file.</p>
-<h2 id="which-retailers">Which retailers?</h2>
+<h2 id="which-browsers-which-retailers">Which browsers? Which retailers?</h2>
 <p>Currently supported retailers are:</p>
 <ul>
 <li>Digikey</li>
@@ -49,7 +49,7 @@
 <li>Newark</li>
 <li>RS</li>
 </ul>
-<p>Check the <a href="#roadmap">roadmap</a> for more details on planned features.</p>
+<p>As of now 1clickBOM is only available for Chrome/Chromium but a Firefox version is planned. Check the <a href="#roadmap">roadmap</a> for more details on planned features.</p>
 <h2 id="usage">Usage</h2>
 <h3 id="adding-items">Adding Items</h3>
 <p>You should arrange items in your spreadsheet in the following order.</p>
@@ -62,13 +62,6 @@
 <p>Alternatively, if you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Press the blue button in the popup and the data will be added. You can try this on the <a href="https://github.com/monostable/1clickBOM/blob/master/chrome/data/example.tsv">example tsv page</a> once you have the extension installed.</p>
 <h3 id="then-what">Then What?</h3>
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
-<h2 id="issues">Issues</h2>
-<p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">Github</a> or <script type="text/javascript">
-<!--
-h='&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#x69;&#110;&#102;&#x6f;';e=n+a+h;
-document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email:info@1clickBOM.com'+'<\/'+'a'+'>');
-// -->
-</script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#58;&#x69;&#110;&#102;&#x6f;&#64;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#46;&#x63;&#x6f;&#x6d;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript>.</p>
 <h2 id="roadmap">Roadmap</h2>
 <ul>
 <li>0.1
@@ -116,9 +109,9 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email:info@1clickBOM.com'+
 <p>The code is available on <a href="https://github.com/monostable/1clickBOM">Github</a>. 1clickBOM is written in <a href="http://coffeescript.org">Coffeescript</a> which transpiles to Javascript. Currently development is done on Chromium.</p>
 <h3 id="build-and-test-instructions">Build and Test Instructions</h3>
 <p>To transpile the coffeescript to javascript run <code>cake build</code> the chrome directory. Run <code>cake</code> with no arguments for help. The code can then be loaded as an unpacked extension in the developer mode in Chrome/Chromium settings.</p>
-<p>Unit and functional tests are written using the <a href="https://qunitjs.com/">QUnit framework</a>. Tests can be run by opening a javascript console on the background page and executing the <code>Test()</code> function.</p>
+<p>Unit and integration tests are written using the <a href="https://qunitjs.com/">QUnit framework</a>. Tests can be run by opening a javascript console on the background page and executing the <code>Test()</code> function.</p>
 <h2 id="license">License</h2>
-<p>1clickBOM is licensed under a CPAL license which means you can use the code in proprietary applications as long as you display appropriate attribution and share your code-improvements to 1clickBOM under the CPAL as well. See the <a href="https://github.com/monostable/1clickBOM/blob/master/LICENSE">LICENSE</a> file for details.</p>
+<p>1clickBOM is licensed under the AGPLv3. See the <a href="https://github.com/monostable/1clickBOM/blob/master/LICENSE">LICENSE</a> file for details.</p>
 <h1 id="section-4"></h1>
 <h1 id="section-5"></h1>
 <center> 

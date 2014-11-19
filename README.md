@@ -1,13 +1,11 @@
 
 
-[![Available on Chrome][8]](https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi) ![Firefox coming soon][9]
-
 1clickBOM is purchasing tool that let's you keep _one_ bill of materials (BOM)
 for items from _multiple_ retailers. It's a browser extension that fills your
 online shopping carts for you. To add items to 1clickBOM you simply paste from
 a spreadsheet or visit an online `.tsv` file.
 
-## Which retailers? ##
+## Which browsers? Which retailers? ##
 
 Currently supported retailers are:
 
@@ -17,7 +15,8 @@ Currently supported retailers are:
 * Newark
 * RS
 
-Check the [roadmap][1] for more details on planned features.
+As of now 1clickBOM is only available for Chrome/Chromium but a Firefox version
+is planned.  Check the [roadmap][1] for more details on planned features.
 
 ## Usage ##
 
@@ -45,11 +44,6 @@ try this on the [example tsv page][2] once you have the extension installed.
 
 Once the data is added you can use 1clickBOM to add the items to your carts
 using the buttons on the popup. You can also quickly view and empty your carts.
-
-## Issues ##
-
-If you need any help or think you found a bug please get in touch via
-[Github][10] or [email:info@1clickBOM.com][11].
 
 ## Roadmap ##
 
@@ -98,16 +92,13 @@ To transpile the coffeescript to javascript run `cake build` the chrome
 directory. Run `cake` with no arguments for help. The code can then be loaded
 as an unpacked extension in the developer mode in Chrome/Chromium settings.
 
-Unit and functional tests are written using the [QUnit framework][5]. Tests
+Unit and integration tests are written using the [QUnit framework][5]. Tests
 can be run by opening a javascript console on the background page and executing
 the `Test()` function.
 
 ## License ##
 
-1clickBOM is licensed under a CPAL license which means you can use the code
-in proprietary applications as long as you display appropriate attribution and
-share your code-improvements to 1clickBOM under the CPAL as well. See the
-[LICENSE][6] file for details.
+1clickBOM is licensed under the AGPLv3. See the [LICENSE][6] file for details.
 
 [1]:#roadmap
 [2]:https://github.com/monostable/1clickBOM/blob/master/chrome/data/example.tsv
@@ -116,7 +107,4 @@ share your code-improvements to 1clickBOM under the CPAL as well. See the
 [5]:https://qunitjs.com/
 [6]:https://github.com/monostable/1clickBOM/blob/master/LICENSE
 [7]:https://github.com/monostable/1clickBOM
-[8]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png
-[9]:http://1clickBOM.com/firefox.png
-[10]:https://github.com/monostable/1clickBOM/issues
-[11]:mailto:info@1clickBOM.com
+
