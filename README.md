@@ -106,10 +106,10 @@ the `Test()` function.
 
 ## License ##
 
-1clickBOM is licensed under a CPAL license which means you can use the code
-in proprietary applications as long as you display appropriate attribution and
-share your code-improvements to 1clickBOM under the CPAL as well. See the
-[LICENSE][6] file for details.
+1clickBOM free and open source software. It is licensed under a CPAL license
+which means you can use the code in proprietary applications as long as you
+display appropriate attribution and share your code-improvements to 1clickBOM
+under the CPAL as well. See the [LICENSE][6] file for details.
 
 [1]:#roadmap
 [2]:https://github.com/monostable/1clickBOM/blob/master/chrome/data/example.tsv
