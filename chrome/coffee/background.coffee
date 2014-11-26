@@ -26,7 +26,7 @@ window.paste = () ->
 
 get_location = (callback) ->
     url = "https://freegeoip.net/json/"
-    get url, {}, (event) ->
+    get url, {timeout:3000}, (event) ->
         response = JSON.parse(event.target.responseText)
         chrome.storage.local.set {country: countries_data[response.country_name]}, ()->
             callback()
