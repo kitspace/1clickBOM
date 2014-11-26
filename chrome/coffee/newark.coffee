@@ -43,7 +43,7 @@ class window.Newark extends RetailerInterface
         params = "langId=-1&orderId=&catalogId=15003&BASE_URL=BasketPage&errorViewName=AjaxOrderItemDisplayView&storeId=" + @store_id + "&URL=BasketDataAjaxResponse&isEmpty=false&LoginTimeout=&LoginTimeoutURL=https%3A%2F%2Fwww.newark.com%2Fwebapp%2Fwcs%2Fstores%2Fservlet%2FOrderCalculate%3FcatalogId%3D15003%26LoginTimeout%3D%26errorViewName%3DAjaxOrderItemDisplayView%26langId%3D-1%26storeId%3D10194%26URL%3DAjaxOrderItemDisplayView&blankLinesResponse=10&orderItemDeleteAll="
         for id in ids
             params += "&orderItemDelete=" + id
-        post url, params, {timeout:10000}, (event) =>
+        post url, params, {}, (event) =>
             if callback?
                 callback({success:true}, this)
             @refreshCartTabs()
@@ -56,7 +56,7 @@ class window.Newark extends RetailerInterface
 
     _get_item_ids: (callback) ->
         url = "https" + @site + @cart
-        get url, {timeout:10000}, (event) =>
+        get url, {}, (event) =>
             doc = DOM.parse(event.target.responseText)
             order_details = doc.querySelector("#order_details")
             if order_details?
@@ -90,7 +90,7 @@ class window.Newark extends RetailerInterface
             params += encodeURIComponent(item.part) + ","
             params += encodeURIComponent(item.quantity) + ","
             params += encodeURIComponent(item.comment) + "\n"
-        post url, params, {timeout:10000}, (event) =>
+        post url, params, {}, (event) =>
             doc = DOM.parse(event.target.responseText)
             form_errors = doc.querySelector("#formErrors")
             success = true
@@ -118,11 +118,11 @@ class window.Newark extends RetailerInterface
                         result.fails = result.fails.concat(fails)
                         result.success = false
                         callback(result)
+            else #success
+                if callback?
+                    callback({success: true, fails:[]})
         , () =>
             if callback?
                 callback({success:false,fails:items})
 
-            else #success
-                if callback?
-                    callback({success: true, fails:[]})
 

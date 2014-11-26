@@ -115,7 +115,7 @@ class window.Farnell extends RetailerInterface
         @_get_item_ids (ids) =>
             @_post_clear ids, (result) =>
                 if callback?
-                    callback(result)
+                    callback(result, this)
                 @refreshSiteTabs()
                 @refreshCartTabs()
                 @clearing_cart = false
