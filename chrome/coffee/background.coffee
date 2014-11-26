@@ -35,7 +35,7 @@ get_location = (callback) ->
 
 chrome.runtime.onInstalled.addListener (details)->
     switch details.reason
-        when "install", "upgrade"
+        when "install"
             get_location () ->
                 chrome.tabs.create({"url": chrome.runtime.getURL("html/options.html")})
 

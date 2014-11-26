@@ -21,7 +21,10 @@ class window.Mouser extends RetailerInterface
     constructor: (country_code, settings) ->
         super "Mouser", country_code, "/data/mouser.json", settings
         #posting our sub-domain as the sites are all linked and switching countries would not register properly otherwise
-        post("http" + @site + "/Preferences/SetSubdomain", "?subdomainName=" + @cart.split(".")[0].slice(3), {}, () ->)
+        post "http" + @site + "/Preferences/SetSubdomain", "?subdomainName=" + @cart.split(".")[1].slice(3), {notify:false}, () ->
+            ;
+        , () ->
+            ;
     addItems: (items, callback) ->
         @adding_items = true
         count = 0
