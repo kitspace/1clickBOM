@@ -49,6 +49,10 @@ class window.Newark extends RetailerInterface
             @refreshCartTabs()
             @refreshSiteTabs()
             @clearing_cart = false
+        , () =>
+            if callback?
+                callback({success:true}, this)
+            @clearing_cart = false
 
     _get_item_ids: (callback) ->
         url = "https" + @site + @cart
@@ -114,6 +118,10 @@ class window.Newark extends RetailerInterface
                         result.fails = result.fails.concat(fails)
                         result.success = false
                         callback(result)
+        , () =>
+            if callback?
+                callback({success:false,fails:items})
+
             else #success
                 if callback?
                     callback({success: true, fails:[]})
