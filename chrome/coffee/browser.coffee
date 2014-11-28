@@ -17,12 +17,12 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-class Browser
+class window.Browser
     constructor:() ->
     storageGet:(keys, callback) ->
         chrome.storage.local.get(keys, callback)
     storageSet:(obj, callback) ->
-        chrome.storage.local.set(obj, callback, callback)
+        chrome.storage.local.set(obj, callback)
     storageRemove:(key) ->
         chrome.storage.local.remove(key)
     storageOnChanged:(callback) ->
