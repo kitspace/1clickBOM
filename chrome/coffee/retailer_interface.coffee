@@ -70,9 +70,9 @@ class window.RetailerInterface
         get @icon_src, {notify:false},  (event) =>
             #failure response image
             if md5(event.target.response) == "6e2001c87afacf376c7df4a011376511"
-                @icon_src = chrome.extension.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
+                @icon_src = window.browser.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
         , () =>
-            @icon_src = chrome.extension.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
+            @icon_src = window.browser.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
         if callback?
             callback()
 
@@ -81,32 +81,30 @@ class window.RetailerInterface
         #so we use a regex. we update the matching tabs to the cart URL instead
         #of using tabs.refresh so we don't re-pass any parameters to the cart
         re = new RegExp(@cart, "i")
-        chrome.tabs.query {"url":"*" + @site + "/*"}, (tabs) =>
+        window.browser.tabsQuery {"url":"*" + @site + "/*"}, (tabs) =>
             for tab in tabs
                 if (tab.url.match(re))
                     protocol = tab.url.split("://")[0]
-                    chrome.tabs.update tab.id, {"url": protocol + @site + @cart}
-
+                    window.browser.tabsUpdate(tab.id, {"url": protocol + @site + @cart})
     refreshSiteTabs: () ->
         #refresh the tabs that are not the cart url. XXX could some of the
         #passed params cause problems on, say, quick-add urls?
         re = new RegExp(@cart, "i")
-        chrome.tabs.query {"url":"*" + @site + "/*"}, (tabs) ->
+        window.browser.tabsQuery {"url":"*" + @site + "/*"}, (tabs) ->
             for tab in tabs
                 if !(tab.url.match(re))
-                    chrome.tabs.reload tab.id
+                    window.browser.tabsReload(tab.id)
 
     openCartTab: () ->
-        chrome.tabs.query {"url":"*" + @site + @cart + "*" , currentWindow:true}
+        window.browser.tabsQuery {"url":"*" + @site + @cart + "*" , currentWindow:true}
         , (tabs) =>
             if tabs.length >  0
                 tab_numbers = []
                 for tab in tabs
                     tab_numbers.push(tab.index)
-                chrome.tabs.highlight({tabs:tab_numbers}, (window)->)
+                window.browser.tabsHighlight(tab_numbers)
             else
-                chrome.tabs.create({url: "http" + @site + @cart, active:true})
-
+                window.browser.tabsCreate({url: "http" + @site + @cart, active:true})
 
 class @InvalidCountryError extends Error
     constructor: ->

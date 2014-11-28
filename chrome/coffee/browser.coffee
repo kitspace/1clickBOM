@@ -33,8 +33,8 @@ class Browser
         return chrome.extension.getURL(url)
     tabsQuery:(obj, callback) ->
         chrome.tabs.query(obj, callback)
-    tabsUpdate:(tab_id, url) ->
-        chrome.tabs.update(tab_id, {"url": url})
+    tabsUpdate:(tab_id, obj) ->
+        chrome.tabs.update(tab_id, obj)
     tabsReload:(tab_id) ->
         chrome.tabs.reload(tab_id)
     tabsHighlight:(tab_numbers) ->
@@ -62,4 +62,6 @@ class Browser
         chrome.cookies.remove(obj, callback)
     cookiesSet: (obj, callback) ->
         chrome.cookies.set(obj, callback)
+    getBackgroundPage: (callback) ->
+        chrome.runtime.getBackgroundPage(callback)
 

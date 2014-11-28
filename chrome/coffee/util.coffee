@@ -17,13 +17,15 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
+window.browser = new Browser
+
 class Badge
     constructor:() ->
         @decaying_set = false
         @priority = 0
         @default_text = ""
         @default_color = "#0000FF"
-        chrome.browserAction.setBadgeText({text:@default_text})
+        window.browser.setBadge({text:@default_text})
     setDecaying: (text, color="#0000FF", priority = 1) ->
         if priority >= @priority
             if @decaying_set && @id > 0
@@ -39,15 +41,14 @@ class Badge
         @default_color = color
         @default_text = text
     _set: (text, color, priority) ->
-        chrome.browserAction.setBadgeBackgroundColor({color:color})
-        chrome.browserAction.setBadgeText({text:text})
+        window.browser.setBadge({color:color, text:text})
         @priority = priority
 
 window.badge = new Badge
 
 window.get_local = (url, json=true)->
     xhr = new XMLHttpRequest()
-    xhr.open("GET", chrome.extension.getURL(url), false)
+    xhr.open("GET", window.browser.getURL(url), false)
     xhr.send()
     if xhr.status == 200
         if (json)
@@ -69,7 +70,7 @@ network_callback = (event, callback, error_callback, notify=true) ->
             else
                 message += event.target.url
             if notify
-                chrome.notifications.create("", {type:"basic", title:"Network Error Occured", message:message, iconUrl:"/images/net_error128.png"}, () ->)
+                window.browser.notificationsCreate({type:"basic", title:"Network Error Occured", message:message, iconUrl:"/images/net_error128.png"}, () ->)
 
                 badge.setDecaying("" + event.target.status, "#CC00FF", priority=3)
             if error_callback?

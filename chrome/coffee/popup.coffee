@@ -62,8 +62,7 @@ disable_till_you_win = (button, check_val) ->
                 button.disabled = false
         , 10
 
-
-chrome.runtime.getBackgroundPage (bkgd_page) ->
+window.browser.getBackgroundPage (bkgd_page) ->
     window.bkgd_page = bkgd_page
     document.querySelector("#paste").addEventListener "click", ()->
         window.bkgd_page.paste()
@@ -154,18 +153,13 @@ chrome.runtime.getBackgroundPage (bkgd_page) ->
             rebuild_bom_view(bom)
 
 
-    chrome.storage.onChanged.addListener (changes, namespace) ->
+    window.browser.storageOnChanged (changes, namespace) ->
         bom_changed()
 
     bom_changed()
 
-
-    chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
-        if(request.invalid)
-            console.log(request.invalid)
-
     document.querySelector("button#clear").addEventListener "click", () ->
-        chrome.storage.local.remove("bom")
+        window.browser.storageRemove("bom")
 
     document.querySelector("button#fill_carts").addEventListener "click", () ->
         @disabled = true

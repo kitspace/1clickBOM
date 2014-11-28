@@ -23,7 +23,7 @@ class window.BomManager
     constructor: (callback) ->
         @filling_carts  = false
         @emptying_carts = false
-        chrome.storage.local.get ["country", "settings"], ({country:country, settings:stored_settings}) =>
+        window.browser.storageGet ["country", "settings"], ({country:country, settings:stored_settings}) =>
             @interfaces = {}
             if (!country)
                 country = "Other"
@@ -44,7 +44,7 @@ class window.BomManager
         return settings
 
     getBOM: (callback) ->
-        chrome.storage.local.get ["bom"], ({bom:bom}) =>
+        window.browser.storageGet ["bom"], ({bom:bom}) =>
             callback(bom)
 
     addToBOM: (text, callback) ->
@@ -52,7 +52,7 @@ class window.BomManager
         @_add_to_bom(items, invalid, callback)
 
     _add_to_bom: (items, invalid, callback) ->
-        chrome.storage.local.get ["bom"], ({bom:bom}) =>
+        window.browser.storageGet ["bom"], ({bom:bom}) =>
             if (!bom)
                 bom = {}
             if invalid.length > 0
@@ -60,12 +60,12 @@ class window.BomManager
                     title = "Could not parse row: "
                     title += inv.item.row
                     message = inv.reason + "\n"
-                    chrome.notifications.create "", {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
+                    window.browser.notificationsCreate {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
                     badge.setDecaying("Warn","#FF8A00", priority=2)
             else if items.length == 0
                 title = "Nothing pasted "
                 message = "Clipboard is empty"
-                chrome.notifications.create "", {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
+                window.browser.notificationsCreate {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
                 badge.setDecaying("Warn","#FF8A00", priority=2)
             else if items.length > 0
                 badge.setDecaying("OK","#00CF0F")
@@ -97,9 +97,9 @@ class window.BomManager
                     message += " and "
                     message += over[over.length - 1]
                 message += ". Adding the items may take a very long time (or even forever). It may be OK but it really depends on the site."
-                chrome.notifications.create "", {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
+                window.browser.notificationsCreate {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
                 badge.setDecaying("Warn","#FF8A00", priority=2)
-            chrome.storage.local.set {"bom":bom}, () =>
+            window.browser.storageSet {"bom":bom}, () =>
                 if callback?
                     callback(this)
 
@@ -119,20 +119,20 @@ class window.BomManager
                 title += " to " + retailer + " cart:"
                 for fail in fails
                     failed_items.push({title:"item: " + fail.comment + " | " + fail.quantity + " | " + fail.part,message:""})
-            chrome.notifications.create "", {type:"list", title:title, message:"", items:failed_items, iconUrl:"/images/error128.png"}, () =>
+            window.browser.notificationsCreate {type:"list", title:title, message:"", items:failed_items, iconUrl:"/images/error128.png"}, () =>
             badge.setDecaying("Err","#FF0000", priority=2)
         else
             badge.setDecaying("OK","#00CF0F")
         if result.warnings?
             for warning in result.warnings
                 title = warning
-                chrome.notifications.create "", {type:"basic", title:title, message:"", iconUrl:"/images/warning128.png"}, () =>
+                window.browser.notificationsCreate {type:"basic", title:title, message:"", iconUrl:"/images/warning128.png"}, () =>
                 badge.setDecaying("Warn","#FF8A00", priority=1)
 
     notifyEmptyCart: (retailer, result) ->
         if not result.success
             title = "Could not empty " + retailer + " cart"
-            chrome.notifications.create "", {type:"basic", title:title, message:"", iconUrl:"/images/error128.png"}, () =>
+            window.browser.notificationsCreate {type:"basic", title:title, message:"", iconUrl:"/images/error128.png"}, () =>
             badge.setDecaying("Err","#FF0000", priority=2)
         else
             badge.setDecaying("OK","#00CF0F")
@@ -140,7 +140,7 @@ class window.BomManager
     fillCarts: (callback)->
         @filling_carts = true
         big_result = {success:true, fails:[]}
-        chrome.storage.local.get ["bom"], ({bom:bom}) =>
+        window.browser.storageGet ["bom"], ({bom:bom}) =>
             count = Object.keys(bom).length
             for retailer of bom
                 @interfaces[retailer].addItems bom[retailer], (result, interf, items) =>
@@ -154,7 +154,7 @@ class window.BomManager
                         @filling_carts = false
 
     fillCart: (retailer, callback)->
-        chrome.storage.local.get ["bom"], ({bom:bom}) =>
+        window.browser.storageGet ["bom"], ({bom:bom}) =>
             @interfaces[retailer].addItems bom[retailer], (result) =>
                 @notifyFillCart bom[retailer], retailer, result
                 callback(result)
@@ -162,7 +162,7 @@ class window.BomManager
     emptyCarts: (callback)->
         @emptying_carts = true
         big_result = {success: true}
-        chrome.storage.local.get ["bom"], ({bom:bom}) =>
+        window.browser.storageGet ["bom"], ({bom:bom}) =>
             if bom?
                 count = Object.keys(bom).length
                 for retailer of bom
@@ -185,7 +185,7 @@ class window.BomManager
                 callback(result)
 
     openCarts: ()->
-        chrome.storage.local.get ["bom"], ({bom:bom}) =>
+        window.browser.storageGet ["bom"], ({bom:bom}) =>
             for retailer of bom
                 @openCart(retailer)
 

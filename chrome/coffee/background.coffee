@@ -34,22 +34,19 @@ get_location = (callback) ->
         code = response.country_code
         if code == "GB" then code = "UK"
         if code not in @used_country_codes then code = "Other"
-        chrome.storage.local.set {country: code}, ()->
-            callback()
+        browser.storageSet({country: code}, callback)
     , () ->
         callback()
 
-chrome.runtime.onInstalled.addListener (details)->
-    if details.reason == "install"
-        get_location () ->
-            chrome.tabs.create({"url": chrome.runtime.getURL("html/options.html")})
+window.browser.onInstalled () ->
+    get_location () ->
+        window.browser.tabsCreate({"url": window.browser.getURL("html/options.html")})
 
 window.bom_manager = new BomManager
 
-chrome.storage.onChanged.addListener (changes, namespace) ->
-    if namespace == "local"
-        if changes.country || changes.settings
-            window.bom_manager = new BomManager
+window.browser.storageOnChanged (changes) ->
+    if changes.country || changes.settings
+        window.bom_manager = new BomManager
 
 class TSVPageNotifier
     constructor: ->
@@ -58,11 +55,7 @@ class TSVPageNotifier
         @checkPage()
         @items   = []
         @invalid = []
-        chrome.tabs.onUpdated.addListener () =>
-            @checkPage()
-        chrome.tabs.onActivated.addListener () =>
-            @checkPage()
-        chrome.windows.onFocusChanged.addListener () =>
+        browser.tabsOnUpdated () =>
             @checkPage()
     _set_not_dotTSV: () ->
         badge.setDefault("")
@@ -70,7 +63,7 @@ class TSVPageNotifier
         @items    = []
         @invalid  = []
     checkPage: (callback) ->
-        chrome.tabs.query {active:true, currentWindow:true}, (tabs) =>
+        browser.tabsQuery {active:true, currentWindow:true}, (tabs) =>
             if tabs.length > 0
                 tab_url = tabs[0].url.split("?")[0]
                 if tabs.length >= 1 && tab_url.match(@re)

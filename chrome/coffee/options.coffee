@@ -31,11 +31,11 @@ save_options = () ->
             checked = document.querySelector("input[name='" + retailer + "']:checked")
             if (checked)
                 settings[country][retailer] = checked.value
-    chrome.storage.local.set {country: country, settings: settings}, () ->
+    window.browser.storageSet {country: country, settings: settings}, () ->
         load_options()
 
 load_options = () ->
-    chrome.storage.local.get ["settings", "country"], (stored) ->
+    window.browser.storageGet ["settings", "country"], (stored) ->
         if (!stored.country)
             stored.country = "Other"
 
