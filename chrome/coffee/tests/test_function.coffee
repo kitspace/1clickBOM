@@ -1,12 +1,12 @@
 @Test = (module)->
-    url = window.browser.getURL("html/test.html")
+    url = browser.getURL("html/test.html")
     url += "?module=" + module if module?
     window.open(url)
 
 @UserSim = ()->
-    url = window.browser.getURL("html/test_user_simulation.html")
+    url = browser.getURL("html/test_user_simulation.html")
     window.open(url)
 
 @LongTest = ()->
-    url = window.browser.getURL("html/test_long.html")
+    url = browser.getURL("html/test_long.html")
     window.open(url)

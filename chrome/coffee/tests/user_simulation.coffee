@@ -23,10 +23,10 @@ window.test_one = (country="HK") ->
     QUnit.test "User Sim " + country, () ->
         expect(3)
         stop()
-        window.browser.storageRemove "bom", () ->
-            window.browser.storageSet {country: country}, () ->
+        browser.storageRemove "bom", () ->
+            browser.storageSet {country: country}, () ->
                 console.log("Test: " + country)
-                window.browser.getBackgroundPage (bkgd_page) ->
+                browser.getBackgroundPage (bkgd_page) ->
                     if bkgd_page?
                         setTimeout () ->
                             bkgd_page.bom_manager.addToBOM window.test_bom, () ->

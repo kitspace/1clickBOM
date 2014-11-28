@@ -70,9 +70,9 @@ class window.RetailerInterface
         get @icon_src, {notify:false},  (event) =>
             #failure response image
             if md5(event.target.response) == "6e2001c87afacf376c7df4a011376511"
-                @icon_src = window.browser.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
+                @icon_src = browser.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
         , () =>
-            @icon_src = window.browser.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
+            @icon_src = browser.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
         if callback?
             callback()
 
@@ -81,30 +81,30 @@ class window.RetailerInterface
         #so we use a regex. we update the matching tabs to the cart URL instead
         #of using tabs.refresh so we don't re-pass any parameters to the cart
         re = new RegExp(@cart, "i")
-        window.browser.tabsQuery {"url":"*" + @site + "/*"}, (tabs) =>
+        browser.tabsQuery {"url":"*" + @site + "/*"}, (tabs) =>
             for tab in tabs
                 if (tab.url.match(re))
                     protocol = tab.url.split("://")[0]
-                    window.browser.tabsUpdate(tab.id, {"url": protocol + @site + @cart})
+                    browser.tabsUpdate(tab.id, {"url": protocol + @site + @cart})
     refreshSiteTabs: () ->
         #refresh the tabs that are not the cart url. XXX could some of the
         #passed params cause problems on, say, quick-add urls?
         re = new RegExp(@cart, "i")
-        window.browser.tabsQuery {"url":"*" + @site + "/*"}, (tabs) ->
+        browser.tabsQuery {"url":"*" + @site + "/*"}, (tabs) ->
             for tab in tabs
                 if !(tab.url.match(re))
-                    window.browser.tabsReload(tab.id)
+                    browser.tabsReload(tab.id)
 
     openCartTab: () ->
-        window.browser.tabsQuery {"url":"*" + @site + @cart + "*" , currentWindow:true}
+        browser.tabsQuery {"url":"*" + @site + @cart + "*" , currentWindow:true}
         , (tabs) =>
             if tabs.length >  0
                 tab_numbers = []
                 for tab in tabs
                     tab_numbers.push(tab.index)
-                window.browser.tabsHighlight(tab_numbers)
+                browser.tabsHighlight(tab_numbers)
             else
-                window.browser.tabsCreate({url: "http" + @site + @cart, active:true})
+                browser.tabsCreate({url: "http" + @site + @cart, active:true})
 
 class @InvalidCountryError extends Error
     constructor: ->

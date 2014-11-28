@@ -62,7 +62,7 @@ disable_till_you_win = (button, check_val) ->
                 button.disabled = false
         , 10
 
-window.browser.getBackgroundPage (bkgd_page) ->
+browser.getBackgroundPage (bkgd_page) ->
     window.bkgd_page = bkgd_page
     document.querySelector("#paste").addEventListener "click", ()->
         window.bkgd_page.paste()
@@ -153,13 +153,13 @@ window.browser.getBackgroundPage (bkgd_page) ->
             rebuild_bom_view(bom)
 
 
-    window.browser.storageOnChanged (changes, namespace) ->
+    browser.storageOnChanged (changes, namespace) ->
         bom_changed()
 
     bom_changed()
 
     document.querySelector("button#clear").addEventListener "click", () ->
-        window.browser.storageRemove("bom")
+        browser.storageRemove("bom")
 
     document.querySelector("button#fill_carts").addEventListener "click", () ->
         @disabled = true

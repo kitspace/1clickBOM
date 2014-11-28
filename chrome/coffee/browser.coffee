@@ -29,8 +29,6 @@ class Browser
         chrome.storage.onChanged.addListener (changes, namespace) ->
             if namespace == "local"
                 callback(changes)
-    getURL:(url) ->
-        return chrome.extension.getURL(url)
     tabsQuery:(obj, callback) ->
         chrome.tabs.query(obj, callback)
     tabsUpdate:(tab_id, obj) ->
@@ -45,6 +43,16 @@ class Browser
         chrome.tabs.onUpdated.addListener(callback)
         chrome.tabs.onActivated.addListener(callback)
         chrome.windows.onFocusChanged.addListener(callback)
+    cookiesGetAll: (obj, callback) ->
+        chrome.cookies.getAll(obj, callback)
+    cookiesRemove: (obj, callback) ->
+        chrome.cookies.remove(obj, callback)
+    cookiesSet: (obj, callback) ->
+        chrome.cookies.set(obj, callback)
+    getBackgroundPage: (callback) ->
+        chrome.runtime.getBackgroundPage(callback)
+    getURL:(url) ->
+        return chrome.extension.getURL(url)
     onInstalled:(callback) ->
         chrome.runtime.onInstalled.addListener (details)->
             if details.reason == "install"
@@ -56,12 +64,4 @@ class Browser
             chrome.browserAction.setBadgeText ({text:obj.text})
     notificationsCreate:(obj, callback) ->
         chrome.notifications.create "", obj, callback
-    cookiesGetAll: (obj, callback) ->
-        chrome.cookies.getAll(obj, callback)
-    cookiesRemove: (obj, callback) ->
-        chrome.cookies.remove(obj, callback)
-    cookiesSet: (obj, callback) ->
-        chrome.cookies.set(obj, callback)
-    getBackgroundPage: (callback) ->
-        chrome.runtime.getBackgroundPage(callback)
 

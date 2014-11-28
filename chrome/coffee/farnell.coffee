@@ -41,7 +41,7 @@ class window.Farnell extends RetailerInterface
                         callback(this)
 
     _clear_cookies: (callback) ->
-        window.browser.cookiesGetAll {domain:"element14.com"}, (incoming_cookies) =>
+        browser.cookiesGetAll {domain:"element14.com"}, (incoming_cookies) =>
             cookies = []
             for cookie in incoming_cookies
                 if not (/MAINT_NOTIFY/.test(cookie.name) or /userSelectedLocale/.test(cookie.name))
@@ -49,10 +49,10 @@ class window.Farnell extends RetailerInterface
             if cookies.length > 0
                 count = cookies.length
                 for cookie in cookies
-                    window.browser.cookiesRemove {url:"http://" + cookie.domain, name:cookie.name}, () =>
+                    browser.cookiesRemove {url:"http://" + cookie.domain, name:cookie.name}, () =>
                         count -= 1
                         if count <= 0
-                            window.browser.cookiesGetAll {domain:"farnell.com"}, (incoming_cookies) =>
+                            browser.cookiesGetAll {domain:"farnell.com"}, (incoming_cookies) =>
                                 cookies = []
                                 if incoming_cookies.length > 0
                                     for cookie in incoming_cookies
@@ -66,7 +66,7 @@ class window.Farnell extends RetailerInterface
                                 else
                                     count = cookies.length
                                     for cookie in cookies
-                                        window.browser.cookiesRemove {url:"http://" + cookie.domain, name:cookie.name}, () =>
+                                        browser.cookiesRemove {url:"http://" + cookie.domain, name:cookie.name}, () =>
                                             count -= 1
                                             if count <= 0 && callback?
                                                 callback()
@@ -80,12 +80,12 @@ class window.Farnell extends RetailerInterface
             fix_url = "http" + @site + @cart + "?_DARGS=/jsp/home/exportHome.jsp_A&_DAV=en_EX_DIRECTEXP"
             get fix_url, callback, callback
         else if @country in ["CH", "BE", "CN"]
-            window.browser.cookiesGetAll {domain:@site.substring(3), name:"userSelectedLocale"}, (incoming_cookies) =>
+            browser.cookiesGetAll {domain:@site.substring(3), name:"userSelectedLocale"}, (incoming_cookies) =>
                 if incoming_cookies.length > 0
                     if callback?
                         callback()
                 else
-                    window.browser.cookiesSet {url:"http" + @site , name:"userSelectedLocale", value:@language}, () =>
+                    browser.cookiesSet {url:"http" + @site , name:"userSelectedLocale", value:@language}, () =>
                         if callback?
                             callback()
         else if callback?
