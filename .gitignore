@@ -1,4 +1,4 @@
 *.sw*
-archive/
-chrome/js/*.js*
-chrome/js/tests/*.js*
+js/
+chrome/*
+!chrome/manifest.json
