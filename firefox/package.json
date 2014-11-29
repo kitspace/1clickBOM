@@ -1,0 +1,11 @@
+{
+  "name": "1clickbom",
+  "title": "1clickBOM",
+  "id": "jid1-CJruvRi2E8oNww",
+  "description": "Populates shopping carts for you on sites like Digikey and Mouser.",
+  "author": "monostable",
+  "license": "CPAL 1.0",
+  "version": "0.1.3",
+  "icon": "data/images/logo48.png",
+  "main":"main"
+}

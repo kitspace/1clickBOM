@@ -2,3 +2,6 @@
 js/
 chrome/*
 !chrome/manifest.json
+firefox/*
+!firefox/data/.gitkeep
+!firefox/package.json
