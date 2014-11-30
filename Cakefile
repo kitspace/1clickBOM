@@ -63,22 +63,18 @@ spawn = (cmd, args, exit_callback, update_callback)->
         if exit_callback? then exit_callback(code)
     return ps
 
-coffee_available = ->
+on_path = (exe, callback) ->
     present = false
     process.env.PATH.split(":").forEach (value, index, array)->
-        present ||= path.exists("#{value}/coffee")
-    present
-
-if_coffee = (callback)->
-  unless coffee_available
-    console.log("CoffeeScript can't be found in your $PATH.")
-    console.log("Please run 'npm install coffee-script.")
-    exit(-1)
-  else
-    callback()
+        present ||= fs.existsSync(join(value,exe))
+    if not present
+        console.log("'" + exe + "'" + " can't be found in your $PATH.")
+        process.exit(-1)
+    else
+        callback()
 
 get_version = (callback)->
-    if_coffee ->
+    on_path "coffee",  ->
         ps = child_process.spawn "coffee", ["--version"]
         ps.stdout.on "data", (data) ->
             v = []
@@ -142,7 +138,7 @@ linkRecursiveAll = () ->
     linkRecursive(JS_PATH, JS_FIREFOX_DEST_PATH)
 
 coffee = (args, callback) ->
-    if_coffee ->
+    on_path "coffee",  ->
         rmDirRecursive(JS_PATH)
         ps = spawn "coffee", args, () ->
             if callback? then callback()
@@ -171,7 +167,7 @@ task "watch"
     , "Make symlinks and re-compile coffeescript automatically, watching for
        changes"
     , ->
-        if_coffee ->
+        on_path "coffee",  ->
             console.log("/Every move you make/")
             watch HTML_PATH, ->
                 console.log("/Every html file you change/")
@@ -205,29 +201,38 @@ task "watch"
 task "package"
     , "Make packages ready for distribution in ../"
     , ->
-        args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
-        coffee args, () ->
-            linkRecursiveAll()
-            manifest = JSON.parse(fs.readFileSync(join(CHROME_PATH, "manifest.json")))
-            chrome_name = "1clickBOM-chrome-v" + manifest.version
-            chrome_tmp_path = join(ROOT_PATH,chrome_name)
-            if fs.existsSync(chrome_tmp_path)
-                rmDirRecursive(chrome_tmp_path)
-            fs.mkdirSync(chrome_tmp_path)
-            chrome_package_path = join(ROOT_PATH + "/../", chrome_name + ".zip")
-            if fs.existsSync(chrome_package_path)
-                fs.unlinkSync(chrome_package_path)
-            linkRecursive(CHROME_PATH, chrome_tmp_path)
-            spawn "zip", ["-r" , chrome_package_path, chrome_name], ->
-                rmDirRecursive(chrome_tmp_path)
+        on_path "coffee", ->
+            on_path "cfx",  ->
+                args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
+                coffee args, () ->
+                    linkRecursiveAll()
+                    manifest = JSON.parse(fs.readFileSync(join(CHROME_PATH, "manifest.json")))
+                    chrome_name = "1clickBOM-chrome-v" + manifest.version
+                    chrome_tmp_path = join(ROOT_PATH,chrome_name)
+                    if fs.existsSync(chrome_tmp_path)
+                        rmDirRecursive(chrome_tmp_path)
+                    fs.mkdirSync(chrome_tmp_path)
+                    chrome_package_path = join(ROOT_PATH + "/../", chrome_name + ".zip")
+                    if fs.existsSync(chrome_package_path)
+                        fs.unlinkSync(chrome_package_path)
+                    linkRecursive(CHROME_PATH, chrome_tmp_path)
+                    spawn "zip", ["-r" , chrome_package_path, chrome_name], ->
+                        rmDirRecursive(chrome_tmp_path)
+                        fpackage = JSON.parse(fs.readFileSync(join(FIREFOX_PATH, "package.json")))
+                        firefox_name = "1clickBOM-firefox-v" + fpackage.version
+                        firefox_package_path = join(ROOT_PATH + "/../", firefox_name + ".xpi")
+                        spawn "cfx", ["--pkgdir=" + FIREFOX_PATH
+                                     , "--output-file=" + firefox_package_path
+                                     , "xpi"
+                                     ]
 
-            fpackage = JSON.parse(fs.readFileSync(join(FIREFOX_PATH, "package.json")))
-            firefox_name = "1clickBOM-firefox-v" + fpackage.version
-            firefox_package_path = join(ROOT_PATH + "/../", firefox_name + ".xpi")
-            spawn "cfx", ["--pkgdir=" + FIREFOX_PATH
-                         , "--output-file=" + firefox_package_path
-                         , "xpi"
-                         ]
-
-
-
+# this sends the extension to the auto-installer extension
+# https://addons.mozilla.org/en-US/firefox/addon/autoinstaller/
+# the 500 no-content error is normal
+task "reload-firefox"
+    , "Build a temporary xpi and send to the Firefox autoinstaller on port 8888"
+    , ->
+        on_path "cfx",  ->
+            on_path "wget",  ->
+                spawn "cfx", ["--pkgdir=" + FIREFOX_PATH, "--output-file=tmp.xpi", "xpi"], ->
+                    child_process.spawn "wget", ["--post-file=tmp.xpi", "http://localhost:8888/"]
