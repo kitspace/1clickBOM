@@ -79,14 +79,9 @@
         "persistent": true,
         "page":"html/background.html"
     },
-    "web_accessible_resources": [
-        "libs/qunit-1.11.0.css",
-        "libs/qunit-1.11.0.js",
-        "libs/md5.js"
-    ],
     "options_page":"html/options.html",
-    "icons": { "16" :"images/logo16.png"
-             , "19" :"images/logo19.png"
+    "icons": { "16" :"images/button16.png"
+             , "19" :"images/button19.png"
              , "38" :"images/logo38.png"
              , "48" :"images/logo48.png"
              , "128":"images/logo128.png"

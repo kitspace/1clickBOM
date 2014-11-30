@@ -15,6 +15,7 @@ IMAGES_DIR  = "images"
 CHROME_DIR  = "chrome"
 FIREFOX_DIR = "firefox"
 JS_DIR      = "js"
+TEST_DIR    = "js/tests"
 
 PACKAGE_DIR = "../"
 
@@ -41,6 +42,7 @@ IMAGES_PATH  = join(ROOT_PATH, IMAGES_DIR)
 JS_PATH      = join(ROOT_PATH, JS_DIR)
 CHROME_PATH  = join(ROOT_PATH, CHROME_DIR)
 FIREFOX_PATH = join(ROOT_PATH, FIREFOX_DIR)
+TEST_PATH    = join(ROOT_PATH, TEST_DIR)
 
 HTML_CHROME_DEST_PATH   = join(CHROME_PATH, HTML_CHROME_DEST_DIR)
 DATA_CHROME_DEST_PATH   = join(CHROME_PATH, DATA_CHROME_DEST_DIR)
@@ -207,6 +209,7 @@ task "package"
         isOnPath "cfx"
         args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
         compile args, () ->
+            rmDirRecursive(TEST_PATH)
             linkRecursiveAll()
             manifest = JSON.parse(fs.readFileSync(join(CHROME_PATH, "manifest.json")))
             chrome_name = EXTENSION_NAME + "-chrome-v" + manifest.version
