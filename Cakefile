@@ -64,13 +64,13 @@ log = (data)->
 
 spawn = (cmd, args)->
     ps = child_process_spawn(cmd, args)
-    ps.stdout.on('data', log)
-    ps.stderr.on('data', log)
+    ps.stdout.on("data", log)
+    ps.stderr.on("data", log)
     return ps
 
 coffee_available = ->
     present = false
-    process.env.PATH.split(':').forEach (value, index, array)->
+    process.env.PATH.split(":").forEach (value, index, array)->
         present ||= path.exists("#{value}/coffee")
 
     present
@@ -85,8 +85,8 @@ if_coffee = (callback)->
 
 get_version = (callback)->
     ps = child_process_spawn("coffee", ["--version"])
-    ps.stderr.on('data', log)
-    ps.stdout.on 'data', (version) ->
+    ps.stderr.on("data", log)
+    ps.stdout.on "data", (version) ->
         v = []
         for n in version.toString().split(" ")[2].split(".")
             v.push(parseInt(n))
@@ -129,7 +129,7 @@ linkRecursiveAll = (src_paths, dest_paths) ->
        d = dest_paths[i]
        linkRecursive(s,d)
 
-task 'build', 'Build extension code into the ./' + JS_DIR + ' directory', ->
+task "build", "Build extension code into the ./" + JS_DIR + " directory", ->
     if_coffee ->
         linkRecursiveAll(SRC_PATHS, FIREFOX_DEST_PATHS)
         linkRecursiveAll(SRC_PATHS, CHROME_DEST_PATHS)
@@ -141,13 +141,11 @@ task 'build', 'Build extension code into the ./' + JS_DIR + ' directory', ->
                 warning = "not generating source maps because CoffeeScript version is < 1.6.1"
                 console.log("Warning: " + warning)
             ps = spawn("coffee", args)
-            ps.on 'exit', (code)->
+            ps.on "exit", (code)->
                 if code != 0
-                    console.log 'failed'
+                    console.log "failed"
 
-
-
-task 'watch', 'Build extension code into the ./' + JS_DIR + ' directory automatically', ->
+task "watch", "Build extension code into the ./" + JS_DIR + " directory automatically", ->
     if_coffee ->
         linkRecursiveAll(SRC_PATHS, FIREFOX_DEST_PATHS)
         linkRecursiveAll(SRC_PATHS, CHROME_DEST_PATHS)
@@ -159,7 +157,7 @@ task 'watch', 'Build extension code into the ./' + JS_DIR + ' directory automati
                 warning = "not generating source maps because CoffeeScript version is < 1.6.1"
                 console.log("Warning: " + warning)
             ps = spawn("coffee", args)
-            ps.on 'exit', (code)->
+            ps.on "exit", (code)->
                 if code != 0
-                    console.log 'failed'
+                    console.log "failed"
 
