@@ -5,3 +5,4 @@ chrome/*
 firefox/*
 !firefox/data/.gitkeep
 !firefox/package.json
+tmp.xpi

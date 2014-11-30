@@ -5,14 +5,18 @@ child_process = require("child_process")
 join = (p1,p2) ->
     path.join(p1, "/" + p2)
 
-COFFEE_DIR = "src/coffee"
-HTML_DIR         = "src/html"
-DATA_DIR         = "src/data"
-LIBS_DIR         = "libs"
-IMAGES_DIR       = "images"
-CHROME_DIR       = "chrome"
-FIREFOX_DIR      = "firefox"
-JS_DIR           = "js"
+EXTENSION_NAME = "1clickBOM"
+
+COFFEE_DIR  = "src/coffee"
+HTML_DIR    = "src/html"
+DATA_DIR    = "src/data"
+LIBS_DIR    = "libs"
+IMAGES_DIR  = "images"
+CHROME_DIR  = "chrome"
+FIREFOX_DIR = "firefox"
+JS_DIR      = "js"
+
+PACKAGE_DIR = "../"
 
 HTML_CHROME_DEST_DIR   = "html"
 DATA_CHROME_DEST_DIR   = "data"
@@ -26,15 +30,17 @@ LIBS_FIREFOX_DEST_DIR   = "data/libs"
 IMAGES_FIREFOX_DEST_DIR = "data/images"
 JS_FIREFOX_DEST_DIR     = "lib"
 
-ROOT_PATH         = __dirname
-COFFEE_PATH = join(ROOT_PATH, COFFEE_DIR)
-HTML_PATH         = join(ROOT_PATH, HTML_DIR)
-DATA_PATH         = join(ROOT_PATH, DATA_DIR)
-LIBS_PATH         = join(ROOT_PATH, LIBS_DIR)
-IMAGES_PATH       = join(ROOT_PATH, IMAGES_DIR)
-JS_PATH           = join(ROOT_PATH, JS_DIR)
-CHROME_PATH       = join(ROOT_PATH, CHROME_DIR)
-FIREFOX_PATH      = join(ROOT_PATH, FIREFOX_DIR)
+FIREFOX_PORT = "8888"
+
+ROOT_PATH    = __dirname
+COFFEE_PATH  = join(ROOT_PATH, COFFEE_DIR)
+HTML_PATH    = join(ROOT_PATH, HTML_DIR)
+DATA_PATH    = join(ROOT_PATH, DATA_DIR)
+LIBS_PATH    = join(ROOT_PATH, LIBS_DIR)
+IMAGES_PATH  = join(ROOT_PATH, IMAGES_DIR)
+JS_PATH      = join(ROOT_PATH, JS_DIR)
+CHROME_PATH  = join(ROOT_PATH, CHROME_DIR)
+FIREFOX_PATH = join(ROOT_PATH, FIREFOX_DIR)
 
 HTML_CHROME_DEST_PATH   = join(CHROME_PATH, HTML_CHROME_DEST_DIR)
 DATA_CHROME_DEST_PATH   = join(CHROME_PATH, DATA_CHROME_DEST_DIR)
@@ -67,7 +73,7 @@ isOnPath = (exe) ->
     present = false
     process.env.PATH.split(":").forEach (value, index, array)->
         present ||= fs.existsSync(join(value,exe))
-    if not present
+    unless present
         console.log("'" + exe + "'" + " can't be found in your $PATH.")
         process.exit(-1)
 
@@ -98,10 +104,7 @@ rmFilesInDirRecursive = (rm_path) ->
             if stats? && stats.isDirectory()
                 rmDirRecursive(p)
             else
-                try
-                    fs.unlinkSync(p)
-                catch err
-                    console.log(err.message)
+                fs.unlinkSync(p)
 
 rmDirRecursive = (rm_path) ->
     stats = stat(rm_path)
@@ -135,7 +138,7 @@ linkRecursiveAll = () ->
     linkRecursive(IMAGES_PATH, IMAGES_FIREFOX_DEST_PATH)
     linkRecursive(JS_PATH, JS_FIREFOX_DEST_PATH)
 
-coffee = (args, callback) ->
+compile = (args, callback) ->
     isOnPath "coffee"
     rmDirRecursive(JS_PATH)
     ps = spawn "coffee", args, () ->
@@ -155,7 +158,7 @@ task "build"
         getVersion (version) ->
             args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
             args = maybeAddMap(version, args)
-            coffee args, () ->
+            compile args, () ->
                 linkRecursiveAll()
 
 watch = (path, callback) ->
@@ -188,48 +191,49 @@ task "watch"
             args = maybeAddMap(version, args)
             watch COFFEE_PATH, () ->
                 console.log("/Every step you take/")
-                coffee args, (code) ->
+                compile args, (code) ->
                     if code == 0
                         linkRecursive(JS_PATH, JS_FIREFOX_DEST_PATH)
                         linkRecursive(JS_PATH, JS_CHROME_DEST_PATH)
-            coffee args, (code) ->
+            compile args, (code) ->
                 if code == 0
                     linkRecursiveAll()
 
 task "package"
-    , "Make packages ready for distribution in ../"
+    , "Make packages ready for distribution in " + PACKAGE_DIR
     , ->
         isOnPath "coffee"
         isOnPath "zip"
         isOnPath "cfx"
         args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
-        coffee args, () ->
+        compile args, () ->
             linkRecursiveAll()
             manifest = JSON.parse(fs.readFileSync(join(CHROME_PATH, "manifest.json")))
-            chrome_name = "1clickBOM-chrome-v" + manifest.version
+            chrome_name = EXTENSION_NAME + "-chrome-v" + manifest.version
             chrome_tmp_path = join(ROOT_PATH,chrome_name)
             fs.mkdirSync(chrome_tmp_path)
-            chrome_package_path = join(ROOT_PATH + "/../", chrome_name + ".zip")
+            chrome_package_path = join(ROOT_PATH + "/" + PACKAGE_DIR, chrome_name + ".zip")
             if fs.existsSync(chrome_package_path)
                 fs.unlinkSync(chrome_package_path)
             linkRecursive(CHROME_PATH, chrome_tmp_path)
             spawn "zip", ["-r" , chrome_package_path, chrome_name], ->
                 rmDirRecursive(chrome_tmp_path)
-                fpackage = JSON.parse(fs.readFileSync(join(FIREFOX_PATH, "package.json")))
-                firefox_name = "1clickBOM-firefox-v" + fpackage.version
-                firefox_package_path = join(ROOT_PATH + "/../", firefox_name + ".xpi")
-                spawn "cfx", ["--pkgdir=" + FIREFOX_PATH
-                             , "--output-file=" + firefox_package_path
-                             , "xpi"
-                             ]
+            fpackage = JSON.parse(fs.readFileSync(join(FIREFOX_PATH, "package.json")))
+            firefox_name = EXTENSION_NAME + "-firefox-v" + fpackage.version
+            firefox_package_path = join(ROOT_PATH + "/" + PACKAGE_DIR, firefox_name + ".xpi")
+            spawn "cfx", ["--pkgdir=" + FIREFOX_PATH
+                         , "--output-file=" + firefox_package_path
+                         , "xpi"
+                         ]
 
 # this sends the extension to the auto-installer extension
 # https://addons.mozilla.org/en-US/firefox/addon/autoinstaller/
 # the 500 no-content error is normal
 task "reload-firefox"
-    , "Build a temporary xpi and send to the Firefox auto-installer on port 8888"
+    , "Build a temporary xpi and send to the Firefox auto-installer on port " + FIREFOX_PORT
     , ->
         isOnPath "cfx"
         isOnPath "wget"
         spawn "cfx", ["--pkgdir=" + FIREFOX_PATH, "--output-file=tmp.xpi", "xpi"], ->
-                child_process.spawn "wget", ["--post-file=tmp.xpi", "http://localhost:8888/"]
+                console.log("Sending extension to Firefox on port " + FIREFOX_PORT)
+                child_process.spawn "wget", ["--post-file=tmp.xpi", "http://localhost:" + FIREFOX_PORT]
