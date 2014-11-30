@@ -2,6 +2,9 @@ fs    = require("fs")
 path  = require("path")
 child_process_spawn = require("child_process").spawn
 
+join = (p1,p2) ->
+    path.join(p1, "/" + p2)
+
 COFFEESCRIPT_DIR = "src/coffee"
 HTML_DIR         = "src/html"
 DATA_DIR         = "src/data"
@@ -24,29 +27,29 @@ IMAGES_FIREFOX_DEST_DIR = "data/images"
 JS_FIREFOX_DEST_DIR     = "lib"
 
 ROOT_PATH         = __dirname
-COFFEESCRIPT_PATH = path.join(ROOT_PATH, "/" + COFFEESCRIPT_DIR)
-HTML_PATH         = path.join(ROOT_PATH, "/" + HTML_DIR)
-DATA_PATH         = path.join(ROOT_PATH, "/" + DATA_DIR)
-LIBS_PATH         = path.join(ROOT_PATH, "/" + LIBS_DIR)
-IMAGES_PATH       = path.join(ROOT_PATH, "/" + IMAGES_DIR)
-JS_PATH           = path.join(ROOT_PATH, "/" + JS_DIR)
-CHROME_PATH       = path.join(ROOT_PATH, "/" + CHROME_DIR)
-FIREFOX_PATH      = path.join(ROOT_PATH, "/" + FIREFOX_DIR)
+COFFEESCRIPT_PATH = join(ROOT_PATH, COFFEESCRIPT_DIR)
+HTML_PATH         = join(ROOT_PATH, HTML_DIR)
+DATA_PATH         = join(ROOT_PATH, DATA_DIR)
+LIBS_PATH         = join(ROOT_PATH, LIBS_DIR)
+IMAGES_PATH       = join(ROOT_PATH, IMAGES_DIR)
+JS_PATH           = join(ROOT_PATH, JS_DIR)
+CHROME_PATH       = join(ROOT_PATH, CHROME_DIR)
+FIREFOX_PATH      = join(ROOT_PATH, FIREFOX_DIR)
 
 SRC_PATHS = [HTML_PATH, DATA_PATH, LIBS_PATH, IMAGES_PATH, JS_PATH]
 
-CHROME_DEST_PATHS = [ path.join(CHROME_PATH, "/" + HTML_CHROME_DEST_DIR)
-                    , path.join(CHROME_PATH, "/" + DATA_CHROME_DEST_DIR)
-                    , path.join(CHROME_PATH, "/" + LIBS_CHROME_DEST_DIR)
-                    , path.join(CHROME_PATH, "/" + IMAGES_CHROME_DEST_DIR)
-                    , path.join(CHROME_PATH, "/" + JS_CHROME_DEST_DIR)
+CHROME_DEST_PATHS = [ join(CHROME_PATH, HTML_CHROME_DEST_DIR)
+                    , join(CHROME_PATH, DATA_CHROME_DEST_DIR)
+                    , join(CHROME_PATH, LIBS_CHROME_DEST_DIR)
+                    , join(CHROME_PATH, IMAGES_CHROME_DEST_DIR)
+                    , join(CHROME_PATH, JS_CHROME_DEST_DIR)
                     ]
 
-HTML_FIREFOX_DEST_PATH   = path.join(FIREFOX_PATH, "/" + HTML_FIREFOX_DEST_DIR)
-DATA_FIREFOX_DEST_PATH   = path.join(FIREFOX_PATH, "/" + DATA_FIREFOX_DEST_DIR)
-LIBS_FIREFOX_DEST_PATH   = path.join(FIREFOX_PATH, "/" + LIBS_FIREFOX_DEST_DIR)
-IMAGES_FIREFOX_DEST_PATH = path.join(FIREFOX_PATH, "/" + IMAGES_FIREFOX_DEST_DIR)
-JS_FIREFOX_DEST_PATH     = path.join(FIREFOX_PATH, "/" + JS_FIREFOX_DEST_DIR)
+HTML_FIREFOX_DEST_PATH   = join(FIREFOX_PATH, HTML_FIREFOX_DEST_DIR)
+DATA_FIREFOX_DEST_PATH   = join(FIREFOX_PATH, DATA_FIREFOX_DEST_DIR)
+LIBS_FIREFOX_DEST_PATH   = join(FIREFOX_PATH, LIBS_FIREFOX_DEST_DIR)
+IMAGES_FIREFOX_DEST_PATH = join(FIREFOX_PATH, IMAGES_FIREFOX_DEST_DIR)
+JS_FIREFOX_DEST_PATH     = join(FIREFOX_PATH, JS_FIREFOX_DEST_DIR)
 
 FIREFOX_DEST_PATHS = [ HTML_FIREFOX_DEST_PATH
                      , DATA_FIREFOX_DEST_PATH
@@ -103,16 +106,37 @@ task 'build', 'Build extension code into the ./' + JS_DIR + ' directory', ->
                 spawn("cp", ["-r"].concat(SRC_PATHS).concat([CHROME_PATH]))
                 if code != 0
                     console.log 'failed'
+rmDirRecursive = (rm_path) ->
+    files = fs.readdirSync(rm_path)
+    for file in files
+        p = join(rm_path,file)
+        if fs.statSync(p).isDirectory()
+            rmDirRecursive(p)
+        else
+            fs.unlinkSync(p)
+    fs.rmdirSync(rm_path)
+
+linkRecursive = (src_path, dest_path) ->
+    if fs.existsSync(dest_path)
+        rmDirRecursive(dest_path)
+    fs.mkdirSync(dest_path)
+    files = fs.readdirSync(src_path)
+    for file in files
+        p = join(src_path,file)
+        stats = fs.statSync(p)
+        if fs.statSync(p).isDirectory()
+            linkRecursive(p, join(dest_path, file))
+        else
+            fs.symlinkSync(p, join(dest_path, file))
 
 task 'watch', 'Build extension code into the ./' + JS_DIR + ' directory automatically', ->
     if_coffee ->
-        spawn("rm", ["-rf"].concat(CHROME_DEST_PATHS).concat(FIREFOX_DEST_PATHS))
-        spawn("ln", ["-s", "--target-directory=" + CHROME_PATH].concat(SRC_PATHS))
-        spawn("ln", ["-s", JS_PATH, JS_FIREFOX_DEST_PATH])
-        spawn("ln", ["-s", DATA_PATH, DATA_FIREFOX_DEST_PATH])
-        spawn("ln", ["-s", HTML_PATH, HTML_FIREFOX_DEST_PATH])
-        spawn("ln", ["-s", IMAGES_PATH, IMAGES_FIREFOX_DEST_PATH])
-        spawn("ln", ["-s", LIBS_PATH, LIBS_FIREFOX_DEST_PATH])
+        spawn("rm", ["-rf"].concat(CHROME_DEST_PATHS))
+        linkRecursive(JS_PATH,     JS_FIREFOX_DEST_PATH)
+        linkRecursive(DATA_PATH,   DATA_FIREFOX_DEST_PATH)
+        linkRecursive(IMAGES_PATH, IMAGES_FIREFOX_DEST_PATH)
+        linkRecursive(LIBS_PATH,   LIBS_FIREFOX_DEST_PATH)
+        linkRecursive(HTML_PATH,   HTML_FIREFOX_DEST_PATH)
         get_version (version) ->
             args = ["--output", JS_PATH,"--watch", COFFEESCRIPT_PATH]
             if version > [1,6,1]
