@@ -36,6 +36,7 @@ JS_PATH           = join(ROOT_PATH, JS_DIR)
 CHROME_PATH       = join(ROOT_PATH, CHROME_DIR)
 FIREFOX_PATH      = join(ROOT_PATH, FIREFOX_DIR)
 
+#the order on these is important for now because of linkRecursiveAll
 SRC_PATHS = [HTML_PATH, DATA_PATH, LIBS_PATH, IMAGES_PATH, JS_PATH]
 
 CHROME_DEST_PATHS = [ join(CHROME_PATH, HTML_CHROME_DEST_DIR)
@@ -91,21 +92,6 @@ get_version = (callback)->
             v.push(parseInt(n))
         callback(v)
 
-task 'build', 'Build extension code into the ./' + JS_DIR + ' directory', ->
-    if_coffee ->
-        spawn("rm", ["-rf"].concat(CHROME_DEST_PATHS))
-        get_version (version) ->
-            args = ["--output", JS_PATH,"--compile", COFFEESCRIPT_PATH]
-            if version > [1,6,1]
-                args.unshift("--map")
-            else
-                warning = "not generating source maps because CoffeeScript version is < 1.6.1"
-                console.log("Warning: " + warning)
-            ps = spawn("coffee", args)
-            ps.on 'exit', (code)->
-                spawn("cp", ["-r"].concat(SRC_PATHS).concat([CHROME_PATH]))
-                if code != 0
-                    console.log 'failed'
 rmDirRecursive = (rm_path) ->
     files = fs.readdirSync(rm_path)
     for file in files
@@ -129,14 +115,33 @@ linkRecursive = (src_path, dest_path) ->
         else
             fs.symlinkSync(p, join(dest_path, file))
 
+linkRecursiveAll = (src_paths, dest_paths) ->
+    for s,i in src_paths
+       d = dest_paths[i]
+       linkRecursive(s,d)
+
+task 'build', 'Build extension code into the ./' + JS_DIR + ' directory', ->
+    if_coffee ->
+        linkRecursiveAll(SRC_PATHS, FIREFOX_DEST_PATHS)
+        linkRecursiveAll(SRC_PATHS, CHROME_DEST_PATHS)
+        get_version (version) ->
+            args = ["--output", JS_PATH,"--compile", COFFEESCRIPT_PATH]
+            if version > [1,6,1]
+                args.unshift("--map")
+            else
+                warning = "not generating source maps because CoffeeScript version is < 1.6.1"
+                console.log("Warning: " + warning)
+            ps = spawn("coffee", args)
+            ps.on 'exit', (code)->
+                if code != 0
+                    console.log 'failed'
+
+
+
 task 'watch', 'Build extension code into the ./' + JS_DIR + ' directory automatically', ->
     if_coffee ->
-        spawn("rm", ["-rf"].concat(CHROME_DEST_PATHS))
-        linkRecursive(JS_PATH,     JS_FIREFOX_DEST_PATH)
-        linkRecursive(DATA_PATH,   DATA_FIREFOX_DEST_PATH)
-        linkRecursive(IMAGES_PATH, IMAGES_FIREFOX_DEST_PATH)
-        linkRecursive(LIBS_PATH,   LIBS_FIREFOX_DEST_PATH)
-        linkRecursive(HTML_PATH,   HTML_FIREFOX_DEST_PATH)
+        linkRecursiveAll(SRC_PATHS, FIREFOX_DEST_PATHS)
+        linkRecursiveAll(SRC_PATHS, CHROME_DEST_PATHS)
         get_version (version) ->
             args = ["--output", JS_PATH,"--watch", COFFEESCRIPT_PATH]
             if version > [1,6,1]
@@ -148,3 +153,4 @@ task 'watch', 'Build extension code into the ./' + JS_DIR + ' directory automati
             ps.on 'exit', (code)->
                 if code != 0
                     console.log 'failed'
+
