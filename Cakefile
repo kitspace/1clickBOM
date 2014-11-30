@@ -93,27 +93,36 @@ get_version = (callback)->
         callback(v)
 
 rmDirRecursive = (rm_path) ->
-    files = fs.readdirSync(rm_path)
-    for file in files
-        p = join(rm_path,file)
-        if fs.statSync(p).isDirectory()
-            rmDirRecursive(p)
-        else
-            fs.unlinkSync(p)
-    fs.rmdirSync(rm_path)
+    if fs.statSync(rm_path).isDirectory()
+        files = fs.readdirSync(rm_path)
+        for file in files
+            p = join(rm_path,file)
+            #statSync throws ENOENT errors on files that where deleted at
+            #symlink source
+            try
+                stats = fs.statSync(p)
+            catch err
+                unless err.code == "ENOENT"
+                    throw(err)
+            if stats? && stats.isDirectory()
+                rmDirRecursive(p)
+            else
+                fs.unlinkSync(p)
+        fs.rmdirSync(rm_path)
 
 linkRecursive = (src_path, dest_path) ->
-    if fs.existsSync(dest_path)
-        rmDirRecursive(dest_path)
-    fs.mkdirSync(dest_path)
-    files = fs.readdirSync(src_path)
-    for file in files
-        p = join(src_path,file)
-        stats = fs.statSync(p)
-        if fs.statSync(p).isDirectory()
-            linkRecursive(p, join(dest_path, file))
-        else
-            fs.symlinkSync(p, join(dest_path, file))
+    if fs.statSync(src_path).isDirectory()
+        if fs.existsSync(dest_path)
+            rmDirRecursive(dest_path)
+        fs.mkdirSync(dest_path)
+        files = fs.readdirSync(src_path)
+        for file in files
+            p = join(src_path,file)
+            stats = fs.statSync(p)
+            if stats? && stats.isDirectory()
+                linkRecursive(p, join(dest_path, file))
+            else
+                fs.symlinkSync(p, join(dest_path, file))
 
 linkRecursiveAll = (src_paths, dest_paths) ->
     for s,i in src_paths
