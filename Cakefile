@@ -1,6 +1,6 @@
 fs    = require("fs")
 path  = require("path")
-child_process_spawn = require("child_process").spawn
+child_process = require("child_process")
 
 join = (p1,p2) ->
     path.join(p1, "/" + p2)
@@ -46,24 +46,18 @@ CHROME_DEST_PATHS = [ join(CHROME_PATH, HTML_CHROME_DEST_DIR)
                     , join(CHROME_PATH, JS_CHROME_DEST_DIR)
                     ]
 
-HTML_FIREFOX_DEST_PATH   = join(FIREFOX_PATH, HTML_FIREFOX_DEST_DIR)
-DATA_FIREFOX_DEST_PATH   = join(FIREFOX_PATH, DATA_FIREFOX_DEST_DIR)
-LIBS_FIREFOX_DEST_PATH   = join(FIREFOX_PATH, LIBS_FIREFOX_DEST_DIR)
-IMAGES_FIREFOX_DEST_PATH = join(FIREFOX_PATH, IMAGES_FIREFOX_DEST_DIR)
-JS_FIREFOX_DEST_PATH     = join(FIREFOX_PATH, JS_FIREFOX_DEST_DIR)
-
-FIREFOX_DEST_PATHS = [ HTML_FIREFOX_DEST_PATH
-                     , DATA_FIREFOX_DEST_PATH
-                     , LIBS_FIREFOX_DEST_PATH
-                     , IMAGES_FIREFOX_DEST_PATH
-                     , JS_FIREFOX_DEST_PATH
+FIREFOX_DEST_PATHS = [ join(FIREFOX_PATH, HTML_FIREFOX_DEST_DIR)
+                     , join(FIREFOX_PATH, DATA_FIREFOX_DEST_DIR)
+                     , join(FIREFOX_PATH, LIBS_FIREFOX_DEST_DIR)
+                     , join(FIREFOX_PATH, IMAGES_FIREFOX_DEST_DIR)
+                     , join(FIREFOX_PATH, JS_FIREFOX_DEST_DIR)
                      ]
 
 log = (data)->
   console.log data.toString()
 
 spawn = (cmd, args)->
-    ps = child_process_spawn(cmd, args)
+    ps = child_process.spawn(cmd, args)
     ps.stdout.on("data", log)
     ps.stderr.on("data", log)
     return ps
@@ -84,7 +78,7 @@ if_coffee = (callback)->
     callback()
 
 get_version = (callback)->
-    ps = child_process_spawn("coffee", ["--version"])
+    ps = child_process.spawn("coffee", ["--version"])
     ps.stderr.on("data", log)
     ps.stdout.on "data", (version) ->
         v = []
@@ -129,35 +123,42 @@ linkRecursiveAll = (src_paths, dest_paths) ->
        d = dest_paths[i]
        linkRecursive(s,d)
 
-task "build", "Build extension code into the ./" + JS_DIR + " directory", ->
-    if_coffee ->
-        linkRecursiveAll(SRC_PATHS, FIREFOX_DEST_PATHS)
-        linkRecursiveAll(SRC_PATHS, CHROME_DEST_PATHS)
-        get_version (version) ->
-            args = ["--output", JS_PATH,"--compile", COFFEESCRIPT_PATH]
-            if version > [1,6,1]
-                args.unshift("--map")
-            else
-                warning = "not generating source maps because CoffeeScript version is < 1.6.1"
-                console.log("Warning: " + warning)
-            ps = spawn("coffee", args)
-            ps.on "exit", (code)->
-                if code != 0
-                    console.log "failed"
+task "build"
+    , "Make symlinks and compile coffeescript"
+    , ->
+        if_coffee ->
+            linkRecursiveAll(SRC_PATHS, FIREFOX_DEST_PATHS)
+            linkRecursiveAll(SRC_PATHS, CHROME_DEST_PATHS)
+            get_version (version) ->
+                args = ["--output", JS_PATH,"--compile", COFFEESCRIPT_PATH]
+                if version > [1,6,1]
+                    args.unshift("--map")
+                else
+                    console.log("Warning: not generating source maps because
+                                 CoffeeScript version is < 1.6.1")
+                ps = spawn("coffee", args)
+                ps.on "exit", (code)->
+                    if code != 0
+                        console.log "failed"
 
-task "watch", "Build extension code into the ./" + JS_DIR + " directory automatically", ->
-    if_coffee ->
-        linkRecursiveAll(SRC_PATHS, FIREFOX_DEST_PATHS)
-        linkRecursiveAll(SRC_PATHS, CHROME_DEST_PATHS)
-        get_version (version) ->
-            args = ["--output", JS_PATH,"--watch", COFFEESCRIPT_PATH]
-            if version > [1,6,1]
-                args.unshift("--map")
-            else
-                warning = "not generating source maps because CoffeeScript version is < 1.6.1"
-                console.log("Warning: " + warning)
-            ps = spawn("coffee", args)
-            ps.on "exit", (code)->
-                if code != 0
-                    console.log "failed"
+task "watch"
+    , "Make symlinks and re-compile coffeescript automatically, watching for
+       changes"
+    , ->
+        if_coffee ->
+            linkRecursiveAll(SRC_PATHS, FIREFOX_DEST_PATHS)
+            linkRecursiveAll(SRC_PATHS, CHROME_DEST_PATHS)
+            get_version (version) ->
+                args = ["--output", JS_PATH,"--watch", COFFEESCRIPT_PATH]
+                if version > [1,6,1]
+                    args.unshift("--map")
+                else
+                    console.log("Warning: not generating source maps because
+                                 CoffeeScript version is < 1.6.1")
+                ps = spawn("coffee", args)
+                ps.on "exit", (code)->
+                    if code != 0
+                        console.log "failed"
+
+
 
