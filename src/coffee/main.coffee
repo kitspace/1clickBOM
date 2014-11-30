@@ -10,4 +10,4 @@ button = ActionButton({
     onClick: (state) ->
         console.log("button '"+ state.label + "'was clicked")
 })
-console.log("hi")
+console.log("yooo")

@@ -5,7 +5,7 @@ child_process = require("child_process")
 join = (p1,p2) ->
     path.join(p1, "/" + p2)
 
-COFFEESCRIPT_DIR = "src/coffee"
+COFFEE_DIR = "src/coffee"
 HTML_DIR         = "src/html"
 DATA_DIR         = "src/data"
 LIBS_DIR         = "libs"
@@ -27,7 +27,7 @@ IMAGES_FIREFOX_DEST_DIR = "data/images"
 JS_FIREFOX_DEST_DIR     = "lib"
 
 ROOT_PATH         = __dirname
-COFFEESCRIPT_PATH = join(ROOT_PATH, COFFEESCRIPT_DIR)
+COFFEE_PATH = join(ROOT_PATH, COFFEE_DIR)
 HTML_PATH         = join(ROOT_PATH, HTML_DIR)
 DATA_PATH         = join(ROOT_PATH, DATA_DIR)
 LIBS_PATH         = join(ROOT_PATH, LIBS_DIR)
@@ -36,25 +36,17 @@ JS_PATH           = join(ROOT_PATH, JS_DIR)
 CHROME_PATH       = join(ROOT_PATH, CHROME_DIR)
 FIREFOX_PATH      = join(ROOT_PATH, FIREFOX_DIR)
 
-#the order on these is important for now because of linkRecursiveAll
-SRC_PATHS = [HTML_PATH, DATA_PATH, LIBS_PATH, IMAGES_PATH, JS_PATH]
+HTML_CHROME_DEST_PATH   = join(CHROME_PATH, HTML_CHROME_DEST_DIR)
+DATA_CHROME_DEST_PATH   = join(CHROME_PATH, DATA_CHROME_DEST_DIR)
+LIBS_CHROME_DEST_PATH   = join(CHROME_PATH, LIBS_CHROME_DEST_DIR)
+IMAGES_CHROME_DEST_PATH = join(CHROME_PATH, IMAGES_CHROME_DEST_DIR)
+JS_CHROME_DEST_PATH     = join(CHROME_PATH, JS_CHROME_DEST_DIR)
 
-CHROME_DEST_PATHS = [ join(CHROME_PATH, HTML_CHROME_DEST_DIR)
-                    , join(CHROME_PATH, DATA_CHROME_DEST_DIR)
-                    , join(CHROME_PATH, LIBS_CHROME_DEST_DIR)
-                    , join(CHROME_PATH, IMAGES_CHROME_DEST_DIR)
-                    , join(CHROME_PATH, JS_CHROME_DEST_DIR)
-                    ]
-
-FIREFOX_DEST_PATHS = [ join(FIREFOX_PATH, HTML_FIREFOX_DEST_DIR)
-                     , join(FIREFOX_PATH, DATA_FIREFOX_DEST_DIR)
-                     , join(FIREFOX_PATH, LIBS_FIREFOX_DEST_DIR)
-                     , join(FIREFOX_PATH, IMAGES_FIREFOX_DEST_DIR)
-                     , join(FIREFOX_PATH, JS_FIREFOX_DEST_DIR)
-                     ]
-
-
-FIREFOX_PACKAGE_PATH =
+HTML_FIREFOX_DEST_PATH   = join(FIREFOX_PATH, HTML_FIREFOX_DEST_DIR)
+DATA_FIREFOX_DEST_PATH   = join(FIREFOX_PATH, DATA_FIREFOX_DEST_DIR)
+LIBS_FIREFOX_DEST_PATH   = join(FIREFOX_PATH, LIBS_FIREFOX_DEST_DIR)
+IMAGES_FIREFOX_DEST_PATH = join(FIREFOX_PATH, IMAGES_FIREFOX_DEST_DIR)
+JS_FIREFOX_DEST_PATH     = join(FIREFOX_PATH, JS_FIREFOX_DEST_DIR)
 
 log = (data)->
   console.log data.toString()
@@ -87,7 +79,8 @@ if_coffee = (callback)->
 
 get_version = (callback)->
     if_coffee ->
-        spawn "coffee", ["--version"], undefined, (data) ->
+        ps = child_process.spawn "coffee", ["--version"]
+        ps.stdout.on "data", (data) ->
             v = []
             for n in data.toString().split(" ")[2].split(".")
                 v.push(parseInt(n))
@@ -136,17 +129,22 @@ linkRecursive = (src_path, dest_path) ->
             else
                 fs.symlinkSync(p, join(dest_path, file))
 
-linkRecursiveAll = (src_paths, dest_paths) ->
-    for s,i in src_paths
-       d = dest_paths[i]
-       linkRecursive(s,d)
+linkRecursiveAll = () ->
+    linkRecursive(HTML_PATH, HTML_CHROME_DEST_PATH)
+    linkRecursive(DATA_PATH, DATA_CHROME_DEST_PATH)
+    linkRecursive(LIBS_PATH, LIBS_CHROME_DEST_PATH)
+    linkRecursive(IMAGES_PATH, IMAGES_CHROME_DEST_PATH)
+    linkRecursive(JS_PATH, JS_CHROME_DEST_PATH)
+    linkRecursive(HTML_PATH, HTML_FIREFOX_DEST_PATH)
+    linkRecursive(DATA_PATH, DATA_FIREFOX_DEST_PATH)
+    linkRecursive(LIBS_PATH, LIBS_FIREFOX_DEST_PATH)
+    linkRecursive(IMAGES_PATH, IMAGES_FIREFOX_DEST_PATH)
+    linkRecursive(JS_PATH, JS_FIREFOX_DEST_PATH)
 
-build = (args, callback) ->
+coffee = (args, callback) ->
     if_coffee ->
         rmDirRecursive(JS_PATH)
         ps = spawn "coffee", args, () ->
-            linkRecursiveAll(SRC_PATHS, FIREFOX_DEST_PATHS)
-            linkRecursiveAll(SRC_PATHS, CHROME_DEST_PATHS)
             if callback? then callback()
 
 maybe_map = (version, args) ->
@@ -161,27 +159,55 @@ task "build"
     , "Make symlinks and compile coffeescript"
     , ->
         get_version (version) ->
-            args = ["--output", JS_PATH,"--compile", COFFEESCRIPT_PATH]
+            args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
             args = maybe_map(version,args)
-            build(args)
+            coffee args, () ->
+                linkRecursiveAll()
+
+watch = (path, callback) ->
+    fs.watchFile(path, { persistent: true, interval: 1007 }, callback)
 
 task "watch"
     , "Make symlinks and re-compile coffeescript automatically, watching for
        changes"
     , ->
         if_coffee ->
-            linkRecursiveAll(SRC_PATHS, FIREFOX_DEST_PATHS)
-            linkRecursiveAll(SRC_PATHS, CHROME_DEST_PATHS)
+            console.log("/Every move you make/")
+            watch HTML_PATH, ->
+                console.log("/Every html file you change/")
+                linkRecursive(HTML_PATH, HTML_FIREFOX_DEST_PATH)
+                linkRecursive(HTML_PATH, HTML_CHROME_DEST_PATH)
+            watch DATA_PATH, ->
+                console.log("/Every data file you change/")
+                linkRecursive(DATA_PATH, DATA_FIREFOX_DEST_PATH)
+                linkRecursive(DATA_PATH, DATA_CHROME_DEST_PATH)
+            watch IMAGES_PATH, ->
+                console.log("/Every image you change/")
+                linkRecursive(IMAGES_PATH, IMAGES_FIREFOX_DEST_PATH)
+                linkRecursive(IMAGES_PATH, IMAGES_CHROME_DEST_PATH)
+            watch LIBS_PATH, ->
+                console.log("/Every lib you change/")
+                linkRecursive(LIBS_PATH, LIBS_FIREFOX_DEST_PATH)
+                linkRecursive(LIBS_PATH, LIBS_CHROME_DEST_PATH)
             get_version (version) ->
-                args = ["--output", JS_PATH,"--watch", COFFEESCRIPT_PATH]
+                args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
                 args = maybe_map(version,args)
-                ps = spawn("coffee", args)
+                watch COFFEE_PATH, () ->
+                    console.log("/Every step you take/")
+                    coffee args, (code) ->
+                        if code == 0
+                            linkRecursive(JS_PATH, JS_FIREFOX_DEST_PATH)
+                            linkRecursive(JS_PATH, JS_CHROME_DEST_PATH)
+                coffee args, (code) ->
+                    if code == 0
+                        linkRecursiveAll()
 
 task "package"
     , "Make packages ready for distribution in ../"
     , ->
-        args = ["--output", JS_PATH,"--compile", COFFEESCRIPT_PATH]
-        build args, () ->
+        args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
+        coffee args, () ->
+            linkRecursiveAll()
             manifest = JSON.parse(fs.readFileSync(join(CHROME_PATH, "manifest.json")))
             chrome_name = "1clickBOM-chrome-v" + manifest.version
             chrome_tmp_path = join(ROOT_PATH,chrome_name)
