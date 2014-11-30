@@ -17,7 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-window.test_bom  = get_local("data/big_example.tsv", json=false)
+window.test_bom  = get_local("examples/big_example.tsv", json=false)
 
 window.test_one = (country="HK") ->
     QUnit.test "User Sim " + country, () ->

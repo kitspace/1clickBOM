@@ -16,45 +16,51 @@ CHROME_DIR  = "chrome"
 FIREFOX_DIR = "firefox"
 JS_DIR      = "js"
 TEST_DIR    = "js/tests"
+EXAMPLES_DIR = "examples"
 
 PACKAGE_DIR = "../"
 
-HTML_CHROME_DEST_DIR   = "html"
-DATA_CHROME_DEST_DIR   = "data"
-LIBS_CHROME_DEST_DIR   = "libs"
-IMAGES_CHROME_DEST_DIR = "images"
-JS_CHROME_DEST_DIR     = "js"
+HTML_CHROME_DEST_DIR     = "html"
+DATA_CHROME_DEST_DIR     = "data"
+EXAMPLES_CHROME_DEST_DIR = "examples"
+LIBS_CHROME_DEST_DIR     = "libs"
+IMAGES_CHROME_DEST_DIR   = "images"
+JS_CHROME_DEST_DIR       = "js"
 
-HTML_FIREFOX_DEST_DIR   = "data/html"
-DATA_FIREFOX_DEST_DIR   = "data/data"
-LIBS_FIREFOX_DEST_DIR   = "data/libs"
-IMAGES_FIREFOX_DEST_DIR = "data/images"
-JS_FIREFOX_DEST_DIR     = "lib"
+HTML_FIREFOX_DEST_DIR     = "data/html"
+DATA_FIREFOX_DEST_DIR     = "data/data"
+EXAMPLES_FIREFOX_DEST_DIR = "data/examples"
+LIBS_FIREFOX_DEST_DIR     = "data/libs"
+IMAGES_FIREFOX_DEST_DIR   = "data/images"
+JS_FIREFOX_DEST_DIR       = "lib"
 
 FIREFOX_PORT = "8888"
 
-ROOT_PATH    = __dirname
-COFFEE_PATH  = join(ROOT_PATH, COFFEE_DIR)
-HTML_PATH    = join(ROOT_PATH, HTML_DIR)
-DATA_PATH    = join(ROOT_PATH, DATA_DIR)
-LIBS_PATH    = join(ROOT_PATH, LIBS_DIR)
-IMAGES_PATH  = join(ROOT_PATH, IMAGES_DIR)
-JS_PATH      = join(ROOT_PATH, JS_DIR)
-CHROME_PATH  = join(ROOT_PATH, CHROME_DIR)
-FIREFOX_PATH = join(ROOT_PATH, FIREFOX_DIR)
-TEST_PATH    = join(ROOT_PATH, TEST_DIR)
+ROOT_PATH     = __dirname
+COFFEE_PATH   = join(ROOT_PATH, COFFEE_DIR)
+HTML_PATH     = join(ROOT_PATH, HTML_DIR)
+DATA_PATH     = join(ROOT_PATH, DATA_DIR)
+LIBS_PATH     = join(ROOT_PATH, LIBS_DIR)
+IMAGES_PATH   = join(ROOT_PATH, IMAGES_DIR)
+JS_PATH       = join(ROOT_PATH, JS_DIR)
+CHROME_PATH   = join(ROOT_PATH, CHROME_DIR)
+FIREFOX_PATH  = join(ROOT_PATH, FIREFOX_DIR)
+TEST_PATH     = join(ROOT_PATH, TEST_DIR)
+EXAMPLES_PATH = join(ROOT_PATH, EXAMPLES_DIR)
 
-HTML_CHROME_DEST_PATH   = join(CHROME_PATH, HTML_CHROME_DEST_DIR)
-DATA_CHROME_DEST_PATH   = join(CHROME_PATH, DATA_CHROME_DEST_DIR)
-LIBS_CHROME_DEST_PATH   = join(CHROME_PATH, LIBS_CHROME_DEST_DIR)
-IMAGES_CHROME_DEST_PATH = join(CHROME_PATH, IMAGES_CHROME_DEST_DIR)
-JS_CHROME_DEST_PATH     = join(CHROME_PATH, JS_CHROME_DEST_DIR)
+HTML_CHROME_DEST_PATH     = join(CHROME_PATH, HTML_CHROME_DEST_DIR)
+DATA_CHROME_DEST_PATH     = join(CHROME_PATH, DATA_CHROME_DEST_DIR)
+LIBS_CHROME_DEST_PATH     = join(CHROME_PATH, LIBS_CHROME_DEST_DIR)
+IMAGES_CHROME_DEST_PATH   = join(CHROME_PATH, IMAGES_CHROME_DEST_DIR)
+JS_CHROME_DEST_PATH       = join(CHROME_PATH, JS_CHROME_DEST_DIR)
+EXAMPLES_CHROME_DEST_PATH = join(CHROME_PATH, EXAMPLES_CHROME_DEST_DIR)
 
-HTML_FIREFOX_DEST_PATH   = join(FIREFOX_PATH, HTML_FIREFOX_DEST_DIR)
-DATA_FIREFOX_DEST_PATH   = join(FIREFOX_PATH, DATA_FIREFOX_DEST_DIR)
-LIBS_FIREFOX_DEST_PATH   = join(FIREFOX_PATH, LIBS_FIREFOX_DEST_DIR)
-IMAGES_FIREFOX_DEST_PATH = join(FIREFOX_PATH, IMAGES_FIREFOX_DEST_DIR)
-JS_FIREFOX_DEST_PATH     = join(FIREFOX_PATH, JS_FIREFOX_DEST_DIR)
+HTML_FIREFOX_DEST_PATH     = join(FIREFOX_PATH, HTML_FIREFOX_DEST_DIR)
+DATA_FIREFOX_DEST_PATH     = join(FIREFOX_PATH, DATA_FIREFOX_DEST_DIR)
+LIBS_FIREFOX_DEST_PATH     = join(FIREFOX_PATH, LIBS_FIREFOX_DEST_DIR)
+IMAGES_FIREFOX_DEST_PATH   = join(FIREFOX_PATH, IMAGES_FIREFOX_DEST_DIR)
+JS_FIREFOX_DEST_PATH       = join(FIREFOX_PATH, JS_FIREFOX_DEST_DIR)
+EXAMPLES_FIREFOX_DEST_PATH = join(FIREFOX_PATH, EXAMPLES_FIREFOX_DEST_DIR)
 
 log = (data)->
   console.log data.toString()
@@ -133,6 +139,22 @@ linkRecursiveAll = () ->
     linkRecursive(DATA_PATH, DATA_CHROME_DEST_PATH)
     linkRecursive(LIBS_PATH, LIBS_CHROME_DEST_PATH)
     linkRecursive(IMAGES_PATH, IMAGES_CHROME_DEST_PATH)
+    linkRecursive(EXAMPLES_PATH, EXAMPLES_CHROME_DEST_PATH)
+    linkRecursive(JS_PATH, JS_CHROME_DEST_PATH)
+    linkRecursive(HTML_PATH, HTML_FIREFOX_DEST_PATH)
+    linkRecursive(DATA_PATH, DATA_FIREFOX_DEST_PATH)
+    linkRecursive(LIBS_PATH, LIBS_FIREFOX_DEST_PATH)
+    linkRecursive(IMAGES_PATH, IMAGES_FIREFOX_DEST_PATH)
+    linkRecursive(EXAMPLES_PATH, EXAMPLES_FIREFOX_DEST_PATH)
+    linkRecursive(JS_PATH, JS_FIREFOX_DEST_PATH)
+
+linkRecursiveDist = () ->
+    rmDirRecursive(EXAMPLES_CHROME_DEST_PATH)
+    rmDirRecursive(EXAMPLES_FIREFOX_DEST_PATH)
+    linkRecursive(HTML_PATH, HTML_CHROME_DEST_PATH)
+    linkRecursive(DATA_PATH, DATA_CHROME_DEST_PATH)
+    linkRecursive(LIBS_PATH, LIBS_CHROME_DEST_PATH)
+    linkRecursive(IMAGES_PATH, IMAGES_CHROME_DEST_PATH)
     linkRecursive(JS_PATH, JS_CHROME_DEST_PATH)
     linkRecursive(HTML_PATH, HTML_FIREFOX_DEST_PATH)
     linkRecursive(DATA_PATH, DATA_FIREFOX_DEST_PATH)
@@ -188,6 +210,10 @@ task "watch"
             console.log("/Every lib you add/")
             linkRecursive(LIBS_PATH, LIBS_FIREFOX_DEST_PATH)
             linkRecursive(LIBS_PATH, LIBS_CHROME_DEST_PATH)
+        watch EXAMPLES_PATH, ->
+            console.log("/Every example you make/")
+            linkRecursive(EXAMPLES_PATH, EXAMPLES_FIREFOX_DEST_PATH)
+            linkRecursive(EXAMPLES_PATH, EXAMPLES_CHROME_DEST_PATH)
         getVersion (version) ->
             args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
             args = maybeAddMap(version, args)
@@ -210,7 +236,7 @@ task "package"
         args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
         compile args, () ->
             rmDirRecursive(TEST_PATH)
-            linkRecursiveAll()
+            linkRecursiveDist()
             manifest = JSON.parse(fs.readFileSync(join(CHROME_PATH, "manifest.json")))
             chrome_name = EXTENSION_NAME + "-chrome-v" + manifest.version
             chrome_tmp_path = join(ROOT_PATH,chrome_name)
