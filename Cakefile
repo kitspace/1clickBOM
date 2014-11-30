@@ -53,19 +53,22 @@ FIREFOX_DEST_PATHS = [ join(FIREFOX_PATH, HTML_FIREFOX_DEST_DIR)
                      , join(FIREFOX_PATH, JS_FIREFOX_DEST_DIR)
                      ]
 
+
+FIREFOX_PACKAGE_PATH =
+
 log = (data)->
   console.log data.toString()
 
-spawn = (cmd, args, exit_callback)->
+spawn = (cmd, args, exit_callback, update_callback)->
     ps = child_process.spawn(cmd, args)
     ps.stdout.on "data", (data) ->
+        if update_callback? then update_callback(data)
         log(data)
     ps.stderr.on("data", log)
     ps.on "exit", (code)->
         if code != 0
             console.log "failed"
-        if exit_callback?
-            exit_callback()
+        if exit_callback? then exit_callback(code)
     return ps
 
 coffee_available = ->
@@ -84,9 +87,9 @@ if_coffee = (callback)->
 
 get_version = (callback)->
     if_coffee ->
-        spawn "coffee", ["--version"], (data) ->
+        spawn "coffee", ["--version"], undefined, (data) ->
             v = []
-            for n in version.toString().split(" ")[2].split(".")
+            for n in data.toString().split(" ")[2].split(".")
                 v.push(parseInt(n))
             callback(v)
 
@@ -133,29 +136,10 @@ linkRecursive = (src_path, dest_path) ->
             else
                 fs.symlinkSync(p, join(dest_path, file))
 
-cpRecursive = (src_path, dest_path) ->
-    if fs.statSync(src_path).isDirectory()
-        if fs.existsSync(dest_path)
-            rmDirRecursive(dest_path)
-        fs.mkdirSync(dest_path)
-        files = fs.readdirSync(src_path)
-        for file in files
-            p = join(src_path,file)
-            stats = fs.statSync(p)
-            if stats? && stats.isDirectory()
-                cpRecursive(p, join(dest_path, file))
-            else
-                fs.linkSync(p, join(dest_path, file))
-
 linkRecursiveAll = (src_paths, dest_paths) ->
     for s,i in src_paths
        d = dest_paths[i]
        linkRecursive(s,d)
-
-cpRecursiveAll = (src_paths, dest_paths) ->
-    for s,i in src_paths
-       d = dest_paths[i]
-       cpRecursive(s,d)
 
 build = (args, callback) ->
     if_coffee ->
@@ -214,9 +198,6 @@ task "package"
             fpackage = JSON.parse(fs.readFileSync(join(FIREFOX_PATH, "package.json")))
             firefox_name = "1clickBOM-firefox-v" + fpackage.version
             firefox_package_path = join(ROOT_PATH + "/../", firefox_name + ".xpi")
-            console.log "cfx", ["--pkgdir=" + FIREFOX_PATH
-                         , "--output-file=" + firefox_package_path
-                         ]
             spawn "cfx", ["--pkgdir=" + FIREFOX_PATH
                          , "--output-file=" + firefox_package_path
                          , "xpi"
