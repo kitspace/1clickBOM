@@ -56,17 +56,22 @@ FIREFOX_DEST_PATHS = [ join(FIREFOX_PATH, HTML_FIREFOX_DEST_DIR)
 log = (data)->
   console.log data.toString()
 
-spawn = (cmd, args)->
+spawn = (cmd, args, exit_callback)->
     ps = child_process.spawn(cmd, args)
-    ps.stdout.on("data", log)
+    ps.stdout.on "data", (data) ->
+        log(data)
     ps.stderr.on("data", log)
+    ps.on "exit", (code)->
+        if code != 0
+            console.log "failed"
+        if exit_callback?
+            exit_callback()
     return ps
 
 coffee_available = ->
     present = false
     process.env.PATH.split(":").forEach (value, index, array)->
         present ||= path.exists("#{value}/coffee")
-
     present
 
 if_coffee = (callback)->
@@ -78,16 +83,14 @@ if_coffee = (callback)->
     callback()
 
 get_version = (callback)->
-    ps = child_process.spawn("coffee", ["--version"])
-    ps.stderr.on("data", log)
-    ps.stdout.on "data", (version) ->
-        v = []
-        for n in version.toString().split(" ")[2].split(".")
-            v.push(parseInt(n))
-        callback(v)
+    if_coffee ->
+        spawn "coffee", ["--version"], (data) ->
+            v = []
+            for n in version.toString().split(" ")[2].split(".")
+                v.push(parseInt(n))
+            callback(v)
 
-rmDirRecursive = (rm_path) ->
-    if fs.statSync(rm_path).isDirectory()
+rmFilesInDirRecursive = (rm_path) ->
         files = fs.readdirSync(rm_path)
         for file in files
             p = join(rm_path,file)
@@ -101,7 +104,19 @@ rmDirRecursive = (rm_path) ->
             if stats? && stats.isDirectory()
                 rmDirRecursive(p)
             else
-                fs.unlinkSync(p)
+                try
+                    fs.unlinkSync(p)
+                catch err
+                    console.log(err.message)
+
+rmDirRecursive = (rm_path) ->
+    try
+        stats = fs.statSync(rm_path)
+    catch err
+        unless err.code == "ENOENT"
+            throw(err)
+    if stats? && stats.isDirectory()
+        rmFilesInDirRecursive(rm_path)
         fs.rmdirSync(rm_path)
 
 linkRecursive = (src_path, dest_path) ->
@@ -118,28 +133,53 @@ linkRecursive = (src_path, dest_path) ->
             else
                 fs.symlinkSync(p, join(dest_path, file))
 
+cpRecursive = (src_path, dest_path) ->
+    if fs.statSync(src_path).isDirectory()
+        if fs.existsSync(dest_path)
+            rmDirRecursive(dest_path)
+        fs.mkdirSync(dest_path)
+        files = fs.readdirSync(src_path)
+        for file in files
+            p = join(src_path,file)
+            stats = fs.statSync(p)
+            if stats? && stats.isDirectory()
+                cpRecursive(p, join(dest_path, file))
+            else
+                fs.linkSync(p, join(dest_path, file))
+
 linkRecursiveAll = (src_paths, dest_paths) ->
     for s,i in src_paths
        d = dest_paths[i]
        linkRecursive(s,d)
 
+cpRecursiveAll = (src_paths, dest_paths) ->
+    for s,i in src_paths
+       d = dest_paths[i]
+       cpRecursive(s,d)
+
+build = (args, callback) ->
+    if_coffee ->
+        rmDirRecursive(JS_PATH)
+        ps = spawn "coffee", args, () ->
+            linkRecursiveAll(SRC_PATHS, FIREFOX_DEST_PATHS)
+            linkRecursiveAll(SRC_PATHS, CHROME_DEST_PATHS)
+            if callback? then callback()
+
+maybe_map = (version, args) ->
+    if version > [1,6,1]
+        args.unshift("--map")
+    else
+        console.log("Warning: not generating source maps because
+                     CoffeeScript version is < 1.6.1")
+    return args
+
 task "build"
     , "Make symlinks and compile coffeescript"
     , ->
-        if_coffee ->
-            linkRecursiveAll(SRC_PATHS, FIREFOX_DEST_PATHS)
-            linkRecursiveAll(SRC_PATHS, CHROME_DEST_PATHS)
-            get_version (version) ->
-                args = ["--output", JS_PATH,"--compile", COFFEESCRIPT_PATH]
-                if version > [1,6,1]
-                    args.unshift("--map")
-                else
-                    console.log("Warning: not generating source maps because
-                                 CoffeeScript version is < 1.6.1")
-                ps = spawn("coffee", args)
-                ps.on "exit", (code)->
-                    if code != 0
-                        console.log "failed"
+        get_version (version) ->
+            args = ["--output", JS_PATH,"--compile", COFFEESCRIPT_PATH]
+            args = maybe_map(version,args)
+            build(args)
 
 task "watch"
     , "Make symlinks and re-compile coffeescript automatically, watching for
@@ -150,15 +190,37 @@ task "watch"
             linkRecursiveAll(SRC_PATHS, CHROME_DEST_PATHS)
             get_version (version) ->
                 args = ["--output", JS_PATH,"--watch", COFFEESCRIPT_PATH]
-                if version > [1,6,1]
-                    args.unshift("--map")
-                else
-                    console.log("Warning: not generating source maps because
-                                 CoffeeScript version is < 1.6.1")
+                args = maybe_map(version,args)
                 ps = spawn("coffee", args)
-                ps.on "exit", (code)->
-                    if code != 0
-                        console.log "failed"
+
+task "package"
+    , "Make packages ready for distribution in ../"
+    , ->
+        args = ["--output", JS_PATH,"--compile", COFFEESCRIPT_PATH]
+        build args, () ->
+            manifest = JSON.parse(fs.readFileSync(join(CHROME_PATH, "manifest.json")))
+            chrome_name = "1clickBOM-chrome-v" + manifest.version
+            chrome_tmp_path = join(ROOT_PATH,chrome_name)
+            if fs.existsSync(chrome_tmp_path)
+                rmDirRecursive(chrome_tmp_path)
+            fs.mkdirSync(chrome_tmp_path)
+            chrome_package_path = join(ROOT_PATH + "/../", chrome_name + ".zip")
+            if fs.existsSync(chrome_package_path)
+                fs.unlinkSync(chrome_package_path)
+            linkRecursive(CHROME_PATH, chrome_tmp_path)
+            spawn "zip", ["-r" , chrome_package_path, chrome_name], ->
+                rmDirRecursive(chrome_tmp_path)
+
+            fpackage = JSON.parse(fs.readFileSync(join(FIREFOX_PATH, "package.json")))
+            firefox_name = "1clickBOM-firefox-v" + fpackage.version
+            firefox_package_path = join(ROOT_PATH + "/../", firefox_name + ".xpi")
+            console.log "cfx", ["--pkgdir=" + FIREFOX_PATH
+                         , "--output-file=" + firefox_package_path
+                         ]
+            spawn "cfx", ["--pkgdir=" + FIREFOX_PATH
+                         , "--output-file=" + firefox_package_path
+                         , "xpi"
+                         ]
 
 
 
