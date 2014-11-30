@@ -63,36 +63,38 @@ spawn = (cmd, args, exit_callback, update_callback)->
         if exit_callback? then exit_callback(code)
     return ps
 
-on_path = (exe, callback) ->
+isOnPath = (exe) ->
     present = false
     process.env.PATH.split(":").forEach (value, index, array)->
         present ||= fs.existsSync(join(value,exe))
     if not present
         console.log("'" + exe + "'" + " can't be found in your $PATH.")
         process.exit(-1)
-    else
-        callback()
 
-get_version = (callback)->
-    on_path "coffee",  ->
-        ps = child_process.spawn "coffee", ["--version"]
-        ps.stdout.on "data", (data) ->
-            v = []
-            for n in data.toString().split(" ")[2].split(".")
-                v.push(parseInt(n))
-            callback(v)
+getVersion = (callback)->
+    isOnPath "coffee"
+    ps = child_process.spawn "coffee", ["--version"]
+    ps.stdout.on "data", (data) ->
+        v = []
+        for n in data.toString().split(" ")[2].split(".")
+            v.push(parseInt(n))
+        callback(v)
+
+stat = (p) ->
+    #statSync throws ENOENT errors on files that where deleted at symlink
+    #source
+    try
+        stats = fs.statSync(p)
+    catch err
+        unless err.code == "ENOENT"
+            throw(err)
+    return stats
 
 rmFilesInDirRecursive = (rm_path) ->
         files = fs.readdirSync(rm_path)
         for file in files
             p = join(rm_path,file)
-            #statSync throws ENOENT errors on files that where deleted at
-            #symlink source
-            try
-                stats = fs.statSync(p)
-            catch err
-                unless err.code == "ENOENT"
-                    throw(err)
+            stats = stat(p)
             if stats? && stats.isDirectory()
                 rmDirRecursive(p)
             else
@@ -102,11 +104,7 @@ rmFilesInDirRecursive = (rm_path) ->
                     console.log(err.message)
 
 rmDirRecursive = (rm_path) ->
-    try
-        stats = fs.statSync(rm_path)
-    catch err
-        unless err.code == "ENOENT"
-            throw(err)
+    stats = stat(rm_path)
     if stats? && stats.isDirectory()
         rmFilesInDirRecursive(rm_path)
         fs.rmdirSync(rm_path)
@@ -138,12 +136,12 @@ linkRecursiveAll = () ->
     linkRecursive(JS_PATH, JS_FIREFOX_DEST_PATH)
 
 coffee = (args, callback) ->
-    on_path "coffee",  ->
-        rmDirRecursive(JS_PATH)
-        ps = spawn "coffee", args, () ->
-            if callback? then callback()
+    isOnPath "coffee"
+    rmDirRecursive(JS_PATH)
+    ps = spawn "coffee", args, () ->
+        if callback? then callback()
 
-maybe_map = (version, args) ->
+maybeAddMap = (version, args) ->
     if version > [1,6,1]
         args.unshift("--map")
     else
@@ -154,85 +152,84 @@ maybe_map = (version, args) ->
 task "build"
     , "Make symlinks and compile coffeescript"
     , ->
-        get_version (version) ->
+        getVersion (version) ->
             args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
-            args = maybe_map(version,args)
+            args = maybeAddMap(version, args)
             coffee args, () ->
                 linkRecursiveAll()
 
 watch = (path, callback) ->
-    fs.watchFile(path, { persistent: true, interval: 1007 }, callback)
+    fs.watchFile(path, { persistent: true, interval: 1000 }, callback)
 
 task "watch"
     , "Make symlinks and re-compile coffeescript automatically, watching for
        changes"
     , ->
-        on_path "coffee",  ->
-            console.log("/Every move you make/")
-            watch HTML_PATH, ->
-                console.log("/Every html file you change/")
-                linkRecursive(HTML_PATH, HTML_FIREFOX_DEST_PATH)
-                linkRecursive(HTML_PATH, HTML_CHROME_DEST_PATH)
-            watch DATA_PATH, ->
-                console.log("/Every data file you change/")
-                linkRecursive(DATA_PATH, DATA_FIREFOX_DEST_PATH)
-                linkRecursive(DATA_PATH, DATA_CHROME_DEST_PATH)
-            watch IMAGES_PATH, ->
-                console.log("/Every image you change/")
-                linkRecursive(IMAGES_PATH, IMAGES_FIREFOX_DEST_PATH)
-                linkRecursive(IMAGES_PATH, IMAGES_CHROME_DEST_PATH)
-            watch LIBS_PATH, ->
-                console.log("/Every lib you change/")
-                linkRecursive(LIBS_PATH, LIBS_FIREFOX_DEST_PATH)
-                linkRecursive(LIBS_PATH, LIBS_CHROME_DEST_PATH)
-            get_version (version) ->
-                args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
-                args = maybe_map(version,args)
-                watch COFFEE_PATH, () ->
-                    console.log("/Every step you take/")
-                    coffee args, (code) ->
-                        if code == 0
-                            linkRecursive(JS_PATH, JS_FIREFOX_DEST_PATH)
-                            linkRecursive(JS_PATH, JS_CHROME_DEST_PATH)
+        isOnPath "coffee"
+        console.log("/Every move you make/")
+        watch HTML_PATH, ->
+            console.log("/Every html file you write/")
+            linkRecursive(HTML_PATH, HTML_FIREFOX_DEST_PATH)
+            linkRecursive(HTML_PATH, HTML_CHROME_DEST_PATH)
+        watch DATA_PATH, ->
+            console.log("/Every data file you change/")
+            linkRecursive(DATA_PATH, DATA_FIREFOX_DEST_PATH)
+            linkRecursive(DATA_PATH, DATA_CHROME_DEST_PATH)
+        watch IMAGES_PATH, ->
+            console.log("/Every image you draw/")
+            linkRecursive(IMAGES_PATH, IMAGES_FIREFOX_DEST_PATH)
+            linkRecursive(IMAGES_PATH, IMAGES_CHROME_DEST_PATH)
+        watch LIBS_PATH, ->
+            console.log("/Every lib you add/")
+            linkRecursive(LIBS_PATH, LIBS_FIREFOX_DEST_PATH)
+            linkRecursive(LIBS_PATH, LIBS_CHROME_DEST_PATH)
+        getVersion (version) ->
+            args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
+            args = maybeAddMap(version, args)
+            watch COFFEE_PATH, () ->
+                console.log("/Every step you take/")
                 coffee args, (code) ->
                     if code == 0
-                        linkRecursiveAll()
+                        linkRecursive(JS_PATH, JS_FIREFOX_DEST_PATH)
+                        linkRecursive(JS_PATH, JS_CHROME_DEST_PATH)
+            coffee args, (code) ->
+                if code == 0
+                    linkRecursiveAll()
 
 task "package"
     , "Make packages ready for distribution in ../"
     , ->
-        on_path "coffee", ->
-            on_path "cfx",  ->
-                args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
-                coffee args, () ->
-                    linkRecursiveAll()
-                    manifest = JSON.parse(fs.readFileSync(join(CHROME_PATH, "manifest.json")))
-                    chrome_name = "1clickBOM-chrome-v" + manifest.version
-                    chrome_tmp_path = join(ROOT_PATH,chrome_name)
-                    if fs.existsSync(chrome_tmp_path)
-                        rmDirRecursive(chrome_tmp_path)
-                    fs.mkdirSync(chrome_tmp_path)
-                    chrome_package_path = join(ROOT_PATH + "/../", chrome_name + ".zip")
-                    if fs.existsSync(chrome_package_path)
-                        fs.unlinkSync(chrome_package_path)
-                    linkRecursive(CHROME_PATH, chrome_tmp_path)
-                    spawn "zip", ["-r" , chrome_package_path, chrome_name], ->
-                        rmDirRecursive(chrome_tmp_path)
-                        fpackage = JSON.parse(fs.readFileSync(join(FIREFOX_PATH, "package.json")))
-                        firefox_name = "1clickBOM-firefox-v" + fpackage.version
-                        firefox_package_path = join(ROOT_PATH + "/../", firefox_name + ".xpi")
-                        spawn "cfx", ["--pkgdir=" + FIREFOX_PATH
-                                     , "--output-file=" + firefox_package_path
-                                     , "xpi"
-                                     ]
+        isOnPath "coffee"
+        isOnPath "zip"
+        isOnPath "cfx"
+        args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
+        coffee args, () ->
+            linkRecursiveAll()
+            manifest = JSON.parse(fs.readFileSync(join(CHROME_PATH, "manifest.json")))
+            chrome_name = "1clickBOM-chrome-v" + manifest.version
+            chrome_tmp_path = join(ROOT_PATH,chrome_name)
+            fs.mkdirSync(chrome_tmp_path)
+            chrome_package_path = join(ROOT_PATH + "/../", chrome_name + ".zip")
+            if fs.existsSync(chrome_package_path)
+                fs.unlinkSync(chrome_package_path)
+            linkRecursive(CHROME_PATH, chrome_tmp_path)
+            spawn "zip", ["-r" , chrome_package_path, chrome_name], ->
+                rmDirRecursive(chrome_tmp_path)
+                fpackage = JSON.parse(fs.readFileSync(join(FIREFOX_PATH, "package.json")))
+                firefox_name = "1clickBOM-firefox-v" + fpackage.version
+                firefox_package_path = join(ROOT_PATH + "/../", firefox_name + ".xpi")
+                spawn "cfx", ["--pkgdir=" + FIREFOX_PATH
+                             , "--output-file=" + firefox_package_path
+                             , "xpi"
+                             ]
 
 # this sends the extension to the auto-installer extension
 # https://addons.mozilla.org/en-US/firefox/addon/autoinstaller/
 # the 500 no-content error is normal
 task "reload-firefox"
-    , "Build a temporary xpi and send to the Firefox autoinstaller on port 8888"
+    , "Build a temporary xpi and send to the Firefox auto-installer on port 8888"
     , ->
-        on_path "cfx",  ->
-            on_path "wget",  ->
-                spawn "cfx", ["--pkgdir=" + FIREFOX_PATH, "--output-file=tmp.xpi", "xpi"], ->
-                    child_process.spawn "wget", ["--post-file=tmp.xpi", "http://localhost:8888/"]
+        isOnPath "cfx"
+        isOnPath "wget"
+        spawn "cfx", ["--pkgdir=" + FIREFOX_PATH, "--output-file=tmp.xpi", "xpi"], ->
+                child_process.spawn "wget", ["--post-file=tmp.xpi", "http://localhost:8888/"]
