@@ -11,7 +11,7 @@ COFFEE_DIR    = "src/coffee"
 HTML_DIR      = "src/html"
 DATA_DIR      = "src/data"
 LIBS_DIR      = "libs"
-TEST_LIBS_DIR = "test_framework"
+TEST_LIBS_DIR = "test_libs"
 IMAGES_DIR    = "images"
 CHROME_DIR    = "chrome"
 FIREFOX_DIR   = "firefox"
@@ -148,7 +148,6 @@ linkRecursive = (src_path, dest_path) ->
             else
                 fs.symlinkSync(p, join(dest_path, file))
 
-
 linkRecursiveDist = () ->
     rmDirRecursive(FIREFOX_PATH)
     rmDirRecursive(CHROME_PATH)
@@ -223,6 +222,10 @@ task "watch"
             console.log("/Every lib you add/")
             linkRecursive(LIBS_PATH, LIBS_FIREFOX_DEST_PATH)
             linkRecursive(LIBS_PATH, LIBS_CHROME_DEST_PATH)
+        watch TEST_LIBS_PATH, ->
+            console.log("/Every test lib you add/")
+            linkRecursive(TEST_LIBS_PATH, TEST_LIBS_FIREFOX_DEST_PATH)
+            linkRecursive(TEST_LIBS_PATH, TEST_LIBS_CHROME_DEST_PATH)
         watch EXAMPLES_PATH, ->
             console.log("/Every example you make/")
             linkRecursive(EXAMPLES_PATH, EXAMPLES_FIREFOX_DEST_PATH)
