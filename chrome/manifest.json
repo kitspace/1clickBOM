@@ -3,7 +3,7 @@
 
     "name": "1clickBOM",
     "description": "Populates shopping carts for you on sites like Digikey and Mouser.",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "homepage_url":"http://1clickBOM.com",
     "permissions": [
         "tabs", "cookies", "clipboardRead", "storage", "notifications",
