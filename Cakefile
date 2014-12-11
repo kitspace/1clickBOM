@@ -120,14 +120,14 @@ stat = (p) ->
     return stats
 
 rmFilesInDirRecursive = (rm_path) ->
-        files = fs.readdirSync(rm_path)
-        for file in files
-            p = join(rm_path,file)
-            stats = stat(p)
-            if stats? && stats.isDirectory()
-                rmDirRecursive(p)
-            else
-                fs.unlinkSync(p)
+    files = fs.readdirSync(rm_path)
+    for file in files
+        p = join(rm_path,file)
+        stats = stat(p)
+        if stats? && stats.isDirectory()
+            rmDirRecursive(p)
+        else
+            fs.unlinkSync(p)
 
 rmDirRecursive = (rm_path) ->
     stats = stat(rm_path)
@@ -136,17 +136,17 @@ rmDirRecursive = (rm_path) ->
         fs.rmdirSync(rm_path)
 
 linkRecursive = (src_path, dest_path) ->
-    if fs.statSync(src_path).isDirectory()
-        unless fs.existsSync(dest_path)
-            fs.mkdirSync(dest_path)
-        files = fs.readdirSync(src_path)
-        for file in files
-            p = join(src_path,file)
-            stats = fs.statSync(p)
-            if stats? && stats.isDirectory()
-                linkRecursive(p, join(dest_path, file))
-            else
-                fs.symlinkSync(p, join(dest_path, file))
+    unless fs.existsSync(dest_path)
+        console.log(dest_path)
+        fs.mkdirSync(dest_path)
+    files = fs.readdirSync(src_path)
+    for file in files
+        p = join(src_path,file)
+        stats = fs.statSync(p)
+        if stats? && stats.isDirectory()
+            linkRecursive(p, join(dest_path, file))
+        else
+            fs.symlinkSync(p, join(dest_path, file))
 
 linkRecursiveDist = () ->
     rmDirRecursive(FIREFOX_PATH)
@@ -205,6 +205,7 @@ task "watch"
        changes"
     , ->
         isOnPath "coffee"
+        linkRecursiveAll()
         console.log("/Every move you make/")
         watch HTML_PATH, ->
             console.log("/Every html file you write/")
