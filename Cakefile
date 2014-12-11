@@ -137,7 +137,6 @@ rmDirRecursive = (rm_path) ->
 
 linkRecursive = (src_path, dest_path) ->
     unless fs.existsSync(dest_path)
-        console.log(dest_path)
         fs.mkdirSync(dest_path)
     files = fs.readdirSync(src_path)
     for file in files
@@ -254,11 +253,11 @@ uglifyRecursive = (callback) ->
             if stats? && stats.isDirectory()
                 uglifyRecursive p, join(dest_path, file), ()->
                     count--
-                    if count == 0 && callback then callback()
+                    if count == 0 && callback? then callback()
             else
                 spawn "uglifyjs2", ["--overwrite", p], () ->
                     count--
-                    if count == 0 && callback then callback()
+                    if count == 0 && callback? then callback()
 
 task "package"
     , "Make packages ready for distribution in " + PACKAGE_DIR
