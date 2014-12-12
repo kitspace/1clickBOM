@@ -55,18 +55,16 @@ If you need any help or think you found a bug please get in touch via
 
 ## Roadmap ##
 
-* 0.1
-    * Chrome support
-    * Digikey, Mouser, Farnell, Newark and RS
-    * Allow clearing and viewing individual carts
-    * Paste TSV or visit online `.tsv` file
-    * Auto-merge multiple entries of the same component
-
 * 0.2
     * Firefox support
 
 * 0.3
-    * Allied and Arrow
+    * Multiple retailers per item
+    * Named columns
+    * Preferred retailer rankings
+
+* 0.4
+    * Allied, Arrow, AVNet
     * Display cart summaries
     * Warn about filling already filled carts
     * Allow adding components to BOM from the component page
@@ -74,8 +72,6 @@ If you need any help or think you found a bug please get in touch via
 
 * 1.0
     * Function to minimize order cost + shipping
-    * Allow for multiple vendors per item
-    * Allow additional unused fields in TSV, named columns?
     * Autofind same items from different vendors
 
 * 2.0
