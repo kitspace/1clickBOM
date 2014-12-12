@@ -101,7 +101,7 @@ isOnPath = (exe) ->
         present ||= fs.existsSync(join(value,exe))
     unless present
         console.log("'" + exe + "'" + " can't be found in your $PATH.")
-        process.exit(-1)
+        process.exit(1)
 
 getVersion = (callback)->
     isOnPath "coffee"
@@ -178,12 +178,6 @@ linkRecursiveAll = () ->
     linkRecursive(EXAMPLES_PATH, EXAMPLES_CHROME_DEST_PATH)
     linkRecursive(EXAMPLES_PATH, EXAMPLES_FIREFOX_DEST_PATH)
 
-compile = (args, callback) ->
-    isOnPath "coffee"
-    rmDirRecursive(JS_PATH)
-    ps = spawn "coffee", args, () ->
-        if callback? then callback()
-
 maybeAddMap = (version, args) ->
     if version > [1,6,1]
         args.unshift("--map")
@@ -192,14 +186,24 @@ maybeAddMap = (version, args) ->
                      CoffeeScript version is < 1.6.1")
     return args
 
+compile = (add_map, callback) ->
+    isOnPath "coffee"
+    rmDirRecursive(JS_PATH)
+    getVersion (version) ->
+        args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
+        if add_map
+            args = maybeAddMap(version, args)
+        ps = spawn "coffee", args, (code) ->
+            if code == 0
+                if callback? then callback()
+            else
+                process.exit(2)
+
 task "build"
     , "Make symlinks and compile coffeescript"
     , ->
-        getVersion (version) ->
-            args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
-            args = maybeAddMap(version, args)
-            compile args, () ->
-                linkRecursiveAll()
+        compile true, () ->
+            linkRecursiveAll()
 
 watch = (path, callback) ->
     fs.watchFile(path, { persistent: true, interval: 1000 }, callback)
@@ -208,45 +212,38 @@ task "watch"
     , "Make symlinks and re-compile coffeescript automatically, watching for
        changes"
     , ->
-        isOnPath "coffee"
-        linkRecursiveAll()
-        console.log("/Every move you make/")
-        watch HTML_PATH, ->
-            console.log("/Every html file you write/")
-            linkRecursive(HTML_PATH, HTML_FIREFOX_DEST_PATH)
-            linkRecursive(HTML_PATH, HTML_CHROME_DEST_PATH)
-        watch DATA_PATH, ->
-            console.log("/Every data file you change/")
-            linkRecursive(DATA_PATH, DATA_FIREFOX_DEST_PATH)
-            linkRecursive(DATA_PATH, DATA_CHROME_DEST_PATH)
-        watch IMAGES_PATH, ->
-            console.log("/Every image you draw/")
-            linkRecursive(IMAGES_PATH, IMAGES_FIREFOX_DEST_PATH)
-            linkRecursive(IMAGES_PATH, IMAGES_CHROME_DEST_PATH)
-        watch LIBS_PATH, ->
-            console.log("/Every lib you add/")
-            linkRecursive(LIBS_PATH, LIBS_FIREFOX_DEST_PATH)
-            linkRecursive(LIBS_PATH, LIBS_CHROME_DEST_PATH)
-        watch TEST_LIBS_PATH, ->
-            console.log("/Every test lib you add/")
-            linkRecursive(TEST_LIBS_PATH, TEST_LIBS_FIREFOX_DEST_PATH)
-            linkRecursive(TEST_LIBS_PATH, TEST_LIBS_CHROME_DEST_PATH)
-        watch EXAMPLES_PATH, ->
-            console.log("/Every example you make/")
-            linkRecursive(EXAMPLES_PATH, EXAMPLES_FIREFOX_DEST_PATH)
-            linkRecursive(EXAMPLES_PATH, EXAMPLES_CHROME_DEST_PATH)
-        getVersion (version) ->
-            args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
-            args = maybeAddMap(version, args)
-            watch COFFEE_PATH, () ->
+        compile true, ->
+            linkRecursiveAll()
+            console.log("/Every move you make/")
+            watch HTML_PATH, ->
+                console.log("/Every html file you write/")
+                linkRecursive(HTML_PATH, HTML_FIREFOX_DEST_PATH)
+                linkRecursive(HTML_PATH, HTML_CHROME_DEST_PATH)
+            watch DATA_PATH, ->
+                console.log("/Every data file you change/")
+                linkRecursive(DATA_PATH, DATA_FIREFOX_DEST_PATH)
+                linkRecursive(DATA_PATH, DATA_CHROME_DEST_PATH)
+            watch IMAGES_PATH, ->
+                console.log("/Every image you draw/")
+                linkRecursive(IMAGES_PATH, IMAGES_FIREFOX_DEST_PATH)
+                linkRecursive(IMAGES_PATH, IMAGES_CHROME_DEST_PATH)
+            watch LIBS_PATH, ->
+                console.log("/Every lib you add/")
+                linkRecursive(LIBS_PATH, LIBS_FIREFOX_DEST_PATH)
+                linkRecursive(LIBS_PATH, LIBS_CHROME_DEST_PATH)
+            watch TEST_LIBS_PATH, ->
+                console.log("/Every test lib you add/")
+                linkRecursive(TEST_LIBS_PATH, TEST_LIBS_FIREFOX_DEST_PATH)
+                linkRecursive(TEST_LIBS_PATH, TEST_LIBS_CHROME_DEST_PATH)
+            watch EXAMPLES_PATH, ->
+                console.log("/Every example you make/")
+                linkRecursive(EXAMPLES_PATH, EXAMPLES_FIREFOX_DEST_PATH)
+                linkRecursive(EXAMPLES_PATH, EXAMPLES_CHROME_DEST_PATH)
+            watch COFFEE_PATH, ->
                 console.log("/Every step you take/")
-                compile args, (code) ->
-                    if code == 0
-                        linkRecursive(JS_PATH, JS_FIREFOX_DEST_PATH)
-                        linkRecursive(JS_PATH, JS_CHROME_DEST_PATH)
-            compile args, (code) ->
-                if code == 0
-                    linkRecursiveAll()
+                compile true, ->
+                    linkRecursive(JS_PATH, JS_FIREFOX_DEST_PATH)
+                    linkRecursive(JS_PATH, JS_CHROME_DEST_PATH)
 
 uglifyRecursive = (callback) ->
     if fs.statSync(JS_PATH).isDirectory()
@@ -271,8 +268,7 @@ task "package"
         isOnPath "zip"
         isOnPath "cfx"
         isOnPath "uglifyjs2"
-        args = ["--output", JS_PATH,"--compile", COFFEE_PATH]
-        compile args, () ->
+        compile false, ->
             rmDirRecursive(JS_TESTS_PATH)
             uglifyRecursive () ->
                 linkRecursiveDist()
