@@ -32,6 +32,7 @@ TEST_LIBS_CHROME_DEST_DIR = "libs"
 IMAGES_CHROME_DEST_DIR    = "images"
 JS_CHROME_DEST_DIR        = "js"
 TEST_LIBS_CHROME_DEST_DIR = "libs"
+FIREFOX_MAIN_JS        = "js/firefox_main.js"
 
 HTML_FIREFOX_DEST_DIR      = "data/html"
 DATA_FIREFOX_DEST_DIR      = "data/data"
@@ -39,7 +40,8 @@ EXAMPLES_FIREFOX_DEST_DIR  = "data/examples"
 LIBS_FIREFOX_DEST_DIR      = "data/libs"
 TEST_LIBS_FIREFOX_DEST_DIR = "data/libs"
 IMAGES_FIREFOX_DEST_DIR    = "data/images"
-JS_FIREFOX_DEST_DIR        = "lib"
+JS_FIREFOX_DEST_DIR        = "data/js"
+FIREFOX_MAIN_DEST_DIR      = "lib"
 
 FIREFOX_PORT = "8888"
 
@@ -57,6 +59,7 @@ JS_TESTS_PATH  = join(ROOT_PATH, JS_TESTS_DIR)
 EXAMPLES_PATH  = join(ROOT_PATH, EXAMPLES_DIR)
 CHROME_MANIFEST_PATH  = join(ROOT_PATH, CHROME_MANIFEST)
 FIREFOX_MANIFEST_PATH = join(ROOT_PATH, FIREFOX_MANIFEST)
+FIREFOX_MAIN_JS_PATH = join(ROOT_PATH, FIREFOX_MAIN_JS)
 
 HTML_CHROME_DEST_PATH      = join(CHROME_PATH, HTML_CHROME_DEST_DIR)
 DATA_CHROME_DEST_PATH      = join(CHROME_PATH, DATA_CHROME_DEST_DIR)
@@ -75,7 +78,7 @@ IMAGES_FIREFOX_DEST_PATH    = join(FIREFOX_PATH, IMAGES_FIREFOX_DEST_DIR)
 JS_FIREFOX_DEST_PATH        = join(FIREFOX_PATH, JS_FIREFOX_DEST_DIR)
 EXAMPLES_FIREFOX_DEST_PATH  = join(FIREFOX_PATH, EXAMPLES_FIREFOX_DEST_DIR)
 FIREFOX_MANIFEST_DEST_PATH  = join(FIREFOX_PATH, "package.json")
-
+FIREFOX_MAIN_JS_DEST_PATH  = join(FIREFOX_PATH + "/" + FIREFOX_MAIN_DEST_DIR , "main.js")
 
 log = (data)->
   console.log data.toString()
@@ -141,20 +144,22 @@ linkRecursive = (src_path, dest_path) ->
     files = fs.readdirSync(src_path)
     for file in files
         p = join(src_path,file)
-        stats = fs.statSync(p)
+        stats = stat(p)
         if stats? && stats.isDirectory()
             linkRecursive(p, join(dest_path, file))
-        else
-            fs.symlinkSync(p, join(dest_path, file))
+        else unless fs.existsSync(join(dest_path, file))
+                fs.symlinkSync(p, join(dest_path, file))
 
 linkRecursiveDist = () ->
     rmDirRecursive(FIREFOX_PATH)
     rmDirRecursive(CHROME_PATH)
     fs.mkdirSync(FIREFOX_PATH)
     fs.mkdirSync(join(FIREFOX_PATH, "data"))
+    fs.mkdirSync(join(FIREFOX_PATH, "lib"))
     fs.mkdirSync(CHROME_PATH)
     fs.symlinkSync(CHROME_MANIFEST_PATH, CHROME_MANIFEST_DEST_PATH)
     fs.symlinkSync(FIREFOX_MANIFEST_PATH, FIREFOX_MANIFEST_DEST_PATH)
+    fs.symlinkSync(FIREFOX_MAIN_JS_PATH, FIREFOX_MAIN_JS_DEST_PATH)
     linkRecursive(HTML_PATH, HTML_CHROME_DEST_PATH)
     linkRecursive(HTML_PATH, HTML_FIREFOX_DEST_PATH)
     linkRecursive(DATA_PATH, DATA_CHROME_DEST_PATH)

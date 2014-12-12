@@ -65,6 +65,7 @@ disable_till_you_win = (button, check_val) ->
 browser.getBackgroundPage (bkgd_page) ->
     window.bkgd_page = bkgd_page
     document.querySelector("#paste").addEventListener "click", ()->
+        console.log("pasta")
         window.bkgd_page.paste()
 
     #Ctrl-V event
