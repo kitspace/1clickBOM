@@ -59,15 +59,17 @@ class window.RetailerInterface
             @language = data.language[country_code_lookedup]
 
         @additem_params = data.additem_params
-        @site = data.sites[country_code_lookedup]
-        @name = name + " " + country_code_lookedup
+        @site           = data.sites[country_code_lookedup]
+        @name           = name + " " + country_code_lookedup
         @interface_name = name
-        @adding_items = false
-        @clearing_cart = false
-        @icon_src = "http://g.etfv.co/" + "http" + @site
-        #this puts the image in cache but also uses our backup if g.etfv.co fails
+        @adding_items   = false
+        @clearing_cart  = false
+        @icon_src       = "http://www.google.com/s2/favicons?domain=http" + @site
+        #this puts the image in cache but also uses our backup if
+        #google.com/s2/favicons fails
         get @icon_src, {notify:false},  (event) =>
-            if md5(event.target.response) == "a8aca8c8c4780cbe1acd774799f326e8" #failure response image
+            #failure response image
+            if md5(event.target.response) == "6e2001c87afacf376c7df4a011376511"
                 @icon_src = chrome.extension.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
         , () =>
             @icon_src = chrome.extension.getURL("/images/" + @interface_name.toLowerCase() + ".ico")

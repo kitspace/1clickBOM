@@ -68,7 +68,7 @@
         "*://*.digikey.sg/*",
         "*://*.digikey.tw/*",
         "*://*.digikey.co.uk/*",
-        "*://g.etfv.co/*",
+        "*://*.google.com/*",
         "*://freegeoip.net/*",
         "*://*/*.tsv"
     ],
