@@ -17,7 +17,6 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-countries_data = get_local("/data/countries.json")
 window.paste = () ->
     textarea = document.getElementById("pastebox")
     textarea.select()
@@ -25,19 +24,26 @@ window.paste = () ->
     bom_manager.addToBOM(textarea.value)
 
 get_location = (callback) ->
+    countries_data = get_local("/data/countries.json")
+    @used_country_codes = []
+    for _,code of countries_data
+        @used_country_codes.push(code)
     url = "https://freegeoip.net/json/"
-    get url, {timeout:10000}, (event) ->
+    get url, {}, (event) =>
         response = JSON.parse(event.target.responseText)
-        chrome.storage.local.set {country: countries_data[response.country_name]}, ()->
+        code = response.country_code
+        if code == "GB" then code = "UK"
+        if code not in @used_country_codes then code = "Other"
+        console.log(code)
+        chrome.storage.local.set {country: code}, ()->
             callback()
     , () ->
         callback()
 
 chrome.runtime.onInstalled.addListener (details)->
-    switch details.reason
-        when "install"
-            get_location () ->
-                chrome.tabs.create({"url": chrome.runtime.getURL("html/options.html")})
+    if details.reason == "install"
+        get_location () ->
+            chrome.tabs.create({"url": chrome.runtime.getURL("html/options.html")})
 
 window.bom_manager = new BomManager
 
