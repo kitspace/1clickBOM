@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>1clickBOM</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Sans;';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    #title {
+       font-size: 70px;
+       color: black;
+       font-weight:bold;
+       font-family: Sans; Helvetica;
+       }
+   #title > img {vertical-align:middle; height:300px; width:300px; }
+   a { color: blue; text-decoration:none;}
+   .screengrab {left:0px; top:0px;width:908px;height:681px;position:absolute}
+   .remark-slide-content { font-size: 30px;}
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+    </textarea>
+    <script src="remark-latest.min.js">
+    </script>
+    <script>
+        var source = document.getElementById("source");
+        var xhr = new XMLHttpRequest
+        get_local = function(url) {
+          var xhr;
+          xhr = new XMLHttpRequest();
+          xhr.open("GET", url, false);
+          xhr.send();
+          if (xhr.status === 200) {
+              return xhr.responseText;
+          }
+        };
+        source.innerHTML = get_local("presentation.md");
+    </script>
+    <script>
+    var slideshow = remark.create({
+      // Set the slideshow display ratio
+      // Default: '4:3'
+      // Alternatives: '16:9', ...
+      ratio: '4:3',
+
+      // Navigation options
+      navigation: {
+        // Enable or disable navigating using scroll
+        // Default: true
+        // Alternatives: false
+        scroll: true,
+
+        // Enable or disable navigation using touch
+        // Default: true
+        // Alternatives: false
+        touch: false,
+
+        // Enable or disable navigation using click
+        // Default: false
+        // Alternatives: true
+        click: false
+      },
+
+
+      // Customize slide number label, either using a format string..
+      //slideNumberFormat: 'Slide %current% of %total%',
+      // .. or by using a format function
+      //slideNumberFormat: function (current, total) {
+      //  if (current >= 8 && current <= 89) {
+      //      current = 7;
+      //  } else if (current > 89 && current <= 197) {
+      //      current = 8;
+      //  } else if (current > 197) {
+      //      current -= 191;
+      //  }
+      //  return current + ' / ' + total;
+      //}
+    });
+    setInterval(function(){
+        if (slideshow.getCurrentSlideIndex() === 5) {
+        console.log(slideshow.update());
+        }
+    },1000);
+    </script>
+  </body>
+</html>
