@@ -2,10 +2,15 @@
 
 [![Available on Chrome][8]](https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi) ![Firefox coming soon][9]
 
-1clickBOM is purchasing tool that let's you keep _one_ bill of materials (BOM)
+1-click BOM is a purchasing tool that let's you keep _one_ bill of materials (BOM)
 for items from _multiple_ retailers. It's a browser extension that fills your
 online shopping carts for you. To add items to 1clickBOM you simply paste from
 a spreadsheet or visit an online `.tsv` file.
+
+## News ##
+
+- [I gave a talk about 1clickBOM at FOSDEM this year](http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4)
+
 
 ## Which retailers? ##
 
