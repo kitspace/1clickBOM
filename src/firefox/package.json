@@ -6,6 +6,6 @@
   "author": "monostable",
   "license": "CPAL 1.0",
   "version": @version,
-  "icon": "images/logo48.png",
-  "main":"js/main"
+  "icon": "data/images/logo48.png",
+  "main":"data/js/main"
 }
