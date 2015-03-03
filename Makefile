@@ -12,9 +12,9 @@ COMMON_COFFEE_FILES  = $(call wildc_recursive, $(COMMON_COFFEE_DIR), *.coffee)
 FIREFOX_COFFEE_FILES = $(call wildc_recursive, $(FIREFOX_COFFEE_DIR), *.coffee)
 
 COMMON_COFFEE_CHROME_TARGET_FILES  = $(patsubst src/common/coffee/%.coffee, build/chrome/js/%.js, $(COMMON_COFFEE_FILES))
-CHROME_COFFEE_TARGET_FILES         = $(patsubst src/chrome/coffee/%.coffee, build/chrome/js/%.js, $(CHROME_COFFEE_FILES)) $(COMMON_COFFEE_CHROME_TARGET_FILES)
+CHROME_COFFEE_TARGET_FILES = $(patsubst src/chrome/coffee/%.coffee, build/chrome/js/%.js, $(CHROME_COFFEE_FILES)) $(COMMON_COFFEE_CHROME_TARGET_FILES)
 COMMON_COFFEE_FIREFOX_TARGET_FILES = $(patsubst src/common/coffee/%.coffee, build/firefox/js/%.js, $(COMMON_COFFEE_FILES))
-FIREFOX_COFFEE_TARGET_FILES        = $(patsubst src/firefox/coffee/%.coffee, build/firefox/js/%.js, $(FIREFOX_COFFEE_FILES)) $(COMMON_COFFEE_FIREFOX_TARGET_FILES)
+FIREFOX_COFFEE_TARGET_FILES = $(patsubst src/firefox/coffee/%.coffee, build/firefox/js/%.js, $(FIREFOX_COFFEE_FILES)) $(COMMON_COFFEE_FIREFOX_TARGET_FILES)
 
 CHROME_HTML_FILES  = $(wildcard src/chrome/html/*)
 COMMON_HTML_FILES  = $(wildcard src/common/html/*)
@@ -33,10 +33,12 @@ COMMON_DATA_FILES  = $(wildcard src/common/data/*)
 FIREFOX_DATA_FILES = $(wildcard src/firefox/data/*)
 
 SUB_DIRS = target/html target/js target/images target/libs target/data
+CHROME_DIRS  = build/chrome/.dirstamp $(patsubst target/%,build/chrome/%/.dirstamp, $(SUB_DIRS))
+FIREFOX_DIRS = build/firefox/.dirstamp $(patsubst target/%,build/firefox/%/.dirstamp, $(SUB_DIRS))
 
-all: dirs coffee images html libs data build/chrome/manifest.json
+all: dirs coffee images html libs data build/chrome/manifest.json build/firefox/package.json
 
-dirs: build/.dirstamp chrome_dirs firefox_dirs
+dirs: build/.dirstamp $(CHROME_DIRS) $(FIREFOX_DIRS)
 coffee: $(CHROME_COFFEE_TARGET_FILES) $(FIREFOX_COFFEE_TARGET_FILES)
 html: chrome_html firefox_html
 libs: chrome_libs firefox_libs
@@ -46,8 +48,8 @@ data: chrome_data firefox_data
 build/chrome/manifest.json: src/chrome/manifest.json
 	sed 's/@version/"$(VERSION)"/' $< > $@
 
-chrome_dirs  : build/chrome/.dirstamp $(patsubst target/%,build/chrome/%/.dirstamp, $(SUB_DIRS))
-firefox_dirs : build/firefox/.dirstamp $(patsubst target/%,build/firefox/%/.dirstamp, $(SUB_DIRS))
+build/firefox/package.json: src/firefox/package.json
+	sed 's/@version/"$(VERSION)"/' $< > $@
 
 build/chrome/js/%.js: $(CHROME_COFFEE_FILES) $(COMMON_COFFEE_FILES)
 	coffee -m -c -o build/chrome/js/ $(CHROME_COFFEE_DIR) $(COMMON_COFFEE_DIR)
@@ -66,6 +68,23 @@ firefox_images: dirs $(patsubst src/common/%, build/firefox/%, $(COMMON_IMAGE_FI
 
 chrome_data: dirs $(patsubst src/common/%, build/chrome/%, $(COMMON_DATA_FILES)) $(patsubst src/%, build/%, $(CHROME_DATA_FILES))
 firefox_data: dirs $(patsubst src/common/%, build/firefox/%, $(COMMON_DATA_FILES)) $(patsubst src/%, build/%, $(FIREFOX_DATA_FILES))
+
+watch:
+	@while true; do make | grep -v "^make\[1\]:"; sleep 1; done
+
+CHROME_PACKAGE_NAME = $(PACKAGE_NAME)-chrome
+
+package_chrome: all
+	cp -r build/chrome $(CHROME_PACKAGE_NAME)
+	rm -f $(patsubst build/chrome/%,$(CHROME_PACKAGE_NAME)/%,$(CHROME_DIRS))
+	zip -r $(CHROME_PACKAGE_NAME).zip $(CHROME_PACKAGE_NAME)/
+	rm -rf $(CHROME_PACKAGE_NAME)
+
+tmp.xpi: all
+	cfx --pkgdir=build/firefox --output-file=/tmp/tmp.xpi xpi
+
+reload-firefox: tmp.xpi
+	wget --post-file=/tmp/tmp.xpi "http://localhost:8888"
 
 %/.dirstamp:
 	mkdir $*
@@ -86,4 +105,4 @@ build/firefox/%: src/common/%
 clean:
 	rm -rf build
 
-.PHONY: all dirs chrome_dirs firefox_dirs coffee clean
+.PHONY: all dirs chrome_dirs firefox_dirs coffee clean watch package_chrome
