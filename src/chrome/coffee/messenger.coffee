@@ -17,30 +17,22 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-data = require("sdk/self").data
-
-window.browser = {
-    storageGet:(keys, callback) ->
-    storageSet:(obj, callback) ->
-    storageRemove:(key) ->
-    storageOnChanged:(callback) ->
-    tabsQuery:(obj, callback) ->
-    tabsUpdate:(tab_id, obj) ->
-    tabsReload:(tab_id) ->
-    tabsHighlight:(tab_numbers) ->
-    tabsCreate:(obj) ->
-    tabsOnUpdated:(callback) ->
-    cookiesGetAll: (obj, callback) ->
-    cookiesRemove: (obj, callback) ->
-    cookiesSet: (obj, callback) ->
-    getBackgroundPage: (callback) ->
-        bkgd_page = () ->
-        callback(bkgd_page)
-
-    getURL:(url) ->
-    onInstalled:(callback) ->
-    setBadge:(obj) ->
-        #if obj.color?
-        #if obj.text?
-    notificationsCreate:(obj, callback) ->
+window.messenger = {
+    send:(msgName, value, callback) ->
+        if callback?
+            fn = (@msgName, @callback) ->
+                    @listener = (request) =>
+                        if request.out? && request.out[0] == @msgName
+                            @callback(request.out[1])
+                            chrome.runtime.onMessage.removeListener(@listener)
+                    chrome.runtime.onMessage.addListener(@listener)
+            new fn(msgName, callback)
+        chrome.runtime.sendMessage {in:[msgName,value]}
+    on:(msgName, callback) ->
+        fn = (@msgName, @callback) ->
+            chrome.runtime.onMessage.addListener (request) =>
+                if request.in? && request.in[0] == @msgName
+                    @callback request.in[1], (value) =>
+                        chrome.runtime.sendMessage({out:[@msgName,value]})
+        new fn(msgName, callback)
 }

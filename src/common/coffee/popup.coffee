@@ -44,52 +44,53 @@ start_spinning = (link) ->
     link.hidden=true
     link.spinning=true
 
-spin_till_you_win = (link, retailer_name, check_val) ->
-    if window.bkgd_page.bom_manager.interfaces[retailer_name][check_val]
-        start_spinning(link)
-        id = setInterval () ->
-            if not window.bkgd_page.bom_manager.interfaces[retailer_name][check_val]
-                clearInterval(id)
-                stop_spinning(link)
-        , 10
+spin_till_you_win = (@link, @retailer_name, @check_field) ->
+    messenger.send "checkRetailer",{retailer:@retailer_name,field:@check_field}, (val) =>
+        if val
+            start_spinning(@link)
+            #@id = setInterval () =>
+            #    messenger.send "check",{retailer:@retailer_name,field:@check_field}, (val) =>
+            #        if val
+            #            clearInterval(@id)
+            #            stop_spinning(@link)
+            #, 1000
 
-disable_till_you_win = (button, check_val) ->
-    if window.bkgd_page.bom_manager[check_val]
-        button.disabled = true
-        id = setInterval () ->
-            if not window.bkgd_page.bom_manager[check_val]
-                clearInterval(id)
-                button.disabled = false
-        , 10
+disable_till_you_win = (@button, @check_field) ->
+    messenger.send "checkBomManager",@check_field, (val) =>
+        @button.disabled = true
+        #@id = setInterval () =>
+        #    messenger.send "checkBomManager",@check_field, (val) =>
+        #        if val
+        #            clearInterval(@id)
+        #            @button.disabled = false
+        #, 1000
 
-browser.getBackgroundPage (bkgd_page) ->
-    window.bkgd_page = bkgd_page
-    document.querySelector("#paste").addEventListener "click", ()->
-        console.log("pasta")
-        window.bkgd_page.paste()
+document.querySelector("#paste").addEventListener "click", ()->
+    messenger.send "paste", []
 
-    #Ctrl-V event
-    document.addEventListener 'keydown', (event) ->
-        if ((event.keyCode == 86) && (event.ctrlKey == true))
-            text = bkgd_page.paste()
-            window.bkgd_page.bom_manager.addToBOM(text)
+#Ctrl-V event
+document.addEventListener 'keydown', (event) ->
+    if ((event.keyCode == 86) && (event.ctrlKey == true))
+        text = bkgd_page.paste()
+        window.bkgd_page.bom_manager.addToBOM(text)
 
-    show_or_hide_buttons = (bom) ->
-        if (!bom)
-            bom = {}
-        document.querySelector("button#clear").hidden=!Boolean(Object.keys(bom).length)
-        document.querySelector("button#fill_carts").hidden=!Boolean(Object.keys(bom).length)
-        document.querySelector("button#empty_carts").hidden=!Boolean(Object.keys(bom).length)
-        document.querySelector("button#open_cart_tabs").hidden=!Boolean(Object.keys(bom).length)
-        document.querySelector("#bom").hidden=!Boolean(Object.keys(bom).length)
-        document.querySelector("button#load_from_page").hidden = not bkgd_page.tsvPageNotifier.onDotTSV
+show_or_hide_buttons = (bom, onDotTSV) ->
+    if (!bom)
+        bom = {}
+    document.querySelector("button#clear").hidden=!Boolean(Object.keys(bom).length)
+    document.querySelector("button#fill_carts").hidden=!Boolean(Object.keys(bom).length)
+    document.querySelector("button#empty_carts").hidden=!Boolean(Object.keys(bom).length)
+    document.querySelector("button#open_cart_tabs").hidden=!Boolean(Object.keys(bom).length)
+    document.querySelector("#bom").hidden=!Boolean(Object.keys(bom).length)
+    document.querySelector("button#load_from_page").hidden = !onDotTSV
 
-    rebuild_bom_view = (bom) ->
-        table = document.querySelector("#bom_list")
-        table.removeChild(table.lastChild) while table.hasChildNodes()
-        for retailer_name of bom
-            retailer = window.bkgd_page.bom_manager.interfaces[retailer_name]
-            items    = bom[retailer_name]
+rebuild_bom_view = (@bom) ->
+    console.log(@bom)
+    table = document.querySelector("#bom_list")
+    table.removeChild(table.lastChild) while table.hasChildNodes()
+    for retailer_name of @bom
+        messenger.send "getRetailer", retailer_name, (retailer) =>
+            items    = @bom[retailer.interface_name]
             no_of_items = 0
             for item in items
                 no_of_items += item.quantity
@@ -119,8 +120,8 @@ browser.getBackgroundPage (bkgd_page) ->
             for i in  [0..2]
                 td = document.createElement("td")
                 a = document.createElement("a")
-                a.value = retailer_name
-                a.title = titles[i] + retailer_name + " cart"
+                a.value = retailer.interface_name
+                a.title = titles[i] + retailer.interface_name + " cart"
                 a.href = "#"
                 span = document.createElement("span")
                 span.className = "button_icon"
@@ -132,55 +133,53 @@ browser.getBackgroundPage (bkgd_page) ->
 
             links[0].addEventListener "click", () ->
                 start_spinning(this)
-                window.bkgd_page.bom_manager.fillCart @value, () =>
+                messenger.send "fillCart", @value, () =>
                     stop_spinning(this)
 
             links[1].addEventListener "click", () ->
-                window.bkgd_page.bom_manager.openCart(@value)
+                messenger.send "openCart", @value
 
             links[2].addEventListener "click", () ->
                 start_spinning(this)
-                window.bkgd_page.bom_manager.emptyCart @value, () =>
+                messenger.send "emptyCart", @value, () =>
                     stop_spinning(this)
 
             table.appendChild(tr)
 
-            spin_till_you_win(links[0], retailer_name, "adding_items")
-            spin_till_you_win(links[2], retailer_name, "clearing_cart")
+            spin_till_you_win(links[0], retailer.interface_name, "adding_items")
+            spin_till_you_win(links[2], retailer.interface_name, "clearing_cart")
 
-    bom_changed = () ->
-        window.bkgd_page.bom_manager.getBOM (bom) ->
-            show_or_hide_buttons(bom)
-            rebuild_bom_view(bom)
+bom_changed = () ->
+    console.log("bom_changed")
+    messenger.send "getBOM", [], (obj) ->
+        console.log(obj)
+        show_or_hide_buttons(obj.bom, obj.onDotTSV)
+        rebuild_bom_view(obj.bom)
 
-
-    browser.storageOnChanged (changes, namespace) ->
-        bom_changed()
-
+messenger.on "bomChanged", (data, callback) ->
     bom_changed()
 
-    document.querySelector("button#clear").addEventListener "click", () ->
-        browser.storageRemove("bom")
+bom_changed()
 
-    document.querySelector("button#fill_carts").addEventListener "click", () ->
-        @disabled = true
-        window.bkgd_page.bom_manager.fillCarts () =>
-            @disabled = false
-        bom_changed()
-    disable_till_you_win(document.querySelector("#fill_carts"), "filling_carts")
+document.querySelector("button#clear").addEventListener "click", () ->
+    messenger.storageRemove("bom")
 
-    document.querySelector("button#empty_carts").addEventListener "click", () ->
-        @disabled = true
-        window.bkgd_page.bom_manager.emptyCarts () =>
-            @disabled = false
-        bom_changed()
-    disable_till_you_win(document.querySelector("#empty_carts"), "emptying_carts")
+document.querySelector("button#fill_carts").addEventListener "click", () ->
+    @disabled = true
+    messenger.send "fillCarts",[], () =>
+        @disabled = false
+    bom_changed()
+disable_till_you_win(document.querySelector("#fill_carts"), "filling_carts")
 
-    document.querySelector("button#open_cart_tabs").addEventListener "click", () ->
-        window.bkgd_page.bom_manager.openCarts()
+document.querySelector("button#empty_carts").addEventListener "click", () ->
+    @disabled = true
+    messenger.send "emptyCarts",[], () =>
+        @disabled = false
+    bom_changed()
+disable_till_you_win(document.querySelector("#empty_carts"), "emptying_carts")
 
-    document.querySelector("button#load_from_page").addEventListener "click", () ->
-        window.bkgd_page.tsvPageNotifier.addToBOM()
+document.querySelector("button#open_cart_tabs").addEventListener "click", () ->
+    messenger.send "openCarts",[]
 
-
-
+document.querySelector("button#load_from_page").addEventListener "click", () ->
+    messenger.send "addFromPage",[]

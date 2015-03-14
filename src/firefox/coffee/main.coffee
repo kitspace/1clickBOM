@@ -4,10 +4,10 @@ data = require("sdk/self").data
 
 popup = require("sdk/panel").Panel({
     contentURL: data.url("html/popup.html")
-    contentScriptFile: [data.url("js/browser.js")
-                       , data.url("js/util.js")
-                       , data.url("js/popup.js")
-                       ]
+    #contentScriptFile: [ data.url("js/browser.js")
+    #                   , data.url("js/util.js")
+    #                   , data.url("js/popup.js")
+    #                   ]
 })
 
 button = ActionButton({

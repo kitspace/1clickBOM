@@ -83,7 +83,7 @@ package_chrome: all
 tmp.xpi: all
 	cfx --pkgdir=build/firefox --output-file=/tmp/tmp.xpi xpi
 
-reload-firefox: tmp.xpi
+load-firefox: tmp.xpi
 	wget --post-file=/tmp/tmp.xpi "http://localhost:8888" || return 0
 
 %/.dirstamp:

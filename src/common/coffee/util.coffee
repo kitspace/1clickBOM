@@ -16,36 +16,6 @@
 #
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
-
-window.browser = new Browser
-
-class Badge
-    constructor:() ->
-        @decaying_set = false
-        @priority = 0
-        @default_text = ""
-        @default_color = "#0000FF"
-        window.browser.setBadge({text:@default_text})
-    setDecaying: (text, color="#0000FF", priority = 1) ->
-        if priority >= @priority
-            if @decaying_set && @id > 0
-                clearTimeout(@id)
-            @_set(text, color, priority)
-            @id = setTimeout () =>
-                @decaying_set = false
-                @_set(@default_text, @default_color, 0)
-            , 5000
-    setDefault: (text, color="#0000FF", priority = 0) ->
-        if priority >= @priority
-            @_set(text, color, priority)
-        @default_color = color
-        @default_text = text
-    _set: (text, color, priority) ->
-        window.browser.setBadge({color:color, text:text})
-        @priority = priority
-
-window.badge = new Badge
-
 window.get_local = (url, json=true)->
     xhr = new XMLHttpRequest()
     xhr.open("GET", window.browser.getURL(url), false)
