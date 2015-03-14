@@ -95,6 +95,12 @@ class TSVPageNotifier
             if @onDotTSV
                 window.bom_manager._add_to_bom(@items, @invalid)
 
+count = 0
+
+guid = () ->
+    count += 1
+    return count
+
 window.tsvPageNotifier = new TSVPageNotifier
 
 messenger.on "checkRetailer", (obj, callback) ->
@@ -132,6 +138,4 @@ messenger.on "addFromPage", (_) ->
     tsvPageNotifier.addToBOM()
 
 messenger.on "paste", (_) ->
-    console.log("paste")
     paste()
-

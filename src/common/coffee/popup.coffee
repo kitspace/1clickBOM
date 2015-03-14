@@ -48,25 +48,26 @@ spin_till_you_win = (@link, @retailer_name, @check_field) ->
     messenger.send "checkRetailer",{retailer:@retailer_name,field:@check_field}, (val) =>
         if val
             start_spinning(@link)
-            #@id = setInterval () =>
-            #    messenger.send "check",{retailer:@retailer_name,field:@check_field}, (val) =>
-            #        if val
-            #            clearInterval(@id)
-            #            stop_spinning(@link)
-            #, 1000
+            @id = setInterval () =>
+                messenger.send "check",{retailer:@retailer_name,field:@check_field}, (val) =>
+                    if val
+                        clearInterval(@id)
+                        stop_spinning(@link)
+            , 1000
 
 disable_till_you_win = (@button, @check_field) ->
     messenger.send "checkBomManager",@check_field, (val) =>
-        @button.disabled = true
-        #@id = setInterval () =>
-        #    messenger.send "checkBomManager",@check_field, (val) =>
-        #        if val
-        #            clearInterval(@id)
-        #            @button.disabled = false
-        #, 1000
+        if val
+            @button.disabled = true
+            @id = setInterval () =>
+                messenger.send "checkBomManager",@check_field, (val) =>
+                    if val
+                        clearInterval(@id)
+                        @button.disabled = false
+            , 1000
 
 document.querySelector("#paste").addEventListener "click", ()->
-    messenger.send "paste", []
+    messenger.send "paste", 0
 
 #Ctrl-V event
 document.addEventListener 'keydown', (event) ->
@@ -85,7 +86,6 @@ show_or_hide_buttons = (bom, onDotTSV) ->
     document.querySelector("button#load_from_page").hidden = !onDotTSV
 
 rebuild_bom_view = (@bom) ->
-    console.log(@bom)
     table = document.querySelector("#bom_list")
     table.removeChild(table.lastChild) while table.hasChildNodes()
     for retailer_name of @bom
@@ -150,9 +150,7 @@ rebuild_bom_view = (@bom) ->
             spin_till_you_win(links[2], retailer.interface_name, "clearing_cart")
 
 bom_changed = () ->
-    console.log("bom_changed")
-    messenger.send "getBOM", [], (obj) ->
-        console.log(obj)
+    messenger.send "getBOM", 0, (obj) ->
         show_or_hide_buttons(obj.bom, obj.onDotTSV)
         rebuild_bom_view(obj.bom)
 
@@ -166,20 +164,20 @@ document.querySelector("button#clear").addEventListener "click", () ->
 
 document.querySelector("button#fill_carts").addEventListener "click", () ->
     @disabled = true
-    messenger.send "fillCarts",[], () =>
+    messenger.send "fillCarts",0, () =>
         @disabled = false
     bom_changed()
 disable_till_you_win(document.querySelector("#fill_carts"), "filling_carts")
 
 document.querySelector("button#empty_carts").addEventListener "click", () ->
     @disabled = true
-    messenger.send "emptyCarts",[], () =>
+    messenger.send "emptyCarts",0, () =>
         @disabled = false
     bom_changed()
 disable_till_you_win(document.querySelector("#empty_carts"), "emptying_carts")
 
 document.querySelector("button#open_cart_tabs").addEventListener "click", () ->
-    messenger.send "openCarts",[]
+    messenger.send "openCarts",0
 
 document.querySelector("button#load_from_page").addEventListener "click", () ->
-    messenger.send "addFromPage",[]
+    messenger.send "addFromPage",0

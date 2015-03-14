@@ -18,21 +18,22 @@
 # the Original Code is Kaspar Emanuel.
 
 window.messenger = {
-    send:(msgName, value, callback) ->
+    send:(msgName, input, callback) ->
         if callback?
-            fn = (@msgName, @callback) ->
-                    @listener = (request) =>
-                        if request.out? && request.out[0] == @msgName
-                            @callback(request.out[1])
+            fn = (@msgName, @input, @callback) ->
+                    @listener = (request, sender) =>
+                        if request.out? && request.out[0] == @msgName && request.out[1] == @input
+                            @callback(request.out[2])
                             chrome.runtime.onMessage.removeListener(@listener)
                     chrome.runtime.onMessage.addListener(@listener)
-            new fn(msgName, callback)
-        chrome.runtime.sendMessage {in:[msgName,value]}
+            new fn(msgName, input, callback)
+        chrome.runtime.sendMessage {in:[msgName,input]}
     on:(msgName, callback) ->
         fn = (@msgName, @callback) ->
-            chrome.runtime.onMessage.addListener (request) =>
+            chrome.runtime.onMessage.addListener (request,sender) =>
                 if request.in? && request.in[0] == @msgName
+                    @input = request.in[1]
                     @callback request.in[1], (value) =>
-                        chrome.runtime.sendMessage({out:[@msgName,value]})
+                        chrome.runtime.sendMessage({out:[@msgName,@input,value]})
         new fn(msgName, callback)
 }
