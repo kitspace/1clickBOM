@@ -44,27 +44,29 @@ start_spinning = (link) ->
     link.hidden=true
     link.spinning=true
 
-spin_till_you_win = (@link, @retailer_name, @check_field) ->
-    messenger.send "checkRetailer",{retailer:@retailer_name,field:@check_field}, (val) =>
-        if val
-            start_spinning(@link)
+spin_till_you_win = (link_element, retailer_name, check_field) ->
+    console.log(link_element.id)
+    messenger.send "checkRetailer",{link:link_element.id, retailer:retailer_name,field:check_field}, (obj) ->
+        console.log(obj.link, obj.value)
+        if obj.value
+            start_spinning(document.getElementById(obj.link))
             @id = setInterval () =>
-                messenger.send "check",{retailer:@retailer_name,field:@check_field}, (val) =>
-                    if val
+                messenger.send "checkRetailer",{retailer:retailer_name,field:check_field}, (obj) =>
+                    if obj.value
                         clearInterval(@id)
-                        stop_spinning(@link)
+                        stop_spinning(document.getElementById(obj.link))
             , 1000
 
 disable_till_you_win = (@button, @check_field) ->
-#    messenger.send "checkBomManager",@check_field, (val) =>
-#        if val
-#            @button.disabled = true
-#            @id = setInterval () =>
-#                messenger.send "checkBomManager",@check_field, (val) =>
-#                    if val
-#                        clearInterval(@id)
-#                        @button.disabled = false
-#            , 1000
+    messenger.send "checkBomManager",@check_field, (val) =>
+        if val
+            @button.disabled = true
+            @id = setInterval () =>
+                messenger.send "checkBomManager",@check_field, (val) =>
+                    if val
+                        clearInterval(@id)
+                        @button.disabled = false
+            , 1000
 
 document.querySelector("#paste").addEventListener "click", ()->
     messenger.send "paste", 0
@@ -90,7 +92,7 @@ rebuild_bom_view = (@bom) ->
     table.removeChild(table.lastChild) while table.hasChildNodes()
     for retailer_name of @bom
         messenger.send "getRetailer", retailer_name, (retailer) =>
-            items    = @bom[retailer.interface_name]
+            items = @bom[retailer.interface_name]
             no_of_items = 0
             for item in items
                 no_of_items += item.quantity
@@ -123,6 +125,7 @@ rebuild_bom_view = (@bom) ->
                 a.value = retailer.interface_name
                 a.title = titles[i] + retailer.interface_name + " cart"
                 a.href = "#"
+                a.id = "link-" + retailer.interface_name + "-" + i
                 span = document.createElement("span")
                 span.className = "button_icon"
                 span.innerText = unicode_chars[i]
@@ -151,7 +154,6 @@ rebuild_bom_view = (@bom) ->
 
 bom_changed = () ->
     messenger.send "getBOM", 0, (obj) ->
-        console.log(obj)
         show_or_hide_buttons(obj.bom, obj.onDotTSV)
         rebuild_bom_view(obj.bom)
 

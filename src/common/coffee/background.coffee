@@ -106,7 +106,7 @@ window.tsvPageNotifier = new TSVPageNotifier
 receiver = new Receiver
 
 receiver.on "checkRetailer", (obj, callback) ->
-    callback(bom_manager.interfaces[obj.retailer][obj.field])
+    callback({link:obj.link, value:bom_manager.interfaces[obj.retailer][obj.field]})
 
 receiver.on "checkBomManager", (field, callback) ->
     callback(bom_manager[field])
