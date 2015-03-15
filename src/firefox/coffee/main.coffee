@@ -1,13 +1,14 @@
 { ActionButton } = require("sdk/ui/button/action")
 
 data = require("sdk/self").data
+browser = require("data/js/browser").browser
 
 popup = require("sdk/panel").Panel({
     contentURL: data.url("html/popup.html")
-    #contentScriptFile: [ data.url("js/browser.js")
-    #                   , data.url("js/util.js")
-    #                   , data.url("js/popup.js")
-    #                   ]
+    contentScriptFile: [ data.url("js/util.js")
+                       , data.url("js/messenger.js")
+                       , data.url("js/popup.js")
+                       ]
 })
 
 button = ActionButton({
@@ -21,4 +22,20 @@ button = ActionButton({
         popup.show({position:button})
 })
 
-console.log("yooo")
+browser.storageOnChanged (changes) ->
+    if changes.country || changes.settings
+        console.log("WRONG!")
+    else if changes.bom
+        console.log("WRIGHT!")
+
+browser.storageSet({bom:{farnell:[1,2,3]}})
+
+browser.storageGet ["bom"], (obj) ->
+    console.log("obj", obj)
+
+browser.storageRemove "bom"
+
+browser.storageGet ["bom"], (obj) ->
+    console.log("obj2", obj)
+
+console.log("1clickBOM main loaded")

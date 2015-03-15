@@ -17,13 +17,33 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-data = require("sdk/self").data
+storage = require("sdk/simple-storage").storage
 
-window.browser =
+storageListeners = []
+browser =
     storageGet:(keys, callback) ->
+        ret = {}
+        console.log(storage)
+        for k in keys
+            ret[k] = storage[k]
+        callback(ret)
     storageSet:(obj, callback) ->
+        for k of obj
+            storage[k] = obj[k]
+        for listener in storageListeners
+            listener(obj)
+        if callback?
+            callback()
     storageRemove:(key, callback) ->
+        delete storage[key]
+        obj = {}
+        obj[key] = undefined
+        for listener in storageListeners
+            listener(obj)
+        if callback?
+            callback()
     storageOnChanged:(callback) ->
+        storageListeners.push(callback)
     tabsQuery:(obj, callback) ->
     tabsUpdate:(tab_id, obj) ->
     tabsReload:(tab_id) ->
@@ -37,3 +57,7 @@ window.browser =
     onInstalled:(callback) ->
     setBadge:(obj) ->
     notificationsCreate:(obj, callback) ->
+
+console.log "browser.js loaded"
+
+exports.browser = browser
