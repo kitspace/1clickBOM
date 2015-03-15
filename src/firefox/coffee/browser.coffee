@@ -19,10 +19,10 @@
 
 data = require("sdk/self").data
 
-window.browser = {
+window.browser =
     storageGet:(keys, callback) ->
     storageSet:(obj, callback) ->
-    storageRemove:(key) ->
+    storageRemove:(key, callback) ->
     storageOnChanged:(callback) ->
     tabsQuery:(obj, callback) ->
     tabsUpdate:(tab_id, obj) ->
@@ -33,14 +33,7 @@ window.browser = {
     cookiesGetAll: (obj, callback) ->
     cookiesRemove: (obj, callback) ->
     cookiesSet: (obj, callback) ->
-    getBackgroundPage: (callback) ->
-        bkgd_page = () ->
-        callback(bkgd_page)
-
     getURL:(url) ->
     onInstalled:(callback) ->
     setBadge:(obj) ->
-        #if obj.color?
-        #if obj.text?
     notificationsCreate:(obj, callback) ->
-}
