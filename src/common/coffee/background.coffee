@@ -95,58 +95,50 @@ class TSVPageNotifier
             if @onDotTSV
                 window.bom_manager._add_to_bom(@items, @invalid,callback)
 
-count = 0
-
-guid = () ->
-    count += 1
-    return count
-
 window.tsvPageNotifier = new TSVPageNotifier
-
-receiver = new Receiver
 
 sendState = () ->
     bom_manager.getBOM (bom) ->
         messenger.send("sendBackgroundState", {bom:bom, bom_manager:bom_manager, onDotTSV: tsvPageNotifier.onDotTSV})
 
-receiver.on "getBackgroundState", () ->
+messenger.on "getBackgroundState", () ->
     sendState()
 
-receiver.on "fillCart", (name, callback) ->
+messenger.on "fillCart", (name, callback) ->
     bom_manager.fillCart name, () ->
         sendState()
     sendState()
 
-receiver.on "fillCarts", () ->
+messenger.on "fillCarts", () ->
     bom_manager.fillCarts undefined, () ->
         sendState()
     sendState()
 
-receiver.on "openCart", (name) ->
+messenger.on "openCart", (name) ->
     bom_manager.openCart(name)
 
-receiver.on "openCarts", () ->
+messenger.on "openCarts", () ->
     bom_manager.openCarts()
 
-receiver.on "emptyCart", (name) ->
+messenger.on "emptyCart", (name) ->
     bom_manager.emptyCart name, () ->
         sendState()
     sendState()
 
-receiver.on "emptyCarts", () ->
+messenger.on "emptyCarts", () ->
     bom_manager.emptyCarts undefined, () ->
         sendState()
     sendState()
 
-receiver.on "clearBOM", () ->
+messenger.on "clearBOM", () ->
     browser.storageRemove "bom" , () ->
         sendState()
 
-receiver.on "paste", () ->
+messenger.on "paste", () ->
     paste () ->
         sendState()
 
-receiver.on "loadFromPage", () ->
+messenger.on "loadFromPage", () ->
     tsvPageNotifier.addToBOM () ->
         sendState()
 

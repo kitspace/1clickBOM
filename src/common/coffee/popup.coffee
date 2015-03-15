@@ -160,8 +160,7 @@ render = (state) ->
     button_EmptyCarts.disabled = any_emptying
 
 
-receiver = new Receiver
-receiver.on "sendBackgroundState", (state) ->
+messenger.on "sendBackgroundState", (state) ->
     render(state)
 
 messenger.send("getBackgroundState")
