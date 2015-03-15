@@ -80,7 +80,7 @@
         "page":"html/background.html"
     },
     "options_page":"html/options.html",
-    "icons": { "16" :"images/button16.png"
+    "icons": { "16" :"images/logo16.png"
              , "19" :"images/button19.png"
              , "38" :"images/logo38.png"
              , "48" :"images/logo48.png"
