@@ -17,23 +17,18 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
+class window.Receiver
+    constructor: () ->
+        @msgNames = []
+        chrome.runtime.onMessage.addListener(@_receive)
+    _receive: (request, sender, sendResponse) =>
+        for {msgName, callback} in @msgNames
+            if request.name == msgName
+                return callback(request.value, sendResponse)
+    on: (msgName, callback) ->
+        @msgNames.push({msgName:msgName, callback:callback})
+
 window.messenger = {
     send:(msgName, input, callback) ->
-        if callback?
-            fn = (@msgName, @input, @callback) ->
-                    @listener = (request, sender) =>
-                        if request.out? && request.out[0] == @msgName && request.out[1] == @input
-                            @callback(request.out[2])
-                            chrome.runtime.onMessage.removeListener(@listener)
-                    chrome.runtime.onMessage.addListener(@listener)
-            new fn(msgName, input, callback)
-        chrome.runtime.sendMessage {in:[msgName,input]}
-    on:(msgName, callback) ->
-        fn = (@msgName, @callback) ->
-            chrome.runtime.onMessage.addListener (request,sender) =>
-                if request.in? && request.in[0] == @msgName
-                    @input = request.in[1]
-                    @callback request.in[1], (value) =>
-                        chrome.runtime.sendMessage({out:[@msgName,@input,value]})
-        new fn(msgName, callback)
+        chrome.runtime.sendMessage({name:msgName, value:input}, callback)
 }

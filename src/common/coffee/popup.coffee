@@ -56,15 +56,15 @@ spin_till_you_win = (@link, @retailer_name, @check_field) ->
             , 1000
 
 disable_till_you_win = (@button, @check_field) ->
-    messenger.send "checkBomManager",@check_field, (val) =>
-        if val
-            @button.disabled = true
-            @id = setInterval () =>
-                messenger.send "checkBomManager",@check_field, (val) =>
-                    if val
-                        clearInterval(@id)
-                        @button.disabled = false
-            , 1000
+#    messenger.send "checkBomManager",@check_field, (val) =>
+#        if val
+#            @button.disabled = true
+#            @id = setInterval () =>
+#                messenger.send "checkBomManager",@check_field, (val) =>
+#                    if val
+#                        clearInterval(@id)
+#                        @button.disabled = false
+#            , 1000
 
 document.querySelector("#paste").addEventListener "click", ()->
     messenger.send "paste", 0
@@ -151,10 +151,13 @@ rebuild_bom_view = (@bom) ->
 
 bom_changed = () ->
     messenger.send "getBOM", 0, (obj) ->
+        console.log(obj)
         show_or_hide_buttons(obj.bom, obj.onDotTSV)
         rebuild_bom_view(obj.bom)
 
-messenger.on "bomChanged", (data, callback) ->
+receiver = new Receiver
+
+receiver.on "bomChanged", (data, callback) ->
     bom_changed()
 
 bom_changed()

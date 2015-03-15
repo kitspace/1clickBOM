@@ -103,39 +103,42 @@ guid = () ->
 
 window.tsvPageNotifier = new TSVPageNotifier
 
-messenger.on "checkRetailer", (obj, callback) ->
+receiver = new Receiver
+
+receiver.on "checkRetailer", (obj, callback) ->
     callback(bom_manager.interfaces[obj.retailer][obj.field])
 
-messenger.on "checkBomManager", (field, callback) ->
+receiver.on "checkBomManager", (field, callback) ->
     callback(bom_manager[field])
 
-messenger.on "getRetailer", (name, callback) ->
+receiver.on "getRetailer", (name, callback) ->
     callback(bom_manager.interfaces[name])
 
-messenger.on "fillCart", (name, callback) ->
+receiver.on "fillCart", (name, callback) ->
     bom_manager.fillCart(name,callback)
 
-messenger.on "fillCarts", (_, callback) ->
+receiver.on "fillCarts", (_, callback) ->
     bom_manager.fillCarts(callback)
 
-messenger.on "openCart", (name) ->
+receiver.on "openCart", (name) ->
     bom_manager.openCart(name)
 
-messenger.on "openCarts", (_) ->
+receiver.on "openCarts", (_) ->
     bom_manager.openCarts()
 
-messenger.on "emptyCart", (name, callback) ->
+receiver.on "emptyCart", (name, callback) ->
     bom_manager.emptyCart(name,callback)
 
-messenger.on "emptyCarts", (_, callback) ->
+receiver.on "emptyCarts", (_, callback) ->
     bom_manager.emptyCarts(callback)
 
-messenger.on "getBOM", (_, callback) ->
-    bom_manager.getBOM (bom) ->
-        callback({bom:bom,onDotTSV:tsvPageNotifier.onDotTSV})
+receiver.on "getBOM", (_, @callback) ->
+    bom_manager.getBOM (bom) =>
+        @callback({bom:bom,onDotTSV:tsvPageNotifier.onDotTSV})
+    return true
 
-messenger.on "addFromPage", (_) ->
+receiver.on "addFromPage", (_) ->
     tsvPageNotifier.addToBOM()
 
-messenger.on "paste", (_) ->
+receiver.on "paste", (_) ->
     paste()
