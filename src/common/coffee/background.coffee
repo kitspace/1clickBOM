@@ -48,15 +48,11 @@ browser.storageOnChanged (changes) ->
     if changes.country || changes.settings
         window.bom_manager = new BomManager
 
-class TSVPageNotifier
-    constructor: ->
-        @onDotTSV = false
-        @re = new RegExp("\.tsv$","i")
-        @checkPage()
-        @items   = []
-        @invalid = []
-        browser.tabsOnUpdated () =>
-            @checkPage()
+window.tsvPageNotifier =
+    onDotTSV : false
+    re       : new RegExp("\.tsv$","i")
+    items    : []
+    invalid  : []
     _set_not_dotTSV: () ->
         badge.setDefault("")
         @onDotTSV = false
@@ -95,7 +91,8 @@ class TSVPageNotifier
             if @onDotTSV
                 window.bom_manager._add_to_bom(@items, @invalid,callback)
 
-window.tsvPageNotifier = new TSVPageNotifier
+browser.tabsOnUpdated () =>
+    tsvPageNotifier.checkPage()
 
 sendState = () ->
     bom_manager.getBOM (bom) ->

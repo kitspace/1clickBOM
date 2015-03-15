@@ -72,13 +72,11 @@ window.browser = {
         chrome.notifications.create "", obj, callback
 }
 
-class Badge
-    constructor:() ->
-        @decaying_set = false
-        @priority = 0
-        @default_text = ""
-        @default_color = "#0000FF"
-        window.browser.setBadge({text:@default_text})
+window.badge =
+    decaying_set  : false
+    priority      : 0
+    default_text  : ""
+    default_color : "#0000FF"
     setDecaying: (text, color="#0000FF", priority = 1) ->
         if priority >= @priority
             if @decaying_set && @id > 0
@@ -96,5 +94,3 @@ class Badge
     _set: (text, color, priority) ->
         window.browser.setBadge({color:color, text:text})
         @priority = priority
-
-window.badge = new Badge
