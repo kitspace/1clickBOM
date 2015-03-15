@@ -27,8 +27,10 @@ window.browser = {
         chrome.storage.local.get(keys, callback)
     storageSet:(obj, callback) ->
         chrome.storage.local.set(obj, callback)
-    storageRemove:(key) ->
-        chrome.storage.local.remove(key)
+    storageRemove:(key, callback) ->
+        chrome.storage.local.remove key, () ->
+            if callback?
+                callback()
     storageOnChanged:(callback) ->
         chrome.storage.onChanged.addListener (changes, namespace) ->
             if namespace == "local"

@@ -17,172 +17,151 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-stop_spinning = (link) ->
-    if link.spinning? && link.spinning
-        td = link.parentNode
-        spinner = td.querySelector("div.spinner")
-        clearInterval(link.interval_id)
-        td.removeChild(spinner)
-        link.hidden=false
-        link.spinning=false
+element_Bom         = document.querySelector("#bom")
+element_Table       = document.querySelector("#bom_table")
+button_Clear        = document.querySelector("button#clear")
+button_FillCarts    = document.querySelector("button#fill_carts")
+button_EmptyCarts   = document.querySelector("button#empty_carts")
+button_OpenCartTabs = document.querySelector("button#open_cart_tabs")
+button_LoadFromPage = document.querySelector("button#load_from_page")
+button_Paste        = document.querySelector("button#paste")
 
-start_spinning = (link) ->
+button_Clear.addEventListener "click", () ->
+    messenger.send("clearBOM")
+
+button_FillCarts.addEventListener "click", () ->
+    @disabled = true
+    messenger.send("fillCarts")
+
+button_EmptyCarts.addEventListener "click", () ->
+    @disabled = true
+    messenger.send("emptyCarts")
+
+button_OpenCartTabs.addEventListener "click", () ->
+    messenger.send("openCarts")
+
+button_Paste.addEventListener "click", () ->
+    messenger.send("paste")
+
+button_LoadFromPage.addEventListener "click", () ->
+    messenger.send("loadFromPage")
+
+hideOrShow = (bom, onDotTSV) ->
+    button_Clear.hidden        = !Boolean(Object.keys(bom).length)
+    button_FillCarts.hidden    = !Boolean(Object.keys(bom).length)
+    button_EmptyCarts.hidden   = !Boolean(Object.keys(bom).length)
+    button_OpenCartTabs.hidden = !Boolean(Object.keys(bom).length)
+    button_LoadFromPage.hidden = !onDotTSV
+    element_Bom.hidden         = !Boolean(Object.keys(bom).length)
+
+startSpinning = (link) ->
     td = link.parentNode
     counter = 0
     spinner = document.createElement("div")
     spinner.className = "spinner"
     td.appendChild(spinner)
     link.interval_id = setInterval ()->
-        frames=12; frameWidth = 15;
-        offset=counter * -frameWidth;
+        frames     = 12
+        frameWidth = 15
+        offset     = counter * -frameWidth
         spinner.style.backgroundPosition=
-            offset + "px" + " " + 0 + "px";
+            offset + "px" + " " + 0 + "px"
         counter++
         if (counter>=frames)
-            counter =0;
+            counter =0
     , 50
     link.hidden=true
     link.spinning=true
 
-spin_till_you_win = (link_element, retailer_name, check_field) ->
-    console.log(link_element.id)
-    messenger.send "checkRetailer",{link:link_element.id, retailer:retailer_name,field:check_field}, (obj) ->
-        console.log(obj.link, obj.value)
-        if obj.value
-            start_spinning(document.getElementById(obj.link))
-            @id = setInterval () =>
-                messenger.send "checkRetailer",{retailer:retailer_name,field:check_field}, (obj) =>
-                    if obj.value
-                        clearInterval(@id)
-                        stop_spinning(document.getElementById(obj.link))
-            , 1000
+stopSpinning = (link) ->
+    if link.spinning? && link.spinning
+        td            = link.parentNode
+        spinner       = td.querySelector("div.spinner")
+        clearInterval(link.interval_id)
+        td.removeChild(spinner)
+        link.hidden   = false
+        link.spinning = false
 
-disable_till_you_win = (@button, @check_field) ->
-    messenger.send "checkBomManager",@check_field, (val) =>
-        if val
-            @button.disabled = true
-            @id = setInterval () =>
-                messenger.send "checkBomManager",@check_field, (val) =>
-                    if val
-                        clearInterval(@id)
-                        @button.disabled = false
-            , 1000
+render = (state) ->
+    bom = state.bom
+    hideOrShow(bom, state.onDotTSV)
+    element_Table.removeChild(element_Table.lastChild) while element_Table.hasChildNodes()
+    any_adding   = false
+    any_emptying = false
+    for retailer_name of bom
+        items = bom[retailer_name]
+        retailer = state.bom_manager.interfaces[retailer_name]
+        no_of_items = 0
+        for item in items
+            no_of_items += item.quantity
+        tr = document.createElement("tr")
+        element_Table.appendChild(tr)
+        td_0 = document.createElement("td")
 
-document.querySelector("#paste").addEventListener "click", ()->
-    messenger.send "paste", 0
+        icon = document.createElement("img")
+        icon.src = retailer.icon_src
+        td_0.appendChild(icon)
+        td_0.innerHTML += retailer.interface_name
+        tr.appendChild(td_0)
 
-#Ctrl-V event
-document.addEventListener 'keydown', (event) ->
-    if ((event.keyCode == 86) && (event.ctrlKey == true))
-        text = bkgd_page.paste()
-        window.bkgd_page.bom_manager.addToBOM(text)
+        td_1 = document.createElement("td")
+        td_1.innerText = items.length + " line"
+        td_1.innerText += "s" if (items.length > 1)
+        tr.appendChild(td_1)
 
-show_or_hide_buttons = (bom, onDotTSV) ->
-    if (!bom)
-        bom = {}
-    document.querySelector("button#clear").hidden=!Boolean(Object.keys(bom).length)
-    document.querySelector("button#fill_carts").hidden=!Boolean(Object.keys(bom).length)
-    document.querySelector("button#empty_carts").hidden=!Boolean(Object.keys(bom).length)
-    document.querySelector("button#open_cart_tabs").hidden=!Boolean(Object.keys(bom).length)
-    document.querySelector("#bom").hidden=!Boolean(Object.keys(bom).length)
-    document.querySelector("button#load_from_page").hidden = !onDotTSV
+        td_2 = document.createElement("td")
+        td_2.innerText = no_of_items + " item"
+        td_2.innerText += "s" if (no_of_items > 1)
+        tr.appendChild(td_2)
+        td = document.createElement("td")
 
-rebuild_bom_view = (@bom) ->
-    table = document.querySelector("#bom_list")
-    table.removeChild(table.lastChild) while table.hasChildNodes()
-    for retailer_name of @bom
-        messenger.send "getRetailer", retailer_name, (retailer) =>
-            items = @bom[retailer.interface_name]
-            no_of_items = 0
-            for item in items
-                no_of_items += item.quantity
-            tr = document.createElement("tr")
-            td_0 = document.createElement("td")
-
-            icon = document.createElement("img")
-            icon.src = retailer.icon_src
-            td_0.appendChild(icon)
-            td_0.innerHTML += retailer.interface_name
-            tr.appendChild(td_0)
-
-            td_1 = document.createElement("td")
-            td_1.innerText = items.length + " line"
-            td_1.innerText += "s" if (items.length > 1)
-            tr.appendChild(td_1)
-
-            td_2 = document.createElement("td")
-            td_2.innerText = no_of_items + " item"
-            td_2.innerText += "s" if (no_of_items > 1)
-            tr.appendChild(td_2)
+        unicode_chars = ["\uf21e", "\uf221", "\uf21b"]
+        titles = ["Add items to " , "View ",  "Empty "]
+        links = []
+        for i in  [0..2]
             td = document.createElement("td")
+            a = document.createElement("a")
+            a.value = retailer.interface_name
+            a.title = titles[i] + retailer.interface_name + " cart"
+            a.href = "#"
+            span = document.createElement("span")
+            span.className = "button_icon"
+            span.innerText = unicode_chars[i]
+            a.appendChild(span)
+            td.appendChild(a)
+            tr.appendChild(td)
+            links.push(a)
 
-            unicode_chars = ["\uf21e", "\uf221", "\uf21b"]
-            titles = ["Add items to " , "View ",  "Empty "]
-            links = []
-            for i in  [0..2]
-                td = document.createElement("td")
-                a = document.createElement("a")
-                a.value = retailer.interface_name
-                a.title = titles[i] + retailer.interface_name + " cart"
-                a.href = "#"
-                a.id = "link-" + retailer.interface_name + "-" + i
-                span = document.createElement("span")
-                span.className = "button_icon"
-                span.innerText = unicode_chars[i]
-                a.appendChild(span)
-                td.appendChild(a)
-                tr.appendChild(td)
-                links.push(a)
+        links[0].addEventListener "click", () ->
+            startSpinning(this)
+            messenger.send "fillCart", @value
 
-            links[0].addEventListener "click", () ->
-                start_spinning(this)
-                messenger.send "fillCart", @value, () =>
-                    stop_spinning(this)
+        links[1].addEventListener "click", () ->
+            messenger.send "openCart", @value
 
-            links[1].addEventListener "click", () ->
-                messenger.send "openCart", @value
+        links[2].addEventListener "click", () ->
+            startSpinning(this)
+            messenger.send "emptyCart", @value
 
-            links[2].addEventListener "click", () ->
-                start_spinning(this)
-                messenger.send "emptyCart", @value, () =>
-                    stop_spinning(this)
+        if retailer.adding_items
+            startSpinning(links[0])
+        else
+            stopSpinning(links[0])
 
-            table.appendChild(tr)
+        if retailer.clearing_cart
+            startSpinning(links[2])
+        else
+            stopSpinning(links[2])
 
-            spin_till_you_win(links[0], retailer.interface_name, "adding_items")
-            spin_till_you_win(links[2], retailer.interface_name, "clearing_cart")
+        any_adding   |= retailer.adding_items
+        any_emptying |= retailer.clearing_cart
 
-bom_changed = () ->
-    messenger.send "getBOM", 0, (obj) ->
-        show_or_hide_buttons(obj.bom, obj.onDotTSV)
-        rebuild_bom_view(obj.bom)
+    button_FillCarts.disabled  = any_adding
+    button_EmptyCarts.disabled = any_emptying
+
 
 receiver = new Receiver
+receiver.on "sendBackgroundState", (state) ->
+    render(state)
 
-receiver.on "bomChanged", (data, callback) ->
-    bom_changed()
-
-bom_changed()
-
-document.querySelector("button#clear").addEventListener "click", () ->
-    messenger.storageRemove("bom")
-
-document.querySelector("button#fill_carts").addEventListener "click", () ->
-    @disabled = true
-    messenger.send "fillCarts",0, () =>
-        @disabled = false
-    bom_changed()
-disable_till_you_win(document.querySelector("#fill_carts"), "filling_carts")
-
-document.querySelector("button#empty_carts").addEventListener "click", () ->
-    @disabled = true
-    messenger.send "emptyCarts",0, () =>
-        @disabled = false
-    bom_changed()
-disable_till_you_win(document.querySelector("#empty_carts"), "emptying_carts")
-
-document.querySelector("button#open_cart_tabs").addEventListener "click", () ->
-    messenger.send "openCarts",0
-
-document.querySelector("button#load_from_page").addEventListener "click", () ->
-    messenger.send "addFromPage",0
+messenger.send("getBackgroundState")

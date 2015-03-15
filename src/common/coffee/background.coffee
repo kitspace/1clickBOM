@@ -17,11 +17,11 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-window.paste = () ->
+window.paste = (callback) ->
     textarea = document.getElementById("pastebox")
     textarea.select()
     document.execCommand("paste")
-    bom_manager.addToBOM(textarea.value)
+    bom_manager.addToBOM(textarea.value, callback)
 
 get_location = (callback) ->
     countries_data = get_local("/data/countries.json")
@@ -90,10 +90,10 @@ class TSVPageNotifier
                     callback()
             else if callback?
                 callback()
-    addToBOM: () ->
+    addToBOM: (callback) ->
         @checkPage () =>
             if @onDotTSV
-                window.bom_manager._add_to_bom(@items, @invalid)
+                window.bom_manager._add_to_bom(@items, @invalid,callback)
 
 count = 0
 
@@ -105,40 +105,48 @@ window.tsvPageNotifier = new TSVPageNotifier
 
 receiver = new Receiver
 
-receiver.on "checkRetailer", (obj, callback) ->
-    callback({link:obj.link, value:bom_manager.interfaces[obj.retailer][obj.field]})
+sendState = () ->
+    bom_manager.getBOM (bom) ->
+        messenger.send("sendBackgroundState", {bom:bom, bom_manager:bom_manager, onDotTSV: tsvPageNotifier.onDotTSV})
 
-receiver.on "checkBomManager", (field, callback) ->
-    callback(bom_manager[field])
-
-receiver.on "getRetailer", (name, callback) ->
-    callback(bom_manager.interfaces[name])
+receiver.on "getBackgroundState", () ->
+    sendState()
 
 receiver.on "fillCart", (name, callback) ->
-    bom_manager.fillCart(name,callback)
+    bom_manager.fillCart name, () ->
+        sendState()
+    sendState()
 
-receiver.on "fillCarts", (_, callback) ->
-    bom_manager.fillCarts(callback)
+receiver.on "fillCarts", () ->
+    bom_manager.fillCarts undefined, () ->
+        sendState()
+    sendState()
 
 receiver.on "openCart", (name) ->
     bom_manager.openCart(name)
 
-receiver.on "openCarts", (_) ->
+receiver.on "openCarts", () ->
     bom_manager.openCarts()
 
-receiver.on "emptyCart", (name, callback) ->
-    bom_manager.emptyCart(name,callback)
+receiver.on "emptyCart", (name) ->
+    bom_manager.emptyCart name, () ->
+        sendState()
+    sendState()
 
-receiver.on "emptyCarts", (_, callback) ->
-    bom_manager.emptyCarts(callback)
+receiver.on "emptyCarts", () ->
+    bom_manager.emptyCarts undefined, () ->
+        sendState()
+    sendState()
 
-receiver.on "getBOM", (_, @callback) ->
-    bom_manager.getBOM (bom) =>
-        @callback({bom:bom,onDotTSV:tsvPageNotifier.onDotTSV})
-    return true
+receiver.on "clearBOM", () ->
+    browser.storageRemove "bom" , () ->
+        sendState()
 
-receiver.on "addFromPage", (_) ->
-    tsvPageNotifier.addToBOM()
+receiver.on "paste", () ->
+    paste () ->
+        sendState()
 
-receiver.on "paste", (_) ->
-    paste()
+receiver.on "loadFromPage", () ->
+    tsvPageNotifier.addToBOM () ->
+        sendState()
+

@@ -45,6 +45,8 @@ class window.BomManager
 
     getBOM: (callback) ->
         browser.storageGet ["bom"], ({bom:bom}) =>
+            if not bom
+                bom = {}
             callback(bom)
 
     addToBOM: (text, callback) ->
@@ -52,9 +54,7 @@ class window.BomManager
         @_add_to_bom(items, invalid, callback)
 
     _add_to_bom: (items, invalid, callback) ->
-        browser.storageGet ["bom"], ({bom:bom}) =>
-            if (!bom)
-                bom = {}
+        @getBOM (bom) =>
             if invalid.length > 0
                 for inv in invalid
                     title = "Could not parse row: "
@@ -137,7 +137,7 @@ class window.BomManager
         else
             badge.setDecaying("OK","#00CF0F")
 
-    fillCarts: (callback)->
+    fillCarts: (callback, callbackEveryRetailer)->
         @filling_carts = true
         big_result = {success:true, fails:[]}
         browser.storageGet ["bom"], ({bom:bom}) =>
@@ -148,9 +148,11 @@ class window.BomManager
                     count--
                     big_result.success &&= result.success
                     big_result.fails = big_result.fails.concat(result.fails)
+                    if callbackEveryRetailer?
+                        callbackEveryRetailer(result.success)
                     if count == 0
                         if callback?
-                            callback(big_result)
+                            callback()
                         @filling_carts = false
 
     fillCart: (retailer, callback)->
@@ -159,7 +161,7 @@ class window.BomManager
                 @notifyFillCart bom[retailer], retailer, result
                 callback(result)
 
-    emptyCarts: (callback)->
+    emptyCarts: (callback, callbackEveryRetailer)->
         @emptying_carts = true
         big_result = {success: true}
         browser.storageGet ["bom"], ({bom:bom}) =>
@@ -169,6 +171,8 @@ class window.BomManager
                     @emptyCart retailer, (result, interf) =>
                         count--
                         big_result.success &&= result.success
+                        if callbackEveryRetailer?
+                            callbackEveryRetailer(result.success)
                         if count == 0
                             if callback?
                                 callback(big_result)
