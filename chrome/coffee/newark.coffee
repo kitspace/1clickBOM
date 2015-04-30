@@ -79,6 +79,13 @@ class window.Newark extends RetailerInterface
             callback(result, this, items)
 
     _add_items: (items, callback) ->
+        url = "https" + @site + "/AjaxPasteOrderChangeServiceItemAdd"
+        get url, {notify:false}, () =>
+            @_add_items_ajax(items, callback)
+        , () =>
+            @_add_items_non_ajax(items, callback)
+
+    _add_items_non_ajax: (items, callback) ->
         if items.length == 0
             if callback?
                 callback({success:true, fails:[]})
@@ -113,7 +120,55 @@ class window.Newark extends RetailerInterface
                         fails.push(item)
                     else
                         retry_items.push(item)
-                @_add_items retry_items, (result) ->
+                @_add_items_non_ajax retry_items, (result) ->
+                    if callback?
+                        result.fails = result.fails.concat(fails)
+                        result.success = false
+                        callback(result)
+            else #success
+                if callback?
+                    callback({success: true, fails:[]})
+        , () =>
+            if callback?
+                callback({success:false,fails:items})
+
+
+    _add_items_ajax: (items, callback) ->
+        if items.length == 0
+            if callback?
+                callback({success:true, fails:[]})
+            return
+        url = "https" + @site + "/AjaxPasteOrderChangeServiceItemAdd"
+
+        params = "storeId=" + @store_id + "&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste="
+        #&addToBasket=Add+to+Cart"
+        for item in items
+            params += encodeURIComponent(item.part) + ","
+            params += encodeURIComponent(item.quantity) + ","
+            params += encodeURIComponent(item.comment) + "\n"
+        post url, params, {}, (event) =>
+            stxt = event.target.responseText.split("\n")
+            stxt2 = stxt[3 .. (stxt.length - 4)]
+            stxt3 = ""
+            for s in stxt2
+                stxt3 += s
+            json = JSON.parse(stxt3)
+            if json.hasPartNumberErrors?
+                #we find out which parts are the problem, call addItems again
+                #on the rest and concatenate the fails to the new result
+                #returning everything together to our callback
+                fail_names  = []
+                fails       = []
+                retry_items = []
+                for k,v of json
+                    if k != "hasPartNumberErrors"
+                        fail_names.push(v[0])
+                for item in items
+                    if item.part in fail_names
+                        fails.push(item)
+                    else
+                        retry_items.push(item)
+                @_add_items_ajax retry_items, (result) ->
                     if callback?
                         result.fails = result.fails.concat(fails)
                         result.success = false
