@@ -1,6 +1,5 @@
 gulp       = require("gulp")
 coffee     = require("gulp-coffee")
-uglify     = require("gulp-uglify")
 sourcemaps = require("gulp-sourcemaps")
 replace    = require("gulp-replace")
 del        = require("del")
@@ -20,7 +19,6 @@ gulp.task "chrome-coffee", () ->
     gulp.src(paths("chrome").coffee)
         .pipe(sourcemaps.init())
             .pipe(coffee())
-            .pipe(uglify())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("build/chrome/js"))
 
