@@ -105,15 +105,18 @@ class window.Digikey extends RetailerInterface
                 callback(event.target.item, result)
 
     _get_part_id: (item, callback, error_callback) ->
-        url = "http" + @site + "/product-detail/en/EXB-38V103JV/"
-        url += item.part
+        url = "http" + @site + "/product-detail/en/"
+        url += item.part + "/"
+        url += item.part + "/"
         get url, {item:item, notify:false}, (event) ->
             doc = DOM.parse(event.target.responseText)
             inputs = doc.querySelectorAll("input")
             for input in inputs
                 if input.name == "partid"
                     callback(event.target.item, input.value)
-                    break
+                    return
+            #we never found an id
+            error_callback()
         , error_callback
     _get_suggested: (item, id, error, callback, error_callback) =>
         url = "http" + @site + "/classic/Ordering/PackTypeDialog.aspx?"
