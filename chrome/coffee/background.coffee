@@ -28,13 +28,12 @@ get_location = (callback) ->
     @used_country_codes = []
     for _,code of countries_data
         @used_country_codes.push(code)
-    url = "https://freegeoip.net/json/"
-    get url, {}, (event) =>
+    url = "http://kaspar.h1x.com:8080/json"
+    get url, {timeout:5000}, (event) =>
         response = JSON.parse(event.target.responseText)
         code = response.country_code
         if code == "GB" then code = "UK"
         if code not in @used_country_codes then code = "Other"
-        console.log(code)
         chrome.storage.local.set {country: code}, ()->
             callback()
     , () ->
