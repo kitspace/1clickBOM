@@ -17,8 +17,10 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-window.messenger =
+messenger =
     msgNames: []
     listening: false
     on: (msgName, callback) ->
     send:(msgName, input, callback) ->
+
+module.exports = messenger

@@ -17,8 +17,10 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-countries_data = window.get_local("/data/countries.json")
-settings_data  = window.get_local("/data/settings.json")
+util = require './util'
+
+countries_data = util.get_local("/data/countries.json")
+settings_data  = util.get_local("/data/settings.json")
 
 save_options = () ->
     select = document.getElementById("country")

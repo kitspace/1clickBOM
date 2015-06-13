@@ -17,7 +17,18 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-settings_data  = get_local("data/settings.json")
+util     = require './util'
+browser  = require './browser'
+Digikey  = require './digikey'
+Farnell  = require './farnell'
+Mouser   = require './mouser'
+RS       = require './rs'
+Newark   = require './newark'
+parseTSV = require './parser'
+
+badge = util.badge
+
+settings_data = util.get_local("data/settings.json")
 
 class window.BomManager
     constructor: (callback) ->
@@ -50,7 +61,7 @@ class window.BomManager
             callback(bom)
 
     addToBOM: (text, callback) ->
-        {items, invalid} = window.parseTSV(text)
+        {items, invalid} = parseTSV(text)
         @_add_to_bom(items, invalid, callback)
 
     _add_to_bom: (items, invalid, callback) ->
@@ -195,3 +206,5 @@ class window.BomManager
 
     openCart: (retailer)->
         @interfaces[retailer].openCartTab()
+
+module.exports = BomManager

@@ -17,6 +17,8 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
+messenger = require './messenger'
+
 element_Bom         = document.querySelector("#bom")
 element_Table       = document.querySelector("#bom_table")
 button_Clear        = document.querySelector("button#clear")

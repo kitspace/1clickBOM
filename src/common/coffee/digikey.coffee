@@ -17,7 +17,14 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-class window.Digikey extends RetailerInterface
+RetailerInterface = require './retailer_interface'
+util = require './util'
+DOM = util.DOM
+post = util.post
+get = util.get
+get_local = util.get_local
+
+class Digikey extends RetailerInterface
     constructor: (country_code, settings, callback) ->
         super("Digikey", country_code, "/data/digikey.json", settings, callback)
 
@@ -148,3 +155,4 @@ class window.Digikey extends RetailerInterface
                 error_callback()
         , error_callback
 
+module.exports = Digikey

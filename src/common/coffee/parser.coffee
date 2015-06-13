@@ -60,7 +60,7 @@ checkValidItems =  (items_incoming, invalid) ->
                 items.push(item)
     return {items, invalid}
 
-window.parseTSV =  (text) ->
+parseTSV =  (text) ->
     rows = text.split "\n"
     items = []
     invalid = []
@@ -78,3 +78,5 @@ window.parseTSV =  (text) ->
                 items.push item
     {items, invalid} = checkValidItems(items, invalid)
     return {items, invalid}
+
+module.exports = parseTSV

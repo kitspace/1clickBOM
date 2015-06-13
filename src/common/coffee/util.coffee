@@ -17,7 +17,9 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-window.badge =
+browser = require './browser'
+
+badge =
     decaying_set  : false
     priority      : 0
     default_text  : ""
@@ -40,9 +42,9 @@ window.badge =
         browser.setBadge({color:color, text:text})
         @priority = priority
 
-window.get_local = (url, json=true)->
+get_local = (url, json=true)->
     xhr = new XMLHttpRequest()
-    xhr.open("GET", window.browser.getURL(url), false)
+    xhr.open("GET", browser.getURL(url), false)
     xhr.send()
     if xhr.status == 200
         if (json)
@@ -64,13 +66,13 @@ network_callback = (event, callback, error_callback, notify=true) ->
             else
                 message += event.target.url
             if notify
-                window.browser.notificationsCreate({type:"basic", title:"Network Error Occured", message:message, iconUrl:"/images/net_error128.png"}, () ->)
+                browser.notificationsCreate({type:"basic", title:"Network Error Occured", message:message, iconUrl:"/images/net_error128.png"}, () ->)
 
                 badge.setDecaying("" + event.target.status, "#CC00FF", priority=3)
             if error_callback?
                 error_callback(event.target.item)
 
-window.post = (url, params, {item:item, notify:notify, timeout:timeout, json:json},  callback, error_callback) ->
+post = (url, params, {item:item, notify:notify, timeout:timeout, json:json},  callback, error_callback) ->
     if not item?
         item=null
     if not notify?
@@ -94,7 +96,7 @@ window.post = (url, params, {item:item, notify:notify, timeout:timeout, json:jso
         network_callback(event, callback, error_callback, notify)
     xhr.send(params)
 
-window.get = (url, {item:item, notify:notify, timeout:timeout}, callback, error_callback) ->
+get = (url, {item:item, notify:notify, timeout:timeout}, callback, error_callback) ->
     if not item?
         item=null
     if not notify?
@@ -113,9 +115,17 @@ window.get = (url, {item:item, notify:notify, timeout:timeout}, callback, error_
         network_callback(event, callback, error_callback, notify)
     xhr.send()
 
-window.trim_whitespace = (str) ->
+trim_whitespace = (str) ->
     return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
 
-window.DOM = new DOMParser()
-window.DOM.parse = (str) ->
+DOM = new DOMParser()
+DOM.parse = (str) ->
     DOM.parseFromString(str, "text/html")
+
+module.exports =
+    badge           : badge
+    get_local       : get_local
+    post            : post
+    get             : get
+    trim_whitespace : trim_whitespace
+    DOM             : DOM

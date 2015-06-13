@@ -17,10 +17,14 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-class window.RetailerInterface
+util    = require './util'
+md5     = require './md5'
+browser = require './browser'
+
+class RetailerInterface
     constructor: (name, country_code, data_path, settings, callback) ->
         @country = country_code
-        data = get_local(data_path)
+        data = util.get_local(data_path)
         country_code_lookedup = data.lookup[country_code]
         if !country_code_lookedup
             error = new InvalidCountryError()
@@ -67,7 +71,7 @@ class window.RetailerInterface
         @icon_src       = "http://www.google.com/s2/favicons?domain=http" + @site
         #this puts the image in cache but also uses our backup if
         #google.com/s2/favicons fails
-        get @icon_src, {notify:false},  (event) =>
+        util.get @icon_src, {notify:false},  (event) =>
             #failure response image
             if md5(event.target.response) == "6e2001c87afacf376c7df4a011376511"
                 @icon_src = browser.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
@@ -111,3 +115,4 @@ class @InvalidCountryError extends Error
         @name = "InvalidCountryError"
         @message = "Invalid country-code"
 
+module.exports = RetailerInterface

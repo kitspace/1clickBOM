@@ -17,7 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-window.messenger =
+messenger =
     msgNames: []
     listening: false
     on: (msgName, callback) ->
@@ -30,3 +30,5 @@ window.messenger =
             @listening = true
     send:(msgName, input, callback) ->
         chrome.runtime.sendMessage({name:msgName, value:input}, callback)
+
+module.exports = messenger

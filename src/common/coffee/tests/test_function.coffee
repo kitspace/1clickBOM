@@ -1,3 +1,5 @@
+browser = require './browser'
+
 @Test = (module)->
     url = browser.getURL("html/test.html")
     url += "?module=" + module if module?

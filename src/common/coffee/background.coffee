@@ -17,6 +17,12 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
+BomManager = require './bom_manager'
+messenger  = require './messenger'
+browser    = require './browser'
+util       = require './util'
+parseTSV   = require './parser'
+
 window.paste = (callback) ->
     textarea = document.getElementById("pastebox")
     textarea.select()
@@ -29,7 +35,7 @@ get_location = (callback) ->
     for _,code of countries_data
         @used_country_codes.push(code)
     url = "http://kaspar.h1x.com:8080/json"
-    get url, {timeout:5000}, (event) =>
+    util.get url, {timeout:5000}, (event) =>
         response = JSON.parse(event.target.responseText)
         code = response.country_code
         if code == "GB" then code = "UK"
@@ -54,7 +60,7 @@ window.tsvPageNotifier =
     items    : []
     invalid  : []
     _set_not_dotTSV: () ->
-        badge.setDefault("")
+        util.badge.setDefault("")
         @onDotTSV = false
         @items    = []
         @invalid  = []
@@ -69,10 +75,10 @@ window.tsvPageNotifier =
                         url = tab_url.split("?")[0].replace(/src/,"raw")
                     else
                         url = tab_url
-                    get url, {notify:false}, (event) =>
+                    util.get url, {notify:false}, (event) =>
                         {items, invalid} = parseTSV(event.target.responseText)
                         if items.length > 0
-                            badge.setDefault("\u2191", "#0000FF")
+                            util.badge.setDefault("\u2191", "#0000FF")
                             @onDotTSV = true
                             @items    = items
                             @invalid  = invalid

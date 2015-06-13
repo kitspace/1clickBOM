@@ -17,6 +17,8 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
+browser = require './browser'
+
 window.test_bom  = get_local("examples/big_example.tsv", json=false)
 
 window.test_one = (country="HK") ->

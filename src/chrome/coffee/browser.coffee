@@ -17,7 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-window.browser = {
+browser =
     storageGet:(keys, callback) ->
         chrome.storage.local.get(keys, callback)
     storageSet:(obj, callback) ->
@@ -65,4 +65,5 @@ window.browser = {
             chrome.browserAction.setBadgeText ({text:obj.text})
     notificationsCreate:(obj, callback) ->
         chrome.notifications.create "", obj, callback
-}
+
+module.exports = browser

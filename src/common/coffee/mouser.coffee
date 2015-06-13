@@ -17,7 +17,14 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-class window.Mouser extends RetailerInterface
+RetailerInterface = require './retailer_interface'
+util = require './util'
+DOM = util.DOM
+post = util.post
+get = util.get
+get_local = util.get_local
+
+class Mouser extends RetailerInterface
     constructor: (country_code, settings) ->
         super "Mouser", country_code, "/data/mouser.json", settings
         #posting our sub-domain as the sites are all linked and switching countries would not register properly otherwise
@@ -120,3 +127,5 @@ class window.Mouser extends RetailerInterface
             viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
             if callback?
                 callback(viewstate)
+
+module.exports = Mouser

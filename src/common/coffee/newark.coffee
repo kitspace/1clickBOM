@@ -17,7 +17,14 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-class window.Newark extends RetailerInterface
+RetailerInterface = require './retailer_interface'
+util = require './util'
+DOM = util.DOM
+post = util.post
+get = util.get
+get_local = util.get_local
+
+class Newark extends RetailerInterface
     constructor: (country_code, settings) ->
         super("Newark", country_code, "/data/newark.json", settings)
         @_set_store_id()
@@ -180,4 +187,4 @@ class window.Newark extends RetailerInterface
             if callback?
                 callback({success:false,fails:items})
 
-
+module.exports = Newark

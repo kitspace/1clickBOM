@@ -182,3 +182,5 @@ msw = (x >> 16) + (y >> 16) + (lsw >> 16);
 return (msw << 16) | (lsw & 0xFFFF);
 }
 }
+
+module.exports = md5
