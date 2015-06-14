@@ -14,7 +14,8 @@ FIREFOX_COFFEE_FILES = $(call wildc_recursive, $(FIREFOX_COFFEE_DIR), *.coffee)
 
 COMMON_COFFEE_CHROME_TARGET_FILES = $(patsubst src/common/coffee/%.coffee, \
 								   	build/chrome/js/%.js, $(COMMON_COFFEE_FILES))
-CHROME_COFFEE_TARGET_FILES = build/chrome/js/background.js build/chrome/js/popup.js
+CHROME_COFFEE_TARGET_FILES = build/chrome/js/background.js build/chrome/js/popup.js \
+							 build/chrome/js/unit.js build/chrome/js/functional.js
 COMMON_COFFEE_FIREFOX_TARGET_FILES = $(patsubst src/common/coffee/%.coffee, \
 									 build/firefox/data/js/%.js, $(COMMON_COFFEE_FILES))
 FIREFOX_COFFEE_TARGET_FILES = $(patsubst src/firefox/coffee/%.coffee, \
@@ -36,7 +37,6 @@ FIREFOX_IMAGE_FILES = $(wildcard src/firefox/images/*)
 CHROME_DATA_FILES  = $(wildcard src/chrome/data/*)
 COMMON_DATA_FILES  = $(wildcard src/common/data/*)
 FIREFOX_DATA_FILES = $(wildcard src/firefox/data/*)
-
 
 SUB_DIRS = target/html target/images target/libs target/data target/js
 CHROME_DIRS  = build/chrome/.dirstamp \
@@ -81,13 +81,20 @@ build/firefox/package.json: src/firefox/package.json
 .temp/%: src/common/libs/%
 	cp $< $@
 
-build/chrome/js/background.js: .temp/.dirstamp $(CHROME_TEMP_TARGET_FILES)
+build/chrome/js/%.js: .temp/.dirstamp $(CHROME_TEMP_TARGET_FILES)
 	browserify --debug --transform coffeeify --extension=".coffee" \
-		.temp/background.coffee -o $@
+		.temp/$(basename $(@F)).coffee -o $@
 
-build/chrome/js/popup.js: $(CHROME_TEMP_TARGET_FILES)
+build/chrome/js/qunit.js: .temp/.dirstamp $(CHROME_TEMP_TARGET_FILES)
+	browserify --debug -r .temp/qunit-1.11.0.js -o $@
+
+build/chrome/js/unit.js: build/chrome/js/qunit.js $(CHROME_TEMP_TARGET_FILES)
 	browserify --debug --transform coffeeify --extension=".coffee" \
-		.temp/popup.coffee -o $@
+		-x .temp/qunit-1.11.0.js .temp/$(basename $(@F)).coffee -o $@
+
+build/chrome/js/functional.js: build/chrome/js/qunit.js $(CHROME_TEMP_TARGET_FILES)
+	browserify --debug --transform coffeeify --extension=".coffee" \
+		-x .temp/qunit-1.11.0.js .temp/$(basename $(@F)).coffee -o $@
 
 build/firefox/data/js/%.js: $(FIREFOX_COFFEE_FILES) $(COMMON_COFFEE_FILES)
 	coffee -m -c -o build/firefox/data/js/ $(FIREFOX_COFFEE_DIR) $(COMMON_COFFEE_DIR)

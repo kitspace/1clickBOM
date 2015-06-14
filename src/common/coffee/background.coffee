@@ -145,3 +145,7 @@ messenger.on "loadFromPage", () ->
     tsvPageNotifier.addToBOM () ->
         sendState()
 
+window.Test = (module)->
+    url = browser.getURL("html/test.html")
+    url += "?module=" + module if module?
+    window.open(url)

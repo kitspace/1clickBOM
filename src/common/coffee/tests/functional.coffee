@@ -17,9 +17,25 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-@digikey_data = get_local("/data/digikey.json")
-@farnell_data = get_local("/data/farnell.json")
-@mouser_data  = get_local("/data/mouser.json")
+util     = require './util'
+browser  = require './browser'
+Digikey  = require './digikey'
+Farnell  = require './farnell'
+Mouser   = require './mouser'
+RS       = require './rs'
+Newark   = require './newark'
+parseTSV = require './parser'
+qunit    = require './qunit-1.11.0'
+
+module    = qunit.module
+asyncTest = qunit.asyncTest
+stop      = qunit.stop
+start     = qunit.start
+deepEqual = qunit.deepEqual
+
+digikey_data = util.get_local("/data/digikey.json")
+farnell_data = util.get_local("/data/farnell.json")
+mouser_data  = util.get_local("/data/mouser.json")
 
 module("Digikey")
 

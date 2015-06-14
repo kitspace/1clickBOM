@@ -17,11 +17,11 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-RetailerInterface = require './retailer_interface'
-util = require './util'
-DOM = util.DOM
-post = util.post
-get = util.get
+RetailerInterface = require('./retailer_interface').RetailerInterface
+util      = require './util'
+DOM       = util.DOM
+post      = util.post
+get       = util.get
 get_local = util.get_local
 
 class Digikey extends RetailerInterface

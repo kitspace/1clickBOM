@@ -16,13 +16,25 @@
 #
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
+
+RetailerInterface = require('./retailer_interface').RetailerInterface
+InvalidCountryError = require('./retailer_interface').InvalidCountryError
 util     = require './util'
+Digikey  = require './digikey'
+Farnell  = require './farnell'
+Mouser   = require './mouser'
+RS       = require './rs'
+Newark   = require './newark'
 parseTSV = require './parser'
+qunit    = require './qunit-1.11.0'
 
-post = util.post
-get = util.get
+module    = qunit.module
+test      = qunit.test
+ok        = qunit.ok
+throws    = qunit.throws
+deepEqual = qunit.deepEqual
 
-countries = get_local("/data/countries.json")
+countries = util.get_local("/data/countries.json")
 
 module("unit")
 
@@ -34,9 +46,8 @@ test "Farnell: Constructs for all countries", () ->
     for country,code of countries
         ok(new Farnell(code) instanceof RetailerInterface, country + " " + code)
 
-test "Mouser: Constructs for all countries", () ->
-    return
-    #we need to mock the post request otherwise they will time out since they fire too quickly
+#test "Mouser: Constructs for all countries", () ->
+#    #we need to mock the post request otherwise they will time out since they fire too quickly
 #    real_post = window.post
 #    window.post = () ->
 #    for country,code of countries

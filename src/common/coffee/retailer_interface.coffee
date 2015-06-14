@@ -110,9 +110,11 @@ class RetailerInterface
             else
                 browser.tabsCreate({url: "http" + @site + @cart, active:true})
 
-class @InvalidCountryError extends Error
+class InvalidCountryError extends Error
     constructor: ->
         @name = "InvalidCountryError"
         @message = "Invalid country-code"
 
-module.exports = RetailerInterface
+module.exports =
+    RetailerInterface: RetailerInterface
+    InvalidCountryError: InvalidCountryError
