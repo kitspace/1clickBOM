@@ -161,7 +161,6 @@ render = (state) ->
     button_FillCarts.disabled  = any_adding
     button_EmptyCarts.disabled = any_emptying
 
-
 messenger.on "sendBackgroundState", (state) ->
     render(state)
 
