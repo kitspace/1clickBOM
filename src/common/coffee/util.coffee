@@ -19,6 +19,9 @@
 
 {browser} = require './browser'
 
+if not XMLHttpRequest?
+    {XMLHttpRequest} = require 'sdk/net/xhr'
+
 badge =
     decaying_set  : false
     priority      : 0

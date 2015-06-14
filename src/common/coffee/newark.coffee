@@ -24,9 +24,12 @@ DOM  = util.DOM
 post = util.post
 get  = util.get
 
+if not XMLHttpRequest?
+    {XMLHttpRequest} = require 'sdk/net/xhr'
+
 class Newark extends RetailerInterface
     constructor: (country_code, settings) ->
-        super("Newark", country_code, "/data/newark.json", settings)
+        super("Newark", country_code, "data/newark.json", settings)
         @_set_store_id()
 
     clearCart: (callback) ->

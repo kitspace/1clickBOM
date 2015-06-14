@@ -26,7 +26,7 @@ get       = util.get
 
 class Digikey extends RetailerInterface
     constructor: (country_code, settings, callback) ->
-        super("Digikey", country_code, "/data/digikey.json", settings, callback)
+        super("Digikey", country_code, "data/digikey.json", settings, callback)
 
     clearCart: (callback) ->
         @clearing_cart = true

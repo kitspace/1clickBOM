@@ -32,7 +32,7 @@ ok        = qunit.ok
 throws    = qunit.throws
 deepEqual = qunit.deepEqual
 
-countries = browser.getLocal("/data/countries.json")
+countries = browser.getLocal("data/countries.json")
 
 module("unit")
 

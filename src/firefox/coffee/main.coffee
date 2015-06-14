@@ -1,3 +1,4 @@
+console.log("1clickBOM main loaded")
 { ActionButton } = require("sdk/ui/button/action")
 
 {data      } = require("sdk/self")
@@ -36,4 +37,3 @@ browser.storageRemove "bom"
 browser.storageGet ["bom"], (obj) ->
     console.log("obj2", obj)
 
-console.log("1clickBOM main loaded")

@@ -17,7 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-#{bom_manager} = require './bom_manager'
+{bom_manager} = require './bom_manager'
 {browser}     = require './browser'
 {parseTSV}    = require './parser'
 util          = require './util'
@@ -31,7 +31,7 @@ exports.background = (messenger) ->
         bom_manager.addToBOM(textarea.value, callback)
 
     get_location = (callback) ->
-        countries_data = browser.getLocal("/data/countries.json")
+        countries_data = browser.getLocal("data/countries.json")
         @used_country_codes = []
         for _,code of countries_data
             @used_country_codes.push(code)

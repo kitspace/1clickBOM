@@ -32,9 +32,9 @@ stop      = qunit.stop
 start     = qunit.start
 deepEqual = qunit.deepEqual
 
-digikey_data = browser.getLocal("/data/digikey.json")
-farnell_data = browser.getLocal("/data/farnell.json")
-mouser_data  = browser.getLocal("/data/mouser.json")
+digikey_data = browser.getLocal("data/digikey.json")
+farnell_data = browser.getLocal("data/farnell.json")
+mouser_data  = browser.getLocal("data/mouser.json")
 
 module("Digikey")
 

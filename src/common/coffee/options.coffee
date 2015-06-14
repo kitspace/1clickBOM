@@ -19,8 +19,8 @@
 
 {browser} = require './browser'
 
-countries_data = browser.getLocal("/data/countries.json")
-settings_data  = browser.getLocal("/data/settings.json")
+countries_data = browser.getLocal("data/countries.json")
+settings_data  = browser.getLocal("data/settings.json")
 
 save_options = () ->
     select = document.getElementById("country")
