@@ -17,8 +17,9 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-RetailerInterface = require('./retailer_interface').RetailerInterface
+{RetailerInterface} = require './retailer_interface'
 util = require './util'
+
 DOM = util.DOM
 post = util.post
 get = util.get
@@ -187,4 +188,4 @@ class Newark extends RetailerInterface
             if callback?
                 callback({success:false,fails:items})
 
-module.exports = Newark
+exports.Newark = Newark

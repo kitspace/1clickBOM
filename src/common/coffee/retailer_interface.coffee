@@ -17,9 +17,9 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-util    = require './util'
-md5     = require './md5'
-browser = require './browser'
+util = require './util'
+{md5    } = require './md5'
+{browser} = require './browser'
 
 class RetailerInterface
     constructor: (name, country_code, data_path, settings, callback) ->
@@ -115,6 +115,5 @@ class InvalidCountryError extends Error
         @name = "InvalidCountryError"
         @message = "Invalid country-code"
 
-module.exports =
-    RetailerInterface: RetailerInterface
-    InvalidCountryError: InvalidCountryError
+exports.RetailerInterface   = RetailerInterface
+exports.InvalidCountryError = InvalidCountryError

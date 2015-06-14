@@ -17,16 +17,15 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-RetailerInterface = require('./retailer_interface').RetailerInterface
-InvalidCountryError = require('./retailer_interface').InvalidCountryError
-util     = require './util'
-Digikey  = require './digikey'
-Farnell  = require './farnell'
-Mouser   = require './mouser'
-RS       = require './rs'
-Newark   = require './newark'
-parseTSV = require './parser'
-qunit    = require './qunit-1.11.0'
+{RetailerInterface, InvalidCountryError} = require('./retailer_interface')
+util = require './util'
+{Digikey } = require './digikey'
+{Farnell } = require './farnell'
+{Mouser  } = require './mouser'
+{RS      } = require './rs'
+{Newark  } = require './newark'
+{parseTSV} = require './parser'
+{qunit   } = require './qunit-1.11.0'
 
 module    = qunit.module
 test      = qunit.test

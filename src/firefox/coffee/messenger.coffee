@@ -23,4 +23,4 @@ messenger =
     on: (msgName, callback) ->
     send:(msgName, input, callback) ->
 
-module.exports = messenger
+exports.messenger = messenger

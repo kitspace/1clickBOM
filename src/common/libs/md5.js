@@ -183,4 +183,4 @@ return (msw << 16) | (lsw & 0xFFFF);
 }
 }
 
-module.exports = md5
+exports.md5 = md5

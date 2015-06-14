@@ -17,8 +17,8 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-RetailerInterface = require('./retailer_interface').RetailerInterface
-util              = require './util'
+{RetailerInterface} = require './retailer_interface'
+util = require './util'
 
 DOM       = util.DOM
 post      = util.post
@@ -304,4 +304,4 @@ class RS extends RetailerInterface
         , () ->
             callback("", [])
 
-module.exports = RS
+exports.RS = RS

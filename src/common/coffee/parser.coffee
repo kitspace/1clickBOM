@@ -79,4 +79,4 @@ parseTSV =  (text) ->
     {items, invalid} = checkValidItems(items, invalid)
     return {items, invalid}
 
-module.exports = parseTSV
+exports.parseTSV = parseTSV

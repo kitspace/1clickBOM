@@ -17,7 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-browser = require './browser'
+{browser} = require './browser'
 
 badge =
     decaying_set  : false
@@ -122,10 +122,9 @@ DOM = new DOMParser()
 DOM.parse = (str) ->
     DOM.parseFromString(str, "text/html")
 
-module.exports =
-    badge           : badge
-    get_local       : get_local
-    post            : post
-    get             : get
-    trim_whitespace : trim_whitespace
-    DOM             : DOM
+exports.badge           = badge
+exports.get_local       = get_local
+exports.post            = post
+exports.get             = get
+exports.trim_whitespace = trim_whitespace
+exports.DOM             = DOM

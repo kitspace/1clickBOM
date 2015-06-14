@@ -31,4 +31,4 @@ messenger =
     send:(msgName, input, callback) ->
         chrome.runtime.sendMessage({name:msgName, value:input}, callback)
 
-module.exports = messenger
+exports.messenger = messenger

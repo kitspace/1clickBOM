@@ -17,15 +17,15 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-util     = require './util'
-browser  = require './browser'
-Digikey  = require './digikey'
-Farnell  = require './farnell'
-Mouser   = require './mouser'
-RS       = require './rs'
-Newark   = require './newark'
-parseTSV = require './parser'
-qunit    = require './qunit-1.11.0'
+util = require './util'
+{browser } = require './browser'
+{Digikey } = require './digikey'
+{Farnell } = require './farnell'
+{Mouser  } = require './mouser'
+{RS      } = require './rs'
+{Newark  } = require './newark'
+{parseTSV} = require './parser'
+{qunit   } = require './qunit-1.11.0'
 
 module    = qunit.module
 asyncTest = qunit.asyncTest

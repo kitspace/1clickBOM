@@ -17,14 +17,14 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-util     = require './util'
-browser  = require './browser'
-Digikey  = require './digikey'
-Farnell  = require './farnell'
-Mouser   = require './mouser'
-RS       = require './rs'
-Newark   = require './newark'
-parseTSV = require './parser'
+util = require './util'
+{browser } = require './browser'
+{Digikey } = require './digikey'
+{Farnell } = require './farnell'
+{Mouser  } = require './mouser'
+{RS      } = require './rs'
+{Newark  } = require './newark'
+{parseTSV} = require './parser'
 
 badge = util.badge
 
@@ -207,4 +207,4 @@ class window.BomManager
     openCart: (retailer)->
         @interfaces[retailer].openCartTab()
 
-module.exports = BomManager
+exports.BomManager = BomManager

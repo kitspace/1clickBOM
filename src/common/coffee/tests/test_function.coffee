@@ -1,4 +1,4 @@
-browser = require './browser'
+{browser} = require './browser'
 
 @Test = (module)->
     url = browser.getURL("html/test.html")

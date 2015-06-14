@@ -17,11 +17,11 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-BomManager = require './bom_manager'
-messenger  = require './messenger'
-browser    = require './browser'
-util       = require './util'
-parseTSV   = require './parser'
+{BomManager} = require './bom_manager'
+{messenger}  = require './messenger'
+{browser}    = require './browser'
+{parseTSV}   = require './parser'
+util         = require './util'
 
 window.paste = (callback) ->
     textarea = document.getElementById("pastebox")
@@ -48,11 +48,11 @@ browser.onInstalled () ->
     get_location () ->
         browser.tabsCreate({"url": browser.getURL("html/options.html")})
 
-window.bom_manager = new BomManager
+bom_manager = new BomManager
 
 browser.storageOnChanged (changes) ->
     if changes.country || changes.settings
-        window.bom_manager = new BomManager
+        bom_manager = new BomManager
 
 window.tsvPageNotifier =
     onDotTSV : false

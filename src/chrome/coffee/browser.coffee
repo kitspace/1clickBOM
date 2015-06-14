@@ -66,4 +66,4 @@ browser =
     notificationsCreate:(obj, callback) ->
         chrome.notifications.create "", obj, callback
 
-module.exports = browser
+exports.browser = browser

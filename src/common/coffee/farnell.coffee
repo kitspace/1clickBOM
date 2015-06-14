@@ -16,10 +16,11 @@
 #
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
-RetailerInterface = require('./retailer_interface').RetailerInterface
-Newark            = require './newark'
-util              = require './util'
-browser           = require './browser'
+
+{RetailerInterface} = require('./retailer_interface')
+{Newark           } = require './newark'
+util = require './util'
+{browser          } = require './browser'
 
 DOM       = util.DOM
 post      = util.post
@@ -201,4 +202,4 @@ class Farnell extends RetailerInterface
                 result = {success: result1.success && result2.success, fails: result1.fails.concat(result2.fails)}
                 callback(result)
 
-module.exports = Farnell
+exports.Farnell = Farnell
