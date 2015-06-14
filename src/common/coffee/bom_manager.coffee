@@ -30,8 +30,8 @@ badge = util.badge
 
 settings_data = util.get_local("data/settings.json")
 
-class window.BomManager
-    constructor: (callback) ->
+bom_manager =
+    init: (callback) ->
         @filling_carts  = false
         @emptying_carts = false
         browser.storageGet ["country", "settings"], ({country:country, settings:stored_settings}) =>
@@ -207,4 +207,6 @@ class window.BomManager
     openCart: (retailer)->
         @interfaces[retailer].openCartTab()
 
-exports.BomManager = BomManager
+bom_manager.init()
+
+exports.bom_manager = bom_manager
