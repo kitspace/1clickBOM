@@ -52,8 +52,15 @@ browser =
         chrome.cookies.set(obj, callback)
     getBackgroundPage: (callback) ->
         chrome.runtime.getBackgroundPage(callback)
-    getURL:(url) ->
-        return chrome.extension.getURL(url)
+    getLocal:(url, json=true)->
+        xhr = new XMLHttpRequest()
+        xhr.open("GET", chrome.extension.getURL(url), false)
+        xhr.send()
+        if xhr.status == 200
+            if (json)
+                return JSON.parse(xhr.responseText)
+            else
+                return xhr.responseText
     onInstalled:(callback) ->
         chrome.runtime.onInstalled.addListener (details)->
             if details.reason == "install"

@@ -42,16 +42,6 @@ badge =
         browser.setBadge({color:color, text:text})
         @priority = priority
 
-get_local = (url, json=true)->
-    xhr = new XMLHttpRequest()
-    xhr.open("GET", browser.getURL(url), false)
-    xhr.send()
-    if xhr.status == 200
-        if (json)
-            return JSON.parse(xhr.responseText)
-        else
-            return xhr.responseText
-
 network_callback = (event, callback, error_callback, notify=true) ->
     if event.target.readyState == 4
         if event.target.status == 200
@@ -129,7 +119,6 @@ DOM.parse = (str) ->
     DOM.parseFromString(str, "text/html")
 
 exports.badge           = badge
-exports.get_local       = get_local
 exports.post            = post
 exports.get             = get
 exports.trim_whitespace = trim_whitespace

@@ -31,7 +31,7 @@ exports.background = (messenger) ->
         bom_manager.addToBOM(textarea.value, callback)
 
     get_location = (callback) ->
-        countries_data = get_local("/data/countries.json")
+        countries_data = browser.getLocal("/data/countries.json")
         @used_country_codes = []
         for _,code of countries_data
             @used_country_codes.push(code)

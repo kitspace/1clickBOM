@@ -28,7 +28,7 @@ util = require './util'
 
 badge = util.badge
 
-settings_data = util.get_local("data/settings.json")
+settings_data = browser.getLocal("data/settings.json")
 
 bom_manager =
     init: (callback) ->

@@ -23,7 +23,6 @@ util = require './util'
 DOM       = util.DOM
 post      = util.post
 get       = util.get
-get_local = util.get_local
 
 class Digikey extends RetailerInterface
     constructor: (country_code, settings, callback) ->

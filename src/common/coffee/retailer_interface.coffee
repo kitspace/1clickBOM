@@ -24,7 +24,7 @@ util = require './util'
 class RetailerInterface
     constructor: (name, country_code, data_path, settings, callback) ->
         @country = country_code
-        data = util.get_local(data_path)
+        data = browser.getLocal(data_path)
         country_code_lookedup = data.lookup[country_code]
         if !country_code_lookedup
             error = new InvalidCountryError()

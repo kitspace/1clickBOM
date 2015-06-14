@@ -18,7 +18,6 @@
 # the Original Code is Kaspar Emanuel.
 
 {RetailerInterface, InvalidCountryError} = require('./retailer_interface')
-util = require './util'
 {Digikey } = require './digikey'
 {Farnell } = require './farnell'
 {Mouser  } = require './mouser'
@@ -33,7 +32,7 @@ ok        = qunit.ok
 throws    = qunit.throws
 deepEqual = qunit.deepEqual
 
-countries = util.get_local("/data/countries.json")
+countries = browser.getLocal("/data/countries.json")
 
 module("unit")
 
