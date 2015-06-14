@@ -17,10 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{browser} = require './browser'
-
-if not XMLHttpRequest?
-    {XMLHttpRequest} = require 'sdk/net/xhr'
+{browser, XMLHttpRequest} = require './browser'
 
 badge =
     decaying_set  : false
@@ -111,18 +108,7 @@ get = (url, {item:item, notify:notify, timeout:timeout}, callback, error_callbac
 trim_whitespace = (str) ->
     return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
 
-if not DOMParser?
-    #firefox doesn't have it in background code
-    {Cc, Ci} = require("chrome")
-    DOM = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser)
-else
-    DOM = new DOMParser()
-
-DOM.parse = (str) ->
-    DOM.parseFromString(str, "text/html")
-
 exports.badge           = badge
 exports.post            = post
 exports.get             = get
 exports.trim_whitespace = trim_whitespace
-exports.DOM             = DOM

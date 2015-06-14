@@ -17,14 +17,13 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{RetailerInterface} = require('./retailer_interface')
-{Newark           } = require './newark'
-util = require './util'
-{browser          } = require './browser'
+{RetailerInterface} = require './retailer_interface'
+{Newark}            = require './newark'
+util                = require './util'
+{browser, DOM}      = require './browser'
 
-DOM       = util.DOM
-post      = util.post
-get       = util.get
+post = util.post
+get  = util.get
 
 class Farnell extends RetailerInterface
     constructor: (country_code, settings, callback) ->

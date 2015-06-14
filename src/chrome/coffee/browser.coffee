@@ -52,6 +52,8 @@ browser =
         chrome.cookies.set(obj, callback)
     getBackgroundPage: (callback) ->
         chrome.runtime.getBackgroundPage(callback)
+    getURL: (url) ->
+        return chrome.extension.getURL(url)
     getLocal:(url, json=true)->
         xhr = new XMLHttpRequest()
         xhr.open("GET", chrome.extension.getURL(url), false)
@@ -73,4 +75,10 @@ browser =
     notificationsCreate:(obj, callback) ->
         chrome.notifications.create "", obj, callback
 
-exports.browser = browser
+DOM = new DOMParser()
+DOM.parse = (str) ->
+    DOM.parseFromString(str, "text/html")
+
+exports.browser        = browser
+exports.XMLHttpRequest = XMLHttpRequest
+exports.DOM            = DOM

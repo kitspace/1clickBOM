@@ -18,11 +18,11 @@
 # the Original Code is Kaspar Emanuel.
 
 {RetailerInterface} = require './retailer_interface'
-util = require './util'
+util  = require './util'
+{DOM} = require './browser'
 
-DOM       = util.DOM
-post      = util.post
-get       = util.get
+post = util.post
+get  = util.get
 
 class Mouser extends RetailerInterface
     constructor: (country_code, settings) ->

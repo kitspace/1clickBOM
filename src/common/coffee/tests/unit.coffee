@@ -24,7 +24,8 @@
 {RS      } = require './rs'
 {Newark  } = require './newark'
 {parseTSV} = require './parser'
-{qunit   } = require './qunit-1.11.0'
+qunit      = require './qunit-1.11.0'
+{browser}  = require './browser'
 
 module    = qunit.module
 test      = qunit.test
@@ -32,7 +33,7 @@ ok        = qunit.ok
 throws    = qunit.throws
 deepEqual = qunit.deepEqual
 
-countries = browser.getLocal("data/countries.json")
+countries = browser.getLocal("/data/countries.json")
 
 module("unit")
 

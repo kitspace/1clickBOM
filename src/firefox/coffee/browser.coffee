@@ -17,8 +17,10 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{storage} = require 'sdk/simple-storage'
-{data   } = require 'sdk/self'
+{storage}        = require 'sdk/simple-storage'
+{data   }        = require 'sdk/self'
+{XMLHttpRequest} = require 'sdk/net/xhr'
+{Cc, Ci}         = require 'chrome'
 
 storageListeners = []
 browser =
@@ -54,6 +56,7 @@ browser =
     cookiesGetAll: (obj, callback) ->
     cookiesRemove: (obj, callback) ->
     cookiesSet: (obj, callback) ->
+    getURL: (url) ->
     getLocal:(url, json=true)->
         s = data.load(url)
         if json
@@ -64,4 +67,10 @@ browser =
     setBadge:(obj) ->
     notificationsCreate:(obj, callback) ->
 
-exports.browser = browser
+DOM = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser)
+DOM.parse = (str) ->
+    DOM.parseFromString(str, "text/html")
+
+exports.browser        = browser
+exports.XMLHttpRequest = XMLHttpRequest
+exports.DOM            = DOM

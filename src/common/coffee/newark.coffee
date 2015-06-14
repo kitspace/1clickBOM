@@ -17,15 +17,11 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{RetailerInterface} = require './retailer_interface'
+{RetailerInterface}   = require './retailer_interface'
+{XMLHttpRequest, DOM} = require './browser'
 util = require './util'
-
-DOM  = util.DOM
 post = util.post
 get  = util.get
-
-if not XMLHttpRequest?
-    {XMLHttpRequest} = require 'sdk/net/xhr'
 
 class Newark extends RetailerInterface
     constructor: (country_code, settings) ->
