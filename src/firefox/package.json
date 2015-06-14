@@ -7,5 +7,5 @@
   "license": "CPAL 1.0",
   "version": @version,
   "icon": "data/images/logo48.png",
-  "main":"data/js/main"
+  "main":"main"
 }

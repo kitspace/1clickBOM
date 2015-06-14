@@ -1,14 +1,11 @@
 { ActionButton } = require("sdk/ui/button/action")
 
 data = require("sdk/self").data
-browser = require("data/js/browser").browser
+browser = require("browser").browser
 
 popup = require("sdk/panel").Panel({
     contentURL: data.url("html/popup.html")
-    contentScriptFile: [ data.url("js/util.js")
-                       , data.url("js/messenger.js")
-                       , data.url("js/popup.js")
-                       ]
+    contentScriptFile: [data.url("popup.js")]
 })
 
 button = ActionButton({

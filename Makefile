@@ -18,9 +18,9 @@ CHROME_COFFEE_TARGET_FILES = build/chrome/js/background.js build/chrome/js/popup
 							 build/chrome/js/unit.js build/chrome/js/functional.js \
 							 build/chrome/js/options.js
 COMMON_COFFEE_FIREFOX_TARGET_FILES = $(patsubst src/common/coffee/%.coffee, \
-									 build/firefox/data/js/%.js, $(COMMON_COFFEE_FILES))
+									 build/firefox/lib/%.js, $(COMMON_COFFEE_FILES))
 FIREFOX_COFFEE_TARGET_FILES = $(patsubst src/firefox/coffee/%.coffee, \
-							  build/firefox/data/js/%.js, $(FIREFOX_COFFEE_FILES)) \
+							  build/firefox/lib/%.js, $(FIREFOX_COFFEE_FILES)) \
 							  $(COMMON_COFFEE_FIREFOX_TARGET_FILES)
 
 CHROME_HTML_FILES  = $(wildcard src/chrome/html/*)
@@ -48,7 +48,11 @@ FIREFOX_DIRS = build/firefox/.dirstamp build/firefox/data/.dirstamp \
 CHROME_TEMP_SRC_FILES = $(CHROME_COFFEE_FILES) $(COMMON_COFFEE_FILES) \
 					   	$(COMMON_LIBS_FILES) $(CHROME_LIBS_FILES)
 
-CHROME_TEMP_TARGET_FILES = $(addprefix .temp/, $(notdir $(CHROME_TEMP_SRC_FILES)))
+FIREFOX_TEMP_SRC_FILES = $(FIREFOX_COFFEE_FILES) $(COMMON_COFFEE_FILES) \
+					   	$(COMMON_LIBS_FILES) $(FIREFOX_LIBS_FILES)
+
+CHROME_TEMP_TARGET_FILES = $(addprefix .temp-chrome/, $(notdir $(CHROME_TEMP_SRC_FILES)))
+FIREFOX_TEMP_TARGET_FILES = $(addprefix .temp-firefox/, $(notdir $(FIREFOX_TEMP_SRC_FILES)))
 
 all: dirs coffee images html libs data build/chrome/manifest.json \
    	 build/firefox/package.json
@@ -66,39 +70,60 @@ build/chrome/manifest.json: src/chrome/manifest.json
 build/firefox/package.json: src/firefox/package.json
 	sed 's/@version/"$(VERSION)"/' $< > $@
 
-.temp/.dirstamp:
+.temp-chrome/.dirstamp:
 	mkdir $(dir $@)
 	@touch $@
 
-.temp/%: src/chrome/coffee/%
+.temp-chrome/%: src/chrome/coffee/%
 	cp $< $@
 
-.temp/%: src/common/coffee/tests/%
+.temp-chrome/%: src/common/coffee/tests/%
 	cp $< $@
 
-.temp/%: src/common/coffee/%
+.temp-chrome/%: src/common/coffee/%
 	cp $< $@
 
-.temp/%: src/common/libs/%
+.temp-chrome/%: src/common/libs/%
 	cp $< $@
 
-build/chrome/js/%.js: .temp/.dirstamp $(CHROME_TEMP_TARGET_FILES)
+.temp-firefox/.dirstamp:
+	mkdir $(dir $@)
+	@touch $@
+
+.temp-firefox/%: src/firefox/coffee/%
+	cp $< $@
+
+.temp-firefox/%: src/common/coffee/tests/%
+	cp $< $@
+
+.temp-firefox/%: src/common/coffee/%
+	cp $< $@
+
+.temp-firefox/%: src/common/libs/%
+	cp $< $@
+
+
+build/chrome/js/%.js: .temp-chrome/.dirstamp $(CHROME_TEMP_TARGET_FILES)
 	browserify --debug --transform coffeeify --extension=".coffee" \
-		.temp/$(basename $(@F)).coffee -o $@
+		.temp-chrome/$(basename $(@F)).coffee -o $@
 
-build/chrome/js/qunit.js: .temp/.dirstamp $(CHROME_TEMP_TARGET_FILES)
-	browserify --debug -r .temp/qunit-1.11.0.js -o $@
+build/chrome/js/qunit.js: .temp-chrome/.dirstamp $(CHROME_TEMP_TARGET_FILES)
+	browserify --debug -r .temp-chrome/qunit-1.11.0.js -o $@
 
 build/chrome/js/unit.js: build/chrome/js/qunit.js $(CHROME_TEMP_TARGET_FILES)
 	browserify --debug --transform coffeeify --extension=".coffee" \
-		-x .temp/qunit-1.11.0.js .temp/$(basename $(@F)).coffee -o $@
+		-x .temp-chrome/qunit-1.11.0.js .temp-chrome/$(basename $(@F)).coffee -o $@
 
 build/chrome/js/functional.js: build/chrome/js/qunit.js $(CHROME_TEMP_TARGET_FILES)
 	browserify --debug --transform coffeeify --extension=".coffee" \
-		-x .temp/qunit-1.11.0.js .temp/$(basename $(@F)).coffee -o $@
+		-x .temp-chrome/qunit-1.11.0.js .temp-chrome/$(basename $(@F)).coffee -o $@
 
-build/firefox/data/js/%.js: $(FIREFOX_COFFEE_FILES) $(COMMON_COFFEE_FILES)
-	coffee -m -c -o build/firefox/data/js/ $(FIREFOX_COFFEE_DIR) $(COMMON_COFFEE_DIR)
+build/firefox/data/popup.js: .temp-firefox/.dirstamp $(FIREFOX_TEMP_TARGET_FILES)
+	browserify --debug --transform coffeeify --extension=".coffee" \
+		.temp-firefox/$(basename $(@F)).coffee -o $@
+
+build/firefox/lib/%.js: $(FIREFOX_COFFEE_FILES) $(COMMON_COFFEE_FILES)
+	coffee -m -c -o build/firefox/lib/ $(FIREFOX_COFFEE_DIR) $(COMMON_COFFEE_DIR)
 
 chrome_html: dirs $(patsubst src/common/%, build/chrome/%, $(COMMON_HTML_FILES)) \
    			$(patsubst src/%, build/%, $(CHROME_HTML_FILES))
@@ -154,6 +179,6 @@ build/firefox/data/%: src/common/%
 	cp $< $@
 
 clean:
-	rm -rf .temp build
+	rm -rf .temp-firefox .temp-chrome build
 
 .PHONY: all dirs chrome_dirs firefox_dirs coffee clean watch package_chrome
