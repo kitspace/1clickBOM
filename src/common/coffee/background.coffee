@@ -17,7 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{bom_manager} = require './bom_manager'
+#{bom_manager} = require './bom_manager'
 {browser}     = require './browser'
 {parseTSV}    = require './parser'
 util          = require './util'

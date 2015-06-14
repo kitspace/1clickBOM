@@ -118,7 +118,13 @@ get = (url, {item:item, notify:notify, timeout:timeout}, callback, error_callbac
 trim_whitespace = (str) ->
     return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
 
-DOM = new DOMParser()
+if not DOMParser?
+    #firefox doesn't have it in background code
+    {Cc, Ci} = require("chrome")
+    DOM = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser)
+else
+    DOM = new DOMParser()
+
 DOM.parse = (str) ->
     DOM.parseFromString(str, "text/html")
 

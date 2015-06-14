@@ -59,7 +59,7 @@ FIREFOX_TEMP_TARGET_FILES = $(addprefix build/.temp-firefox/, \
 
 all: firefox chrome
 
-firefox: dirs $(FIREFOX_COFFEE_TARGET_FILES) firefox_html firefox_libs firefox_images firefox_data build/firefox/package.json
+firefox: dirs $(FIREFOX_COFFEE_TARGET_FILES) firefox_html firefox_images firefox_data build/firefox/package.json
 
 chrome: dirs $(CHROME_COFFEE_TARGET_FILES) chrome_html chrome_libs chrome_images chrome_data build/chrome/manifest.json
 
@@ -124,6 +124,8 @@ build/firefox/data/popup.js: build/.temp-firefox/.dir $(FIREFOX_TEMP_TARGET_FILE
 		./build/.temp-firefox/$(basename $(@F)).coffee -o $@
 
 build/firefox/lib/%.js: $(FIREFOX_COFFEE_FILES) $(COMMON_COFFEE_FILES)
+	mkdir -p build/firefox/lib
+	cp src/common/libs/*.js build/firefox/lib/
 	coffee -m -c -o build/firefox/lib/ $(FIREFOX_COFFEE_DIR) $(COMMON_COFFEE_DIR)
 
 chrome_html: dirs $(patsubst src/common/%, build/chrome/%, $(COMMON_HTML_FILES)) \
@@ -133,8 +135,6 @@ firefox_html: dirs $(patsubst src/common/%, build/firefox/data/%,\
 
 chrome_libs: dirs $(patsubst src/common/%, build/chrome/%, $(COMMON_LIBS_FILES)) \
    	$(patsubst src/%, build/%, $(CHROME_LIBS_FILES))
-firefox_libs: dirs $(patsubst src/common/%, build/firefox/data/%, \
-	$(COMMON_LIBS_FILES)) $(patsubst src/%, build/%, $(FIREFOX_LIBS_FILES))
 
 chrome_images: dirs $(patsubst src/common/%, build/chrome/%, \
 	$(COMMON_IMAGE_FILES)) $(patsubst src/%, build/%, $(CHROME_IMAGE_FILES))
