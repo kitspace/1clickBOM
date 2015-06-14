@@ -18,132 +18,133 @@
 # the Original Code is Kaspar Emanuel.
 
 {bom_manager} = require './bom_manager'
-{messenger}   = require './messenger'
 {browser}     = require './browser'
 {parseTSV}    = require './parser'
 util          = require './util'
 
-window.paste = (callback) ->
-    textarea = document.getElementById("pastebox")
-    textarea.select()
-    document.execCommand("paste")
-    bom_manager.addToBOM(textarea.value, callback)
+exports.background = (messenger) ->
 
-get_location = (callback) ->
-    countries_data = get_local("/data/countries.json")
-    @used_country_codes = []
-    for _,code of countries_data
-        @used_country_codes.push(code)
-    url = "http://kaspar.h1x.com:8080/json"
-    util.get url, {timeout:5000}, (event) =>
-        response = JSON.parse(event.target.responseText)
-        code = response.country_code
-        if code == "GB" then code = "UK"
-        if code not in @used_country_codes then code = "Other"
-        browser.storageSet({country: code}, callback)
-    , () ->
-        callback()
+    window.paste = (callback) ->
+        textarea = document.getElementById("pastebox")
+        textarea.select()
+        document.execCommand("paste")
+        bom_manager.addToBOM(textarea.value, callback)
 
-browser.onInstalled () ->
-    get_location () ->
-        browser.tabsCreate({"url": browser.getURL("html/options.html")})
+    get_location = (callback) ->
+        countries_data = get_local("/data/countries.json")
+        @used_country_codes = []
+        for _,code of countries_data
+            @used_country_codes.push(code)
+        url = "http://kaspar.h1x.com:8080/json"
+        util.get url, {timeout:5000}, (event) =>
+            response = JSON.parse(event.target.responseText)
+            code = response.country_code
+            if code == "GB" then code = "UK"
+            if code not in @used_country_codes then code = "Other"
+            browser.storageSet({country: code}, callback)
+        , () ->
+            callback()
 
-browser.storageOnChanged (changes) ->
-    if changes.country || changes.settings
-        bom_manager.init()
+    browser.onInstalled () ->
+        get_location () ->
+            browser.tabsCreate({"url": browser.getURL("html/options.html")})
 
-window.tsvPageNotifier =
-    onDotTSV : false
-    re       : new RegExp("\.tsv$","i")
-    items    : []
-    invalid  : []
-    _set_not_dotTSV: () ->
-        util.badge.setDefault("")
-        @onDotTSV = false
-        @items    = []
-        @invalid  = []
-    checkPage: (callback) ->
-        browser.tabsQuery {active:true, currentWindow:true}, (tabs) =>
-            if tabs.length > 0
-                tab_url = tabs[0].url.split("?")[0]
-                if tabs.length >= 1 && tab_url.match(@re)
-                    if /^http.?:\/\/github.com\//.test(tabs[0].url)
-                        url = tab_url.replace(/blob/,"raw")
-                    else if /^http.?:\/\/bitbucket.org\//.test(tabs[0].url)
-                        url = tab_url.split("?")[0].replace(/src/,"raw")
-                    else
-                        url = tab_url
-                    util.get url, {notify:false}, (event) =>
-                        {items, invalid} = parseTSV(event.target.responseText)
-                        if items.length > 0
-                            util.badge.setDefault("\u2191", "#0000FF")
-                            @onDotTSV = true
-                            @items    = items
-                            @invalid  = invalid
+    browser.storageOnChanged (changes) ->
+        if changes.country || changes.settings
+            bom_manager.init()
+
+    window.tsvPageNotifier =
+        onDotTSV : false
+        re       : new RegExp("\.tsv$","i")
+        items    : []
+        invalid  : []
+        _set_not_dotTSV: () ->
+            util.badge.setDefault("")
+            @onDotTSV = false
+            @items    = []
+            @invalid  = []
+        checkPage: (callback) ->
+            browser.tabsQuery {active:true, currentWindow:true}, (tabs) =>
+                if tabs.length > 0
+                    tab_url = tabs[0].url.split("?")[0]
+                    if tabs.length >= 1 && tab_url.match(@re)
+                        if /^http.?:\/\/github.com\//.test(tabs[0].url)
+                            url = tab_url.replace(/blob/,"raw")
+                        else if /^http.?:\/\/bitbucket.org\//.test(tabs[0].url)
+                            url = tab_url.split("?")[0].replace(/src/,"raw")
                         else
+                            url = tab_url
+                        util.get url, {notify:false}, (event) =>
+                            {items, invalid} = parseTSV(event.target.responseText)
+                            if items.length > 0
+                                util.badge.setDefault("\u2191", "#0000FF")
+                                @onDotTSV = true
+                                @items    = items
+                                @invalid  = invalid
+                            else
+                                @_set_not_dotTSV()
+                        , () =>
                             @_set_not_dotTSV()
-                    , () =>
+                    else
                         @_set_not_dotTSV()
-                else
-                    @_set_not_dotTSV()
-                if callback?
+                    if callback?
+                        callback()
+                else if callback?
                     callback()
-            else if callback?
-                callback()
-    addToBOM: (callback) ->
-        @checkPage () =>
-            if @onDotTSV
-                window.bom_manager._add_to_bom(@items, @invalid,callback)
+        addToBOM: (callback) ->
+            @checkPage () =>
+                if @onDotTSV
+                    window.bom_manager._add_to_bom(@items, @invalid,callback)
 
-browser.tabsOnUpdated () =>
-    tsvPageNotifier.checkPage()
+    browser.tabsOnUpdated () =>
+        tsvPageNotifier.checkPage()
 
-sendState = () ->
-    bom_manager.getBOM (bom) ->
-        messenger.send("sendBackgroundState", {bom:bom, bom_manager:bom_manager, onDotTSV: tsvPageNotifier.onDotTSV})
+    sendState = () ->
+        bom_manager.getBOM (bom) ->
+            messenger.send("sendBackgroundState", {bom:bom, bom_manager:bom_manager, onDotTSV: tsvPageNotifier.onDotTSV})
 
-messenger.on "getBackgroundState", () ->
-    sendState()
-
-messenger.on "fillCart", (name, callback) ->
-    bom_manager.fillCart name, () ->
-        sendState()
-    sendState()
-
-messenger.on "fillCarts", () ->
-    bom_manager.fillCarts undefined, () ->
-        sendState()
-    sendState()
-
-messenger.on "openCart", (name) ->
-    bom_manager.openCart(name)
-
-messenger.on "openCarts", () ->
-    bom_manager.openCarts()
-
-messenger.on "emptyCart", (name) ->
-    bom_manager.emptyCart name, () ->
-        sendState()
-    sendState()
-
-messenger.on "emptyCarts", () ->
-    bom_manager.emptyCarts undefined, () ->
-        sendState()
-    sendState()
-
-messenger.on "clearBOM", () ->
-    browser.storageRemove "bom" , () ->
+    messenger.on "getBackgroundState", () ->
         sendState()
 
-messenger.on "paste", () ->
-    paste () ->
+    messenger.on "fillCart", (name, callback) ->
+        bom_manager.fillCart name, () ->
+            sendState()
         sendState()
 
-messenger.on "loadFromPage", () ->
-    tsvPageNotifier.addToBOM () ->
+    messenger.on "fillCarts", () ->
+        bom_manager.fillCarts undefined, () ->
+            sendState()
         sendState()
 
-window.Test = (module)->
-    url = browser.getURL("html/test.html")
-    url += "?module=" + module if module?
-    window.open(url)
+    messenger.on "openCart", (name) ->
+        bom_manager.openCart(name)
+
+    messenger.on "openCarts", () ->
+        bom_manager.openCarts()
+
+    messenger.on "emptyCart", (name) ->
+        bom_manager.emptyCart name, () ->
+            sendState()
+        sendState()
+
+    messenger.on "emptyCarts", () ->
+        bom_manager.emptyCarts undefined, () ->
+            sendState()
+        sendState()
+
+    messenger.on "clearBOM", () ->
+        browser.storageRemove "bom" , () ->
+            sendState()
+
+    messenger.on "paste", () ->
+        paste () ->
+            sendState()
+
+    messenger.on "loadFromPage", () ->
+        tsvPageNotifier.addToBOM () ->
+            sendState()
+
+    window.Test = (module)->
+        url = browser.getURL("html/test.html")
+        url += "?module=" + module if module?
+        window.open(url)

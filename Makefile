@@ -14,7 +14,7 @@ FIREFOX_COFFEE_FILES = $(call wildc_recursive, $(FIREFOX_COFFEE_DIR), *.coffee)
 
 COMMON_COFFEE_CHROME_TARGET_FILES = $(patsubst src/common/coffee/%.coffee, \
 								   	build/chrome/js/%.js, $(COMMON_COFFEE_FILES))
-CHROME_COFFEE_TARGET_FILES = build/chrome/js/background.js build/chrome/js/popup.js \
+CHROME_COFFEE_TARGET_FILES = build/chrome/js/main.js build/chrome/js/popup.js \
 							 build/chrome/js/unit.js build/chrome/js/functional.js \
 							 build/chrome/js/options.js
 COMMON_COFFEE_FIREFOX_TARGET_FILES = $(patsubst src/common/coffee/%.coffee, \
@@ -151,7 +151,7 @@ watch:
 
 CHROME_PACKAGE_NAME = $(PACKAGE_NAME)-chrome
 
-package_chrome: all
+package_chrome: chrome
 	cp -r build/chrome $(CHROME_PACKAGE_NAME)
 	rm -f $(patsubst build/chrome/%,$(CHROME_PACKAGE_NAME)/%,$(CHROME_DIRS))
 	zip -r $(CHROME_PACKAGE_NAME).zip $(CHROME_PACKAGE_NAME)/
