@@ -15,7 +15,8 @@ FIREFOX_COFFEE_FILES = $(call wildc_recursive, $(FIREFOX_COFFEE_DIR), *.coffee)
 COMMON_COFFEE_CHROME_TARGET_FILES = $(patsubst src/common/coffee/%.coffee, \
 								   	build/chrome/js/%.js, $(COMMON_COFFEE_FILES))
 CHROME_COFFEE_TARGET_FILES = build/chrome/js/background.js build/chrome/js/popup.js \
-							 build/chrome/js/unit.js build/chrome/js/functional.js
+							 build/chrome/js/unit.js build/chrome/js/functional.js \
+							 build/chrome/js/options.js
 COMMON_COFFEE_FIREFOX_TARGET_FILES = $(patsubst src/common/coffee/%.coffee, \
 									 build/firefox/data/js/%.js, $(COMMON_COFFEE_FILES))
 FIREFOX_COFFEE_TARGET_FILES = $(patsubst src/firefox/coffee/%.coffee, \

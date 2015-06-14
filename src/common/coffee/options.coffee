@@ -17,7 +17,8 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-util = require './util'
+util    = require './util'
+browser = require './browser'
 
 countries_data = util.get_local("/data/countries.json")
 settings_data  = util.get_local("/data/settings.json")
