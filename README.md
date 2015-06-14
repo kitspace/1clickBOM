@@ -54,31 +54,27 @@ using the buttons on the popup. You can also quickly view and empty your carts.
 ## Issues ##
 
 If you need any help or think you found a bug please get in touch via
-[Github][10] or [email:info@1clickBOM.com][11].
+[Github][10] or [email][11].
 
 ## Roadmap ##
 
 * 0.2
     * Firefox support
 
-* 0.3
+* 1.0
     * Multiple retailers per item
     * Named columns
-    * Preferred retailer rankings
-
-* 0.4
-    * Allied, Arrow, AVNet
-    * Display cart summaries
+    * Preferred retailer setting
+    * 1clickBOM site interaction
     * Warn about filling already filled carts
-    * Allow adding components to BOM from the component page
-    * Export BOM
-
-* 1.0
-    * Function to minimize order cost + shipping
-    * Autofind same items from different vendors
 
 * 2.0
-    * Include PCB order
+    * Allied, Arrow, AVNet, Conrad and Rapid
+    * Function to minimize order cost + shipping
+    * Autofind same items from different vendors
+    * Display cart summaries
+    * Allow adding components to BOM from the component page
+    * Export BOM
 
 * 3.0
     * 3D-chip-printer support
