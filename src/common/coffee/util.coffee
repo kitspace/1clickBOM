@@ -81,7 +81,7 @@ post = (url, params, {item:item, notify:notify, timeout:timeout, json:json},  ca
     xhr.url = url
     xhr.onreadystatechange = (event) ->
         network_callback(event, callback, error_callback, notify)
-    xhr.timeout = timeout;
+    xhr.timeout = timeout
     xhr.ontimedout = (event) ->
         network_callback(event, callback, error_callback, notify)
     xhr.send(params)

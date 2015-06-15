@@ -129,7 +129,7 @@ bom_manager =
                 title += if items.length > 1 then "s" else ""
                 title += " to " + retailer + " cart:"
                 for fail in fails
-                    failed_items.push({title:"item: " + fail.comment + " | " + fail.quantity + " | " + fail.part,message:""})
+                    failed_items.push({title:"item: " + fail.comment + " | " + fail.quantity + " | " + fail.part, message:""})
             browser.notificationsCreate {type:"list", title:title, message:"", items:failed_items, iconUrl:"/images/error128.png"}, () =>
             badge.setDecaying("Err","#FF0000", priority=2)
         else

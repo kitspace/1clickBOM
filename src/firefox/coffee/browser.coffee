@@ -26,7 +26,6 @@ storageListeners = []
 browser =
     storageGet:(keys, callback) ->
         ret = {}
-        console.log(storage)
         for k in keys
             ret[k] = storage[k]
         callback(ret)

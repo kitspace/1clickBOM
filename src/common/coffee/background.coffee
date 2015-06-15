@@ -47,7 +47,7 @@ exports.background = (messenger) ->
         if changes.country || changes.settings
             bom_manager.init()
 
-    window.tsvPageNotifier =
+    tsvPageNotifier =
         onDotTSV : false
         re       : new RegExp("\.tsv$","i")
         items    : []
@@ -88,7 +88,7 @@ exports.background = (messenger) ->
         addToBOM: (callback) ->
             @checkPage () =>
                 if @onDotTSV
-                    window.bom_manager._add_to_bom(@items, @invalid,callback)
+                    bom_manager._add_to_bom(@items, @invalid,callback)
 
     browser.tabsOnUpdated () =>
         tsvPageNotifier.checkPage()

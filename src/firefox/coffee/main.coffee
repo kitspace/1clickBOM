@@ -22,7 +22,6 @@ button = ActionButton({
         popup.show({position:button})
 })
 
-
 console.log("1clickBOM main loaded")
 
 background(bgMessenger(popup))

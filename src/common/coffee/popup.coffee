@@ -70,7 +70,7 @@ startSpinning = (link) ->
             offset + "px" + " " + 0 + "px"
         counter++
         if (counter>=frames)
-            counter =0
+            counter = 0
     , 50
     link.hidden=true
     link.spinning=true
@@ -87,7 +87,8 @@ stopSpinning = (link) ->
 render = (state) ->
     bom = state.bom
     hideOrShow(bom, state.onDotTSV)
-    element_Table.removeChild(element_Table.lastChild) while element_Table.hasChildNodes()
+    while element_Table.hasChildNodes()
+        element_Table.removeChild(element_Table.lastChild)
     any_adding   = false
     any_emptying = false
     for retailer_name of bom

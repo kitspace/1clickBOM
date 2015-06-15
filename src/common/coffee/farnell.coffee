@@ -28,7 +28,7 @@ get  = util.get
 class Farnell extends RetailerInterface
     constructor: (country_code, settings, callback) ->
         super("Farnell", country_code, "data/farnell.json", settings)
-        get "http" + @site, {}, () =>
+        get "http" + @site, {}, (event) =>
             #if there is a "pf_custom_js" element then this site is like
             #Newark's and we get all our methods from Newark, otherwise we fix
             #our cookies
