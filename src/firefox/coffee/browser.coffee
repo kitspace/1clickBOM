@@ -20,6 +20,8 @@
 {storage}        = require 'sdk/simple-storage'
 {data   }        = require 'sdk/self'
 {XMLHttpRequest} = require 'sdk/net/xhr'
+clipboard        = require 'sdk/clipboard'
+notifications    = require 'sdk/notifications'
 {Cc, Ci}         = require 'chrome'
 
 storageListeners = []
@@ -64,7 +66,16 @@ browser =
             return s
     onInstalled:(callback) ->
     setBadge:(obj) ->
+        console.log("setBadge:", obj)
     notificationsCreate:(obj, callback) ->
+        console.log("notificationsCreate:", obj)
+        ffObj =
+            title   : obj.title
+            text    : obj.message
+            iconURL : obj.iconUrl
+        notifications.notify(ffObj)
+    paste:(callback) ->
+        return clipboard.get()
 
 DOM = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser)
 DOM.parse = (str) ->
