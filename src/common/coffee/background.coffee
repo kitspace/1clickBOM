@@ -24,12 +24,6 @@ util          = require './util'
 
 exports.background = (messenger) ->
 
-    window.paste = (callback) ->
-        textarea = document.getElementById("pastebox")
-        textarea.select()
-        document.execCommand("paste")
-        bom_manager.addToBOM(textarea.value, callback)
-
     get_location = (callback) ->
         countries_data = browser.getLocal("data/countries.json")
         @used_country_codes = []
@@ -137,14 +131,15 @@ exports.background = (messenger) ->
             sendState()
 
     messenger.on "paste", () ->
-        paste () ->
+        bom_manager.addToBOM browser.paste(), () ->
             sendState()
 
     messenger.on "loadFromPage", () ->
         tsvPageNotifier.addToBOM () ->
             sendState()
 
-    window.Test = (module)->
-        url = browser.getURL("html/test.html")
-        url += "?module=" + module if module?
-        window.open(url)
+    if window?
+        window.Test = (module)->
+            url = browser.getURL("html/test.html")
+            url += "?module=" + module if module?
+            window.open(url)

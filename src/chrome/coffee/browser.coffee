@@ -74,6 +74,11 @@ browser =
             chrome.browserAction.setBadgeText ({text:obj.text})
     notificationsCreate:(obj, callback) ->
         chrome.notifications.create "", obj, callback
+    paste:() ->
+        textarea = document.getElementById("pastebox")
+        textarea.select()
+        document.execCommand("paste")
+        return textarea.value
 
 DOM = new DOMParser()
 DOM.parse = (str) ->
