@@ -1,9 +1,10 @@
-console.log("1clickBOM main loaded")
 { ActionButton } = require("sdk/ui/button/action")
 
-{data      } = require("sdk/self")
-{browser   } = require("./browser")
-{background} = require("./background")
+{data      }  = require 'sdk/self'
+{browser   }  = require './browser'
+{background}  = require './background'
+{bgMessenger} = require './bg_messenger'
+{Cc, Ci}      = require 'chrome'
 
 popup = require("sdk/panel").Panel({
     contentURL: data.url("html/popup.html")
@@ -21,19 +22,7 @@ button = ActionButton({
         popup.show({position:button})
 })
 
-browser.storageOnChanged (changes) ->
-    if changes.country || changes.settings
-        console.log("WRONG!")
-    else if changes.bom
-        console.log("WRIGHT!")
 
-browser.storageSet({bom:{farnell:[1,2,3]}})
+console.log("1clickBOM main loaded")
 
-browser.storageGet ["bom"], (obj) ->
-    console.log("obj", obj)
-
-browser.storageRemove "bom"
-
-browser.storageGet ["bom"], (obj) ->
-    console.log("obj2", obj)
-
+background(bgMessenger(popup))

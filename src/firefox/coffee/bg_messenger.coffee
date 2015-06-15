@@ -20,9 +20,9 @@
 #this is the messenger object used by the background in firefox
 
 bgMessenger = (popup) ->
-    msgNames: []
-    listening: false
     on: (msgName, callback) ->
-    send:(msgName, input, callback) ->
+        popup.port.on(msgName, callback)
+    send:(msgName, input) ->
+        popup.port.emit(msgName, input)
 
 exports.bgMessenger = bgMessenger

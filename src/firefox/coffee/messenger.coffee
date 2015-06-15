@@ -20,9 +20,9 @@
 #this is the messenger object used by the popup in firefox
 
 messenger =
-    msgNames: []
-    listening: false
     on: (msgName, callback) ->
-    send:(msgName, input, callback) ->
+        self.port.on(msgName, callback)
+    send:(msgName, input) ->
+        self.port.emit(msgName, input)
 
 exports.messenger = messenger

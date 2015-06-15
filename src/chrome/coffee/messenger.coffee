@@ -28,7 +28,7 @@ messenger =
                     if request.name == msgName
                         return callback(request.value, sendResponse)
             @listening = true
-    send:(msgName, input, callback) ->
-        chrome.runtime.sendMessage({name:msgName, value:input}, callback)
+    send: (msgName, input) ->
+        chrome.runtime.sendMessage({name:msgName, value:input})
 
 exports.messenger = messenger
