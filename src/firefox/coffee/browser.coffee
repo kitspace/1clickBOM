@@ -23,6 +23,24 @@
 clipboard        = require 'sdk/clipboard'
 notifications    = require 'sdk/notifications'
 {Cc, Ci}         = require 'chrome'
+{ActionButton}   = require 'sdk/ui/button/action'
+{setTimeout, clearTimeout} = require 'sdk/timers'
+
+popup = require("sdk/panel").Panel({
+    contentURL: data.url("html/popup.html")
+    contentScriptFile: [data.url("popup.js")]
+})
+
+button = ActionButton(
+    id:"bom_button",
+    label:"1clickBOM",
+    icon : {
+        "16": "./images/button16.png",
+        "32": "./images/button32.png"
+    },
+    onClick: (state) ->
+        popup.show({position:button})
+)
 
 storageListeners = []
 browser =
@@ -65,17 +83,20 @@ browser =
         else
             return s
     onInstalled:(callback) ->
-    setBadge:(obj) ->
-        console.log("setBadge:", obj)
+    setBadge:({color, text}) ->
+        button.badge = text
+        button.badgeColor = color
     notificationsCreate:(obj, callback) ->
         console.log("notificationsCreate:", obj)
         ffObj =
             title   : obj.title
             text    : obj.message
-            iconURL : obj.iconUrl
+            iconURL : "." + obj.iconUrl
         notifications.notify(ffObj)
     paste:(callback) ->
         return clipboard.get()
+    setTimeout: setTimeout
+    clearTimeout: clearTimeout
 
 DOM = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser)
 DOM.parse = (str) ->
@@ -84,3 +105,4 @@ DOM.parse = (str) ->
 exports.browser        = browser
 exports.XMLHttpRequest = XMLHttpRequest
 exports.DOM            = DOM
+exports.popup          = popup

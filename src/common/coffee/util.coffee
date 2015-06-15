@@ -27,9 +27,9 @@ badge =
     setDecaying: (text, color="#0000FF", priority = 1) ->
         if priority >= @priority
             if @decaying_set && @id > 0
-                clearTimeout(@id)
+                browser.clearTimeout(@id)
             @_set(text, color, priority)
-            @id = setTimeout () =>
+            @id = browser.setTimeout () =>
                 @decaying_set = false
                 @_set(@default_text, @default_color, 0)
             , 5000
