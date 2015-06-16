@@ -147,7 +147,7 @@ firefox_data: dirs $(patsubst src/common/%, build/firefox/data/%, \
 	$(COMMON_DATA_FILES)) $(patsubst src/%, build/%, $(FIREFOX_DATA_FILES))
 
 watch:
-	@while true; do make | grep -v "^make\[1\]:"; sleep 1; done
+	while true; do make | grep --invert-match "^make\[1\]:"; sleep 1; done
 
 CHROME_PACKAGE_NAME = $(PACKAGE_NAME)-chrome
 
@@ -162,7 +162,7 @@ build/.temp-firefox/tmp.xpi: firefox
 
 load-firefox: build/.temp-firefox/tmp.xpi
 	wget --post-file=build/.temp-firefox/tmp.xpi "http://localhost:8888" 2>&1 |\
-	   	grep -v 399
+	   	grep --invert-match 399 #ignore 399 errors, they are normal
 
 %/.dir:
 	mkdir $*
