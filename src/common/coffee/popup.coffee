@@ -108,13 +108,13 @@ render = (state) ->
         tr.appendChild(td_0)
 
         td_1 = document.createElement("td")
-        td_1.innerText = items.length + " line"
-        td_1.innerText += "s" if (items.length > 1)
+        td_1.innerHTML = items.length + " line"
+        td_1.innerHTML += "s" if (items.length > 1)
         tr.appendChild(td_1)
 
         td_2 = document.createElement("td")
-        td_2.innerText = no_of_items + " item"
-        td_2.innerText += "s" if (no_of_items > 1)
+        td_2.innerHTML = no_of_items + " item"
+        td_2.innerHTML += "s" if (no_of_items > 1)
         tr.appendChild(td_2)
         td = document.createElement("td")
 
@@ -129,7 +129,7 @@ render = (state) ->
             a.href = "#"
             span = document.createElement("span")
             span.className = "button_icon"
-            span.innerText = unicode_chars[i]
+            span.innerHTML = unicode_chars[i]
             a.appendChild(span)
             td.appendChild(a)
             tr.appendChild(td)

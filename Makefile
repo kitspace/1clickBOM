@@ -161,7 +161,8 @@ build/.temp-firefox/tmp.xpi: firefox
 	cfx xpi --pkgdir=build/firefox --output-file=$@
 
 load-firefox: build/.temp-firefox/tmp.xpi
-	wget --post-file=build/.temp-firefox/tmp.xpi "http://localhost:8888" || return 0
+	wget --post-file=build/.temp-firefox/tmp.xpi "http://localhost:8888" 2>&1 |\
+	   	grep -v 399
 
 %/.dir:
 	mkdir $*
