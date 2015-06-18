@@ -94,7 +94,11 @@ browser =
             iconURL : "." + obj.iconUrl
         notifications.notify(ffObj)
     paste:(callback) ->
-        return clipboard.get()
+        c = clipboard.get()
+        if not c?
+            return ""
+        else
+            return c
     setTimeout: setTimeout
     clearTimeout: clearTimeout
 
