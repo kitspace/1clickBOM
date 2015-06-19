@@ -79,8 +79,10 @@ browser =
         textarea.select()
         document.execCommand("paste")
         return textarea.value
-    setTimeout: setTimeout
-    clearTimeout: clearTimeout
+    setTimeout: (callback, time) ->
+        setTimeout(callback, time)
+    clearTimeout: (id) ->
+        clearTimeout(id)
 
 DOM = new DOMParser()
 DOM.parse = (str) ->
