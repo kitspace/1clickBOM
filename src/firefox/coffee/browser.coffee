@@ -24,6 +24,8 @@ clipboard        = require 'sdk/clipboard'
 notifications    = require 'sdk/notifications'
 {Cc, Ci}         = require 'chrome'
 {ActionButton}   = require 'sdk/ui/button/action'
+locationChanged  = require './locationChanged'
+tabs             = require 'sdk/tabs'
 {setTimeout, clearTimeout} = require 'sdk/timers'
 
 popup = require("sdk/panel").Panel({
@@ -43,7 +45,7 @@ button = ActionButton(
 )
 
 popup.on "show", () ->
-  popup.port.emit("show")
+    popup.port.emit("show")
 
 storageListeners = []
 browser =
@@ -69,12 +71,16 @@ browser =
             callback()
     storageOnChanged:(callback) ->
         storageListeners.push(callback)
+    tabsGetActive:(callback) ->
+        callback(tabs.activeTab)
     tabsQuery:(obj, callback) ->
     tabsUpdate:(tab_id, obj) ->
     tabsReload:(tab_id) ->
     tabsHighlight:(tab_numbers) ->
     tabsCreate:(obj) ->
     tabsOnUpdated:(callback) ->
+        tabs.on 'activate', callback
+        locationChanged.on(callback)
     cookiesGetAll: (obj, callback) ->
     cookiesRemove: (obj, callback) ->
     cookiesSet: (obj, callback) ->

@@ -31,7 +31,7 @@ browser =
             if namespace == "local"
                 callback(changes)
 
-    tabsActive:(callback) ->
+    tabsGetActive: (callback) ->
         chrome.tabs.query {active:true, currentWindow:true}, (tabs) ->
             if tabs.length >= 1
                 callback(tabs[0])

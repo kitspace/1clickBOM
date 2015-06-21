@@ -58,7 +58,7 @@ exports.background = (messenger) ->
             @items    = []
             @invalid  = []
         checkPage: (callback) ->
-            browser.tabsActive (tab) =>
+            browser.tabsGetActive (tab) =>
                 if tab?
                     tab_url = tab.url.split("?")[0]
                     if tab_url.match(@re)
@@ -88,7 +88,7 @@ exports.background = (messenger) ->
         addToBOM: (callback) ->
             @checkPage () =>
                 if @onDotTSV
-                    bom_manager._add_to_bom(@items, @invalid,callback)
+                    bom_manager._add_to_bom(@items, @invalid, callback)
 
     browser.tabsOnUpdated () =>
         tsvPageNotifier.checkPage()
