@@ -26,12 +26,29 @@ notifications    = require 'sdk/notifications'
 {ActionButton}   = require 'sdk/ui/button/action'
 locationChanged  = require './locationChanged'
 tabs             = require 'sdk/tabs'
+windowUtils      = require 'sdk/window/utils'
 {setTimeout, clearTimeout} = require 'sdk/timers'
 
 popup = require("sdk/panel").Panel({
     contentURL: data.url("html/popup.html")
     contentScriptFile: [data.url("popup.js")]
 })
+
+globToRegex = (glob) ->
+    specialChars = "\\^$*+?.()|{}[]"
+    regexChars = ["^"]
+    for c in glob
+        switch c
+            when '?'
+                regexChars.push('.')
+            when '*'
+                regexChars.push('.*')
+            else
+                if (specialChars.indexOf(c) >= 0)
+                    regexChars.push('\\')
+                regexChars.push(c)
+    regexChars.push("$");
+    return new RegExp(regexChars.join(""))
 
 button = ActionButton(
     id:"bom_button",
@@ -73,7 +90,17 @@ browser =
         storageListeners.push(callback)
     tabsGetActive:(callback) ->
         callback(tabs.activeTab)
-    tabsQuery:(obj, callback) ->
+    tabsQuery:({url, currentWindow}, callback) ->
+        matches = []
+        for tab in tabs
+            if tab.url.match(globToRegex(url))?
+                if currentWindow? && currentWindow
+                    current = windowUtils.getMostRecentBrowserWindow()
+                    if tab.window == current
+                        matches.push(tab)
+                else
+                    matches.push(tab)
+        return matches
     tabsUpdate:(tab_id, obj) ->
     tabsReload:(tab_id) ->
     tabsHighlight:(tab_numbers) ->

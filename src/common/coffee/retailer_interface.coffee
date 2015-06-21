@@ -85,7 +85,7 @@ class RetailerInterface
         #so we use a regex. we update the matching tabs to the cart URL instead
         #of using tabs.refresh so we don't re-pass any parameters to the cart
         re = new RegExp(@cart, "i")
-        browser.tabsQuery {"url":"*" + @site + "/*"}, (tabs) =>
+        browser.tabsQuery {url:"*#{@site}/*"}, (tabs) =>
             for tab in tabs
                 if (tab.url.match(re))
                     protocol = tab.url.split("://")[0]
@@ -94,13 +94,13 @@ class RetailerInterface
         #refresh the tabs that are not the cart url. XXX could some of the
         #passed params cause problems on, say, quick-add urls?
         re = new RegExp(@cart, "i")
-        browser.tabsQuery {"url":"*" + @site + "/*"}, (tabs) ->
+        browser.tabsQuery {url:"*#{@site}/*"}, (tabs) ->
             for tab in tabs
                 if !(tab.url.match(re))
                     browser.tabsReload(tab.id)
 
     openCartTab: () ->
-        browser.tabsQuery {"url":"*" + @site + @cart + "*" , currentWindow:true}
+        browser.tabsQuery {url:"*#{@site}#{@cart}*" , currentWindow:true}
         , (tabs) =>
             if tabs.length >  0
                 tab_numbers = []
