@@ -42,6 +42,9 @@ button = ActionButton(
         popup.show({position:button})
 )
 
+popup.on "show", () ->
+  popup.port.emit("show")
+
 storageListeners = []
 browser =
     storageGet:(keys, callback) ->

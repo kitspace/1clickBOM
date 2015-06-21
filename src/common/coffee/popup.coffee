@@ -165,4 +165,12 @@ render = (state) ->
 messenger.on "sendBackgroundState", (state) ->
     render(state)
 
+# For Firefox we forward the popup 'show' event from browser.coffee because
+# this script seems get loaded once at startup. The 'show' message is never
+# sent on Chrome.
+messenger.on "show", ()->
+    messenger.send("getBackgroundState")
+
+# For Chrome the whole script is instead re-executed each time the popup is
+# opened.
 messenger.send("getBackgroundState")
