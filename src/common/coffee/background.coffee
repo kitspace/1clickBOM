@@ -58,13 +58,13 @@ exports.background = (messenger) ->
             @items    = []
             @invalid  = []
         checkPage: (callback) ->
-            browser.tabsQuery {active:true, currentWindow:true}, (tabs) =>
-                if tabs.length > 0
-                    tab_url = tabs[0].url.split("?")[0]
-                    if tabs.length >= 1 && tab_url.match(@re)
-                        if /^http.?:\/\/github.com\//.test(tabs[0].url)
+            browser.tabsActive (tab) =>
+                if tab?
+                    tab_url = tab.url.split("?")[0]
+                    if tab_url.match(@re)
+                        if /^http.?:\/\/github.com\//.test(tab.url)
                             url = tab_url.replace(/blob/,"raw")
-                        else if /^http.?:\/\/bitbucket.org\//.test(tabs[0].url)
+                        else if /^http.?:\/\/bitbucket.org\//.test(tab.url)
                             url = tab_url.split("?")[0].replace(/src/,"raw")
                         else
                             url = tab_url

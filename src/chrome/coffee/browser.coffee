@@ -30,6 +30,13 @@ browser =
         chrome.storage.onChanged.addListener (changes, namespace) ->
             if namespace == "local"
                 callback(changes)
+
+    tabsActive:(callback) ->
+        chrome.tabs.query {active:true, currentWindow:true}, (tabs) ->
+            if tabs.length >= 1
+                callback(tabs[0])
+            else
+                callback(null)
     tabsQuery:(obj, callback) ->
         chrome.tabs.query(obj, callback)
     tabsUpdate:(tab_id, obj) ->
