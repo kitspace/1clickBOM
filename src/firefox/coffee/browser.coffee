@@ -100,11 +100,12 @@ browser =
                         matches.push(tab)
                 else
                     matches.push(tab)
-        return matches
+        callback(matches)
     tabsUpdate:(tab_id, obj) ->
     tabsReload:(tab_id) ->
     tabsHighlight:(tab_numbers) ->
     tabsCreate:(obj) ->
+        tabs.open(obj.url)
     tabsOnUpdated:(callback) ->
         tabs.on 'activate', callback
         locationChanged.on(callback)
