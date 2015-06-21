@@ -27,6 +27,8 @@ notifications    = require 'sdk/notifications'
 locationChanged  = require './locationChanged'
 tabs             = require 'sdk/tabs'
 windowUtils      = require 'sdk/window/utils'
+tabsUtils        = require 'sdk/tabs/utils'
+{modelFor}       = require 'sdk/model/core'
 {setTimeout, clearTimeout} = require 'sdk/timers'
 
 popup = require("sdk/panel").Panel({
@@ -91,15 +93,17 @@ browser =
     tabsGetActive:(callback) ->
         callback(tabs.activeTab)
     tabsQuery:({url, currentWindow}, callback) ->
+        if currentWindow? && currentWindow
+            current = windowUtils.getMostRecentBrowserWindow()
+            ts = []
+            for tab in tabsUtils.getTabs(current)
+                ts.push(modelFor(tab))
+        else
+            ts = tabs
         matches = []
-        for tab in tabs
+        for tab in ts
             if tab.url.match(globToRegex(url))?
-                if currentWindow? && currentWindow
-                    current = windowUtils.getMostRecentBrowserWindow()
-                    if tab.window == current
-                        matches.push(tab)
-                else
-                    matches.push(tab)
+                matches.push(tab)
         callback(matches)
     tabsUpdate:(tab_id, obj) ->
     tabsReload:(tab_id) ->
