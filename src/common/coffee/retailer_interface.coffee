@@ -97,7 +97,7 @@ class RetailerInterface
         browser.tabsQuery {url:"*#{@site}/*"}, (tabs) ->
             for tab in tabs
                 if !(tab.url.match(re))
-                    browser.tabsReload(tab.id)
+                    browser.tabsReload(tab)
 
     openCartTab: () ->
         browser.tabsQuery {url:"*#{@site}#{@cart}*" , currentWindow:true}

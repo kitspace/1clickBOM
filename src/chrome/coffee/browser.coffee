@@ -41,8 +41,8 @@ browser =
         chrome.tabs.query(obj, callback)
     tabsUpdate:(tab_id, obj) ->
         chrome.tabs.update(tab_id, obj)
-    tabsReload:(tab_id) ->
-        chrome.tabs.reload(tab_id)
+    tabsReload:(tab) ->
+        chrome.tabs.reload(tab.id)
     tabsHighlight:(tab_numbers) ->
         chrome.tabs.highlight({tabs:tab_numbers}, (window)->)
     tabsCreate:(obj) ->

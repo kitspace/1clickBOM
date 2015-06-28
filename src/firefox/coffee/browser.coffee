@@ -106,7 +106,8 @@ browser =
                 matches.push(tab)
         callback(matches)
     tabsUpdate:(tab_id, obj) ->
-    tabsReload:(tab_id) ->
+    tabsReload:(tab) ->
+        tab.reload()
     tabsHighlight:(tab_numbers) ->
     tabsCreate:(obj) ->
         tabs.open(obj.url)
