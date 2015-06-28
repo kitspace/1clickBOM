@@ -129,7 +129,6 @@ browser =
         button.badge = text
         button.badgeColor = color
     notificationsCreate:(obj, callback) ->
-        console.log("notificationsCreate:", obj)
         ffObj =
             title   : obj.title
             text    : obj.message
@@ -141,8 +140,10 @@ browser =
             return ""
         else
             return c
-    setTimeout: setTimeout
-    clearTimeout: clearTimeout
+    setTimeout: (callback, time) ->
+        setTimeout(callback, time)
+    clearTimeout: (id) ->
+        clearTimeout(id)
 
 DOM = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser)
 DOM.parse = (str) ->
