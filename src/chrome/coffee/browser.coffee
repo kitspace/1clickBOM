@@ -39,12 +39,12 @@ browser =
                 callback(null)
     tabsQuery:(obj, callback) ->
         chrome.tabs.query(obj, callback)
-    tabsUpdate:(tab_id, obj) ->
-        chrome.tabs.update(tab_id, obj)
+    tabsUpdate:(tab, url) ->
+        chrome.tabs.update(tab.id, {url: url})
     tabsReload:(tab) ->
         chrome.tabs.reload(tab.id)
-    tabsHighlight:(tab_numbers) ->
-        chrome.tabs.highlight({tabs:tab_numbers}, (window)->)
+    tabsActivate: (tab) ->
+        chrome.tabs.update(tab.id, {active: true})
     tabsCreate:(obj) ->
         chrome.tabs.create(obj)
     tabsOnUpdated:(callback) ->

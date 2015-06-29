@@ -89,7 +89,7 @@ class RetailerInterface
             for tab in tabs
                 if (tab.url.match(re))
                     protocol = tab.url.split("://")[0]
-                    browser.tabsUpdate(tab.id, {"url": protocol + @site + @cart})
+                    browser.tabsUpdate(tab, protocol + @site + @cart)
     refreshSiteTabs: () ->
         #refresh the tabs that are not the cart url. XXX could some of the
         #passed params cause problems on, say, quick-add urls?
@@ -102,11 +102,8 @@ class RetailerInterface
     openCartTab: () ->
         browser.tabsQuery {url:"*#{@site}#{@cart}*" , currentWindow:true}
         , (tabs) =>
-            if tabs.length >  0
-                tab_numbers = []
-                for tab in tabs
-                    tab_numbers.push(tab.index)
-                browser.tabsHighlight(tab_numbers)
+            if tabs.length > 0
+                browser.tabsActivate(tabs[tabs.length - 1])
             else
                 browser.tabsCreate({url: "http" + @site + @cart, active:true})
 

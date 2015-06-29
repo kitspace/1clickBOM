@@ -25,7 +25,7 @@ notifications    = require 'sdk/notifications'
 {Cc, Ci}         = require 'chrome'
 {ActionButton}   = require 'sdk/ui/button/action'
 locationChanged  = require './locationChanged'
-tabs             = require 'sdk/tabs'
+firefoxTabs      = require 'sdk/tabs'
 windowUtils      = require 'sdk/window/utils'
 tabsUtils        = require 'sdk/tabs/utils'
 {modelFor}       = require 'sdk/model/core'
@@ -90,28 +90,30 @@ browser =
     storageOnChanged:(callback) ->
         storageListeners.push(callback)
     tabsGetActive:(callback) ->
-        callback(tabs.activeTab)
+        callback(firefoxTabs.activeTab)
     tabsQuery:({url, currentWindow}, callback) ->
         if currentWindow? && currentWindow
             current = windowUtils.getMostRecentBrowserWindow()
-            ts = []
+            tabs = []
             for tab in tabsUtils.getTabs(current)
-                ts.push(modelFor(tab))
+                tabs.push(modelFor(tab))
         else
-            ts = tabs
+            tabs = firefoxTabs
         matches = []
-        for tab in ts
+        for tab in tabs
             if tab.url.match(globToRegex(url))?
                 matches.push(tab)
         callback(matches)
-    tabsUpdate:(tab_id, obj) ->
+    tabsUpdate:(tab, url) ->
+        tab.url = url
     tabsReload:(tab) ->
         tab.reload()
-    tabsHighlight:(tab_numbers) ->
+    tabsActivate:(tab) ->
+        tab.activate()
     tabsCreate:(obj) ->
-        tabs.open(obj.url)
+        firefoxTabs.open(obj.url)
     tabsOnUpdated:(callback) ->
-        tabs.on 'activate', callback
+        firefoxTabs.on 'activate', callback
         locationChanged.on(callback)
     cookiesGetAll: (obj, callback) ->
     cookiesRemove: (obj, callback) ->
