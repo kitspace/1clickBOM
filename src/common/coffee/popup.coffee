@@ -72,8 +72,8 @@ startSpinning = (link) ->
         if (counter>=frames)
             counter = 0
     , 50
-    link.hidden=true
-    link.spinning=true
+    link.hidden   = true
+    link.spinning = true
 
 stopSpinning = (link) ->
     if link.spinning? && link.spinning

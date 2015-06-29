@@ -95,6 +95,29 @@ exports.background = (messenger) ->
 
     sendState = () ->
         bom_manager.getBOM (bom) ->
+            #this estimates the size needed for the firefox popup and resizes
+            #it to emulate chrome behaviour
+            if messenger.resizePopup?
+                width  = 92
+                height = 46
+                nRetailers = Object.keys(bom).length
+                if nRetailers > 0
+                    maxItems = 0
+                    maxLines = 0
+                    for retailer_name of bom
+                        items = bom[retailer_name]
+                        no_of_items = 0
+                        for item in items
+                            no_of_items += item.quantity
+                        if no_of_items > maxItems then maxItems = no_of_items
+                        if items.length > maxLines then maxLines = items.length
+                    width = 243 + (String(maxItems).length * 9) + (String(maxLines).length * 9)
+                    if maxItems > 1 then width += 9 #due to 's' being added for plural
+                    if maxLines > 1 then width += 9
+                    height += 40 + (nRetailers * 27)
+                else if tsvPageNotifier.onDotTSV
+                    height += 36
+                messenger.resizePopup(width, height)
             messenger.send("sendBackgroundState", {bom:bom, bom_manager:bom_manager, onDotTSV: tsvPageNotifier.onDotTSV})
 
     messenger.on "getBackgroundState", () ->
@@ -138,6 +161,10 @@ exports.background = (messenger) ->
         tsvPageNotifier.addToBOM () ->
             sendState()
 
+    sendState()
+
+    # tests only work in chrome currently which has the window available in the
+    # background
     if window?
         window.Test = (module)->
             url = browser.getURL("html/test.html")
