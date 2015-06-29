@@ -78,7 +78,7 @@ build/.temp-chrome/.dir:
 build/.temp-chrome/%: src/chrome/coffee/%
 	cp $< $@
 
-build/.temp-chrome/%: src/common/coffee/tests/%
+build/.temp-chrome/%: src/chrome/coffee/tests/%
 	cp $< $@
 
 build/.temp-chrome/%: src/common/coffee/%
@@ -94,7 +94,7 @@ build/.temp-firefox/.dir:
 build/.temp-firefox/%: src/firefox/coffee/%
 	cp $< $@
 
-build/.temp-firefox/%: src/common/coffee/tests/%
+build/.temp-firefox/%: src/chrome/coffee/tests/%
 	cp $< $@
 
 build/.temp-firefox/%: src/common/coffee/%
