@@ -110,8 +110,8 @@ browser =
         tab.reload()
     tabsActivate:(tab) ->
         tab.activate()
-    tabsCreate:(obj) ->
-        firefoxTabs.open(obj.url)
+    tabsCreate:(url) ->
+        firefoxTabs.open(url)
     tabsOnUpdated:(callback) ->
         firefoxTabs.on 'activate', callback
         locationChanged.on(callback)

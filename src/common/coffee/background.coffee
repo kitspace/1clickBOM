@@ -41,7 +41,7 @@ exports.background = (messenger) ->
 
     browser.onInstalled () ->
         get_location () ->
-            browser.tabsCreate({"url": browser.getURL("html/options.html")})
+            browser.tabsCreate(browser.getURL("html/options.html"))
 
     browser.storageOnChanged (changes) ->
         if changes.country || changes.settings

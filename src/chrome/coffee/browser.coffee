@@ -45,8 +45,8 @@ browser =
         chrome.tabs.reload(tab.id)
     tabsActivate: (tab) ->
         chrome.tabs.update(tab.id, {active: true})
-    tabsCreate:(obj) ->
-        chrome.tabs.create(obj)
+    tabsCreate:(url) ->
+        chrome.tabs.create({url: url, active: true})
     tabsOnUpdated:(callback) ->
         chrome.tabs.onUpdated.addListener(callback)
         chrome.tabs.onActivated.addListener(callback)
@@ -60,7 +60,7 @@ browser =
     getBackgroundPage: (callback) ->
         chrome.runtime.getBackgroundPage(callback)
     getURL: (url) ->
-        return chrome.extension.getURL(url)
+        chrome.extension.getURL(url)
     getLocal:(url, json=true)->
         xhr = new XMLHttpRequest()
         xhr.open("GET", chrome.extension.getURL(url), false)

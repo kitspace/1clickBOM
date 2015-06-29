@@ -105,7 +105,7 @@ class RetailerInterface
             if tabs.length > 0
                 browser.tabsActivate(tabs[tabs.length - 1])
             else
-                browser.tabsCreate({url: "http" + @site + @cart, active:true})
+                browser.tabsCreate("http" + @site + @cart)
 
 class InvalidCountryError extends Error
     constructor: ->
