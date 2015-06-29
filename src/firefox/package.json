@@ -5,7 +5,13 @@
   "description": "Populates shopping carts for you on sites like Digikey and Mouser.",
   "author": "monostable",
   "license": "CPAL 1.0",
-  "version": @version,
   "icon": "data/images/logo48.png",
-  "main":"main"
+  "main":"main",
+  "preferences": [{
+    "name": "location",
+    "title": "Location",
+    "description": "Affects which localized retailer sites are used.",
+    "type": "menulist",
+    "value": "Other"
+  }]
 }

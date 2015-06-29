@@ -68,8 +68,8 @@ dirs: build/.dir $(CHROME_DIRS) $(FIREFOX_DIRS)
 build/chrome/manifest.json: src/chrome/manifest.json
 	sed 's/@version/"$(VERSION)"/' $< > $@
 
-build/firefox/package.json: src/firefox/package.json
-	sed 's/@version/"$(VERSION)"/' $< > $@
+build/firefox/package.json: src/firefox/package.json src/common/data/countries.json
+	coffee makeFirefoxPackageJSON.coffee $(VERSION)
 
 build/.temp-chrome/.dir:
 	mkdir $(dir $@)
