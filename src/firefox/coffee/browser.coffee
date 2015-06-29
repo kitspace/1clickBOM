@@ -31,10 +31,10 @@ tabsUtils        = require 'sdk/tabs/utils'
 {modelFor}       = require 'sdk/model/core'
 {setTimeout, clearTimeout} = require 'sdk/timers'
 
-popup = require("sdk/panel").Panel({
+popup = require("sdk/panel").Panel(
     contentURL: data.url("html/popup.html")
     contentScriptFile: [data.url("popup.js")]
-})
+)
 
 globToRegex = (glob) ->
     specialChars = "\\^$*+?.()|{}[]"
@@ -49,16 +49,15 @@ globToRegex = (glob) ->
                 if (specialChars.indexOf(c) >= 0)
                     regexChars.push('\\')
                 regexChars.push(c)
-    regexChars.push("$");
+    regexChars.push("$")
     return new RegExp(regexChars.join(""))
 
 button = ActionButton(
     id:"bom_button",
     label:"1clickBOM",
-    icon : {
-        "16": "./images/button16.png",
+    icon :
+        "16": "./images/button16.png"
         "32": "./images/button32.png"
-    },
     onClick: (state) ->
         popup.show({position:button})
 )
