@@ -31,11 +31,25 @@ div#bottom_spacer {
 }
 button.big_buttons {
     min-height:25px;
-    min-width: 60px;
+    min-width: 72px;
     vertical-align:middle;
     margin-top:2px;
     margin-bottom:2px;
+    border: 1px solid grey;
+    border-radius: 3px;
+    background-image: linear-gradient(to top,#D5D5D5,#FFFFFF);
 }
+
+button.big_buttons:hover {
+    border: 1px solid #999999;
+    background-image: linear-gradient(to top,#DFDFDF,#FFFFFF);
+}
+
+button.big_buttons:active {
+    border: 1px solid #999999;
+    background-image: linear-gradient(to bottom,#DDDDDD,#FFFFFF);
+}
+
 span.button_icon {
     font-family:"Foundation Icons";
     font-size:18px;
@@ -99,15 +113,17 @@ button#load_from_page {
     border-color: #1111E6 #1111E6 #0000FF;
     border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
     border-bottom-color: #b3b3b3;
-    border-radius:3px;
-    padding-bottom:2px;
+    border-radius: 4px;
     color: white;
     font-family: "sans";
-    font-weight: bold;
+}
+button#load_from_page:hover {
+    background-image: linear-gradient(to top,#5555FF,#0000FF);
 }
 button#load_from_page:active {
-    background-image: linear-gradient(to top,#0000EE,#4444FF);
+    background-image: linear-gradient(to bottom,#4444FF,#0000EE);
 }
+
 </style>
 </head>
 <body>
