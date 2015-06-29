@@ -124,7 +124,7 @@ asyncTest "Clear All", () ->
 
 asyncTest "Add items fails but adds again", () ->
     items = [{"part":"fail","quantity":2, "comment":"test"},{"part":"607-GALILEO","quantity":2, "comment":"test"}]
-    r = new Mouser("AU")
+    r = new Mouser("UK")
     r.addItems items, (result, that) ->
         deepEqual(result.success, false, that.country)
         deepEqual(result.fails, [items[0]], that.country)

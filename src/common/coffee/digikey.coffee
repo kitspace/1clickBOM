@@ -18,11 +18,11 @@
 # the Original Code is Kaspar Emanuel.
 
 {RetailerInterface} = require './retailer_interface'
-util  = require './util'
+http  = require './http'
 {DOM} = require './browser'
 
-post = util.post
-get  = util.get
+post = http.post
+get  = http.get
 
 class Digikey extends RetailerInterface
     constructor: (country_code, settings, callback) ->

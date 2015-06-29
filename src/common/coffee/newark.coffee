@@ -19,9 +19,9 @@
 
 {RetailerInterface}   = require './retailer_interface'
 {XMLHttpRequest, DOM} = require './browser'
-util = require './util'
-post = util.post
-get  = util.get
+http = require './http'
+post = http.post
+get  = http.get
 
 class Newark extends RetailerInterface
     constructor: (country_code, settings) ->

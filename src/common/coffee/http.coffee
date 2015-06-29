@@ -18,29 +18,7 @@
 # the Original Code is Kaspar Emanuel.
 
 {browser, XMLHttpRequest} = require './browser'
-
-badge =
-    decaying_set  : false
-    priority      : 0
-    default_text  : ""
-    default_color : "#0000FF"
-    setDecaying: (text, color="#0000FF", priority = 1) ->
-        if priority >= @priority
-            if @decaying_set && @id > 0
-                browser.clearTimeout(@id)
-            @_set(text, color, priority)
-            @id = browser.setTimeout () =>
-                @decaying_set = false
-                @_set(@default_text, @default_color, 0)
-            , 5000
-    setDefault: (text, color="#0000FF", priority = 0) ->
-        if priority >= @priority
-            @_set(text, color, priority)
-        @default_color = color
-        @default_text = text
-    _set: (text, color, priority) ->
-        browser.setBadge({color:color, text:text})
-        @priority = priority
+{badge}                   = require './badge'
 
 network_callback = (event, callback, error_callback, notify=true) ->
     if event.target.readyState == 4
@@ -105,10 +83,5 @@ get = (url, {item:item, notify:notify, timeout:timeout}, callback, error_callbac
         network_callback(event, callback, error_callback, notify)
     xhr.send()
 
-trim_whitespace = (str) ->
-    return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
-
-exports.badge           = badge
 exports.post            = post
 exports.get             = get
-exports.trim_whitespace = trim_whitespace

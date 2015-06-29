@@ -19,11 +19,11 @@
 
 {RetailerInterface} = require './retailer_interface'
 {Newark}            = require './newark'
-util                = require './util'
+http                = require './http'
 {browser, DOM}      = require './browser'
 
-post = util.post
-get  = util.get
+post = http.post
+get  = http.get
 
 class Farnell extends RetailerInterface
     constructor: (country_code, settings, callback) ->

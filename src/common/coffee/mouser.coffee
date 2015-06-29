@@ -18,20 +18,20 @@
 # the Original Code is Kaspar Emanuel.
 
 {RetailerInterface} = require './retailer_interface'
-util  = require './util'
+http  = require './http'
 {DOM} = require './browser'
 
-post = util.post
-get  = util.get
+post = http.post
+get  = http.get
 
 class Mouser extends RetailerInterface
     constructor: (country_code, settings) ->
         super "Mouser", country_code, "data/mouser.json", settings
         #posting our sub-domain as the sites are all linked and switching countries would not register properly otherwise
         post "http" + @site + "/Preferences/SetSubdomain", "?subdomainName=" + @cart.split(".")[1].slice(3), {notify:false}, () ->
-            ;
+            console.log("success")
         , () ->
-            ;
+            console.log("fail")
     addItems: (items, callback) ->
         @adding_items = true
         count = 0

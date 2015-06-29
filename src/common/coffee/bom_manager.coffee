@@ -17,7 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-util = require './util'
+http       = require './http'
 {browser } = require './browser'
 {Digikey } = require './digikey'
 {Farnell } = require './farnell'
@@ -25,8 +25,7 @@ util = require './util'
 {RS      } = require './rs'
 {Newark  } = require './newark'
 {parseTSV} = require './parser'
-
-badge = util.badge
+{badge}    = require './badge'
 
 settings_data = browser.getLocal("data/settings.json")
 

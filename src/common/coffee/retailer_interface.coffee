@@ -17,7 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-util = require './util'
+http = require './http'
 {md5    } = require './md5'
 {browser} = require './browser'
 
@@ -71,7 +71,7 @@ class RetailerInterface
         @icon_src       = "http://www.google.com/s2/favicons?domain=http" + @site
         #this puts the image in cache but also uses our backup if
         #google.com/s2/favicons fails
-        util.get @icon_src, {notify:false},  (event) =>
+        http.get @icon_src, {notify:false},  (event) =>
             #failure response image
             if md5(event.target.response) == "6e2001c87afacf376c7df4a011376511"
                 @icon_src = browser.getURL("/images/" + @interface_name.toLowerCase() + ".ico")

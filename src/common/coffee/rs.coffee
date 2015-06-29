@@ -18,12 +18,11 @@
 # the Original Code is Kaspar Emanuel.
 
 {RetailerInterface} = require './retailer_interface'
-util  = require './util'
+http  = require './http'
 {DOM} = require './browser'
 
-post = util.post
-get  = util.get
-trim_whitespace = util.trim_whitespace
+post = http.post
+get  = http.get
 
 class RS extends RetailerInterface
     constructor: (country_code, settings, callback) ->
@@ -129,7 +128,7 @@ class RS extends RetailerInterface
             parts = []
             for elem in doc.getElementsByClassName("errorOrderLine")
                 ids.push(elem.parentElement.nextElementSibling.querySelector(".quantityTd").firstElementChild.classList[3].split("_")[1])
-                parts.push(trim_whitespace(elem.parentElement.nextElementSibling.querySelector(".descriptionTd").firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.innerText))
+                parts.push(elem.parentElement.nextElementSibling.querySelector(".descriptionTd").firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.innerText.trim())
             callback(ids, parts)
         , () ->
             callback([],[])

@@ -20,7 +20,8 @@
 {bom_manager} = require './bom_manager'
 {browser}     = require './browser'
 {parseTSV}    = require './parser'
-util          = require './util'
+http          = require './http'
+{badge}       = require './badge'
 
 exports.background = (messenger) ->
 
@@ -30,7 +31,7 @@ exports.background = (messenger) ->
         for _,code of countries_data
             @used_country_codes.push(code)
         url = "http://kaspar.h1x.com:8080/json"
-        util.get url, {timeout:5000}, (event) =>
+        http.get url, {timeout:5000}, (event) =>
             response = JSON.parse(event.target.responseText)
             code = response.country_code
             if code == "GB" then code = "UK"
@@ -53,7 +54,7 @@ exports.background = (messenger) ->
         items    : []
         invalid  : []
         _set_not_dotTSV: () ->
-            util.badge.setDefault("")
+            badge.setDefault("")
             @onDotTSV = false
             @items    = []
             @invalid  = []
@@ -69,10 +70,10 @@ exports.background = (messenger) ->
                             url = tab_url.split("?")[0].replace(/src/,"raw")
                         else
                             url = tab_url
-                        util.get url, {notify:false}, (event) =>
+                        http.get url, {notify:false}, (event) =>
                             {items, invalid} = parseTSV(event.target.responseText)
                             if items.length > 0
-                                util.badge.setDefault("\u2191", "#0000FF")
+                                http.badge.setDefault("\u2191", "#0000FF")
                                 @onDotTSV = true
                                 @items    = items
                                 @invalid  = invalid
