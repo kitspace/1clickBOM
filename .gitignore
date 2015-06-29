@@ -7,3 +7,4 @@ firefox/*
 !firefox/package.json
 tmp.xpi
 build/*
+node_modules/*
