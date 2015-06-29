@@ -57,6 +57,7 @@ exports.background = (messenger) ->
             @onDotTSV = false
             @items    = []
             @invalid  = []
+            sendState()
         checkPage: (callback) ->
             browser.tabsGetActive (tab) =>
                 if tab?
@@ -75,6 +76,7 @@ exports.background = (messenger) ->
                                 @onDotTSV = true
                                 @items    = items
                                 @invalid  = invalid
+                                sendState()
                             else
                                 @_set_not_dotTSV()
                         , () =>
