@@ -33,7 +33,7 @@ bom_manager =
     init: (callback) ->
         @filling_carts  = false
         @emptying_carts = false
-        browser.storageGet ["country", "settings"], ({country:country, settings:stored_settings}) =>
+        browser.prefsGet ["country", "settings"], ({country:country, settings:stored_settings}) =>
             @interfaces = {}
             if (!country)
                 country = "Other"
@@ -109,7 +109,7 @@ bom_manager =
                 message += ". Adding the items may take a very long time (or even forever). It may be OK but it really depends on the site."
                 browser.notificationsCreate {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
                 badge.setDecaying("Warn","#FF8A00", priority=2)
-            browser.storageSet {"bom":bom}, () =>
+            browser.storageSet {bom:bom}, () =>
                 if callback?
                     callback(this)
 

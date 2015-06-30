@@ -17,24 +17,21 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{storage}        = require 'sdk/simple-storage'
-{data   }        = require 'sdk/self'
-{XMLHttpRequest} = require 'sdk/net/xhr'
+
 clipboard        = require 'sdk/clipboard'
-notifications    = require 'sdk/notifications'
-{Cc, Ci}         = require 'chrome'
-{ActionButton}   = require 'sdk/ui/button/action'
-locationChanged  = require './locationChanged'
 firefoxTabs      = require 'sdk/tabs'
-windowUtils      = require 'sdk/window/utils'
+notifications    = require 'sdk/notifications'
 tabsUtils        = require 'sdk/tabs/utils'
+windowUtils      = require 'sdk/window/utils'
+{ActionButton}   = require 'sdk/ui/button/action'
+{Cc, Ci}         = require 'chrome'
+{XMLHttpRequest} = require 'sdk/net/xhr'
+{data   }        = require 'sdk/self'
 {modelFor}       = require 'sdk/model/core'
 {setTimeout, clearTimeout} = require 'sdk/timers'
-
-popup = require("sdk/panel").Panel(
-    contentURL: data.url("html/popup.html")
-    contentScriptFile: [data.url("popup.js")]
-)
+{storage}       = require 'sdk/simple-storage'
+preferences     = require 'sdk/simple-prefs'
+locationChanged = require './locationChanged'
 
 globToRegex = (glob) ->
     specialChars = "\\^$*+?.()|{}[]"
@@ -52,6 +49,11 @@ globToRegex = (glob) ->
     regexChars.push("$")
     return new RegExp(regexChars.join(""))
 
+popup = require("sdk/panel").Panel(
+    contentURL: data.url("html/popup.html")
+    contentScriptFile: [data.url("popup.js")]
+)
+
 button = ActionButton(
     id:"bom_button",
     label:"1clickBOM",
@@ -65,8 +67,19 @@ button = ActionButton(
 popup.on "show", () ->
     popup.port.emit("show")
 
-storageListeners = []
 browser =
+    prefsSet: (obj) ->
+        for k,v of obj
+            preferences.prefs[k] = v
+    prefsGet: (keys, callback) ->
+        ret = {}
+        for k in keys
+            ret[k] = preferences.prefs[k]
+        callback(ret)
+    prefsOnChanged: (keys, callback) ->
+        for k in keys
+            preferences.on k, (prefName) ->
+                callback()
     storageGet:(keys, callback) ->
         ret = {}
         for k in keys
@@ -75,20 +88,14 @@ browser =
     storageSet:(obj, callback) ->
         for k of obj
             storage[k] = obj[k]
-        for listener in storageListeners
-            listener(obj)
         if callback?
             callback()
     storageRemove:(key, callback) ->
         delete storage[key]
         obj = {}
         obj[key] = undefined
-        for listener in storageListeners
-            listener(obj)
         if callback?
             callback()
-    storageOnChanged:(callback) ->
-        storageListeners.push(callback)
     tabsGetActive:(callback) ->
         callback(firefoxTabs.activeTab)
     tabsQuery:({url, currentWindow}, callback) ->

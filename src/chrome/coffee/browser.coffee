@@ -22,15 +22,18 @@ browser =
         chrome.storage.local.get(keys, callback)
     storageSet:(obj, callback) ->
         chrome.storage.local.set(obj, callback)
+    prefsGet:(keys, callback) ->
+        chrome.storage.local.get(keys, callback)
+    prefsSet:(obj, callback) ->
+        chrome.storage.local.set(obj, callback)
     storageRemove:(key, callback) ->
         chrome.storage.local.remove key, () ->
             if callback?
                 callback()
-    storageOnChanged:(callback) ->
+    prefsOnChanged:(keys, callback) ->
         chrome.storage.onChanged.addListener (changes, namespace) ->
-            if namespace == "local"
-                callback(changes)
-
+            if namespace == "local" && (keys.filter((x) -> x of changes).length > 0)
+                callback()
     tabsGetActive: (callback) ->
         chrome.tabs.query {active:true, currentWindow:true}, (tabs) ->
             if tabs.length >= 1

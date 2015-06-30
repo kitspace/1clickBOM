@@ -8,7 +8,7 @@
   "icon": "data/images/logo48.png",
   "main":"main",
   "preferences": [{
-    "name": "location",
+    "name": "country",
     "title": "Location",
     "description": "Affects which localized retailer sites are used.",
     "type": "menulist",

@@ -36,7 +36,7 @@ exports.background = (messenger) ->
             code = response.country_code
             if code == "GB" then code = "UK"
             if code not in @used_country_codes then code = "Other"
-            browser.storageSet({country: code}, callback)
+            browser.prefsSet({country: code}, callback)
         , () ->
             callback()
 
@@ -44,9 +44,8 @@ exports.background = (messenger) ->
         get_location () ->
             browser.tabsCreate(browser.getURL("html/options.html"))
 
-    browser.storageOnChanged (changes) ->
-        if changes.country || changes.settings
-            bom_manager.init()
+    browser.prefsOnChanged ['country', 'settings'], () ->
+        bom_manager.init()
 
     tsvPageNotifier =
         onDotTSV : false
