@@ -37,7 +37,7 @@ class Newark extends RetailerInterface
         xhr = new XMLHttpRequest
         xhr.open("GET", url, false)
         xhr.onreadystatechange = (event) =>
-            doc = DOM.parse(event.target.responseText)
+            doc = browser.parseDOM(event.target.responseText)
             id_elem = doc.getElementById("storeId")
             if id_elem?
                 @store_id = id_elem.value
@@ -63,7 +63,7 @@ class Newark extends RetailerInterface
     _get_item_ids: (callback) ->
         url = "https" + @site + @cart
         get url, {}, (event) =>
-            doc = DOM.parse(event.target.responseText)
+            doc = browser.parseDOM(event.target.responseText)
             order_details = doc.querySelector("#order_details")
             if order_details?
                 tbody = order_details.querySelector("tbody")
@@ -104,7 +104,7 @@ class Newark extends RetailerInterface
             params += encodeURIComponent(item.quantity) + ","
             params += encodeURIComponent(item.comment) + "\n"
         post url, params, {}, (event) =>
-            doc = DOM.parse(event.target.responseText)
+            doc = browser.parseDOM(event.target.responseText)
             form_errors = doc.querySelector("#formErrors")
             success = true
             if form_errors?

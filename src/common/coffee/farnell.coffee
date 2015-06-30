@@ -32,7 +32,7 @@ class Farnell extends RetailerInterface
             #if there is a "pf_custom_js" element then this site is like
             #Newark's and we get all our methods from Newark, otherwise we fix
             #our cookies
-            if DOM.parse(event.target.response).getElementById("pf_custom_js")?
+            if browser.parseDOM(event.target.response).getElementById("pf_custom_js")?
                 for name, method of Newark::
                     this[name] = method
                 @cart = "/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView"
@@ -131,7 +131,7 @@ class Farnell extends RetailerInterface
     _get_item_ids: (callback) ->
         url = "http" + @site + @cart
         get url, {}, (event) =>
-            doc = DOM.parse(event.target.responseText)
+            doc = browser.parseDOM(event.target.responseText)
             ins = doc.getElementsByTagName("input")
             ids = []
             for element in ins
@@ -175,7 +175,7 @@ class Farnell extends RetailerInterface
         params += "&%2Fpf%2Fcommerce%2Forder%2FQuickPaste.addPasteProducts=Add+To+Basket&_D%3A%2Fpf%2Fcommerce%2Forder%2FQuickPaste.addPasteProducts=+&submitQuickPaste=Add+To+Basket&_D%3AsubmitQuickPaste=+&_DARGS=%2Fjsp%2FshoppingCart%2Ffragments%2FquickPaste%2FquickPaste.jsp.quickpaste"
         post url, params, {item:{part:"parts",retailer:"Farnell"}}, (event) =>
             #if items successully add the request returns the basket
-            doc = DOM.parse(event.target.responseText)
+            doc = browser.parseDOM(event.target.responseText)
             #we determine the request has returned the basket by the body
             #classname so it's language agnostic
             result.success = doc.querySelector("body.shoppingCart") != null

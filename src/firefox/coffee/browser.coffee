@@ -17,21 +17,21 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-
 clipboard        = require 'sdk/clipboard'
 firefoxTabs      = require 'sdk/tabs'
 notifications    = require 'sdk/notifications'
 tabsUtils        = require 'sdk/tabs/utils'
 windowUtils      = require 'sdk/window/utils'
 {ActionButton}   = require 'sdk/ui/button/action'
-{Cc, Ci}         = require 'chrome'
 {XMLHttpRequest} = require 'sdk/net/xhr'
 {data   }        = require 'sdk/self'
 {modelFor}       = require 'sdk/model/core'
-{setTimeout, clearTimeout} = require 'sdk/timers'
-{storage}       = require 'sdk/simple-storage'
-preferences     = require 'sdk/simple-prefs'
-locationChanged = require './locationChanged'
+timers           = require 'sdk/timers'
+{storage}        = require 'sdk/simple-storage'
+preferences      = require 'sdk/simple-prefs'
+locationChanged  = require './locationChanged'
+{Cc, Ci}         = require 'chrome'
+dom = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser)
 
 globToRegex = (glob) ->
     specialChars = "\\^$*+?.()|{}[]"
@@ -149,15 +149,12 @@ browser =
         else
             return c
     setTimeout: (callback, time) ->
-        setTimeout(callback, time)
+        timers.setTimeout(callback, time)
     clearTimeout: (id) ->
-        clearTimeout(id)
-
-DOM = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser)
-DOM.parse = (str) ->
-    DOM.parseFromString(str, "text/html")
+        timers.clearTimeout(id)
+    parseDOM: (str) ->
+        dom.parseFromString(str, "text/html")
 
 exports.browser        = browser
 exports.XMLHttpRequest = XMLHttpRequest
-exports.DOM            = DOM
 exports.popup          = popup

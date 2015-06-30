@@ -98,7 +98,7 @@ class Digikey extends RetailerInterface
         params = "qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment
         result = {success:true, fails:[]}
         post url, params, {item:item, timeout:600000}, (event)->
-            doc = DOM.parse(event.target.responseText)
+            doc = browser.parseDOM(event.target.responseText)
             #if the cart returns with a quick-add quantity filled-in there was an error
             quick_add_quant = doc.querySelector("#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity")
             result.success = (quick_add_quant?) && (quick_add_quant.value?) && (quick_add_quant.value == "")
@@ -116,7 +116,7 @@ class Digikey extends RetailerInterface
         url += item.part + "/"
         url += item.part + "/"
         get url, {item:item, notify:false}, (event) ->
-            doc = DOM.parse(event.target.responseText)
+            doc = browser.parseDOM(event.target.responseText)
             inputs = doc.querySelectorAll("input")
             for input in inputs
                 if input.name == "partid"
@@ -132,7 +132,7 @@ class Digikey extends RetailerInterface
         url += "&partId=" + id
         url += "&error=" + error + "&cref=&esc=-1&returnURL=%2f%2fwww.digikey.co.uk%2fclassic%2fordering%2faddpart.aspx&fastAdd=false&showUpsell=True"
         get url, {item:item, notify:false}, (event) ->
-            doc = DOM.parse(event.target.responseText)
+            doc = browser.parseDOM(event.target.responseText)
             switch error
                 when "TapeReelQuantityTooLow"       then choice = doc.getElementById("rb1")
                 when "NextBreakQuanIsLowerExtPrice" then choice = doc.getElementById("rb2")

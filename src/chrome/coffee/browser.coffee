@@ -17,6 +17,8 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
+dom = new DOMParser()
+
 browser =
     storageGet:(keys, callback) ->
         chrome.storage.local.get(keys, callback)
@@ -93,11 +95,8 @@ browser =
         setTimeout(callback, time)
     clearTimeout: (id) ->
         clearTimeout(id)
-
-DOM = new DOMParser()
-DOM.parse = (str) ->
-    DOM.parseFromString(str, "text/html")
+    parseDOM: (str) ->
+        dom.parseFromString(str, "text/html")
 
 exports.browser        = browser
 exports.XMLHttpRequest = XMLHttpRequest
-exports.DOM            = DOM

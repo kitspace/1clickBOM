@@ -87,7 +87,7 @@ class RS extends RetailerInterface
     _get_invalid_item_ids_rs_online: (callback) ->
         url = "http" + @site + @cart
         get url, {}, (event) =>
-            doc = DOM.parse(event.target.responseText)
+            doc = browser.parseDOM(event.target.responseText)
             ids = []
             parts = []
             for elem in doc.querySelectorAll(".errorRow")
@@ -123,7 +123,7 @@ class RS extends RetailerInterface
     _get_invalid_item_ids_rs_delivers: (callback) ->
         url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/GetCartHtml"
         post url, undefined, {timeout:600000,json:true}, (event) ->
-            doc = DOM.parse(JSON.parse(event.target.responseText).html)
+            doc = browser.parseDOM(JSON.parse(event.target.responseText).html)
             ids = []
             parts = []
             for elem in doc.getElementsByClassName("errorOrderLine")
@@ -200,7 +200,7 @@ class RS extends RetailerInterface
                     params += item.part + "," + item.quantity + ",," + item.comment + "\n"
                 params += '"}}'
                 post url, params, {timeout:600000,json:true}, (event) =>
-                    doc = DOM.parse(JSON.parse(event.target.responseText).html)
+                    doc = browser.parseDOM(JSON.parse(event.target.responseText).html)
                     success = doc.querySelector("#hidErrorAtLineLevel").value == "0"
                     if not success
                         @_get_invalid_item_ids_rs_delivers (ids, parts) =>
@@ -249,7 +249,7 @@ class RS extends RetailerInterface
     _get_adding_viewstate_rs_online: (callback)->
         url = "http" + @site + @cart
         get url, {}, (event) =>
-            doc = DOM.parse(event.target.responseText)
+            doc = browser.parseDOM(event.target.responseText)
             viewstate_element  = doc.getElementById("javax.faces.ViewState")
             if viewstate_element?
                 viewstate = viewstate_element.value
@@ -267,7 +267,7 @@ class RS extends RetailerInterface
     _get_clear_viewstate_rs_online: (callback)->
         url = "http" + @site + @cart
         get url, {}, (event) =>
-            doc = DOM.parse(event.target.responseText)
+            doc = browser.parseDOM(event.target.responseText)
             viewstate_elem = doc.getElementById("javax.faces.ViewState")
             if viewstate_elem?
                 viewstate = doc.getElementById("javax.faces.ViewState").value
@@ -290,7 +290,7 @@ class RS extends RetailerInterface
     _get_invalid_viewstate_rs_online: (callback)->
         url = "http" + @site + @cart
         get url, {}, (event) =>
-            doc = DOM.parse(event.target.responseText)
+            doc = browser.parseDOM(event.target.responseText)
             viewstate  = doc.getElementById("javax.faces.ViewState").value
             form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling
             #the form_id elements are different values depending on signed in or signed out
