@@ -139,6 +139,10 @@ browser =
             title   : obj.title
             text    : obj.message
             iconURL : "." + obj.iconUrl
+        if obj.type == 'list'
+            console.dir(obj.items)
+            for i in obj.items
+                ffObj.text += "\n" + i.title
         notifications.notify(ffObj)
     paste:(callback) ->
         c = clipboard.get()
