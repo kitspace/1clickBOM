@@ -122,9 +122,6 @@ browser =
     tabsOnUpdated:(callback) ->
         firefoxTabs.on 'activate', callback
         locationChanged.on(callback)
-    cookiesGetAll: (obj, callback) ->
-    cookiesRemove: (obj, callback) ->
-    cookiesSet: (obj, callback) ->
     getURL: (url) ->
     getLocal:(url, json=true)->
         s = data.load(url)

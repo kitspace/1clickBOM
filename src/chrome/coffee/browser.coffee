@@ -56,12 +56,6 @@ browser =
         chrome.tabs.onUpdated.addListener(callback)
         chrome.tabs.onActivated.addListener(callback)
         chrome.windows.onFocusChanged.addListener(callback)
-    cookiesGetAll: (obj, callback) ->
-        chrome.cookies.getAll(obj, callback)
-    cookiesRemove: (obj, callback) ->
-        chrome.cookies.remove(obj, callback)
-    cookiesSet: (obj, callback) ->
-        chrome.cookies.set(obj, callback)
     getBackgroundPage: (callback) ->
         chrome.runtime.getBackgroundPage(callback)
     getURL: (url) ->

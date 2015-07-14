@@ -70,21 +70,11 @@ asyncTest "Add items fails", () ->
 
 module("Farnell")
 
-farnell_locations_all = Object.keys(farnell_data.sites)
-farnell_locations = []
-
-# these sites have issues with cookies being set across countries and won't
-# pass the test reliably
-for l in farnell_locations_all
-    if l not in [ "AU", "MY", "PH", "TW", "NZ", "KR" , "CN"
-                , "TH", "IN", "SG"
-                , "FR", "IL", "International", "TR"
-                ]
-        farnell_locations.push(l)
+farnell_locations = Object.keys(farnell_data.sites)
 
 asyncTest "Clear All", () ->
-    stop(farnell_locations_all.length - 1)
-    for l in farnell_locations_all
+    stop(farnell_locations.length - 1)
+    for l in farnell_locations
         r = new Farnell l, {}, (that) ->
             that.clearCart (result, that) ->
                 deepEqual(result.success, true)

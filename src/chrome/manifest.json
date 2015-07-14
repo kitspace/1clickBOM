@@ -5,7 +5,7 @@
     "version": @version,
     "homepage_url":"http://1clickBOM.com",
     "permissions": [
-        "tabs", "cookies", "clipboardRead", "storage", "notifications",
+        "tabs", "clipboardRead", "storage", "notifications",
         "*://*.mouser.com/*",
         "*://*.mouser.be/*",
         "*://*.mouser.bg/*",
