@@ -69,10 +69,6 @@ browser =
                 return JSON.parse(xhr.responseText)
             else
                 return xhr.responseText
-    onInstalled:(callback) ->
-        chrome.runtime.onInstalled.addListener (details)->
-            if details.reason == "install"
-                callback()
     setBadge:(obj) ->
         if obj.color?
             chrome.browserAction.setBadgeBackgroundColor({color:obj.color})

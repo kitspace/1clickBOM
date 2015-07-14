@@ -83,5 +83,23 @@ get = (url, {item:item, notify:notify, timeout:timeout}, callback, error_callbac
         network_callback(event, callback, error_callback, notify)
     xhr.send()
 
-exports.post            = post
-exports.get             = get
+used_country_codes = []
+
+getLocation = (callback) ->
+    used_country_codes = []
+    countries_data = browser.getLocal("data/countries.json")
+    for _,code of countries_data
+        used_country_codes.push(code)
+    url = "http://kaspar.h1x.com:8080/json"
+    get url, {timeout:5000}, (event) =>
+        response = JSON.parse(event.target.responseText)
+        code = response.country_code
+        if code == "GB" then code = "UK"
+        if code not in used_country_codes then code = "Other"
+        browser.prefsSet({country: code}, callback)
+    , () ->
+        callback()
+
+exports.post        = post
+exports.get         = get
+exports.getLocation = getLocation

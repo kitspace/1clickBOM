@@ -68,9 +68,10 @@ popup.on "show", () ->
     popup.port.emit("show")
 
 browser =
-    prefsSet: (obj) ->
+    prefsSet: (obj, callback) ->
         for k,v of obj
             preferences.prefs[k] = v
+        callback()
     prefsGet: (keys, callback) ->
         ret = {}
         for k in keys
@@ -130,7 +131,6 @@ browser =
             return JSON.parse(s)
         else
             return s
-    onInstalled:(callback) ->
     setBadge:({color, text}) ->
         button.badge = text
         button.badgeColor = color

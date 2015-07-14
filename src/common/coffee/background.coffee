@@ -25,24 +25,6 @@ http          = require './http'
 
 exports.background = (messenger) ->
 
-    get_location = (callback) ->
-        countries_data = browser.getLocal("data/countries.json")
-        @used_country_codes = []
-        for _,code of countries_data
-            @used_country_codes.push(code)
-        url = "http://kaspar.h1x.com:8080/json"
-        http.get url, {timeout:5000}, (event) =>
-            response = JSON.parse(event.target.responseText)
-            code = response.country_code
-            if code == "GB" then code = "UK"
-            if code not in @used_country_codes then code = "Other"
-            browser.prefsSet({country: code}, callback)
-        , () ->
-            callback()
-
-    browser.onInstalled () ->
-        get_location () ->
-            browser.tabsCreate(browser.getURL("html/options.html"))
 
     browser.prefsOnChanged ['country', 'settings'], () ->
         bom_manager.init()
