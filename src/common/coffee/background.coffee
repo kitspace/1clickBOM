@@ -25,7 +25,6 @@ http          = require './http'
 
 exports.background = (messenger) ->
 
-
     browser.prefsOnChanged ['country', 'settings'], () ->
         bom_manager.init()
 
@@ -82,7 +81,7 @@ exports.background = (messenger) ->
             #this estimates the size needed for the firefox popup and resizes
             #it to emulate chrome behaviour
             if messenger.resizePopup?
-                width  = 92
+                width  = 88
                 height = 46
                 nRetailers = Object.keys(bom).length
                 if nRetailers > 0
@@ -95,7 +94,7 @@ exports.background = (messenger) ->
                             no_of_items += item.quantity
                         if no_of_items > maxItems then maxItems = no_of_items
                         if items.length > maxLines then maxLines = items.length
-                    width = 243 + (String(maxItems).length * 9) + (String(maxLines).length * 9)
+                    width = 241 + (String(maxItems).length * 9) + (String(maxLines).length * 9)
                     if maxItems > 1 then width += 9 #due to 's' being added for plural
                     if maxLines > 1 then width += 9
                     height += 40 + (nRetailers * 27)
