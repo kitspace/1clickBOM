@@ -54,7 +54,7 @@ exports.background = (messenger) ->
                         http.get url, {notify:false}, (event) =>
                             {items, invalid} = parseTSV(event.target.responseText)
                             if items.length > 0
-                                http.badge.setDefault("\u2191", "#0000FF")
+                                badge.setDefault("\u2191", "#0000FF")
                                 @onDotTSV = true
                                 @items    = items
                                 @invalid  = invalid
