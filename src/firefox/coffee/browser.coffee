@@ -123,6 +123,7 @@ browser =
         firefoxTabs.on 'activate', callback
         locationChanged.on(callback)
     getURL: (url) ->
+        data.url(url)
     getLocal:(url, json=true)->
         s = data.load(url)
         if json

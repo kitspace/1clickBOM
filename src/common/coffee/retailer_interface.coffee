@@ -74,9 +74,9 @@ class RetailerInterface
         http.get @icon_src, {notify:false},  (event) =>
             #failure response image
             if md5(event.target.response) == "6e2001c87afacf376c7df4a011376511"
-                @icon_src = browser.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
+                @icon_src = browser.getURL("images/" + @interface_name.toLowerCase() + ".ico")
         , () =>
-            @icon_src = browser.getURL("/images/" + @interface_name.toLowerCase() + ".ico")
+            @icon_src = browser.getURL("images/" + @interface_name.toLowerCase() + ".ico")
         if callback?
             callback()
 
