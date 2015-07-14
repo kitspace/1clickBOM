@@ -18,8 +18,8 @@
 # the Original Code is Kaspar Emanuel.
 
 {RetailerInterface} = require './retailer_interface'
-http  = require './http'
-{DOM} = require './browser'
+http      = require './http'
+{browser} = require './browser'
 
 post = http.post
 get  = http.get
