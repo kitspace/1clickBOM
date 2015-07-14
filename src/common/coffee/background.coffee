@@ -147,10 +147,3 @@ exports.background = (messenger) ->
 
     sendState()
 
-    # tests only work in chrome currently which has the window available in the
-    # background
-    if window?
-        window.Test = (module)->
-            url = browser.getURL("html/test.html")
-            url += "?module=" + module if module?
-            window.open(url)
