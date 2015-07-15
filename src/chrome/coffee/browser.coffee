@@ -34,7 +34,7 @@ browser =
                 callback()
     prefsOnChanged:(keys, callback) ->
         chrome.storage.onChanged.addListener (changes, namespace) ->
-            if namespace == "local" && (keys.filter((x) -> x of changes).length > 0)
+            if namespace == 'local' && (keys.filter((x) -> x of changes).length > 0)
                 callback()
     tabsGetActive: (callback) ->
         chrome.tabs.query {active:true, currentWindow:true}, (tabs) ->
@@ -62,7 +62,7 @@ browser =
         chrome.extension.getURL(url)
     getLocal:(url, json=true)->
         xhr = new XMLHttpRequest()
-        xhr.open("GET", chrome.extension.getURL(url), false)
+        xhr.open('GET', chrome.extension.getURL(url), false)
         xhr.send()
         if xhr.status == 200
             if (json)
@@ -75,18 +75,18 @@ browser =
         if obj.text?
             chrome.browserAction.setBadgeText ({text:obj.text})
     notificationsCreate:(obj, callback) ->
-        chrome.notifications.create "", obj, callback
+        chrome.notifications.create '', obj, callback
     paste:() ->
-        textarea = document.getElementById("pastebox")
+        textarea = document.getElementById('pastebox')
         textarea.select()
-        document.execCommand("paste")
+        document.execCommand('paste')
         return textarea.value
     setTimeout: (callback, time) ->
         setTimeout(callback, time)
     clearTimeout: (id) ->
         clearTimeout(id)
     parseDOM: (str) ->
-        dom.parseFromString(str, "text/html")
+        dom.parseFromString(str, 'text/html')
 
 exports.browser        = browser
 exports.XMLHttpRequest = XMLHttpRequest

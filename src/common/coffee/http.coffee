@@ -26,17 +26,17 @@ network_callback = (event, callback, error_callback, notify=true) ->
             if callback?
                 callback(event)
         else
-            message = event.target.status + "\n"
+            message = event.target.status + '\n'
             if event.target.item?
                 item = event.target.item
-                message += "Trying to process "
-                message +=  item.part + " from " + item.retailer + "\n"
+                message += 'Trying to process '
+                message +=  item.part + ' from ' + item.retailer + '\n'
             else
                 message += event.target.url
             if notify
-                browser.notificationsCreate({type:"basic", title:"Network Error Occured", message:message, iconUrl:"/images/net_error128.png"}, () ->)
+                browser.notificationsCreate({type:'basic', title:'Network Error Occured', message:message, iconUrl:'/images/net_error128.png'}, () ->)
 
-                badge.setDecaying("" + event.target.status, "#CC00FF", priority=3)
+                badge.setDecaying('' + event.target.status, '#CC00FF', priority=3)
             if error_callback?
                 error_callback(event.target.item)
 
@@ -50,12 +50,12 @@ post = (url, params, {item:item, notify:notify, timeout:timeout, json:json},  ca
     if not json?
         json=false
     xhr = new XMLHttpRequest
-    xhr.open("POST", url, true)
+    xhr.open('POST', url, true)
     xhr.item = item
     if (json)
-        xhr.setRequestHeader("Content-type", "application/JSON")
+        xhr.setRequestHeader('Content-type', 'application/JSON')
     else
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
     xhr.url = url
     xhr.onreadystatechange = (event) ->
         network_callback(event, callback, error_callback, notify)
@@ -73,8 +73,8 @@ get = (url, {item:item, notify:notify, timeout:timeout}, callback, error_callbac
         timeout=60000
     xhr = new XMLHttpRequest
     xhr.item = item
-    xhr.open("GET", url, true)
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhr.open('GET', url, true)
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
     xhr.url = url
     xhr.onreadystatechange = (event) ->
         network_callback(event, callback, error_callback, notify)
@@ -87,15 +87,15 @@ used_country_codes = []
 
 getLocation = (callback) ->
     used_country_codes = []
-    countries_data = browser.getLocal("data/countries.json")
+    countries_data = browser.getLocal('data/countries.json')
     for _,code of countries_data
         used_country_codes.push(code)
-    url = "http://kaspar.h1x.com:8080/json"
+    url = 'http://kaspar.h1x.com:8080/json'
     get url, {timeout:5000}, (event) =>
         response = JSON.parse(event.target.responseText)
         code = response.country_code
-        if code == "GB" then code = "UK"
-        if code not in used_country_codes then code = "Other"
+        if code == 'GB' then code = 'UK'
+        if code not in used_country_codes then code = 'Other'
         browser.prefsSet({country: code}, callback)
     , () ->
         callback()

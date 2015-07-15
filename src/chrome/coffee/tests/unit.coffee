@@ -33,63 +33,63 @@ ok        = qunit.ok
 throws    = qunit.throws
 deepEqual = qunit.deepEqual
 
-countries = browser.getLocal("/data/countries.json")
+countries = browser.getLocal('/data/countries.json')
 
-module("unit")
+module('unit')
 
-test "Digikey: Constructs for all countries", () ->
+test 'Digikey: Constructs for all countries', () ->
     for country,code of countries
-        ok(new Digikey(code) instanceof RetailerInterface, country + " " + code)
+        ok(new Digikey(code) instanceof RetailerInterface, country + ' ' + code)
 
-test "Farnell: Constructs for all countries", () ->
+test 'Farnell: Constructs for all countries', () ->
     for country,code of countries
-        ok(new Farnell(code) instanceof RetailerInterface, country + " " + code)
+        ok(new Farnell(code) instanceof RetailerInterface, country + ' ' + code)
 
-#test "Mouser: Constructs for all countries", () ->
+#test 'Mouser: Constructs for all countries', () ->
 #    #we need to mock the post request otherwise they will time out since they fire too quickly
 #    real_post = window.post
 #    window.post = () ->
 #    for country,code of countries
-#        ok(new Mouser(code) instanceof RetailerInterface, country + " " + code)
+#        ok(new Mouser(code) instanceof RetailerInterface, country + ' ' + code)
 #    window.post = real_post
 
-test "RS: Constructs for all countries", () ->
+test 'RS: Constructs for all countries', () ->
     for country,code of countries
-        ok(new RS(code) instanceof RetailerInterface, country + " " + code)
+        ok(new RS(code) instanceof RetailerInterface, country + ' ' + code)
 
-test "Newark: Constructs for all countries", () ->
+test 'Newark: Constructs for all countries', () ->
     for country,code of countries
-        ok(new Newark(code) instanceof RetailerInterface, country + " " + code)
+        ok(new Newark(code) instanceof RetailerInterface, country + ' ' + code)
 
-test "InvalidCountryError Exists", () ->
+test 'InvalidCountryError Exists', () ->
     ok new InvalidCountryError instanceof Error
 
-test "Digikey: InvalidCountryError Thrown", () ->
+test 'Digikey: InvalidCountryError Thrown', () ->
     throws () ->
-        new Digikey("XX")
+        new Digikey('XX')
     , InvalidCountryError
 
-test "Farnell: InvalidCountryError Thrown", () ->
+test 'Farnell: InvalidCountryError Thrown', () ->
     throws () ->
-        new Farnell("XX")
+        new Farnell('XX')
     , InvalidCountryError
 
-test "Mouser: InvalidCountryError Thrown", () ->
+test 'Mouser: InvalidCountryError Thrown', () ->
     throws () ->
-        new Mouser("XX")
+        new Mouser('XX')
     , InvalidCountryError
 
-test "RS: InvalidCountryError Thrown", () ->
+test 'RS: InvalidCountryError Thrown', () ->
     throws () ->
-        new RS("XX")
+        new RS('XX')
     , InvalidCountryError
 
-test "Newark: InvalidCountryError Thrown", () ->
+test 'Newark: InvalidCountryError Thrown', () ->
     throws () ->
-        new Newark("XX")
+        new Newark('XX')
     , InvalidCountryError
 
-test "Parser: Catches negative quantities", () ->
-    {items, invalid} = parseTSV("test\t-1\tFarnell\t898989")
+test 'Parser: Catches negative quantities', () ->
+    {items, invalid} = parseTSV('test\t-1\tFarnell\t898989')
     deepEqual(items, [])
-    deepEqual(invalid[0].reason, "Quantity is less than one")
+    deepEqual(invalid[0].reason, 'Quantity is less than one')

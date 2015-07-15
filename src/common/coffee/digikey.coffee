@@ -26,11 +26,11 @@ get  = http.get
 
 class Digikey extends RetailerInterface
     constructor: (country_code, settings, callback) ->
-        super("Digikey", country_code, "data/digikey.json", settings, callback)
+        super('Digikey', country_code, 'data/digikey.json', settings, callback)
 
     clearCart: (callback) ->
         @clearing_cart = true
-        url = "http" + @site + @cart + "?webid=-1"
+        url = 'http' + @site + @cart + '?webid=-1'
         get url, {}, () =>
             if callback?
                 callback({success:true})
@@ -55,11 +55,11 @@ class Digikey extends RetailerInterface
             @_add_item item, (item, item_result) =>
                 if not item_result.success
                     @_get_part_id item, (item, id) =>
-                        @_get_suggested item, id, "NextBreakQuanIsLowerExtPrice"
+                        @_get_suggested item, id, 'NextBreakQuanIsLowerExtPrice'
                         , (new_item) =>
                             @_add_item new_item, (_, r) =>
                                 if not r.success
-                                    @_get_suggested new_item, id, "TapeReelQuantityTooLow"
+                                    @_get_suggested new_item, id, 'TapeReelQuantityTooLow'
                                     , (new_item) =>
                                         @_add_item new_item, (_, r) ->
                                             result.success &&= r.success
@@ -94,14 +94,14 @@ class Digikey extends RetailerInterface
                     if (count == 0)
                         callback(result)
     _add_item: (item, callback) ->
-        url = "http" + @site + @additem
-        params = "qty=" + item.quantity + "&part=" + item.part + "&cref=" + item.comment
+        url = 'http' + @site + @additem
+        params = 'qty=' + item.quantity + '&part=' + item.part + '&cref=' + item.comment
         result = {success:true, fails:[]}
         post url, params, {item:item, timeout:600000}, (event)->
             doc = browser.parseDOM(event.target.responseText)
             #if the cart returns with a quick-add quantity filled-in there was an error
-            quick_add_quant = doc.querySelector("#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity")
-            result.success = (quick_add_quant?) && (quick_add_quant.value?) && (quick_add_quant.value == "")
+            quick_add_quant = doc.querySelector('#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity')
+            result.success = (quick_add_quant?) && (quick_add_quant.value?) && (quick_add_quant.value == '')
             if not result.success
                 result.fails.push(event.target.item)
             callback(event.target.item, result)
@@ -112,36 +112,36 @@ class Digikey extends RetailerInterface
                 callback(event.target.item, result)
 
     _get_part_id: (item, callback, error_callback) ->
-        url = "http" + @site + "/product-detail/en/"
-        url += item.part + "/"
-        url += item.part + "/"
+        url = 'http' + @site + '/product-detail/en/'
+        url += item.part + '/'
+        url += item.part + '/'
         get url, {item:item, notify:false}, (event) ->
             doc = browser.parseDOM(event.target.responseText)
-            inputs = doc.querySelectorAll("input")
+            inputs = doc.querySelectorAll('input')
             for input in inputs
-                if input.name == "partid"
+                if input.name == 'partid'
                     callback(event.target.item, input.value)
                     return
             #we never found an id
             error_callback()
         , error_callback
     _get_suggested: (item, id, error, callback, error_callback) =>
-        url = "http" + @site + "/classic/Ordering/PackTypeDialog.aspx?"
-        url += "part=" + item.part
-        url += "&qty=" + item.quantity
-        url += "&partId=" + id
-        url += "&error=" + error + "&cref=&esc=-1&returnURL=%2f%2fwww.digikey.co.uk%2fclassic%2fordering%2faddpart.aspx&fastAdd=false&showUpsell=True"
+        url = 'http' + @site + '/classic/Ordering/PackTypeDialog.aspx?'
+        url += 'part=' + item.part
+        url += '&qty=' + item.quantity
+        url += '&partId=' + id
+        url += '&error=' + error + '&cref=&esc=-1&returnURL=%2f%2fwww.digikey.co.uk%2fclassic%2fordering%2faddpart.aspx&fastAdd=false&showUpsell=True'
         get url, {item:item, notify:false}, (event) ->
             doc = browser.parseDOM(event.target.responseText)
             switch error
-                when "TapeReelQuantityTooLow"       then choice = doc.getElementById("rb1")
-                when "NextBreakQuanIsLowerExtPrice" then choice = doc.getElementById("rb2")
+                when 'TapeReelQuantityTooLow'       then choice = doc.getElementById('rb1')
+                when 'NextBreakQuanIsLowerExtPrice' then choice = doc.getElementById('rb2')
             if choice?
                 label = choice.nextElementSibling
                 if label?
                     number_str = label.innerText.split(String.fromCharCode(160))[0]
                     part       = label.innerText.split(String.fromCharCode(160))[2]
-                    number = parseInt(number_str.replace(/,/,""))
+                    number = parseInt(number_str.replace(/,/,''))
                     if not isNaN(number)
                         it = event.target.item
                         it.part = part

@@ -31,11 +31,11 @@ timers           = require 'sdk/timers'
 preferences      = require 'sdk/simple-prefs'
 locationChanged  = require './locationChanged'
 {Cc, Ci}         = require 'chrome'
-dom = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser)
+dom = Cc['@mozilla.org/xmlextras/domparser;1'].createInstance(Ci.nsIDOMParser)
 
 globToRegex = (glob) ->
-    specialChars = "\\^$*+?.()|{}[]"
-    regexChars = ["^"]
+    specialChars = '\\^$*+?.()|{}[]'
+    regexChars = ['^']
     for c in glob
         switch c
             when '?'
@@ -46,26 +46,26 @@ globToRegex = (glob) ->
                 if (specialChars.indexOf(c) >= 0)
                     regexChars.push('\\')
                 regexChars.push(c)
-    regexChars.push("$")
-    return new RegExp(regexChars.join(""))
+    regexChars.push('$')
+    return new RegExp(regexChars.join(''))
 
-popup = require("sdk/panel").Panel(
-    contentURL: data.url("html/popup.html")
-    contentScriptFile: [data.url("popup.js")]
+popup = require('sdk/panel').Panel(
+    contentURL: data.url('html/popup.html')
+    contentScriptFile: [data.url('popup.js')]
 )
 
 button = ActionButton(
-    id:"bom_button",
-    label:"1clickBOM",
+    id:'bom_button',
+    label:'1clickBOM',
     icon :
-        "16": "./images/button16.png"
-        "32": "./images/button32.png"
+        '16': './images/button16.png'
+        '32': './images/button32.png'
     onClick: (state) ->
         popup.show({position:button})
 )
 
-popup.on "show", () ->
-    popup.port.emit("show")
+popup.on 'show', () ->
+    popup.port.emit('show')
 
 preference_listeners = {}
 
@@ -80,7 +80,7 @@ browser =
         # {'settings.UK.Farnell':''} becomes {settings:{UK:{Farnell:''}}}
         for k,v of preferences.prefs
             if /\./.test(k)
-                ks = k.split(".")
+                ks = k.split('.')
                 ks.reduce (prev, curr, i, arr) ->
                     if i == (arr.length - 1)
                         prev[curr] = v
@@ -153,15 +153,15 @@ browser =
         ffObj =
             title   : obj.title
             text    : obj.message
-            iconURL : "." + obj.iconUrl
+            iconURL : '.' + obj.iconUrl
         if obj.type == 'list'
             for i in obj.items
-                ffObj.text += "\n" + i.title
+                ffObj.text += '\n' + i.title
         notifications.notify(ffObj)
     paste:(callback) ->
         c = clipboard.get()
         if not c?
-            return ""
+            return ''
         else
             return c
     setTimeout: (callback, time) ->
@@ -169,9 +169,9 @@ browser =
     clearTimeout: (id) ->
         timers.clearTimeout(id)
     parseDOM: (str) ->
-        dom.parseFromString(str, "text/html")
+        dom.parseFromString(str, 'text/html')
 
-preferences.on "", (prefName) ->
+preferences.on '', (prefName) ->
     for name,callbacks of preference_listeners
         if (RegExp("^#{name}")).test(prefName)
             for callback in callbacks

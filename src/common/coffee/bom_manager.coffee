@@ -31,10 +31,10 @@ bom_manager =
     init: (callback) ->
         @filling_carts  = false
         @emptying_carts = false
-        browser.prefsGet ["country", "settings"], ({country:country, settings:stored_settings}) =>
+        browser.prefsGet ['country', 'settings'], ({country:country, settings:stored_settings}) =>
             @interfaces = {}
             if (!country)
-                country = "Other"
+                country = 'Other'
             count = 5
             for retailer_interface in [Digikey, Farnell, Mouser, RS, Newark]
                 retailer = retailer_interface.name
@@ -49,7 +49,7 @@ bom_manager =
                             callback()
 
     getBOM: (callback) ->
-        browser.storageGet ["bom"], ({bom:bom}) =>
+        browser.storageGet ['bom'], ({bom:bom}) =>
             if not bom
                 bom = {}
             callback(bom)
@@ -62,18 +62,18 @@ bom_manager =
         @getBOM (bom) =>
             if invalid.length > 0
                 for inv in invalid
-                    title = "Could not parse row: "
+                    title = 'Could not parse row: '
                     title += inv.item.row
-                    message = inv.reason + "\n"
-                    browser.notificationsCreate {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
-                    badge.setDecaying("Warn","#FF8A00", priority=2)
+                    message = inv.reason + '\n'
+                    browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning128.png'}, () ->
+                    badge.setDecaying('Warn','#FF8A00', priority=2)
             else if items.length == 0
-                title = "Nothing pasted "
-                message = "Clipboard is empty"
-                browser.notificationsCreate {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
-                badge.setDecaying("Warn","#FF8A00", priority=2)
+                title = 'Nothing pasted '
+                message = 'Clipboard is empty'
+                browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning128.png'}, () ->
+                badge.setDecaying('Warn','#FF8A00', priority=2)
             else if items.length > 0
-                badge.setDecaying("OK","#00CF0F")
+                badge.setDecaying('OK','#00CF0F')
             for item in items
                 if item.retailer not of bom
                     bom[item.retailer] = []
@@ -82,7 +82,7 @@ bom_manager =
                     if existing_item.part == item.part && existing_item.retailer == item.retailer
                         existing_item.quantity += item.quantity
                         if existing_item.comment != item.comment
-                            existing_item.comment  += "," + item.comment
+                            existing_item.comment  += ',' + item.comment
                         existing = true
                         break
                 if not existing
@@ -93,16 +93,16 @@ bom_manager =
                     over.push(retailer)
             if over.length > 0
                 title = "That's a lot of lines!"
-                message = "You have over 100 lines for "
+                message = 'You have over 100 lines for '
                 message += over[0]
                 if over.length > 1
                     for retailer in over[1 .. over.length - 2]
-                        message += ", " + retailer
-                    message += " and "
+                        message += ', ' + retailer
+                    message += ' and '
                     message += over[over.length - 1]
-                message += ". Adding the items may take a very long time (or even forever). It may be OK but it really depends on the site."
-                browser.notificationsCreate {type:"basic", title:title , message:message, iconUrl:"/images/warning128.png"}, () ->
-                badge.setDecaying("Warn","#FF8A00", priority=2)
+                message += '. Adding the items may take a very long time (or even forever). It may be OK but it really depends on the site.'
+                browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning128.png'}, () ->
+                badge.setDecaying('Warn','#FF8A00', priority=2)
             browser.storageSet {bom:bom}, () =>
                 if callback?
                     callback(this)
@@ -112,39 +112,39 @@ bom_manager =
             fails = result.fails
             failed_items = []
             if fails.length == 0
-                title = "There may have been problems adding items"
-                title += " to " + retailer + " cart. "
-                failed_items.push({title:"Please check the cart to try and " ,message:""})
-                failed_items.push({title:"correct any issues." ,message:""})
+                title = 'There may have been problems adding items'
+                title += ' to ' + retailer + ' cart. '
+                failed_items.push({title:'Please check the cart to try and ' ,message:''})
+                failed_items.push({title:'correct any issues.' ,message:''})
             else
-                title = "Could not add " + fails.length
-                title += " out of " + items.length + " line"
-                title += if items.length > 1 then "s" else ""
-                title += " to " + retailer + " cart:"
+                title = 'Could not add ' + fails.length
+                title += ' out of ' + items.length + ' line'
+                title += if items.length > 1 then 's' else ''
+                title += ' to ' + retailer + ' cart:'
                 for fail in fails
-                    failed_items.push({title:"item: " + fail.comment + " | " + fail.quantity + " | " + fail.part, message:""})
-            browser.notificationsCreate {type:"list", title:title, message:"", items:failed_items, iconUrl:"/images/error128.png"}, () =>
-            badge.setDecaying("Err","#FF0000", priority=2)
+                    failed_items.push({title:'item: ' + fail.comment + ' | ' + fail.quantity + ' | ' + fail.part, message:''})
+            browser.notificationsCreate {type:'list', title:title, message:'', items:failed_items, iconUrl:'/images/error128.png'}, () =>
+            badge.setDecaying('Err','#FF0000', priority=2)
         else
-            badge.setDecaying("OK","#00CF0F")
+            badge.setDecaying('OK','#00CF0F')
         if result.warnings?
             for warning in result.warnings
                 title = warning
-                browser.notificationsCreate {type:"basic", title:title, message:"", iconUrl:"/images/warning128.png"}, () =>
-                badge.setDecaying("Warn","#FF8A00", priority=1)
+                browser.notificationsCreate {type:'basic', title:title, message:'', iconUrl:'/images/warning128.png'}, () =>
+                badge.setDecaying('Warn','#FF8A00', priority=1)
 
     notifyEmptyCart: (retailer, result) ->
         if not result.success
-            title = "Could not empty " + retailer + " cart"
-            browser.notificationsCreate {type:"basic", title:title, message:"", iconUrl:"/images/error128.png"}, () =>
-            badge.setDecaying("Err","#FF0000", priority=2)
+            title = 'Could not empty ' + retailer + ' cart'
+            browser.notificationsCreate {type:'basic', title:title, message:'', iconUrl:'/images/error128.png'}, () =>
+            badge.setDecaying('Err','#FF0000', priority=2)
         else
-            badge.setDecaying("OK","#00CF0F")
+            badge.setDecaying('OK','#00CF0F')
 
     fillCarts: (callback, callbackEveryRetailer)->
         @filling_carts = true
         big_result = {success:true, fails:[]}
-        browser.storageGet ["bom"], ({bom:bom}) =>
+        browser.storageGet ['bom'], ({bom:bom}) =>
             count = Object.keys(bom).length
             for retailer of bom
                 @interfaces[retailer].addItems bom[retailer], (result, interf, items) =>
@@ -160,7 +160,7 @@ bom_manager =
                         @filling_carts = false
 
     fillCart: (retailer, callback)->
-        browser.storageGet ["bom"], ({bom:bom}) =>
+        browser.storageGet ['bom'], ({bom:bom}) =>
             @interfaces[retailer].addItems bom[retailer], (result) =>
                 @notifyFillCart bom[retailer], retailer, result
                 callback(result)
@@ -168,7 +168,7 @@ bom_manager =
     emptyCarts: (callback, callbackEveryRetailer)->
         @emptying_carts = true
         big_result = {success: true}
-        browser.storageGet ["bom"], ({bom:bom}) =>
+        browser.storageGet ['bom'], ({bom:bom}) =>
             if bom?
                 count = Object.keys(bom).length
                 for retailer of bom
@@ -193,7 +193,7 @@ bom_manager =
                 callback(result)
 
     openCarts: ()->
-        browser.storageGet ["bom"], ({bom:bom}) =>
+        browser.storageGet ['bom'], ({bom:bom}) =>
             for retailer of bom
                 @openCart(retailer)
 

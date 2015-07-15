@@ -30,11 +30,11 @@ exports.background = (messenger) ->
 
     tsvPageNotifier =
         onDotTSV : false
-        re       : new RegExp("\.tsv$","i")
+        re       : new RegExp('\.tsv$','i')
         items    : []
         invalid  : []
         _set_not_dotTSV: () ->
-            badge.setDefault("")
+            badge.setDefault('')
             @onDotTSV = false
             @items    = []
             @invalid  = []
@@ -42,18 +42,18 @@ exports.background = (messenger) ->
         checkPage: (callback) ->
             browser.tabsGetActive (tab) =>
                 if tab?
-                    tab_url = tab.url.split("?")[0]
+                    tab_url = tab.url.split('?')[0]
                     if tab_url.match(@re)
                         if /^http.?:\/\/github.com\//.test(tab.url)
-                            url = tab_url.replace(/blob/,"raw")
+                            url = tab_url.replace(/blob/,'raw')
                         else if /^http.?:\/\/bitbucket.org\//.test(tab.url)
-                            url = tab_url.split("?")[0].replace(/src/,"raw")
+                            url = tab_url.split('?')[0].replace(/src/,'raw')
                         else
                             url = tab_url
                         http.get url, {notify:false}, (event) =>
                             {items, invalid} = parseTSV(event.target.responseText)
                             if items.length > 0
-                                badge.setDefault("\u2191", "#0000FF")
+                                badge.setDefault('\u2191', '#0000FF')
                                 @onDotTSV = true
                                 @items    = items
                                 @invalid  = invalid
@@ -101,46 +101,46 @@ exports.background = (messenger) ->
                 else if tsvPageNotifier.onDotTSV
                     height += 36
                 messenger.resizePopup(width, height)
-            messenger.send("sendBackgroundState", {bom:bom, bom_manager:bom_manager, onDotTSV: tsvPageNotifier.onDotTSV})
+            messenger.send('sendBackgroundState', {bom:bom, bom_manager:bom_manager, onDotTSV: tsvPageNotifier.onDotTSV})
 
-    messenger.on "getBackgroundState", () ->
+    messenger.on 'getBackgroundState', () ->
         sendState()
 
-    messenger.on "fillCart", (name, callback) ->
+    messenger.on 'fillCart', (name, callback) ->
         bom_manager.fillCart name, () ->
             sendState()
         sendState()
 
-    messenger.on "fillCarts", () ->
+    messenger.on 'fillCarts', () ->
         bom_manager.fillCarts undefined, () ->
             sendState()
         sendState()
 
-    messenger.on "openCart", (name) ->
+    messenger.on 'openCart', (name) ->
         bom_manager.openCart(name)
 
-    messenger.on "openCarts", () ->
+    messenger.on 'openCarts', () ->
         bom_manager.openCarts()
 
-    messenger.on "emptyCart", (name) ->
+    messenger.on 'emptyCart', (name) ->
         bom_manager.emptyCart name, () ->
             sendState()
         sendState()
 
-    messenger.on "emptyCarts", () ->
+    messenger.on 'emptyCarts', () ->
         bom_manager.emptyCarts undefined, () ->
             sendState()
         sendState()
 
-    messenger.on "clearBOM", () ->
-        browser.storageRemove "bom" , () ->
+    messenger.on 'clearBOM', () ->
+        browser.storageRemove 'bom' , () ->
             sendState()
 
-    messenger.on "paste", () ->
+    messenger.on 'paste', () ->
         bom_manager.addToBOM browser.paste(), () ->
             sendState()
 
-    messenger.on "loadFromPage", () ->
+    messenger.on 'loadFromPage', () ->
         tsvPageNotifier.addToBOM () ->
             sendState()
 

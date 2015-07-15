@@ -28,7 +28,7 @@ class RetailerInterface
         country_code_lookedup = data.lookup[country_code]
         if !country_code_lookedup
             error = new InvalidCountryError()
-            error.message += " \"" + country_code + "\" given to " + name
+            error.message += ' \'' + country_code + '\' given to ' + name
             throw error
 
         if (settings?)
@@ -47,12 +47,12 @@ class RetailerInterface
 
         @settings = settings
 
-        if typeof(data.carts) == "string"
+        if typeof(data.carts) == 'string'
             @cart = data.carts
         else
             @cart = data.carts[country_code_lookedup]
 
-        if typeof(data.additems) == "string"
+        if typeof(data.additems) == 'string'
             @additem = data.additems
         else
             @additem = data.additems[country_code_lookedup]
@@ -66,19 +66,19 @@ class RetailerInterface
             @site = data.sites[country_code_lookedup]
 
         @additem_params = data.additem_params
-        @name           = name + " " + country_code_lookedup
+        @name           = name + ' ' + country_code_lookedup
         @interface_name = name
         @adding_items   = false
         @clearing_cart  = false
-        @icon_src       = "http://www.google.com/s2/favicons?domain=http" + @site
+        @icon_src       = 'http://www.google.com/s2/favicons?domain=http' + @site
         #this puts the image in cache but also uses our backup if
         #google.com/s2/favicons fails
         http.get @icon_src, {notify:false},  (event) =>
             #failure response image
-            if md5(event.target.response) == "6e2001c87afacf376c7df4a011376511"
-                @icon_src = browser.getURL("images/" + @interface_name.toLowerCase() + ".ico")
+            if md5(event.target.response) == '6e2001c87afacf376c7df4a011376511'
+                @icon_src = browser.getURL('images/' + @interface_name.toLowerCase() + '.ico')
         , () =>
-            @icon_src = browser.getURL("images/" + @interface_name.toLowerCase() + ".ico")
+            @icon_src = browser.getURL('images/' + @interface_name.toLowerCase() + '.ico')
         if callback?
             callback()
 
@@ -86,11 +86,11 @@ class RetailerInterface
         #we reload any tabs with the cart URL but the path is case insensitive
         #so we use a regex. we update the matching tabs to the cart URL instead
         #of using tabs.refresh so we don't re-pass any parameters to the cart
-        re = new RegExp(@cart, "i")
+        re = new RegExp(@cart, 'i')
         browser.tabsQuery {url:"*#{@site}/*"}, (tabs) =>
             for tab in tabs
                 if (tab.url.match(re))
-                    protocol = tab.url.split("://")[0]
+                    protocol = tab.url.split('://')[0]
                     browser.tabsUpdate(tab, protocol + @site + @cart)
     refreshSiteTabs: () ->
         #refresh the tabs that are not the cart url. XXX could some of the
@@ -107,12 +107,12 @@ class RetailerInterface
             if tabs.length > 0
                 browser.tabsActivate(tabs[tabs.length - 1])
             else
-                browser.tabsCreate("http" + @site + @cart)
+                browser.tabsCreate('http' + @site + @cart)
 
 class InvalidCountryError extends Error
     constructor: ->
-        @name = "InvalidCountryError"
-        @message = "Invalid country-code"
+        @name = 'InvalidCountryError'
+        @message = 'Invalid country-code'
 
 exports.RetailerInterface   = RetailerInterface
 exports.InvalidCountryError = InvalidCountryError

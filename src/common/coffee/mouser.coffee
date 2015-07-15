@@ -26,9 +26,9 @@ get  = http.get
 
 class Mouser extends RetailerInterface
     constructor: (country_code, settings) ->
-        super "Mouser", country_code, "data/mouser.json", settings
+        super 'Mouser', country_code, 'data/mouser.json', settings
         #posting our sub-domain as the sites are all linked and switching countries would not register properly otherwise
-        s = @site.split(".")[0].slice(3)
+        s = @site.split('.')[0].slice(3)
         if s == 'uk'
             s = 'gb'
         post "http://www.mouser.com/api/Preferences/SetSubdomain?subdomainName=#{s}",'', {notify:false}, () ->
@@ -55,23 +55,23 @@ class Mouser extends RetailerInterface
                                 @adding_items = false
     _add_items: (items, viewstate, callback) ->
         params = @additem_params + viewstate
-        params += "&ctl00$ContentMain$hNumberOfLines=99"
-        params += "&ctl00$ContentMain$txtNumberOfLines=94"
+        params += '&ctl00$ContentMain$hNumberOfLines=99'
+        params += '&ctl00$ContentMain$txtNumberOfLines=94'
         for item,i in items
-            params += "&ctl00$ContentMain$txtCustomerPartNumber" + (i+1) + "=" + item.comment
-            params += "&ctl00$ContentMain$txtPartNumber" + (i+1) + "=" + item.part
-            params += "&ctl00$ContentMain$txtQuantity"   + (i+1) + "=" + item.quantity
-        url = "http" + @site + @additem
+            params += "&ctl00$ContentMain$txtCustomerPartNumber#{i+1}=#{item.comment}\
+                       &ctl00$ContentMain$txtPartNumber#{i+1}=#{item.part}\
+                       &ctl00$ContentMain$txtQuantity#{i+1}=}#{item.quantity}"
+        url = 'http' + @site + @additem
         result = {success: true, fails:[]}
         post url, params, {}, (event) =>
-            #if there is an error, there will be some error-class items with display set to ""
+            #if there is an error, there will be some error-class items with display set to ''
             doc = browser.parseDOM(event.target.responseText)
-            errors = doc.getElementsByClassName("error")
+            errors = doc.getElementsByClassName('error')
             for error in errors
-                if error.style.display == ""
+                if error.style.display == ''
                     # this padding5 error element just started appearing, doesn't indicate anything
-                    if not (error.firstChild? && error.firstChild.nextSibling? && error.firstChild.nextSibling.className == "padding5")
-                        part = error.getAttribute("data-partnumber")
+                    if not (error.firstChild? && error.firstChild.nextSibling? && error.firstChild.nextSibling.className == 'padding5')
+                        part = error.getAttribute('data-partnumber')
                         if part?
                             for item in items
                                 if item.part == part.replace(/-/g, '')
@@ -84,10 +84,16 @@ class Mouser extends RetailerInterface
                 callback({success:false, fails:items})
 
     _clear_errors: (viewstate, callback) ->
-        post "http" + @site + @cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors", {}, (event) =>
+        post "http#{@site}#{@cart}", "__EVENTARGUMENT=&__EVENTTARGET=\
+            &__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=#{viewstate}\
+            &__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors"
+        , {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
-            viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-            post "http" + @site + @cart, "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket", {}, (event) =>
+            viewstate = encodeURIComponent(doc.getElementById('__VIEWSTATE').value)
+            post "http#{@site}#{@cart}", "__EVENTARGUMENT=&__EVENTTARGET=\
+                &__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=#{viewstate}\
+                &__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket"
+            , {}, (event) =>
                if callback?
                    callback()
 
@@ -97,8 +103,10 @@ class Mouser extends RetailerInterface
             @_clear_cart(viewstate, callback)
     _clear_cart: (viewstate, callback)->
         #don't ask, this is what works...
-        url = "http" + @site + @cart
-        params =  "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=" + viewstate + "&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket"
+        url = 'http' + @site + @cart
+        params =  "__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=\
+            &__SCROLLPOSITIONY=&__VIEWSTATE=#{viewstate}\
+            &__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket"
         post url, params, {}, (event) =>
             if callback?
                 callback({success:true}, this)
@@ -110,24 +118,24 @@ class Mouser extends RetailerInterface
             @clearing_cart = false
     _get_adding_viewstate: (callback, arg)->
         #we get the quick-add form , extend it to 99 lines (the max) and get the viewstate from the response
-        url = "http" + @site + @additem
+        url = 'http' + @site + @additem
         get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
             params = @additem_params
-            params += encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
-            params += "&ctl00$ContentMain$btnAddLines=Lines to Forms"
-            params += "&ctl00$ContentMain$hNumberOfLines=5"
-            params += "&ctl00$ContentMain$txtNumberOfLines=94"
+            params += encodeURIComponent(doc.getElementById('__VIEWSTATE').value)
+            params += '&ctl00$ContentMain$btnAddLines=Lines to Forms'
+            params += '&ctl00$ContentMain$hNumberOfLines=5'
+            params += '&ctl00$ContentMain$txtNumberOfLines=94'
             post url, params, {}, (event) =>
                 doc = browser.parseDOM(event.target.responseText)
-                viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
+                viewstate = encodeURIComponent(doc.getElementById('__VIEWSTATE').value)
                 if callback?
                     callback(viewstate, arg)
     _get_cart_viewstate: (callback)->
-        url = "http" + @site + @cart
+        url = 'http' + @site + @cart
         get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
-            viewstate = encodeURIComponent(doc.getElementById("__VIEWSTATE").value)
+            viewstate = encodeURIComponent(doc.getElementById('__VIEWSTATE').value)
             if callback?
                 callback(viewstate)
 

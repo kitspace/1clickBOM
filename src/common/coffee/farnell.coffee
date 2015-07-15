@@ -22,12 +22,12 @@
 
 class Farnell extends RetailerInterface
     constructor: (country_code, settings, callback) ->
-        super("Farnell", country_code, "data/farnell.json", settings)
+        super('Farnell', country_code, 'data/farnell.json', settings)
         #all Farnell sites are Newark style sites now so we use Newark's
         #methods
         for name, method of Newark::
             this[name] = method
-        @cart = "/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView"
+        @cart = '/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView'
         @_set_store_id()
         if callback?
             callback(this)

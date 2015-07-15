@@ -26,7 +26,7 @@ get  = http.get
 
 class RS extends RetailerInterface
     constructor: (country_code, settings, callback) ->
-        super("RS", country_code, "data/rs.json", settings, callback)
+        super('RS', country_code, 'data/rs.json', settings, callback)
     clearCart: (callback) ->
         @clearing_cart = true
         if /web\/ca/.test(@cart)
@@ -38,8 +38,8 @@ class RS extends RetailerInterface
                     @refreshSiteTabs()
                     @clearing_cart = false
         else
-            url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart"
-            post url, "", {json:true}, (event) =>
+            url = 'http' + @site + '/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart'
+            post url, '', {json:true}, (event) =>
                 if callback?
                     callback({success: true}, this)
                 @refreshSiteTabs()

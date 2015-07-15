@@ -32,16 +32,16 @@ stop      = qunit.stop
 start     = qunit.start
 deepEqual = qunit.deepEqual
 
-digikey_data = browser.getLocal("data/digikey.json")
-farnell_data = browser.getLocal("data/farnell.json")
-mouser_data  = browser.getLocal("data/mouser.json")
+digikey_data = browser.getLocal('data/digikey.json')
+farnell_data = browser.getLocal('data/farnell.json')
+mouser_data  = browser.getLocal('data/mouser.json')
 
-module("Digikey")
+module('Digikey')
 
 # we only test a few locations or else we start getting 403: forbidden
-digikey_locations = ["UK", "AT", "IL", "US", "AU"]
+digikey_locations = ['UK', 'AT', 'IL', 'US', 'AU']
 
-asyncTest "Clear All", () ->
+asyncTest 'Clear All', () ->
     stop(digikey_locations.length - 1)
     for l in digikey_locations
         r = new Digikey(l)
@@ -49,8 +49,8 @@ asyncTest "Clear All", () ->
             deepEqual(result.success, true)
             start()
 
-asyncTest "Add items", () ->
-    items = [{"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
+asyncTest 'Add items', () ->
+    items = [{'part':'754-1173-1-ND', 'quantity':2, 'comment':'test'}]
     stop(digikey_locations.length - 1)
     for l in digikey_locations
         r = new Digikey(l)
@@ -58,8 +58,8 @@ asyncTest "Add items", () ->
             deepEqual(result.success, true, that.country)
             start()
 
-asyncTest "Add items fails", () ->
-    items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"754-1173-1-ND", "quantity":2, "comment":"test"}]
+asyncTest 'Add items fails', () ->
+    items = [{'part':'fail', 'quantity':2, 'comment':'test'}, {'part':'754-1173-1-ND', 'quantity':2, 'comment':'test'}]
     stop(digikey_locations.length - 1)
     for l in digikey_locations
         r = new Digikey(l)
@@ -68,11 +68,11 @@ asyncTest "Add items fails", () ->
             deepEqual(result.fails, [items[0]], that.country)
             start()
 
-module("Farnell")
+module('Farnell')
 
 farnell_locations = Object.keys(farnell_data.sites)
 
-asyncTest "Clear All", () ->
+asyncTest 'Clear All', () ->
     stop(farnell_locations.length - 1)
     for l in farnell_locations
         r = new Farnell l, {}, (that) ->
@@ -80,8 +80,8 @@ asyncTest "Clear All", () ->
                 deepEqual(result.success, true)
                 start()
 
-asyncTest "Add items", () ->
-    items = [{"part":"2250472", "quantity":2, "comment":"test"}]
+asyncTest 'Add items', () ->
+    items = [{'part':'2250472', 'quantity':2, 'comment':'test'}]
     stop(farnell_locations.length - 1)
     for l in farnell_locations
         r = new Farnell l, {}, (that) ->
@@ -89,8 +89,8 @@ asyncTest "Add items", () ->
                 deepEqual(result.success, true, that.country)
                 start()
 
-asyncTest "Add items fails", () ->
-    items = [{"part":"fail", "quantity":2, "comment":"test"}, {"part":"2250472", "quantity":2, "comment":"test"}]
+asyncTest 'Add items fails', () ->
+    items = [{'part':'fail', 'quantity':2, 'comment':'test'}, {'part':'2250472', 'quantity':2, 'comment':'test'}]
     stop(farnell_locations.length - 1)
     for l in farnell_locations
         r = new Farnell l, {}, (that) ->
@@ -99,101 +99,101 @@ asyncTest "Add items fails", () ->
                 deepEqual(result.fails, [items[0]], that.country)
                 start()
 
-module("Mouser")
+module('Mouser')
 
 # Mouser's site is unified, changing the basket somewhere will change the
 # basket everywhere.
 # TODO would be good to find a way to test more locations, tried doing it like
 # the other retailers but the locations can interefer with each other
 
-asyncTest "Clear All", () ->
-    r = new Mouser("AU")
+asyncTest 'Clear All', () ->
+    r = new Mouser('AU')
     r.clearCart (result, that) ->
         deepEqual(result.success, true)
         start()
 
-asyncTest "Add items fails but adds again", () ->
-    items = [{"part":"fail","quantity":2, "comment":"test"},{"part":"607-GALILEO","quantity":2, "comment":"test"}]
-    r = new Mouser("UK")
+asyncTest 'Add items fails but adds again', () ->
+    items = [{'part':'fail','quantity':2, 'comment':'test'},{'part':'607-GALILEO','quantity':2, 'comment':'test'}]
+    r = new Mouser('UK')
     r.addItems items, (result, that) ->
         deepEqual(result.success, false, that.country)
         deepEqual(result.fails, [items[0]], that.country)
-        items = [{"part":"607-GALILEO","quantity":2, "comment":"test"}]
+        items = [{'part':'607-GALILEO','quantity':2, 'comment':'test'}]
         that.addItems items, (result, that) ->
-            #the order here is important as we want to make sure the "errors" were cleared after the failed add
+            #the order here is important as we want to make sure the 'errors' were cleared after the failed add
             deepEqual(result.success, true, that.country)
             start()
 
-module("RS")
+module('RS')
 
-rs_locations_online = [ "AT", "AU", "BE", "CH", "CN", "CZ" , "DE", "DK", "ES",
-    "FR", "HK", "HU" , "IE", "IT", "JP", "KR", "MY", "NL", "NO", "NZ", "PH",
-    "PL", "PT", "SE", "SG", "TH", "TW", "UK", "ZA" ]
+rs_locations_online = [ 'AT', 'AU', 'BE', 'CH', 'CN', 'CZ' , 'DE', 'DK', 'ES',
+    'FR', 'HK', 'HU' , 'IE', 'IT', 'JP', 'KR', 'MY', 'NL', 'NO', 'NZ', 'PH',
+    'PL', 'PT', 'SE', 'SG', 'TH', 'TW', 'UK', 'ZA' ]
 
-rs_locations_delivers = ["AE", "AZ", "CL", "CY", "EE", "FI", "GR", "HR", "IL",
-    "IN", "LT", "LV", "LY", "MT", "MX", "RO", "RU", "SA", "TR", "UA", "AR",
-    "US"]
+rs_locations_delivers = ['AE', 'AZ', 'CL', 'CY', 'EE', 'FI', 'GR', 'HR', 'IL',
+    'IN', 'LT', 'LV', 'LY', 'MT', 'MX', 'RO', 'RU', 'SA', 'TR', 'UA', 'AR',
+    'US']
 
 
 rs_locations = rs_locations_online.concat(rs_locations_delivers)
 
-asyncTest "Clear all", () ->
+asyncTest 'Clear all', () ->
     stop(rs_locations.length - 1)
     for l in rs_locations
         r = new RS(l)
         r.clearCart (result, that) ->
-            deepEqual(result.success, true, "1:" + that.country)
+            deepEqual(result.success, true, '1:' + that.country)
             start()
 
-asyncTest "rsdelivers: Add items fails but adds again", () ->
+asyncTest 'rsdelivers: Add items fails but adds again', () ->
     stop(rs_locations_delivers.length - 1)
     for l in rs_locations_delivers
         r = new RS(l)
         items = [
-                  {"part":"264-7881","quantity":2, "comment":"test"}
-                , {"part":"fail","quantity":2, "comment":"test"}
+                  {'part':'264-7881','quantity':2, 'comment':'test'}
+                , {'part':'fail','quantity':2, 'comment':'test'}
                 ]
         r.addItems items, (result, that) ->
-            expected_fails = [{"part":"fail","quantity":2, "comment":"test"}]
-            deepEqual(result.success, false, "1:"+ that.country)
-            deepEqual(result.fails, expected_fails,"2:" + that.country)
-            items = [{"part":"264-7881","quantity":2, "comment":"test"}]
+            expected_fails = [{'part':'fail','quantity':2, 'comment':'test'}]
+            deepEqual(result.success, false, '1:'+ that.country)
+            deepEqual(result.fails, expected_fails,'2:' + that.country)
+            items = [{'part':'264-7881','quantity':2, 'comment':'test'}]
             that.addItems items, (result, that2) ->
-                deepEqual(result.success, true, "3:" + that2.country)
+                deepEqual(result.success, true, '3:' + that2.country)
                 start()
 
-asyncTest "rs-online: Add items fails but adds again", () ->
+asyncTest 'rs-online: Add items fails but adds again', () ->
     stop(rs_locations_online.length - 1)
     for l in rs_locations
         r = new RS(l)
         items = [
-                  {"part":"264-7881","quantity":2, "comment":"test"}
-                , {"part":"fail","quantity":2, "comment":"test"}
+                  {'part':'264-7881','quantity':2, 'comment':'test'}
+                , {'part':'fail','quantity':2, 'comment':'test'}
                 ]
         r.addItems items, (result, that) ->
-            expected_fails = [{"part":"fail","quantity":2, "comment":"test"}]
-            deepEqual(result.success, false, "1:"+ that.country)
-            deepEqual(result.fails, expected_fails,"2:" + that.country)
-            items = [{"part":"264-7881","quantity":2, "comment":"test"}]
+            expected_fails = [{'part':'fail','quantity':2, 'comment':'test'}]
+            deepEqual(result.success, false, '1:'+ that.country)
+            deepEqual(result.fails, expected_fails,'2:' + that.country)
+            items = [{'part':'264-7881','quantity':2, 'comment':'test'}]
             that.addItems items, (result, that2) ->
-                deepEqual(result.success, true, "3:" + that2.country)
+                deepEqual(result.success, true, '3:' + that2.country)
                 start()
 
 
-module("Newark")
+module('Newark')
 
-asyncTest "Add items fails, add items, clear all", () ->
-	r = new Newark("US")
+asyncTest 'Add items fails, add items, clear all', () ->
+	r = new Newark('US')
 	items = [
-          {"part":"98W0461","quantity":2, "comment":"test"}
-		, {"part":"fail"   ,"quantity":2, "comment":"test"}
-		, {"part":"fail2"  ,"quantity":2, "comment":"test"}
+          {'part':'98W0461','quantity':2, 'comment':'test'}
+		, {'part':'fail'   ,'quantity':2, 'comment':'test'}
+		, {'part':'fail2'  ,'quantity':2, 'comment':'test'}
 	]
 	r.addItems items, (result1, that) ->
 		deepEqual(result1.success, false)
 		deepEqual(result1.fails, [items[2], items[1]])
 		items = [
-			{"part":"98W0461","quantity":2, "comment":"test"}
+			{'part':'98W0461','quantity':2, 'comment':'test'}
 		]
 		that.addItems items, (result2, that) ->
 			deepEqual(result2.success, true)
@@ -201,10 +201,10 @@ asyncTest "Add items fails, add items, clear all", () ->
 				deepEqual(result3.success, true)
 				start()
 
-asyncTest "Add items", () ->
-	r = new Newark("US")
+asyncTest 'Add items', () ->
+	r = new Newark('US')
 	items = [
-	          {"part":"98W0461","quantity":2, "comment":"test"}
+	          {'part':'98W0461','quantity':2, 'comment':'test'}
 	        ]
 	r.addItems items, (result) ->
 		deepEqual(result.success, true)

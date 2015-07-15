@@ -19,18 +19,18 @@
 
 {browser} = require './browser'
 
-countries_data = browser.getLocal("data/countries.json")
-settings_data  = browser.getLocal("data/settings.json")
+countries_data = browser.getLocal('data/countries.json')
+settings_data  = browser.getLocal('data/settings.json')
 
 save_options = () ->
-    select = document.getElementById("country")
+    select = document.getElementById('country')
     country = select.children[select.selectedIndex].value
     settings = document.settings
     if(settings_data[country])
         if (!settings[country])
             settings[country] = {}
         for retailer of settings_data[country]
-            checked = document.querySelector("input[name='" + retailer + "']:checked")
+            checked = document.querySelector("input[name=#{retailer}]:checked")
             if (checked)
                 settings[country][retailer] = {}
                 settings[country][retailer]['site'] = checked.value
@@ -38,66 +38,66 @@ save_options = () ->
         load_options()
 
 load_options = () ->
-    browser.prefsGet ["settings", "country"], (stored) ->
+    browser.prefsGet ['settings', 'country'], (stored) ->
         if (!stored.country)
-            stored.country = "Other"
+            stored.country = 'Other'
 
         if (stored.settings?)
             document.settings = stored.settings
         else
             document.settings = {}
 
-        select = document.getElementById("country")
+        select = document.getElementById('country')
         for child in select.children
             if child.value == stored.country
-                child.selected = "true"
+                child.selected = 'true'
                 break
 
-        form = document.getElementById("settings")
+        form = document.getElementById('settings')
         form.removeChild(form.lastChild) while form.hasChildNodes()
         for retailer of settings_data[stored.country]
             choices = settings_data[stored.country][retailer].site.options
             _default = settings_data[stored.country][retailer].site.value
-            div = document.createElement("div")
-            div2 = document.createElement("div")
-            div2.className = "heading_2"
-            h2 = document.createElement("h2")
+            div = document.createElement('div')
+            div2 = document.createElement('div')
+            div2.className = 'heading_2'
+            h2 = document.createElement('h2')
             h2.innerHTML = retailer
             div2.appendChild(h2)
             div.appendChild(div2)
             form.appendChild(div)
             for choice,index in choices
-                radio = document.createElement("input")
-                radio.type = "radio"
+                radio = document.createElement('input')
+                radio.type = 'radio'
                 radio.name = retailer
                 radio.value = choice.value
-                radio.id = "id_" + choice.value
-                div = document.createElement("div")
+                radio.id = 'id_' + choice.value
+                div = document.createElement('div')
                 div.appendChild(radio)
                 div.innerHTML += choice.label
-                div.className = "radio_text"
+                div.className = 'radio_text'
                 div.onclick = (mouse_event) ->
                     child = mouse_event.toElement.firstChild
                     if(child?)
-                        if (child.type == "radio")
-                            child.checked = "checked"
+                        if (child.type == 'radio')
+                            child.checked = 'checked'
                             save_options()
 
                 form.appendChild(div)
             if (stored.settings? && (stored.settings[stored.country]?) && (Boolean(Object.keys(stored.settings[stored.country]).length)))
-                id = "id_" + stored.settings[stored.country][retailer].site
+                id = 'id_' + stored.settings[stored.country][retailer].site
                 selected = document.getElementById(id)
             else
-                selected = document.getElementById("id_" + _default)
-            selected.checked = "checked"
-            input.onclick = save_options for input in document.getElementsByTagName("input")
+                selected = document.getElementById('id_' + _default)
+            selected.checked = 'checked'
+            input.onclick = save_options for input in document.getElementsByTagName('input')
 
-select = document.getElementById("country")
+select = document.getElementById('country')
 for name, code of countries_data
-    opt = document.createElement("option")
+    opt = document.createElement('option')
     opt.innerHTML = name
     opt.value = code
     select.appendChild(opt)
 
-document.addEventListener("DOMContentLoaded", load_options)
-document.getElementById("country").onchange = save_options
+document.addEventListener('DOMContentLoaded', load_options)
+document.getElementById('country').onchange = save_options

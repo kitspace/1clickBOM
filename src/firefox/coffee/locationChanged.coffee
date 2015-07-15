@@ -1,9 +1,9 @@
-tabs       = require "sdk/tabs"
+tabs       = require 'sdk/tabs'
 {viewFor}  = require 'sdk/view/core'
 {modelFor} = require 'sdk/model/core'
-{Ci, Cu}   = require "chrome"
-{getBrowserForTab, getTabForContentWindow} = require "sdk/tabs/utils"
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this)
+{Ci, Cu}   = require 'chrome'
+{getBrowserForTab, getTabForContentWindow} = require 'sdk/tabs/utils'
+Cu.import('resource://gre/modules/XPCOMUtils.jsm', this)
 
 listeners = []
 progressListener =

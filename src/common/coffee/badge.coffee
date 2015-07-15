@@ -22,9 +22,9 @@
 badge =
     decaying_set  : false
     priority      : 0
-    default_text  : ""
-    default_color : "#0000FF"
-    setDecaying: (text, color="#0000FF", priority = 1) ->
+    default_text  : ''
+    default_color : '#0000FF'
+    setDecaying: (text, color='#0000FF', priority = 1) ->
         if priority >= @priority
             if @decaying_set && @id > 0
                 browser.clearTimeout(@id)
@@ -33,7 +33,7 @@ badge =
                 @decaying_set = false
                 @_set(@default_text, @default_color, 0)
             , 5000
-    setDefault: (text, color="#0000FF", priority = 0) ->
+    setDefault: (text, color='#0000FF', priority = 0) ->
         if priority >= @priority
             @_set(text, color, priority)
         @default_color = color

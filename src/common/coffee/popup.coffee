@@ -19,34 +19,34 @@
 
 {messenger} = require './messenger'
 
-element_Bom         = document.querySelector("#bom")
-element_Table       = document.querySelector("#bom_table")
-button_Clear        = document.querySelector("button#clear")
-button_FillCarts    = document.querySelector("button#fill_carts")
-button_EmptyCarts   = document.querySelector("button#empty_carts")
-button_OpenCartTabs = document.querySelector("button#open_cart_tabs")
-button_LoadFromPage = document.querySelector("button#load_from_page")
-button_Paste        = document.querySelector("button#paste")
+element_Bom         = document.querySelector('#bom')
+element_Table       = document.querySelector('#bom_table')
+button_Clear        = document.querySelector('button#clear')
+button_FillCarts    = document.querySelector('button#fill_carts')
+button_EmptyCarts   = document.querySelector('button#empty_carts')
+button_OpenCartTabs = document.querySelector('button#open_cart_tabs')
+button_LoadFromPage = document.querySelector('button#load_from_page')
+button_Paste        = document.querySelector('button#paste')
 
-button_Clear.addEventListener "click", () ->
-    messenger.send("clearBOM")
+button_Clear.addEventListener 'click', () ->
+    messenger.send('clearBOM')
 
-button_FillCarts.addEventListener "click", () ->
+button_FillCarts.addEventListener 'click', () ->
     @disabled = true
-    messenger.send("fillCarts")
+    messenger.send('fillCarts')
 
-button_EmptyCarts.addEventListener "click", () ->
+button_EmptyCarts.addEventListener 'click', () ->
     @disabled = true
-    messenger.send("emptyCarts")
+    messenger.send('emptyCarts')
 
-button_OpenCartTabs.addEventListener "click", () ->
-    messenger.send("openCarts")
+button_OpenCartTabs.addEventListener 'click', () ->
+    messenger.send('openCarts')
 
-button_Paste.addEventListener "click", () ->
-    messenger.send("paste")
+button_Paste.addEventListener 'click', () ->
+    messenger.send('paste')
 
-button_LoadFromPage.addEventListener "click", () ->
-    messenger.send("loadFromPage")
+button_LoadFromPage.addEventListener 'click', () ->
+    messenger.send('loadFromPage')
 
 hideOrShow = (bom, onDotTSV) ->
     button_Clear.hidden        = !Boolean(Object.keys(bom).length)
@@ -59,15 +59,15 @@ hideOrShow = (bom, onDotTSV) ->
 startSpinning = (link) ->
     td = link.parentNode
     counter = 0
-    spinner = document.createElement("div")
-    spinner.className = "spinner"
+    spinner = document.createElement('div')
+    spinner.className = 'spinner'
     td.appendChild(spinner)
     link.interval_id = setInterval ()->
         frames     = 12
         frameWidth = 15
         offset     = counter * -frameWidth
         spinner.style.backgroundPosition=
-            offset + "px" + " " + 0 + "px"
+            offset + 'px' + ' ' + 0 + 'px'
         counter++
         if (counter>=frames)
             counter = 0
@@ -78,7 +78,7 @@ startSpinning = (link) ->
 stopSpinning = (link) ->
     if link.spinning? && link.spinning
         td            = link.parentNode
-        spinner       = td.querySelector("div.spinner")
+        spinner       = td.querySelector('div.spinner')
         clearInterval(link.interval_id)
         td.removeChild(spinner)
         link.hidden   = false
@@ -97,55 +97,55 @@ render = (state) ->
         no_of_items = 0
         for item in items
             no_of_items += item.quantity
-        tr = document.createElement("tr")
+        tr = document.createElement('tr')
         element_Table.appendChild(tr)
-        td_0 = document.createElement("td")
+        td_0 = document.createElement('td')
 
-        icon = document.createElement("img")
+        icon = document.createElement('img')
         icon.src = retailer.icon_src
         td_0.appendChild(icon)
         td_0.innerHTML += retailer.interface_name
-        td_0.id = "icon"
+        td_0.id = 'icon'
         tr.appendChild(td_0)
 
-        td_1 = document.createElement("td")
-        td_1.innerHTML = items.length + " line"
-        td_1.innerHTML += "s" if (items.length > 1)
+        td_1 = document.createElement('td')
+        td_1.innerHTML = items.length + ' line'
+        td_1.innerHTML += 's' if (items.length > 1)
         tr.appendChild(td_1)
 
-        td_2 = document.createElement("td")
-        td_2.innerHTML = no_of_items + " item"
-        td_2.innerHTML += "s" if (no_of_items > 1)
+        td_2 = document.createElement('td')
+        td_2.innerHTML = no_of_items + ' item'
+        td_2.innerHTML += 's' if (no_of_items > 1)
         tr.appendChild(td_2)
-        td = document.createElement("td")
+        td = document.createElement('td')
 
-        unicode_chars = ["\uf21e", "\uf221", "\uf21b"]
-        titles = ["Add items to " , "View ",  "Empty "]
+        unicode_chars = ['\uf21e', '\uf221', '\uf21b']
+        titles = ['Add items to ' , 'View ',  'Empty ']
         links = []
         for i in  [0..2]
-            td = document.createElement("td")
-            a = document.createElement("a")
+            td = document.createElement('td')
+            a = document.createElement('a')
             a.value = retailer.interface_name
-            a.title = titles[i] + retailer.interface_name + " cart"
-            a.href = "#"
-            span = document.createElement("span")
-            span.className = "button_icon"
+            a.title = titles[i] + retailer.interface_name + ' cart'
+            a.href = '#'
+            span = document.createElement('span')
+            span.className = 'button_icon'
             span.innerHTML = unicode_chars[i]
             a.appendChild(span)
             td.appendChild(a)
             tr.appendChild(td)
             links.push(a)
 
-        links[0].addEventListener "click", () ->
+        links[0].addEventListener 'click', () ->
             startSpinning(this)
-            messenger.send "fillCart", @value
+            messenger.send 'fillCart', @value
 
-        links[1].addEventListener "click", () ->
-            messenger.send "openCart", @value
+        links[1].addEventListener 'click', () ->
+            messenger.send 'openCart', @value
 
-        links[2].addEventListener "click", () ->
+        links[2].addEventListener 'click', () ->
             startSpinning(this)
-            messenger.send "emptyCart", @value
+            messenger.send 'emptyCart', @value
 
         if retailer.adding_items
             startSpinning(links[0])
@@ -163,15 +163,15 @@ render = (state) ->
     button_FillCarts.disabled  = any_adding
     button_EmptyCarts.disabled = any_emptying
 
-messenger.on "sendBackgroundState", (state) ->
+messenger.on 'sendBackgroundState', (state) ->
     render(state)
 
 # For Firefox we forward the popup 'show' event from browser.coffee because
 # this script seems get loaded once at startup not on popup. The 'show' message
 # is never sent on Chrome.
-messenger.on "show", ()->
-    messenger.send("getBackgroundState")
+messenger.on 'show', ()->
+    messenger.send('getBackgroundState')
 
 # For Chrome the whole script is instead re-executed each time the popup is
 # opened.
-messenger.send("getBackgroundState")
+messenger.send('getBackgroundState')
