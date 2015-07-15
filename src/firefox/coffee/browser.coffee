@@ -98,8 +98,9 @@ browser =
                 preference_listeners[key] = [callback]
     storageGet:(keys, callback) ->
         ret = {}
-        for k in keys
-            ret[k] = storage[k]
+        for key in keys
+            if storage[key]?
+                ret[key] = JSON.parse(JSON.stringify(storage[key]))
         callback(ret)
     storageSet:(obj, callback) ->
         for k of obj
