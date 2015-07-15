@@ -105,6 +105,7 @@ render = (state) ->
         icon.src = retailer.icon_src
         td_0.appendChild(icon)
         td_0.innerHTML += retailer.interface_name
+        td_0.id = "icon"
         tr.appendChild(td_0)
 
         td_1 = document.createElement("td")
