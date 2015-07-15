@@ -89,7 +89,8 @@ load_options = () ->
                 selected = document.getElementById(id)
             else
                 selected = document.getElementById('id_' + _default)
-            selected.checked = 'checked'
+            if selected?
+                selected.checked = 'checked'
             input.onclick = save_options for input in document.getElementsByTagName('input')
 
 select = document.getElementById('country')
