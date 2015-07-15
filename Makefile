@@ -94,9 +94,6 @@ build/.temp-firefox/.dir:
 build/.temp-firefox/%: src/firefox/coffee/%
 	cp $< $@
 
-build/.temp-firefox/%: src/chrome/coffee/tests/%
-	cp $< $@
-
 build/.temp-firefox/%: src/common/coffee/%
 	cp $< $@
 
@@ -151,9 +148,12 @@ watch:
 
 CHROME_PACKAGE_NAME = $(PACKAGE_NAME)-chrome
 
-package_chrome: chrome
+package-chrome: chrome
 	cp -r build/chrome $(CHROME_PACKAGE_NAME)
 	rm -f $(patsubst build/chrome/%,$(CHROME_PACKAGE_NAME)/%,$(CHROME_DIRS))
+	rm -rf $(CHROME_PACKAGE_NAME)/js/functional.js $(CHROME_PACKAGE_NAME)/js/qunit.js\
+	       	$(CHROME_PACKAGE_NAME)/js/unit.js $(CHROME_PACKAGE_NAME)/html/test.html\
+	       	$(CHROME_PACKAGE_NAME)/libs
 	zip -r $(CHROME_PACKAGE_NAME).zip $(CHROME_PACKAGE_NAME)/
 	rm -rf $(CHROME_PACKAGE_NAME)
 
