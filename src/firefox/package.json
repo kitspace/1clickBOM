@@ -16,7 +16,7 @@
   },
   { "name": "settings.UK.Farnell.site",
     "title": "UK Farnell",
-    "description": "Which site to use for UK Farnell",
+    "description": "Which site to use for UK Farnell.",
     "type": "radio",
     "hidden": false,
     "value" : "://uk.farnell.com",

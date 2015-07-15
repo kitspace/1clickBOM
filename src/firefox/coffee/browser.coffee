@@ -67,6 +67,8 @@ button = ActionButton(
 popup.on "show", () ->
     popup.port.emit("show")
 
+preference_listeners = {}
+
 browser =
     prefsSet: (obj, callback) ->
         for k,v of obj
@@ -89,9 +91,11 @@ browser =
                 ret[k] = v
         callback(ret)
     prefsOnChanged: (keys, callback) ->
-        for k in keys
-            preferences.on k, (prefName) ->
-                callback()
+        for key in keys
+            if preference_listeners[key]?
+                preference_listeners[key].push(callback)
+            else
+                preference_listeners[key] = [callback]
     storageGet:(keys, callback) ->
         ret = {}
         for k in keys
@@ -151,7 +155,6 @@ browser =
             text    : obj.message
             iconURL : "." + obj.iconUrl
         if obj.type == 'list'
-            console.dir(obj.items)
             for i in obj.items
                 ffObj.text += "\n" + i.title
         notifications.notify(ffObj)
@@ -167,6 +170,12 @@ browser =
         timers.clearTimeout(id)
     parseDOM: (str) ->
         dom.parseFromString(str, "text/html")
+
+preferences.on "", (prefName) ->
+    for name,callbacks of preference_listeners
+        if (RegExp("^#{name}")).test(prefName)
+            for callback in callbacks
+                callback()
 
 exports.browser        = browser
 exports.XMLHttpRequest = XMLHttpRequest

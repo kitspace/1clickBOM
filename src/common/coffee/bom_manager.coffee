@@ -42,8 +42,7 @@ bom_manager =
                     setting_values = stored_settings[country][retailer]
                 else
                     setting_values = {}
-                console.log(retailer, country, setting_values)
-                @interfaces[retailer_interface.name] = new retailer_interface country, setting_values, () ->
+                @interfaces[retailer] = new retailer_interface country, setting_values, () ->
                     count -= 1
                     if count == 0
                         if callback?
