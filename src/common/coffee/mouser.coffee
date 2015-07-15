@@ -28,7 +28,10 @@ class Mouser extends RetailerInterface
     constructor: (country_code, settings) ->
         super "Mouser", country_code, "data/mouser.json", settings
         #posting our sub-domain as the sites are all linked and switching countries would not register properly otherwise
-        post "http://www.mouser.com/api/Preferences/SetSubdomain?subdomainName=#{@cart.split(".")[1].slice(3)}", {notify:false}, () ->
+        s = @site.split(".")[0].slice(3)
+        if s == 'uk'
+            s = 'gb'
+        post "http://www.mouser.com/api/Preferences/SetSubdomain?subdomainName=#{s}",'', {notify:false}, () ->
             ;
         , () ->
             ;

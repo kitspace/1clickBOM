@@ -1,7 +1,7 @@
 wildc_recursive=$(foreach d,$(wildcard $1*),$(call wildc_recursive,$d/,$2)\
 			   	$(filter $(subst *,%,$2),$d))
 
-VERSION = 0.1.7.1
+VERSION = 0.2.0
 PACKAGE_NAME = 1clickBOM-$(VERSION)
 
 CHROME_COFFEE_DIR  = src/chrome/coffee
