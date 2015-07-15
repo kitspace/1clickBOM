@@ -38,8 +38,6 @@ class RetailerInterface
                 data.additems = settings.additems
             if (settings.additem_params?)
                 data.additem_params = settings.additem_params
-            if (settings.sites?)
-                data.sites = settings.sites
             if (settings.name?)
                 data.name = settings.name
             if (settings.interface_name?)
@@ -62,8 +60,12 @@ class RetailerInterface
         if data.language?
             @language = data.language[country_code_lookedup]
 
+        if (settings? && settings.site?)
+            @site = settings.site
+        else
+            @site = data.sites[country_code_lookedup]
+
         @additem_params = data.additem_params
-        @site           = data.sites[country_code_lookedup]
         @name           = name + " " + country_code_lookedup
         @interface_name = name
         @adding_items   = false

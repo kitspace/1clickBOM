@@ -74,8 +74,19 @@ browser =
         callback()
     prefsGet: (keys, callback) ->
         ret = {}
-        for k in keys
-            ret[k] = preferences.prefs[k]
+        #give preferences a faux object hieararchy so
+        # {'settings.UK.Farnell':''} becomes {settings:{UK:{Farnell:''}}}
+        for k,v of preferences.prefs
+            if /\./.test(k)
+                ks = k.split(".")
+                ks.reduce (prev, curr, i, arr) ->
+                    if i == (arr.length - 1)
+                        prev[curr] = v
+                    else
+                        prev[curr] = {}
+                , ret
+            else
+                ret[k] = v
         callback(ret)
     prefsOnChanged: (keys, callback) ->
         for k in keys

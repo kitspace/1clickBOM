@@ -1,7 +1,7 @@
 {
   "name": "1clickbom",
   "title": "1clickBOM",
-  "id": "1clickBOM@monostable.co.uk",
+  "id": "1clickBOM@monostable",
   "description": "Populates shopping carts for you on sites like Digikey and Mouser.",
   "author": "monostable",
   "license": "CPAL 1.0",
@@ -13,5 +13,15 @@
     "description": "Affects which localized retailer sites are used.",
     "type": "menulist",
     "value": "Other"
+  },
+  { "name": "settings.UK.Farnell.site",
+    "title": "UK Farnell",
+    "description": "Which site to use for UK Farnell",
+    "type": "radio",
+    "hidden": false,
+    "value" : "://uk.farnell.com",
+    "options": [ {"value":"://uk.farnell.com", "label":"uk.farnell.com"}
+               , {"value":"://onecall.farnell.com", "label":"onecall.farnell.com"}
+               ]
   }]
 }

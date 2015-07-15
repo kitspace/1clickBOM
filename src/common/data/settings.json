@@ -1,20 +1,13 @@
 {
     "UK": {
         "Farnell": {
-            "default": "Farnell",
-            "choices": {
-                "Farnell": {
-                    "sites": {
-                        "UK": "://uk.farnell.com"
-                    },
-                    "text": "use uk.farnell.com"
-                },
-                "Onecall": {
-                    "sites": {
-                        "UK": "://onecall.farnell.com"
-                    },
-                    "text": "use onecall.farnell.com"
-                }
+            "site": {
+                "value": "uk.farnell.com",
+                "options": [ {"value":"://uk.farnell.com"
+                                , "label":"uk.farnell.com"}
+                           , {"value":"://onecall.farnell.com"
+                                , "label":"onecall.farnell.com"}
+                ]
             }
         }
     }

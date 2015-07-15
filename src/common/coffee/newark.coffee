@@ -18,7 +18,7 @@
 # the Original Code is Kaspar Emanuel.
 
 {RetailerInterface}   = require './retailer_interface'
-{XMLHttpRequest, DOM, browser} = require './browser'
+{XMLHttpRequest, browser} = require './browser'
 http = require './http'
 post = http.post
 get  = http.get

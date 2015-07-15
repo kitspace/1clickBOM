@@ -32,7 +32,8 @@ save_options = () ->
         for retailer of settings_data[country]
             checked = document.querySelector("input[name='" + retailer + "']:checked")
             if (checked)
-                settings[country][retailer] = checked.value
+                settings[country][retailer] = {}
+                settings[country][retailer]['site'] = checked.value
     browser.prefsSet {country: country, settings: settings}, () ->
         load_options()
 
@@ -55,8 +56,8 @@ load_options = () ->
         form = document.getElementById("settings")
         form.removeChild(form.lastChild) while form.hasChildNodes()
         for retailer of settings_data[stored.country]
-            choices = settings_data[stored.country][retailer].choices
-            _default = settings_data[stored.country][retailer].default
+            choices = settings_data[stored.country][retailer].site.options
+            _default = settings_data[stored.country][retailer].site.value
             div = document.createElement("div")
             div2 = document.createElement("div")
             div2.className = "heading_2"
@@ -65,15 +66,15 @@ load_options = () ->
             div2.appendChild(h2)
             div.appendChild(div2)
             form.appendChild(div)
-            for choice of choices
+            for choice,index in choices
                 radio = document.createElement("input")
                 radio.type = "radio"
                 radio.name = retailer
-                radio.value = choice
-                radio.id = "id_" + choice
+                radio.value = choice.value
+                radio.id = "id_" + choice.value
                 div = document.createElement("div")
                 div.appendChild(radio)
-                div.innerHTML += choices[choice].text
+                div.innerHTML += choice.label
                 div.className = "radio_text"
                 div.onclick = (mouse_event) ->
                     child = mouse_event.toElement.firstChild
@@ -84,7 +85,7 @@ load_options = () ->
 
                 form.appendChild(div)
             if (stored.settings? && (stored.settings[stored.country]?) && (Boolean(Object.keys(stored.settings[stored.country]).length)))
-                id = "id_" + stored.settings[stored.country][retailer]
+                id = "id_" + stored.settings[stored.country][retailer].site
                 selected = document.getElementById(id)
             else
                 selected = document.getElementById("id_" + _default)

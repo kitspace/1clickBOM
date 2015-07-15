@@ -27,8 +27,6 @@ http       = require './http'
 {parseTSV} = require './parser'
 {badge}    = require './badge'
 
-settings_data = browser.getLocal("data/settings.json")
-
 bom_manager =
     init: (callback) ->
         @filling_carts  = false
@@ -39,19 +37,17 @@ bom_manager =
                 country = "Other"
             count = 5
             for retailer_interface in [Digikey, Farnell, Mouser, RS, Newark]
-                setting_values = @lookup_setting_values(country, retailer_interface.name, stored_settings)
+                retailer = retailer_interface.name
+                if(stored_settings? && stored_settings[country]? && stored_settings[country][retailer]?)
+                    setting_values = stored_settings[country][retailer]
+                else
+                    setting_values = {}
+                console.log(retailer, country, setting_values)
                 @interfaces[retailer_interface.name] = new retailer_interface country, setting_values, () ->
                     count -= 1
                     if count == 0
                         if callback?
                             callback()
-
-    lookup_setting_values: (country, retailer, stored_settings)->
-        if(stored_settings? && stored_settings[country]? && stored_settings[country][retailer]?)
-            settings = settings_data[country][retailer].choices[stored_settings[country][retailer]]
-        else
-            settings = {}
-        return settings
 
     getBOM: (callback) ->
         browser.storageGet ["bom"], ({bom:bom}) =>
@@ -79,7 +75,6 @@ bom_manager =
                 badge.setDecaying("Warn","#FF8A00", priority=2)
             else if items.length > 0
                 badge.setDecaying("OK","#00CF0F")
-
             for item in items
                 if item.retailer not of bom
                     bom[item.retailer] = []
