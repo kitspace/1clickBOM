@@ -6,7 +6,7 @@ self    = require 'sdk/self'
 tabs    = require 'sdk/tabs'
 
 exports.main = (options, callbacks) ->
-
+    console.log('1clickBOM main loaded')
     if options.loadReason == 'install'
         http.getLocation () ->
             #open 1clickBOM preferences

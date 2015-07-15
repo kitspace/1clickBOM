@@ -97,7 +97,7 @@ class Digikey extends RetailerInterface
         url = 'http' + @site + @additem
         params = 'qty=' + item.quantity + '&part=' + item.part + '&cref=' + item.comment
         result = {success:true, fails:[]}
-        post url, params, {item:item, timeout:600000}, (event)->
+        post url, params, {item:item}, (event)->
             doc = browser.parseDOM(event.target.responseText)
             #if the cart returns with a quick-add quantity filled-in there was an error
             quick_add_quant = doc.querySelector('#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity')
@@ -139,9 +139,9 @@ class Digikey extends RetailerInterface
             if choice?
                 label = choice.nextElementSibling
                 if label?
-                    number_str = label.innerText.split(String.fromCharCode(160))[0]
-                    part       = label.innerText.split(String.fromCharCode(160))[2]
-                    number = parseInt(number_str.replace(/,/,''))
+                    split  = label.innerHTML.split('&nbsp;')
+                    part   = split[2]
+                    number = parseInt(split[0].replace(/,/,''))
                     if not isNaN(number)
                         it = event.target.item
                         it.part = part
