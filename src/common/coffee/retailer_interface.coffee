@@ -70,15 +70,18 @@ class RetailerInterface
         @interface_name = name
         @adding_items   = false
         @clearing_cart  = false
-        @icon_src       = 'http://www.google.com/s2/favicons?domain=http' + @site
+        @icon_src       = 'https://www.google.com/s2/favicons?domain=http' + @site
         #this puts the image in cache but also uses our backup if
         #google.com/s2/favicons fails
         http.get @icon_src, {notify:false},  (event) =>
-            #failure response image
-            if md5(event.target.response) == '6e2001c87afacf376c7df4a011376511'
-                @icon_src = browser.getURL('images/' + @interface_name.toLowerCase() + '.ico')
+            md = md5(event.target.response)
+            #failure response image, different on ff vs chrome for some reason
+            failure_md5_ff     = 'faaec2b6826ef502e0e3e38f652ff0b8'
+            failure_md5_chrome = '6e2001c87afacf376c7df4a011376511'
+            if md == failure_md5_chrome || md == failure_md5_ff
+                @icon_src = browser.getURL("images/#{@interface_name.toLowerCase()}.ico")
         , () =>
-            @icon_src = browser.getURL('images/' + @interface_name.toLowerCase() + '.ico')
+            @icon_src = browser.getURL("images/#{@interface_name.toLowerCase()}.ico")
         if callback?
             callback()
 
