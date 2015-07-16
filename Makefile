@@ -161,12 +161,16 @@ package-chrome: chrome
 package-firefox: firefox
 	cfx xpi --pkgdir=build/firefox --output-file=$(FIREFOX_PACKAGE_NAME).xpi
 
+run-firefox: firefox
+	cfx run  --pkgdir=build/firefox
+
 build/.temp-firefox/tmp.xpi: firefox
 	cfx xpi --pkgdir=build/firefox --output-file=$@
 
+#post to firefox extension auto-installer
+#https://palant.de/2012/01/13/extension-auto-installer
 load-firefox: build/.temp-firefox/tmp.xpi
-	wget --post-file=build/.temp-firefox/tmp.xpi "http://localhost:8888" 2>&1 |\
-	   	grep --invert-match 399 #ignore 399 errors, they are normal
+	curl --data-binary '@$<' -H 'Expect:' http://localhost:8888/
 
 %/.dir:
 	mkdir $*
