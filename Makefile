@@ -161,6 +161,11 @@ package-chrome: chrome
 package-firefox: firefox
 	cfx xpi --pkgdir=build/firefox --output-file=$(FIREFOX_PACKAGE_NAME).xpi
 
+package: package-chrome package-firefox
+
+clean-package:
+	rm -rf *.xpi *.zip $(CHROME_PACKAGE_NAME)
+
 run-firefox: firefox
 	cfx run  --pkgdir=build/firefox
 
@@ -192,4 +197,4 @@ clean:
 	rm -rf build
 
 .PHONY: all firefox chrome dirs chrome_dirs firefox_dirs coffee clean watch \
-	package-chrome package-firefox
+	package-chrome package-firefox package
