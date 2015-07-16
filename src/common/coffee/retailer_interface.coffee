@@ -76,7 +76,7 @@ class RetailerInterface
         http.get @icon_src, {notify:false},  (event) =>
             md = md5(event.target.response)
             #failure response image, different on ff vs chrome for some reason
-            failure_md5_ff     = 'faaec2b6826ef502e0e3e38f652ff0b8'
+            failure_md5_ff     = '0dbc42f9ddbc4a887493dd2dcc50a78a'
             failure_md5_chrome = '6e2001c87afacf376c7df4a011376511'
             if md == failure_md5_chrome || md == failure_md5_ff
                 @icon_src = browser.getURL("images/#{@interface_name.toLowerCase()}.ico")
