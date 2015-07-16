@@ -28,8 +28,7 @@ class Farnell extends RetailerInterface
         for name, method of Newark::
             this[name] = method
         @cart = '/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView'
-        @_set_store_id()
-        if callback?
+        @_set_store_id () =>
             callback(this)
 
 exports.Farnell = Farnell

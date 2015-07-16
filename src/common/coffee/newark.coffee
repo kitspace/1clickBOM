@@ -18,30 +18,32 @@
 # the Original Code is Kaspar Emanuel.
 
 {RetailerInterface}   = require './retailer_interface'
-{XMLHttpRequest, browser} = require './browser'
+{browser} = require './browser'
 http = require './http'
 post = http.post
 get  = http.get
 
 class Newark extends RetailerInterface
-    constructor: (country_code, settings) ->
+    constructor: (country_code, settings,callback) ->
         super('Newark', country_code, 'data/newark.json', settings)
-        @_set_store_id()
+        @_set_store_id () =>
+            callback(this)
 
     clearCart: (callback) ->
         @clearing_cart = true
         @_get_item_ids (ids) =>
             @_clear_cart(ids, callback)
-    _set_store_id: () ->
+
+    _set_store_id: (callback) ->
         url = 'https' + @site + @cart
-        xhr = new XMLHttpRequest
-        xhr.open('GET', url, false)
-        xhr.onreadystatechange = (event) =>
+        get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
             id_elem = doc.getElementById('storeId')
             if id_elem?
                 @store_id = id_elem.value
-        xhr.send()
+                callback()
+        , () ->
+            callback()
 
 
     _clear_cart: (ids, callback) ->

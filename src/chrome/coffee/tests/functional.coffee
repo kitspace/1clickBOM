@@ -183,30 +183,30 @@ asyncTest 'rs-online: Add items fails but adds again', () ->
 module('Newark')
 
 asyncTest 'Add items fails, add items, clear all', () ->
-	r = new Newark('US')
-	items = [
-          {'part':'98W0461','quantity':2, 'comment':'test'}
-		, {'part':'fail'   ,'quantity':2, 'comment':'test'}
-		, {'part':'fail2'  ,'quantity':2, 'comment':'test'}
-	]
-	r.addItems items, (result1, that) ->
-		deepEqual(result1.success, false)
-		deepEqual(result1.fails, [items[2], items[1]])
-		items = [
-			{'part':'98W0461','quantity':2, 'comment':'test'}
-		]
-		that.addItems items, (result2, that) ->
-			deepEqual(result2.success, true)
-			that.clearCart (result3, that) ->
-				deepEqual(result3.success, true)
-				start()
+	r = new Newark 'US', {}, () ->
+            items = [
+              {'part':'98W0461','quantity':2, 'comment':'test'}
+                    , {'part':'fail'   ,'quantity':2, 'comment':'test'}
+                    , {'part':'fail2'  ,'quantity':2, 'comment':'test'}
+            ]
+            r.addItems items, (result1, that) ->
+                    deepEqual(result1.success, false)
+                    deepEqual(result1.fails, [items[2], items[1]])
+                    items = [
+                            {'part':'98W0461','quantity':2, 'comment':'test'}
+                    ]
+                    that.addItems items, (result2, that) ->
+                            deepEqual(result2.success, true)
+                            that.clearCart (result3, that) ->
+                                    deepEqual(result3.success, true)
+                                    start()
 
 asyncTest 'Add items', () ->
-	r = new Newark('US')
-	items = [
-	          {'part':'98W0461','quantity':2, 'comment':'test'}
-	        ]
-	r.addItems items, (result) ->
-		deepEqual(result.success, true)
-		start()
+	r = new Newark 'US', {}, () ->
+            items = [
+                      {'part':'98W0461','quantity':2, 'comment':'test'}
+                    ]
+            r.addItems items, (result) ->
+                    deepEqual(result.success, true)
+                    start()
 
