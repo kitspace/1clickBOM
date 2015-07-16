@@ -146,7 +146,8 @@ firefox_data: dirs $(patsubst src/common/%, build/firefox/data/%, \
 watch:
 	while true; do make | grep --invert-match "^make\[1\]:"; sleep 1; done
 
-CHROME_PACKAGE_NAME = $(PACKAGE_NAME)-chrome
+CHROME_PACKAGE_NAME  = $(PACKAGE_NAME)-chrome
+FIREFOX_PACKAGE_NAME = $(PACKAGE_NAME)-firefox
 
 package-chrome: chrome
 	cp -r build/chrome $(CHROME_PACKAGE_NAME)
@@ -156,6 +157,9 @@ package-chrome: chrome
 	       	$(CHROME_PACKAGE_NAME)/libs
 	zip -r $(CHROME_PACKAGE_NAME).zip $(CHROME_PACKAGE_NAME)/
 	rm -rf $(CHROME_PACKAGE_NAME)
+
+package-firefox: firefox
+	cfx xpi --pkgdir=build/firefox --output-file=$(FIREFOX_PACKAGE_NAME).xpi
 
 build/.temp-firefox/tmp.xpi: firefox
 	cfx xpi --pkgdir=build/firefox --output-file=$@
@@ -184,4 +188,4 @@ clean:
 	rm -rf build
 
 .PHONY: all firefox chrome dirs chrome_dirs firefox_dirs coffee clean watch \
-	package_chrome
+	package-chrome package-firefox
