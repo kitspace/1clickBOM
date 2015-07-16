@@ -160,7 +160,7 @@ browser =
                 ffObj.text += '\n' + i.title
         notifications.notify(ffObj)
     paste:(callback) ->
-        c = clipboard.get()
+        c = clipboard.get('text')
         if not c?
             return ''
         else
