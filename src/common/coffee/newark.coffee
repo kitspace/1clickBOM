@@ -32,7 +32,12 @@ class Newark extends RetailerInterface
     clearCart: (callback) ->
         @clearing_cart = true
         @_get_item_ids (ids) =>
-            @_clear_cart(ids, callback)
+            @_clear_cart ids, (obj) =>
+                @refreshCartTabs()
+                @refreshSiteTabs()
+                @clearing_cart = false
+                if callback?
+                    callback(obj)
 
     _set_store_id: (callback) ->
         url = 'https' + @site + @cart
@@ -47,20 +52,18 @@ class Newark extends RetailerInterface
 
 
     _clear_cart: (ids, callback) ->
-        url = 'https' + @site + '/webapp/wcs/stores/servlet/ProcessBasket'
-        params = 'langId=-1&orderId=&catalogId=15003&BASE_URL=BasketPage&errorViewName=AjaxOrderItemDisplayView&storeId=' + @store_id + '&URL=BasketDataAjaxResponse&isEmpty=false&LoginTimeout=&LoginTimeoutURL=https%3A%2F%2Fwww.newark.com%2Fwebapp%2Fwcs%2Fstores%2Fservlet%2FOrderCalculate%3FcatalogId%3D15003%26LoginTimeout%3D%26errorViewName%3DAjaxOrderItemDisplayView%26langId%3D-1%26storeId%3D10194%26URL%3DAjaxOrderItemDisplayView&blankLinesResponse=10&orderItemDeleteAll='
+        url = "https#{@site}/webapp/wcs/stores/servlet/ProcessBasket"
+        params = "langId=-1&orderId=&catalogId=15003&BASE_URL=BasketPage\
+        &errorViewName=AjaxOrderItemDisplayView&storeId=#{@store_id}\
+        &URL=BasketDataAjaxResponse&isEmpty=false&LoginTimeout=&LoginTimeoutURL=\
+        &blankLinesResponse=10&orderItemDeleteAll="
         for id in ids
             params += '&orderItemDelete=' + id
         post url, params, {}, (event) =>
-            if callback?
-                callback({success:true}, this)
-            @refreshCartTabs()
-            @refreshSiteTabs()
-            @clearing_cart = false
+            callback({success:true}, this)
         , () =>
-            if callback?
-                callback({success:true}, this)
-            @clearing_cart = false
+            #we actually successfully clear the cart on 404s
+            callback({success:true}, this)
 
     _get_item_ids: (callback) ->
         url = 'https' + @site + @cart
