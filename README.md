@@ -4,15 +4,14 @@
 
 [![Available on Chrome][8]](https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi) ![Firefox coming soon][9]
 
-1-click BOM is a purchasing tool that let's you keep _one_ bill of materials (BOM)
-for items from _multiple_ retailers. It's a browser extension that fills your
-online shopping carts for you. To add items to 1clickBOM you simply paste from
-a spreadsheet or visit an online `.tsv` file.
+1-click BOM is a browser extension that fills your shopping carts at sites like
+Digikey and Mouser.  To add items to 1clickBOM you simply paste from a
+spreadsheet or visit an online `.tsv` file.
 
 ## News ##
 
+- v0.2.0 has been released with Firefox support
 - [I gave a talk about 1clickBOM at FOSDEM this year](http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4)
-
 
 ## Which retailers? ##
 
@@ -41,7 +40,7 @@ part-number specific to that retailer. See the [example tsv][2].
 In your spreadsheet select the relevant columns, copy and then click the paste
 button on the 1clickBOM popup.
 
-![Load from page](https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png)
+![Load from page][3]
 
 Alternatively, if you visit a page that ends in `.tsv` and has data in the
 right format available 1clickBOM will show a blue badge and button with an
@@ -59,9 +58,6 @@ If you need any help or think you found a bug please get in touch via
 [Github][10] or [email][11].
 
 ## Roadmap ##
-
-* 0.2
-    * Firefox support
 
 * 1.0
     * Multiple retailers per item
@@ -103,19 +99,19 @@ the `Test()` function.
 
 ## License ##
 
-1clickBOM free and open source software. It is licensed under a CPAL license
+1clickBOM is free and open source software. It is licensed under a CPAL license
 which means you can use the code in proprietary applications as long as you
 display appropriate attribution and share your code-improvements to 1clickBOM
 under the CPAL as well. See the [LICENSE][6] file for details.
 
 [1]:#roadmap
-[2]:https://github.com/monostable/1clickBOM/blob/master/chrome/data/example.tsv
-[3]:https://github.com/monostable/1clickBOM/blob/master/chrome/html/test.html
+[2]:https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv
+[3]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png
 [4]:http://coffeescript.org
 [5]:https://qunitjs.com/
 [6]:https://github.com/monostable/1clickBOM/blob/master/LICENSE
 [7]:https://github.com/monostable/1clickBOM
 [8]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png
-[9]:http://1clickBOM.com/firefox.png
+[9]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png
 [10]:https://github.com/monostable/1clickBOM/issues
 [11]:mailto:info@1clickBOM.com
