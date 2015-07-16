@@ -2,7 +2,6 @@
 {bgMessenger}    = require './bg_messenger'
 {popup} = require './browser'
 http    = require './http'
-self    = require 'sdk/self'
 tabs    = require 'sdk/tabs'
 
 exports.main = (options, callbacks) ->
@@ -15,8 +14,8 @@ exports.main = (options, callbacks) ->
                 tab.attach(
                   contentScriptWhen: 'end',
                   contentScript:"
-                      AddonManager.getAddonByID('#{self.id}', function(aAddon) {\n
-                        unsafeWindow.gViewController.commands
+                      AddonManager.getAddonByID('1clickBOM@monostable', function(aAddon) {\n
+                        window.gViewController.commands
                             .cmd_showItemDetails.doCommand(aAddon, true);\n
                       });\n"
                 )
