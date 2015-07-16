@@ -109,15 +109,16 @@ render = (state) ->
         tr.appendChild(td_0)
 
         td_1 = document.createElement('td')
-        td_1.innerHTML = items.length + ' line'
-        td_1.innerHTML += 's' if (items.length > 1)
+        t  = items.length + ' line'
+        t += 's' if (items.length > 1)
+        td_1.appendChild(document.createTextNode(t))
         tr.appendChild(td_1)
 
         td_2 = document.createElement('td')
-        td_2.innerHTML = no_of_items + ' item'
-        td_2.innerHTML += 's' if (no_of_items > 1)
+        t  = no_of_items + ' line'
+        t += 's' if (items.length > 1)
+        td_2.appendChild(document.createTextNode(t))
         tr.appendChild(td_2)
-        td = document.createElement('td')
 
         unicode_chars = ['\uf21e', '\uf221', '\uf21b']
         titles = ['Add items to ' , 'View ',  'Empty ']
@@ -130,7 +131,7 @@ render = (state) ->
             a.href = '#'
             span = document.createElement('span')
             span.className = 'button_icon'
-            span.innerHTML = unicode_chars[i]
+            span.appendChild(document.createTextNode(unicode_chars[i]))
             a.appendChild(span)
             td.appendChild(a)
             tr.appendChild(td)
