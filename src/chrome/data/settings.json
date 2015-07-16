@@ -2,7 +2,7 @@
     "UK": {
         "Farnell": {
             "site": {
-                "value": "uk.farnell.com",
+                "value": "://uk.farnell.com",
                 "options": [ {"value":"://uk.farnell.com"
                                 , "label":"uk.farnell.com"}
                            , {"value":"://onecall.farnell.com"
