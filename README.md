@@ -4,9 +4,8 @@
 
 [![Available on Chrome][8]](https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi) ![Firefox coming soon][9]
 
-1-click BOM is a browser extension that fills your shopping carts at sites like
-Digikey and Mouser.  To add items to 1clickBOM you simply paste from a
-spreadsheet or visit an online `.tsv` file.
+1-click BOM is a browser extension that fills your online shopping carts on sites like
+Digikey and Mouser. To add items to 1clickBOM you simply paste from a spreadsheet or visit an online .tsv file. This way you can keep one bill of materials (BOM) that quickly lets you purchase items from multiple retailers.
 
 ## News ##
 

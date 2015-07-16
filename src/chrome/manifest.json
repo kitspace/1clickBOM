@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "1clickBOM",
-    "description": "Populates shopping carts for you on sites like Digikey and Mouser.",
+    "description": "Quickly fill shopping carts with electronic components.",
     "version": @version,
     "homepage_url":"http://1clickBOM.com",
     "permissions": [
