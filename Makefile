@@ -136,7 +136,7 @@ chrome_libs: dirs $(patsubst src/common/%, build/chrome/%, $(COMMON_LIBS_FILES))
 chrome_images: dirs $(patsubst src/common/%, build/chrome/%, \
 	$(COMMON_IMAGE_FILES)) $(patsubst src/%, build/%, $(CHROME_IMAGE_FILES))
 firefox_images: dirs $(patsubst src/common/%, build/firefox/data/%, \
-	$(COMMON_IMAGE_FILES)) $(patsubst src/%, build/%, $(FIREFOX_IMAGE_FILES))
+	$(COMMON_IMAGE_FILES)) $(patsubst src/firefox/%, build/firefox/data/%, $(FIREFOX_IMAGE_FILES))
 
 chrome_data: dirs $(patsubst src/common/%, build/chrome/%, $(COMMON_DATA_FILES)) \
 	$(patsubst src/%, build/%, $(CHROME_DATA_FILES))

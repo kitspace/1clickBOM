@@ -72,12 +72,12 @@ bom_manager =
                     title = 'Could not parse row '
                     title += inv.item.row
                     message = inv.reason + '\n'
-                    browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning128.png'}, () ->
+                    browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning.png'}, () ->
                     badge.setDecaying('Warn','#FF8A00', priority=2)
             else if items.length == 0
                 title = 'Nothing pasted '
                 message = 'Clipboard is empty'
-                browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning128.png'}, () ->
+                browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning.png'}, () ->
                 badge.setDecaying('Warn','#FF8A00', priority=2)
             else if items.length > 0
                 badge.setDecaying('OK','#00CF0F')
@@ -108,7 +108,7 @@ bom_manager =
                     message += ' and '
                     message += over[over.length - 1]
                 message += '. Adding the items may take a very long time (or even forever). It may be OK but it really depends on the site.'
-                browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning128.png'}, () ->
+                browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning.png'}, () ->
                 badge.setDecaying('Warn','#FF8A00', priority=2)
             browser.storageSet {bom:bom}, () =>
                 if callback?
@@ -130,20 +130,20 @@ bom_manager =
                 title += ' to ' + retailer + ' cart:'
                 for fail in fails
                     failed_items.push({title:'item: ' + fail.comment + ' | ' + fail.quantity + ' | ' + fail.part, message:''})
-            browser.notificationsCreate {type:'list', title:title, message:'', items:failed_items, iconUrl:'/images/error128.png'}, () =>
+            browser.notificationsCreate {type:'list', title:title, message:'', items:failed_items, iconUrl:'/images/error.png'}, () =>
             badge.setDecaying('Err','#FF0000', priority=2)
         else
             badge.setDecaying('OK','#00CF0F')
         if result.warnings?
             for warning in result.warnings
                 title = warning
-                browser.notificationsCreate {type:'basic', title:title, message:'', iconUrl:'/images/warning128.png'}, () =>
+                browser.notificationsCreate {type:'basic', title:title, message:'', iconUrl:'/images/warning.png'}, () =>
                 badge.setDecaying('Warn','#FF8A00', priority=1)
 
     notifyEmptyCart: (retailer, result) ->
         if not result.success
             title = 'Could not empty ' + retailer + ' cart'
-            browser.notificationsCreate {type:'basic', title:title, message:'', iconUrl:'/images/error128.png'}, () =>
+            browser.notificationsCreate {type:'basic', title:title, message:'', iconUrl:'/images/error.png'}, () =>
             badge.setDecaying('Err','#FF0000', priority=2)
         else
             badge.setDecaying('OK','#00CF0F')

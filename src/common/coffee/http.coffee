@@ -34,7 +34,7 @@ network_callback = (event, callback, error_callback, notify=true) ->
             else
                 message += event.target.url
             if notify
-                browser.notificationsCreate({type:'basic', title:'Network Error Occured', message:message, iconUrl:'/images/net_error128.png'}, () ->)
+                browser.notificationsCreate({type:'basic', title:'Network Error Occured', message:message, iconUrl:'/images/net_error.png'}, () ->)
 
                 badge.setDecaying('' + event.target.status, '#CC00FF', priority=3)
             if error_callback?
