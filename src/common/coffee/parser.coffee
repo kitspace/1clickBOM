@@ -30,6 +30,8 @@ checkValidItems =  (items_incoming, invalid) ->
         'RS-Online'   : 'RS',
         'RS-Delivers' : 'RS',
         'RSDelivers'  : 'RS',
+        'Radio Spares': 'RS'
+        'RadioSpares' : 'RS'
         'Newark'      : 'Newark'
     }
     items = []
