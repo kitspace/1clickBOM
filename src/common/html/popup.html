@@ -65,6 +65,7 @@ span.button_text {
     font-size:11px;
 }
 table#bom_table {
+    margin-top:30px;
     background: white;
     border-collapse:collapse;
     border: none;
@@ -106,12 +107,15 @@ div#bottom_toolbar {
 }
 button#clear {
     float: left;
-    margin-bottom: 8px;
 }
 button#paste {
     float: right;
-    margin-bottom:8px;
 }
+
+button#load_from_page {
+    float: right;
+}
+
 button#load_from_page {
     background-color: #DDDDDD;
     background-repeat: repeat-x;
@@ -141,13 +145,13 @@ button#load_from_page:active {
             <span class=button_icon>&#xf182;</span>
             <span class=button_text>Clear</span>
         </button >
+        <button class=big_buttons id="load_from_page" title="Load TSV from page" hidden=true>
+            <span class=button_icon>&#x2190;</span>
+        </button >
         <button class=big_buttons id="paste" title="Paste BOM data">
             <span class=button_icon>&#xf220;</span>
             <span class=button_text> Paste</span>
         </button>
-        <button class=big_buttons id="load_from_page" title="Load TSV from page" hidden=true>
-            <span class=button_icon>&#x2190;</span>
-        </button >
     </div>
 
     <div id=bom hidden=true>
