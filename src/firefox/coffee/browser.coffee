@@ -29,7 +29,7 @@ windowUtils      = require 'sdk/window/utils'
 timers           = require 'sdk/timers'
 {storage}        = require 'sdk/simple-storage'
 preferences      = require 'sdk/simple-prefs'
-locationChanged  = require './locationChanged'
+locationChanged  = require './location_changed'
 {Cc, Ci}         = require 'chrome'
 dom = Cc['@mozilla.org/xmlextras/domparser;1'].createInstance(Ci.nsIDOMParser)
 

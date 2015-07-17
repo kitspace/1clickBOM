@@ -13,10 +13,14 @@ progressListener =
         for callback in listeners
             callback(highLevelTab)
 
-tabs.on 'open', (newTab) ->
-    lowLevelTab = viewFor(newTab)
+attach = (tab) ->
+    lowLevelTab = viewFor(tab)
     browser     = getBrowserForTab(lowLevelTab)
     browser.addProgressListener(progressListener)
 
+tabs.on 'open', attach
+
 exports.on = (callback) ->
     listeners.push(callback)
+
+exports.attach = attach
