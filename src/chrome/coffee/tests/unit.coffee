@@ -39,11 +39,11 @@ module('unit')
 
 test 'Digikey: Constructs for all countries', () ->
     for country,code of countries
-        ok(new Digikey(code) instanceof RetailerInterface, country + ' ' + code)
+        ok(new Digikey(code, {}, ()->) instanceof RetailerInterface, country + ' ' + code)
 
 test 'Farnell: Constructs for all countries', () ->
     for country,code of countries
-        ok(new Farnell(code) instanceof RetailerInterface, country + ' ' + code)
+        ok(new Farnell(code, {}, ()->) instanceof RetailerInterface, country + ' ' + code)
 
 #test 'Mouser: Constructs for all countries', () ->
 #    #we need to mock the post request otherwise they will time out since they fire too quickly
@@ -59,34 +59,34 @@ test 'RS: Constructs for all countries', () ->
 
 test 'Newark: Constructs for all countries', () ->
     for country,code of countries
-        ok(new Newark(code) instanceof RetailerInterface, country + ' ' + code)
+        ok(new Newark(code, {}, ()->) instanceof RetailerInterface, country + ' ' + code)
 
 test 'InvalidCountryError Exists', () ->
     ok new InvalidCountryError instanceof Error
 
 test 'Digikey: InvalidCountryError Thrown', () ->
     throws () ->
-        new Digikey('XX')
+        new Digikey('XX', {}, ()->)
     , InvalidCountryError
 
 test 'Farnell: InvalidCountryError Thrown', () ->
     throws () ->
-        new Farnell('XX')
+        new Farnell('XX', {}, ()->)
     , InvalidCountryError
 
 test 'Mouser: InvalidCountryError Thrown', () ->
     throws () ->
-        new Mouser('XX')
+        new Mouser('XX', {}, ()->)
     , InvalidCountryError
 
 test 'RS: InvalidCountryError Thrown', () ->
     throws () ->
-        new RS('XX')
+        new RS('XX', {}, ()->)
     , InvalidCountryError
 
 test 'Newark: InvalidCountryError Thrown', () ->
     throws () ->
-        new Newark('XX')
+        new Newark('XX', {}, ()->)
     , InvalidCountryError
 
 test 'Parser: Catches negative quantities', () ->
