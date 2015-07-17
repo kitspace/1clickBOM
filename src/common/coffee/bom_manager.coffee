@@ -32,13 +32,6 @@ bom_manager =
         @filling_carts  = false
         @emptying_carts = false
         browser.prefsGet ['country', 'settings'], ({country:country, settings:stored_settings}) =>
-            #allow for graceful update as settings format has changed
-            if typeof(stored_settings.UK.Farnell) == 'string'
-                if stored_settings.UK.Farnell == 'Onecall'
-                    stored_settings.UK.Farnell = {site:'://onecall.farnell.com'}
-                else
-                    stored_settings.UK.Farnell = {site:'://uk.farnell.com'}
-                browser.prefsSet({settings:stored_settings}, ()->)
             @interfaces = {}
             if (!country)
                 country = 'Other'

@@ -17,6 +17,14 @@ chrome.runtime.onInstalled.addListener (details)->
                 for setting,info of setting_names
                     settings[country][retailer][setting] = info.value
         browser.prefsSet({settings:settings})
+    else if details.reason == 'upgrade'
+        browser.prefsGet ['country', 'settings'], ({country:country, settings:stored_settings}) =>
+            #allow for graceful update as settings format has changed
+            if stored_settings? && stored_settings.UK? && stored_settings.UK.Farnell? && stored_settings.UK.Farnell == 'Onecall'
+                    stored_settings.UK.Farnell = {site:'://onecall.farnell.com'}
+            else
+                stored_settings.UK.Farnell = {site:'://uk.farnell.com'}
+            browser.prefsSet({settings:stored_settings}, ()->)
 
 # tests only work in chrome currently, open a console on background and execute
 # Test() or test a specific module, e.g. Farnell, with Test('Farnell')
