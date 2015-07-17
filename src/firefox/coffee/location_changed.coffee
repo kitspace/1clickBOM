@@ -9,18 +9,21 @@ listeners = []
 progressListener =
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIWebProgressListener, Ci.nsISupportsWeakReference])
     onLocationChange: (aProgress, aRequest, aURI) ->
-        highLevelTab = modelFor(getTabForContentWindow(aProgress.DOMWindow))
+        high_level_tab = modelFor(getTabForContentWindow(aProgress.DOMWindow))
         for callback in listeners
-            callback(highLevelTab)
+            callback(high_level_tab)
 
 attach = (tab) ->
-    lowLevelTab = viewFor(tab)
-    browser     = getBrowserForTab(lowLevelTab)
+    low_level_tab = viewFor(tab)
+    browser       = getBrowserForTab(low_level_tab)
     browser.addProgressListener(progressListener)
+
+#attach the tab location changed notifier to all existing tabs
+browser.tabsQuery {url:'*'}, (tabs) ->
+    for tab in tabs
+        locationChanged.attach(tab)
 
 tabs.on 'open', attach
 
 exports.on = (callback) ->
     listeners.push(callback)
-
-exports.attach = attach

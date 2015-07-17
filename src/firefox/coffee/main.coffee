@@ -1,15 +1,10 @@
-{background}     = require './background'
-{bgMessenger}    = require './bg_messenger'
-{browser, popup} = require './browser'
-locationChanged  = require './location_changed'
-http             = require './http'
-firefoxTabs      = require 'sdk/tabs'
+{background}  = require './background'
+{bgMessenger} = require './bg_messenger'
+{popup}       = require './browser'
+http          = require './http'
+firefoxTabs   = require 'sdk/tabs'
 
 exports.main = (options, callbacks) ->
-    #attach the tab location changed notifier to all existing tabs
-    browser.tabsQuery {url:'*'}, (tabs) ->
-        for tab in tabs
-            locationChanged.attach(tab)
     if options.loadReason == 'install'
         http.getLocation () ->
             #open 1clickBOM preferences
