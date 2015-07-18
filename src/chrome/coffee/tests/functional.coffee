@@ -145,40 +145,25 @@ asyncTest 'Clear all', () ->
             deepEqual(result.success, true, '1:' + that.country)
             start()
 
-asyncTest 'rsdelivers: Add items fails but adds again', () ->
-    stop(rs_locations_delivers.length - 1)
-    for l in rs_locations_delivers
-        r = new RS(l)
-        items = [
-                  {'part':'264-7881','quantity':2, 'comment':'test'}
-                , {'part':'fail','quantity':2, 'comment':'test'}
-                ]
-        r.addItems items, (result, that) ->
-            expected_fails = [{'part':'fail','quantity':2, 'comment':'test'}]
-            deepEqual(result.success, false, '1:'+ that.country)
-            deepEqual(result.fails, expected_fails,'2:' + that.country)
-            items = [{'part':'264-7881','quantity':2, 'comment':'test'}]
-            that.addItems items, (result, that2) ->
-                deepEqual(result.success, true, '3:' + that2.country)
-                start()
-
-asyncTest 'rs-online: Add items fails but adds again', () ->
-    stop(rs_locations_online.length - 1)
+asyncTest 'Add items fails but adds again', () ->
+    stop(rs_locations.length - 1)
     for l in rs_locations
         r = new RS(l)
-        items = [
-                  {'part':'264-7881','quantity':2, 'comment':'test'}
-                , {'part':'fail','quantity':2, 'comment':'test'}
+        items = [ {'part':'264-7881','quantity':2, 'comment':'test'}
+                , {'part':'fail1','quantity':2, 'comment':'test'}
+                , {'part':'fail2','quantity':2, 'comment':'test'}
                 ]
         r.addItems items, (result, that) ->
-            expected_fails = [{'part':'fail','quantity':2, 'comment':'test'}]
+            expected_fails =
+                [ {'part':'fail1','quantity':2, 'comment':'test'}
+                , {'part':'fail2','quantity':2, 'comment':'test'}
+                ]
             deepEqual(result.success, false, '1:'+ that.country)
             deepEqual(result.fails, expected_fails,'2:' + that.country)
             items = [{'part':'264-7881','quantity':2, 'comment':'test'}]
             that.addItems items, (result, that2) ->
                 deepEqual(result.success, true, '3:' + that2.country)
                 start()
-
 
 module('Newark')
 

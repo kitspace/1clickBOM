@@ -110,13 +110,76 @@ class RS extends RetailerInterface
                 callback({success:false})
 
     _clear_invalid_rs_online: (callback) ->
-        @_get_invalid_item_ids_rs_online (ids) =>
-            if ids.length == 0
-                if callback?
-                    callback()
-            else
-                @_get_invalid_viewstate_rs_online (viewstate, form_ids) =>
-                    @_delete_invalid_rs_online(viewstate, form_ids, ids, callback)
+
+        url = "http" + @site + @cart
+
+        @_get_clear_viewstate_rs_online (viewstate, form_ids) ->
+            params1 = "AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasketForm\
+            &=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&shoppingBa\
+            sketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingBas\
+            ketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingBask\
+            etForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingBaske\
+            tForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingBasket\
+            Form%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingBasketF\
+            orm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingBasketFo\
+            rm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingBasketFor\
+            m%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingBasketForm\
+            %3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%\
+            3AquickQty_9=&shoppingBasketForm%3Aj_id1085=&shoppingBasketForm%3Aj_id1\
+            091=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_deco\
+            rate%3AQuickOrderWidgetAction_listItems=Paste%20or%20type%20your%20list\
+            %20here%20and%20click%20'Add'.&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id\
+            1228=505-1441&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1248=1&deliveryOp\
+            tionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&sh\
+            oppingBasketForm%3ApromoCodeTermsAndConditionModalLayerOpenedState=&sho\
+            ppingBasketForm%3AsendToColleagueWidgetPanelOpenedState=&shoppingBasket\
+            Form%3AGuestUserSendToColleagueWidgetAction_senderName_decorate%3AGuest\
+            UserSendToColleagueWidgetAction_senderName=&shoppingBasketForm%3AGuestU\
+            serSendToColleagueWidgetAction_senderEmail_decorate%3AGuestUserSendToCo\
+            lleagueWidgetAction_senderEmail=name%40company.com&shoppingBasketForm%3\
+            AGuestUserSendToColleagueWidgetAction_mailTo_decorate%3AGuestUserSendTo\
+            ColleagueWidgetAction_mailTo=name%40company.com&shoppingBasketForm%3AGu\
+            estUserSendToColleagueWidgetAction_subject_decorate%3AGuestUserSendToCo\
+            lleagueWidgetAction_subject=Copy%20of%20order%20from%20RS%20Online&shop\
+            pingBasketForm%3AGuestUserSendToColleagueWidgetAction_message_decorate%\
+            3AGuestUserSendToColleagueWidgetAction_message=&shoppingBasketForm%3Ase\
+            ndToColleagueSuccessWidgetPanelOpenedState=\
+            &javax.faces.ViewState=#{viewstate}"
+            params2 = "AJAXREQUEST=_viewRoot&#{form_ids[0]}=#{form_ids[0]}&javax\
+            .faces.ViewState=#{viewstate}&ajaxSingle=#{form_ids[0]}%3A\
+            #{form_ids[1]}&#{form_ids[0]}%3A#{form_ids[1]}=#{form_ids[0]}%3A\
+            #{form_ids[1]}&"
+            params3 = "AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&autoScro\
+            ll=&javax.faces.ViewState=#{viewstate}&a4jCloseForm%3A#{form_ids[2]}\
+            =a4jCloseForm%3A#{form_ids[2]}&"
+
+            p = http.promiseGet(url)
+            p.then (doc) ->
+                error_items = doc.querySelectorAll('.errorRow')
+                a = []
+                for _ in error_items
+                    a.push(null)
+                chain = a.reduce (prev) ->
+                    prev.then (_doc) ->
+                        if not _doc?
+                            return http.promiseGet(url)
+                        else
+                            return Promise.resolve(_doc)
+                    .then (_doc) ->
+                        error_item = _doc.querySelector('.errorRow')
+                            .querySelector('.quantityTd')
+                        id = error_item.children[3].children[0].id
+                        param_id = params1 + '&' + encodeURIComponent(id)
+                        http.promisePost(url, param_id)
+                    .then () ->
+                        http.promisePost(url, params2)
+                    .then () ->
+                        http.promisePost(url, params3)
+                , Promise.resolve(doc)
+                chain.then () ->
+                    callback({success:true})
+                chain.catch () ->
+                    callback({success:false})
 
     _get_invalid_item_ids_rs_online: (callback) ->
         url = "http" + @site + @cart
@@ -126,7 +189,6 @@ class RS extends RetailerInterface
             parts = []
             for elem in doc.querySelectorAll('.errorRow')
                 error_quantity_input = elem.querySelector('.quantityTd')
-                console.log(error_quantity_input)
                 if error_quantity_input?
                     ids.push(error_quantity_input.children[3].children[0].id)
                 error_child = elem.children[1]
@@ -134,7 +196,6 @@ class RS extends RetailerInterface
                     error_input = error_child.querySelector('input')
                     if error_input?
                         parts.push(error_input.value.replace(/-/g,''))
-            console.log('ids', ids)
             callback(ids, parts)
         , () ->
             callback([],[])
@@ -168,74 +229,6 @@ class RS extends RetailerInterface
             callback(ids, parts)
         , () ->
             callback([],[])
-
-    _delete_invalid_rs_online: (viewstate, form_ids, ids, callback) ->
-        url = "http" + @site + @cart
-        #TODO get rid of these massive strings
-        params1 = "AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasketForm\
-        &=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&shoppingBa\
-        sketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingBas\
-        ketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingBask\
-        etForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingBaske\
-        tForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingBasket\
-        Form%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingBasketF\
-        orm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingBasketFo\
-        rm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingBasketFor\
-        m%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingBasketForm\
-        %3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%\
-        3AquickQty_9=&shoppingBasketForm%3Aj_id1085=&shoppingBasketForm%3Aj_id1\
-        091=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_deco\
-        rate%3AQuickOrderWidgetAction_listItems=Paste%20or%20type%20your%20list\
-        %20here%20and%20click%20'Add'.&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id\
-        1228=505-1441&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1248=1&deliveryOp\
-        tionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&sh\
-        oppingBasketForm%3ApromoCodeTermsAndConditionModalLayerOpenedState=&sho\
-        ppingBasketForm%3AsendToColleagueWidgetPanelOpenedState=&shoppingBasket\
-        Form%3AGuestUserSendToColleagueWidgetAction_senderName_decorate%3AGuest\
-        UserSendToColleagueWidgetAction_senderName=&shoppingBasketForm%3AGuestU\
-        serSendToColleagueWidgetAction_senderEmail_decorate%3AGuestUserSendToCo\
-        lleagueWidgetAction_senderEmail=name%40company.com&shoppingBasketForm%3\
-        AGuestUserSendToColleagueWidgetAction_mailTo_decorate%3AGuestUserSendTo\
-        ColleagueWidgetAction_mailTo=name%40company.com&shoppingBasketForm%3AGu\
-        estUserSendToColleagueWidgetAction_subject_decorate%3AGuestUserSendToCo\
-        lleagueWidgetAction_subject=Copy%20of%20order%20from%20RS%20Online&shop\
-        pingBasketForm%3AGuestUserSendToColleagueWidgetAction_message_decorate%\
-        3AGuestUserSendToColleagueWidgetAction_message=&shoppingBasketForm%3Ase\
-        ndToColleagueSuccessWidgetPanelOpenedState=\
-        &javax.faces.ViewState=#{viewstate}"
-        params2 = "AJAXREQUEST=_viewRoot&" + form_ids[0] + "=" + form_ids[0] + "&javax.faces.ViewState=" + viewstate + "&ajaxSingle=" + form_ids[0] + "%3A" + form_ids[1] + "&" + form_ids[0] + "%3A" + form_ids[1] + "=" + form_ids[0] + "%3A" + form_ids[1] + "&"
-        params3 = "AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&autoScroll=&javax.faces.ViewState=" + viewstate + "&a4jCloseForm%3A" + form_ids[2] + "=a4jCloseForm%3A" + form_ids[2] + "&"
-
-        promisePost = (url, params) ->
-            console.log(url)
-            new Promise (resolve, reject) ->
-                post url, params, {}, (event) ->
-                    resolve(event)
-                , () ->
-                    reject()
-
-        delay = (time)->
-          return new Promise (resolve)  ->
-            setTimeout(resolve, time)
-
-        chain = ids.reduce (prev, id) ->
-            param_id = params1 + '&' + encodeURIComponent(id)
-            prev.then () ->
-                console.log('waiting...')
-                delay(1000)
-            .then () ->
-                console.log(id)
-                promisePost(url, param_id)
-            .then () ->
-                promisePost(url, params2)
-            .then () ->
-                promisePost(url, params3)
-        , Promise.resolve()
-
-        chain.then () ->
-            if callback?
-                callback()
-
 
     addItems: (items, callback) ->
         @adding_items = true
@@ -350,20 +343,6 @@ class RS extends RetailerInterface
                 callback(viewstate, [form.id, form_id2, form_id3])
             else
                 return callback("", [])
-        , () ->
-            callback("", [])
-
-    _get_invalid_viewstate_rs_online: (callback)->
-        url = "http" + @site + @cart
-        get url, {}, (event) =>
-            doc = browser.parseDOM(event.target.responseText)
-            viewstate  = doc.getElementById("javax.faces.ViewState").value
-            form = doc.getElementById("a4jCloseForm").nextElementSibling.nextElementSibling
-            #the form_id elements are different values depending on signed in or signed out
-            #could just hardcode them but maybe this will be more future-proof?
-            form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
-            form_id3  = doc.getElementById("a4jCloseForm").firstChild.id.split(":")[1]
-            callback(viewstate, [form.id, form_id2, form_id3])
         , () ->
             callback("", [])
 

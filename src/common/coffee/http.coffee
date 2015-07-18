@@ -100,6 +100,23 @@ getLocation = (callback) ->
     , () ->
         callback()
 
+promisePost = (url, params) ->
+    new Promise (resolve, reject) ->
+        post url, params, {}, (event) ->
+            resolve()
+        , () ->
+            reject()
+
+promiseGet = (url) ->
+    new Promise (resolve, reject) ->
+        get url, {}, (event) ->
+            resolve(browser.parseDOM(event.target.responseText))
+        , () ->
+            reject()
+
+
 exports.post        = post
 exports.get         = get
+exports.promisePost = promisePost
+exports.promiseGet  = promiseGet
 exports.getLocation = getLocation
