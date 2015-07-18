@@ -124,15 +124,17 @@ class RS extends RetailerInterface
             doc = browser.parseDOM(event.target.responseText)
             ids = []
             parts = []
-            for elem in doc.querySelectorAll(".errorRow")
-                error_quantity_input = elem.querySelector(".quantityTd")
+            for elem in doc.querySelectorAll('.errorRow')
+                error_quantity_input = elem.querySelector('.quantityTd')
+                console.log(error_quantity_input)
                 if error_quantity_input?
-                    ids.push(error_quantity_input.children[0].name.split(":")[2])
+                    ids.push(error_quantity_input.children[3].children[0].id)
                 error_child = elem.children[1]
                 if error_child?
-                    error_input = error_child.querySelector("input")
+                    error_input = error_child.querySelector('input')
                     if error_input?
                         parts.push(error_input.value.replace(/-/g,''))
+            console.log('ids', ids)
             callback(ids, parts)
         , () ->
             callback([],[])
@@ -170,40 +172,70 @@ class RS extends RetailerInterface
     _delete_invalid_rs_online: (viewstate, form_ids, ids, callback) ->
         url = "http" + @site + @cart
         #TODO get rid of these massive strings
-        params1 = "AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasketForm&=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3Aj_id1085=&shoppingBasketForm%3Aj_id1091=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_listItems=Paste%20or%20type%20your%20list%20here%20and%20click%20'Add'.&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1228=505-1441&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1248=1&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionModalLayerOpenedState=&shoppingBasketForm%3AsendToColleagueWidgetPanelOpenedState=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_senderName_decorate%3AGuestUserSendToColleagueWidgetAction_senderName=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_senderEmail_decorate%3AGuestUserSendToColleagueWidgetAction_senderEmail=name%40company.com&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_mailTo_decorate%3AGuestUserSendToColleagueWidgetAction_mailTo=name%40company.com&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_subject_decorate%3AGuestUserSendToColleagueWidgetAction_subject=Copy%20of%20order%20from%20RS%20Online&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_message_decorate%3AGuestUserSendToColleagueWidgetAction_message=&shoppingBasketForm%3AsendToColleagueSuccessWidgetPanelOpenedState=&javax.faces.ViewState=" + viewstate + "&shoppingBasketForm%3AremoveMultipleLink=shoppingBasketForm%3AremoveMultipleLink&"
-        params2 = "AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasketForm&=ManualEntry&shoppingBasketForm%3AquickStockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3Aj_id1085=&shoppingBasketForm%3Aj_id1045=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_listItems=F%C3%BCgen%20Sie%20hier%20die%20gew%C3%BCnschten%20Produkte%20ein%20und%20klicken%20Sie%20auf%20'Hinzuf%C3%BCgen'."
-        for id in ids
-            params2 += "&shoppingBasketForm%3A" + form_ids[3] + "%3A" + id + "%3Achk_=on"
+        params1 = "AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasketForm\
+        &=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&shoppingBa\
+        sketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingBas\
+        ketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingBask\
+        etForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingBaske\
+        tForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingBasket\
+        Form%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingBasketF\
+        orm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingBasketFo\
+        rm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingBasketFor\
+        m%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingBasketForm\
+        %3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%\
+        3AquickQty_9=&shoppingBasketForm%3Aj_id1085=&shoppingBasketForm%3Aj_id1\
+        091=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_deco\
+        rate%3AQuickOrderWidgetAction_listItems=Paste%20or%20type%20your%20list\
+        %20here%20and%20click%20'Add'.&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id\
+        1228=505-1441&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1248=1&deliveryOp\
+        tionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&sh\
+        oppingBasketForm%3ApromoCodeTermsAndConditionModalLayerOpenedState=&sho\
+        ppingBasketForm%3AsendToColleagueWidgetPanelOpenedState=&shoppingBasket\
+        Form%3AGuestUserSendToColleagueWidgetAction_senderName_decorate%3AGuest\
+        UserSendToColleagueWidgetAction_senderName=&shoppingBasketForm%3AGuestU\
+        serSendToColleagueWidgetAction_senderEmail_decorate%3AGuestUserSendToCo\
+        lleagueWidgetAction_senderEmail=name%40company.com&shoppingBasketForm%3\
+        AGuestUserSendToColleagueWidgetAction_mailTo_decorate%3AGuestUserSendTo\
+        ColleagueWidgetAction_mailTo=name%40company.com&shoppingBasketForm%3AGu\
+        estUserSendToColleagueWidgetAction_subject_decorate%3AGuestUserSendToCo\
+        lleagueWidgetAction_subject=Copy%20of%20order%20from%20RS%20Online&shop\
+        pingBasketForm%3AGuestUserSendToColleagueWidgetAction_message_decorate%\
+        3AGuestUserSendToColleagueWidgetAction_message=&shoppingBasketForm%3Ase\
+        ndToColleagueSuccessWidgetPanelOpenedState=\
+        &javax.faces.ViewState=#{viewstate}"
+        params2 = "AJAXREQUEST=_viewRoot&" + form_ids[0] + "=" + form_ids[0] + "&javax.faces.ViewState=" + viewstate + "&ajaxSingle=" + form_ids[0] + "%3A" + form_ids[1] + "&" + form_ids[0] + "%3A" + form_ids[1] + "=" + form_ids[0] + "%3A" + form_ids[1] + "&"
+        params3 = "AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&autoScroll=&javax.faces.ViewState=" + viewstate + "&a4jCloseForm%3A" + form_ids[2] + "=a4jCloseForm%3A" + form_ids[2] + "&"
 
-        #hack on-top of a hack, let's hope they retire the site before it
-        #becomes a problem
-        if form_ids[3] == "j_id1136"
-            form_id5 = "j_id1541"
-        else
-            form_id5 = "j_id1625"
-
-        params2 += "&shoppingBasketForm%3A" + form_ids[3] + "%3A0%3Aj_id1180=fail&shoppingBasketForm%3A" + form_ids[3] + "%3A0%3Aj_id1202=2&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionModalLayerOpenedState=&shoppingBasketForm%3AsendToColleagueWidgetPanelOpenedState=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_senderName_decorate%3AGuestUserSendToColleagueWidgetAction_senderName=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_senderEmail_decorate%3AGuestUserSendToColleagueWidgetAction_senderEmail=name%40firma.at&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_mailTo_decorate%3AGuestUserSendToColleagueWidgetAction_mailTo=name%40firma.at&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_subject_decorate%3AGuestUserSendToColleagueWidgetAction_subject=Kopie%20des%20Warenkorbs&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_message_decorate%3AGuestUserSendToColleagueWidgetAction_message=&shoppingBasketForm%3AsendToColleagueSuccessWidgetPanelOpenedState=&javax.faces.ViewState=" + viewstate + "&shoppingBasketForm%3A" + form_id5 + "=shoppingBasketForm%3A" + form_id5 + "&"
-
-        params3 = "AJAXREQUEST=_viewRoot&" + form_ids[0] + "=" + form_ids[0] + "&javax.faces.ViewState=" + viewstate + "&ajaxSingle=" + form_ids[0] + "%3A" + form_ids[1] + "&" + form_ids[0] + "%3A" + form_ids[1] + "=" + form_ids[0] + "%3A" + form_ids[1] + "&"
-        params4 = "AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&autoScroll=&javax.faces.ViewState=" + viewstate + "&a4jCloseForm%3A" + form_ids[2] + "=a4jCloseForm%3A" + form_ids[2] + "&"
-        post url, params1, {}, () ->
-            post url, params2, {}, () ->
-                post url, params3, {}, () ->
-                    post url, params4, {}, () -> #stairway to heaven lol
-                            if callback?
-                                callback()
-                    , () ->
-                        if callback?
-                            callback()
+        promisePost = (url, params) ->
+            console.log(url)
+            new Promise (resolve, reject) ->
+                post url, params, {}, (event) ->
+                    resolve(event)
                 , () ->
-                    if callback?
-                        callback()
-            , () ->
-                if callback?
-                    callback()
-        , () ->
+                    reject()
+
+        delay = (time)->
+          return new Promise (resolve)  ->
+            setTimeout(resolve, time)
+
+        chain = ids.reduce (prev, id) ->
+            param_id = params1 + '&' + encodeURIComponent(id)
+            prev.then () ->
+                console.log('waiting...')
+                delay(1000)
+            .then () ->
+                console.log(id)
+                promisePost(url, param_id)
+            .then () ->
+                promisePost(url, params2)
+            .then () ->
+                promisePost(url, params3)
+        , Promise.resolve()
+
+        chain.then () ->
             if callback?
                 callback()
+
 
     addItems: (items, callback) ->
         @adding_items = true
@@ -331,8 +363,7 @@ class RS extends RetailerInterface
             #could just hardcode them but maybe this will be more future-proof?
             form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
             form_id3  = doc.getElementById("a4jCloseForm").firstChild.id.split(":")[1]
-            form_id4  = /"shoppingBasketForm:(j_id\d+):\d+:chk_"/.exec(event.target.responseText)[1]
-            callback(viewstate, [form.id, form_id2, form_id3, form_id4])
+            callback(viewstate, [form.id, form_id2, form_id3])
         , () ->
             callback("", [])
 
