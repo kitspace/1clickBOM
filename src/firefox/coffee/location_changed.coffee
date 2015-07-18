@@ -19,11 +19,10 @@ attach = (tab) ->
     browser.addProgressListener(progressListener)
 
 #attach the tab location changed notifier to all existing tabs
-browser.tabsQuery {url:'*'}, (tabs) ->
-    for tab in tabs
-        locationChanged.attach(tab)
+for tab in tabs
+    attach(tab)
 
-tabs.on 'open', attach
+tabs.on('open', attach)
 
 exports.on = (callback) ->
     listeners.push(callback)
