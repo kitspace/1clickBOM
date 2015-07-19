@@ -115,7 +115,7 @@ render = (state) ->
         tr.appendChild(td_1)
 
         td_2 = document.createElement('td')
-        t  = no_of_items + ' line'
+        t  = no_of_items + ' item'
         t += 's' if (items.length > 1)
         td_2.appendChild(document.createTextNode(t))
         tr.appendChild(td_2)
