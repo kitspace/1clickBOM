@@ -38,7 +38,7 @@ class RS extends RetailerInterface
                     @refreshSiteTabs()
                     @clearing_cart = false
         else
-            url = 'http' + @site + '/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart'
+            url = "http#{@site}/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart"
             post url, '', {json:true}, (event) =>
                 if callback?
                     callback({success: true}, this)
@@ -202,7 +202,7 @@ class RS extends RetailerInterface
             @_delete_invalid_rs_delivers(ids, callback)
 
     _delete_invalid_rs_delivers: (ids, callback) ->
-        url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/RemoveMultiple"
+        url = "http#{@site}/ShoppingCart/NcjRevampServicePage.aspx/RemoveMultiple"
         params = '{"request":{"encodedString":"'
         for id in ids
             params += id + "|"
@@ -215,14 +215,19 @@ class RS extends RetailerInterface
                 callback()
 
     _get_invalid_item_ids_rs_delivers: (callback) ->
-        url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/GetCartHtml"
+        url = "http#{@site}/ShoppingCart/NcjRevampServicePage.aspx/GetCartHtml"
         post url, undefined, {json:true}, (event) ->
             doc = browser.parseDOM(JSON.parse(event.target.responseText).html)
             ids = []
             parts = []
             for elem in doc.getElementsByClassName("errorOrderLine")
-                ids.push(elem.parentElement.nextElementSibling.querySelector(".quantityTd").firstElementChild.classList[3].split("_")[1])
-                parts.push(elem.parentElement.nextElementSibling.querySelector(".descriptionTd").firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.innerText.trim())
+                ids.push(elem.parentElement.nextElementSibling
+                    .querySelector(".quantityTd").firstElementChild
+                    .classList[3].split("_")[1])
+                parts.push(elem.parentElement.nextElementSibling
+                    .querySelector(".descriptionTd").firstElementChild
+                    .nextElementSibling.firstElementChild.nextElementSibling
+                    .innerText.trim())
             callback(ids, parts)
         , () ->
             callback([],[])
@@ -250,10 +255,10 @@ class RS extends RetailerInterface
         if i < items_incoming.length
             items = items_incoming[i..i+99]
             @_clear_invalid_rs_delivers () =>
-                url = "http" + @site + "/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder"
+                url = "http#{@site}/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder"
                 params = '{"request":{"lines":"'
                 for item in items
-                    params += item.part + "," + item.quantity + ",," + item.comment + "\n"
+                    params += "#{item.part},#{item.quantity},,#{item.comment}\n"
                 params += '"}}'
                 post url, params, {json:true}, (event) =>
                     doc = browser.parseDOM(JSON.parse(event.target.responseText).html)
@@ -312,9 +317,10 @@ class RS extends RetailerInterface
             else
                 return callback("", "")
             btn_doc = doc.getElementById("addToOrderDiv")
-            #the form_id element is different values depending on signed in or signed out
-            #could just hardcode them but maybe this will be more future-proof?
-            #we use a regex here as DOM select methods crash on this element!
+            #the form_id element is different values depending on signed in or
+            #signed out could just hardcode them but maybe this will be more
+            #future-proof?  we use a regex here as DOM select methods crash on
+            #this element!
             form_id  = /AJAX.Submit\('shoppingBasketForm\:(j_id\d+)/.exec(btn_doc.innerHTML.toString())[1]
             callback(viewstate, form_id)
         , () ->
@@ -333,8 +339,9 @@ class RS extends RetailerInterface
             form_elem = doc.getElementById("a4jCloseForm")
             if form_elem?
                 form = form_elem.nextElementSibling.nextElementSibling
-                #the form_id elements are different values depending on signed in or signed out
-                #could just hardcode them but maybe this will be more future-proof?
+                #the form_id elements are different values depending on signed
+                #in or signed out could just hardcode them but maybe this will
+                #be more future-proof?
                 form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
                 form_id3  = doc.getElementById("a4jCloseForm").firstChild.id.split(":")[1]
                 callback(viewstate, [form.id, form_id2, form_id3])
