@@ -1,4 +1,4 @@
-
+[![Demo][15]][19]
 
 [![Available on Chrome][8]][14] [![Add to Firefox][9]][13]
 
@@ -10,7 +10,7 @@ retailers.
 
 ## News ##
 
-#### - [1clickBOM is now available for Firefox][13]
+#### - [1clickBOM is now available for Firefox][20]
 
 #### - [I gave a talk about 1clickBOM at FOSDEM][12]
 
@@ -86,7 +86,7 @@ If you need any help or think you found a bug please get in touch via
 
 ### Build and Test Requirements ###
 
-The code is available on [GitHub][7] to get started you will need:
+The code is available on [GitHub][7]. To get started you will need:
 
 - Chrome or Chromium
 - Firefox (optionally with [Extension Autoinstaller][16])
@@ -103,7 +103,7 @@ The rest of the dependencies can be retrieved via `npm install`.
 
 - Get dependencies above and make sure executables are on your path
 - `npm install --global` (or `npm install && export PATH=$PATH:$(pwd)/node_modules/.bin)`
-- `make` which builds everything or you can be more specific like `make chrome` or `make firefox` or even `make run-firefox` to build and load in firefox in one step
+- `make`
 
 #### Load
 
@@ -129,8 +129,8 @@ issue manually before trying to fix it.
 which means you are free to use the code in your own applications (even
 proprietary ones) as long as you display appropriate attribution and share your
 code-improvements to 1clickBOM itself under the CPAL as well. This also applies
-to software you are making available to users as a network service from a
-server. See the [LICENSE][6] file for details.
+to software you are solely making available to users over a network i.e.
+software as a service. See the [LICENSE][6] file for details.
 
 [1]:#roadmap
 [2]:https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv
@@ -150,3 +150,5 @@ server. See the [LICENSE][6] file for details.
 [16]:https://palant.de/2012/01/13/extension-auto-installer
 [17]:https://web.archive.org/web/20130128010139/http://api.qunitjs.com/
 [18]:https://developer.mozilla.org/en-US/Add-ons/SDK
+[19]:http://1clickBOM.com
+[20]:https://addons.mozilla.org/en-US/firefox/addon/1clickbom/
