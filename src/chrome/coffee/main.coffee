@@ -17,7 +17,7 @@ chrome.runtime.onInstalled.addListener (details)->
                 for setting,info of setting_names
                     settings[country][retailer][setting] = info.value
         browser.prefsSet({settings:settings})
-    else if details.reason == 'upgrade'
+    else if details.reason == 'update'
         browser.prefsGet ['country', 'settings']
         , ({country:country, settings:stored_settings}) =>
             #allow for graceful update as settings format has changed
