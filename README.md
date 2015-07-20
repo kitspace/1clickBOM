@@ -5,7 +5,7 @@
 1-click BOM is a browser extension that fills your shopping carts for you on
 sites like Digikey and Mouser, you simply paste from a spreadsheet or visit an
 online `.tsv` file. This way you can keep one bill of materials (BOM) that lets
-you and people you share the BOM with, quickly purchase items from multiple
+you and people you share the BOM with quickly purchase items from multiple
 retailers.
 
 ## News ##
@@ -103,11 +103,11 @@ The rest of the dependencies can be retrieved via `npm install`.
 
 - Get dependencies above and make sure executables are on your path
 - `npm install --global` (or `npm install && export PATH=$PATH:$(pwd)/node_modules/.bin)`
-- `make`
+- `make` which builds everything or you can be more specific like `make chrome` or `make firefox` or even `make run-firefox` to build and load in firefox in one step
 
 #### Load
 
-- For Chrome enable developer mode and load the unpacked extension from `build/chrome`
+- For Chrome enable developer mode in `chrome://extensions` and load the unpacked extension from `build/chrome`
 - For Firefox run `make run-firefox` (or setup [Autoinstaller][16] and run `make load-firefox`)
 
 #### Test
@@ -120,14 +120,17 @@ Most of the tests are functional tests that require interaction with the
 various retailer sites and they make a lot of network requests to test across
 all the different possible locations. Sometimes they will fail because they are
 not an accurate representation of actual extension use. If a test fails or
-doesn't complete, run it again before investigating.
+doesn't complete, run it again before investigating. Try and re-create the
+issue manually before trying to fix it.
 
 ## License ##
 
 1clickBOM is free and open source software. It is licensed under a CPAL license
-which means you can use the code in proprietary applications as long as you
-display appropriate attribution and share your code-improvements to 1clickBOM
-under the CPAL as well. See the [LICENSE][6] file for details.
+which means you are free to use the code in your own applications (even
+proprietary ones) as long as you display appropriate attribution and share your
+code-improvements to 1clickBOM itself under the CPAL as well. This also applies
+to software you are making available to users as a network service from a
+server. See the [LICENSE][6] file for details.
 
 [1]:#roadmap
 [2]:https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv
@@ -141,7 +144,7 @@ under the CPAL as well. See the [LICENSE][6] file for details.
 [10]:https://github.com/monostable/1clickBOM/issues
 [11]:mailto:info@1clickBOM.com
 [12]:http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4
-[13]:http://1clickBOM.com
+[13]:https://addons.mozilla.org/firefox/downloads/file/330582/1clickbom-0.2.0-fx.xpi
 [14]:https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi
 [15]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif
 [16]:https://palant.de/2012/01/13/extension-auto-installer
