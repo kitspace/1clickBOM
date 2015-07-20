@@ -177,6 +177,8 @@ class RS extends RetailerInterface
                     callback({success:true})
                 chain.catch () ->
                     callback({success:false})
+            .catch () ->
+                callback({success:false})
 
     _get_invalid_item_ids_rs_online: (callback) ->
         url = "http" + @site + @cart
