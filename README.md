@@ -1,16 +1,18 @@
 
 
-[![Available on Chrome][8]](https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi) ![Firefox coming soon][9]
+[![Available on Chrome][8]][14] [![Add to Firefox][9]][13]
 
-1-click BOM is a purchasing tool that let's you keep _one_ bill of materials (BOM)
-for items from _multiple_ retailers. It's a browser extension that fills your
-online shopping carts for you. To add items to 1clickBOM you simply paste from
-a spreadsheet or visit an online `.tsv` file.
+1-click BOM is a browser extension that fills your shopping carts for you on
+sites like Digikey and Mouser, you simply paste from a spreadsheet or visit an
+online `.tsv` file. This way you can keep one bill of materials (BOM) that lets
+you and people you share the BOM with quickly purchase items from multiple
+retailers.
 
 ## News ##
 
-- [I gave a talk about 1clickBOM at FOSDEM this year](http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4)
+#### - [1clickBOM is now available for Firefox][13]
 
+#### - [I gave a talk about 1clickBOM at FOSDEM][12]
 
 ## Which retailers? ##
 
@@ -39,14 +41,14 @@ part-number specific to that retailer. See the [example tsv][2].
 In your spreadsheet select the relevant columns, copy and then click the paste
 button on the 1clickBOM popup.
 
-![Load from page](https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png)
+![Load from page][3]
 
 Alternatively, if you visit a page that ends in `.tsv` and has data in the
 right format available 1clickBOM will show a blue badge and button with an
 arrow. Press the blue button in the popup and the data will be added. You can
 try this on the [example tsv page][2] once you have the extension installed.
 
-### Then What? ###
+### Let's go shopping! ###
 
 Once the data is added you can use 1clickBOM to add the items to your carts
 using the buttons on the popup. You can also quickly view and empty your carts.
@@ -54,19 +56,17 @@ using the buttons on the popup. You can also quickly view and empty your carts.
 ## Issues ##
 
 If you need any help or think you found a bug please get in touch via
-[Github][10] or [email][11].
+[GitHub][10] or [email][11].
 
 ## Roadmap ##
-
-* 0.2
-    * Firefox support
 
 * 1.0
     * Multiple retailers per item
     * Named columns
     * Preferred retailer setting
+    * Display cart status
+    * Paste directly to cart
     * 1clickBOM site interaction
-    * Warn about filling already filled carts
 
 * 2.0
     * Allied, Arrow, AVNet, Conrad and Rapid
@@ -86,34 +86,67 @@ If you need any help or think you found a bug please get in touch via
 
 ### Build and Test Requirements ###
 
-The code is available on [Github][7]. 1clickBOM is written in [Coffeescript][4]
-which transpiles to Javascript.  Currently development is done on Chromium.
+The code is available on [GitHub][7] to get started you will need:
+
+- Chrome or Chromium
+- Firefox (optionally with [Extension Autoinstaller][16])
+- [Mozilla Add-on SDK][18] (cfx)
+- GNU Make
+- sed
+- npm
+
+The rest of the dependencies can be retrieved via `npm install`.
 
 ### Build and Test Instructions ###
 
-To transpile the coffeescript to javascript run `cake build` the chrome
-directory. Run `cake` with no arguments for help. The code can then be loaded
-as an unpacked extension in the developer mode in Chrome/Chromium settings.
+#### Build
 
-Unit and functional tests are written using the [QUnit framework][5]. Tests
-can be run by opening a javascript console on the background page and executing
-the `Test()` function.
+- Get dependencies above and make sure executables are on your path
+- `npm install --global` (or `npm install && export PATH=$PATH:$(pwd)/node_modules/.bin)`
+- `make` which builds everything or you can be more specific like `make chrome` or `make firefox` or even `make run-firefox` to build and load in firefox in one step
+
+#### Load
+
+- For Chrome enable developer mode in `chrome://extensions` and load the unpacked extension from `build/chrome`
+- For Firefox run `make run-firefox` (or setup [Autoinstaller][16] and run `make load-firefox`)
+
+#### Test
+
+Tests are written in [QUnit 1.11][17] and can only be run in Chrome/Chromium.
+Open a console on background page and execute `Test()` or test a specific
+module, e.g.  Farnell, with `Test('Farnell')`
+
+Most of the tests are functional tests that require interaction with the
+various retailer sites and they make a lot of network requests to test across
+all the different possible locations. Sometimes they will fail because they are
+not an accurate representation of actual extension use. If a test fails or
+doesn't complete, run it again before investigating. Try and re-create the
+issue manually before trying to fix it.
 
 ## License ##
 
-1clickBOM free and open source software. It is licensed under a CPAL license
-which means you can use the code in proprietary applications as long as you
-display appropriate attribution and share your code-improvements to 1clickBOM
-under the CPAL as well. See the [LICENSE][6] file for details.
+1clickBOM is free and open source software. It is licensed under a CPAL license
+which means you are free to use the code in your own applications (even
+proprietary ones) as long as you display appropriate attribution and share your
+code-improvements to 1clickBOM itself under the CPAL as well. This also applies
+to software you are making available to users as a network service from a
+server. See the [LICENSE][6] file for details.
 
 [1]:#roadmap
-[2]:https://github.com/monostable/1clickBOM/blob/master/chrome/data/example.tsv
-[3]:https://github.com/monostable/1clickBOM/blob/master/chrome/html/test.html
+[2]:https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv
+[3]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png
 [4]:http://coffeescript.org
 [5]:https://qunitjs.com/
 [6]:https://github.com/monostable/1clickBOM/blob/master/LICENSE
 [7]:https://github.com/monostable/1clickBOM
 [8]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png
-[9]:http://1clickBOM.com/firefox.png
+[9]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png
 [10]:https://github.com/monostable/1clickBOM/issues
 [11]:mailto:info@1clickBOM.com
+[12]:http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4
+[13]:https://addons.mozilla.org/firefox/downloads/file/330582/1clickbom-0.2.0-fx.xpi
+[14]:https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi
+[15]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif
+[16]:https://palant.de/2012/01/13/extension-auto-installer
+[17]:https://web.archive.org/web/20130128010139/http://api.qunitjs.com/
+[18]:https://developer.mozilla.org/en-US/Add-ons/SDK

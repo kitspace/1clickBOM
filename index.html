@@ -23,7 +23,7 @@
 </div></center>
 <h1 id="section-2"></h1>
 <center><p>
-<a id="chromelink" href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi"><img id="chromeimage" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" alt="Available on Chrome" /></a><img alt="Firefox coming soon" src="firefox.png">
+<a id="chromelink" href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi"><img id="chromeimage" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" alt="Available on Chrome" /></a><a href=https://addons.mozilla.org/firefox/downloads/file/330582/1clickbom-0.2.0-fx.xpi><img alt="Add to Firefox" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png"></a>
 </p></center>
 <script type"text/javascript">
     //fix favicon on firefox (due to github.io hosting)
@@ -39,11 +39,10 @@
     }
 </script>
 <h1 id="section-3"></h1>
-<p>1-click BOM is a purchasing tool that let's you keep <em>one</em> bill of materials (BOM) for items from <em>multiple</em> retailers. It's a browser extension that fills your online shopping carts for you. To add items to 1clickBOM you simply paste from a spreadsheet or visit an online <code>.tsv</code> file.</p>
+<p>1-click BOM is a browser extension that fills your shopping carts for you on sites like Digikey and Mouser, you simply paste from a spreadsheet or visit an online <code>.tsv</code> file. This way you can keep one bill of materials (BOM) that lets you and people you share the BOM with quickly purchase items from multiple retailers.</p>
 <h2 id="news">News</h2>
-<ul>
-<li><a href="http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4">I gave a talk about 1clickBOM at FOSDEM this year</a></li>
-</ul>
+<h4 id="clickbom-is-now-available-for-firefox13">- <a href="https://addons.mozilla.org/firefox/downloads/file/330582/1clickbom-0.2.0-fx.xpi">1clickBOM is now available for Firefox</a></h4>
+<h4 id="i-gave-a-talk-about-1clickbom-at-fosdem12">- <a href="http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4">I gave a talk about 1clickBOM at FOSDEM</a></h4>
 <h2 id="which-retailers">Which retailers?</h2>
 <p>Currently supported retailers are:</p>
 <ul>
@@ -58,16 +57,16 @@
 <h3 id="adding-items">Adding Items</h3>
 <p>You should arrange items in your spreadsheet in the following order.</p>
 <pre><code>line-note | quantity | retailer | part-number</code></pre>
-<p>Line-note can be anything you like. I normally use schematic references. Retailer is a name of one of the supported retailers and part-number is the part-number specific to that retailer. See the <a href="https://github.com/monostable/1clickBOM/blob/master/chrome/data/example.tsv">example tsv</a>.</p>
+<p>Line-note can be anything you like. I normally use schematic references. Retailer is a name of one of the supported retailers and part-number is the part-number specific to that retailer. See the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv">example tsv</a>.</p>
 <p>In your spreadsheet select the relevant columns, copy and then click the paste button on the 1clickBOM popup.</p>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" /><p class="caption">Load from page</p>
 </div>
-<p>Alternatively, if you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Press the blue button in the popup and the data will be added. You can try this on the <a href="https://github.com/monostable/1clickBOM/blob/master/chrome/data/example.tsv">example tsv page</a> once you have the extension installed.</p>
-<h3 id="then-what">Then What?</h3>
+<p>Alternatively, if you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Press the blue button in the popup and the data will be added. You can try this on the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv">example tsv page</a> once you have the extension installed.</p>
+<h3 id="lets-go-shopping">Let's go shopping!</h3>
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
 <h2 id="issues">Issues</h2>
-<p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">Github</a> or <script type="text/javascript">
+<p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">GitHub</a> or <script type="text/javascript">
 <!--
 h='&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#x69;&#110;&#102;&#x6f;';e=n+a+h;
 document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
@@ -75,17 +74,14 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 </script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript>.</p>
 <h2 id="roadmap">Roadmap</h2>
 <ul>
-<li>0.2
-<ul>
-<li>Firefox support</li>
-</ul></li>
 <li>1.0
 <ul>
 <li>Multiple retailers per item</li>
 <li>Named columns</li>
 <li>Preferred retailer setting</li>
+<li>Display cart status</li>
+<li>Paste directly to cart</li>
 <li>1clickBOM site interaction</li>
-<li>Warn about filling already filled carts</li>
 </ul></li>
 <li>2.0
 <ul>
@@ -107,12 +103,33 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 </ul>
 <h2 id="development">Development</h2>
 <h3 id="build-and-test-requirements">Build and Test Requirements</h3>
-<p>The code is available on <a href="https://github.com/monostable/1clickBOM">Github</a>. 1clickBOM is written in <a href="http://coffeescript.org">Coffeescript</a> which transpiles to Javascript. Currently development is done on Chromium.</p>
+<p>The code is available on <a href="https://github.com/monostable/1clickBOM">GitHub</a> to get started you will need:</p>
+<ul>
+<li>Chrome or Chromium</li>
+<li>Firefox (optionally with <a href="https://palant.de/2012/01/13/extension-auto-installer">Extension Autoinstaller</a>)</li>
+<li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK">Mozilla Add-on SDK</a> (cfx)</li>
+<li>GNU Make</li>
+<li>sed</li>
+<li>npm</li>
+</ul>
+<p>The rest of the dependencies can be retrieved via <code>npm install</code>.</p>
 <h3 id="build-and-test-instructions">Build and Test Instructions</h3>
-<p>To transpile the coffeescript to javascript run <code>cake build</code> the chrome directory. Run <code>cake</code> with no arguments for help. The code can then be loaded as an unpacked extension in the developer mode in Chrome/Chromium settings.</p>
-<p>Unit and functional tests are written using the <a href="https://qunitjs.com/">QUnit framework</a>. Tests can be run by opening a javascript console on the background page and executing the <code>Test()</code> function.</p>
+<h4 id="build">Build</h4>
+<ul>
+<li>Get dependencies above and make sure executables are on your path</li>
+<li><code>npm install --global</code> (or <code>npm install &amp;&amp; export PATH=$PATH:$(pwd)/node_modules/.bin)</code></li>
+<li><code>make</code> which builds everything or you can be more specific like <code>make chrome</code> or <code>make firefox</code> or even <code>make run-firefox</code> to build and load in firefox in one step</li>
+</ul>
+<h4 id="load">Load</h4>
+<ul>
+<li>For Chrome enable developer mode in <code>chrome://extensions</code> and load the unpacked extension from <code>build/chrome</code></li>
+<li>For Firefox run <code>make run-firefox</code> (or setup <a href="https://palant.de/2012/01/13/extension-auto-installer">Autoinstaller</a> and run <code>make load-firefox</code>)</li>
+</ul>
+<h4 id="test">Test</h4>
+<p>Tests are written in <a href="https://web.archive.org/web/20130128010139/http://api.qunitjs.com/">QUnit 1.11</a> and can only be run in Chrome/Chromium. Open a console on background page and execute <code>Test()</code> or test a specific module, e.g. Farnell, with <code>Test('Farnell')</code></p>
+<p>Most of the tests are functional tests that require interaction with the various retailer sites and they make a lot of network requests to test across all the different possible locations. Sometimes they will fail because they are not an accurate representation of actual extension use. If a test fails or doesn't complete, run it again before investigating. Try and re-create the issue manually before trying to fix it.</p>
 <h2 id="license">License</h2>
-<p>1clickBOM free and open source software. It is licensed under a CPAL license which means you can use the code in proprietary applications as long as you display appropriate attribution and share your code-improvements to 1clickBOM under the CPAL as well. See the <a href="https://github.com/monostable/1clickBOM/blob/master/LICENSE">LICENSE</a> file for details.</p>
+<p>1clickBOM is free and open source software. It is licensed under a CPAL license which means you are free to use the code in your own applications (even proprietary ones) as long as you display appropriate attribution and share your code-improvements to 1clickBOM itself under the CPAL as well. This also applies to software you are making available to users as a network service from a server. See the <a href="https://github.com/monostable/1clickBOM/blob/master/LICENSE">LICENSE</a> file for details.</p>
 <h1 id="section-4"></h1>
 <h1 id="section-5"></h1>
 <center> 
