@@ -41,7 +41,7 @@
 <h1 id="section-3"></h1>
 <p>1-click BOM is a browser extension that fills your shopping carts for you on sites like Digikey and Mouser, you simply paste from a spreadsheet or visit an online <code>.tsv</code> file. This way you can keep one bill of materials (BOM) that lets you and people you share the BOM with quickly purchase items from multiple retailers.</p>
 <h2 id="news">News</h2>
-<h4 id="clickbom-is-now-available-for-firefox13">- <a href="https://addons.mozilla.org/firefox/downloads/file/330582/1clickbom-0.2.0-fx.xpi">1clickBOM is now available for Firefox</a></h4>
+<h4 id="clickbom-is-now-available-for-firefox20">- <a href="https://addons.mozilla.org/en-US/firefox/addon/1clickbom/">1clickBOM is now available for Firefox</a></h4>
 <h4 id="i-gave-a-talk-about-1clickbom-at-fosdem12">- <a href="http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4">I gave a talk about 1clickBOM at FOSDEM</a></h4>
 <h2 id="which-retailers">Which retailers?</h2>
 <p>Currently supported retailers are:</p>
@@ -103,7 +103,7 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 </ul>
 <h2 id="development">Development</h2>
 <h3 id="build-and-test-requirements">Build and Test Requirements</h3>
-<p>The code is available on <a href="https://github.com/monostable/1clickBOM">GitHub</a> to get started you will need:</p>
+<p>The code is available on <a href="https://github.com/monostable/1clickBOM">GitHub</a>. To get started you will need:</p>
 <ul>
 <li>Chrome or Chromium</li>
 <li>Firefox (optionally with <a href="https://palant.de/2012/01/13/extension-auto-installer">Extension Autoinstaller</a>)</li>
@@ -118,7 +118,7 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 <ul>
 <li>Get dependencies above and make sure executables are on your path</li>
 <li><code>npm install --global</code> (or <code>npm install &amp;&amp; export PATH=$PATH:$(pwd)/node_modules/.bin)</code></li>
-<li><code>make</code> which builds everything or you can be more specific like <code>make chrome</code> or <code>make firefox</code> or even <code>make run-firefox</code> to build and load in firefox in one step</li>
+<li><code>make</code></li>
 </ul>
 <h4 id="load">Load</h4>
 <ul>
@@ -129,7 +129,7 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 <p>Tests are written in <a href="https://web.archive.org/web/20130128010139/http://api.qunitjs.com/">QUnit 1.11</a> and can only be run in Chrome/Chromium. Open a console on background page and execute <code>Test()</code> or test a specific module, e.g. Farnell, with <code>Test('Farnell')</code></p>
 <p>Most of the tests are functional tests that require interaction with the various retailer sites and they make a lot of network requests to test across all the different possible locations. Sometimes they will fail because they are not an accurate representation of actual extension use. If a test fails or doesn't complete, run it again before investigating. Try and re-create the issue manually before trying to fix it.</p>
 <h2 id="license">License</h2>
-<p>1clickBOM is free and open source software. It is licensed under a CPAL license which means you are free to use the code in your own applications (even proprietary ones) as long as you display appropriate attribution and share your code-improvements to 1clickBOM itself under the CPAL as well. This also applies to software you are making available to users as a network service from a server. See the <a href="https://github.com/monostable/1clickBOM/blob/master/LICENSE">LICENSE</a> file for details.</p>
+<p>1clickBOM is free and open source software. It is licensed under a CPAL license which means you are free to use the code in your own applications (even proprietary ones) as long as you display appropriate attribution and share your code-improvements to 1clickBOM itself under the CPAL as well. This also applies to software you are solely making available to users over a network i.e. software as a service. See the <a href="https://github.com/monostable/1clickBOM/blob/master/LICENSE">LICENSE</a> file for details.</p>
 <h1 id="section-4"></h1>
 <h1 id="section-5"></h1>
 <center> 
