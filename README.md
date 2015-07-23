@@ -145,7 +145,7 @@ software as a service. See the [LICENSE][6] file for details.
 [10]:https://github.com/monostable/1clickBOM/issues
 [11]:mailto:info@1clickBOM.com
 [12]:http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4
-[13]:https://addons.mozilla.org/firefox/downloads/file/330582/1clickbom-0.2.0-fx.xpi
+[13]:https://addons.mozilla.org/firefox/downloads/file/331354/1clickbom-0.2.1-fx.xpi
 [14]:https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi
 [15]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif
 [16]:https://palant.de/2012/01/13/extension-auto-installer
