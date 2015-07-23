@@ -44,8 +44,9 @@ button on the 1clickBOM popup.
 
 Alternatively, if you visit a page that ends in `.tsv` and has data in the
 right format available 1clickBOM will show a blue badge and button with an
-arrow. Press the blue button in the popup and the data will be added. You can
-try this on the [example tsv page][2] once you have the extension installed.
+arrow. Press the blue button in the popup and the data will be added. Try this
+on the [example tsv][2] or the [Bus Pirate tsv][21] once you have the extension
+installed.
 
 ### Let's go shopping! ###
 
@@ -143,7 +144,7 @@ software as a service. See the [LICENSE][6] file for details.
 [10]:https://github.com/monostable/1clickBOM/issues
 [11]:mailto:info@1clickBOM.com
 [12]:http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4
-[13]:https://addons.mozilla.org/firefox/downloads/file/330582/1clickbom-0.2.0-fx.xpi
+[13]:https://addons.mozilla.org/firefox/downloads/file/331354/1clickbom-0.2.1-fx.xpi
 [14]:https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi
 [15]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif
 [16]:https://palant.de/2012/01/13/extension-auto-installer
@@ -151,3 +152,4 @@ software as a service. See the [LICENSE][6] file for details.
 [18]:https://developer.mozilla.org/en-US/Add-ons/SDK
 [19]:http://1clickBOM.com
 [20]:https://addons.mozilla.org/en-US/firefox/addon/1clickbom/
+[21]:https://github.com/monostable/1clickBOM/blob/master/examples/bus_pirate.tsv
