@@ -145,6 +145,7 @@ class Newark extends RetailerInterface
 
 
     _add_items_ajax: (items, callback) ->
+        result = {success: true, fails:[], warnings:[]}
         if items.length == 0
             if callback?
                 callback({success:true, fails:[]})
@@ -152,11 +153,13 @@ class Newark extends RetailerInterface
         url = 'https' + @site + '/AjaxPasteOrderChangeServiceItemAdd'
 
         params = 'storeId=' + @store_id + '&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste='
-        #&addToBasket=Add+to+Cart'
         for item in items
             params += encodeURIComponent(item.part) + ','
             params += encodeURIComponent(item.quantity) + ','
-            params += encodeURIComponent(item.comment) + '\n'
+            if item.comment.length > 30
+                result.warnings.push("Truncated line-note when adding
+                    #{@interface_name} item to cart: #{item.comment}")
+            params += encodeURIComponent(item.comment.substr(0,30)) + '\n'
         post url, params, {}, (event) =>
             stxt = event.target.responseText.split('\n')
             stxt2 = stxt[3 .. (stxt.length - 4)]
@@ -164,7 +167,7 @@ class Newark extends RetailerInterface
             for s in stxt2
                 stxt3 += s
             json = JSON.parse(stxt3)
-            if json.hasPartNumberErrors?
+            if json.hasPartNumberErrors? or json.hasCommentErrors?
                 #we find out which parts are the problem, call addItems again
                 #on the rest and concatenate the fails to the new result
                 #returning everything together to our callback
@@ -172,7 +175,8 @@ class Newark extends RetailerInterface
                 fails       = []
                 retry_items = []
                 for k,v of json
-                    if k != 'hasPartNumberErrors'
+                    #the rest of the json items are the part numbers
+                    if k != 'hasPartNumberErrors' and k != 'hasCommentErrors'
                         fail_names.push(v[0])
                 for item in items
                     if item.part in fail_names
@@ -186,9 +190,9 @@ class Newark extends RetailerInterface
                         callback(result)
             else #success
                 if callback?
-                    callback({success: true, fails:[]})
+                    callback(result)
         , () =>
             if callback?
-                callback({success:false,fails:items})
+                callback({success:false,fails:items,warnings:result.warnings})
 
 exports.Newark = Newark

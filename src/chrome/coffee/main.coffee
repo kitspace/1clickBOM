@@ -29,17 +29,6 @@ chrome.runtime.onInstalled.addListener (details)->
             else
                 stored_settings.UK.Farnell = {site:'://uk.farnell.com'}
             browser.prefsSet({settings:stored_settings}, ()->)
-        chrome.notifications.onClicked.addListener (id) ->
-            if id == 'firefox'
-                chrome.tabs.create({url:'http://1clickBOM.com'})
-        chrome.notifications.create 'firefox',
-            type:'basic'
-            title:'1clickBOM for Firefox now available'
-            message:'Tell your friends, click to visit our site.'
-            iconUrl:"https://raw.githubusercontent.com/monostable/1clickBOM/\
-            a4b8344d79cdb5c0487c9b853f2d955b0ee924e8/readme_images/\
-            firefox_announce.png"
-            isClickable: true
 
 # tests only work in chrome currently, open a console on background and execute
 # Test() or test a specific module, e.g. Farnell, with Test('Farnell')

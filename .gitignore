@@ -8,3 +8,4 @@ firefox/*
 tmp.xpi
 build/*
 node_modules/*
+.~lock.*.*#
