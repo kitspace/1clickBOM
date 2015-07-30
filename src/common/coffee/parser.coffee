@@ -17,22 +17,40 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
+retailer_aliases =
+    'Farnell'     : 'Farnell'
+    'FEC'         : 'Farnell'
+    'Premier'     : 'Farnell'
+    'Digikey'     : 'Digikey'
+    'Digi-key'    : 'Digikey'
+    'Mouser'      : 'Mouser'
+    'RS'          : 'RS'
+    'RSOnline'    : 'RS'
+    'RS-Online'   : 'RS'
+    'RS-Delivers' : 'RS'
+    'RSDelivers'  : 'RS'
+    'Radio Spares': 'RS'
+    'RadioSpares' : 'RS'
+    'Newark'      : 'Newark'
+
+headings =
+    'reference'  : 'comment'
+    'references' : 'comment'
+    'line-note'  : 'comment'
+    'line note'  : 'comment'
+    'comment'    : 'comment'
+    'comments'   : 'comment'
+    'qty'        : 'quantity'
+    'quantity'   : 'quantity'
+
+#a case insensitive match
+lookup = (name, obj) ->
+    for key of obj
+        re = new RegExp(key, 'i')
+        if name.match(re)
+            return obj[key]
+
 checkValidItems =  (items_incoming, invalid) ->
-    retailer_aliases =
-        'Farnell'     : 'Farnell'
-        'FEC'         : 'Farnell'
-        'Premier'     : 'Farnell'
-        'Digikey'     : 'Digikey'
-        'Digi-key'    : 'Digikey'
-        'Mouser'      : 'Mouser'
-        'RS'          : 'RS'
-        'RSOnline'    : 'RS'
-        'RS-Online'   : 'RS'
-        'RS-Delivers' : 'RS'
-        'RSDelivers'  : 'RS'
-        'Radio Spares': 'RS'
-        'RadioSpares' : 'RS'
-        'Newark'      : 'Newark'
     items = []
     for item in items_incoming
         number = parseInt(item.quantity)
@@ -45,14 +63,8 @@ checkValidItems =  (items_incoming, invalid) ->
             invalid.push {item:item, reason:'Quantity is less than one'}
         else
             item.quantity = number
-            r = ''
-            #a case insensitive match to the aliases
-            for key of retailer_aliases
-                re = new RegExp(key, 'i')
-                if item.retailer.match(re)
-                    r = retailer_aliases[key]
-                    break
-            if  r == ''
+            r = lookup(item.retailer, retailer_aliases)
+            if not r?
                 invalid.push
                     item: item
                     reason: "Retailer '#{item.retailer}' is not known."
@@ -83,11 +95,12 @@ parseSimple = (rows) ->
                 invalid.push {item:item, reason: 'Part number is undefined.'}
             else
                 items.push(item)
-    {items, invalid} = checkValidItems(items, invalid)
+    return {items, invalid}
 
 parseTSV = (text) ->
     rows = text.split('\n')
     {items, invalid} = parseSimple(rows)
+    {items, invalid} = checkValidItems(items, invalid)
     return {items, invalid}
 
 exports.parseTSV = parseTSV
