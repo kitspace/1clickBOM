@@ -18,22 +18,21 @@
 # the Original Code is Kaspar Emanuel.
 
 checkValidItems =  (items_incoming, invalid) ->
-    retailer_aliases = {
-        'Farnell'     : 'Farnell',
-        'FEC'         : 'Farnell',
-        'Premier'     : 'Farnell',
-        'Digikey'     : 'Digikey',
-        'Digi-key'    : 'Digikey',
-        'Mouser'      : 'Mouser',
-        'RS'          : 'RS',
-        'RSOnline'    : 'RS',
-        'RS-Online'   : 'RS',
-        'RS-Delivers' : 'RS',
-        'RSDelivers'  : 'RS',
+    retailer_aliases =
+        'Farnell'     : 'Farnell'
+        'FEC'         : 'Farnell'
+        'Premier'     : 'Farnell'
+        'Digikey'     : 'Digikey'
+        'Digi-key'    : 'Digikey'
+        'Mouser'      : 'Mouser'
+        'RS'          : 'RS'
+        'RSOnline'    : 'RS'
+        'RS-Online'   : 'RS'
+        'RS-Delivers' : 'RS'
+        'RSDelivers'  : 'RS'
         'Radio Spares': 'RS'
         'RadioSpares' : 'RS'
         'Newark'      : 'Newark'
-    }
     items = []
     for item in items_incoming
         number = parseInt(item.quantity)
@@ -64,8 +63,7 @@ checkValidItems =  (items_incoming, invalid) ->
                 items.push(item)
     return {items, invalid}
 
-parseTSV = (text) ->
-    rows = text.split('\n')
+parseSimple = (rows) ->
     items = []
     invalid = []
     for row, i in rows
@@ -84,8 +82,12 @@ parseTSV = (text) ->
             else if !item.part
                 invalid.push {item:item, reason: 'Part number is undefined.'}
             else
-                items.push item
+                items.push(item)
     {items, invalid} = checkValidItems(items, invalid)
+
+parseTSV = (text) ->
+    rows = text.split('\n')
+    {items, invalid} = parseSimple(rows)
     return {items, invalid}
 
 exports.parseTSV = parseTSV
