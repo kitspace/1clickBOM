@@ -100,7 +100,28 @@ parseSimple = (rows) ->
     return {items, invalid}
 
 
-parseNamed = (rows, order) ->
+parseNamed = (rows, heading_order, retailer_order) ->
+    items = []
+    invalid = []
+    for row, i in rows
+        if row != ''
+            cells = row.split('\t')
+            for retailer,r_index in retailer_order
+                part = cells[r_index + 2]
+                if part? && part != ''
+                    item =
+                        comment  : cells[heading_order.indexOf('comment')]
+                        quantity : cells[heading_order.indexOf('quantity')]
+                        retailer : retailer
+                        part     : part
+                        row      : i + 1
+                    if !item.quantity
+                        invalid.push
+                            item:item
+                            reason: 'Quantity is undefined.'
+                    else
+                        items.push(item)
+    return {items, invalid}
 
 
 hasNamedColumns = (cells) ->
@@ -112,31 +133,24 @@ hasNamedColumns = (cells) ->
 
 
 getOrder = (cells) ->
-    order = []
-
-    possible_names = {}
-    for k,v of headings
-        possible_names[k] = v
-    for k,v of retailer_aliases
-        possible_names[k] = v
-
+    heading_order = []
+    retailer_order = []
     for cell in cells
-        heading = lookup(cell, possible_names)
+        heading = lookup(cell, headings)
+        retailer = lookup(cell, retailer_aliases)
         if heading?
-            order.push(heading)
+            heading_order.push(heading)
+        else if retailer?
+            retailer_order.push(retailer)
         else
             return {reason: "Unknown heading '#{cell}' for named column"}
 
-    hasRetailer = false
-    for n in order
-        if lookup(n, retailer_aliases)?
-            hasRetailer = true
-            break
-
-    if hasRetailer
-        return {order: order}
+    if heading_order.length != 2
+        return {reason: 'You need a line-note and a quantity column'}
+    else if retailer_order.length <= 0
+        return {reason: 'You need at least on retailer'}
     else
-        return {reason: "No retailer column in pasted data"}
+        return {heading_order:heading_order, retailer_order:retailer_order}
 
 
 parseTSV = (text) ->
@@ -148,13 +162,13 @@ parseTSV = (text) ->
             invalid:[{item: {row:1}, reason:'Invalid number of columns'}]
         }
     if hasNamedColumns(firstCells)
-        {order, reason} = getOrder(firstCells)
-        if not order?
+        {heading_order, retailer_order, reason} = getOrder(firstCells)
+        if not (heading_order? && retailer_order?)
             return {
                 items:[]
                 invalid:[{item: {row:1}, reason:reason}]
             }
-        {items, invalid} = parseNamed(rows[1..], order)
+        {items, invalid} = parseNamed(rows[1..], heading_order, retailer_order)
     else
         {items, invalid} = parseSimple(rows)
     {items, invalid} = checkValidItems(items, invalid)
