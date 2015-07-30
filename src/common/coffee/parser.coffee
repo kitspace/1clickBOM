@@ -143,17 +143,22 @@ getOrder = (cells) ->
         possible_names[k] = v
 
     for cell in cells
-        heading = lookup(cell, possible_names)
-        retailer = lookup(cell, retailer_aliases)
-        if retailer?
-            retailers.push(retailer)
-        if heading?
-            order.push(heading)
+        if cell == ''
+            #this is an empty column, it happen if you ctrl select several
+            #columns in a spreadsheet for example
+            order.push('')
         else
-            return {reason: "Unknown heading '#{cell}' for named column"}
+            heading = lookup(cell, possible_names)
+            retailer = lookup(cell, retailer_aliases)
+            if retailer?
+                retailers.push(retailer)
+            if heading?
+                order.push(heading)
+            else
+                return {reason: "Unknown heading '#{cell}' for named column"}
 
     if retailers.length <= 0
-        return {reason: 'You need at least on retailer'}
+        return {reason: 'You need at least one retailer'}
     else
         return {order:order, retailers:retailers}
 
