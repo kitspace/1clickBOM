@@ -49,6 +49,8 @@ lookup = (name, obj) ->
         re = new RegExp(key, 'i')
         if name.match(re)
             return obj[key]
+    #else
+    return null
 
 checkValidItems =  (items_incoming, invalid) ->
     items = []
@@ -97,10 +99,66 @@ parseSimple = (rows) ->
                 items.push(item)
     return {items, invalid}
 
+
+parseNamed = (rows, order) ->
+
+
+hasNamedColumns = (cells) ->
+    for cell in cells
+        if lookup(cell, headings)?
+            return true
+    #else
+    return false
+
+
+getOrder = (cells) ->
+    order = []
+
+    possible_names = {}
+    for k,v of headings
+        possible_names[k] = v
+    for k,v of retailer_aliases
+        possible_names[k] = v
+
+    for cell in cells
+        heading = lookup(cell, possible_names)
+        if heading?
+            order.push(heading)
+        else
+            return {reason: "Unknown heading '#{cell}' for named column"}
+
+    hasRetailer = false
+    for n in order
+        if lookup(n, retailer_aliases)?
+            hasRetailer = true
+            break
+
+    if hasRetailer
+        return {order: order}
+    else
+        return {reason: "No retailer column in pasted data"}
+
+
 parseTSV = (text) ->
     rows = text.split('\n')
-    {items, invalid} = parseSimple(rows)
+    firstCells = rows[0].split('\t')
+    if firstCells.length < 3 || firstCells.length > 7
+        return {
+            items:[]
+            invalid:[{item: {row:1}, reason:'Invalid number of columns'}]
+        }
+    if hasNamedColumns(firstCells)
+        {order, reason} = getOrder(firstCells)
+        if not order?
+            return {
+                items:[]
+                invalid:[{item: {row:1}, reason:reason}]
+            }
+        {items, invalid} = parseNamed(rows[1..], order)
+    else
+        {items, invalid} = parseSimple(rows)
     {items, invalid} = checkValidItems(items, invalid)
     return {items, invalid}
+
 
 exports.parseTSV = parseTSV
