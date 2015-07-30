@@ -55,10 +55,10 @@ lookup = (name, obj) ->
 checkValidItems =  (items_incoming, invalid) ->
     items = []
     for item in items_incoming
-        number = parseInt(item.quantity)
         if invalid.length > 10
             items = []
             break
+        number = parseInt(item.quantity)
         if isNaN(number)
             invalid.push {item:item, reason:'Quantity is not a number.'}
         else if number < 1
@@ -100,22 +100,22 @@ parseSimple = (rows) ->
     return {items, invalid}
 
 
-parseNamed = (rows, heading_order, retailer_order) ->
+parseNamed = (rows, order, retailers) ->
     items = []
     invalid = []
     for row, i in rows
         if row != ''
             cells = row.split('\t')
-            for retailer,r_index in retailer_order
-                part = cells[r_index + 2]
+            for retailer in retailers
+                part = cells[order.indexOf(retailer)]
                 if part? && part != ''
                     item =
-                        comment  : cells[heading_order.indexOf('comment')]
-                        quantity : cells[heading_order.indexOf('quantity')]
+                        comment  : cells[order.indexOf('comment')]
+                        quantity : cells[order.indexOf('quantity')]
                         retailer : retailer
                         part     : part
                         row      : i + 1
-                    if !item.quantity
+                    if not item.quantity?
                         invalid.push
                             item:item
                             reason: 'Quantity is undefined.'
@@ -133,24 +133,29 @@ hasNamedColumns = (cells) ->
 
 
 getOrder = (cells) ->
-    heading_order = []
-    retailer_order = []
+    order = []
+    retailers = []
+
+    possible_names = {}
+    for k,v of headings
+        possible_names[k] = v
+    for k,v of retailer_aliases
+        possible_names[k] = v
+
     for cell in cells
-        heading = lookup(cell, headings)
+        heading = lookup(cell, possible_names)
         retailer = lookup(cell, retailer_aliases)
+        if retailer?
+            retailers.push(retailer)
         if heading?
-            heading_order.push(heading)
-        else if retailer?
-            retailer_order.push(retailer)
+            order.push(heading)
         else
             return {reason: "Unknown heading '#{cell}' for named column"}
 
-    if heading_order.length != 2
-        return {reason: 'You need a line-note and a quantity column'}
-    else if retailer_order.length <= 0
+    if retailers.length <= 0
         return {reason: 'You need at least on retailer'}
     else
-        return {heading_order:heading_order, retailer_order:retailer_order}
+        return {order:order, retailers:retailers}
 
 
 parseTSV = (text) ->
@@ -162,13 +167,13 @@ parseTSV = (text) ->
             invalid:[{item: {row:1}, reason:'Invalid number of columns'}]
         }
     if hasNamedColumns(firstCells)
-        {heading_order, retailer_order, reason} = getOrder(firstCells)
-        if not (heading_order? && retailer_order?)
+        {order, retailers, reason} = getOrder(firstCells)
+        if not (order? && retailers?)
             return {
                 items:[]
                 invalid:[{item: {row:1}, reason:reason}]
             }
-        {items, invalid} = parseNamed(rows[1..], heading_order, retailer_order)
+        {items, invalid} = parseNamed(rows[1..], order, retailers)
     else
         {items, invalid} = parseSimple(rows)
     {items, invalid} = checkValidItems(items, invalid)
