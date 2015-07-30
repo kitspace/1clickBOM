@@ -54,7 +54,9 @@ checkValidItems =  (items_incoming, invalid) ->
                     r = retailer_aliases[key]
                     break
             if  r == ''
-                invalid.push({item:item, reason: 'Retailer \'' + item.retailer + '\' is not known.'})
+                invalid.push
+                    item: item
+                    reason: "Retailer '#{item.retailer}' is not known."
             else
                 item.retailer = r
                 if item.retailer != 'Digikey'
@@ -62,14 +64,19 @@ checkValidItems =  (items_incoming, invalid) ->
                 items.push(item)
     return {items, invalid}
 
-parseTSV =  (text) ->
-    rows = text.split '\n'
+parseTSV = (text) ->
+    rows = text.split('\n')
     items = []
     invalid = []
     for row, i in rows
         if row != ''
-            cells = row.split '\t'
-            item = {comment:cells[0], quantity:cells[1], retailer:cells[2], part:cells[3], row:i + 1}
+            cells = row.split('\t')
+            item =
+                comment  : cells[0]
+                quantity : cells[1]
+                retailer : cells[2]
+                part     : cells[3]
+                row      : i + 1
             if !item.quantity
                 invalid.push {item:item, reason: 'Quantity is undefined.'}
             else if !item.retailer
