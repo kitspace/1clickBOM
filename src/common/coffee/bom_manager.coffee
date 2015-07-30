@@ -63,7 +63,7 @@ bom_manager =
             if invalid.length > 0
                 for inv in invalid
                     title = 'Could not parse row '
-                    title += inv.item.row
+                    title += inv.row
                     message = inv.reason + '\n'
                     browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning.png'}, () ->
                     badge.setDecaying('Warn','#FF8A00', priority=2)

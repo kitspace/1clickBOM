@@ -60,15 +60,15 @@ checkValidItems =  (items_incoming, invalid) ->
             break
         number = parseInt(item.quantity)
         if isNaN(number)
-            invalid.push {item:item, reason:'Quantity is not a number.'}
+            invalid.push {row:item.row, reason:'Quantity is not a number.'}
         else if number < 1
-            invalid.push {item:item, reason:'Quantity is less than one'}
+            invalid.push {row:item.row, reason:'Quantity is less than one'}
         else
             item.quantity = number
             r = lookup(item.retailer, retailer_aliases)
             if not r?
                 invalid.push
-                    item: item
+                    row: item.row
                     reason: "Retailer '#{item.retailer}' is not known."
             else
                 item.retailer = r
@@ -90,11 +90,11 @@ parseSimple = (rows) ->
                 part     : cells[3]
                 row      : i + 1
             if !item.quantity
-                invalid.push {item:item, reason: 'Quantity is undefined.'}
+                invalid.push {row:item.row, reason: 'Quantity is undefined.'}
             else if !item.retailer
-                invalid.push {item:item, reason: 'Retailer is undefined.'}
+                invalid.push {row:item.row, reason: 'Retailer is undefined.'}
             else if !item.part
-                invalid.push {item:item, reason: 'Part number is undefined.'}
+                invalid.push {row:item.row, reason: 'Part number is undefined.'}
             else
                 items.push(item)
     return {items, invalid}
@@ -117,7 +117,7 @@ parseNamed = (rows, order, retailers) ->
                         row      : i + 1
                     if not item.quantity?
                         invalid.push
-                            item:item
+                            row:item.row
                             reason: 'Quantity is undefined.'
                     else
                         items.push(item)
@@ -155,7 +155,7 @@ getOrder = (cells) ->
             if heading?
                 order.push(heading)
             else
-                return {reason: "Unknown heading '#{cell}' for named column"}
+                return {reason: "Unknown column-heading '#{cell}'"}
 
     if retailers.length <= 0
         return {reason: 'You need at least one retailer'}
@@ -169,14 +169,14 @@ parseTSV = (text) ->
     if firstCells.length < 3 || firstCells.length > 7
         return {
             items:[]
-            invalid:[{item: {row:1}, reason:'Invalid number of columns'}]
+            invalid:[{row:1, reason:'Invalid number of columns'}]
         }
     if hasNamedColumns(firstCells)
         {order, retailers, reason} = getOrder(firstCells)
         if not (order? && retailers?)
             return {
                 items:[]
-                invalid:[{item: {row:1}, reason:reason}]
+                invalid:[{row:1, reason:reason}]
             }
         {items, invalid} = parseNamed(rows[1..], order, retailers)
     else
