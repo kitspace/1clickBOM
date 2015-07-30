@@ -60,12 +60,16 @@ If you need any help or think you found a bug please get in touch via
 
 ## Roadmap ##
 
-* 1.0
+* 0.3
     * Multiple retailers per item
     * Named columns
+
+* 0.4
     * Preferred retailer setting
-    * Display cart status
     * Paste directly to cart
+    * Display cart status
+
+* 1.0
     * 1clickBOM site interaction
 
 * 2.0
