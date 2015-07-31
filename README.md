@@ -10,6 +10,8 @@ retailers.
 
 ## News ##
 
+#### - [Named columns are now supported](#usage)
+
 #### - [1clickBOM is now available for Firefox][20]
 
 #### - [I gave a talk about 1clickBOM at FOSDEM][12]
@@ -30,23 +32,23 @@ Check the [roadmap][1] for more details on planned features.
 
 ### Adding Items ###
 
-In your `.tsv` or spreadsheet you must have a column for line-note, one for the
-quantity and at least one retailer. Column titles are interpreted in the
-following way by 1clickBOM. Capitalisation is ignored.
+In your tab-seperated values (`.tsv`) or spreadsheet you must have a column for
+line-note, one for the quantity and at least one retailer. Column titles are
+interpreted in the following way by 1clickBOM. Capitalisation is ignored.
 
-     reference    = line-note
-     references   = line-note
-     line-note    = line-note
-     line note    = line-note
-     comment      = line-note
-     comments     = line-note
-     qty          = quantity
-     quantity     = quantity
-     farnell      = Farnell
-     digikey      = Digikey
-     mouser       = Mouser
-     rs           = RS
-     newark       = Newark
+     reference  = line-note
+     references = line-note
+     line-note  = line-note
+     line note  = line-note
+     comment    = line-note
+     comments   = line-note
+     qty        = quantity
+     quantity   = quantity
+     farnell    = Farnell
+     digikey    = Digikey
+     mouser     = Mouser
+     rs         = RS
+     newark     = Newark
 
 ![Load from page][3]
 
@@ -66,11 +68,12 @@ using the buttons on the popup. You can also quickly view and empty your carts.
 
 ### Legacy BOM format ###
 
-The format used prior to version 0.3 simply had the items in the following order:
+The format used prior to version `0.3` simply had the items in the following order:
 
     line-note | quantity | retailer | part-number
 
-This format is still supported but deprecated and will be phased out by version 1.0.
+This format is still supported but deprecated and will be phased out by version
+`1.0`.
 
 ## Issues ##
 
