@@ -23,7 +23,7 @@
 </div></center>
 <h1 id="section-2"></h1>
 <center><p>
-<a id="chromelink" href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi"><img id="chromeimage" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" alt="Available on Chrome" /></a><a href=https://addons.mozilla.org/firefox/downloads/file/331354/1clickbom-0.2.1-fx.xpi><img alt="Add to Firefox" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png"></a>
+<a id="chromelink" href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi"><img id="chromeimage" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" alt="Available on Chrome" /></a><a href=https://addons.mozilla.org/firefox/downloads/file/332724/1clickbom-0.3.0-fx.xpi?src=dp-btn-primary><img alt="Add to Firefox" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png"></a>
 </p></center>
 <script type"text/javascript">
     //fix favicon on firefox (due to github.io hosting)
@@ -55,16 +55,31 @@
 <p>Check the <a href="#roadmap">roadmap</a> for more details on planned features.</p>
 <h2 id="usage">Usage</h2>
 <h3 id="adding-items">Adding Items</h3>
-<p>You should arrange items in your spreadsheet in the following order.</p>
-<pre><code>line-note | quantity | retailer | part-number</code></pre>
-<p>Line-note can be anything you like. I normally use schematic references. Retailer is a name of one of the supported retailers and part-number is the part-number specific to that retailer. See the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv">example tsv</a>.</p>
-<p>In your spreadsheet select the relevant columns, copy and then click the paste button on the 1clickBOM popup.</p>
+<p>In your <code>.tsv</code> or spreadsheet you must have a column for line-note, one for the quantity and at least one retailer. Column titles are interpreted in the following way by 1clickBOM. Capitalisation is ignored.</p>
+<pre><code> reference    = line-note
+ references   = line-note
+ line-note    = line-note
+ line note    = line-note
+ comment      = line-note
+ comments     = line-note
+ qty          = quantity
+ quantity     = quantity
+ farnell      = Farnell
+ digikey      = Digikey
+ mouser       = Mouser
+ rs           = RS
+ newark       = Newark</code></pre>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" /><p class="caption">Load from page</p>
 </div>
-<p>Alternatively, if you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Press the blue button in the popup and the data will be added. Try this on the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv">example tsv</a> or the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/bus_pirate.tsv">Bus Pirate tsv</a> once you have the extension installed.</p>
+<p>If you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Clicking the blue button will load the data into 1clickBOM. Alternatively you can paste from any spreadsheet (Excel, OpenOffice, LibreOffice, etc.) by selecting the relevant columns copying them and then clicking the paste button on 1clickBOM's popup.</p>
+<p>See the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv">example tsv</a> and the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/bus_pirate.tsv">Bus Pirate tsv</a>.</p>
 <h3 id="lets-go-shopping">Let's go shopping!</h3>
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
+<h3 id="legacy-bom-format">Legacy BOM format</h3>
+<p>The format used prior to version 0.3 simply had the items in the following order:</p>
+<pre><code>line-note | quantity | retailer | part-number</code></pre>
+<p>This format is still supported but deprecated and will be phased out by version 1.0.</p>
 <h2 id="issues">Issues</h2>
 <p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">GitHub</a> or <script type="text/javascript">
 <!--
@@ -74,11 +89,6 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 </script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript>.</p>
 <h2 id="roadmap">Roadmap</h2>
 <ul>
-<li>0.3
-<ul>
-<li>Multiple retailers per item</li>
-<li>Named columns</li>
-</ul></li>
 <li>0.4
 <ul>
 <li>Preferred retailer setting</li>
@@ -88,6 +98,7 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 <li>1.0
 <ul>
 <li>1clickBOM site interaction</li>
+<li>Remove legacy BOM format support</li>
 </ul></li>
 <li>2.0
 <ul>
