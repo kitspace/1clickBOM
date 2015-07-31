@@ -30,29 +30,47 @@ Check the [roadmap][1] for more details on planned features.
 
 ### Adding Items ###
 
-You should arrange items in your spreadsheet in the following order.
+In your `.tsv` or spreadsheet you must have a column for line-note, one for the
+quantity and at least one retailer. Column titles are interpreted in the
+following way by 1clickBOM. Capitalisation is ignored.
 
-    line-note | quantity | retailer | part-number
-
-Line-note can be anything you like. I normally use schematic references.
-Retailer is a name of one of the supported retailers and part-number is the
-part-number specific to that retailer. See the [example tsv][2].
-
-In your spreadsheet select the relevant columns, copy and then click the paste
-button on the 1clickBOM popup.
+     reference    = line-note
+     references   = line-note
+     line-note    = line-note
+     line note    = line-note
+     comment      = line-note
+     comments     = line-note
+     qty          = quantity
+     quantity     = quantity
+     farnell      = Farnell
+     digikey      = Digikey
+     mouser       = Mouser
+     rs           = RS
+     newark       = Newark
 
 ![Load from page][3]
 
-Alternatively, if you visit a page that ends in `.tsv` and has data in the
-right format available 1clickBOM will show a blue badge and button with an
-arrow. Press the blue button in the popup and the data will be added. Try this
-on the [example tsv][2] or the [Bus Pirate tsv][21] once you have the extension
-installed.
+If you visit a page that ends in `.tsv` and has data in the right format
+available 1clickBOM will show a blue badge and button with an arrow. Clicking
+the blue button will load the data into 1clickBOM.  Alternatively you can paste
+from any spreadsheet (Excel, OpenOffice, LibreOffice, etc.) by selecting the
+relevant columns copying them and then clicking the paste button on 1clickBOM's
+popup.
+
+See the [example tsv][2] and the [Bus Pirate tsv][21].
 
 ### Let's go shopping! ###
 
 Once the data is added you can use 1clickBOM to add the items to your carts
 using the buttons on the popup. You can also quickly view and empty your carts.
+
+### Legacy BOM format ###
+
+The format used prior to version 0.3 simply had the items in the following order:
+
+    line-note | quantity | retailer | part-number
+
+This format is still supported but deprecated and will be phased out by version 1.0.
 
 ## Issues ##
 
@@ -61,10 +79,6 @@ If you need any help or think you found a bug please get in touch via
 
 ## Roadmap ##
 
-* 0.3
-    * Multiple retailers per item
-    * Named columns
-
 * 0.4
     * Preferred retailer setting
     * Paste directly to cart
@@ -72,6 +86,7 @@ If you need any help or think you found a bug please get in touch via
 
 * 1.0
     * 1clickBOM site interaction
+    * Remove legacy BOM format support
 
 * 2.0
     * Allied, Arrow, AVNet, Conrad and Rapid
