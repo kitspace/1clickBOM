@@ -41,6 +41,7 @@
 <h1 id="section-3"></h1>
 <p>1-click BOM is a browser extension that fills your shopping carts for you on sites like Digikey and Mouser, you simply paste from a spreadsheet or visit an online <code>.tsv</code> file. This way you can keep one bill of materials (BOM) that lets you and people you share the BOM with quickly purchase items from multiple retailers.</p>
 <h2 id="news">News</h2>
+<h4 id="named-columns-are-now-supported">- <a href="#usage">Named columns are now supported</a></h4>
 <h4 id="clickbom-is-now-available-for-firefox20">- <a href="https://addons.mozilla.org/en-US/firefox/addon/1clickbom/">1clickBOM is now available for Firefox</a></h4>
 <h4 id="i-gave-a-talk-about-1clickbom-at-fosdem12">- <a href="http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4">I gave a talk about 1clickBOM at FOSDEM</a></h4>
 <h2 id="which-retailers">Which retailers?</h2>
@@ -55,20 +56,20 @@
 <p>Check the <a href="#roadmap">roadmap</a> for more details on planned features.</p>
 <h2 id="usage">Usage</h2>
 <h3 id="adding-items">Adding Items</h3>
-<p>In your <code>.tsv</code> or spreadsheet you must have a column for line-note, one for the quantity and at least one retailer. Column titles are interpreted in the following way by 1clickBOM. Capitalisation is ignored.</p>
-<pre><code> reference    = line-note
- references   = line-note
- line-note    = line-note
- line note    = line-note
- comment      = line-note
- comments     = line-note
- qty          = quantity
- quantity     = quantity
- farnell      = Farnell
- digikey      = Digikey
- mouser       = Mouser
- rs           = RS
- newark       = Newark</code></pre>
+<p>In your tab-seperated values (<code>.tsv</code>) or spreadsheet you must have a column for line-note, one for the quantity and at least one retailer. Column titles are interpreted in the following way by 1clickBOM. Capitalisation is ignored.</p>
+<pre><code> reference  = line-note
+ references = line-note
+ line-note  = line-note
+ line note  = line-note
+ comment    = line-note
+ comments   = line-note
+ qty        = quantity
+ quantity   = quantity
+ farnell    = Farnell
+ digikey    = Digikey
+ mouser     = Mouser
+ rs         = RS
+ newark     = Newark</code></pre>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" /><p class="caption">Load from page</p>
 </div>
@@ -77,9 +78,9 @@
 <h3 id="lets-go-shopping">Let's go shopping!</h3>
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
 <h3 id="legacy-bom-format">Legacy BOM format</h3>
-<p>The format used prior to version 0.3 simply had the items in the following order:</p>
+<p>The format used prior to version <code>0.3</code> simply had the items in the following order:</p>
 <pre><code>line-note | quantity | retailer | part-number</code></pre>
-<p>This format is still supported but deprecated and will be phased out by version 1.0.</p>
+<p>This format is still supported but deprecated and will be phased out by version <code>1.0</code>.</p>
 <h2 id="issues">Issues</h2>
 <p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">GitHub</a> or <script type="text/javascript">
 <!--
