@@ -82,13 +82,22 @@ If you need any help or think you found a bug please get in touch via
 ## Roadmap ##
 
 * 0.4
+    * Rework UI adding overview
+    * Add a details page
+    * Add auto-fill-out function (search Octopart)
+    * Support manufacturer and manufacturer part number fields
+    * Export BOM
+
+* 0.5
+    * Add button to pages with BOM data
+
+* 1.0
+    * Remove legacy BOM format support
+
+* 1.1
     * Preferred retailer setting
     * Paste directly to cart
     * Display cart status
-
-* 1.0
-    * 1clickBOM site interaction
-    * Remove legacy BOM format support
 
 * 2.0
     * Allied, Arrow, AVNet, Conrad and Rapid
@@ -96,7 +105,6 @@ If you need any help or think you found a bug please get in touch via
     * Autofind same items from different vendors
     * Display cart summaries
     * Allow adding components to BOM from the component page
-    * Export BOM
 
 * 3.0
     * 3D-chip-printer support
