@@ -40,8 +40,8 @@ class RetailerInterface
                 data.additem_params = settings.additem_params
             if (settings.name?)
                 data.name = settings.name
-            if (settings.interface_name?)
-                data.interface_name = settings.interface_name
+            if (settings.name?)
+                data.name = settings.name
             if (settings.language?)
                 data.language = settings.language
 
@@ -66,8 +66,7 @@ class RetailerInterface
             @site = data.sites[country_code_lookedup]
 
         @additem_params = data.additem_params
-        @name           = name + ' ' + country_code_lookedup
-        @interface_name = name
+        @name           = name
         @adding_items   = false
         @clearing_cart  = false
         @icon_src       = 'https://www.google.com/s2/favicons?domain=http' + @site
@@ -79,9 +78,9 @@ class RetailerInterface
             failure_md5_ff     = '0dbc42f9ddbc4a887493dd2dcc50a78a'
             failure_md5_chrome = '6e2001c87afacf376c7df4a011376511'
             if md == failure_md5_chrome || md == failure_md5_ff
-                @icon_src = browser.getURL("images/#{@interface_name.toLowerCase()}.ico")
+                @icon_src = browser.getURL("images/#{@name.toLowerCase()}.ico")
         , () =>
-            @icon_src = browser.getURL("images/#{@interface_name.toLowerCase()}.ico")
+            @icon_src = browser.getURL("images/#{@name.toLowerCase()}.ico")
         if callback?
             callback()
 

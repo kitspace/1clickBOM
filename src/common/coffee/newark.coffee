@@ -158,7 +158,7 @@ class Newark extends RetailerInterface
             params += encodeURIComponent(item.quantity) + ','
             if item.comment.length > 30
                 result.warnings.push("Truncated line-note when adding
-                    #{@interface_name} item to cart: #{item.comment}")
+                    #{@name} item to cart: #{item.comment}")
             params += encodeURIComponent(item.comment.substr(0,30)) + '\n'
         post url, params, {}, (event) =>
             stxt = event.target.responseText.split('\n')

@@ -28,6 +28,7 @@ http       = require './http'
 {badge}    = require './badge'
 
 bom_manager =
+    retailers: [Digikey, Farnell, Mouser, RS, Newark]
     init: (callback) ->
         @filling_carts  = false
         @emptying_carts = false
@@ -36,7 +37,7 @@ bom_manager =
             if (!country)
                 country = 'Other'
             count = 5
-            for retailer_interface in [Digikey, Farnell, Mouser, RS, Newark]
+            for retailer_interface in @retailers
                 retailer = retailer_interface.name
                 if(stored_settings? && stored_settings[country]? && stored_settings[country][retailer]?)
                     setting_values = stored_settings[country][retailer]
@@ -52,49 +53,81 @@ bom_manager =
         browser.storageGet ['bom'], ({bom:bom}) =>
             if not bom
                 bom = {}
+            if not bom.retailers
+                bom.retailers = {}
+            if not bom.items
+                bom.items = []
             callback(bom)
 
     addToBOM: (text, callback) ->
         {items, invalid, warnings} = parseTSV(text)
+        if invalid.length > 0
+            for inv in invalid
+                title = 'Could not parse row '
+                title += inv.row
+                message = inv.reason + '\n'
+                browser.notificationsCreate
+                    type:'basic'
+                    title:title
+                    message:message
+                    iconUrl:'/images/warning.png'
+                badge.setDecaying('Warn','#FF8A00', priority=2)
+        else if items.length == 0
+            title = 'Nothing pasted '
+            message = 'Clipboard is empty'
+            browser.notificationsCreate
+                type:'basic'
+                title:title
+                message:message
+                iconUrl:'/images/warning.png'
+            badge.setDecaying('Warn','#FF8A00', priority=2)
+        else if warnings?.length > 0
+            for w in warnings
+                title = w.title
+                message = w.message
+                browser.notificationsCreate
+                    type:'basic'
+                    title:title
+                    message:message
+                    iconUrl:'/images/warning.png'
+                badge.setDecaying('Warn','#FF8A00', priority=2)
+        else if items.length > 0
+            badge.setDecaying('OK','#00CF0F')
         @_add_to_bom(items, invalid, warnings, callback)
+
+    _to_retailers: (items) ->
+        r = {}
+        for item in items
+            for retailer,part of item.retailers
+                if part != ''
+                    if not r[retailer]?
+                        r[retailer] = []
+                    r[retailer].push
+                        part     : part
+                        quantity : item.quantity
+                        comment  : item.comment
+        return r
 
     _add_to_bom: (items, invalid, warnings, callback) ->
         @getBOM (bom) =>
-            if invalid.length > 0
-                for inv in invalid
-                    title = 'Could not parse row '
-                    title += inv.row
-                    message = inv.reason + '\n'
-                    browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning.png'}, () ->
-                    badge.setDecaying('Warn','#FF8A00', priority=2)
-            else if items.length == 0
-                title = 'Nothing pasted '
-                message = 'Clipboard is empty'
-                browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning.png'}, () ->
-                badge.setDecaying('Warn','#FF8A00', priority=2)
-            else if warnings?.length > 0
-                for w in warnings
-                    title = w.title
-                    message = w.message
-                    browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning.png'}, () ->
-                    badge.setDecaying('Warn','#FF8A00', priority=2)
-            else if items.length > 0
-                badge.setDecaying('OK','#00CF0F')
-            for item in items
-                if item.retailer not of bom
-                    bom[item.retailer] = []
+            retailers = @_to_retailers(items)
+            bom.items.concat(items)
+            for retailer,items of retailers
+                if retailer not of bom.retailers
+                    bom.retailers[retailer] = []
                 existing = false
-                for existing_item in bom[item.retailer]
-                    if existing_item.part == item.part && existing_item.retailer == item.retailer
-                        existing_item.quantity += item.quantity
-                        if existing_item.comment != item.comment
-                            existing_item.comment  += ',' + item.comment
-                        existing = true
-                        break
-                if not existing
-                    bom[item.retailer].push(item)
+                for item in items
+                    for existing_item in bom.retailers[retailer]
+                        if existing_item.part == item.part
+                            existing_item.quantity += item.quantity
+                            if existing_item.comment != item.comment
+                                existing_item.comment  += ',' + item.comment
+                            existing = true
+                            break
+                    if not existing
+                        bom.retailers[retailer].push(item)
             over = []
-            for retailer,lines of bom
+            for retailer,lines of bom.retailers
                 if lines.length > 100
                     over.push(retailer)
             if over.length > 0
@@ -151,10 +184,10 @@ bom_manager =
         @filling_carts = true
         big_result = {success:true, fails:[]}
         browser.storageGet ['bom'], ({bom:bom}) =>
-            count = Object.keys(bom).length
-            for retailer of bom
-                @interfaces[retailer].addItems bom[retailer], (result, interf, items) =>
-                    @notifyFillCart(items, interf.interface_name, result)
+            count = Object.keys(bom.retailers).length
+            for retailer of bom.retailers
+                @interfaces[retailer].addItems bom.retailers[retailer], (result, interf, items) =>
+                    @notifyFillCart(items, interf.name, result)
                     count--
                     big_result.success &&= result.success
                     big_result.fails = big_result.fails.concat(result.fails)
@@ -167,8 +200,8 @@ bom_manager =
 
     fillCart: (retailer, callback)->
         browser.storageGet ['bom'], ({bom:bom}) =>
-            @interfaces[retailer].addItems bom[retailer], (result) =>
-                @notifyFillCart bom[retailer], retailer, result
+            @interfaces[retailer].addItems bom.retailers[retailer], (result) =>
+                @notifyFillCart bom.retailers[retailer], retailer, result
                 callback(result)
 
     emptyCarts: (callback, callbackEveryRetailer)->
@@ -176,8 +209,8 @@ bom_manager =
         big_result = {success: true}
         browser.storageGet ['bom'], ({bom:bom}) =>
             if bom?
-                count = Object.keys(bom).length
-                for retailer of bom
+                count = Object.keys(bom.retailers).length
+                for retailer of bom.retailers
                     @emptyCart retailer, (result, interf) =>
                         count--
                         big_result.success &&= result.success
@@ -200,7 +233,7 @@ bom_manager =
 
     openCarts: ()->
         browser.storageGet ['bom'], ({bom:bom}) =>
-            for retailer of bom
+            for retailer of bom.retailers
                 @openCart(retailer)
 
     openCart: (retailer)->

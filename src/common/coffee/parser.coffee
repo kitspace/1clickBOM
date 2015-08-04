@@ -66,11 +66,6 @@ checkValidItems =  (items_incoming, invalid, warnings) ->
         else
             item.quantity = number
             item.retailers.Digikey = item.retailers.Digikey.replace(/-/g, '')
-            #for retailer,part of item.retailers
-            #    if part == ''
-            #        warnings.push
-            #            title:"'#{item.comment}' is not given for #{retailer}"
-            #            message:"To try and find the parts press the auto fillout button."
             items.push(item)
     return {items, invalid, warnings}
 
@@ -115,7 +110,12 @@ parseNamed = (rows, order, retailers) ->
         if row != ''
             cells = row.split('\t')
             rs = () ->
-                r = {}
+                r =
+                    Digikey : ''
+                    Mouser  : ''
+                    RS      : ''
+                    Farnell : ''
+                    Newark  : ''
                 for retailer in retailers
                     r["#{retailer}"] = cells[order.indexOf(retailer)]
                 return r
@@ -180,10 +180,14 @@ parseTSV = (text) ->
     rows = text.split('\n')
     firstCells = rows[0].split('\t')
     warnings = []
-    if firstCells.length < 3
+    l = firstCells.length
+    if l < 3
         return {
             items:[]
-            invalid:[{row:1, reason:'Invalid number of columns'}]
+            invalid:
+                row:1
+                reason:"Only #{l} column#{if l > 1 then 's' else ''}.
+                    At least 3 are required."
         }
     if hasNamedColumns(firstCells)
         {order, retailers, reason, warnings} = getOrder(firstCells)

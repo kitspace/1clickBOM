@@ -83,12 +83,12 @@ exports.background = (messenger) ->
             if messenger.resizePopup?
                 width  = 88
                 height = 46
-                nRetailers = Object.keys(bom).length
+                nRetailers = Object.keys(bom.retailers).length
                 if nRetailers > 0
                     maxItems = 0
                     maxLines = 0
-                    for retailer_name of bom
-                        items = bom[retailer_name]
+                    for retailer_name of bom.retailers
+                        items = bom.retailers[retailer_name]
                         no_of_items = 0
                         for item in items
                             no_of_items += item.quantity

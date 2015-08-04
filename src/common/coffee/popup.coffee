@@ -49,12 +49,12 @@ button_LoadFromPage.addEventListener 'click', () ->
     messenger.send('loadFromPage')
 
 hideOrShow = (bom, onDotTSV) ->
-    button_Clear.hidden        = !Boolean(Object.keys(bom).length)
-    button_FillCarts.hidden    = !Boolean(Object.keys(bom).length)
-    button_EmptyCarts.hidden   = !Boolean(Object.keys(bom).length)
-    button_OpenCartTabs.hidden = !Boolean(Object.keys(bom).length)
+    button_Clear.hidden        = !Boolean(Object.keys(bom.retailers).length)
+    button_FillCarts.hidden    = !Boolean(Object.keys(bom.retailers).length)
+    button_EmptyCarts.hidden   = !Boolean(Object.keys(bom.retailers).length)
+    button_OpenCartTabs.hidden = !Boolean(Object.keys(bom.retailers).length)
     button_LoadFromPage.hidden = !onDotTSV
-    element_Bom.hidden         = !Boolean(Object.keys(bom).length)
+    element_Bom.hidden         = !Boolean(Object.keys(bom.retailers).length)
 
 startSpinning = (link) ->
     td = link.parentNode
@@ -91,8 +91,7 @@ render = (state) ->
         element_Table.removeChild(element_Table.lastChild)
     any_adding   = false
     any_emptying = false
-    for retailer_name of bom
-        items = bom[retailer_name]
+    for retailer_name,items of bom.retailers
         retailer = state.bom_manager.interfaces[retailer_name]
         no_of_items = 0
         for item in items
@@ -104,7 +103,7 @@ render = (state) ->
         icon = document.createElement('img')
         icon.src = retailer.icon_src
         td_0.appendChild(icon)
-        td_0.innerHTML += retailer.interface_name
+        td_0.innerHTML += retailer.name
         td_0.id = 'icon'
         tr.appendChild(td_0)
 
@@ -126,8 +125,8 @@ render = (state) ->
         for i in  [0..2]
             td = document.createElement('td')
             a = document.createElement('a')
-            a.value = retailer.interface_name
-            a.title = titles[i] + retailer.interface_name + ' cart'
+            a.value = retailer.name
+            a.title = titles[i] + retailer.name + ' cart'
             a.href = '#'
             span = document.createElement('span')
             span.className = 'button_icon'
