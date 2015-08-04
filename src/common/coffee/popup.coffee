@@ -26,6 +26,7 @@ button_FillCarts    = document.querySelector('button#fill_carts')
 button_EmptyCarts   = document.querySelector('button#empty_carts')
 button_OpenCartTabs = document.querySelector('button#open_cart_tabs')
 button_LoadFromPage = document.querySelector('button#load_from_page')
+button_FillOut      = document.querySelector('button#fillout')
 button_Paste        = document.querySelector('button#paste')
 
 button_Clear.addEventListener 'click', () ->

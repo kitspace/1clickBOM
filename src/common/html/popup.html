@@ -66,7 +66,6 @@ span.button_text {
     font-size:11px;
 }
 table#bom_table {
-    margin-top:30px;
     background: white;
     border-collapse:collapse;
     border: none;
@@ -112,12 +111,11 @@ button#clear {
 button#paste {
     float: right;
 }
-
-button#load_from_page {
-    float: right;
+button#fillout {
 }
 
 button#load_from_page {
+    float: right;
     background-color: #DDDDDD;
     background-repeat: repeat-x;
     background-image: linear-gradient(to top,#4444E6,#0000EE);
@@ -152,6 +150,14 @@ button#load_from_page:active {
         <button class=big_buttons id="paste" title="Paste BOM data">
             <span class=button_icon>&#xf220;</span>
             <span class=button_text> Paste</span>
+        </button>
+        <button class=big_buttons id="details" title="Paste BOM data">
+            <span class=button_icon>&#xf18d;</span>
+            <span class=button_text> View Details</span>
+        </button>
+        <button class=big_buttons id="fillout" title="Attempt to auto-fillout retailer parts">
+            <span class=button_icon>&#xf143;</span>
+            <span class=button_text> Auto-Fillout</span>
         </button>
     </div>
 
