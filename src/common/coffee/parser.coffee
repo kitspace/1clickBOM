@@ -78,9 +78,13 @@ parseSimple = (rows) ->
             retailer = lookup(cells[2], retailer_aliases)
             if not retailer
                 if cells[2] == ''
-                    invalid.push {row:i + 1, reason: "Retailer is not defined."}
+                    invalid.push
+                        row:i + 1
+                        reason: "Retailer is not defined."
                 else
-                    invalid.push {row:i + 1, reason: "Retailer '#{cells[2]}' is not known."}
+                    invalid.push
+                        row:i + 1
+                        reason: "Retailer '#{cells[2]}' is not known."
             else
                 retailers =
                     Digikey : ''
@@ -95,9 +99,13 @@ parseSimple = (rows) ->
                     retailers : retailers
                     row       : i + 1
                 if !item.quantity
-                    invalid.push {row:item.row, reason: 'Quantity is undefined.'}
+                    invalid.push
+                        row:item.row
+                        reason: 'Quantity is undefined.'
                 else if !item.retailers["#{retailer}"]
-                    invalid.push {row:item.row, reason: 'Part number is undefined.'}
+                    invalid.push
+                        row:item.row
+                        reason: 'Part number is undefined.'
                 else
                     items.push(item)
     return {items, invalid}
@@ -184,10 +192,11 @@ parseTSV = (text) ->
     if l < 3
         return {
             items:[]
-            invalid:
+            invalid:[
                 row:1
                 reason:"Only #{l} column#{if l > 1 then 's' else ''}.
                     At least 3 are required."
+            ]
         }
     if hasNamedColumns(firstCells)
         {order, retailers, reason, warnings} = getOrder(firstCells)
