@@ -37,4 +37,6 @@ window.Test = (module)->
     url += '?module=' + module if module?
     window.open(url)
 
+window.fillout = require('./fillout')
+
 background(messenger)
