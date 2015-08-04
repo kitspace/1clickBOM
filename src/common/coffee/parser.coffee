@@ -65,20 +65,13 @@ checkValidItems =  (items_incoming, invalid, warnings) ->
             invalid.push {row:item.row, reason:'Quantity is less than one'}
         else
             item.quantity = number
-            r = lookup(item.retailer, retailer_aliases)
-            if not r?
-                invalid.push
-                    row: item.row
-                    reason: "Retailer '#{item.retailer}' is not known."
-            else
-                item.retailer = r
-                if item.retailer != 'Digikey'
-                    item.part = item.part.replace(/-/g, '')
-                if item.part == ''
-                    warnings.push
-                        title:"'#{item.comment}' is not given for Digikey"
-                        message:"To try and find the parts press the auto fillout button"
-                items.push(item)
+            item.retailers.Digikey = item.retailers.Digikey.replace(/-/g, '')
+            #for retailer,part of item.retailers
+            #    if part == ''
+            #        warnings.push
+            #            title:"'#{item.comment}' is not given for #{retailer}"
+            #            message:"To try and find the parts press the auto fillout button."
+            items.push(item)
     return {items, invalid, warnings}
 
 parseSimple = (rows) ->
@@ -87,20 +80,31 @@ parseSimple = (rows) ->
     for row, i in rows
         if row != ''
             cells = row.split('\t')
-            item =
-                comment  : cells[0]
-                quantity : cells[1]
-                retailer : cells[2]
-                part     : cells[3]
-                row      : i + 1
-            if !item.quantity
-                invalid.push {row:item.row, reason: 'Quantity is undefined.'}
-            else if !item.retailer
-                invalid.push {row:item.row, reason: 'Retailer is undefined.'}
-            else if !item.part
-                invalid.push {row:item.row, reason: 'Part number is undefined.'}
+            retailer = lookup(cells[2], retailer_aliases)
+            if not retailer
+                if cells[2] == ''
+                    invalid.push {row:i + 1, reason: "Retailer is not defined."}
+                else
+                    invalid.push {row:i + 1, reason: "Retailer '#{cells[2]}' is not known."}
             else
-                items.push(item)
+                retailers =
+                    Digikey : ''
+                    Mouser  : ''
+                    RS      : ''
+                    Farnell : ''
+                    Newark  : ''
+                retailers["#{retailer}"] = cells[3]
+                item =
+                    comment   : cells[0]
+                    quantity  : cells[1]
+                    retailers : retailers
+                    row       : i + 1
+                if !item.quantity
+                    invalid.push {row:item.row, reason: 'Quantity is undefined.'}
+                else if !item.retailers["#{retailer}"]
+                    invalid.push {row:item.row, reason: 'Part number is undefined.'}
+                else
+                    items.push(item)
     return {items, invalid}
 
 
@@ -110,21 +114,22 @@ parseNamed = (rows, order, retailers) ->
     for row, i in rows
         if row != ''
             cells = row.split('\t')
-            for retailer in retailers
-                part = cells[order.indexOf(retailer)]
-                if part? && part != ''
-                    item =
-                        comment  : cells[order.indexOf('comment')]
-                        quantity : cells[order.indexOf('quantity')]
-                        retailer : retailer
-                        part     : part
-                        row      : i + 1
-                    if not item.quantity?
-                        invalid.push
-                            row:item.row
-                            reason: 'Quantity is undefined.'
-                    else
-                        items.push(item)
+            rs = () ->
+                r = {}
+                for retailer in retailers
+                    r["#{retailer}"] = cells[order.indexOf(retailer)]
+                return r
+            item =
+                comment  : cells[order.indexOf('comment')]
+                quantity : cells[order.indexOf('quantity')]
+                retailers: rs()
+                row      : i + 1
+            if not item.quantity?
+                invalid.push
+                    row:item.row
+                    reason: 'Quantity is undefined.'
+            else
+                items.push(item)
     return {items, invalid}
 
 
@@ -191,7 +196,6 @@ parseTSV = (text) ->
     else
         {items, invalid} = parseSimple(rows)
     {items, invalid, warnings} = checkValidItems(items, invalid, warnings)
-    console.log(warnings)
     return {items, invalid, warnings}
 
 
