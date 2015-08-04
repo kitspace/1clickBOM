@@ -52,7 +52,7 @@ lookup = (name, obj) ->
     #else
     return null
 
-checkValidItems =  (items_incoming, invalid) ->
+checkValidItems =  (items_incoming, invalid, warnings) ->
     items = []
     for item in items_incoming
         if invalid.length > 10
@@ -74,8 +74,12 @@ checkValidItems =  (items_incoming, invalid) ->
                 item.retailer = r
                 if item.retailer != 'Digikey'
                     item.part = item.part.replace(/-/g, '')
+                if item.part == ''
+                    warnings.push
+                        title:"'#{item.comment}' is not given for Digikey"
+                        message:"To try and find the parts press the auto fillout button"
                 items.push(item)
-    return {items, invalid}
+    return {items, invalid, warnings}
 
 parseSimple = (rows) ->
     items = []
@@ -135,6 +139,7 @@ hasNamedColumns = (cells) ->
 getOrder = (cells) ->
     order = []
     retailers = []
+    warnings = []
 
     possible_names = {}
     for k,v of headings
@@ -155,24 +160,28 @@ getOrder = (cells) ->
             if heading?
                 order.push(heading)
             else
-                return {reason: "Unknown column-heading '#{cell}'"}
+                warnings.push
+                    title:"Unknown column-heading '#{cell}'"
+                    message:"Column #{order.length + 1} was ignored"
+                order.push('')
 
     if retailers.length <= 0
         return {reason: 'You need at least one retailer'}
     else
-        return {order:order, retailers:retailers}
+        return {order:order, retailers:retailers, warnings:warnings}
 
 
 parseTSV = (text) ->
     rows = text.split('\n')
     firstCells = rows[0].split('\t')
-    if firstCells.length < 3 || firstCells.length > 7
+    warnings = []
+    if firstCells.length < 3
         return {
             items:[]
             invalid:[{row:1, reason:'Invalid number of columns'}]
         }
     if hasNamedColumns(firstCells)
-        {order, retailers, reason} = getOrder(firstCells)
+        {order, retailers, reason, warnings} = getOrder(firstCells)
         if not (order? && retailers?)
             return {
                 items:[]
@@ -181,8 +190,9 @@ parseTSV = (text) ->
         {items, invalid} = parseNamed(rows[1..], order, retailers)
     else
         {items, invalid} = parseSimple(rows)
-    {items, invalid} = checkValidItems(items, invalid)
-    return {items, invalid}
+    {items, invalid, warnings} = checkValidItems(items, invalid, warnings)
+    console.log(warnings)
+    return {items, invalid, warnings}
 
 
 exports.parseTSV = parseTSV

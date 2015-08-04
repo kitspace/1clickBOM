@@ -55,10 +55,10 @@ bom_manager =
             callback(bom)
 
     addToBOM: (text, callback) ->
-        {items, invalid} = parseTSV(text)
-        @_add_to_bom(items, invalid, callback)
+        {items, invalid, warnings} = parseTSV(text)
+        @_add_to_bom(items, invalid, warnings, callback)
 
-    _add_to_bom: (items, invalid, callback) ->
+    _add_to_bom: (items, invalid, warnings, callback) ->
         @getBOM (bom) =>
             if invalid.length > 0
                 for inv in invalid
@@ -72,6 +72,12 @@ bom_manager =
                 message = 'Clipboard is empty'
                 browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning.png'}, () ->
                 badge.setDecaying('Warn','#FF8A00', priority=2)
+            else if warnings?.length > 0
+                for w in warnings
+                    title = w.title
+                    message = w.message
+                    browser.notificationsCreate {type:'basic', title:title , message:message, iconUrl:'/images/warning.png'}, () ->
+                    badge.setDecaying('Warn','#FF8A00', priority=2)
             else if items.length > 0
                 badge.setDecaying('OK','#00CF0F')
             for item in items
