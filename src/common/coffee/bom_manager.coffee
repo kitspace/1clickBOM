@@ -37,7 +37,7 @@ bom_manager =
             @interfaces = {}
             if (!country)
                 country = 'Other'
-            count = 5
+            count = @retailers.length
             for retailer_interface in @retailers
                 retailer = retailer_interface.name
                 if stored_settings?[country]?[retailer]?
@@ -48,8 +48,7 @@ bom_manager =
                 , setting_values, () ->
                     count -= 1
                     if count == 0
-                        if callback?
-                            callback()
+                        callback?()
 
     getBOM: (callback) ->
         browser.storageGet ['bom'], ({bom:bom}) =>
@@ -151,8 +150,7 @@ bom_manager =
                     iconUrl:'/images/warning.png'
                 badge.setDecaying('Warn','#FF8A00', priority=2)
             browser.storageSet {bom:bom}, () =>
-                if callback?
-                    callback(this)
+                callback?(this)
 
     notifyFillCart: (items, retailer, result) ->
         if not result.success
@@ -220,12 +218,10 @@ bom_manager =
                     count--
                     big_result.success &&= result.success
                     big_result.fails = big_result.fails.concat(result.fails)
-                    if callbackEveryRetailer?
-                        callbackEveryRetailer(result.success)
+                    callbackEveryRetailer?(result.success)
                     if count == 0
-                        if callback?
-                            callback()
                         @filling_carts = false
+                        callback?()
 
     fillCart: (retailer, callback)->
         browser.storageGet ['bom'], ({bom:bom}) =>
@@ -244,22 +240,18 @@ bom_manager =
                     @emptyCart retailer, (result, interf) =>
                         count--
                         big_result.success &&= result.success
-                        if callbackEveryRetailer?
-                            callbackEveryRetailer(result.success)
+                        callbackEveryRetailer?(result.success)
                         if count == 0
-                            if callback?
-                                callback(big_result)
                             @emptying_carts = false
+                            callback?(big_result)
             else
-                if callback?
-                    callback(big_result)
                 @emptying_carts = false
+                callback?(big_result)
 
     emptyCart: (retailer, callback)->
         @interfaces[retailer].clearCart (result) =>
             @notifyEmptyCart(retailer, result)
-            if callback?
-                callback(result)
+            callback?(result)
 
     openCarts: ()->
         browser.storageGet ['bom'], ({bom:bom}) =>
