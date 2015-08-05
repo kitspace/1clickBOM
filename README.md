@@ -45,6 +45,7 @@ interpreted in the following way by 1clickBOM. Capitalisation is ignored.
      quantity   = quantity
      farnell    = Farnell
      digikey    = Digikey
+     digi-key   = Digikey
      mouser     = Mouser
      rs         = RS
      newark     = Newark
@@ -82,14 +83,17 @@ If you need any help or think you found a bug please get in touch via
 ## Roadmap ##
 
 * 0.4
-    * Rework UI adding overview
-    * Add a details page
-    * Add auto-fill-out function (search Octopart)
-    * Support manufacturer and manufacturer part number fields
-    * Export BOM
+    * Auto-fill-out function (search Octopart)
+    * BOM export
+    * BOM overview in UI
+    * Manufacturer and manufacturer part number fields
 
 * 0.5
     * Add button to pages with BOM data
+
+* 0.6
+    * Details page
+    * Improved retailer overview UI
 
 * 1.0
     * Remove legacy BOM format support
@@ -97,13 +101,11 @@ If you need any help or think you found a bug please get in touch via
 * 1.1
     * Preferred retailer setting
     * Paste directly to cart
-    * Display cart status
+    * Display cart summaries
 
 * 2.0
     * Allied, Arrow, AVNet, Conrad and Rapid
     * Function to minimize order cost + shipping
-    * Autofind same items from different vendors
-    * Display cart summaries
     * Allow adding components to BOM from the component page
 
 * 3.0

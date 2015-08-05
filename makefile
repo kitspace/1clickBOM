@@ -6,3 +6,6 @@ all:
 	sed -i 's/<head>/<head>\n  <meta name="google-site-verification" content="no3OyqIUt7RYgKwphZ6du5ZjhIwZt3eEik9OnVbldeM" \/>\n  <link rel="chrome-webstore-item" href="https:\/\/chrome.google.com\/webstore\/detail\/mflpmlediakefinapghmabapjeippfdi">/' index.html
 	sed -i '/<img src="https:\/\/raw.githubusercontent.com\/monostable\/1clickBOM\/master\/readme_images\/chrome.png" alt="Available on Chrome" \/>/d' index.html
 
+MSG=$(shell git log --oneline -n1 master)
+commit:
+	git commit -a -m 'Update with $(MSG)'
