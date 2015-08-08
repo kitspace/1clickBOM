@@ -21,9 +21,6 @@
 http      = require './http'
 {browser} = require './browser'
 
-post = http.post
-get  = http.get
-
 class RS extends RetailerInterface
     constructor: (country_code, settings, callback) ->
         super('RS', country_code, 'data/rs.json', settings, callback)
@@ -39,7 +36,7 @@ class RS extends RetailerInterface
                     @clearing_cart = false
         else
             url = "http#{@site}/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart"
-            post url, '', {json:true}, (event) =>
+            http.post url, '', {json:true}, (event) =>
                 if callback?
                     callback({success: true}, this)
                 @refreshSiteTabs()
@@ -91,9 +88,9 @@ class RS extends RetailerInterface
         params3 = "AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&autoScro\
         ll=&javax.faces.ViewState=#{viewstate}&a4jCloseForm%3A#{form_ids[2]}\
         =a4jCloseForm%3A#{form_ids[2]}&"
-        post url, params1, {}, () ->
-            post url, params2, {}, () ->
-                post url, params3, {}, () ->
+        http.post url, params1, {}, () ->
+            http.post url, params2, {}, () ->
+                http.post url, params3, {}, () ->
                    if callback?
                        callback({success:true})
                 , () ->
@@ -182,7 +179,7 @@ class RS extends RetailerInterface
 
     _get_invalid_item_ids_rs_online: (callback) ->
         url = "http" + @site + @cart
-        get url, {}, (event) =>
+        http.get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
             ids = []
             parts = []
@@ -209,7 +206,7 @@ class RS extends RetailerInterface
         for id in ids
             params += id + "|"
         params += '"}}'
-        post url, params, {json:true}, () ->
+        http.post url, params, {json:true}, () ->
             if callback?
                 callback()
         , () ->
@@ -218,7 +215,7 @@ class RS extends RetailerInterface
 
     _get_invalid_item_ids_rs_delivers: (callback) ->
         url = "http#{@site}/ShoppingCart/NcjRevampServicePage.aspx/GetCartHtml"
-        post url, undefined, {json:true}, (event) ->
+        http.post url, undefined, {json:true}, (event) ->
             doc = browser.parseDOM(JSON.parse(event.target.responseText).html)
             ids = []
             parts = []
@@ -262,7 +259,7 @@ class RS extends RetailerInterface
                 for item in items
                     params += "#{item.part},#{item.quantity},,#{item.comment}\n"
                 params += '"}}'
-                post url, params, {json:true}, (event) =>
+                http.post url, params, {json:true}, (event) =>
                     doc = browser.parseDOM(JSON.parse(event.target.responseText).html)
                     success = doc.querySelector("#hidErrorAtLineLevel").value == "0"
                     if not success
@@ -292,7 +289,7 @@ class RS extends RetailerInterface
             params += encodeURIComponent(item.part + "," + item.quantity + ",," + item.comment + "\n")
 
         params += "&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionModalLayerOpenedState=&javax.faces.ViewState=" + viewstate + "&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderTextBoxbtn=shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderTextBoxbtn&"
-        post url, params, {}, (event) =>
+        http.post url, params, {}, (event) =>
             @_get_invalid_item_ids_rs_online (ids, parts) =>
                 success = parts.length == 0
                 invalid = []
@@ -311,7 +308,7 @@ class RS extends RetailerInterface
 
     _get_adding_viewstate_rs_online: (callback)->
         url = "http" + @site + @cart
-        get url, {}, (event) =>
+        http.get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
             viewstate_element  = doc.getElementById("javax.faces.ViewState")
             if viewstate_element?
@@ -330,7 +327,7 @@ class RS extends RetailerInterface
 
     _get_clear_viewstate_rs_online: (callback)->
         url = "http" + @site + @cart
-        get url, {}, (event) =>
+        http.get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
             viewstate_elem = doc.getElementById("javax.faces.ViewState")
             if viewstate_elem?
