@@ -26,15 +26,14 @@ rsOnline =
         @clearing_cart = true
         @_get_clear_viewstate (viewstate, form_ids) =>
             @_clear_cart viewstate, form_ids, (result) =>
-                if callback?
-                    callback(result, this)
+                callback?(result, this)
                 @refreshCartTabs()
                 @refreshSiteTabs()
                 @clearing_cart = false
 
 
     _clear_cart: (viewstate, form_ids, callback) ->
-        url = "http" + @site + @cart
+        url = "http#{@site}#{@cart}"
         #TODO consolidate and move these massive strings somewhere sensible
         params1 = "AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasketForm\
         &=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&shoppingB\
@@ -78,22 +77,17 @@ rsOnline =
         http.post url, params1, {}, () ->
             http.post url, params2, {}, () ->
                 http.post url, params3, {}, () ->
-                   if callback?
-                       callback({success:true})
+                    callback?({success:true})
                 , () ->
-                    if callback?
-                        callback({success:false})
+                    callback?({success:false})
             , () ->
-                if callback?
-                    callback({success:false})
+                callback?({success:false})
         , () ->
-            if callback?
-                callback({success:false})
+            callback?({success:false})
 
 
     _clear_invalid: (callback) ->
-        url = "http" + @site + @cart
-        @_get_clear_viewstate (viewstate, form_ids) ->
+        @_get_clear_viewstate (viewstate, form_ids) =>
             params1 = "AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasket\
             Form&=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&s\
             hoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_\
@@ -135,28 +129,30 @@ rsOnline =
             oll=&javax.faces.ViewState=#{viewstate}&a4jCloseForm%3A\
             #{form_ids[2]}=a4jCloseForm%3A#{form_ids[2]}&"
 
-            p = http.promiseGet(url)
-            p.then (doc) ->
+            p = http.promiseGet("http#{@site}#{@cart}")
+            p.then (doc) =>
                 error_items = doc.querySelectorAll('.errorRow')
                 a = []
                 for _ in error_items
                     a.push(null)
-                chain = a.reduce (prev) ->
-                    prev.then (_doc) ->
+                #for each item we basically click the 'remove' link which also
+                #asks for confirmation
+                chain = a.reduce (prev) =>
+                    prev.then (_doc) =>
                         if not _doc?
-                            return http.promiseGet(url)
+                            return http.promiseGet("http#{@site}#{@cart}")
                         else
                             return Promise.resolve(_doc)
-                    .then (_doc) ->
-                        error_item = _doc.querySelector('.errorRow')
-                            .querySelector('.quantityTd')
-                        id = error_item.children[3].children[0].id
+                    .then (_doc) =>
+                        error_item = _doc?.querySelector('.errorRow')
+                            ?.querySelector('.quantityTd')
+                        id = error_item?.children[3]?.children[0]?.id
                         param_id = params1 + '&' + encodeURIComponent(id)
-                        http.promisePost(url, param_id)
-                    .then () ->
-                        http.promisePost(url, params2)
-                    .then () ->
-                        http.promisePost(url, params3)
+                        http.promisePost("http#{@site}#{@cart}", param_id)
+                    .then () =>
+                        http.promisePost("http#{@site}#{@cart}", params2)
+                    .then () =>
+                        http.promisePost("http#{@site}#{@cart}", params3)
                 , Promise.resolve(doc)
                 chain.then () ->
                     callback({success:true})
@@ -166,8 +162,19 @@ rsOnline =
                 callback({success:false})
 
 
+    addItems: (items, callback) ->
+        @adding_items = true
+        @_clear_invalid () =>
+            @_get_adding_viewstate (viewstate, form_id) =>
+                @_add_items items, viewstate, form_id, (result) =>
+                    callback(result, this, items)
+                    @refreshCartTabs()
+                    @refreshSiteTabs()
+                    @adding_items = false
+
+
     _get_invalid_item_ids: (callback) ->
-        url = "http" + @site + @cart
+        url = "http#{@site}#{@cart}"
         http.get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
             ids = []
@@ -194,7 +201,7 @@ rsOnline =
             items = items_incoming[0..499]
         else
             items = items_incoming
-        url = "http" + @site + @cart
+        url = "http#{@site}#{@cart}"
         params = "AJAXREQUEST=shoppingBasketForm%3A#{form_id}&shoppingBasketFo\
         rm=shoppingBasketForm&=QuickAdd&=DELIVERY&shoppingBasketForm%3AquickSt\
         ockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickSt\
@@ -209,6 +216,7 @@ rsOnline =
         ockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3AQuickOr\
         derWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_li\
         stItems="
+
         for item in items
             params += encodeURIComponent("#{item.part},#{item.quantity},,\
             #{item.comment}\n")
@@ -220,6 +228,7 @@ rsOnline =
         idgetAction_quickOrderTextBoxbtn=shoppingBasketForm%3AQuickOrderWidget\
         Action_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderT\
         extBoxbtn&"
+
         http.post url, params, {}, (event) =>
             @_get_invalid_item_ids (ids, parts) =>
                 success = parts.length == 0
@@ -233,9 +242,6 @@ rsOnline =
                     fails:result.fails.concat(invalid)
                     warnings:result.warnings
                 , this, items_incoming)
-                @refreshCartTabs()
-                @refreshSiteTabs()
-                @adding_items = false
         , () =>
             callback?(
                 success:false
@@ -243,19 +249,8 @@ rsOnline =
             , this, items_incoming)
 
 
-    addItems: (items, callback) ->
-        @adding_items = true
-        @_clear_invalid () =>
-            @_get_adding_viewstate (viewstate, form_id) =>
-                @_add_items items, viewstate, form_id, (result) =>
-                    callback(result, this, items)
-                    @refreshCartTabs()
-                    @refreshSiteTabs()
-                    @adding_items = false
-
-
     _get_adding_viewstate: (callback)->
-        url = "http" + @site + @cart
+        url = "http#{@site}#{@cart}"
         http.get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
             viewstate_element  = doc.getElementById("javax.faces.ViewState")
@@ -276,7 +271,7 @@ rsOnline =
 
 
     _get_clear_viewstate: (callback)->
-        url = "http" + @site + @cart
+        url = "http#{@site}#{@cart}"
         http.get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
             viewstate_elem = doc.getElementById("javax.faces.ViewState")
