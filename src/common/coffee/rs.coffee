@@ -131,7 +131,7 @@ rsOnline =
 
             p = http.promiseGet("http#{@site}#{@cart}")
             p.then (doc) =>
-                error_items = doc.querySelectorAll('.errorRow')
+                error_items = doc.querySelectorAll('.dataRow.errorRow')
                 a = []
                 for _ in error_items
                     a.push(null)
@@ -144,7 +144,7 @@ rsOnline =
                         else
                             return Promise.resolve(_doc)
                     .then (_doc) =>
-                        error_item = _doc?.querySelector('.errorRow')
+                        error_item = _doc?.querySelector('.dataRow.errorRow')
                             ?.querySelector('.quantityTd')
                         id = error_item?.children[3]?.children[0]?.id
                         param_id = params1 + '&' + encodeURIComponent(id)
@@ -163,76 +163,65 @@ rsOnline =
 
 
     addItems: (items, callback) ->
+        @adding_items = true
+
+        add = (items, callback) =>
+            @_clear_invalid () =>
+                @_get_adding_viewstate (viewstate, form_id) =>
+                    @_add_items(items, viewstate, form_id, callback)
+
         end = (result) =>
             callback(result, this, items)
             @refreshCartTabs()
             @refreshSiteTabs()
             @adding_items = false
 
-        @adding_items = true
-        @_clear_invalid () =>
-            @_get_adding_viewstate (viewstate, form_id) =>
-                @_add_items items, viewstate, form_id, (result) =>
-                    if not result.success
-                        _items = @_correct_quantities(result.fails)
-                        @_clear_invalid () =>
-                            @_get_adding_viewstate (_viewstate, _form_id) =>
-                                @_add_items _items
-                                , _viewstate
-                                , _form_id
-                                , (_result) =>
-                                    end(_result)
-                    else
-                        end(result)
+        add items, (result) ->
+            if not result.success
+                #do a second pass with corrected quantities
+                add result.fails, (_result) ->
+                    end(_result)
+            else
+                end(result)
 
-    _correct_quantities: (failed_items) ->
-        for item in failed_items
-            if item.min?
-                item.quantity = item.min
-            else if item.mul?
-                item.quantity += item.mul - (item.quantity % item.mul)
-        return failed_items
-
-    _get_invalid_item_ids: (callback) ->
+    _get_and_correct_invalid_items: (callback) ->
         url = "http#{@site}#{@cart}"
         http.get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
-            ids = []
             items = []
             for elem in doc.querySelectorAll('.dataRow.errorRow')
                 item = {}
                 #detect minimimum and multiple-of quantities from description
+                #and add a quantity according to those. we read the quantity
+                #from the cart as this could be an item that was already in
+                #the cart when we added. description is of the form:
+                #blabla 10 (minimum) blablabla 10 (multiple of) blabla
+                # or
+                #blabla 10 (multiple of) blabla
                 descr = elem.previousElementSibling?.previousElementSibling
                     ?.firstElementChild?.innerHTML
-                # description is of form:
-                # blabla 10 (minimum) blablabla 10 (multiple of) blabla
-                # or
-                # blabla 10 (multiple of) blabla
-                re_min_mul = /.*?(\d+).*?(\d+).*?/
+                re_min_mul = /.*?(\d+).+(\d+).*?/
                 min = re_min_mul.exec(descr)?[1]
                 if not min?
                     re_mul = /.*?(\d+).*?/
-                    mul = re_mul.exec(descr)?[1]
-                    mul = parseInt(mul)
-                    if not isNaN(mul)
-                        item.mul = mul
+                    mul = parseInt(re_mul.exec(descr)?[1])
+                    quantity = parseInt(elem.querySelector('.quantityTd')
+                        ?.firstElementChild?.value)
+                    if (not isNaN(mul)) && (not isNaN(quantity))
+                        item.quantity = quantity + (mul - (quantity % mul))
                 else
                     min = parseInt(min)
                     if not isNaN(min)
-                        item.min = min
-                #detect j_id
-                error_quantity_input = elem.querySelector('.quantityTd')
-                if error_quantity_input?
-                    ids.push(error_quantity_input.children[3].children[0].id)
+                        item.quantity = min
                 #detect part number
                 error_child = elem.children?[1]
                 error_input = error_child?.querySelector('input')
                 if error_input?
                     item.part = error_input.value?.replace(/-/g,'')
                 items.push(item)
-            callback(ids, items)
+            callback(items)
         , () ->
-            callback([],[])
+            callback([])
 
 
     _add_items: (items_incoming, viewstate, form_id, callback) ->
@@ -272,15 +261,15 @@ rsOnline =
         extBoxbtn&"
 
         http.post url, params, {}, (event) =>
-            @_get_invalid_item_ids (ids, invalid_items) =>
+            @_get_and_correct_invalid_items (invalid_items) =>
                 success = invalid_items.length == 0
                 invalid = []
                 if not success
                     for item in items
                         for inv_item in invalid_items
                             if item.part == inv_item.part
-                                item.min = inv_item.min
-                                item.mul = inv_item.mul
+                                if inv_item.quantity?
+                                    item.quantity = inv_item.quantity
                                 invalid.push(item)
                 callback?(
                     success:result.success && success
