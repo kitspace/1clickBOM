@@ -11,7 +11,7 @@ retailers.
 
 #### - [Named columns are now supported](#usage)
 
-#### - [1clickBOM is now available for Firefox][20]
+#### - [1clickBOM is available for Firefox][20]
 
 #### - [I gave a talk about 1clickBOM at FOSDEM][12]
 
@@ -82,16 +82,16 @@ If you need any help or think you found a bug please get in touch via
 
 ## Roadmap ##
 
-* 0.4
+* 0.5
     * Auto-fill-out function (search Octopart)
     * BOM export
     * BOM overview in UI
     * Manufacturer and manufacturer part number fields
 
-* 0.5
+* 0.6
     * Add button to pages with BOM data
 
-* 0.6
+* 0.7
     * Details page
     * Improved retailer overview UI
 
@@ -134,7 +134,7 @@ The rest of the dependencies can be retrieved via `npm install`.
 #### Build
 
 - Get dependencies above and make sure executables are on your path
-- `npm install --global` (or `npm install && export PATH=$PATH:$(pwd)/node_modules/.bin)`
+- `npm install --global` (or `npm install && export PATH=$PATH:$(pwd)/node_modules/.bin`)
 - `make`
 
 #### Load
