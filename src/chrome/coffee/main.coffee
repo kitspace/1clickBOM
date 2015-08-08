@@ -29,15 +29,6 @@ chrome.runtime.onInstalled.addListener (details)->
             else
                 stored_settings.UK.Farnell = {site:'://uk.farnell.com'}
             browser.prefsSet({settings:stored_settings}, ()->)
-        chrome.notifications.onClicked.addListener (id) ->
-            if id == 'BOMchanged'
-                chrome.tabs.create({url:'http://1clickBOM.com/#usage'})
-        chrome.notifications.create 'BOMchanged',
-            type:'basic'
-            title:'New 1clickBOM format with named columns is now available.'
-            message:'Click for more info.'
-            iconUrl:"/images/logo128.png"
-            isClickable: true
 
 # tests only work in chrome currently, open a console on background and execute
 # Test() or test a specific module, e.g. Farnell, with Test('Farnell')

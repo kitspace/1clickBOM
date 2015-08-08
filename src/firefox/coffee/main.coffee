@@ -22,13 +22,5 @@ exports.main = (options, callbacks) ->
                           });"
                 )
             )
-    else if options.loadReason == 'upgrade'
-        ffObj =
-            title   : 'New 1clickBOM format'
-            text    : 'Named columns are now available. Click for more info.'
-            iconURL : './images/logo48.png'
-            onClick: () ->
-                firefoxTabs.open('http://1clickBOM.com/#usage')
-        notifications.notify(ffObj)
 
     background(bgMessenger(popup))
