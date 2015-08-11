@@ -21,14 +21,11 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>1clickBOM</title>
+  <title></title>
   <style type="text/css">code{white-space: pre;}</style>
   <link rel="stylesheet" href="markdown7.css" type="text/css" />
 </head>
-<body>
-<div id="header">
-<div id="title"><img src="logo.png"/><span>1clickBOM</span></div>
-</div>
+<body><div id="title"><img src="logo.png"/><span>1clickBOM</span></div>
 <h1 id="section"></h1>
 <h1 id="section-1"></h1>
 <link href="favicon.png" rel="shortcut icon" type="image/png"></link>
@@ -62,12 +59,25 @@
 
 </script>
 <h1 id="section-3"></h1>
+<div id="TOC">
+<ul>
+<li><a href="#news">News</a></li>
+<li><a href="#which-retailers">Which retailers?</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#issues">Issues</a></li>
+<li><a href="#roadmap">Roadmap</a></li>
+<li><a href="#development">Development</a></li>
+<li><a href="#license">License</a></li>
+
+
+</ul>
+</div>
 <p>1-click BOM is a browser extension that fills your shopping carts for you on sites like Digikey and Mouser, you simply paste from a spreadsheet or visit an online <code>.tsv</code> file. This way you can keep one bill of materials (BOM) that lets you and people you share the BOM with quickly purchase items from multiple retailers.</p>
-<h2 id="news">News</h2>
-<h4 id="named-columns-are-now-supported">- <a href="#usage">Named columns are now supported</a></h4>
-<h4 id="clickbom-is-available-for-firefox20">- <a href="https://addons.mozilla.org/en-US/firefox/addon/1clickbom/">1clickBOM is available for Firefox</a></h4>
-<h4 id="i-gave-a-talk-about-1clickbom-at-fosdem12">- <a href="http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4">I gave a talk about 1clickBOM at FOSDEM</a></h4>
-<h2 id="which-retailers">Which retailers?</h2>
+<h2 id="news"><a href="#news">News</a></h2>
+<h4 id="named-columns-are-now-supported"><a href="#named-columns-are-now-supported">- <a href="#usage">Named columns are now supported</a></a></h4>
+<h4 id="clickbom-is-available-for-firefox20"><a href="#clickbom-is-available-for-firefox20">- <a href="https://addons.mozilla.org/en-US/firefox/addon/1clickbom/">1clickBOM is available for Firefox</a></a></h4>
+<h4 id="i-gave-a-talk-about-1clickbom-at-fosdem12"><a href="#i-gave-a-talk-about-1clickbom-at-fosdem12">- <a href="http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4">I gave a talk about 1clickBOM at FOSDEM</a></a></h4>
+<h2 id="which-retailers"><a href="#which-retailers">Which retailers?</a></h2>
 <p>Currently supported retailers are:</p>
 <ul>
 <li>Digikey</li>
@@ -77,8 +87,8 @@
 <li>RS</li>
 </ul>
 <p>Check the <a href="#roadmap">roadmap</a> for more details on planned features.</p>
-<h2 id="usage">Usage</h2>
-<h3 id="adding-items">Adding Items</h3>
+<h2 id="usage"><a href="#usage">Usage</a></h2>
+<h3 id="adding-items"><a href="#adding-items">Adding Items</a></h3>
 <p>In your tab-seperated values (<code>.tsv</code>) or spreadsheet you must have a column for line-note, one for the quantity and at least one retailer. Column titles are interpreted in the following way by 1clickBOM. Capitalisation is ignored.</p>
 <pre><code> reference  = line-note
  references = line-note
@@ -99,20 +109,20 @@
 </div>
 <p>If you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Clicking the blue button will load the data into 1clickBOM. Alternatively you can paste from any spreadsheet (Excel, OpenOffice, LibreOffice, etc.) by selecting the relevant columns copying them and then clicking the paste button on 1clickBOM's popup.</p>
 <p>See the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv">example tsv</a> and the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/bus_pirate.tsv">Bus Pirate tsv</a>.</p>
-<h3 id="lets-go-shopping">Let's go shopping!</h3>
+<h3 id="lets-go-shopping"><a href="#lets-go-shopping">Let's go shopping!</a></h3>
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
-<h3 id="legacy-bom-format">Legacy BOM format</h3>
+<h3 id="legacy-bom-format"><a href="#legacy-bom-format">Legacy BOM format</a></h3>
 <p>The format used prior to version <code>0.3</code> simply had the items in the following order:</p>
 <pre><code>line-note | quantity | retailer | part-number</code></pre>
 <p>This format is still supported but deprecated and will be phased out by version <code>1.0</code>.</p>
-<h2 id="issues">Issues</h2>
+<h2 id="issues"><a href="#issues">Issues</a></h2>
 <p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">GitHub</a> or <script type="text/javascript">
 <!--
 h='&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#x69;&#110;&#102;&#x6f;';e=n+a+h;
 document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 // -->
 </script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript>.</p>
-<h2 id="roadmap">Roadmap</h2>
+<h2 id="roadmap"><a href="#roadmap">Roadmap</a></h2>
 <ul>
 <li>0.5
 <ul>
@@ -155,8 +165,8 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 <li>Communicate through quantum entanglement</li>
 </ul></li>
 </ul>
-<h2 id="development">Development</h2>
-<h3 id="build-and-test-requirements">Build and Test Requirements</h3>
+<h2 id="development"><a href="#development">Development</a></h2>
+<h3 id="build-and-test-requirements"><a href="#build-and-test-requirements">Build and Test Requirements</a></h3>
 <p>The code is available on <a href="https://github.com/monostable/1clickBOM">GitHub</a>. To get started you will need:</p>
 <ul>
 <li>Chrome or Chromium</li>
@@ -167,25 +177,25 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 <li>npm</li>
 </ul>
 <p>The rest of the dependencies can be retrieved via <code>npm install</code>.</p>
-<h3 id="build-and-test-instructions">Build and Test Instructions</h3>
-<h4 id="build">Build</h4>
+<h3 id="build-and-test-instructions"><a href="#build-and-test-instructions">Build and Test Instructions</a></h3>
+<h4 id="build"><a href="#build">Build</a></h4>
 <ul>
 <li>Get dependencies above and make sure executables are on your path</li>
 <li><code>npm install --global</code> (or <code>npm install &amp;&amp; export PATH=$PATH:$(pwd)/node_modules/.bin</code>)</li>
 <li><code>make</code></li>
 </ul>
-<h4 id="load">Load</h4>
+<h4 id="load"><a href="#load">Load</a></h4>
 <ul>
 <li>For Chrome enable developer mode in <code>chrome://extensions</code> and load the unpacked extension from <code>build/chrome</code></li>
 <li>For Firefox run <code>make run-firefox</code> (or setup <a href="https://palant.de/2012/01/13/extension-auto-installer">Autoinstaller</a> and run <code>make load-firefox</code>)</li>
 </ul>
-<h4 id="test">Test</h4>
+<h4 id="test"><a href="#test">Test</a></h4>
 <p>Tests are written in <a href="https://web.archive.org/web/20130128010139/http://api.qunitjs.com/">QUnit 1.11</a> and can only be run in Chrome/Chromium. Open a console on background page and execute <code>Test()</code> or test a specific module, e.g. Farnell, with <code>Test('Farnell')</code></p>
 <p>Most of the tests are functional tests that require interaction with the various retailer sites and they make a lot of network requests to test across all the different possible locations. Sometimes they will fail because they are not an accurate representation of actual extension use. If a test fails or doesn't complete, run it again before investigating. Try and re-create the issue manually before trying to fix it.</p>
-<h2 id="license">License</h2>
+<h2 id="license"><a href="#license">License</a></h2>
 <p>1clickBOM is free and open source software. It is licensed under a CPAL license which means you are free to use the code in your own applications (even proprietary ones) as long as you display appropriate attribution and share your code-improvements to 1clickBOM itself under the CPAL as well. This also applies to software you are solely making available to users over a network i.e. software as a service. See the <a href="https://github.com/monostable/1clickBOM/blob/master/LICENSE">LICENSE</a> file for details.</p>
-<h1 id="section-4"></h1>
-<h1 id="section-5"></h1>
+<h1 id="section"><a href="#section"></a></h1>
+<h1 id="section-1"><a href="#section-1"></a></h1>
 <center> 
 <a href="http://monostable.co.uk"><img src="monostable.png" alt="logo" /></a>
 </center>

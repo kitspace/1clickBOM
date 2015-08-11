@@ -24,10 +24,6 @@ body > *:last-child {
 
 #title > img {vertical-align:middle;}
 
-a {
-   color: #4183C4; }
-a.absent {
-   color: #cc0000; }
 a.anchor {
    display: block;
    padding-left: 30px;
@@ -39,12 +35,25 @@ a.anchor {
    bottom: 0; }
 
 h1, h2, h3, h4, h5, h6 {
+   color: black;
    margin: 20px 0 10px;
    padding: 0;
    font-weight: bold;
    -webkit-font-smoothing: antialiased;
    cursor: text;
    position: relative; }
+
+h1 > a, h2 > a, h3 > a, h4 > a, h5 > a, h6 > a {
+   color: black !important;
+   text-decoration: none;
+}
+
+a {
+   color: #4183C4;
+}
+a.absent {
+   color: #cc0000;
+}
 
 h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
    text-decoration: none; }
