@@ -2,6 +2,8 @@
 
 [![Available on Chrome][8]][14] [![Add to Firefox][9]][13]
 
+## About ##
+
 1-click BOM is a browser extension that fills your shopping carts for you on
 sites like Digikey and Mouser, you simply paste from a spreadsheet or visit an
 online `.tsv` file. This way you can keep one bill of materials (BOM) that lets
@@ -10,11 +12,11 @@ retailers.
 
 ## News ##
 
-#### - [Named columns are now supported](#usage)
+- [Named columns are now supported](#usage)
 
-#### - [1clickBOM is available for Firefox][20]
+- [1clickBOM is available for Firefox][20]
 
-#### - [I gave a talk about 1clickBOM at FOSDEM][12]
+- [I gave a talk about 1clickBOM at FOSDEM][12]
 
 ## Which retailers? ##
 
@@ -98,8 +100,6 @@ If you need any help or think you found a bug please get in touch via
 
 * 1.0
     * Remove legacy BOM format support
-
-* 1.1
     * Preferred retailer setting
     * Paste directly to cart
     * Display cart summaries
