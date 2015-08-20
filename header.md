@@ -1,4 +1,3 @@
-%1clickBOM
 #
 #
 <link href="favicon.png" rel="shortcut icon" type="image/png"></link>
