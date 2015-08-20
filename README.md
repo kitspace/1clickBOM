@@ -1,3 +1,4 @@
+[![Demo][15]][19]
 
 [![Available on Chrome][8]][14] [![Add to Firefox][9]][13]
 
