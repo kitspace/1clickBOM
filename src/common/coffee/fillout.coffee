@@ -6,11 +6,12 @@ aliases =
     'RS Components' : 'RS'
 
 exports.search = (part) ->
-    url = "https://octopart.com/search?q=#{part}&start=0&filter[fields]\
-    [offers.seller.name][]=Mouser&filter[fields][offers.seller.name][]=\
-    Digi-Key&filter[fields][offers.seller.name][]=RS%20Components&filter\
-    [fields][offers.seller.name][]=Farnell&filter[fields][offers.seller\
-    .name][]=Newark"
+    url = "https://octopart.com/search?q=#{part}&start=0"
+    for retailer in retailers
+        for k,v of aliases
+            retailer = retailer.replace(v,k)
+        retailer = encodeURIComponent(retailer)
+        url += "&filter[fields][offers.seller.name][]=#{retailer}"
     http.promiseGet(url)
         .then (doc) ->
             r = {}
