@@ -8,23 +8,25 @@ exports.search = (part) ->
     .name][]=Newark"
     http.promiseGet(url)
         .then (doc) ->
-            retailers = []
+            r =
+                RS      : null
+                Digikey : null
+                Farnell : null
+                Mouser  : null
+                Newark  : null
             for n,i in doc.querySelectorAll('td.col-seller')
-                if i >= 5
+                retailer = n.querySelector('a').innerHTML
+                retailer = retailer.replace('Digi-Key', 'Digikey')
+                retailer = retailer.replace('RS Components', 'RS')
+                console.log(retailer)
+                if r[retailer] == null
+                    sku = n.parentElement?.querySelector('td.col-sku')
+                        ?.firstElementChild?.innerHTML
+                    if sku?
+                        r[retailer] = sku
+                done = Object.keys(r).reduce (prev, k) ->
+                    prev && (r[k] != null)
+                if done
                     break
-                else
-                    retailer = n.querySelector('a').innerHTML
-                    retailer.replace('Digi-Key', 'DigiKey')
-                    retailer.replace('RS Components', 'RS')
-                    retailers.push(retailer)
-            skus = []
-            for n,i in doc.querySelectorAll('td.col-sku')
-                if i >= 5
-                    break
-                else
-                    skus.push(n.querySelector('a').innerHTML)
-            r = {}
-            for retailer,index in retailers
-                r[retailer] = skus[index]
             return r
 
