@@ -106,16 +106,20 @@ div#bottom_toolbar {
     text-align: center;
 }
 button#clear {
-    float: left;
+    float:none;
 }
 button#paste {
-    float: right;
+    float:none;
 }
-button#fillout {
+button#copy {
+    float:none;
+}
+button#complete {
+    float:none;
 }
 
 button#load_from_page {
-    float: right;
+    float:none;
     background-color: #DDDDDD;
     background-repeat: repeat-x;
     background-image: linear-gradient(to top,#4444E6,#0000EE);
@@ -139,26 +143,30 @@ button#load_from_page:active {
 <body>
 <center>
 <div id=main_content>
-    <div id=top_toolbar>
-        <button class=big_buttons id="clear" title="Clear entire BOM" hidden=true>
-            <span class=button_icon>&#xf182;</span>
-            <span class=button_text>Clear</span>
-        </button >
-        <button class=big_buttons id="load_from_page" title="Load TSV from page" hidden=true>
-            <span class=button_icon>&#x2190;</span>
-        </button >
-        <button class=big_buttons id="paste" title="Paste BOM data">
-            <span class=button_icon>&#xf220;</span>
-            <span class=button_text> Paste</span>
-        </button>
-        <button class=big_buttons id="details" title="Paste BOM data">
-            <span class=button_icon>&#xf18d;</span>
-            <span class=button_text> View Details</span>
-        </button>
-        <button class=big_buttons id="fillout" title="Attempt to auto-fillout retailer parts">
-            <span class=button_icon>&#xf143;</span>
-            <span class=button_text> Auto-Fillout</span>
-        </button>
+    <div style="display: table;" id=top_toolbar>
+        <div style="display: inline-block; width:100%; text-align:center;">
+            <button class=big_buttons id="clear" title="Clear entire BOM" hidden=true>
+                <span class=button_icon>&#xf182;</span>
+                <span class=button_text>Clear</span>
+            </button >
+            <button class=big_buttons id="copy" title="Copy entire BOM to clipboard">
+                <span class=button_icon>&#xf188;</span>
+                <span class=button_text> Copy</span>
+            </button>
+            <button class=big_buttons id="paste" title="Paste BOM data from clipboard">
+                <span class=button_icon>&#xf220;</span>
+                <span class=button_text> Paste</span>
+            </button>
+            <button id="load_from_page" title="Load BOM data from page" hidden=true>
+                <span class=button_icon>&#x2190;</span>
+            </button >
+        </div>
+        <div style="display: inline-block; width:100%; text-align:center;">
+            <button class=big_buttons id="complete" title="Attempt to auto fill out retailer parts">
+                <span class=button_icon>&#xf143;</span>
+                <span class=button_text> Auto-Complete</span>
+            </button>
+        </div>
     </div>
 
     <div id=bom hidden=true>

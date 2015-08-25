@@ -26,7 +26,8 @@ button_FillCarts    = document.querySelector('button#fill_carts')
 button_EmptyCarts   = document.querySelector('button#empty_carts')
 button_OpenCartTabs = document.querySelector('button#open_cart_tabs')
 button_LoadFromPage = document.querySelector('button#load_from_page')
-button_FillOut      = document.querySelector('button#fillout')
+button_Complete     = document.querySelector('button#complete')
+button_Copy         = document.querySelector('button#copy')
 button_Paste        = document.querySelector('button#paste')
 
 button_Clear.addEventListener 'click', () ->
@@ -50,12 +51,15 @@ button_LoadFromPage.addEventListener 'click', () ->
     messenger.send('loadFromPage')
 
 hideOrShow = (bom, onDotTSV) ->
-    button_Clear.hidden        = !Boolean(Object.keys(bom.retailers).length)
-    button_FillCarts.hidden    = !Boolean(Object.keys(bom.retailers).length)
-    button_EmptyCarts.hidden   = !Boolean(Object.keys(bom.retailers).length)
-    button_OpenCartTabs.hidden = !Boolean(Object.keys(bom.retailers).length)
-    button_LoadFromPage.hidden = !onDotTSV
-    element_Bom.hidden         = !Boolean(Object.keys(bom.retailers).length)
+    hasBOM = Boolean(Object.keys(bom.retailers).length)
+    button_Clear.hidden        = not hasBOM
+    button_FillCarts.hidden    = not hasBOM
+    button_EmptyCarts.hidden   = not hasBOM
+    button_OpenCartTabs.hidden = not hasBOM
+    button_Complete.hidden     = not hasBOM
+    button_Copy.hidden         = not hasBOM
+    button_LoadFromPage.hidden = not onDotTSV
+    element_Bom.hidden         = not hasBOM
 
 startSpinning = (link) ->
     td = link.parentNode

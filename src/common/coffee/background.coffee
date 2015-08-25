@@ -99,7 +99,7 @@ exports.background = (messenger) ->
                     #due to 's' being added for plural
                     if maxItems > 1 then width += 9
                     if maxLines > 1 then width += 9
-                    height += 40 + (nRetailers * 27)
+                    height += 64 + (nRetailers * 27)
                 else if tsvPageNotifier.onDotTSV
                     height += 28
                 messenger.resizePopup(width, height)
