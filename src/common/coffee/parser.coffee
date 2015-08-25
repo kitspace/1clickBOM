@@ -17,6 +17,8 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
+{retailer_list} = require('./retailer_list')
+
 retailer_aliases =
     'Farnell'     : 'Farnell'
     'FEC'         : 'Farnell'
@@ -86,17 +88,14 @@ parseSimple = (rows) ->
                         row:i + 1
                         reason: "Retailer '#{cells[2]}' is not known."
             else
-                retailers =
-                    Digikey : ''
-                    Mouser  : ''
-                    RS      : ''
-                    Farnell : ''
-                    Newark  : ''
-                retailers["#{retailer}"] = cells[3]
+                retailersObj = {}
+                for r in retailer_list
+                    retailersObj[r] = ''
+                retailersObj["#{retailer}"] = cells[3]
                 item =
                     comment   : cells[0]
                     quantity  : cells[1]
-                    retailers : retailers
+                    retailers : retailersObj
                     row       : i + 1
                 if !item.quantity
                     invalid.push
@@ -118,15 +117,12 @@ parseNamed = (rows, order, retailers) ->
         if row != ''
             cells = row.split('\t')
             rs = () ->
-                r =
-                    Digikey : ''
-                    Mouser  : ''
-                    RS      : ''
-                    Farnell : ''
-                    Newark  : ''
-                for retailer in retailers
-                    r["#{retailer}"] = cells[order.indexOf(retailer)]
-                return r
+                retailersObj = {}
+                for r in retailer_list
+                    retailersObj[r] = ''
+                for r in retailers
+                    retailersObj["#{r}"] = cells[order.indexOf(r)]
+                return retailersObj
             item =
                 comment  : cells[order.indexOf('comment')]
                 quantity : cells[order.indexOf('quantity')]
