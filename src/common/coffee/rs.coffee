@@ -250,7 +250,7 @@ rsOnline =
 
         for item in items
             params += encodeURIComponent("#{item.part},#{item.quantity},,\
-            #{item.comment}\n")
+            #{item.reference}\n")
 
         params += "&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetA\
         ction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionMo\
@@ -404,7 +404,7 @@ rsDelivers =
                 params = '{"request":{"lines":"'
                 for item in items
                     params += "#{item.part},#{item.quantity},,\
-                    #{item.comment}\n"
+                    #{item.reference}\n"
                 params += '"}}'
                 http.post url, params, {json:true}, (event) =>
                     doc = browser.parseDOM(

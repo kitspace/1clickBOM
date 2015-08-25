@@ -107,7 +107,7 @@ bom_manager =
                     r[retailer].push
                         part     : part
                         quantity : item.quantity
-                        comment  : item.comment
+                        reference  : item.reference
         return r
 
 
@@ -116,7 +116,7 @@ bom_manager =
         for item2 in items2
             exists = false
             for item1 in items1
-                if item1.comment == item2.comment
+                if item1.reference == item2.reference
                     exists = true
                     for r of retailer_list
                         if item1.retailers[r] == ''
@@ -179,7 +179,7 @@ bom_manager =
                 title += ' to ' + retailer + ' cart:'
                 for fail in fails
                     failed_items.push
-                        title:"item: #{fail.comment} | #{fail.quantity}
+                        title:"item: #{fail.reference} | #{fail.quantity}
                         | #{fail.part}"
                         message:''
             browser.notificationsCreate

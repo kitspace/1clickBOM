@@ -36,10 +36,10 @@ retailer_aliases =
     'Newark'      : 'Newark'
 
 headings =
-    'reference'  : 'comment'
-    'references' : 'comment'
-    'line-note'  : 'comment'
-    'line note'  : 'comment'
+    'reference'  : 'reference'
+    'references' : 'reference'
+    'line-note'  : 'reference'
+    'line note'  : 'reference'
     'comment'    : 'comment'
     'comments'   : 'comment'
     'qty'        : 'quantity'
@@ -93,7 +93,7 @@ parseSimple = (rows) ->
                     retailersObj[r] = ''
                 retailersObj["#{retailer}"] = cells[3]
                 item =
-                    comment   : cells[0]
+                    reference   : cells[0]
                     quantity  : cells[1]
                     retailers : retailersObj
                     row       : i + 1
@@ -124,7 +124,7 @@ parseNamed = (rows, order, retailers) ->
                     retailersObj["#{r}"] = cells[order.indexOf(r)]
                 return retailersObj
             item =
-                comment  : cells[order.indexOf('comment')]
+                reference  : cells[order.indexOf('reference')]
                 quantity : cells[order.indexOf('quantity')]
                 retailers: rs()
                 row      : i + 1

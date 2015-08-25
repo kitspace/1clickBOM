@@ -62,7 +62,7 @@ class Mouser extends RetailerInterface
         params += '&ctl00$ContentMain$hNumberOfLines=99'
         params += '&ctl00$ContentMain$txtNumberOfLines=94'
         for item,i in items
-            params += "&ctl00$ContentMain$txtCustomerPartNumber#{i+1}=#{item.comment}\
+            params += "&ctl00$ContentMain$txtCustomerPartNumber#{i+1}=#{item.reference}\
                        &ctl00$ContentMain$txtPartNumber#{i+1}=#{item.part}\
                        &ctl00$ContentMain$txtQuantity#{i+1}=}#{item.quantity}"
         url = 'http' + @site + @additem

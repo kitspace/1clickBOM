@@ -50,7 +50,7 @@ asyncTest 'Clear All', () ->
             start()
 
 asyncTest 'Add items', () ->
-    items = [{'part':'754-1173-1-ND', 'quantity':2, 'comment':'test'}]
+    items = [{'part':'754-1173-1-ND', 'quantity':2, 'reference':'test'}]
     stop(digikey_locations.length - 1)
     for l in digikey_locations
         r = new Digikey(l)
@@ -59,7 +59,7 @@ asyncTest 'Add items', () ->
             start()
 
 asyncTest 'Add items fails', () ->
-    items = [{'part':'fail', 'quantity':2, 'comment':'test'}, {'part':'754-1173-1-ND', 'quantity':2, 'comment':'test'}]
+    items = [{'part':'fail', 'quantity':2, 'reference':'test'}, {'part':'754-1173-1-ND', 'quantity':2, 'reference':'test'}]
     stop(digikey_locations.length - 1)
     for l in digikey_locations
         r = new Digikey(l)
@@ -81,7 +81,7 @@ asyncTest 'Clear All', () ->
                 start()
 
 asyncTest 'Add items', () ->
-    items = [{'part':'2250472', 'quantity':2, 'comment':'test'}]
+    items = [{'part':'2250472', 'quantity':2, 'reference':'test'}]
     stop(farnell_locations.length - 1)
     for l in farnell_locations
         r = new Farnell l, {}, (that) ->
@@ -90,7 +90,7 @@ asyncTest 'Add items', () ->
                 start()
 
 asyncTest 'Add items fails', () ->
-    items = [{'part':'fail', 'quantity':2, 'comment':'test'}, {'part':'2250472', 'quantity':2, 'comment':'test'}]
+    items = [{'part':'fail', 'quantity':2, 'reference':'test'}, {'part':'2250472', 'quantity':2, 'reference':'test'}]
     stop(farnell_locations.length - 1)
     for l in farnell_locations
         r = new Farnell l, {}, (that) ->
@@ -113,12 +113,12 @@ asyncTest 'Clear All', () ->
         start()
 
 asyncTest 'Add items fails but adds again', () ->
-    items = [{'part':'fail','quantity':2, 'comment':'test'},{'part':'607-GALILEO','quantity':2, 'comment':'test'}]
+    items = [{'part':'fail','quantity':2, 'reference':'test'},{'part':'607-GALILEO','quantity':2, 'reference':'test'}]
     r = new Mouser('UK')
     r.addItems items, (result, that) ->
         deepEqual(result.success, false, that.country)
         deepEqual(result.fails, [items[0]], that.country)
-        items = [{'part':'607-GALILEO','quantity':2, 'comment':'test'}]
+        items = [{'part':'607-GALILEO','quantity':2, 'reference':'test'}]
         that.addItems items, (result, that) ->
             #the order here is important as we want to make sure the 'errors' were cleared after the failed add
             deepEqual(result.success, true, that.country)
@@ -149,18 +149,18 @@ asyncTest 'Add items fails but adds again', () ->
     stop(rs_locations.length - 1)
     for l in rs_locations
         r = new RS(l)
-        items = [ {'part':'264-7881','quantity':2, 'comment':'test'}
-                , {'part':'fail1','quantity':2, 'comment':'test'}
-                , {'part':'fail2','quantity':2, 'comment':'test'}
+        items = [ {'part':'264-7881','quantity':2, 'reference':'test'}
+                , {'part':'fail1','quantity':2, 'reference':'test'}
+                , {'part':'fail2','quantity':2, 'reference':'test'}
                 ]
         r.addItems items, (result, that) ->
             expected_fails =
-                [ {'part':'fail1','quantity':2, 'comment':'test'}
-                , {'part':'fail2','quantity':2, 'comment':'test'}
+                [ {'part':'fail1','quantity':2, 'reference':'test'}
+                , {'part':'fail2','quantity':2, 'reference':'test'}
                 ]
             deepEqual(result.success, false, '1:'+ that.country)
             deepEqual(result.fails, expected_fails,'2:' + that.country)
-            items = [{'part':'264-7881','quantity':2, 'comment':'test'}]
+            items = [{'part':'264-7881','quantity':2, 'reference':'test'}]
             that.addItems items, (result, that2) ->
                 deepEqual(result.success, true, '3:' + that2.country)
                 start()
@@ -170,15 +170,15 @@ module('Newark')
 asyncTest 'Add items fails, add items, clear all', () ->
 	r = new Newark 'US', {}, () ->
             items = [
-              {'part':'98W0461','quantity':2, 'comment':'test'}
-                    , {'part':'fail'   ,'quantity':2, 'comment':'test'}
-                    , {'part':'fail2'  ,'quantity':2, 'comment':'test'}
+              {'part':'98W0461','quantity':2, 'reference':'test'}
+                    , {'part':'fail'   ,'quantity':2, 'reference':'test'}
+                    , {'part':'fail2'  ,'quantity':2, 'reference':'test'}
             ]
             r.addItems items, (result1, that) ->
                     deepEqual(result1.success, false)
                     deepEqual(result1.fails, [items[2], items[1]])
                     items = [
-                            {'part':'98W0461','quantity':2, 'comment':'test'}
+                            {'part':'98W0461','quantity':2, 'reference':'test'}
                     ]
                     that.addItems items, (result2, that) ->
                             deepEqual(result2.success, true)
@@ -189,7 +189,7 @@ asyncTest 'Add items fails, add items, clear all', () ->
 asyncTest 'Add items', () ->
 	r = new Newark 'US', {}, () ->
             items = [
-                      {'part':'98W0461','quantity':2, 'comment':'test'}
+                      {'part':'98W0461','quantity':2, 'reference':'test'}
                     ]
             r.addItems items, (result) ->
                     deepEqual(result.success, true)

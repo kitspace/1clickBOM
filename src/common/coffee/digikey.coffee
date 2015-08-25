@@ -95,7 +95,7 @@ class Digikey extends RetailerInterface
                         callback(result)
     _add_item: (item, callback) ->
         url = 'http' + @site + @additem
-        params = 'qty=' + item.quantity + '&part=' + item.part + '&cref=' + item.comment
+        params = 'qty=' + item.quantity + '&part=' + item.part + '&cref=' + item.reference
         result = {success:true, fails:[]}
         post url, params, {item:item}, (event)->
             doc = browser.parseDOM(event.target.responseText)

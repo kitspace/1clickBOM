@@ -107,7 +107,7 @@ class Newark extends RetailerInterface
         for item in items
             params += encodeURIComponent(item.part) + ','
             params += encodeURIComponent(item.quantity) + ','
-            params += encodeURIComponent(item.comment) + '\n'
+            params += encodeURIComponent(item.reference) + '\n'
         post url, params, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
             form_errors = doc.querySelector('#formErrors')
@@ -156,10 +156,10 @@ class Newark extends RetailerInterface
         for item in items
             params += encodeURIComponent(item.part) + ','
             params += encodeURIComponent(item.quantity) + ','
-            if item.comment.length > 30
+            if item.reference.length > 30
                 result.warnings.push("Truncated line-note when adding
-                    #{@name} item to cart: #{item.comment}")
-            params += encodeURIComponent(item.comment.substr(0,30)) + '\n'
+                    #{@name} item to cart: #{item.reference}")
+            params += encodeURIComponent(item.reference.substr(0,30)) + '\n'
         post url, params, {}, (event) =>
             stxt = event.target.responseText.split('\n')
             stxt2 = stxt[3 .. (stxt.length - 4)]

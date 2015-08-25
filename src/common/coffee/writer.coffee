@@ -26,7 +26,7 @@ exports.writeTSV = (bom) ->
         retailers.push("#{retailer}")
     r += '\n'
     for item in bom.items
-        r += "#{item.comment}"
+        r += "#{item.reference}"
         r += "\t#{item.quantity}"
         for retailer in retailers
             r += "\t#{item.retailers[retailer]}"
