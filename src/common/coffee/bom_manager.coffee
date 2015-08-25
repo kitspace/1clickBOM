@@ -112,7 +112,7 @@ bom_manager =
     _add_to_bom: (items, invalid, warnings, callback) ->
         @getBOM (bom) =>
             retailers = @_to_retailers(items)
-            bom.items.concat(items)
+            bom.items = bom.items.concat(items)
             for retailer,items of retailers
                 if retailer not of bom.retailers
                     bom.retailers[retailer] = []

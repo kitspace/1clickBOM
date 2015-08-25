@@ -22,6 +22,7 @@
 {parseTSV}    = require './parser'
 http          = require './http'
 {badge}       = require './badge'
+{writeTSV}    = require './writer'
 
 exports.background = (messenger) ->
 
@@ -144,6 +145,10 @@ exports.background = (messenger) ->
     messenger.on 'paste', () ->
         bom_manager.addToBOM browser.paste(), () ->
             sendState()
+
+    messenger.on 'copy', () ->
+        bom_manager.getBOM (bom) ->
+            browser.copy(writeTSV(bom))
 
     messenger.on 'loadFromPage', () ->
         tsvPageNotifier.addToBOM () ->

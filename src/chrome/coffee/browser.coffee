@@ -76,11 +76,17 @@ browser =
             chrome.browserAction.setBadgeText ({text:obj.text})
     notificationsCreate:(obj, callback) ->
         chrome.notifications.create '', obj, callback
-    paste:() ->
+    paste: () ->
         textarea = document.getElementById('pastebox')
         textarea.select()
         document.execCommand('paste')
         return textarea.value
+    copy: (text) ->
+        textarea = document.getElementById('pastebox')
+        textarea.value = text
+        textarea.select()
+        document.execCommand('SelectAll')
+        document.execCommand('Copy')
     setTimeout: (callback, time) ->
         setTimeout(callback, time)
     clearTimeout: (id) ->

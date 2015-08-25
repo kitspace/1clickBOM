@@ -50,6 +50,9 @@ button_Paste.addEventListener 'click', () ->
 button_LoadFromPage.addEventListener 'click', () ->
     messenger.send('loadFromPage')
 
+button_Copy.addEventListener 'click', () ->
+    messenger.send('copy')
+
 hideOrShow = (bom, onDotTSV) ->
     hasBOM = Boolean(Object.keys(bom.retailers).length)
     button_Clear.hidden        = not hasBOM
