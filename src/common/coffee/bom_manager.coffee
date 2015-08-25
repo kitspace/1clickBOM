@@ -26,6 +26,7 @@ http       = require './http'
 {Newark  } = require './newark'
 {parseTSV} = require './parser'
 {badge}    = require './badge'
+{retailer_list} = require './retailer_list'
 
 bom_manager =
     retailers: [Digikey, Farnell, Mouser, RS, Newark]
@@ -109,24 +110,29 @@ bom_manager =
                         comment  : item.comment
         return r
 
+
+    _merge_items: (items1, items2) ->
+        merged = []
+        for item2 in items2
+            exists = false
+            for item1 in items1
+                if item1.comment == item2.comment
+                    exists = true
+                    for r of retailer_list
+                        if item1.retailers[r] == ''
+                            item1.retailers[r] = item2.retailers[r]
+                    item1.quantity += item2.quantity
+                    merged.push(item1)
+                    break
+            if not exists
+                merged.push(item2)
+        return merged
+
+
     _add_to_bom: (items, invalid, warnings, callback) ->
         @getBOM (bom) =>
-            retailers = @_to_retailers(items)
-            bom.items = bom.items.concat(items)
-            for retailer,items of retailers
-                if retailer not of bom.retailers
-                    bom.retailers[retailer] = []
-                existing = false
-                for item in items
-                    for existing_item in bom.retailers[retailer]
-                        if existing_item.part == item.part
-                            existing_item.quantity += item.quantity
-                            if existing_item.comment != item.comment
-                                existing_item.comment  += ',' + item.comment
-                            existing = true
-                            break
-                    if not existing
-                        bom.retailers[retailer].push(item)
+            bom.items = @_merge_items(bom.items, items)
+            bom.retailers = @_to_retailers(bom.items)
             over = []
             for retailer,lines of bom.retailers
                 if lines.length > 100
@@ -151,6 +157,7 @@ bom_manager =
                 badge.setDecaying('Warn','#FF8A00', priority=2)
             browser.storageSet {bom:bom}, () =>
                 callback?(this)
+
 
     notifyFillCart: (items, retailer, result) ->
         if not result.success
@@ -193,6 +200,7 @@ bom_manager =
                     message:''
                     iconUrl:'/images/warning.png'
                 badge.setDecaying('Warn','#FF8A00', priority=1)
+
 
     notifyEmptyCart: (retailer, result) ->
         if not result.success

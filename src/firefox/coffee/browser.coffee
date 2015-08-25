@@ -165,6 +165,8 @@ browser =
             return ''
         else
             return c
+    copy: (text) ->
+        clipboard.set(text, 'text')
     setTimeout: (callback, time) ->
         timers.setTimeout(callback, time)
     clearTimeout: (id) ->

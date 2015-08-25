@@ -39,4 +39,7 @@ window.Test = (module)->
 
 window.fillout = require('./fillout')
 
+window.clear = () ->
+    browser.storageRemove 'bom' , () ->
+
 background(messenger)

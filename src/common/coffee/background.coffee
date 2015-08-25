@@ -149,6 +149,7 @@ exports.background = (messenger) ->
     messenger.on 'copy', () ->
         bom_manager.getBOM (bom) ->
             browser.copy(writeTSV(bom))
+            badge.setDecaying('OK','#00CF0F')
 
     messenger.on 'loadFromPage', () ->
         tsvPageNotifier.addToBOM () ->
