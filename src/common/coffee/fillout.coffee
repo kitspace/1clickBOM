@@ -1,12 +1,11 @@
 http        = require './http'
-{retailers} = require './retailers'
 
 aliases =
     'Digi-Key' : 'Digikey'
     'RS Components' : 'RS'
 
-exports.search = (part) ->
-    url = "https://octopart.com/search?q=#{part}&start=0"
+exports.search = (query, retailers) ->
+    url = "https://octopart.com/search?q=#{query}&start=0"
     for retailer in retailers
         for k,v of aliases
             retailer = retailer.replace(v,k)
