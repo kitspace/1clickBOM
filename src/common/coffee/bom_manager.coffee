@@ -53,16 +53,17 @@ bom_manager =
 
     getBOM: (callback) ->
         browser.storageGet ['bom'], ({bom:bom}) =>
-            old_bom = retailer_list.reduce (prev, k) ->
-                prev |= bom[k]?
-            , false
-            if old_bom
+            if not bom?
                 bom = {}
-            else if not bom
-                bom = {}
-            if not bom.retailers
+            else
+                old_bom = retailer_list.reduce (prev, k) ->
+                    prev ||= bom[k]?
+                , false
+                if old_bom
+                    bom = {}
+            if not bom.retailers?
                 bom.retailers = {}
-            if not bom.items
+            if not bom.items?
                 bom.items = []
             callback(bom)
 
