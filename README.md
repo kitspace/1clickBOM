@@ -2,7 +2,7 @@
 
 [![Available on Chrome][8]][14] [![Add to Firefox][9]][13]
 
-## About ##
+## Summary ##
 
 1-click BOM is a browser extension that fills your shopping carts for you on
 sites like Digikey and Mouser, you simply paste from a spreadsheet or visit an
@@ -86,17 +86,13 @@ If you need any help or think you found a bug please get in touch via
 ## Roadmap ##
 
 * 0.5
-    * Auto-fill-out function (search Octopart)
+    * Auto-complete (search Octopart)
     * BOM export
-    * BOM overview in UI
-    * Manufacturer and manufacturer part number fields
+    * Manufacturer, manufacturer part number and comment fields
 
 * 0.6
-    * Add button to pages with BOM data
-
-* 0.7
-    * Details page
-    * Improved retailer overview UI
+    * Add buttons to pages with BOM data
+    * BOM details and editing page
 
 * 1.0
     * Remove legacy BOM format support
