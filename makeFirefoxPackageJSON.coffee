@@ -1,7 +1,7 @@
 fs = require 'fs'
 
 countries = JSON.parse(fs.readFileSync('src/common/data/countries.json', 'utf8'))
-packageJ  = JSON.parse(fs.readFileSync('src/firefox/package.json'))
+packageJ  = JSON.parse(fs.readFileSync('src/firefox/package.json', 'utf8'))
 
 options = []
 for name, code of countries
