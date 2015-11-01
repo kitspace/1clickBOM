@@ -116,21 +116,19 @@ render = (state) ->
         tr.appendChild(td_0)
 
         td_1 = document.createElement('td')
-        t  = items.length + ' line'
-        t += 's' if (items.length > 1)
+        t  = "#{items.length}/#{bom.items.length} line"
+        t += 's' if (bom.items.length > 1)
+        if items.length < bom.items.length
+            td_1.style.color = 'red'
+        else
+            td_1.style.color= 'green'
         td_1.appendChild(document.createTextNode(t))
         tr.appendChild(td_1)
 
-        td_2 = document.createElement('td')
-        t  = no_of_items + ' item'
-        t += 's' if (items.length > 1)
-        td_2.appendChild(document.createTextNode(t))
-        tr.appendChild(td_2)
-
-        unicode_chars = ['\uf21e', '\uf221', '\uf21b']
-        titles = ['Add items to ' , 'View ',  'Empty ']
+        unicode_chars = ['\uf21e', '\uf21b']
+        titles = ['Add items to ' , 'Empty ']
         links = []
-        for i in  [0..2]
+        for i in  [0..1]
             td = document.createElement('td')
             a = document.createElement('a')
             a.value = retailer.name
@@ -149,9 +147,6 @@ render = (state) ->
             messenger.send 'fillCart', @value
 
         links[1].addEventListener 'click', () ->
-            messenger.send 'openCart', @value
-
-        links[2].addEventListener 'click', () ->
             startSpinning(this)
             messenger.send 'emptyCart', @value
 
@@ -161,9 +156,9 @@ render = (state) ->
             stopSpinning(links[0])
 
         if retailer.clearing_cart
-            startSpinning(links[2])
+            startSpinning(links[1])
         else
-            stopSpinning(links[2])
+            stopSpinning(links[1])
 
         any_adding   |= retailer.adding_items
         any_emptying |= retailer.clearing_cart
