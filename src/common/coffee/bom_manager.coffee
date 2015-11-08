@@ -106,8 +106,8 @@ bom_manager =
     _to_retailers: (items) ->
         r = {}
         for item in items
-            for retailer,part of item.retailers
-                if part != ''
+            for retailer, part of item.retailers
+                if part? and part != ''
                     if not r[retailer]?
                         r[retailer] = []
                     r[retailer].push
