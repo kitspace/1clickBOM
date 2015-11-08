@@ -18,6 +18,7 @@
 # the Original Code is Kaspar Emanuel.
 
 {messenger} = require './messenger'
+{retailer_list} = require './retailer_list'
 
 element_Bom         = document.querySelector('#bom')
 element_Table       = document.querySelector('#bom_table')
@@ -99,7 +100,10 @@ render = (state) ->
         element_Table.removeChild(element_Table.lastChild)
     any_adding   = false
     any_emptying = false
-    for retailer_name,items of bom.retailers
+    for retailer_name in retailer_list
+        items = []
+        if retailer_name of bom.retailers
+            items = bom.retailers[retailer_name]
         retailer = state.bom_manager.interfaces[retailer_name]
         no_of_items = 0
         for item in items
@@ -125,8 +129,8 @@ render = (state) ->
         td_1.appendChild(document.createTextNode(t))
         tr.appendChild(td_1)
 
-        unicode_chars = ['\uf21e', '\uf21b']
-        titles = ['Add items to ' , 'Empty ']
+        unicode_chars = ['\uf21b', '\uf21e']
+        titles = ['Empty ', 'Add items to ']
         links = []
         for i in  [0..1]
             td = document.createElement('td')
@@ -144,11 +148,11 @@ render = (state) ->
 
         links[0].addEventListener 'click', () ->
             startSpinning(this)
-            messenger.send 'fillCart', @value
+            messenger.send 'emptyCart', @value
 
         links[1].addEventListener 'click', () ->
             startSpinning(this)
-            messenger.send 'emptyCart', @value
+            messenger.send 'fillCart', @value
 
         if retailer.adding_items
             startSpinning(links[0])
