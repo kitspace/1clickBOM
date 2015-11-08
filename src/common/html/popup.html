@@ -7,11 +7,13 @@
 body {
     background: #DDDDDD;
     margin: 0px 0px 0px 0px;
-    min-width: 300px;
+    min-width: 260px;
     text-align: right;
     overflow: hidden;
 }
 .spinner {
+    display: table;
+    margin: 0 auto;
     width:15px;
     height:15px;
     background-image: url('./../images/spinner.png');
@@ -72,6 +74,8 @@ table#bom_table {
     border: none;
     font-family: "sans-serif", "Arial", "Helvetica";
     white-space: nowrap;
+    display: table;
+    margin: 0 auto;
 }
 table#bom_table > tr:hover {
     background: #ADD8E6;
@@ -161,31 +165,16 @@ button#load_from_page:active {
             <span class=button_icon>&#x2190;</span>
         </button >
     </div>
-    <div style="text-align:center;">
-        <button class=big_buttons id="complete" title="Attempt to auto fill out retailer parts">
-            <span class=button_icon>&#xf222;</span>
-            <span class=button_text> Auto-Complete</span>
-        </button>
-    </div>
 
     <div id=bom hidden=true>
         <div id=top_spacer></div>
         <table id="bom_table"></table>
         <div id=bottom_spacer></div>
     </div>
-
-    <div id=bottom_toolbar>
-        <button class=big_buttons id="fill_carts" hidden=true title="Add all BOM items to retailer carts">
-            <span class=button_icon>&#xf21e;</span>
-            <span class=button_text>Add</span>
-        </button>
-        <button class=big_buttons id="open_cart_tabs" hidden=true title="View all retailer carts">
-            <span class=button_icon>&#xf221;</span>
-            <span class=button_text>View</span>
-        </button>
-        <button class=big_buttons id="empty_carts" hidden=true title="Empty all retailer carts">
-            <span class=button_icon>&#xf21b;</span>
-            <span class=button_text>Empty</span>
+    <div style="text-align:center;">
+        <button class=big_buttons id="complete" title="Attempt to auto fill out retailer parts">
+            <span class=button_icon>&#xf222;</span>
+            <span class=button_text> Auto-Complete</span>
         </button>
     </div>
 </div>

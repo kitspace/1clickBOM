@@ -23,9 +23,6 @@
 element_Bom         = document.querySelector('#bom')
 element_Table       = document.querySelector('#bom_table')
 button_Clear        = document.querySelector('button#clear')
-button_FillCarts    = document.querySelector('button#fill_carts')
-button_EmptyCarts   = document.querySelector('button#empty_carts')
-button_OpenCartTabs = document.querySelector('button#open_cart_tabs')
 button_LoadFromPage = document.querySelector('button#load_from_page')
 button_Complete     = document.querySelector('button#complete')
 button_Copy         = document.querySelector('button#copy')
@@ -33,17 +30,6 @@ button_Paste        = document.querySelector('button#paste')
 
 button_Clear.addEventListener 'click', () ->
     messenger.send('clearBOM')
-
-button_FillCarts.addEventListener 'click', () ->
-    @disabled = true
-    messenger.send('fillCarts')
-
-button_EmptyCarts.addEventListener 'click', () ->
-    @disabled = true
-    messenger.send('emptyCarts')
-
-button_OpenCartTabs.addEventListener 'click', () ->
-    messenger.send('openCarts')
 
 button_Paste.addEventListener 'click', () ->
     messenger.send('paste')
@@ -57,9 +43,6 @@ button_Copy.addEventListener 'click', () ->
 hideOrShow = (bom, onDotTSV) ->
     hasBOM = Boolean(Object.keys(bom.retailers).length)
     button_Clear.hidden        = not hasBOM
-    button_FillCarts.hidden    = not hasBOM
-    button_EmptyCarts.hidden   = not hasBOM
-    button_OpenCartTabs.hidden = not hasBOM
     button_Complete.hidden     = not hasBOM
     button_Copy.hidden         = not hasBOM
     button_LoadFromPage.hidden = not onDotTSV
@@ -120,8 +103,8 @@ render = (state) ->
         tr.appendChild(td_0)
 
         td_1 = document.createElement('td')
-        t  = "#{items.length}/#{bom.items.length} line"
-        t += 's' if (bom.items.length > 1)
+        t  = "#{items.length} line"
+        t += 's' if (items.length > 1) or (items.length == 0)
         if items.length < bom.items.length
             td_1.style.color = 'red'
         else
@@ -154,21 +137,18 @@ render = (state) ->
             startSpinning(this)
             messenger.send 'fillCart', @value
 
-        if retailer.adding_items
+        if retailer.clearing_cart
             startSpinning(links[0])
         else
             stopSpinning(links[0])
 
-        if retailer.clearing_cart
+        if retailer.adding_items
             startSpinning(links[1])
         else
             stopSpinning(links[1])
 
         any_adding   |= retailer.adding_items
         any_emptying |= retailer.clearing_cart
-
-    button_FillCarts.disabled  = any_adding
-    button_EmptyCarts.disabled = any_emptying
 
 messenger.on 'sendBackgroundState', (state) ->
     render(state)
