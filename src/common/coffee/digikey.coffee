@@ -41,6 +41,9 @@ class Digikey extends RetailerInterface
                 callback({success:false})
 
     addItems: (items, callback) ->
+        if items.length == 0
+            callback({success: true, fails: []})
+            return
         @adding_items = true
         @_add_items items, (result) =>
             if callback?

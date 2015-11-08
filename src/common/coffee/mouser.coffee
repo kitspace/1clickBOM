@@ -40,6 +40,9 @@ class Mouser extends RetailerInterface
             , {notify:false}
             , (->), (->)
     addItems: (items, callback) ->
+        if items.length == 0
+            callback({success: true, fails: []})
+            return
         @adding_items = true
         count = 0
         big_result = {success:true, fails:[]}

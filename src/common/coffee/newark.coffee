@@ -82,6 +82,9 @@ class Newark extends RetailerInterface
             callback(ids)
 
     addItems: (items, callback) ->
+        if items.length == 0
+            callback({success: true, fails: []})
+            return
         @adding_items = true
         @_add_items  items, (result) =>
             @refreshCartTabs()

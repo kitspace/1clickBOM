@@ -163,6 +163,11 @@ rsOnline =
 
 
     addItems: (items, callback) ->
+
+        if items.length == 0
+            callback({success: true, fails: []})
+            return
+
         @adding_items = true
 
         add = (items, callback) =>
@@ -385,6 +390,9 @@ rsDelivers =
 
 
     addItems: (items, callback) ->
+        if items.length == 0
+            callback({success: true, fails: []})
+            return
         @adding_items = true
         @_add_items items, 0, {success:true, fails:[]}, (result) =>
             @adding_items = false
