@@ -105,10 +105,13 @@ render = (state) ->
         td_1 = document.createElement('td')
         t  = "#{items.length} line"
         t += 's' if (items.length > 1) or (items.length == 0)
-        if items.length < bom.items.length
-            td_1.style.color = 'red'
+        if items.length == bom.items.length
+            td_1.style.color= 'darkGreen'
+        else if items.length > 0
+            td_1.style.color = '#CF5D00' #a dark orange'
         else
-            td_1.style.color= 'green'
+            td_1.style.color = 'darkRed'
+
         td_1.appendChild(document.createTextNode(t))
         tr.appendChild(td_1)
 
