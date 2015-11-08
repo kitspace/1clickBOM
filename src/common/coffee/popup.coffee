@@ -103,16 +103,22 @@ render = (state) ->
         tr.appendChild(td_0)
 
         td_1 = document.createElement('td')
-        t  = "#{items.length} line"
-        t += 's' if (items.length > 1) or (items.length == 0)
+        t  = "#{items.length}"
+        tspan = document.createElement('span')
+        tspan.appendChild(document.createTextNode(t))
         if items.length == bom.items.length
-            td_1.style.color= 'darkGreen'
+            tspan.style.color= 'darkGreen'
         else if items.length > 0
-            td_1.style.color = '#CF5D00' #a dark orange'
+            tspan.style.color = '#CF5D00' #a dark orange'
         else
-            td_1.style.color = 'darkRed'
+            tspan.style.color = 'darkRed'
 
-        td_1.appendChild(document.createTextNode(t))
+        t2 = " line#{'s' if (items.length > 1) or (items.length == 0)}"
+        t2span = document.createElement('span')
+        t2span.appendChild(document.createTextNode(t2))
+
+        td_1.appendChild(tspan)
+        td_1.appendChild(t2span)
         tr.appendChild(td_1)
 
         unicode_chars = ['\uf21b', '\uf21e']
