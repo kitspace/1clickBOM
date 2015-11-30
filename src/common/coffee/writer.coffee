@@ -18,7 +18,6 @@
 # the Original Code is Kaspar Emanuel.
 
 exports.writeTSV = (bom) ->
-    console.log(bom)
     r = 'References\tQuantity'
     retailers = []
     for retailer of bom.retailers
@@ -29,6 +28,9 @@ exports.writeTSV = (bom) ->
         r += "#{item.reference}"
         r += "\t#{item.quantity}"
         for retailer in retailers
-            r += "\t#{item.retailers[retailer]}"
+            if item.retailers[retailer]?
+                r += "\t#{item.retailers[retailer]}"
+            else
+                r += "\t"
         r += '\n'
     return r
