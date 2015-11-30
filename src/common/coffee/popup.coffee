@@ -41,11 +41,11 @@ button_Copy.addEventListener 'click', () ->
     messenger.send('copy')
 
 hideOrShow = (bom, onDotTSV) ->
-    #hasBOM = Boolean(Object.keys(bom.retailers).length)
-    #button_Clear.hidden        = not hasBOM
-    #button_Complete.hidden     = not hasBOM
-    #button_Copy.hidden         = not hasBOM
-    #button_LoadFromPage.hidden = not onDotTSV
+    hasBOM = Boolean(Object.keys(bom.retailers).length)
+    button_Clear.disabled      = not hasBOM
+    button_Complete.disabled   = not hasBOM
+    button_Copy.disabled       = not hasBOM
+    button_LoadFromPage.hidden = not onDotTSV
     element_Bom.hidden         = false
 
 startSpinning = (link) ->
@@ -81,8 +81,6 @@ render = (state) ->
     hideOrShow(bom, state.onDotTSV)
     while element_Table.hasChildNodes()
         element_Table.removeChild(element_Table.lastChild)
-    any_adding   = false
-    any_emptying = false
     for retailer_name in retailer_list
         items = []
         if retailer_name of bom.retailers
@@ -123,28 +121,39 @@ render = (state) ->
 
         unicode_chars = ['\uf21b', '\uf21e']
         titles = ['Empty ', 'Add items to ']
+        messages = ['emptyCart', 'fillCart']
+        lookup = ['clearing_cart', 'adding_items']
         links = []
         for i in  [0..1]
             td = document.createElement('td')
-            a = document.createElement('a')
-            a.value = retailer.name
-            a.title = titles[i] + retailer.name + ' cart'
-            a.href = '#'
+            tr.appendChild(td)
             span = document.createElement('span')
             span.className = 'button_icon'
             span.appendChild(document.createTextNode(unicode_chars[i]))
-            a.appendChild(span)
-            td.appendChild(a)
-            tr.appendChild(td)
-            links.push(a)
+            if (messages[i] == 'fillCart' and items.length == 0)
+                span.style = "color: grey;"
+                td.appendChild(span)
+                links.push(span)
+            else
+                a = document.createElement('a')
+                a.value = retailer.name
+                a.title = titles[i] + retailer.name + ' cart'
+                a.href = '#'
+                a.appendChild(span)
+                a.addEventListener 'click', () ->
+                    startSpinning(this)
+                    messenger.send(messages[i], @value)
+                td.appendChild(a)
+                links.push(a)
 
         links[0].addEventListener 'click', () ->
             startSpinning(this)
             messenger.send 'emptyCart', @value
 
-        links[1].addEventListener 'click', () ->
-            startSpinning(this)
-            messenger.send 'fillCart', @value
+        if (items.length != 0)
+            links[1].addEventListener 'click', () ->
+                startSpinning(this)
+                messenger.send 'fillCart', @value
 
         if retailer.clearing_cart
             startSpinning(links[0])
@@ -155,9 +164,6 @@ render = (state) ->
             startSpinning(links[1])
         else
             stopSpinning(links[1])
-
-        any_adding   |= retailer.adding_items
-        any_emptying |= retailer.clearing_cart
 
 messenger.on 'sendBackgroundState', (state) ->
     render(state)
