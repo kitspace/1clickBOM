@@ -41,12 +41,12 @@ button_Copy.addEventListener 'click', () ->
     messenger.send('copy')
 
 hideOrShow = (bom, onDotTSV) ->
-    hasBOM = Boolean(Object.keys(bom.retailers).length)
-    button_Clear.hidden        = not hasBOM
-    button_Complete.hidden     = not hasBOM
-    button_Copy.hidden         = not hasBOM
-    button_LoadFromPage.hidden = not onDotTSV
-    element_Bom.hidden         = not hasBOM
+    #hasBOM = Boolean(Object.keys(bom.retailers).length)
+    #button_Clear.hidden        = not hasBOM
+    #button_Complete.hidden     = not hasBOM
+    #button_Copy.hidden         = not hasBOM
+    #button_LoadFromPage.hidden = not onDotTSV
+    element_Bom.hidden         = false
 
 startSpinning = (link) ->
     td = link.parentNode
