@@ -68,7 +68,7 @@ span.button_text {
     vertical-align:middle;
     font-size:11px;
 }
-table {
+table#bom_table {
     width: 100%;
     background: white;
     border-collapse:collapse;
@@ -80,21 +80,33 @@ table {
 }
 
 table#overview_table {
+    border: none;
     text-align: center;
+    background-color: grey;
+    color: white;
+    border-radius: 5px;
+    line-height: 18px;
+    width:100%
 }
 
-td {
+table#overview_table > tr > td {
+    padding: 0px 3px 0px 3px;
+    font-size: 14px;
+    vertical-align:middle;
+}
+
+table#bom_table > tr > td {
     border: 1px solid #999999;
     padding: 0px 3px 0px 3px;
     font-size: 14px;
     vertical-align:middle;
 }
 
+
 table#bom_table > tr:hover {
     background: #ADD8E6;
 }
 table#bom_table > tr > td#icon {
-    min-width: 82px;
     cursor: pointer;
 }
 table#bom_table > tr > td > a > img {
