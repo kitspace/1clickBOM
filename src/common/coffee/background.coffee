@@ -79,31 +79,6 @@ exports.background = (messenger) ->
 
     sendState = () ->
         bom_manager.getBOM (bom) ->
-            #this estimates the size needed for the firefox popup and resizes
-            #it to emulate chrome behaviour
-            if messenger.resizePopup?
-                width  = 88
-                height = 46
-                nRetailers = Object.keys(bom.retailers).length
-                if nRetailers > 0
-                    maxItems = 0
-                    maxLines = 0
-                    for retailer_name of bom.retailers
-                        items = bom.retailers[retailer_name]
-                        no_of_items = 0
-                        for item in items
-                            no_of_items += item.quantity
-                        if no_of_items > maxItems then maxItems = no_of_items
-                        if items.length > maxLines then maxLines = items.length
-                    width = 250 + (String(maxItems).length * 9)
-                    width += (String(maxLines).length * 9)
-                    #due to 's' being added for plural
-                    if maxItems > 1 then width += 9
-                    if maxLines > 1 then width += 9
-                    height += 64 + (nRetailers * 27)
-                else if tsvPageNotifier.onDotTSV
-                    height += 28
-                messenger.resizePopup(width, height)
             messenger.send('sendBackgroundState',
                 bom:bom
                 bom_manager:bom_manager

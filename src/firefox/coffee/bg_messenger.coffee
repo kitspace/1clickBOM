@@ -24,7 +24,5 @@ bgMessenger = (popup) ->
         popup.port.on(msgName, callback)
     send:(msgName, input) ->
         popup.port.emit(msgName, input)
-    resizePopup: (width, height) ->
-        popup.resize(width, height)
 
 exports.bgMessenger = bgMessenger

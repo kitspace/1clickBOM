@@ -52,6 +52,8 @@ globToRegex = (glob) ->
 popup = require('sdk/panel').Panel(
     contentURL: data.url('html/popup.html')
     contentScriptFile: [data.url('popup.js')]
+    width: 260
+    height: 260
 )
 
 button = ActionButton(
@@ -76,7 +78,7 @@ browser =
         callback()
     prefsGet: (keys, callback) ->
         ret = {}
-        #give preferences a faux object hieararchy so
+        #give preferences a faux object hierarchy so
         # {'settings.UK.Farnell':''} becomes {settings:{UK:{Farnell:''}}}
         for k,v of preferences.prefs
             if /\./.test(k)
