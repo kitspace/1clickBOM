@@ -68,7 +68,8 @@ span.button_text {
     vertical-align:middle;
     font-size:11px;
 }
-table#bom_table {
+table {
+    width: 100%;
     background: white;
     border-collapse:collapse;
     border: none;
@@ -77,14 +78,20 @@ table#bom_table {
     display: table;
     margin: 0 auto;
 }
-table#bom_table > tr:hover {
-    background: #ADD8E6;
+
+table#overview_table {
+    text-align: center;
 }
-table#bom_table > tr > td {
+
+td {
     border: 1px solid #999999;
     padding: 0px 3px 0px 3px;
     font-size: 14px;
     vertical-align:middle;
+}
+
+table#bom_table > tr:hover {
+    background: #ADD8E6;
 }
 table#bom_table > tr > td#icon {
     min-width: 82px;
@@ -166,7 +173,17 @@ button#load_from_page:active {
         </button >
     </div>
 
-    <div id=bom hidden=true>
+    <div id=overview>
+        <div id=top_spacer></div>
+        <table id="overview_table">
+            <tr>
+                <td id=total_lines></td>
+                <td id=total_items></td>
+            </tr>
+        </table>
+    </div>
+
+    <div id=bom>
         <div id=top_spacer></div>
         <table id="bom_table"></table>
         <div id=bottom_spacer></div>

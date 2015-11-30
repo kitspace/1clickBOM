@@ -22,6 +22,8 @@
 
 element_Bom         = document.querySelector('#bom')
 element_Table       = document.querySelector('#bom_table')
+element_TotalLines  = document.querySelector('#total_lines')
+element_TotalItems  = document.querySelector('#total_items')
 button_Clear        = document.querySelector('button#clear')
 button_LoadFromPage = document.querySelector('button#load_from_page')
 button_Complete     = document.querySelector('button#complete')
@@ -52,7 +54,6 @@ hideOrShow = (bom, onDotTSV) ->
     button_Copy.disabled       = not hasBOM
 
     button_LoadFromPage.hidden = not onDotTSV
-    element_Bom.hidden         = false
 
 
 startSpinning = (link) ->
@@ -90,6 +91,13 @@ stopSpinning = (link) ->
 render = (state) ->
     bom = state.bom
     hideOrShow(bom, state.onDotTSV)
+    element_TotalLines.innerHTML = "#{bom.items.length}
+        line#{if bom.items.length != 1 then 's' else ''}"
+    quantity = 0
+    for item in bom.items
+        quantity += item.quantity
+    element_TotalItems.innerHTML = "#{quantity}
+        item#{if quantity != 1 then 's' else ''}"
     while element_Table.hasChildNodes()
         element_Table.removeChild(element_Table.lastChild)
     for retailer_name in retailer_list
@@ -103,7 +111,6 @@ render = (state) ->
         tr = document.createElement('tr')
         element_Table.appendChild(tr)
         td_0 = document.createElement('td')
-
         icon = document.createElement('img')
         icon.src = retailer.icon_src
         viewCart = document.createElement('a')
