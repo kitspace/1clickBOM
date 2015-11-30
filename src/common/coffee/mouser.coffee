@@ -29,11 +29,16 @@ class Mouser extends RetailerInterface
         super 'Mouser', country_code, 'data/mouser.json', settings
         #posting our sub-domain as the sites are all linked and switching
         #countries would not register properly otherwise
-        s = @site.split('.')[0].slice(3)
+        split = @site.split('.')
+        s = split[0].slice(3)
+        if s == 'www'
+           s = split[split.length - 1]
         if s == 'uk'
             s = 'gb'
-        post "http://www2.mouser.com/api/Preferences/SetSubdomain"
-        ,"subdomainName=#{s}", {notify:false}, (->), (->)
+        post "http://www2.mouser.com/api/Preferences/SetSubdomain?subdomainName=#{s}"
+            , ""
+            , {notify:false}
+            , (->), (->)
     addItems: (items, callback) ->
         @adding_items = true
         count = 0
