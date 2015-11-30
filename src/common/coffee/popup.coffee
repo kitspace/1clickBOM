@@ -106,8 +106,14 @@ render = (state) ->
 
         icon = document.createElement('img')
         icon.src = retailer.icon_src
-        td_0.appendChild(icon)
-        td_0.innerHTML += retailer.name
+        viewCart = document.createElement('a')
+        viewCart.appendChild(icon)
+        viewCart.innerHTML += retailer.name
+        viewCart.value = retailer.name
+        td_0.value = retailer.name
+        td_0.addEventListener 'click', () ->
+            messenger.send('openCart', @value)
+        td_0.appendChild(viewCart)
         td_0.id = 'icon'
         tr.appendChild(td_0)
 
