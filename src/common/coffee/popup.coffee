@@ -31,22 +31,29 @@ button_Paste        = document.querySelector('button#paste')
 button_Clear.addEventListener 'click', () ->
     messenger.send('clearBOM')
 
+
 button_Paste.addEventListener 'click', () ->
     messenger.send('paste')
+
 
 button_LoadFromPage.addEventListener 'click', () ->
     messenger.send('loadFromPage')
 
+
 button_Copy.addEventListener 'click', () ->
     messenger.send('copy')
 
+
 hideOrShow = (bom, onDotTSV) ->
     hasBOM = Boolean(Object.keys(bom.retailers).length)
+
     button_Clear.disabled      = not hasBOM
     button_Complete.disabled   = not hasBOM
     button_Copy.disabled       = not hasBOM
+
     button_LoadFromPage.hidden = not onDotTSV
     element_Bom.hidden         = false
+
 
 startSpinning = (link) ->
     td = link.parentNode
@@ -54,6 +61,7 @@ startSpinning = (link) ->
     spinner = document.createElement('div')
     spinner.className = 'spinner'
     td.appendChild(spinner)
+
     link.interval_id = setInterval ()->
         frames     = 12
         frameWidth = 15
@@ -64,8 +72,10 @@ startSpinning = (link) ->
         if (counter>=frames)
             counter = 0
     , 50
+
     link.hidden   = true
     link.spinning = true
+
 
 stopSpinning = (link) ->
     if link.spinning? && link.spinning
@@ -75,6 +85,7 @@ stopSpinning = (link) ->
         td.removeChild(spinner)
         link.hidden   = false
         link.spinning = false
+
 
 render = (state) ->
     bom = state.bom
@@ -150,7 +161,7 @@ render = (state) ->
             startSpinning(this)
             messenger.send 'emptyCart', @value
 
-        if (items.length != 0)
+        if items.length != 0
             links[1].addEventListener 'click', () ->
                 startSpinning(this)
                 messenger.send 'fillCart', @value
@@ -165,14 +176,17 @@ render = (state) ->
         else
             stopSpinning(links[1])
 
+
 messenger.on 'sendBackgroundState', (state) ->
     render(state)
+
 
 # For Firefox we forward the popup 'show' event from browser.coffee because
 # this script seems get loaded once at startup not on popup. The 'show' message
 # is never sent on Chrome.
 messenger.on 'show', ()->
     messenger.send('getBackgroundState')
+
 
 # For Chrome the whole script is instead re-executed each time the popup is
 # opened.
