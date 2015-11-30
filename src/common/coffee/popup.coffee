@@ -128,12 +128,9 @@ render = (state) ->
         t  = "#{items.length}"
         tspan = document.createElement('span')
         tspan.appendChild(document.createTextNode(t))
-        if items.length == bom.items.length
-            tspan.style.color= 'darkGreen'
-        else if items.length > 0
-            tspan.style.color = '#CF5D00' #a dark orange'
-        else
-            tspan.style.color = 'darkRed'
+
+        if items.length != bom.items.length
+            td_1.style.backgroundColor = 'pink'
 
         t2 = " line#{'s' if (items.length > 1) or (items.length == 0)}"
         t2span = document.createElement('span')
