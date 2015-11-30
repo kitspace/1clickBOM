@@ -5,7 +5,7 @@
 <center><div class="gfyitem" data-title=true data-autoplay=false data-controls=true data-expand=false data-id="EminentSecondaryInsect" ><img src=demo.gif></div></center>
 #
 
-<center><p><a id="chromelink" href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi"><img id="chromeimage" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" alt="Available on Chrome" /></a><a href=https://addons.mozilla.org/firefox/downloads/latest/634060/platform:2/addon-634060-latest.xpi?src=dp-btn-primary><img alt="Add to Firefox" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png"></a></p></center>
+<center><p><a id="chromelink" href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi"><img id="chromeimage" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" alt="Available on Chrome" /></a><a href=https://addons.mozilla.org/firefox/downloads/latest/634060/addon-634060-latest.xpi><img alt="Add to Firefox" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png"></a></p></center>
 <script type"text/javascript">
 
     //fix favicon on firefox (due to github.io hosting)
