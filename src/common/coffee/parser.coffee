@@ -64,7 +64,7 @@ checkValidItems =  (items_incoming, invalid, warnings) ->
         if isNaN(number)
             invalid.push {row:item.row, reason:'Quantity is not a number.'}
         else if number < 1
-            invalid.push {row:item.row, reason:'Quantity is less than one'}
+            invalid.push {row:item.row, reason:'Quantity is less than one.'}
         else
             item.quantity = number
             for key,v of item.retailers
@@ -97,7 +97,7 @@ parseSimple = (rows) ->
                     retailersObj[r] = ''
                 retailersObj["#{retailer}"] = cells[3]
                 item =
-                    reference   : cells[0]
+                    reference : cells[0]
                     quantity  : cells[1]
                     retailers : retailersObj
                     row       : i + 1
@@ -128,10 +128,10 @@ parseNamed = (rows, order, retailers) ->
                     retailersObj["#{r}"] = cells[order.indexOf(r)]
                 return retailersObj
             item =
-                reference  : cells[order.indexOf('reference')]
-                quantity : cells[order.indexOf('quantity')]
-                retailers: rs()
-                row      : i + 1
+                reference : cells[order.indexOf('reference')]
+                quantity  : cells[order.indexOf('quantity')]
+                retailers : rs()
+                row       : i + 1
             if not item.quantity?
                 invalid.push
                     row:item.row
@@ -175,13 +175,13 @@ getOrder = (cells) ->
             else
                 warnings.push
                     title:"Unknown column-heading '#{cell}'"
-                    message:"Column #{order.length + 1} was ignored"
+                    message:"Column #{order.length + 1} was ignored."
                 order.push('')
 
     if retailers.length <= 0
         return {reason: 'You need at least one retailer'}
     else
-        return {order:order, retailers:retailers, warnings:warnings}
+        return {order, retailers, warnings}
 
 
 parseTSV = (text) ->
@@ -189,7 +189,15 @@ parseTSV = (text) ->
     firstCells = rows[0].split('\t')
     warnings = []
     l = firstCells.length
-    if l < 3
+    if l < 2
+        return {
+            items:[]
+            invalid:[
+                row:1
+                reason:"The pasted data doesn't look like tab seperated values."
+            ]
+        }
+    else if l < 3
         return {
             items:[]
             invalid:[
