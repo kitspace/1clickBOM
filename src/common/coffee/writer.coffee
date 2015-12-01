@@ -18,7 +18,7 @@
 # the Original Code is Kaspar Emanuel.
 
 exports.writeTSV = (bom) ->
-    r = 'References\tQuantity'
+    r = 'References\tQuantity\tManufacturer\tPart Number'
     retailers = []
     for retailer of bom.retailers
         r += "\t#{retailer}"
@@ -27,6 +27,8 @@ exports.writeTSV = (bom) ->
     for item in bom.items
         r += "#{item.reference}"
         r += "\t#{item.quantity}"
+        r += "\t#{item.manufacturer}"
+        r += "\t#{item.partNumber}"
         for retailer in retailers
             if item.retailers[retailer]?
                 r += "\t#{item.retailers[retailer]}"

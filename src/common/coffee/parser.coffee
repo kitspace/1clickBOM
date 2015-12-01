@@ -36,14 +36,26 @@ retailer_aliases =
     'Newark'      : 'Newark'
 
 headings =
-    'reference'  : 'reference'
-    'references' : 'reference'
-    'line-note'  : 'reference'
-    'line note'  : 'reference'
-    'comment'    : 'comment'
-    'comments'   : 'comment'
-    'qty'        : 'quantity'
-    'quantity'   : 'quantity'
+    'reference'                : 'reference'
+    'references'               : 'reference'
+    'line-note'                : 'reference'
+    'line note'                : 'reference'
+    'comment'                  : 'comment'
+    'comments'                 : 'comment'
+    'qty'                      : 'quantity'
+    'quantity'                 : 'quantity'
+    'part-number'              : 'partNumber'
+    'partnumber'               : 'partNumber'
+    'part number'              : 'partNumber'
+    'm/f part'                 : 'partNumber'
+    'manuf. part'              : 'partNumber'
+    'mpn'                      : 'partNumber'
+    'm/f part number'          : 'partNumber'
+    'manuf. part number'       : 'partNumber'
+    'manufacturer part'        : 'partNumber'
+    'manufacturer part number' : 'partNumber'
+    'manufacturer'             : 'manufacturer'
+    'm/f'                      : 'manufacturer'
 
 #a case insensitive match
 lookup = (name, obj) ->
@@ -128,10 +140,12 @@ parseNamed = (rows, order, retailers) ->
                     retailersObj["#{r}"] = cells[order.indexOf(r)]
                 return retailersObj
             item =
-                reference : cells[order.indexOf('reference')]
-                quantity  : cells[order.indexOf('quantity')]
-                retailers : rs()
-                row       : i + 1
+                reference    : cells[order.indexOf('reference')]
+                quantity     : cells[order.indexOf('quantity')]
+                partNumber   : cells[order.indexOf('partNumber')]
+                manufacturer : cells[order.indexOf('manufacturer')]
+                retailers    : rs()
+                row          : i + 1
             if not item.quantity?
                 invalid.push
                     row:item.row

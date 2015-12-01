@@ -137,8 +137,12 @@ bom_manager =
                 if item1.reference == item2.reference
                     exists = true
                     for r in retailer_list
-                        if item1.retailers[r] == ''
+                        if item2.retailers[r] != ''
                             item1.retailers[r] = item2.retailers[r]
+                    if item2.partNumber != ''
+                        item1.partNumber = item2.partNumber
+                    if item2.manufacturer != ''
+                        item1.manufacturer = item2.manufacturer
                     item1.quantity += item2.quantity
                     break
             if not exists
