@@ -88,28 +88,19 @@ exports.background = (messenger) ->
         sendState()
 
     messenger.on 'fillCart', (name, callback) ->
-        bom_manager.fillCart name, () ->
-            sendState()
-        sendState()
-
-    messenger.on 'fillCarts', () ->
-        bom_manager.fillCarts undefined, () ->
+        @name = name
+        bom_manager.fillCart name, () =>
+            bom_manager.openCart(@name)
             sendState()
         sendState()
 
     messenger.on 'openCart', (name) ->
         bom_manager.openCart(name)
 
-    messenger.on 'openCarts', () ->
-        bom_manager.openCarts()
-
     messenger.on 'emptyCart', (name) ->
-        bom_manager.emptyCart name, () ->
-            sendState()
-        sendState()
-
-    messenger.on 'emptyCarts', () ->
-        bom_manager.emptyCarts undefined, () ->
+        @name = name
+        bom_manager.emptyCart name, () =>
+            bom_manager.openCart(@name)
             sendState()
         sendState()
 
