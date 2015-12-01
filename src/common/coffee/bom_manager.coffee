@@ -88,21 +88,20 @@ bom_manager =
                             break
                 p = autoComplete.search(query, retailers, other_fields)
                 p.then ((item, result) ->
-                    return {result, item}
+                    for field,v of result
+                        if field != 'retailers' and v?
+                            item[field] = v
+                    for retailer,v of result.retailers
+                        if v?
+                            item.retailers[retailer] = v
+                    return item
                 ).bind(undefined, item)
 
 
             final = promise_array.reduce (prev, promise) ->
                 prev.then (newItems) ->
-                    promise.then (({result, item}) ->
-                        newItem = item
-                        for field,v of result
-                            if field != 'retailers' and v?
-                                newItem[field] = v
-                        for retailer,v of result.retailers
-                            if v?
-                                newItem.retailers[retailer] = v
-                        newItems.push(newItem)
+                    promise.then ((item) ->
+                        newItems.push(item)
                         return newItems
                     )
             , Promise.resolve([])
