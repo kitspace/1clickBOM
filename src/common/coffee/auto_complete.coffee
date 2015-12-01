@@ -20,9 +20,7 @@ exports.search = (query, retailers) ->
                 retailer = n.querySelector('a').innerHTML.trim()
                 for k,v of aliases
                     retailer = retailer.replace(k,v)
-                console.log retailer
                 if r[retailer] == null
-                    console.log n.parentElement
                     sku = n.parentElement?.querySelector('td.col-sku')
                         ?.firstElementChild?.innerHTML.trim()
                     if sku?
