@@ -144,7 +144,6 @@ render = (state) ->
         titles = ['Empty ', 'Add items to ']
         messages = ['emptyCart', 'fillCart']
         lookup = ['clearing_cart', 'adding_items']
-        links = []
         for i in  [0..1]
             td = document.createElement('td')
             tr.appendChild(td)
@@ -154,37 +153,19 @@ render = (state) ->
             if (messages[i] == 'fillCart' and items.length == 0)
                 span.style = "color: grey;"
                 td.appendChild(span)
-                links.push(span)
             else
                 a = document.createElement('a')
                 a.value = retailer.name
+                a.message = messages[i]
                 a.title = titles[i] + retailer.name + ' cart'
                 a.href = '#'
                 a.appendChild(span)
                 a.addEventListener 'click', () ->
                     startSpinning(this)
-                    messenger.send(messages[i], @value)
+                    messenger.send(@message, @value)
                 td.appendChild(a)
-                links.push(a)
-
-        links[0].addEventListener 'click', () ->
-            startSpinning(this)
-            messenger.send 'emptyCart', @value
-
-        if items.length != 0
-            links[1].addEventListener 'click', () ->
-                startSpinning(this)
-                messenger.send 'fillCart', @value
-
-        if retailer.clearing_cart
-            startSpinning(links[0])
-        else
-            stopSpinning(links[0])
-
-        if retailer.adding_items
-            startSpinning(links[1])
-        else
-            stopSpinning(links[1])
+                if retailer[lookup[i]]
+                    startSpinning(a)
 
 
 messenger.on 'sendBackgroundState', (state) ->
