@@ -88,7 +88,6 @@ bom_manager =
                             break
                 p = autoComplete.search(query, retailers, other_fields)
                 p.then ((item, result) ->
-                    console.log('item', item)
                     return {result, item}
                 ).bind(undefined, item)
 
@@ -103,7 +102,6 @@ bom_manager =
                         for retailer,v of result.retailers
                             if v?
                                 newItem.retailers[retailer] = v
-                        console.log(newItem)
                         newItems.push(newItem)
                         return newItems
                     )
@@ -112,7 +110,6 @@ bom_manager =
                 bom = {}
                 bom.items = newItems
                 bom.retailers = @_to_retailers(bom.items)
-                console.log(bom)
                 browser.storageSet {bom:bom}, () ->
                     callback?()
 

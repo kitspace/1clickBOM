@@ -50,7 +50,7 @@ button_Complete.addEventListener 'click', () ->
 
 
 hideOrShow = (bom, onDotTSV) ->
-    hasBOM = Boolean(Object.keys(bom.retailers).length)
+    hasBOM = Boolean(Object.keys(bom.items).length)
 
     button_Clear.disabled      = not hasBOM
     button_Complete.disabled   = not hasBOM

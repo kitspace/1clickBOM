@@ -195,10 +195,7 @@ getOrder = (cells) ->
                     message:"Column #{order.length + 1} was ignored."
                 order.push('')
 
-    if retailers.length <= 0
-        return {reason: 'You need at least one retailer'}
-    else
-        return {order, retailers, warnings}
+    return {order, retailers, warnings}
 
 
 parseTSV = (text) ->
