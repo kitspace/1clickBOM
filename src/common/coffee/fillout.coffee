@@ -17,12 +17,14 @@ exports.search = (query, retailers) ->
             for retailer in retailers
                 r[retailer] = null
             for n,i in doc.querySelectorAll('td.col-seller')
-                retailer = n.querySelector('a').innerHTML
+                retailer = n.querySelector('a').innerHTML.trim()
                 for k,v of aliases
                     retailer = retailer.replace(k,v)
+                console.log retailer
                 if r[retailer] == null
+                    console.log n.parentElement
                     sku = n.parentElement?.querySelector('td.col-sku')
-                        ?.firstElementChild?.innerHTML
+                        ?.firstElementChild?.innerHTML.trim()
                     if sku?
                         r[retailer] = sku
                 done = retailers.reduce (prev, retailer) ->
