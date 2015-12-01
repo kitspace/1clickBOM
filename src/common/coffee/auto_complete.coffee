@@ -4,7 +4,7 @@ aliases =
     'Digi-Key' : 'Digikey'
     'RS Components' : 'RS'
 
-exports.search = (query, retailers) ->
+exports.search = (query, retailers = [], other_fields = []) ->
     url = "https://octopart.com/search?q=#{query}&start=0"
     for retailer in retailers
         for k,v of aliases
@@ -13,20 +13,26 @@ exports.search = (query, retailers) ->
         url += "&filter[fields][offers.seller.name][]=#{retailer}"
     http.promiseGet(url)
         .then (doc) ->
-            r = {}
+            r = {retailers:{}}
+            if 'manufacturer' in other_fields
+                r.manufacturer = doc.querySelector('.PartHeader__brand')
+                    ?.firstElementChild?.innerHTML.trim()
+            if 'partNumber' in other_fields
+                r.partNumber = doc.querySelector('.PartHeader__mpn')
+                    ?.firstElementChild?.innerHTML.trim()
             for retailer in retailers
-                r[retailer] = null
+                r.retailers[retailer] = null
             for n,i in doc.querySelectorAll('td.col-seller')
                 retailer = n.querySelector('a').innerHTML.trim()
                 for k,v of aliases
                     retailer = retailer.replace(k,v)
-                if r[retailer] == null
+                if r.retailers[retailer] == null
                     sku = n.parentElement?.querySelector('td.col-sku')
                         ?.firstElementChild?.innerHTML.trim()
                     if sku?
-                        r[retailer] = sku
+                        r.retailers[retailer] = sku
                 done = retailers.reduce (prev, retailer) ->
-                    prev && (r[retailer] != null)
+                    prev && (r.retailers[retailer] != null)
                 if done
                     break
             return r
