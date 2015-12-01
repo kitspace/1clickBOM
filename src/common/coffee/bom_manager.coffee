@@ -101,7 +101,7 @@ bom_manager =
                 badge.setDecaying('Warn','#FF8A00', priority=2)
         else if items.length > 0
             badge.setDecaying('OK','#00CF0F')
-        @_add_to_bom(items, invalid, warnings, callback)
+        @_add_to_bom(items, invalid, callback)
 
     _to_retailers: (items) ->
         r = {}
@@ -118,26 +118,51 @@ bom_manager =
 
 
     _merge_items: (items1, items2) ->
-        merged = []
-        for item2 in items2
+        warnings = []
+        duplicates = {}
+        merged = items1
+        for item2, index in items2
+            for item2_, index_ in items2
+                if index != index_ and item2.reference == item2_.reference
+                    d = duplicates[item2.reference]
+                    if d?
+                        if index not in d
+                            d.push(index)
+                        if index_ not in d
+                            d.push(index_)
+                    else
+                         duplicates[item2.reference] = [index, index_]
             exists = false
-            for item1 in items1
+            for item1 in merged
                 if item1.reference == item2.reference
                     exists = true
                     for r of retailer_list
                         if item1.retailers[r] == ''
                             item1.retailers[r] = item2.retailers[r]
                     item1.quantity += item2.quantity
-                    merged.push(item1)
                     break
             if not exists
                 merged.push(item2)
-        return merged
+        for ref, d of duplicates
+            warnings.push(
+                title:'Duplicate lines detected'
+                message:"You have the exact same reference '#{ref}' on lines
+                    #{n + 1 for n in d[0..(d.length-2)]} and #{d[d.length-1] + 1}.
+                    These have been merged"
+            )
+        return [merged, warnings]
 
 
-    _add_to_bom: (items, invalid, warnings, callback) ->
+    _add_to_bom: (items, invalid, callback) ->
         @getBOM (bom) =>
-            bom.items = @_merge_items(bom.items, items)
+            [bom.items, warnings] = @_merge_items(bom.items, items)
+            for warning in warnings
+                browser.notificationsCreate
+                    type:'basic'
+                    title:warning.title
+                    message:warning.message
+                    iconUrl:'/images/warning.png'
+                badge.setDecaying('Warn','#FF8A00', priority=2)
             bom.retailers = @_to_retailers(bom.items)
             over = []
             for retailer,lines of bom.retailers
