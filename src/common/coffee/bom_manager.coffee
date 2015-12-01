@@ -136,7 +136,7 @@ bom_manager =
             for item1 in merged
                 if item1.reference == item2.reference
                     exists = true
-                    for r of retailer_list
+                    for r in retailer_list
                         if item1.retailers[r] == ''
                             item1.retailers[r] = item2.retailers[r]
                     item1.quantity += item2.quantity
