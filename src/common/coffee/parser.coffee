@@ -67,7 +67,9 @@ checkValidItems =  (items_incoming, invalid, warnings) ->
             invalid.push {row:item.row, reason:'Quantity is less than one'}
         else
             item.quantity = number
-            item.retailers.Digikey = item.retailers.Digikey.replace(/-/g, '')
+            for key,v of item.retailers
+                if key != 'Digikey'
+                    item.retailers[key] = v.replace(/-/g,'')
             items.push(item)
     return {items, invalid, warnings}
 
