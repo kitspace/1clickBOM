@@ -17,7 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{retailer_list} = require('./retailer_list')
+{retailer_list, field_list} = require('./retailer_list')
 
 retailer_aliases =
     'Farnell'     : 'Farnell'
@@ -84,6 +84,9 @@ checkValidItems =  (items_incoming, invalid, warnings) ->
                     v = ''
                 else if key != 'Digikey'
                     v = v.replace(/-/g,'')
+            for field in field_list
+                if not item[field]?
+                    item[field] = ''
             items.push(item)
     return {items, invalid, warnings}
 

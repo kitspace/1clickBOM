@@ -45,6 +45,9 @@ button_LoadFromPage.addEventListener 'click', () ->
 button_Copy.addEventListener 'click', () ->
     messenger.send('copy')
 
+button_Complete.addEventListener 'click', () ->
+    messenger.send('autoComplete')
+
 
 hideOrShow = (bom, onDotTSV) ->
     hasBOM = Boolean(Object.keys(bom.retailers).length)

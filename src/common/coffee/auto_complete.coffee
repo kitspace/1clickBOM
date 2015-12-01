@@ -5,6 +5,8 @@ aliases =
     'RS Components' : 'RS'
 
 exports.search = (query, retailers = [], other_fields = []) ->
+    if query == ''
+        return Promise.resolve({retailers:{}})
     url = "https://octopart.com/search?q=#{query}&start=0"
     for retailer in retailers
         for k,v of aliases
@@ -33,6 +35,7 @@ exports.search = (query, retailers = [], other_fields = []) ->
                         r.retailers[retailer] = sku
                 done = retailers.reduce (prev, retailer) ->
                     prev && (r.retailers[retailer] != null)
+                , true
                 if done
                     break
             return r

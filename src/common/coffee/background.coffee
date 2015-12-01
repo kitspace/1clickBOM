@@ -97,6 +97,11 @@ exports.background = (messenger) ->
     messenger.on 'openCart', (name) ->
         bom_manager.openCart(name)
 
+    messenger.on 'autoComplete', () ->
+        bom_manager.autoComplete ()->
+            sendState()
+            badge.setDecaying('OK','#00CF0F')
+
     messenger.on 'emptyCart', (name) ->
         @name = name
         bom_manager.emptyCart name, () =>

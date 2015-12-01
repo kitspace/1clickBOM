@@ -26,7 +26,8 @@ http       = require './http'
 {Newark  } = require './newark'
 {parseTSV} = require './parser'
 {badge}    = require './badge'
-{retailer_list} = require './retailer_list'
+{retailer_list, field_list} = require './retailer_list'
+autoComplete = require './auto_complete'
 
 bom_manager =
     retailers: [Digikey, Farnell, Mouser, RS, Newark]
@@ -66,6 +67,54 @@ bom_manager =
             if not bom.items?
                 bom.items = []
             callback(bom)
+
+
+    autoComplete: (callback) ->
+        @getBOM (bom) =>
+            promise_array = for item in bom.items
+                retailers = []
+                other_fields = []
+                for retailer in retailer_list
+                    if item.retailers[retailer] == ''
+                        retailers.push(retailer)
+                for field in field_list
+                    if item[field] == ''
+                        other_fields.push(field)
+                query = item.partNumber
+                if query == ''
+                    for retailer in retailer_list
+                        if item.retailers[retailer] != ''
+                            query = item.retailers[retailer]
+                            break
+                p = autoComplete.search(query, retailers, other_fields)
+                p.then ((item, result) ->
+                    console.log('item', item)
+                    return {result, item}
+                ).bind(undefined, item)
+
+
+            final = promise_array.reduce (prev, promise) ->
+                prev.then (newItems) ->
+                    promise.then (({result, item}) ->
+                        newItem = item
+                        for field,v of result
+                            if field != 'retailers' and v?
+                                newItem[field] = v
+                        for retailer,v of result.retailers
+                            if v?
+                                newItem.retailers[retailer] = v
+                        console.log(newItem)
+                        newItems.push(newItem)
+                        return newItems
+                    )
+            , Promise.resolve([])
+            final.then (newItems) =>
+                bom = {}
+                bom.items = newItems
+                bom.retailers = @_to_retailers(bom.items)
+                console.log(bom)
+                browser.storageSet {bom:bom}, () ->
+                    callback?()
 
     addToBOM: (text, callback) ->
         {items, invalid, warnings} = parseTSV(text)
