@@ -146,6 +146,7 @@ render = (state) ->
         lookup = ['clearing_cart', 'adding_items']
         for i in  [0..1]
             td = document.createElement('td')
+            td.className = 'button_icon_td'
             tr.appendChild(td)
             span = document.createElement('span')
             span.className = 'button_icon'
