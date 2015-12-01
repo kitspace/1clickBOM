@@ -132,7 +132,7 @@ render = (state) ->
         if items.length != bom.items.length
             td_1.style.backgroundColor = 'pink'
 
-        t2 = " line#{'s' if (items.length > 1) or (items.length == 0)}"
+        t2 = " line#{if items.length != 1 then 's' else ''}"
         t2span = document.createElement('span')
         t2span.appendChild(document.createTextNode(t2))
 
