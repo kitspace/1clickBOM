@@ -68,8 +68,10 @@ checkValidItems =  (items_incoming, invalid, warnings) ->
         else
             item.quantity = number
             for key,v of item.retailers
-                if key != 'Digikey'
-                    item.retailers[key] = v.replace(/-/g,'')
+                if not v?
+                    v = ''
+                else if key != 'Digikey'
+                    v = v.replace(/-/g,'')
             items.push(item)
     return {items, invalid, warnings}
 
