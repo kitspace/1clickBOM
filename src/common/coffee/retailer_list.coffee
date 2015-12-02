@@ -7,7 +7,6 @@ exports.isComplete = (items) ->
             if item.retailers[r] == ''
                 complete = false
         for f in exports.field_list
-            console.log(item[f])
             if item[f] == ''
                 complete = false
     return complete

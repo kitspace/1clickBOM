@@ -26,6 +26,8 @@ http       = require './http'
 {Newark  } = require './newark'
 {parseTSV} = require './parser'
 {badge}    = require './badge'
+{retailer_list, field_list, isComplete} = require './retailer_list'
+autoComplete = require './auto_complete'
 
 bom_manager =
     retailers: [Digikey, Farnell, Mouser, RS, Newark]
