@@ -185,9 +185,6 @@ button#load_from_page:active {
             <span class=button_icon>&#xf220;</span>
             <span class=button_text> Paste</span>
         </button>
-        <button id="load_from_page" title="Load BOM data from page" hidden=true>
-            <span class=button_icon>&#x2190;</span>
-        </button >
     </div>
 
     <div id=overview>
@@ -206,9 +203,12 @@ button#load_from_page:active {
         <div id=bottom_spacer></div>
     </div>
     <div style="text-align:center;">
-        <button class=big_buttons id="complete" title="Attempt to auto fill out retailer parts">
+        <button id="load_from_page" title="Load BOM data from page" hidden=true>
+            <span class=button_icon>&#x2190;</span>
+        </button >
+        <button class=big_buttons id="complete" title="Attempt to auto fill out empty fields">
             <span class=button_icon>&#xf222;</span>
-            <span class=button_text> Auto-Complete</span>
+            <span class=button_text> Attempt Auto-Complete</span>
         </button>
     </div>
 </div>

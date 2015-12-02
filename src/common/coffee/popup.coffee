@@ -18,7 +18,7 @@
 # the Original Code is Kaspar Emanuel.
 
 {messenger} = require './messenger'
-{retailer_list} = require './retailer_list'
+{retailer_list, isComplete} = require './retailer_list'
 
 element_Bom         = document.querySelector('#bom')
 element_Table       = document.querySelector('#bom_table')
@@ -53,7 +53,7 @@ hideOrShow = (bom, onDotTSV) ->
     hasBOM = Boolean(Object.keys(bom.items).length)
 
     button_Clear.disabled      = not hasBOM
-    button_Complete.disabled   = not hasBOM
+    button_Complete.disabled   = (not hasBOM) or isComplete(bom.items)
     button_Copy.disabled       = not hasBOM
 
     button_LoadFromPage.hidden = not onDotTSV
