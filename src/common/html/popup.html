@@ -81,6 +81,7 @@ table#bom_table {
 
 table#overview_table {
     border: none;
+    max-height:40px;
     text-align: center;
     background-color: grey;
     color: white;
@@ -89,7 +90,7 @@ table#overview_table {
     width:100%
 }
 
-table#overview_table > tr > td {
+.overview_td{
     padding: 0px 3px 0px 3px;
     font-size: 14px;
     vertical-align:middle;
@@ -187,13 +188,14 @@ button#load_from_page:active {
         </button>
     </div>
 
-    <div id=overview>
+    <div id=overview style="max-height:48px">
         <div id=top_spacer></div>
         <table id="overview_table">
             <tr>
-                <td id=total_lines></td>
-                <td id=total_partNumbers></td>
-                <td id=total_items></td>
+                <td class=overview_td id=total_lines></td>
+                <td class=overview_td id=total_manufacturers></td>
+                <td class=overview_td id=total_partNumbers></td>
+                <td class=overview_td id=total_items></td>
             </tr>
         </table>
     </div>

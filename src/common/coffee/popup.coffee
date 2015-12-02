@@ -24,6 +24,7 @@ element_Bom         = document.querySelector('#bom')
 element_Table       = document.querySelector('#bom_table')
 element_TotalLines  = document.querySelector('#total_lines')
 element_TotalPartNumbers  = document.querySelector('#total_partNumbers')
+element_TotalManufacturers  = document.querySelector('#total_manufacturers')
 element_TotalItems  = document.querySelector('#total_items')
 button_Clear        = document.querySelector('button#clear')
 button_LoadFromPage = document.querySelector('button#load_from_page')
@@ -100,8 +101,11 @@ render = (state) ->
     part_numbers = bom.items.reduce (prev, item) ->
         prev += item.partNumber != ''
     , 0
-    element_TotalPartNumbers.innerHTML = "#{part_numbers}
-        with MPN#{if part_numbers != 1 then 's' else ''}"
+    element_TotalPartNumbers.innerHTML = "#{part_numbers} with MPN"
+    manufacturers = bom.items.reduce (prev, item) ->
+        prev += item.manufacturer != ''
+    , 0
+    element_TotalManufacturers.innerHTML = "#{manufacturers} with M/F"
     quantity = 0
     for item in bom.items
         quantity += item.quantity

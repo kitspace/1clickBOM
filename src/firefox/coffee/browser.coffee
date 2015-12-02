@@ -53,7 +53,7 @@ popup = require('sdk/panel').Panel(
     contentURL: data.url('html/popup.html')
     contentScriptFile: [data.url('popup.js')]
     width: 260
-    height: 260
+    height: 272
 )
 
 button = ActionButton(
