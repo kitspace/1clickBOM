@@ -163,6 +163,7 @@ button#complete {
 }
 
 button#load_from_page {
+    margin-top:20px;
     float:left;
     background-color: #DDDDDD;
     background-repeat: repeat-x;
@@ -218,39 +219,44 @@ button#load_from_page:active {
         <table id="bom_table"></table>
         <div id=bottom_spacer></div>
     </div>
-    <table>
-        <tr>
-            <td style="text-align:right;">
-                <button class="buttons bottom_buttons" id="empty_carts" title="Empty all retailer carts">
-                    <span class=button_icon>&#xf21b;</span>
-                    <span class=button_text>Empty</span>
-                </button>
-            </td>
-            <td>
-                <button class="buttons bottom_buttons" id="fill_carts" title="Add all BOM items to retailer carts">
-                    <span class=button_icon>&#xf21e;</span>
-                    <span class=button_text>Add</span>
-                </button>
-            </td>
-        </tr>
-                <button id="load_from_page" title="Load BOM data from page" hidden=true>
-                    <span class=button_icon>↑</span>
-                </button >
-        <tr>
-            <td style="text-align:right;">
-                <button class="buttons bottom_buttons" id="complete" title="Attempt to auto fill out empty fields">
-                    <span class=button_icon>&#xf223;</span>
-                    <span class=button_text> Complete</span>
-                </button>
-            </td>
-            <td>
-                <button class="buttons bottom_buttons" id="reduce" title="Reduce to preferred retailers">
-                    <span class=button_icon>&#xf225;</span>
-                    <span class=button_text> Reduce</span>
-                </button>
-            </td>
-        </tr>
-    </table>
+    <div>
+        <button id="load_from_page" title="Load BOM data from page" hidden=true>
+            <span class=button_icon>↑</span>
+        </button >
+        <button id="load_from_page" title="Load BOM data from page" hidden=true>
+            <span class=button_icon>↑</span>
+        </button >
+        <table>
+            <tr>
+                <td style="text-align:right;">
+                    <button class="buttons bottom_buttons" id="empty_carts" title="Empty all retailer carts">
+                        <span class=button_icon>&#xf21b;</span>
+                        <span class=button_text>Empty</span>
+                    </button>
+                </td>
+                <td>
+                    <button class="buttons bottom_buttons" id="fill_carts" title="Add all BOM items to retailer carts">
+                        <span class=button_icon>&#xf21e;</span>
+                        <span class=button_text>Add</span>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:right;">
+                    <button class="buttons bottom_buttons" id="complete" title="Attempt to auto fill out empty fields">
+                        <span class=button_icon>&#xf223;</span>
+                        <span class=button_text> Complete</span>
+                    </button>
+                </td>
+                <td>
+                    <button class="buttons bottom_buttons" id="reduce" title="Reduce to preferred retailers">
+                        <span class=button_icon>&#xf225;</span>
+                        <span class=button_text> Reduce</span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 <script src="../js/popup.js"></script>
 </center>
