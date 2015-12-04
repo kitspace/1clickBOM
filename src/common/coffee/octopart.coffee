@@ -1,4 +1,4 @@
-http        = require './http'
+http = require './http'
 
 aliases =
     'Digi-Key' : 'Digikey'
