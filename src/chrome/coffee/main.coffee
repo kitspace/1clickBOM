@@ -37,8 +37,6 @@ window.Test = (module)->
     url += '?module=' + module if module?
     window.open(url)
 
-window.autoComplete = require('./auto_complete')
-
 window.clear = () ->
     browser.storageRemove 'bom' , () ->
 

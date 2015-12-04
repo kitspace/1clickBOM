@@ -27,7 +27,7 @@ http       = require './http'
 {parseTSV} = require './parser'
 {badge}    = require './badge'
 {retailer_list, field_list, isComplete} = require './retailer_list'
-autoComplete = require './auto_complete'
+octopart = require './octopart'
 
 bom_manager =
     retailers: [Digikey, Farnell, Mouser, RS, Newark]
@@ -86,7 +86,7 @@ bom_manager =
                         if item.retailers[retailer] != ''
                             query = item.retailers[retailer]
                             break
-                p = autoComplete.search(query, retailers, other_fields)
+                p = octopart.search(query, retailers, other_fields)
                 p.then ((item, result) ->
                     for field,v of result
                         if field != 'retailers' and v?
