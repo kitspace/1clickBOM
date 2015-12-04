@@ -11,6 +11,7 @@ body {
     text-align: right;
     overflow: hidden;
 }
+
 .spinner {
     display: table;
     margin: 0 auto;
@@ -32,9 +33,8 @@ div#bottom_spacer {
     font-family:"Foundation Icons";
     src: url("./../images/foundation-icons.ttf");
 }
-button.big_buttons {
+button.buttons {
     min-height:25px;
-    min-width: 72px;
     vertical-align:middle;
     border: 1px solid grey;
     border-radius: 3px;
@@ -42,14 +42,22 @@ button.big_buttons {
     margin: 2px 2px 2px 2px;
 }
 
-button.big_buttons:hover {
+button.buttons:hover {
     border: 1px solid #999999;
     background-image: linear-gradient(to top,#DFDFDF,#FFFFFF);
 }
 
-button.big_buttons:active {
+button.buttons:active {
     border: 1px solid #999999;
     background-image: linear-gradient(to bottom,#DDDDDD,#FFFFFF);
+}
+
+button.top_buttons {
+    min-width: 72px;
+}
+
+button.bottom_buttons {
+    min-width: 90px;
 }
 
 span.button_icon {
@@ -155,7 +163,7 @@ button#complete {
 }
 
 button#load_from_page {
-    float:none;
+    float:left;
     background-color: #DDDDDD;
     background-repeat: repeat-x;
     background-image: linear-gradient(to top,#4444E6,#0000EE);
@@ -179,15 +187,15 @@ button#load_from_page:active {
 <center>
 <div id=main_content>
     <div style="text-align:center;">
-        <button class=big_buttons id="clear" title="Clear entire BOM">
+        <button class="buttons top_buttons" id="clear" title="Clear entire BOM">
             <span class=button_icon>&#xf182;</span>
             <span class=button_text>Clear</span>
         </button >
-        <button class=big_buttons id="copy" title="Copy entire BOM to clipboard">
+        <button class="buttons top_buttons" id="copy" title="Copy entire BOM to clipboard">
             <span class=button_icon>&#xf188;</span>
             <span class=button_text> Copy</span>
         </button>
-        <button class=big_buttons id="paste" title="Paste BOM data from clipboard">
+        <button class="buttons top_buttons" id="paste" title="Paste BOM data from clipboard">
             <span class=button_icon>&#xf220;</span>
             <span class=button_text> Paste</span>
         </button>
@@ -210,17 +218,39 @@ button#load_from_page:active {
         <table id="bom_table"></table>
         <div id=bottom_spacer></div>
     </div>
-    <div style="text-align:center;">
-        <span style="float:left;">
-            <button id="load_from_page" title="Load BOM data from page" hidden=true>
-                <span class=button_icon>↑</span>
-            </button >
-        </span>
-        <button class=big_buttons id="complete" title="Attempt to auto fill out empty fields">
-            <span class=button_icon>&#xf222;</span>
-            <span class=button_text> Attempt Auto-Complete</span>
-        </button>
-    </div>
+    <table>
+        <tr>
+            <td style="text-align:right;">
+                <button class="buttons bottom_buttons" id="empty_carts" title="Empty all retailer carts">
+                    <span class=button_icon>&#xf21b;</span>
+                    <span class=button_text>Empty</span>
+                </button>
+            </td>
+            <td>
+                <button class="buttons bottom_buttons" id="fill_carts" title="Add all BOM items to retailer carts">
+                    <span class=button_icon>&#xf21e;</span>
+                    <span class=button_text>Add</span>
+                </button>
+            </td>
+        </tr>
+                <button id="load_from_page" title="Load BOM data from page" hidden=true>
+                    <span class=button_icon>↑</span>
+                </button >
+        <tr>
+            <td style="text-align:right;">
+                <button class="buttons bottom_buttons" id="complete" title="Attempt to auto fill out empty fields">
+                    <span class=button_icon>&#xf223;</span>
+                    <span class=button_text> Complete</span>
+                </button>
+            </td>
+            <td>
+                <button class="buttons bottom_buttons" id="reduce" title="Reduce to preferred retailers">
+                    <span class=button_icon>&#xf225;</span>
+                    <span class=button_text> Reduce</span>
+                </button>
+            </td>
+        </tr>
+    </table>
 </div>
 <script src="../js/popup.js"></script>
 </center>

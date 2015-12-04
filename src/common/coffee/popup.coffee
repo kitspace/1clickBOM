@@ -31,6 +31,19 @@ button_LoadFromPage = document.querySelector('button#load_from_page')
 button_Complete     = document.querySelector('button#complete')
 button_Copy         = document.querySelector('button#copy')
 button_Paste        = document.querySelector('button#paste')
+button_FillCarts    = document.querySelector('button#fill_carts')
+button_EmptyCarts   = document.querySelector('button#empty_carts')
+
+
+button_FillCarts.addEventListener 'click', () ->
+    @disabled = true
+    messenger.send('fillCarts')
+
+
+button_EmptyCarts.addEventListener 'click', () ->
+    @disabled = true
+    messenger.send('emptyCarts')
+
 
 button_Clear.addEventListener 'click', () ->
     messenger.send('clearBOM')
