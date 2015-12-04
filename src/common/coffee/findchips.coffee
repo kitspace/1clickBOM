@@ -1,0 +1,85 @@
+# The contents of this file are subject to the Common Public Attribution
+# License Version 1.0 (the “License”); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://1clickBOM.com/LICENSE. The License is based on the Mozilla Public
+# License Version 1.1 but Sections 14 and 15 have been added to cover use of
+# software over a computer network and provide for limited attribution for the
+# Original Developer. In addition, Exhibit A has been modified to be consistent
+# with Exhibit B.
+#
+# Software distributed under the License is distributed on an
+# "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations under
+# the License.
+#
+# The Original Code is 1clickBOM.
+#
+# The Original Developer is the Initial Developer. The Original Developer of
+# the Original Code is Kaspar Emanuel.
+
+http = require './http'
+
+aliases =
+    'Digi-Key'           : 'Digikey'
+    'RS Components'      : 'RS'
+    'Mouser Electronics' : 'Mouser'
+    'Farnell element14'  : 'Farnell'
+    'Newark element14'   : 'Newark'
+
+exports.search = (query, retailers_to_search = [], other_fields = []) ->
+    if query == ''
+        return Promise.resolve({retailers:{}})
+    url = "http://www.findchips.com/lite/#{query}"
+    http.promiseGet(url)
+        .then (doc)->
+            result = {retailers:[]}
+            elements = doc.getElementsByClassName('distributor-title')
+            for h in elements
+                title = h.firstElementChild.innerHTML.trim()
+                retailer = ''
+                for k,v of aliases
+                    regex = RegExp("^#{k}")
+                    if regex.test(title)
+                        retailer = v
+                        break
+                if retailer not in retailers_to_search
+                    continue
+                min_quantities = []
+                additional_elements =
+                    h.parentElement.getElementsByClassName('additional-title')
+                for span in additional_elements
+                    if span.innerHTML == 'Min Qty'
+                        min_quantities.push(span.nextElementSibling)
+                {span, n} = min_quantities.reduce (prev, span) ->
+                    n = parseInt(span.innerHTML.trim())
+                    if prev?.n < n or isNaN(n)
+                        return prev
+                    else
+                        return {span, n}
+                , {}
+                if not span?
+                    for span in additional_elements
+                        if span.innerHTML == 'Distri #:'
+                            part = span.nextElementSibling.innerHTML.trim()
+                            break
+                else
+                    tr = span.parentElement?.parentElement?.parentElement
+                    if tr?
+                        for span in tr?.getElementsByClassName('additional-title')
+                            if span.innerHTML == 'Distri #:'
+                                part = span.nextElementSibling?.innerHTML.trim()
+                                break
+                if part?
+                    result.retailers[retailer] = part
+            return result
+
+
+
+
+
+
+
+
+
+
+

@@ -37,6 +37,8 @@ window.Test = (module)->
     url += '?module=' + module if module?
     window.open(url)
 
+window.findchips = require('./findchips').search
+
 window.clear = () ->
     browser.storageRemove 'bom' , () ->
 
