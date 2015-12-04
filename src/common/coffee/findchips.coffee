@@ -27,7 +27,6 @@ aliases =
     'Newark element14'   : 'Newark'
 
 exports.search = (query, retailers_to_search = [], other_fields = []) ->
-    console.log(arguments)
     if query == ''
         return Promise.resolve({retailers:{}})
     url = "http://www.findchips.com/lite/#{query}"
@@ -35,7 +34,6 @@ exports.search = (query, retailers_to_search = [], other_fields = []) ->
         .then (doc)->
             result = {retailers:{}}
             elements = doc.getElementsByClassName('distributor-title')
-            console.log(elements)
             for h in elements
                 title = h.firstElementChild.innerHTML.trim()
                 retailer = ''

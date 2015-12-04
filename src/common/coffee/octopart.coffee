@@ -43,19 +43,24 @@ exports.search = (query, retailers = [], other_fields = []) ->
                     ?.firstElementChild?.innerHTML.trim()
             for retailer in retailers
                 r.retailers[retailer] = null
-            for n,i in doc.querySelectorAll('td.col-seller')
-                retailer = n.querySelector('a').innerHTML.trim()
+            tds = doc.querySelectorAll('td.col-seller')
+            elements_moq = []
+            for td in tds
+                min_qty = td.parentElement?.getElementsByClassName('col-moq')?[0]?
+                min_qty = parseInt(min_qty?.firstElementChild?.innerHTML?.trim())
+                if isNaN(min_qty)
+                    min_qty = undefined
+                elements_moq.push({td:td, moq:min_qty})
+            moqs = {}
+            for {td,moq},i in elements_moq
+                retailer = td.querySelector('a').innerHTML.trim()
                 for k,v of aliases
                     retailer = retailer.replace(k,v)
-                if r.retailers[retailer] == null
-                    sku = n.parentElement?.querySelector('td.col-sku')
+                if not moqs[retailer]? or moqs[retailer] > moq
+                    sku = td.parentElement?.querySelector('td.col-sku')
                         ?.firstElementChild?.innerHTML.trim()
                     if sku?
+                        moqs[retailer] = moq
                         r.retailers[retailer] = sku
-                done = retailers.reduce (prev, retailer) ->
-                    prev && (r.retailers[retailer] != null)
-                , true
-                if done
-                    break
             return r
 
