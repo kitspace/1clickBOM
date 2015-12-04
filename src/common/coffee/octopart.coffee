@@ -50,7 +50,6 @@ exports.search = (query, retailers = [], other_fields = []) ->
                 if isNaN(min_qty)
                     min_qty = undefined
                 elements_moq.push({td:td, moq:min_qty})
-                console.log(td.querySelector('a').innerHTML.trim(), min_qty)
             moqs = {}
             for {td,moq} in elements_moq
                 retailer = td.querySelector('a').innerHTML.trim()

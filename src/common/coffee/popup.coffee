@@ -165,7 +165,8 @@ render = (state) ->
             span.className = 'button_icon'
             span.appendChild(document.createTextNode(unicode_chars[i]))
             if (messages[i] == 'fillCart' and items.length == 0)
-                span.style = "color: grey;"
+                span.style.color = 'grey'
+                span.style.cursor = 'default'
                 td.appendChild(span)
             else
                 a = document.createElement('a')
