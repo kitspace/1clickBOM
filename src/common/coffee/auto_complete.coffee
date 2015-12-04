@@ -18,9 +18,10 @@
 # the Original Code is Kaspar Emanuel.
 
 {retailer_list, field_list, isComplete} = require './retailer_list'
-octopart = require './octopart'
+octopart  = require './octopart'
+findchips = require './findchips'
 
-autoComplete = (items, callback) ->
+_auto_complete = (search_engine, items) ->
     promise_array = for item in items
         retailers = []
         other_fields = []
@@ -36,7 +37,7 @@ autoComplete = (items, callback) ->
                 if item.retailers[retailer] != ''
                     query = item.retailers[retailer]
                     break
-        p = octopart.search(query, retailers, other_fields)
+        p = search_engine.search(query, retailers, other_fields)
         p.then ((item, result) ->
             for field,v of result
                 if field != 'retailers' and v?
@@ -47,6 +48,7 @@ autoComplete = (items, callback) ->
             return item
         ).bind(undefined, item)
 
+
     final = promise_array.reduce (prev, promise) ->
         prev.then (newItems) ->
             promise.then (item) ->
@@ -54,8 +56,19 @@ autoComplete = (items, callback) ->
                 return newItems
     , Promise.resolve([])
 
-    final.then (newItems) ->
-        callback(newItems)
+    return final
+
+
+autoComplete = (items, callback) ->
+    p = _auto_complete(octopart, items)
+    p.then (newItems) ->
+        if not isComplete(newItems)
+            p = _auto_complete(findchips, newItems)
+            p.then (newItems_) ->
+                callback(newItems_)
+        else
+            callback(newItems)
+
 
 exports.autoComplete = autoComplete
 

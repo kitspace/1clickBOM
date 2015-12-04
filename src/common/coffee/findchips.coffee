@@ -27,13 +27,15 @@ aliases =
     'Newark element14'   : 'Newark'
 
 exports.search = (query, retailers_to_search = [], other_fields = []) ->
+    console.log(arguments)
     if query == ''
         return Promise.resolve({retailers:{}})
     url = "http://www.findchips.com/lite/#{query}"
     http.promiseGet(url)
         .then (doc)->
-            result = {retailers:[]}
+            result = {retailers:{}}
             elements = doc.getElementsByClassName('distributor-title')
+            console.log(elements)
             for h in elements
                 title = h.firstElementChild.innerHTML.trim()
                 retailer = ''
@@ -66,8 +68,8 @@ exports.search = (query, retailers_to_search = [], other_fields = []) ->
                     tr = span.parentElement?.parentElement?.parentElement
                     if tr?
                         for span in tr?.getElementsByClassName('additional-title')
-                            if span.innerHTML == 'Distri #:'
-                                part = span.nextElementSibling?.innerHTML.trim()
+                            if span.innerHTML == 'Distri #:' and span.nextElementSibling?
+                                part = span.nextElementSibling.innerHTML.trim()
                                 break
                 if part?
                     result.retailers[retailer] = part
