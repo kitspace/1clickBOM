@@ -32,35 +32,35 @@ exports.search = (query, retailers = [], other_fields = []) ->
             retailer = retailer.replace(v,k)
         retailer = encodeURIComponent(retailer)
         url += "&filter[fields][offers.seller.name][]=#{retailer}"
+    url += '&filter[fields][avg_avail][]=[1 TO *]'
     http.promiseGet(url)
         .then (doc) ->
-            r = {retailers:{}}
+            result = {retailers:{}}
             if 'manufacturer' in other_fields
-                r.manufacturer = doc.querySelector('.PartHeader__brand')
+                result.manufacturer = doc.querySelector('.PartHeader__brand')
                     ?.firstElementChild?.innerHTML.trim()
             if 'partNumber' in other_fields
-                r.partNumber = doc.querySelector('.PartHeader__mpn')
+                result.partNumber = doc.querySelector('.PartHeader__mpn')
                     ?.firstElementChild?.innerHTML.trim()
-            for retailer in retailers
-                r.retailers[retailer] = null
             tds = doc.querySelectorAll('td.col-seller')
             elements_moq = []
             for td in tds
-                min_qty = td.parentElement?.getElementsByClassName('col-moq')?[0]?
-                min_qty = parseInt(min_qty?.firstElementChild?.innerHTML?.trim())
+                min_qty = td.parentElement?.querySelector('td.col-moq')
+                min_qty = parseInt(min_qty.innerHTML.trim().replace(/,/g,''))
                 if isNaN(min_qty)
                     min_qty = undefined
                 elements_moq.push({td:td, moq:min_qty})
+                console.log(td.querySelector('a').innerHTML.trim(), min_qty)
             moqs = {}
-            for {td,moq},i in elements_moq
+            for {td,moq} in elements_moq
                 retailer = td.querySelector('a').innerHTML.trim()
                 for k,v of aliases
                     retailer = retailer.replace(k,v)
-                if not moqs[retailer]? or moqs[retailer] > moq
+                if not moqs[retailer]? or (moq? and moqs[retailer] > moq)
                     sku = td.parentElement?.querySelector('td.col-sku')
                         ?.firstElementChild?.innerHTML.trim()
                     if sku?
                         moqs[retailer] = moq
-                        r.retailers[retailer] = sku
-            return r
+                        result.retailers[retailer] = sku
+            return result
 
