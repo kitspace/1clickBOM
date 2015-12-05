@@ -57,7 +57,7 @@ button.top_buttons {
 }
 
 button.bottom_buttons {
-    min-width: 90px;
+    min-width: 100px;
 }
 
 span.button_icon {
@@ -163,7 +163,8 @@ button#complete {
 }
 
 button#load_from_page {
-    margin-top:20px;
+    margin-top:10px;
+    height:60px;
     float:left;
     background-color: #DDDDDD;
     background-repeat: repeat-x;
@@ -219,11 +220,9 @@ button#load_from_page:active {
         <table id="bom_table"></table>
         <div id=bottom_spacer></div>
     </div>
-    <div>
-        <button id="load_from_page" title="Load BOM data from page" hidden=true>
-            <span class=button_icon>↑</span>
-        </button >
-        <button id="load_from_page" title="Load BOM data from page" hidden=true>
+    <div style="min-width:265px;text-align:center;content-align:center;">
+        <center>
+        <button id="load_from_page" title="Load BOM data from page">
             <span class=button_icon>↑</span>
         </button >
         <table>
@@ -256,6 +255,7 @@ button#load_from_page:active {
                 </td>
             </tr>
         </table>
+    </center>
     </div>
 </div>
 <script src="../js/popup.js"></script>

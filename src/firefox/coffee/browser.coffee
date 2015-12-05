@@ -52,8 +52,8 @@ globToRegex = (glob) ->
 popup = require('sdk/panel').Panel(
     contentURL: data.url('html/popup.html')
     contentScriptFile: [data.url('popup.js')]
-    width: 260
-    height: 272
+    width: 275
+    height: 320
 )
 
 button = ActionButton(
