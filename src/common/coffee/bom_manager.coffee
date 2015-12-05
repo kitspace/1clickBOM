@@ -259,57 +259,19 @@ bom_manager =
         else
             badge.setDecaying('OK','#00CF0F')
 
-    fillCarts: (callback, callbackEveryRetailer)->
-        @filling_carts = true
-        big_result = {success:true, fails:[]}
-        browser.storageGet ['bom'], ({bom:bom}) =>
-            count = Object.keys(bom.retailers).length
-            for retailer of bom.retailers
-                @interfaces[retailer].addItems bom.retailers[retailer]
-                , (result, interf, items) =>
-                    @notifyFillCart(items, interf.name, result)
-                    count--
-                    big_result.success &&= result.success
-                    big_result.fails = big_result.fails.concat(result.fails)
-                    callbackEveryRetailer?(result.success)
-                    if count == 0
-                        @filling_carts = false
-                        callback?()
 
     fillCart: (retailer, callback)->
         browser.storageGet ['bom'], ({bom:bom}) =>
-            @interfaces[retailer].addItems bom.retailers[retailer]
-            , (result) =>
-                @notifyFillCart bom.retailers[retailer], retailer, result
-                callback(result)
-
-    emptyCarts: (callback, callbackEveryRetailer)->
-        @emptying_carts = true
-        big_result = {success: true}
-        browser.storageGet ['bom'], ({bom:bom}) =>
-            if bom?
-                count = Object.keys(bom.retailers).length
-                for retailer of bom.retailers
-                    @emptyCart retailer, (result, interf) =>
-                        count--
-                        big_result.success &&= result.success
-                        callbackEveryRetailer?(result.success)
-                        if count == 0
-                            @emptying_carts = false
-                            callback?(big_result)
-            else
-                @emptying_carts = false
-                callback?(big_result)
+            if bom.retailers[retailer]?
+                @interfaces[retailer].addItems bom.retailers[retailer]
+                , (result) =>
+                    @notifyFillCart bom.retailers[retailer], retailer, result
+                    callback(result)
 
     emptyCart: (retailer, callback)->
         @interfaces[retailer].clearCart (result) =>
             @notifyEmptyCart(retailer, result)
             callback?(result)
-
-    openCarts: ()->
-        browser.storageGet ['bom'], ({bom:bom}) =>
-            for retailer of bom.retailers
-                @openCart(retailer)
 
     openCart: (retailer)->
         @interfaces[retailer].openCartTab()

@@ -17,12 +17,14 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{bom_manager} = require './bom_manager'
-{browser}     = require './browser'
-{parseTSV}    = require './parser'
-http          = require './http'
-{badge}       = require './badge'
-{writeTSV}    = require './writer'
+{bom_manager}   = require './bom_manager'
+{browser}       = require './browser'
+{parseTSV}      = require './parser'
+http            = require './http'
+{badge}         = require './badge'
+{writeTSV}      = require './writer'
+{retailer_list} = require './retailer_list'
+
 
 exports.background = (messenger) ->
 
@@ -103,10 +105,10 @@ exports.background = (messenger) ->
             badge.setDecaying('OK','#00CF0F')
 
     messenger.on 'emptyCart', (name) ->
-        @name = name
-        bom_manager.emptyCart name, () =>
-            bom_manager.openCart(@name)
+        bom_manager.emptyCart name, (() ->
+            bom_manager.openCart(name)
             sendState()
+        ).bind(this, name)
         sendState()
 
     messenger.on 'clearBOM', () ->
@@ -126,5 +128,20 @@ exports.background = (messenger) ->
         tsvPageNotifier.addToBOM () ->
             sendState()
 
-    sendState()
+    messenger.on 'emptyCarts', () ->
+        for name in retailer_list
+            bom_manager.emptyCart name, (() ->
+                bom_manager.openCart(name)
+                sendState()
+            ).bind(this, name)
+        sendState()
 
+    messenger.on 'fillCarts', () ->
+        for name in retailer_list
+            bom_manager.fillCart name, (() ->
+                bom_manager.openCart(name)
+                sendState()
+            ).bind(this, name)
+        sendState()
+
+    sendState()
