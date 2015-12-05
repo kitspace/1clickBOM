@@ -18,7 +18,7 @@
 # the Original Code is Kaspar Emanuel.
 
 {messenger} = require './messenger'
-{retailer_list, isComplete} = require './retailer_list'
+{retailer_list, isComplete, hasSKUs} = require './retailer_list'
 
 element_Bom         = document.querySelector('#bom')
 element_Table       = document.querySelector('#bom_table')
@@ -108,24 +108,38 @@ stopSpinning = (link) ->
 
 render = (state) ->
     bom = state.bom
+
     hideOrShow(bom, state.onDotTSV)
+
     element_TotalLines.innerHTML = "#{bom.items.length}
         line#{if bom.items.length != 1 then 's' else ''}"
+
     part_numbers = bom.items.reduce (prev, item) ->
         prev += item.partNumber != ''
     , 0
+
     element_TotalPartNumbers.innerHTML = "#{part_numbers} with MPN"
+
     manufacturers = bom.items.reduce (prev, item) ->
         prev += item.manufacturer != ''
     , 0
+
     element_TotalManufacturers.innerHTML = "#{manufacturers} with M/F"
+
     quantity = 0
+
     for item in bom.items
         quantity += item.quantity
+
     element_TotalItems.innerHTML = "#{quantity}
         item#{if quantity != 1 then 's' else ''}"
+
     while element_Table.hasChildNodes()
         element_Table.removeChild(element_Table.lastChild)
+
+    any_adding   = false
+    any_emptying = false
+
     for retailer_name in retailer_list
         items = []
         if retailer_name of bom.retailers
@@ -194,6 +208,11 @@ render = (state) ->
                 td.appendChild(a)
                 if retailer[lookup[i]]
                     startSpinning(a)
+            any_adding   |= retailer.adding_items
+            any_emptying |= retailer.clearing_cart
+
+        button_FillCarts.disabled  = any_adding or (not hasSKUs(bom.items))
+        button_EmptyCarts.disabled = any_emptying
 
 
 messenger.on 'sendBackgroundState', (state) ->

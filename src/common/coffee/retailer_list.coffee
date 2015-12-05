@@ -25,7 +25,24 @@ exports.isComplete = (items) ->
         for r in exports.retailer_list
             if item.retailers[r] == ''
                 complete = false
+                break
+        if not complete
+            break
         for f in exports.field_list
             if item[f] == ''
                 complete = false
+                break
     return complete
+
+exports.hasSKUs = (items) ->
+    hasSKUs = false
+    for item in items
+        for r in exports.retailer_list
+            if item.retailers[r] != ''
+                hasSKUs = true
+                break
+        if hasSKUs
+            break
+    return hasSKUs
+
+
