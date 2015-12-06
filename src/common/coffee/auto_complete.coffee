@@ -37,16 +37,19 @@ _auto_complete = (search_engine, items) ->
                 if item.retailers[retailer] != ''
                     query = item.retailers[retailer]
                     break
-        p = search_engine.search(query, retailers, other_fields)
-        p.then ((item, result) ->
-            for field,v of result
-                if field != 'retailers' and v?
-                    item[field] = v
-            for retailer,v of result.retailers
-                if v?
-                    item.retailers[retailer] = v
-            return item
-        ).bind(undefined, item)
+        if retailers.length == 0 and other_fields.length == 0
+            Promise.resolve(item)
+        else
+            p = search_engine.search(query, retailers, other_fields)
+            p.then ((item, result) ->
+                for field,v of result
+                    if field != 'retailers' and v?
+                        item[field] = v
+                for retailer in retailer_list
+                    if result.retailers[retailer]?
+                        item.retailers[retailer] = result.retailers[retailer]
+                return item
+            ).bind(undefined, item)
 
 
     final = promise_array.reduce (prev, promise) ->
@@ -62,9 +65,17 @@ _auto_complete = (search_engine, items) ->
 autoComplete = (items, callback) ->
     p = _auto_complete(octopart, items)
     p.then (newItems) ->
+        for item in newItems
+            for r of item.retailers
+                if r not in retailer_list
+                    console.log("octopart")
         if not isComplete(newItems)
             p = _auto_complete(findchips, newItems)
             p.then (newItems_) ->
+                for item in newItems_
+                    for r of item.retailers
+                        if r not in retailer_list
+                            console.log("findchips")
                 callback(newItems_)
         else
             callback(newItems)

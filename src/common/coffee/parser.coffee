@@ -140,7 +140,8 @@ parseNamed = (rows, order, retailers) ->
                 for r in retailer_list
                     retailersObj[r] = ''
                 for r in retailers
-                    retailersObj["#{r}"] = cells[order.indexOf(r)]
+                    if cells[order.indexOf(r)]?
+                        retailersObj["#{r}"] = cells[order.indexOf(r)]
                 return retailersObj
             item =
                 reference    : cells[order.indexOf('reference')]
