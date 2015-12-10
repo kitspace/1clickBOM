@@ -33,6 +33,8 @@ _auto_complete = (search_engine, items) ->
                 other_fields.push(field)
         query = item.partNumber
         if query == ''
+            query = item.comment
+        if not query?
             for retailer in retailer_list
                 if item.retailers[retailer] != ''
                     query = item.retailers[retailer]

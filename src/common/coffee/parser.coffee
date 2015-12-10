@@ -148,6 +148,7 @@ parseNamed = (rows, order, retailers) ->
                 quantity     : cells[order.indexOf('quantity')]
                 partNumber   : cells[order.indexOf('partNumber')]
                 manufacturer : cells[order.indexOf('manufacturer')]
+                comment      : cells[order.indexOf('comment')]
                 retailers    : rs()
                 row          : i + 1
             if not item.quantity?
