@@ -34,7 +34,7 @@ _auto_complete = (search_engine, items) ->
         query = item.partNumber
         if query == ''
             query = item.description
-        if not query?
+        if query == ''
             for retailer in retailer_list
                 if item.retailers[retailer] != ''
                     query = item.retailers[retailer]

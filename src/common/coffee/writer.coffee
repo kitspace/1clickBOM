@@ -29,7 +29,7 @@ exports.writeTSV = (bom) ->
         r += "\t#{item.quantity}"
         r += "\t#{item.manufacturer}"
         r += "\t#{item.partNumber}"
-        r += "\t#{if item.description? then item.description else ''}"
+        r += "\t#{item.description}"
         for retailer in retailers
             if item.retailers[retailer]?
                 r += "\t#{item.retailers[retailer]}"

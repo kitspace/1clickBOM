@@ -18,7 +18,7 @@
 # the Original Code is Kaspar Emanuel.
 
 exports.retailer_list = ['Digikey', 'Mouser', 'RS', 'Newark', 'Farnell']
-exports.field_list = ['partNumber', 'manufacturer']
+exports.field_list = ['partNumber', 'manufacturer', 'description']
 exports.isComplete = (items) ->
     complete = true
     for item in items
