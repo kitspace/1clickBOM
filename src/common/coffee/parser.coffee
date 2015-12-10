@@ -40,8 +40,9 @@ headings =
     'references'               : 'reference'
     'line-note'                : 'reference'
     'line note'                : 'reference'
-    'comment'                  : 'comment'
-    'comments'                 : 'comment'
+    'comment'                  : 'description'
+    'comments'                 : 'description'
+    'description'              : 'description'
     'qty'                      : 'quantity'
     'quantity'                 : 'quantity'
     'part-number'              : 'partNumber'
@@ -148,7 +149,7 @@ parseNamed = (rows, order, retailers) ->
                 quantity     : cells[order.indexOf('quantity')]
                 partNumber   : cells[order.indexOf('partNumber')]
                 manufacturer : cells[order.indexOf('manufacturer')]
-                comment      : cells[order.indexOf('comment')]
+                description  : cells[order.indexOf('description')]
                 retailers    : rs()
                 row          : i + 1
             if not item.quantity?
