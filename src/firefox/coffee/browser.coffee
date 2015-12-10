@@ -52,7 +52,7 @@ globToRegex = (glob) ->
 popup = require('sdk/panel').Panel(
     contentURL: data.url('html/popup.html')
     contentScriptFile: [data.url('popup.js')]
-    width: 275
+    width: 280
     height: 320
 )
 
