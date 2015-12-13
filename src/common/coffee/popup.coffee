@@ -132,7 +132,7 @@ render = (state) ->
         quantity += line.quantity
 
     element_TotalItems.innerHTML = "#{quantity}
-        line#{if quantity != 1 then 's' else ''}"
+        item#{if quantity != 1 then 's' else ''}"
 
     while element_Table.hasChildNodes()
         element_Table.removeChild(element_Table.lastChild)
@@ -180,10 +180,10 @@ render = (state) ->
         td_1.appendChild(t2span)
         tr.appendChild(td_1)
 
-        unicode_chars = ['\uf21b', '\uf21e']
-        titles = ['Empty ', 'Add lines to ']
-        messages = ['emptyCart', 'fillCart']
-        lookup = ['clearing_cart', 'adding_lines']
+        unicode_chars = ['\uf21e', '\uf21b',]
+        titles   = ['Add lines to ', 'Empty ']
+        messages = ['fillCart', 'emptyCart']
+        lookup   = ['adding_lines', 'clearing_cart']
         for i in  [0..1]
             td = document.createElement('td')
             td.className = 'button_icon_td'

@@ -30,7 +30,7 @@ network_callback = (event, callback, error_callback, notify=true) ->
             if event.target.line?
                 line = event.target.line
                 message += 'Trying to process '
-                message +=  line.part + ' from ' + line.retailer + '\n'
+                message +=  line.part + '\n'
             else
                 message += event.target.url
             if notify
