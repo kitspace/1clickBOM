@@ -43,6 +43,8 @@ headings =
     'comment'                  : 'description'
     'comments'                 : 'description'
     'description'              : 'description'
+    'cmnts'                    : 'description'
+    'descr.'                   : 'description'
     'qty'                      : 'quantity'
     'quantity'                 : 'quantity'
     'part-number'              : 'partNumber'
