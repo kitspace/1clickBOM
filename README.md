@@ -12,11 +12,13 @@ retailers.
 
 ## News ##
 
+- [Added function to auto-complete BOM](#completion)
+
 - [Named columns are now supported](#usage)
 
 - [1clickBOM is available for Firefox][20]
 
-- [I gave a talk about 1clickBOM at FOSDEM][12]
+- [I gave a talk about 1clickBOM at FOSDEM in 2015][12]
 
 ## Which retailers? ##
 
@@ -38,20 +40,29 @@ In your tab-seperated values (`.tsv`) or spreadsheet you must have a column for
 line-note, one for the quantity and at least one retailer. Column titles are
 interpreted in the following way by 1clickBOM. Capitalisation is ignored.
 
-     reference  = line-note
-     references = line-note
-     line-note  = line-note
-     line note  = line-note
-     comment    = line-note
-     comments   = line-note
-     qty        = quantity
-     quantity   = quantity
-     farnell    = Farnell
-     digikey    = Digikey
-     digi-key   = Digikey
-     mouser     = Mouser
-     rs         = RS
-     newark     = Newark
+    reference                : Reference
+    references               : Reference
+    line-note                : Reference
+    line note                : Reference
+    comment                  : Description
+    comments                 : Description
+    description              : Description
+    cmnts                    : Description
+    descr.                   : Description
+    qty                      : Quantity
+    quantity                 : Quantity
+    part-number              : Part Number
+    partnumber               : Part Number
+    part number              : Part Number
+    m/f part                 : Part Number
+    manuf. part              : Part Number
+    mpn                      : Part Number
+    m/f part number          : Part Number
+    manuf. part number       : Part Number
+    manufacturer part        : Part Number
+    manufacturer part number : Part Number
+    manufacturer             : Manufacturer
+    m/f                      : Manufacturer
 
 ![Load from page][3]
 
@@ -69,6 +80,13 @@ See the [example tsv][2] and the [Bus Pirate tsv][21].
 Once the data is added you can use 1clickBOM to add the items to your carts
 using the buttons on the popup. You can also quickly view and empty your carts.
 
+### Completion ###
+
+New in version 0.5 is function to search Octopart.com and Findchips.com to try
+and complete a BOM for you. A complete BOM is one that has a part number for
+_every_ retailer. Simply press the button labeled 'Complete' and 1clickBOM will
+use other fields to search for the fields that are left blank.
+
 ### Legacy BOM format ###
 
 The format used prior to version `0.3` simply had the items in the following order:
@@ -85,22 +103,18 @@ If you need any help or think you found a bug please get in touch via
 
 ## Roadmap ##
 
-* 0.5
-    * Auto-complete (search Octopart)
-    * BOM export
-    * Manufacturer, manufacturer part number and comment fields
-
 * 0.6
-    * Add buttons to pages with BOM data
-    * BOM details and editing page
+    * Add retailer preference ranking
+    * Add function to reduce BOM (and add to cart?) according to retailer preference
 
 * 1.0
+    * Support for direct loading from Google docs pages
+    * Add buttons to pages with BOM data
     * Remove legacy BOM format support
-    * Preferred retailer setting
-    * Paste directly to cart
-    * Display cart summaries
 
 * 2.0
+    * BOM details and editing page
+    * Display cart summaries
     * Allied, Arrow, AVNet, Conrad and Rapid
     * Function to minimize order cost + shipping
     * Allow adding components to BOM from the component page
