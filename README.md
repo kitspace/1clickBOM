@@ -1,4 +1,4 @@
-[![Demo][15]][19]
+[![Youtube Demo][22]](https://youtu.be/611TW315pZM)
 
 [![Available on Chrome][8]][14] [![Add to Firefox][9]][13]
 
@@ -182,3 +182,6 @@ software as a service. See the [LICENSE][6] file for details.
 [19]:http://1clickBOM.com
 [20]:https://addons.mozilla.org/en-US/firefox/addon/1clickbom/
 [21]:https://github.com/monostable/1clickBOM/blob/master/examples/bus_pirate.tsv
+[22]:https://github.com/monostable/1clickBOM/blob/feat-auto-complete/readme_images/youtube.png
+
+
