@@ -17,70 +17,70 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{retailer_list, field_list, isComplete} = require './item_data'
+{retailer_list, field_list, isComplete} = require './line_data'
 octopart  = require './octopart'
 findchips = require './findchips'
 
-_auto_complete = (search_engine, items) ->
-    promise_array = for item in items
+_auto_complete = (search_engine, lines) ->
+    promise_array = for line in lines
         retailers = []
         other_fields = []
         for retailer in retailer_list
-            if (item.retailers[retailer] == '')
+            if (line.retailers[retailer] == '')
                 retailers.push(retailer)
         for field in field_list
-            if item[field] == ''
+            if line[field] == ''
                 other_fields.push(field)
-        query = item.partNumber
+        query = line.partNumber
         if query == ''
-            query = item.description
+            query = line.description
         if query == ''
             for retailer in retailer_list
-                if item.retailers[retailer] != ''
-                    query = item.retailers[retailer]
+                if line.retailers[retailer] != ''
+                    query = line.retailers[retailer]
                     break
         if retailers.length == 0 and other_fields.length == 0
-            Promise.resolve(item)
+            Promise.resolve(line)
         else
             p = search_engine.search(query, retailers, other_fields)
-            p.then ((item, result) ->
+            p.then ((line, result) ->
                 for field,v of result
                     if field != 'retailers' and v?
-                        item[field] = v
+                        line[field] = v
                 for retailer in retailer_list
                     if result.retailers[retailer]?
-                        item.retailers[retailer] = result.retailers[retailer]
-                return item
-            ).bind(undefined, item)
+                        line.retailers[retailer] = result.retailers[retailer]
+                return line
+            ).bind(undefined, line)
 
 
     final = promise_array.reduce (prev, promise) ->
-        prev.then (newItems) ->
-            promise.then (item) ->
-                newItems.push(item)
-                return newItems
+        prev.then (newLines) ->
+            promise.then (line) ->
+                newLines.push(line)
+                return newLines
     , Promise.resolve([])
 
     return final
 
 
-autoComplete = (items, callback) ->
-    p = _auto_complete(octopart, items)
-    p.then (newItems) ->
-        for item in newItems
-            for r of item.retailers
+autoComplete = (lines, callback) ->
+    p = _auto_complete(octopart, lines)
+    p.then (newLines) ->
+        for line in newLines
+            for r of line.retailers
                 if r not in retailer_list
                     console.log("octopart")
-        if not isComplete(newItems)
-            p = _auto_complete(findchips, newItems)
-            p.then (newItems_) ->
-                for item in newItems_
-                    for r of item.retailers
+        if not isComplete(newLines)
+            p = _auto_complete(findchips, newLines)
+            p.then (newLines_) ->
+                for line in newLines_
+                    for r of line.retailers
                         if r not in retailer_list
                             console.log("findchips")
-                callback(newItems_)
+                callback(newLines_)
         else
-            callback(newItems)
+            callback(newLines)
 
 
 exports.autoComplete = autoComplete

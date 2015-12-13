@@ -24,15 +24,15 @@ exports.writeTSV = (bom) ->
         r += "\t#{retailer}"
         retailers.push("#{retailer}")
     r += '\n'
-    for item in bom.items
-        r += "#{item.reference}"
-        r += "\t#{item.quantity}"
-        r += "\t#{item.manufacturer}"
-        r += "\t#{item.partNumber}"
-        r += "\t#{item.description}"
+    for line in bom.lines
+        r += "#{line.reference}"
+        r += "\t#{line.quantity}"
+        r += "\t#{line.manufacturer}"
+        r += "\t#{line.partNumber}"
+        r += "\t#{line.description}"
         for retailer in retailers
-            if item.retailers[retailer]?
-                r += "\t#{item.retailers[retailer]}"
+            if line.retailers[retailer]?
+                r += "\t#{line.retailers[retailer]}"
             else
                 r += "\t"
         r += '\n'

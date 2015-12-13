@@ -39,39 +39,39 @@ class Mouser extends RetailerInterface
             , ""
             , {notify:false}
             , (->), (->)
-    addItems: (items, callback) ->
-        if items.length == 0
+    addLines: (lines, callback) ->
+        if lines.length == 0
             callback({success: true, fails: []})
             return
-        @adding_items = true
+        @adding_lines = true
         count = 0
         big_result = {success:true, fails:[]}
         @_get_cart_viewstate (viewstate) =>
             @_clear_errors viewstate, () =>
                 @_get_adding_viewstate (viewstate) =>
-                    for _,i in items by 99
-                        _99_items = items[i..i+98]
+                    for _,i in lines by 99
+                        _99_lines = lines[i..i+98]
                         count += 1
-                        @_add_items _99_items, viewstate, (result) =>
+                        @_add_lines _99_lines, viewstate, (result) =>
                             big_result.success &&= result.success
                             big_result.fails = big_result.fails.concat(result.fails)
                             count -= 1
                             if count <= 0
-                                callback(big_result, this, items)
+                                callback(big_result, this, lines)
                                 @refreshCartTabs()
-                                @adding_items = false
-    _add_items: (items, viewstate, callback) ->
-        params = @additem_params + viewstate
+                                @adding_lines = false
+    _add_lines: (lines, viewstate, callback) ->
+        params = @addline_params + viewstate
         params += '&ctl00$ContentMain$hNumberOfLines=99'
         params += '&ctl00$ContentMain$txtNumberOfLines=94'
-        for item,i in items
-            params += "&ctl00$ContentMain$txtCustomerPartNumber#{i+1}=#{item.reference}\
-                       &ctl00$ContentMain$txtPartNumber#{i+1}=#{item.part}\
-                       &ctl00$ContentMain$txtQuantity#{i+1}=}#{item.quantity}"
-        url = 'http' + @site + @additem
+        for line,i in lines
+            params += "&ctl00$ContentMain$txtCustomerPartNumber#{i+1}=#{line.reference}\
+                       &ctl00$ContentMain$txtPartNumber#{i+1}=#{line.part}\
+                       &ctl00$ContentMain$txtQuantity#{i+1}=}#{line.quantity}"
+        url = 'http' + @site + @addline
         result = {success: true, fails:[]}
         post url, params, {}, (event) =>
-            #if there is an error, there will be some error-class items with display set to ''
+            #if there is an error, there will be some error-class lines with display set to ''
             doc = browser.parseDOM(event.target.responseText)
             errors = doc.getElementsByClassName('error')
             for error in errors
@@ -80,15 +80,15 @@ class Mouser extends RetailerInterface
                     if not (error.firstChild? && error.firstChild.nextSibling? && error.firstChild.nextSibling.className == 'padding5')
                         part = error.getAttribute('data-partnumber')
                         if part?
-                            for item in items
-                                if item.part == part.replace(/-/g, '')
-                                    result.fails.push(item)
+                            for line in lines
+                                if line.part == part.replace(/-/g, '')
+                                    result.fails.push(line)
                             result.success = false
             if callback?
                 callback(result)
         , () ->
             if callback?
-                callback({success:false, fails:items})
+                callback({success:false, fails:lines})
 
     _clear_errors: (viewstate, callback) ->
         post "http#{@site}#{@cart}", "__EVENTARGUMENT=&__EVENTTARGET=\
@@ -125,10 +125,10 @@ class Mouser extends RetailerInterface
             @clearing_cart = false
     _get_adding_viewstate: (callback, arg)->
         #we get the quick-add form , extend it to 99 lines (the max) and get the viewstate from the response
-        url = 'http' + @site + @additem
+        url = 'http' + @site + @addline
         get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
-            params = @additem_params
+            params = @addline_params
             params += encodeURIComponent(doc.getElementById('__VIEWSTATE').value)
             params += '&ctl00$ContentMain$btnAddLines=Lines to Forms'
             params += '&ctl00$ContentMain$hNumberOfLines=5'

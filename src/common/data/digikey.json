@@ -31,8 +31,8 @@
     "UK": "://www.digikey.co.uk"},
 
 "carts" : "/classic/ordering/addpart.aspx",
-"additems": "/classic/ordering/addpart.aspx",
-"additem_params" : "",
+"addlines": "/classic/ordering/addpart.aspx",
+"addline_params" : "",
 
 "lookup" : {
     "AE": "US/International",

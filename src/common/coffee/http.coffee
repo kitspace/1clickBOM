@@ -27,10 +27,10 @@ network_callback = (event, callback, error_callback, notify=true) ->
                 callback(event)
         else
             message = event.target.status + '\n'
-            if event.target.item?
-                item = event.target.item
+            if event.target.line?
+                line = event.target.line
                 message += 'Trying to process '
-                message +=  item.part + ' from ' + item.retailer + '\n'
+                message +=  line.part + ' from ' + line.retailer + '\n'
             else
                 message += event.target.url
             if notify
@@ -38,11 +38,11 @@ network_callback = (event, callback, error_callback, notify=true) ->
 
                 badge.setDecaying('' + event.target.status, '#CC00FF', priority=3)
             if error_callback?
-                error_callback(event.target.item)
+                error_callback(event.target.line)
 
-post = (url, params, {item:item, notify:notify, timeout:timeout, json:json},  callback, error_callback) ->
-    if not item?
-        item=null
+post = (url, params, {line:line, notify:notify, timeout:timeout, json:json},  callback, error_callback) ->
+    if not line?
+        line=null
     if not notify?
         notify=true
     if not timeout?
@@ -51,7 +51,7 @@ post = (url, params, {item:item, notify:notify, timeout:timeout, json:json},  ca
         json=false
     xhr = new XMLHttpRequest
     xhr.open('POST', url, true)
-    xhr.item = item
+    xhr.line = line
     if (json)
         xhr.setRequestHeader('Content-type', 'application/JSON')
     else
@@ -64,15 +64,15 @@ post = (url, params, {item:item, notify:notify, timeout:timeout, json:json},  ca
         network_callback(event, callback, error_callback, notify)
     xhr.send(params)
 
-get = (url, {item:item, notify:notify, timeout:timeout}, callback, error_callback) ->
-    if not item?
-        item=null
+get = (url, {line:line, notify:notify, timeout:timeout}, callback, error_callback) ->
+    if not line?
+        line=null
     if not notify?
         notify=false
     if not timeout?
         timeout=60000
     xhr = new XMLHttpRequest
-    xhr.item = item
+    xhr.line = line
     xhr.open('GET', url, true)
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
     xhr.url = url

@@ -18,14 +18,14 @@
 # the Original Code is Kaspar Emanuel.
 
 {messenger} = require './messenger'
-{retailer_list, isComplete, hasSKUs} = require './item_data'
+{retailer_list, isComplete, hasSKUs} = require './line_data'
 
 element_Bom         = document.querySelector('#bom')
 element_Table       = document.querySelector('#bom_table')
-element_TotalLines  = document.querySelector('#total_lines')
+element_TotalItems  = document.querySelector('#total_items')
 element_TotalPartNumbers  = document.querySelector('#total_partNumbers')
 element_TotalManufacturers  = document.querySelector('#total_manufacturers')
-element_TotalItems  = document.querySelector('#total_items')
+element_TotalLines  = document.querySelector('#total_lines')
 button_Clear        = document.querySelector('button#clear')
 button_LoadFromPage = document.querySelector('button#load_from_page')
 button_Complete     = document.querySelector('button#complete')
@@ -65,10 +65,10 @@ button_Complete.addEventListener 'click', () ->
 
 
 hideOrShow = (bom, onDotTSV) ->
-    hasBOM = Boolean(Object.keys(bom.items).length)
+    hasBOM = Boolean(Object.keys(bom.lines).length)
 
     button_Clear.disabled      = not hasBOM
-    button_Complete.disabled   = (not hasBOM) or isComplete(bom.items)
+    button_Complete.disabled   = (not hasBOM) or isComplete(bom.lines)
     button_Copy.disabled       = not hasBOM
 
     button_LoadFromPage.hidden = not onDotTSV
@@ -111,28 +111,28 @@ render = (state) ->
 
     hideOrShow(bom, state.onDotTSV)
 
-    element_TotalLines.innerHTML = "#{bom.items.length}
-        line#{if bom.items.length != 1 then 's' else ''}"
+    element_TotalLines.innerHTML = "#{bom.lines.length}
+        line#{if bom.lines.length != 1 then 's' else ''}"
 
-    part_numbers = bom.items.reduce (prev, item) ->
-        prev += item.partNumber != ''
+    part_numbers = bom.lines.reduce (prev, line) ->
+        prev += line.partNumber != ''
     , 0
 
     element_TotalPartNumbers.innerHTML = "#{part_numbers} with MPN"
 
-    manufacturers = bom.items.reduce (prev, item) ->
-        prev += item.manufacturer != ''
+    manufacturers = bom.lines.reduce (prev, line) ->
+        prev += line.manufacturer != ''
     , 0
 
     element_TotalManufacturers.innerHTML = "#{manufacturers} with M/F"
 
     quantity = 0
 
-    for item in bom.items
-        quantity += item.quantity
+    for line in bom.lines
+        quantity += line.quantity
 
     element_TotalItems.innerHTML = "#{quantity}
-        item#{if quantity != 1 then 's' else ''}"
+        line#{if quantity != 1 then 's' else ''}"
 
     while element_Table.hasChildNodes()
         element_Table.removeChild(element_Table.lastChild)
@@ -141,13 +141,13 @@ render = (state) ->
     any_emptying = false
 
     for retailer_name in retailer_list
-        items = []
+        lines = []
         if retailer_name of bom.retailers
-            items = bom.retailers[retailer_name]
+            lines = bom.retailers[retailer_name]
         retailer = state.bom_manager.interfaces[retailer_name]
-        no_of_items = 0
-        for item in items
-            no_of_items += item.quantity
+        no_of_lines = 0
+        for line in lines
+            no_of_lines += line.quantity
         tr = document.createElement('tr')
         element_Table.appendChild(tr)
         td_0 = document.createElement('td')
@@ -165,14 +165,14 @@ render = (state) ->
         tr.appendChild(td_0)
 
         td_1 = document.createElement('td')
-        t  = "#{items.length}"
+        t  = "#{lines.length}"
         tspan = document.createElement('span')
         tspan.appendChild(document.createTextNode(t))
 
-        if items.length != bom.items.length
+        if lines.length != bom.lines.length
             td_1.style.backgroundColor = 'pink'
 
-        t2 = " line#{if items.length != 1 then 's' else ''}"
+        t2 = " line#{if lines.length != 1 then 's' else ''}"
         t2span = document.createElement('span')
         t2span.appendChild(document.createTextNode(t2))
 
@@ -181,9 +181,9 @@ render = (state) ->
         tr.appendChild(td_1)
 
         unicode_chars = ['\uf21b', '\uf21e']
-        titles = ['Empty ', 'Add items to ']
+        titles = ['Empty ', 'Add lines to ']
         messages = ['emptyCart', 'fillCart']
-        lookup = ['clearing_cart', 'adding_items']
+        lookup = ['clearing_cart', 'adding_lines']
         for i in  [0..1]
             td = document.createElement('td')
             td.className = 'button_icon_td'
@@ -191,7 +191,7 @@ render = (state) ->
             span = document.createElement('span')
             span.className = 'button_icon'
             span.appendChild(document.createTextNode(unicode_chars[i]))
-            if (messages[i] == 'fillCart' and items.length == 0)
+            if (messages[i] == 'fillCart' and lines.length == 0)
                 span.style.color = 'grey'
                 span.style.cursor = 'default'
                 td.appendChild(span)
@@ -208,10 +208,10 @@ render = (state) ->
                 td.appendChild(a)
                 if retailer[lookup[i]]
                     startSpinning(a)
-            any_adding   |= retailer.adding_items
+            any_adding   |= retailer.adding_lines
             any_emptying |= retailer.clearing_cart
 
-        button_FillCarts.disabled  = any_adding or (not hasSKUs(bom.items))
+        button_FillCarts.disabled  = any_adding or (not hasSKUs(bom.lines))
         button_EmptyCarts.disabled = any_emptying
 
 

@@ -19,26 +19,26 @@
 
 exports.retailer_list = ['Digikey', 'Mouser', 'RS', 'Newark', 'Farnell']
 exports.field_list = ['partNumber', 'manufacturer', 'description']
-exports.isComplete = (items) ->
+exports.isComplete = (lines) ->
     complete = true
-    for item in items
+    for line in lines
         for r in exports.retailer_list
-            if item.retailers[r] == ''
+            if line.retailers[r] == ''
                 complete = false
                 break
         if not complete
             break
         for f in exports.field_list
-            if item[f] == ''
+            if line[f] == ''
                 complete = false
                 break
     return complete
 
-exports.hasSKUs = (items) ->
+exports.hasSKUs = (lines) ->
     hasSKUs = false
-    for item in items
+    for line in lines
         for r in exports.retailer_list
-            if item.retailers[r] != ''
+            if line.retailers[r] != ''
                 hasSKUs = true
                 break
         if hasSKUs

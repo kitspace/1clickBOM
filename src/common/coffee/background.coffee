@@ -23,7 +23,7 @@
 http            = require './http'
 {badge}         = require './badge'
 {writeTSV}      = require './writer'
-{retailer_list} = require './item_data'
+{retailer_list} = require './line_data'
 
 
 exports.background = (messenger) ->
@@ -34,12 +34,12 @@ exports.background = (messenger) ->
     tsvPageNotifier =
         onDotTSV : false
         re       : new RegExp('\.tsv$','i')
-        items    : []
+        lines    : []
         invalid  : []
         _set_not_dotTSV: () ->
             badge.setDefault('')
             @onDotTSV = false
-            @items    = []
+            @lines    = []
             @invalid  = []
             sendState()
         checkPage: (callback) ->
@@ -54,11 +54,11 @@ exports.background = (messenger) ->
                         else
                             url = tab_url
                         http.get url, {notify:false}, (event) =>
-                            {items, invalid} = parseTSV(event.target.responseText)
-                            if items.length > 0
+                            {lines, invalid} = parseTSV(event.target.responseText)
+                            if lines.length > 0
                                 badge.setDefault('\u2191', '#0000FF')
                                 @onDotTSV = true
-                                @items    = items
+                                @lines    = lines
                                 @invalid  = invalid
                                 sendState()
                             else
@@ -74,7 +74,7 @@ exports.background = (messenger) ->
         addToBOM: (callback) ->
             @checkPage () =>
                 if @onDotTSV
-                    bom_manager._add_to_bom(@items, @invalid, callback)
+                    bom_manager._add_to_bom(@lines, @invalid, callback)
 
     browser.tabsOnUpdated () =>
         tsvPageNotifier.checkPage()

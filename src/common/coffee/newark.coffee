@@ -81,36 +81,36 @@ class Newark extends RetailerInterface
                     ids.push(input.value)
             callback(ids)
 
-    addItems: (items, callback) ->
-        if items.length == 0
+    addLines: (lines, callback) ->
+        if lines.length == 0
             callback({success: true, fails: []})
             return
-        @adding_items = true
-        @_add_items  items, (result) =>
+        @adding_lines = true
+        @_add_lines  lines, (result) =>
             @refreshCartTabs()
             @refreshSiteTabs()
-            @adding_items = false
-            callback(result, this, items)
+            @adding_lines = false
+            callback(result, this, lines)
 
-    _add_items: (items, callback) ->
+    _add_lines: (lines, callback) ->
         url = 'https' + @site + '/AjaxPasteOrderChangeServiceItemAdd'
         get url, {notify:false}, () =>
-            @_add_items_ajax(items, callback)
+            @_add_lines_ajax(lines, callback)
         , () =>
-            @_add_items_non_ajax(items, callback)
+            @_add_lines_non_ajax(lines, callback)
 
-    _add_items_non_ajax: (items, callback) ->
-        if items.length == 0
+    _add_lines_non_ajax: (lines, callback) ->
+        if lines.length == 0
             if callback?
                 callback({success:true, fails:[]})
             return
         url = 'https' + @site + '/webapp/wcs/stores/servlet/PasteOrderChangeServiceItemAdd'
         params = 'storeId=' + @store_id + '&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste='
         #&addToBasket=Add+to+Cart'
-        for item in items
-            params += encodeURIComponent(item.part) + ','
-            params += encodeURIComponent(item.quantity) + ','
-            params += encodeURIComponent(item.reference) + '\n'
+        for line in lines
+            params += encodeURIComponent(line.part) + ','
+            params += encodeURIComponent(line.quantity) + ','
+            params += encodeURIComponent(line.reference) + '\n'
         post url, params, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
             form_errors = doc.querySelector('#formErrors')
@@ -118,23 +118,23 @@ class Newark extends RetailerInterface
             if form_errors?
                 success = form_errors.className != ''
             if not success
-                #we find out which parts are the problem, call addItems again
+                #we find out which parts are the problem, call addLines again
                 #on the rest and concatenate the fails to the new result
                 #returning everything together to our callback
                 fail_names  = []
                 fails       = []
-                retry_items = []
-                for item in items
-                        regex = new RegExp item.part, 'g'
+                retry_lines = []
+                for line in lines
+                        regex = new RegExp line.part, 'g'
                         result = regex.exec(form_errors.innerHTML)
                         if result != null
                             fail_names.push(result[0])
-                for item in items
-                    if item.part in fail_names
-                        fails.push(item)
+                for line in lines
+                    if line.part in fail_names
+                        fails.push(line)
                     else
-                        retry_items.push(item)
-                @_add_items_non_ajax retry_items, (result) ->
+                        retry_lines.push(line)
+                @_add_lines_non_ajax retry_lines, (result) ->
                     if callback?
                         result.fails = result.fails.concat(fails)
                         result.success = false
@@ -144,25 +144,25 @@ class Newark extends RetailerInterface
                     callback({success: true, fails:[]})
         , () =>
             if callback?
-                callback({success:false,fails:items})
+                callback({success:false,fails:lines})
 
 
-    _add_items_ajax: (items, callback) ->
+    _add_lines_ajax: (lines, callback) ->
         result = {success: true, fails:[], warnings:[]}
-        if items.length == 0
+        if lines.length == 0
             if callback?
                 callback({success:true, fails:[]})
             return
         url = 'https' + @site + '/AjaxPasteOrderChangeServiceItemAdd'
 
         params = 'storeId=' + @store_id + '&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste='
-        for item in items
-            params += encodeURIComponent(item.part) + ','
-            params += encodeURIComponent(item.quantity) + ','
-            if item.reference.length > 30
+        for line in lines
+            params += encodeURIComponent(line.part) + ','
+            params += encodeURIComponent(line.quantity) + ','
+            if line.reference.length > 30
                 result.warnings.push("Truncated line-note when adding
-                    #{@name} item to cart: #{item.reference}")
-            params += encodeURIComponent(item.reference.substr(0,30)) + '\n'
+                    #{@name} line to cart: #{line.reference}")
+            params += encodeURIComponent(line.reference.substr(0,30)) + '\n'
         post url, params, {}, (event) =>
             stxt = event.target.responseText.split('\n')
             stxt2 = stxt[3 .. (stxt.length - 4)]
@@ -171,22 +171,22 @@ class Newark extends RetailerInterface
                 stxt3 += s
             json = JSON.parse(stxt3)
             if json.hasPartNumberErrors? or json.hasCommentErrors?
-                #we find out which parts are the problem, call addItems again
+                #we find out which parts are the problem, call addLines again
                 #on the rest and concatenate the fails to the new result
                 #returning everything together to our callback
                 fail_names  = []
                 fails       = []
-                retry_items = []
+                retry_lines = []
                 for k,v of json
-                    #the rest of the json items are the part numbers
+                    #the rest of the json lines are the part numbers
                     if k != 'hasPartNumberErrors' and k != 'hasCommentErrors'
                         fail_names.push(v[0])
-                for item in items
-                    if item.part in fail_names
-                        fails.push(item)
+                for line in lines
+                    if line.part in fail_names
+                        fails.push(line)
                     else
-                        retry_items.push(item)
-                @_add_items_ajax retry_items, (result) ->
+                        retry_lines.push(line)
+                @_add_lines_ajax retry_lines, (result) ->
                     if callback?
                         result.fails = result.fails.concat(fails)
                         result.success = false
@@ -196,6 +196,6 @@ class Newark extends RetailerInterface
                     callback(result)
         , () =>
             if callback?
-                callback({success:false,fails:items,warnings:result.warnings})
+                callback({success:false,fails:lines,warnings:result.warnings})
 
 exports.Newark = Newark

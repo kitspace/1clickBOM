@@ -131,11 +131,11 @@ rsOnline =
 
             p = http.promiseGet("http#{@site}#{@cart}")
             p.then (doc) =>
-                error_items = doc.querySelectorAll('.dataRow.errorRow')
+                error_lines = doc.querySelectorAll('.dataRow.errorRow')
                 a = []
-                for _ in error_items
+                for _ in error_lines
                     a.push(null)
-                #for each item we basically click the 'remove' link which also
+                #for each line we basically click the 'remove' link which also
                 #asks for confirmation
                 chain = a.reduce (prev) =>
                     prev.then (_doc) =>
@@ -144,9 +144,9 @@ rsOnline =
                         else
                             return Promise.resolve(_doc)
                     .then (_doc) =>
-                        error_item = _doc?.querySelector('.dataRow.errorRow')
+                        error_line = _doc?.querySelector('.dataRow.errorRow')
                             ?.querySelector('.quantityTd')
-                        id = error_item?.children[3]?.children[0]?.id
+                        id = error_line?.children[3]?.children[0]?.id
                         param_id = params1 + '&' + encodeURIComponent(id)
                         http.promisePost("http#{@site}#{@cart}", param_id)
                     .then () =>
@@ -162,26 +162,26 @@ rsOnline =
                 callback({success:false})
 
 
-    addItems: (items, callback) ->
+    addLines: (lines, callback) ->
 
-        if items.length == 0
+        if lines.length == 0
             callback({success: true, fails: []})
             return
 
-        @adding_items = true
+        @adding_lines = true
 
-        add = (items, callback) =>
+        add = (lines, callback) =>
             @_clear_invalid () =>
                 @_get_adding_viewstate (viewstate, form_id) =>
-                    @_add_items(items, viewstate, form_id, callback)
+                    @_add_lines(lines, viewstate, form_id, callback)
 
         end = (result) =>
-            callback(result, this, items)
+            callback(result, this, lines)
             @refreshCartTabs()
             @refreshSiteTabs()
-            @adding_items = false
+            @adding_lines = false
 
-        add items, (result) ->
+        add lines, (result) ->
             if not result.success
                 #do a second pass with corrected quantities
                 add result.fails, (_result) ->
@@ -189,16 +189,16 @@ rsOnline =
             else
                 end(result)
 
-    _get_and_correct_invalid_items: (callback) ->
+    _get_and_correct_invalid_lines: (callback) ->
         url = "http#{@site}#{@cart}"
         http.get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
-            items = []
+            lines = []
             for elem in doc.querySelectorAll('.dataRow.errorRow')
-                item = {}
+                line = {}
                 #detect minimimum and multiple-of quantities from description
                 #and add a quantity according to those. we read the quantity
-                #from the cart as this could be an item that was already in
+                #from the cart as this could be an line that was already in
                 #the cart when we added. description is of the form:
                 #blabla 10 (minimum) blablabla 10 (multiple of) blabla
                 # or
@@ -213,30 +213,30 @@ rsOnline =
                     quantity = parseInt(elem.querySelector('.quantityTd')
                         ?.firstElementChild?.value)
                     if (not isNaN(mul)) && (not isNaN(quantity))
-                        item.quantity = quantity + (mul - (quantity % mul))
+                        line.quantity = quantity + (mul - (quantity % mul))
                 else
                     min = parseInt(min)
                     if not isNaN(min)
-                        item.quantity = min
+                        line.quantity = min
                 #detect part number
                 error_child = elem.children?[1]
                 error_input = error_child?.querySelector('input')
                 if error_input?
-                    item.part = error_input.value?.replace(/-/g,'')
-                items.push(item)
-            callback(items)
+                    line.part = error_input.value?.replace(/-/g,'')
+                lines.push(line)
+            callback(lines)
         , () ->
             callback([])
 
 
-    _add_items: (items_incoming, viewstate, form_id, callback) ->
+    _add_lines: (lines_incoming, viewstate, form_id, callback) ->
         result = {success:true, fails:[]}
-        if items_incoming.length > 500
+        if lines_incoming.length > 500
             result.warnings = ["RS cart cannot hold more than 500 lines."]
-            result.fails = items[500..]
-            items = items_incoming[0..499]
+            result.fails = lines[500..]
+            lines = lines_incoming[0..499]
         else
-            items = items_incoming
+            lines = lines_incoming
         url = "http#{@site}#{@cart}"
         params = "AJAXREQUEST=shoppingBasketForm%3A#{form_id}&shoppingBasketFo\
         rm=shoppingBasketForm&=QuickAdd&=DELIVERY&shoppingBasketForm%3AquickSt\
@@ -253,9 +253,9 @@ rsOnline =
         derWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_li\
         stItems="
 
-        for item in items
-            params += encodeURIComponent("#{item.part},#{item.quantity},,\
-            #{item.reference}\n")
+        for line in lines
+            params += encodeURIComponent("#{line.part},#{line.quantity},,\
+            #{line.reference}\n")
 
         params += "&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetA\
         ction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionMo\
@@ -266,26 +266,26 @@ rsOnline =
         extBoxbtn&"
 
         http.post url, params, {}, (event) =>
-            @_get_and_correct_invalid_items (invalid_items) =>
-                success = invalid_items.length == 0
+            @_get_and_correct_invalid_lines (invalid_lines) =>
+                success = invalid_lines.length == 0
                 invalid = []
                 if not success
-                    for item in items
-                        for inv_item in invalid_items
-                            if item.part == inv_item.part
-                                if inv_item.quantity?
-                                    item.quantity = inv_item.quantity
-                                invalid.push(item)
+                    for line in lines
+                        for inv_line in invalid_lines
+                            if line.part == inv_line.part
+                                if inv_line.quantity?
+                                    line.quantity = inv_line.quantity
+                                invalid.push(line)
                 callback?(
                     success:result.success && success
                     fails:result.fails.concat(invalid)
                     warnings:result.warnings
-                , this, items_incoming)
+                , this, lines_incoming)
         , () =>
             callback?(
                 success:false
-                fails:result.fails.concat(items)
-            , this, items_incoming)
+                fails:result.fails.concat(lines)
+            , this, lines_incoming)
 
 
     _get_adding_viewstate: (callback)->
@@ -351,7 +351,7 @@ rsDelivers =
 
 
     _clear_invalid: (callback) ->
-        @_get_invalid_item_ids (ids) =>
+        @_get_invalid_line_ids (ids) =>
             @_delete_invalid(ids, callback)
 
 
@@ -370,7 +370,7 @@ rsDelivers =
                 callback()
 
 
-    _get_invalid_item_ids: (callback) ->
+    _get_invalid_line_ids: (callback) ->
         url = "http#{@site}/ShoppingCart/NcjRevampServicePage.aspx/GetCartHtml"
         http.post url, undefined, {json:true}, (event) ->
             doc = browser.parseDOM(JSON.parse(event.target.responseText).html)
@@ -389,30 +389,30 @@ rsDelivers =
             callback([],[])
 
 
-    addItems: (items, callback) ->
-        if items.length == 0
+    addLines: (lines, callback) ->
+        if lines.length == 0
             callback({success: true, fails: []})
             return
-        @adding_items = true
-        @_add_items items, 0, {success:true, fails:[]}, (result) =>
-            @adding_items = false
-            callback(result, this, items)
+        @adding_lines = true
+        @_add_lines lines, 0, {success:true, fails:[]}, (result) =>
+            @adding_lines = false
+            callback(result, this, lines)
             @refreshCartTabs()
             @refreshSiteTabs()
 
 
-    #adds items recursively in batches of 100 -- requests would timeout
+    #adds lines recursively in batches of 100 -- requests would timeout
     #otherwise
-    _add_items: (items_incoming, i, result, callback) ->
-        if i < items_incoming.length
-            items = items_incoming[i..i+99]
+    _add_lines: (lines_incoming, i, result, callback) ->
+        if i < lines_incoming.length
+            lines = lines_incoming[i..i+99]
             @_clear_invalid () =>
                 url = "http#{@site}/ShoppingCart/NcjRevampServicePage.aspx/\
                 BulkOrder"
                 params = '{"request":{"lines":"'
-                for item in items
-                    params += "#{item.part},#{item.quantity},,\
-                    #{item.reference}\n"
+                for line in lines
+                    params += "#{line.part},#{line.quantity},,\
+                    #{line.reference}\n"
                 params += '"}}'
                 http.post url, params, {json:true}, (event) =>
                     doc = browser.parseDOM(
@@ -420,23 +420,23 @@ rsDelivers =
                     success = doc.querySelector("#hidErrorAtLineLevel")
                         .value == "0"
                     if not success
-                        @_get_invalid_item_ids (ids, parts) =>
+                        @_get_invalid_line_ids (ids, parts) =>
                             invalid = []
-                            for item in items
-                                if item.part in parts
-                                    invalid.push(item)
-                            @_add_items items_incoming
+                            for line in lines
+                                if line.part in parts
+                                    invalid.push(line)
+                            @_add_lines lines_incoming
                             , i+100
                             ,
                                 success:false
                                 fails:result.fails.concat(invalid)
                             , callback
                     else
-                        @_add_items(items_incoming, i+100, result, callback)
+                        @_add_lines(lines_incoming, i+100, result, callback)
                 , () =>
-                    @_add_items items_incoming
+                    @_add_lines lines_incoming
                     , i+100
-                    , {success:false, fails:result.fails.concat(items)}
+                    , {success:false, fails:result.fails.concat(lines)}
                     , callback
         else
             callback(result)

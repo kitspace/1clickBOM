@@ -34,10 +34,10 @@ class RetailerInterface
         if (settings?)
             if (settings.carts?)
                 data.carts = settings.carts
-            if (settings.additems?)
-                data.additems = settings.additems
-            if (settings.additem_params?)
-                data.additem_params = settings.additem_params
+            if (settings.addlines?)
+                data.addlines = settings.addlines
+            if (settings.addline_params?)
+                data.addline_params = settings.addline_params
             if (settings.name?)
                 data.name = settings.name
             if (settings.name?)
@@ -52,10 +52,10 @@ class RetailerInterface
         else
             @cart = data.carts[country_code_lookedup]
 
-        if typeof(data.additems) == 'string'
-            @additem = data.additems
+        if typeof(data.addlines) == 'string'
+            @addline = data.addlines
         else
-            @additem = data.additems[country_code_lookedup]
+            @addline = data.addlines[country_code_lookedup]
 
         if data.language?
             @language = data.language[country_code_lookedup]
@@ -65,9 +65,9 @@ class RetailerInterface
         else
             @site = data.sites[country_code_lookedup]
 
-        @additem_params = data.additem_params
+        @addline_params = data.addline_params
         @name           = name
-        @adding_items   = false
+        @adding_lines   = false
         @clearing_cart  = false
         @icon_src       = 'https://www.google.com/s2/favicons?domain=http' + @site
         #this puts the image in cache but also uses our backup if

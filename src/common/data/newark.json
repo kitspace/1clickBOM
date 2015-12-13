@@ -3,8 +3,8 @@
         "US": "://www.newark.com"
     },
     "carts": "/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView",
-    "additems": "",
-    "additem_params": "",
+    "addlines": "",
+    "addline_params": "",
     "lookup": {
         "AE": "US",
         "AM": "US",

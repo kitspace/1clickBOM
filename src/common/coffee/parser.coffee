@@ -17,7 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{retailer_list, field_list} = require('./item_data')
+{retailer_list, field_list} = require('./line_data')
 
 retailer_aliases =
     'Farnell'     : 'Farnell'
@@ -67,32 +67,32 @@ lookup = (name, obj) ->
     #else
     return null
 
-checkValidItems =  (items_incoming, invalid, warnings) ->
-    items = []
-    for item in items_incoming
+checkValidLines =  (lines_incoming, invalid, warnings) ->
+    lines = []
+    for line in lines_incoming
         if invalid.length > 10
-            items = []
+            lines = []
             break
-        number = parseInt(item.quantity)
+        number = parseInt(line.quantity)
         if isNaN(number)
-            invalid.push {row:item.row, reason:'Quantity is not a number.'}
+            invalid.push {row:line.row, reason:'Quantity is not a number.'}
         else if number < 1
-            invalid.push {row:item.row, reason:'Quantity is less than one.'}
+            invalid.push {row:line.row, reason:'Quantity is less than one.'}
         else
-            item.quantity = number
-            for key,v of item.retailers
+            line.quantity = number
+            for key,v of line.retailers
                 if not v?
                     v = ''
                 else if key != 'Digikey'
                     v = v.replace(/-/g,'')
             for field in field_list
-                if not item[field]?
-                    item[field] = ''
-            items.push(item)
-    return {items, invalid, warnings}
+                if not line[field]?
+                    line[field] = ''
+            lines.push(line)
+    return {lines, invalid, warnings}
 
 parseSimple = (rows) ->
-    items = []
+    lines = []
     invalid = []
     for row, i in rows
         if row != ''
@@ -112,26 +112,26 @@ parseSimple = (rows) ->
                 for r in retailer_list
                     retailersObj[r] = ''
                 retailersObj["#{retailer}"] = cells[3]
-                item =
+                line =
                     reference : cells[0]
                     quantity  : cells[1]
                     retailers : retailersObj
                     row       : i + 1
-                if !item.quantity
+                if !line.quantity
                     invalid.push
-                        row:item.row
+                        row:line.row
                         reason: 'Quantity is undefined.'
-                else if !item.retailers["#{retailer}"]
+                else if !line.retailers["#{retailer}"]
                     invalid.push
-                        row:item.row
+                        row:line.row
                         reason: 'Part number is undefined.'
                 else
-                    items.push(item)
-    return {items, invalid}
+                    lines.push(line)
+    return {lines, invalid}
 
 
 parseNamed = (rows, order, retailers) ->
-    items = []
+    lines = []
     invalid = []
     for row, i in rows
         if row != ''
@@ -144,7 +144,7 @@ parseNamed = (rows, order, retailers) ->
                     if cells[order.indexOf(r)]?
                         retailersObj["#{r}"] = cells[order.indexOf(r)]
                 return retailersObj
-            item =
+            line =
                 reference    : cells[order.indexOf('reference')]
                 quantity     : cells[order.indexOf('quantity')]
                 partNumber   : cells[order.indexOf('partNumber')]
@@ -152,13 +152,13 @@ parseNamed = (rows, order, retailers) ->
                 description  : cells[order.indexOf('description')]
                 retailers    : rs()
                 row          : i + 1
-            if not item.quantity?
+            if not line.quantity?
                 invalid.push
-                    row:item.row
+                    row:line.row
                     reason: 'Quantity is undefined.'
             else
-                items.push(item)
-    return {items, invalid}
+                lines.push(line)
+    return {lines, invalid}
 
 
 hasNamedColumns = (cells) ->
@@ -208,7 +208,7 @@ parseTSV = (text) ->
     l = firstCells.length
     if l < 2
         return {
-            items:[]
+            lines:[]
             invalid:[
                 row:1
                 reason:"The pasted data doesn't look like tab seperated values."
@@ -216,7 +216,7 @@ parseTSV = (text) ->
         }
     else if l < 3
         return {
-            items:[]
+            lines:[]
             invalid:[
                 row:1
                 reason:"Only #{l} column#{if l > 1 then 's' else ''}.
@@ -227,14 +227,14 @@ parseTSV = (text) ->
         {order, retailers, reason, warnings} = getOrder(firstCells)
         if not (order? && retailers?)
             return {
-                items:[]
+                lines:[]
                 invalid:[{row:1, reason:reason}]
             }
-        {items, invalid} = parseNamed(rows[1..], order, retailers)
+        {lines, invalid} = parseNamed(rows[1..], order, retailers)
     else
-        {items, invalid} = parseSimple(rows)
-    {items, invalid, warnings} = checkValidItems(items, invalid, warnings)
-    return {items, invalid, warnings}
+        {lines, invalid} = parseSimple(rows)
+    {lines, invalid, warnings} = checkValidLines(lines, invalid, warnings)
+    return {lines, invalid, warnings}
 
 
 exports.parseTSV = parseTSV

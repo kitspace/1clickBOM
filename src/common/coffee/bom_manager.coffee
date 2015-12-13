@@ -26,7 +26,7 @@ http            = require './http'
 {Newark  }      = require './newark'
 {parseTSV}      = require './parser'
 {badge}         = require './badge'
-{retailer_list} = require './item_data'
+{retailer_list} = require './line_data'
 {autoComplete}  = require './auto_complete'
 
 bom_manager =
@@ -64,21 +64,21 @@ bom_manager =
                     bom = {}
             if not bom.retailers?
                 bom.retailers = {}
-            if not bom.items?
-                bom.items = []
+            if not bom.lines?
+                bom.lines = []
             callback(bom)
 
     autoComplete: (callback) ->
         @getBOM (bom) =>
-            autoComplete bom.items, (items) =>
+            autoComplete bom.lines, (lines) =>
                 bom = {}
-                bom.items = items
-                bom.retailers = @_to_retailers(items)
+                bom.lines = lines
+                bom.retailers = @_to_retailers(lines)
                 browser.storageSet {bom:bom}, () ->
                     callback?()
 
     addToBOM: (text, callback) ->
-        {items, invalid, warnings} = parseTSV(text)
+        {lines, invalid, warnings} = parseTSV(text)
         if invalid.length > 0
             for inv in invalid
                 title = 'Could not parse row '
@@ -90,7 +90,7 @@ bom_manager =
                     message:message
                     iconUrl:'/images/warning.png'
                 badge.setDecaying('Warn','#FF8A00', priority=2)
-        else if items.length == 0
+        else if lines.length == 0
             title = 'Nothing pasted '
             message = 'Clipboard is empty'
             browser.notificationsCreate
@@ -109,54 +109,54 @@ bom_manager =
                     message:message
                     iconUrl:'/images/warning.png'
                 badge.setDecaying('Warn','#FF8A00', priority=2)
-        else if items.length > 0
+        else if lines.length > 0
             badge.setDecaying('OK','#00CF0F')
-        @_add_to_bom(items, invalid, callback)
+        @_add_to_bom(lines, invalid, callback)
 
-    _to_retailers: (items) ->
+    _to_retailers: (lines) ->
         r = {}
-        for item in items
-            for retailer, part of item.retailers
+        for line in lines
+            for retailer, part of line.retailers
                 if part? and part != ''
                     if not r[retailer]?
                         r[retailer] = []
                     r[retailer].push
                         part     : part
-                        quantity : item.quantity
-                        reference  : item.reference
+                        quantity : line.quantity
+                        reference  : line.reference
         return r
 
 
-    _merge_items: (items1, items2) ->
+    _merge_lines: (lines1, lines2) ->
         warnings = []
         duplicates = {}
-        merged = items1
-        for item2, index in items2
-            for item2_, index_ in items2
-                if index != index_ and item2.reference == item2_.reference
-                    d = duplicates[item2.reference]
+        merged = lines1
+        for line2, index in lines2
+            for line2_, index_ in lines2
+                if index != index_ and line2.reference == line2_.reference
+                    d = duplicates[line2.reference]
                     if d?
                         if index not in d
                             d.push(index)
                         if index_ not in d
                             d.push(index_)
                     else
-                         duplicates[item2.reference] = [index, index_]
+                         duplicates[line2.reference] = [index, index_]
             exists = false
-            for item1 in merged
-                if item1.reference == item2.reference
+            for line1 in merged
+                if line1.reference == line2.reference
                     exists = true
                     for r in retailer_list
-                        if item2.retailers[r] != ''
-                            item1.retailers[r] = item2.retailers[r]
-                    if item2.partNumber != ''
-                        item1.partNumber = item2.partNumber
-                    if item2.manufacturer != ''
-                        item1.manufacturer = item2.manufacturer
-                    item1.quantity += item2.quantity
+                        if line2.retailers[r] != ''
+                            line1.retailers[r] = line2.retailers[r]
+                    if line2.partNumber != ''
+                        line1.partNumber = line2.partNumber
+                    if line2.manufacturer != ''
+                        line1.manufacturer = line2.manufacturer
+                    line1.quantity += line2.quantity
                     break
             if not exists
-                merged.push(item2)
+                merged.push(line2)
         for ref, d of duplicates
             warnings.push(
                 title:'Duplicate lines detected'
@@ -167,9 +167,9 @@ bom_manager =
         return [merged, warnings]
 
 
-    _add_to_bom: (items, invalid, callback) ->
+    _add_to_bom: (lines, invalid, callback) ->
         @getBOM (bom) =>
-            [bom.items, warnings] = @_merge_items(bom.items, items)
+            [bom.lines, warnings] = @_merge_lines(bom.lines, lines)
             for warning in warnings
                 browser.notificationsCreate
                     type:'basic'
@@ -177,7 +177,7 @@ bom_manager =
                     message:warning.message
                     iconUrl:'/images/warning.png'
                 badge.setDecaying('Warn','#FF8A00', priority=2)
-            bom.retailers = @_to_retailers(bom.items)
+            bom.retailers = @_to_retailers(bom.lines)
             over = []
             for retailer,lines of bom.retailers
                 if lines.length > 100
@@ -191,7 +191,7 @@ bom_manager =
                         message += ', ' + retailer
                     message += ' and '
                     message += over[over.length - 1]
-                message += ". Adding the items may take a very long time
+                message += ". Adding the lines may take a very long time
                 (or even forever). It may be OK but it really depends on the
                 site."
                 browser.notificationsCreate
@@ -204,34 +204,34 @@ bom_manager =
                 callback?(this)
 
 
-    notifyFillCart: (items, retailer, result) ->
+    notifyFillCart: (lines, retailer, result) ->
         if not result.success
             fails = result.fails
-            failed_items = []
+            failed_lines = []
             if fails.length == 0
-                title = 'There may have been problems adding items'
+                title = 'There may have been problems adding lines'
                 title += ' to ' + retailer + ' cart. '
-                failed_items.push
+                failed_lines.push
                     title:'Please check the cart to try and ' ,
                     message:''
-                failed_items.push
+                failed_lines.push
                     title:'correct any issues.'
                     message:''
             else
                 title = 'Could not add ' + fails.length
-                title += ' out of ' + items.length + ' line'
-                title += if items.length > 1 then 's' else ''
+                title += ' out of ' + lines.length + ' line'
+                title += if lines.length > 1 then 's' else ''
                 title += ' to ' + retailer + ' cart:'
                 for fail in fails
-                    failed_items.push
-                        title:"item: #{fail.reference} | #{fail.quantity}
+                    failed_lines.push
+                        title:"line: #{fail.reference} | #{fail.quantity}
                         | #{fail.part}"
                         message:''
             browser.notificationsCreate
                 type:'list'
                 title:title
                 message:''
-                items:failed_items
+                items:failed_lines
                 iconUrl:'/images/error.png'
             badge.setDecaying('Err','#FF0000', priority=2)
         else
@@ -263,7 +263,7 @@ bom_manager =
     fillCart: (retailer, callback)->
         browser.storageGet ['bom'], ({bom:bom}) =>
             if bom.retailers[retailer]?
-                @interfaces[retailer].addItems bom.retailers[retailer]
+                @interfaces[retailer].addLines bom.retailers[retailer]
                 , (result) =>
                     @notifyFillCart bom.retailers[retailer], retailer, result
                     callback(result)

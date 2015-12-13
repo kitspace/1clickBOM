@@ -40,31 +40,31 @@ class Digikey extends RetailerInterface
             if callback?
                 callback({success:false})
 
-    addItems: (items, callback) ->
-        if items.length == 0
+    addLines: (lines, callback) ->
+        if lines.length == 0
             callback({success: true, fails: []})
             return
-        @adding_items = true
-        @_add_items items, (result) =>
+        @adding_lines = true
+        @_add_lines lines, (result) =>
             if callback?
-                callback(result, this, items)
+                callback(result, this, lines)
             @refreshCartTabs()
-            @adding_items = false
+            @adding_lines = false
 
-    _add_items: (items, callback) ->
+    _add_lines: (lines, callback) ->
         result = {success:true, fails:[]}
-        count = items.length
-        for item in items
-            @_add_item item, (item, item_result) =>
-                if not item_result.success
-                    @_get_part_id item, (item, id) =>
-                        @_get_suggested item, id, 'NextBreakQuanIsLowerExtPrice'
-                        , (new_item) =>
-                            @_add_item new_item, (_, r) =>
+        count = lines.length
+        for line in lines
+            @_add_line line, (line, line_result) =>
+                if not line_result.success
+                    @_get_part_id line, (line, id) =>
+                        @_get_suggested line, id, 'NextBreakQuanIsLowerExtPrice'
+                        , (new_line) =>
+                            @_add_line new_line, (_, r) =>
                                 if not r.success
-                                    @_get_suggested new_item, id, 'TapeReelQuantityTooLow'
-                                    , (new_item) =>
-                                        @_add_item new_item, (_, r) ->
+                                    @_get_suggested new_line, id, 'TapeReelQuantityTooLow'
+                                    , (new_line) =>
+                                        @_add_line new_line, (_, r) ->
                                             result.success &&= r.success
                                             result.fails = result.fails.concat(r.fails)
                                             count--
@@ -72,7 +72,7 @@ class Digikey extends RetailerInterface
                                                 callback(result)
                                     , () ->
                                         result.success = false
-                                        result.fails.push(item)
+                                        result.fails.push(line)
                                         count--
                                         if (count == 0)
                                             callback(result)
@@ -82,13 +82,13 @@ class Digikey extends RetailerInterface
                                         callback(result)
                         , () ->
                             result.success = false
-                            result.fails.push(item)
+                            result.fails.push(line)
                             count--
                             if (count == 0)
                                 callback(result)
                     , () ->
                         result.success = false
-                        result.fails.push(item)
+                        result.fails.push(line)
                         count--
                         if (count == 0)
                             callback(result)
@@ -96,45 +96,45 @@ class Digikey extends RetailerInterface
                     count--
                     if (count == 0)
                         callback(result)
-    _add_item: (item, callback) ->
-        url = 'http' + @site + @additem
-        params = 'qty=' + item.quantity + '&part=' + item.part + '&cref=' + item.reference
+    _add_line: (line, callback) ->
+        url = 'http' + @site + @addline
+        params = 'qty=' + line.quantity + '&part=' + line.part + '&cref=' + line.reference
         result = {success:true, fails:[]}
-        post url, params, {item:item}, (event)->
+        post url, params, {line:line}, (event)->
             doc = browser.parseDOM(event.target.responseText)
             #if the cart returns with a quick-add quantity filled-in there was an error
             quick_add_quant = doc.querySelector('#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity')
             result.success = (quick_add_quant?) && (quick_add_quant.value?) && (quick_add_quant.value == '')
             if not result.success
-                result.fails.push(event.target.item)
-            callback(event.target.item, result)
+                result.fails.push(event.target.line)
+            callback(event.target.line, result)
         , (event) ->
             result.success = false
             if event.target?
-                result.fails.push(event.target.item)
-                callback(event.target.item, result)
+                result.fails.push(event.target.line)
+                callback(event.target.line, result)
 
-    _get_part_id: (item, callback, error_callback) ->
+    _get_part_id: (line, callback, error_callback) ->
         url = 'http' + @site + '/product-detail/en/'
-        url += item.part + '/'
-        url += item.part + '/'
-        get url, {item:item, notify:false}, (event) ->
+        url += line.part + '/'
+        url += line.part + '/'
+        get url, {line:line, notify:false}, (event) ->
             doc = browser.parseDOM(event.target.responseText)
             inputs = doc.querySelectorAll('input')
             for input in inputs
                 if input.name == 'partid'
-                    callback(event.target.item, input.value)
+                    callback(event.target.line, input.value)
                     return
             #we never found an id
             error_callback()
         , error_callback
-    _get_suggested: (item, id, error, callback, error_callback) =>
+    _get_suggested: (line, id, error, callback, error_callback) =>
         url = 'http' + @site + '/classic/Ordering/PackTypeDialog.aspx?'
-        url += 'part=' + item.part
-        url += '&qty=' + item.quantity
+        url += 'part=' + line.part
+        url += '&qty=' + line.quantity
         url += '&partId=' + id
         url += '&error=' + error + '&cref=&esc=-1&returnURL=%2f%2fwww.digikey.co.uk%2fclassic%2fordering%2faddpart.aspx&fastAdd=false&showUpsell=True'
-        get url, {item:item, notify:false}, (event) ->
+        get url, {line:line, notify:false}, (event) ->
             doc = browser.parseDOM(event.target.responseText)
             switch error
                 when 'TapeReelQuantityTooLow'       then choice = doc.getElementById('rb1')
@@ -146,7 +146,7 @@ class Digikey extends RetailerInterface
                     part   = split[2]
                     number = parseInt(split[0].replace(/,/,''))
                     if not isNaN(number)
-                        it = event.target.item
+                        it = event.target.line
                         it.part = part
                         it.quantity = number
                         callback(it)

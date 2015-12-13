@@ -107,8 +107,8 @@
     "Export": "/shoppingCart/shoppingCart.aspx"
 },
 
-"additems" : "",
-"additem_params" : "",
+"addlines" : "",
+"addline_params" : "",
 
 "lookup" : {
     "AE": "AE",

@@ -87,6 +87,6 @@ test 'Newark: InvalidCountryError Thrown', () ->
     , InvalidCountryError
 
 test 'Parser: Catches negative quantities', () ->
-    {items, invalid} = parseTSV('test\t-1\tFarnell\t898989')
-    deepEqual(items, [])
+    {lines, invalid} = parseTSV('test\t-1\tFarnell\t898989')
+    deepEqual(lines, [])
     deepEqual(invalid[0].reason, 'Quantity is less than one')
