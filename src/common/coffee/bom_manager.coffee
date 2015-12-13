@@ -26,7 +26,7 @@ http            = require './http'
 {Newark  }      = require './newark'
 {parseTSV}      = require './parser'
 {badge}         = require './badge'
-{retailer_list} = require './retailer_list'
+{retailer_list} = require './item_data'
 {autoComplete}  = require './auto_complete'
 
 bom_manager =

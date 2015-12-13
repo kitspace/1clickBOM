@@ -17,7 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{retailer_list, field_list} = require('./retailer_list')
+{retailer_list, field_list} = require('./item_data')
 
 retailer_aliases =
     'Farnell'     : 'Farnell'

@@ -23,7 +23,7 @@
 http            = require './http'
 {badge}         = require './badge'
 {writeTSV}      = require './writer'
-{retailer_list} = require './retailer_list'
+{retailer_list} = require './item_data'
 
 
 exports.background = (messenger) ->

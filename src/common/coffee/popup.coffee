@@ -18,7 +18,7 @@
 # the Original Code is Kaspar Emanuel.
 
 {messenger} = require './messenger'
-{retailer_list, isComplete, hasSKUs} = require './retailer_list'
+{retailer_list, isComplete, hasSKUs} = require './item_data'
 
 element_Bom         = document.querySelector('#bom')
 element_Table       = document.querySelector('#bom_table')
