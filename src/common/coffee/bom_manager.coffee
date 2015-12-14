@@ -261,7 +261,7 @@ bom_manager =
 
 
     fillCart: (retailer, callback)->
-        browser.storageGet ['bom'], ({bom:bom}) =>
+        @getBOM (bom) =>
             if bom.retailers[retailer]?
                 @interfaces[retailer].addLines bom.retailers[retailer]
                 , (result) =>
