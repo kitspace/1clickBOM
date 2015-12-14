@@ -18,6 +18,19 @@ chrome.runtime.onInstalled.addListener (details)->
                     settings[country][retailer][setting] = info.value
         browser.prefsSet({settings:settings})
     else if details.reason == 'update'
+
+        chrome.notifications.create 'update-notification',
+            type:'basic'
+            title:'New UI and auto-complete!'
+            message:"Hope you like the new look. Be sure to try out 1clickBOM's
+                new feature that searches Octopart and Findchips.com for you."
+            isClickable:true
+            iconUrl:'/images/logo128.png'
+
+        chrome.notifications.onClicked.addListener (id) ->
+            if (id == 'update-notification')
+                browser.tabsCreate('http://1clickBOM.com')
+
         browser.prefsGet ['country', 'settings']
         , ({country:country, settings:stored_settings}) =>
             #allow for graceful update as settings format has changed
@@ -29,6 +42,7 @@ chrome.runtime.onInstalled.addListener (details)->
             else
                 stored_settings.UK.Farnell = {site:'://uk.farnell.com'}
             browser.prefsSet({settings:stored_settings}, ()->)
+
 
 # tests only work in chrome currently, open a console on background and execute
 # Test() or test a specific module, e.g. Farnell, with Test('Farnell')
