@@ -1,9 +1,9 @@
 all:
 	git checkout master README.md LICENSE
-	sed -i '/\[Demo\]/d;/# 1clickBOM/d' README.md
+	sed -i '/\[Youtube Demo\]/d;/# 1clickBOM/d' README.md
 	sed -i '1s/^/##\n##/' README.md
 	pandoc header.md > header.html
-	pandoc --toc --toc-depth=2 --standalone -c markdown7.css README.md footer.md -o index.html
+	pandoc --standalone -c markdown7.css README.md footer.md > index.html
 	sed -i '/<body>/ r header.html' index.html
 	rm header.html
 	sed -i 's!^<li><a href="#section.*"></a></li>!!' index.html
