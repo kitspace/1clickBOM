@@ -105,34 +105,44 @@ stopSpinning = (link) ->
         link.hidden   = false
         link.spinning = false
 
+removeChildren = (element) ->
+    while element.hasChildNodes()
+        element.removeChild(element.lastChild)
+
 
 render = (state) ->
     bom = state.bom
 
     hideOrShow(bom, state.onDotTSV)
 
-    element_TotalLines.innerHTML = "#{bom.lines.length}
-        line#{if bom.lines.length != 1 then 's' else ''}"
+    removeChildren(element_TotalLines)
+    element_TotalLines.appendChild(
+        document.createTextNode("#{bom.lines.length}
+                line#{if bom.lines.length != 1 then 's' else ''}"))
 
     part_numbers = bom.lines.reduce (prev, line) ->
         prev += line.partNumber != ''
     , 0
 
-    element_TotalPartNumbers.innerHTML = "#{part_numbers} with MPN"
+    removeChildren(element_TotalPartNumbers)
+    element_TotalPartNumbers.appendChild(
+        document.createTextNode("#{part_numbers} with MPN"))
 
     manufacturers = bom.lines.reduce (prev, line) ->
         prev += line.manufacturer != ''
     , 0
 
-    element_TotalManufacturers.innerHTML = "#{manufacturers} with M/F"
+    removeChildren(element_TotalManufacturers)
+    element_TotalManufacturers.appendChild(
+        document.createTextNode("#{manufacturers} with M/F"))
 
     quantity = 0
-
     for line in bom.lines
         quantity += line.quantity
 
-    element_TotalItems.innerHTML = "#{quantity}
-        item#{if quantity != 1 then 's' else ''}"
+    removeChildren(element_TotalItems)
+    element_TotalItems.appendChild(document.createTextNode("#{quantity}
+        item#{if quantity != 1 then 's' else ''}"))
 
     while element_Table.hasChildNodes()
         element_Table.removeChild(element_Table.lastChild)
