@@ -1,6 +1,8 @@
+
 [![Youtube Demo][22]](https://youtu.be/611TW315pZM)
 
 [![Available on Chrome][8]][14] [![Add to Firefox][9]][13]
+
 
 ## Summary ##
 
@@ -9,6 +11,17 @@ sites like Digikey and Mouser, you simply paste from a spreadsheet or visit an
 online `.tsv` file. This way you can keep one bill of materials (BOM) that lets
 you and people you share the BOM with quickly purchase items from multiple
 retailers.
+
+## Table of Contents ##
+
+* [Summary](#summary)
+* [News](#news)
+* [Which retailers?](#which-retailers)
+* [Usage](#usage)
+* [Issues](#issues)
+* [Roadmap](#roadmap)
+* [Development](#development)
+* [License](#license)
 
 ## News ##
 
