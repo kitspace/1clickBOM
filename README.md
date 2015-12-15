@@ -77,14 +77,14 @@ interpreted in the following way by 1clickBOM. Capitalisation is ignored.
     manufacturer             : Manufacturer
     m/f                      : Manufacturer
 
-![Load from page][3]
-
 If you visit a page that ends in `.tsv` and has data in the right format
 available 1clickBOM will show a blue badge and button with an arrow. Clicking
 the blue button will load the data into 1clickBOM.  Alternatively you can paste
 from any spreadsheet (Excel, OpenOffice, LibreOffice, etc.) by selecting the
 relevant columns copying them and then clicking the paste button on 1clickBOM's
 popup.
+
+![Load from page][3]
 
 See the [example tsv][2] and the [Bus Pirate tsv][21].
 
@@ -95,7 +95,7 @@ using the buttons on the popup. You can also quickly view and empty your carts.
 
 ### Completion ###
 
-New in version 0.5 is function to search Octopart.com and Findchips.com to try
+New in version 0.5 is a function to search Octopart.com and Findchips.com to try
 and complete a BOM for you. A complete BOM is one that has a part number for
 _every_ retailer. Simply press the button labeled 'Complete' and 1clickBOM will
 use other fields to search for the fields that are left blank.
