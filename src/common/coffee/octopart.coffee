@@ -62,4 +62,6 @@ exports.search = (query, retailers = [], other_fields = []) ->
                         moqs[retailer] = moq
                         result.retailers[retailer] = sku
             return result
+    .catch (reason) ->
+            return {retailers:{}}
 

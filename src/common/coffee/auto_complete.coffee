@@ -67,17 +67,9 @@ _auto_complete = (search_engine, lines) ->
 autoComplete = (lines, callback) ->
     p = _auto_complete(octopart, lines)
     p.then (newLines) ->
-        for line in newLines
-            for r of line.retailers
-                if r not in retailer_list
-                    console.log("octopart")
         if not isComplete(newLines)
             p = _auto_complete(findchips, newLines)
             p.then (newLines_) ->
-                for line in newLines_
-                    for r of line.retailers
-                        if r not in retailer_list
-                            console.log("findchips")
                 callback(newLines_)
         else
             callback(newLines)

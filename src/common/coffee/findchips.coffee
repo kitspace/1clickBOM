@@ -72,14 +72,5 @@ exports.search = (query, retailers_to_search = [], other_fields = []) ->
                 if part?
                     result.retailers[retailer] = part
             return result
-
-
-
-
-
-
-
-
-
-
-
+        .catch (reason) ->
+            return {retailers:{}}

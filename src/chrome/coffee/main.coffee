@@ -17,20 +17,7 @@ chrome.runtime.onInstalled.addListener (details)->
                 for setting,info of setting_names
                     settings[country][retailer][setting] = info.value
         browser.prefsSet({settings:settings})
-    else if details.reason == 'update'
-
-        if details.previousVersion != "0.5.0"
-            chrome.notifications.create 'update-notification',
-                type:'basic'
-                title:'New UI and auto-complete!'
-                message:"Hope you like the new look. Be sure to try out 1clickBOM's
-                    new feature that searches Octopart and Findchips.com for you."
-                isClickable:true
-                iconUrl:'/images/logo128.png'
-
-            chrome.notifications.onClicked.addListener (id) ->
-                if (id == 'update-notification')
-                    browser.tabsCreate('http://1clickBOM.com')
+    #else if details.reason == 'update'
 
 # tests only work in chrome currently, open a console on background and execute
 # Test() or test a specific module, e.g. Farnell, with Test('Farnell')
@@ -38,8 +25,6 @@ window.Test = (module)->
     url = browser.getURL('html/test.html')
     url += '?module=' + module if module?
     window.open(url)
-
-window.findchips = require('./findchips').search
 
 window.clear = () ->
     browser.storageRemove 'bom' , () ->

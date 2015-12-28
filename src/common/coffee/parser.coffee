@@ -144,14 +144,14 @@ parseNamed = (rows, order, retailers) ->
                     retailersObj[r] = ''
                 for r in retailers
                     if cells[order.indexOf(r)]?
-                        retailersObj["#{r}"] = cells[order.indexOf(r)]
+                        retailersObj["#{r}"] = cells[order.indexOf(r)].trim()
                 return retailersObj
             line =
-                reference    : cells[order.indexOf('reference')]
-                quantity     : cells[order.indexOf('quantity')]
-                partNumber   : cells[order.indexOf('partNumber')]
-                manufacturer : cells[order.indexOf('manufacturer')]
-                description  : cells[order.indexOf('description')]
+                reference    : cells[order.indexOf('reference')]?.trim()
+                quantity     : cells[order.indexOf('quantity')]?.trim()
+                partNumber   : cells[order.indexOf('partNumber')]?.trim()
+                manufacturer : cells[order.indexOf('manufacturer')]?.trim()
+                description  : cells[order.indexOf('description')]?.trim()
                 retailers    : rs()
                 row          : i + 1
             if not line.quantity?
