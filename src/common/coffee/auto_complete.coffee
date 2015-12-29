@@ -49,6 +49,10 @@ _auto_complete = (search_engine, lines) ->
                         line[field] = v
                 for retailer in retailer_list
                     if result.retailers[retailer]?
+                        if retailer == 'Farnell' &&
+                        /RL$/.test(result.retailers[retailer])
+                            result.retailers[retailer] =
+                                result.retailers[retailer].replace('RL','')
                         line.retailers[retailer] = result.retailers[retailer]
                 return line
             ).bind(undefined, line)
