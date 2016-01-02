@@ -154,7 +154,11 @@ parseNamed = (rows, order, retailers) ->
                 description  : cells[order.indexOf('description')]?.trim()
                 retailers    : rs()
                 row          : i + 1
-            if not line.quantity?
+            if not line.reference? or line.reference == ''
+                invalid.push
+                    row:line.row
+                    reason: 'Reference is undefined.'
+            else if not line.quantity?
                 invalid.push
                     row:line.row
                     reason: 'Quantity is undefined.'
@@ -231,6 +235,11 @@ parseTSV = (text) ->
             return {
                 lines:[]
                 invalid:[{row:1, reason:reason}]
+            }
+        if order.indexOf('reference') < 0
+            return {
+                lines:[]
+                invalid:[{row:1, reason:'You need a references column.'}]
             }
         {lines, invalid} = parseNamed(rows[1..], order, retailers)
     else
