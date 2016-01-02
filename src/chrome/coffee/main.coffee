@@ -17,7 +17,6 @@ chrome.runtime.onInstalled.addListener (details)->
                 for setting,info of setting_names
                     settings[country][retailer][setting] = info.value
         browser.prefsSet({settings:settings})
-    #else if details.reason == 'update'
 
 # tests only work in chrome currently, open a console on background and execute
 # Test() or test a specific module, e.g. Farnell, with Test('Farnell')

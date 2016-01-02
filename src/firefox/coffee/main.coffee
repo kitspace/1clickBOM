@@ -22,14 +22,5 @@ exports.main = (options, callbacks) ->
                           });"
                 )
             )
-    else if options.loadReason == 'upgrade'
-        ffObj =
-            title:'New UI and auto-complete!'
-            text:"Hope you like the new look. Be sure to try out 1clickBOM's
-                new feature that searches Octopart and Findchips.com for you."
-            iconURL : './images/logo48.png'
-            onClick: () ->
-                firefoxTabs.open('http://1clickBOM.com')
-        notifications.notify(ffObj)
 
     background(bgMessenger(popup))
