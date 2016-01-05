@@ -17,6 +17,7 @@
   "devDependencies": {
     "browserify": "^10.2.4",
     "coffee-script": "^1.9.3",
-    "coffeeify": "^1.1.0"
+    "coffeeify": "^1.1.0",
+    "jpm": "^1.0.4"
   }
 }

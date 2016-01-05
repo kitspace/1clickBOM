@@ -7,7 +7,7 @@
   "homepage": "http://1clickBOM.com",
   "license": "CPAL 1.0",
   "icon": "data/images/logo48.png",
-  "main":"main",
+  "main":"lib/main.js",
   "preferences": [{
     "name": "country",
     "title": "Location",

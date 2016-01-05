@@ -159,7 +159,8 @@ package-chrome: chrome
 	rm -rf $(CHROME_PACKAGE_NAME)
 
 package-firefox: firefox
-	cfx xpi --pkgdir=build/firefox --output-file=$(FIREFOX_PACKAGE_NAME).xpi
+	jpm xpi --addon-dir $(PWD)/build/firefox --binary $(shell which firefox)
+	mv build/firefox/*.xpi $(FIREFOX_PACKAGE_NAME).xpi
 
 package: package-chrome package-firefox
 
@@ -167,15 +168,13 @@ clean-package:
 	rm -rf *.xpi *.zip $(CHROME_PACKAGE_NAME)
 
 run-firefox: firefox
-	cfx run  --pkgdir=build/firefox
-
-build/.temp-firefox/tmp.xpi: firefox
-	cfx xpi --pkgdir=build/firefox --output-file=$@
+	jpm run --addon-dir $(PWD)/build/firefox --binary $(shell which firefox)
 
 #post to firefox extension auto-installer
 #https://palant.de/2012/01/13/extension-auto-installer
-load-firefox: build/.temp-firefox/tmp.xpi
-	curl --data-binary '@$<' -H 'Expect:' http://localhost:8888/
+load-firefox:
+	jpm post --addon-dir $(PWD)/build/firefox --binary $(shell which firefox) \
+		--post-url http://localhost:8888
 
 %/.dir:
 	mkdir $*
