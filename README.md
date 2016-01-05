@@ -43,7 +43,7 @@ Currently supported retailers are:
 * Newark
 * RS
 
-Check the [roadmap][1] for more details on planned features.
+Check the [roadmap][#roadmap] for more details on planned features.
 
 ## Usage ##
 
@@ -53,14 +53,14 @@ In your tab-seperated values (`.tsv`) or spreadsheet you must have a column for
 line-note, one for the quantity and at least one retailer. Column titles are
 interpreted in the following way by 1clickBOM. Capitalisation is ignored.
 
-    reference                : Reference
-    references               : Reference
-    line-note                : Reference
-    line note                : Reference
+    reference                : References
+    references               : References
+    line-note                : References
+    line note                : References
     comment                  : Description
     comments                 : Description
-    description              : Description
     cmnts                    : Description
+    description              : Description
     descr.                   : Description
     qty                      : Quantity
     quantity                 : Quantity
@@ -188,7 +188,6 @@ code-improvements to 1clickBOM itself under the CPAL as well. This also applies
 to software you are solely making available to users over a network i.e.
 software as a service. See the [LICENSE][6] file for details.
 
-[1]:#roadmap
 [2]:https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv
 [3]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png
 [4]:http://coffeescript.org
