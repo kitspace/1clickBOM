@@ -159,8 +159,7 @@ package-chrome: chrome
 	rm -rf $(CHROME_PACKAGE_NAME)
 
 package-firefox: firefox
-	jpm xpi --addon-dir $(PWD)/build/firefox --binary $(shell which firefox)
-	mv build/firefox/*.xpi $(FIREFOX_PACKAGE_NAME).xpi
+	cfx xpi --pkgdir=build/firefox --output-file=$(FIREFOX_PACKAGE_NAME).xpi
 
 package: package-chrome package-firefox
 

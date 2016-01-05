@@ -146,6 +146,7 @@ The code is available on [GitHub][7]. To get started you will need:
 
 - Chrome or Chromium
 - Firefox (optionally with [Extension Autoinstaller][16])
+- [Mozilla Add-on SDK][18] (cfx)
 - GNU Make
 - sed
 - npm
@@ -204,6 +205,7 @@ software as a service. See the [LICENSE][6] file for details.
 [15]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif
 [16]:https://palant.de/2012/01/13/extension-auto-installer
 [17]:https://web.archive.org/web/20130128010139/http://api.qunitjs.com/
+[18]:https://developer.mozilla.org/en-US/Add-ons/SDK
 [19]:http://1clickBOM.com
 [20]:https://addons.mozilla.org/en-US/firefox/addon/1clickbom/
 [21]:https://github.com/monostable/1clickBOM/blob/master/examples/bus_pirate.tsv
