@@ -68,6 +68,12 @@ exports.search = (query, retailers_to_search = [], other_fields = []) ->
                         for span in tr?.getElementsByClassName('additional-title')
                             if span.innerHTML == 'Distri #:' and span.nextElementSibling?
                                 part = span.nextElementSibling.innerHTML.trim()
+
+                                #sometimes there are some erroneous 'Distri #'
+                                #in the results like '77M8756 CE TMK107 B7224KA-T'
+                                if (part.split(' ').length > 1)
+                                    part = part.split(' ')[0]
+
                                 break
                 if part?
                     result.retailers[retailer] = part
