@@ -7,7 +7,7 @@ ninjaBuildGen = require('./ninja-build-gen')
 
 version = "0.5.4.1"
 
-browserify = 'browserify --debug --extension=".coffee" --transform coffeeify'
+browserify = 'browserify -x $exclude --debug --extension=".coffee" --transform coffeeify'
 
 coffee = 'coffee -m -c'
 
@@ -25,12 +25,27 @@ ninja.rule('copy').run('cp $in $out')
 
 #browserify and put dependency list in $out.d in makefile format using
 #relative paths
+#ninja.rule('browserify')
+#    .run("echo -n '$out: ' > $out.d && #{browserify} $in --list
+#        | sed 's!#{__dirname}/!!' | tr '\\n' ' '
+#        >> $out.d && #{browserify} --exclude='./$exclude' $in -o $out")
+#    .depfile('$out.d')
+#    .description("browserify $in -o $out")
+#
+#ninja.rule('browserify-require')
+#    .run("echo -n '$out: ' > $out.d && #{browserify} --require='./$in' --list
+#        | sed 's!#{__dirname}/!!' | tr '\\n' ' '
+#        >> $out.d && #{browserify} --exclude='./$exclude' --require='./$in' -o $out")
+#    .depfile('$out.d')
+#    .description("browserify --require='./$in' -o $out")
+
 ninja.rule('browserify')
-    .run("echo -n '$out: ' > $out.d && #{browserify} $in --list
-        | sed 's!#{__dirname}/!!' | tr '\\n' ' '
-        >> $out.d && #{browserify} --exclude=$exclude $in -o $out")
-    .depfile('$out.d')
-    .description("#{browserify} $in -o $out")
+    .run("#{browserify} $in -o $out")
+    .description("browserify $in -o $out")
+
+ninja.rule('browserify-require')
+    .run("#{browserify} --require=./$in -o $out")
+    .description("browserify --require='./$in' -o $out")
 
 
 ninja.rule('coffee')
@@ -47,7 +62,7 @@ ninja.rule('remove').run('rm -rf $in')
 
 sourceCoffee = (browser) ->
     globule.find([
-        "src/#{browser}/coffee/*.coffee"
+        "src/#{browser}/coffee/**/*.coffee"
         'src/common/coffee/*.coffee'
     ])
 
@@ -68,16 +83,18 @@ copyFiles = (browser) ->
         'src/common/html/*'
         'src/common/images/*'
         'src/common/data/*.json'
+        'src/common/libs/*.css'
     ])
 
 #- Edges -#
 
-browserifyEdge = (target, browser, layer) ->
+browserifyEdge = (target, browser, layer, exclude='') ->
     ninja.edge(target)
         .from("build/.temp-#{browser}/#{layer}.coffee")
+        .assign('exclude', exclude)
         .after(sourceFiles(browser)
             .map (f) ->
-                f.replace(/src\/.*?\/.*?\//, "build/.temp-#{browser}/")
+                "build/.temp-#{browser}/#{path.basename(f)}"
         ).using('browserify')
     targets[browser].push(target)
 
@@ -99,19 +116,37 @@ for f in sourceCoffee('firefox')
 
 for browser,list of targets
     for f in sourceFiles(browser)
-        target = f.replace(/src\/.*?\/.*?\//, "build/.temp-#{browser}/")
+        target = "build/.temp-#{browser}/#{path.basename(f)}"
         ninja.edge(target).from(f).using('copy')
         list.push(target)
+
+qunitSrc = 'build/.temp-chrome/qunit-1.11.0.js'
+ninja.edge('build/chrome/js/qunit.js').from(qunitSrc)
+    .using('browserify-require')
+targets.chrome.push('build/chrome/js/qunit.js')
+
+ninja.edge('build/chrome/js/unit.js').from('build/.temp-chrome/unit.coffee')
+    .assign('exclude', qunitSrc)
+    .using('browserify')
+targets.chrome.push('build/chrome/js/unit.js')
+
+ninja.edge('build/chrome/js/functional.js').from('build/.temp-chrome/functional.coffee')
+    .assign('exclude', qunitSrc)
+    .using('browserify')
+targets.chrome.push('build/chrome/js/functional.js')
+
 
 for f in copyFiles('chrome')
     target = f.replace(/src\/.*?\//, "build/chrome/")
     ninja.edge(target).from(f).using('copy')
     targets.chrome.push(target)
 
+
 for f in copyFiles('firefox')
     target = f.replace(/src\/.*?\//, "build/firefox/data/")
     ninja.edge(target).from(f).using('copy')
     targets.firefox.push(target)
+
 
 for browser,list of targets
     ninja.edge(browser).from(list)

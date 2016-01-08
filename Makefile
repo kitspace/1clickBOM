@@ -72,7 +72,7 @@ build/firefox/package.json: src/firefox/package.json src/common/data/countries.j
 	coffee makeFirefoxPackageJSON.coffee $(VERSION)
 
 build/.temp-chrome/.dir:
-	mkdir $(dir $@)
+	mkdir -p $(dir $@)
 	@touch $@
 
 build/.temp-chrome/%: src/chrome/coffee/%
@@ -88,7 +88,7 @@ build/.temp-chrome/%: src/common/libs/%
 	cp $< $@
 
 build/.temp-firefox/.dir:
-	mkdir $(dir $@)
+	mkdir -p $(dir $@)
 	@touch $@
 
 build/.temp-firefox/%: src/firefox/coffee/%
@@ -176,7 +176,7 @@ load-firefox:
 		--post-url http://localhost:8888
 
 %/.dir:
-	mkdir $*
+	mkdir -p $*
 	@touch $@
 
 build/chrome/%: src/chrome/%
