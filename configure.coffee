@@ -88,6 +88,7 @@ for layer in ['main', 'popup']
 
 browserifyEdge('build/firefox/data/popup.js', 'firefox', 'popup')
 
+
 for f in sourceCoffee('firefox')
     target = f.replace(/src\/.*?\/.*?\//, 'build/firefox/lib/')
         .replace('.coffee', '.js')
@@ -102,8 +103,19 @@ for browser,list of targets
         ninja.edge(target).from(f).using('copy')
         list.push(target)
 
+for f in copyFiles('chrome')
+    target = f.replace(/src\/.*?\//, "build/chrome/")
+    ninja.edge(target).from(f).using('copy')
+    targets.chrome.push(target)
+
+for f in copyFiles('firefox')
+    target = f.replace(/src\/.*?\//, "build/firefox/data/")
+    ninja.edge(target).from(f).using('copy')
+    targets.firefox.push(target)
+
 for browser,list of targets
     ninja.edge(browser).from(list)
+
 
 manifest = 'build/chrome/manifest.json'
 ninja.edge(manifest).from(manifest.replace('build','src'))
