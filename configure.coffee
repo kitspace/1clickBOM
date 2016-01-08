@@ -5,30 +5,42 @@ path    = require('path')
 cp      = require('child_process')
 ninjaBuildGen = require('./ninja-build-gen')
 
+version = "0.5.4.1"
+
 browserify = 'browserify --debug --extension=".coffee" --transform coffeeify'
-coffee     = 'coffee -m -c'
+
+coffee = 'coffee -m -c'
 
 targets = {firefox:[], chrome:[]}
 
 ninja = ninjaBuildGen('1.5.1', 'build/')
+
 ninja.header("#generated from #{path.basename(module.filename)}")
 
 #- Rules -#
 
+
 ninja.rule('copy').run('cp $in $out')
+
 
 #browserify and put dependency list in $out.d in makefile format using
 #relative paths
 ninja.rule('browserify')
     .run("echo -n '$out: ' > $out.d && #{browserify} $in --list
         | sed 's!#{__dirname}/!!' | tr '\\n' ' '
-        >> $out.d && #{browserify} $in -o $out")
+        >> $out.d && #{browserify} --exclude=$exclude $in -o $out")
     .depfile('$out.d')
     .description("#{browserify} $in -o $out")
 
 
 ninja.rule('coffee')
     .run("#{coffee} -o $dir $in")
+
+
+ninja.rule('sed').run("sed 's$regex' $in > $out")
+
+
+ninja.rule('remove').run('rm -rf $in')
 
 
 #- Lists of Files -#
@@ -69,8 +81,10 @@ browserifyEdge = (target, browser, layer) ->
         ).using('browserify')
     targets[browser].push(target)
 
+
 for layer in ['main', 'popup']
     browserifyEdge("build/chrome/js/#{layer}.js", 'chrome', layer)
+
 
 browserifyEdge('build/firefox/data/popup.js', 'firefox', 'popup')
 
@@ -81,18 +95,24 @@ for f in sourceCoffee('firefox')
     ninja.edge(target).assign('dir', dir).from(f).using('coffee')
     targets['firefox'].push(target)
 
+
 for browser,list of targets
     for f in sourceFiles(browser)
         target = f.replace(/src\/.*?\/.*?\//, "build/.temp-#{browser}/")
         ninja.edge(target).from(f).using('copy')
-        targets[browser].push(target)
+        list.push(target)
 
+for browser,list of targets
     ninja.edge(browser).from(list)
+
+manifest = 'build/chrome/manifest.json'
+ninja.edge(manifest).from(manifest.replace('build','src'))
+    .assign('regex',"/@version/\"#{version}\"/").using('sed')
+targets.chrome.push(manifest)
 
 ninja.edge('all').from(browser for browser of targets)
 ninja.byDefault('all')
 
-ninja.rule('remove').run('rm -rf $in')
 ninja.edge('clean').from('build/').using('remove')
 
 ninja.save('build.ninja')
