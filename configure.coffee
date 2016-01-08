@@ -90,8 +90,10 @@ for browser,list of targets
     ninja.edge(browser).from(list)
 
 ninja.edge('all').from(browser for browser of targets)
-
 ninja.byDefault('all')
+
+ninja.rule('remove').run('rm -rf $in')
+ninja.edge('clean').from('build/').using('remove')
 
 ninja.save('build.ninja')
 
