@@ -24,9 +24,9 @@ ninja.rule('browserify')
         | sed 's!#{__dirname}/!!' | tr '\\n' ' '
         >> $out.d && #{browserify} $in -o $out")
     .depfile('$out.d')
+    .description("#{browserify} $in -o $out")
 
-#compile and touch files (since coffee doesn't update timestamp when source is
-#re-compiled but output is the same and this confuses ninja)
+
 ninja.rule('coffee')
     .run("#{coffee} -o $dir $in")
 
@@ -72,7 +72,7 @@ browserifyEdge = (target, browser, layer) ->
 for layer in ['main', 'popup']
     browserifyEdge("build/chrome/js/#{layer}.js", 'chrome', layer)
 
-browserifyEdge('build/firefox/data/lib/popup.js', 'firefox', 'popup')
+browserifyEdge('build/firefox/data/popup.js', 'firefox', 'popup')
 
 for f in sourceCoffee('firefox')
     target = f.replace(/src\/.*?\/.*?\//, 'build/firefox/lib/')
