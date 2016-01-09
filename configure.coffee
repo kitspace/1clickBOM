@@ -11,40 +11,30 @@ browserify = 'browserify -x $exclude --debug --extension=".coffee" --transform c
 
 coffee = 'coffee -m -c'
 
-targets = {firefox:[], chrome:[]}
-
 ninja = ninjaBuildGen('1.5.1', 'build/')
 
 ninja.header("#generated from #{path.basename(module.filename)}")
 
 #- Rules -#
 
-
 ninja.rule('copy').run('cp $in $out')
 
 
 #browserify and put dependency list in $out.d in makefile format using
 #relative paths
-#ninja.rule('browserify')
-#    .run("echo -n '$out: ' > $out.d && #{browserify} $in --list
-#        | sed 's!#{__dirname}/!!' | tr '\\n' ' '
-#        >> $out.d && #{browserify} --exclude='./$exclude' $in -o $out")
-#    .depfile('$out.d')
-#    .description("browserify $in -o $out")
-#
-#ninja.rule('browserify-require')
-#    .run("echo -n '$out: ' > $out.d && #{browserify} --require='./$in' --list
-#        | sed 's!#{__dirname}/!!' | tr '\\n' ' '
-#        >> $out.d && #{browserify} --exclude='./$exclude' --require='./$in' -o $out")
-#    .depfile('$out.d')
-#    .description("browserify --require='./$in' -o $out")
-
 ninja.rule('browserify')
-    .run("#{browserify} $in -o $out")
+    .run("echo -n '$out: ' > $out.d && #{browserify} $in --list
+        | sed 's!#{__dirname}/!!' | tr '\\n' ' '
+        >> $out.d && #{browserify} $in -o $out")
+    .depfile('$out.d')
     .description("browserify $in -o $out")
 
+
 ninja.rule('browserify-require')
-    .run("#{browserify} --require=./$in -o $out")
+    .run("echo -n '$out: ' > $out.d && #{browserify} --require='./$in' --list
+        | sed 's!#{__dirname}/!!' | tr '\\n' ' '
+        >> $out.d && #{browserify} --require='./$in' -o $out")
+    .depfile('$out.d')
     .description("browserify --require='./$in' -o $out")
 
 
@@ -63,7 +53,7 @@ ninja.rule('remove').run('rm -rf $in')
 sourceCoffee = (browser) ->
     globule.find([
         "src/#{browser}/coffee/**/*.coffee"
-        'src/common/coffee/*.coffee'
+        'src/common/coffee/**/*.coffee'
     ])
 
 sourceJs = (browser) ->
@@ -80,13 +70,15 @@ copyFiles = (browser) ->
         "src/#{browser}/html/*"
         "src/#{browser}/images/*"
         "src/#{browser}/data/*.json"
+        "src/#{browser}/libs/*.css"
         'src/common/html/*'
         'src/common/images/*'
         'src/common/data/*.json'
-        'src/common/libs/*.css'
     ])
 
 #- Edges -#
+
+targets = {firefox:[], chrome:[]}
 
 browserifyEdge = (target, browser, layer, exclude='') ->
     ninja.edge(target)
@@ -120,15 +112,18 @@ for browser,list of targets
         ninja.edge(target).from(f).using('copy')
         list.push(target)
 
+
 qunitSrc = 'build/.temp-chrome/qunit-1.11.0.js'
 ninja.edge('build/chrome/js/qunit.js').from(qunitSrc)
     .using('browserify-require')
 targets.chrome.push('build/chrome/js/qunit.js')
 
+
 ninja.edge('build/chrome/js/unit.js').from('build/.temp-chrome/unit.coffee')
     .assign('exclude', qunitSrc)
     .using('browserify')
 targets.chrome.push('build/chrome/js/unit.js')
+
 
 ninja.edge('build/chrome/js/functional.js').from('build/.temp-chrome/functional.coffee')
     .assign('exclude', qunitSrc)
