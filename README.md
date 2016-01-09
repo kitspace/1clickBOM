@@ -43,7 +43,7 @@ Currently supported retailers are:
 * Newark
 * RS
 
-Check the [roadmap][#roadmap] for more details on planned features.
+Check the [roadmap](#roadmap) for more details on planned features.
 
 ## Usage ##
 
