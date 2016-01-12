@@ -34,57 +34,10 @@ rsOnline =
 
     _clear_cart: (viewstate, form_ids, callback) ->
         url = "http#{@site}#{@cart}"
-        #TODO consolidate and move these massive strings somewhere sensible
-        params1 = "AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasketForm\
-        &=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&shoppingB\
-        asketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingB\
-        asketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingB\
-        asketForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingB\
-        asketForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingB\
-        asketForm%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingB\
-        asketForm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingB\
-        asketForm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingB\
-        asketForm%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingB\
-        asketForm%3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingB\
-        asketForm%3AquickQty_9=&shoppingBasketForm%3Aj_id1085=&shoppingBasketF\
-        orm%3Aj_id1091=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrder\
-        TextBox_decorate%3AQuickOrderWidgetAction_listItems=Paste%20or%20type%\
-        20your%20list%20here%20and%20click%20'Add'.&shoppingBasketForm%3Aj_id1\
-        182%3A0%3Aj_id1228=505-1441&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id12\
-        48=1&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_p\
-        romotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionModalLaye\
-        rOpenedState=&shoppingBasketForm%3AsendToColleagueWidgetPanelOpenedSta\
-        te=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_senderNa\
-        me_decorate%3AGuestUserSendToColleagueWidgetAction_senderName=&shoppin\
-        gBasketForm%3AGuestUserSendToColleagueWidgetAction_senderEmail_decorat\
-        e%3AGuestUserSendToColleagueWidgetAction_senderEmail=name%40company.co\
-        m&shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_mailTo_dec\
-        orate%3AGuestUserSendToColleagueWidgetAction_mailTo=name%40company.com\
-        &shoppingBasketForm%3AGuestUserSendToColleagueWidgetAction_subject_dec\
-        orate%3AGuestUserSendToColleagueWidgetAction_subject=Copy%20of%20order\
-        %20from%20RS%20Online&shoppingBasketForm%3AGuestUserSendToColleagueWid\
-        getAction_message_decorate%3AGuestUserSendToColleagueWidgetAction_mess\
-        age=&shoppingBasketForm%3AsendToColleagueSuccessWidgetPanelOpenedState\
-        =&javax.faces.ViewState=#{viewstate}&shoppingBasketForm%3AclearBasketB\
-        utton=shoppingBasketForm%3AclearBasketButton&"
-        params2 = "AJAXREQUEST=_viewRoot&#{form_ids[0]}=#{form_ids[0]}&javax\
-        .faces.ViewState=#{viewstate}&ajaxSingle=#{form_ids[0]}%3A\
-        #{form_ids[1]}&#{form_ids[0]}%3A#{form_ids[1]}=#{form_ids[0]}%3A\
-        #{form_ids[1]}&"
-        params3 = "AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&autoScro\
-        ll=&javax.faces.ViewState=#{viewstate}&a4jCloseForm%3A#{form_ids[2]}\
-        =a4jCloseForm%3A#{form_ids[2]}&"
-        http.post url, params1, {}, () ->
-            http.post url, params2, {}, () ->
-                http.post url, params3, {}, () ->
-                    callback?({success:true})
-                , () ->
-                    callback?({success:false})
-            , () ->
-                callback?({success:false})
+        http.post url, 'isRemoveAll=true', {}, () ->
+            callback?({success:true})
         , () ->
             callback?({success:false})
-
 
     _clear_invalid: (callback) ->
         @_get_clear_viewstate (viewstate, form_ids) =>
@@ -198,7 +151,7 @@ rsOnline =
                 line = {}
                 #detect minimimum and multiple-of quantities from description
                 #and add a quantity according to those. we read the quantity
-                #from the cart as this could be an line that was already in
+                #from the cart as this could be a line that was already in
                 #the cart when we added. description is of the form:
                 #blabla 10 (minimum) blablabla 10 (multiple of) blabla
                 # or
