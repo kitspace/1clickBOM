@@ -158,7 +158,7 @@ rsOnline =
                 #blabla 10 (multiple of) blabla
                 descr = elem.previousElementSibling?.previousElementSibling
                     ?.firstElementChild?.innerHTML
-                re_min_mul = /.*?(\d+).+(\d+).*?/
+                re_min_mul = /.*?(\d+)\D+?(\d+).*?/
                 min = re_min_mul.exec(descr)?[1]
                 if not min?
                     re_mul = /.*?(\d+).*?/
@@ -169,8 +169,10 @@ rsOnline =
                         line.quantity = quantity + (mul - (quantity % mul))
                 else
                     min = parseInt(min)
-                    if not isNaN(min)
-                        line.quantity = min
+                    quantity = parseInt(elem.querySelector('.quantityTd')
+                        ?.firstElementChild?.value)
+                    if (not isNaN(min)) && (not isNaN(quantity))
+                        line.quantity = min - quantity
                 #detect part number
                 error_child = elem.children?[1]
                 error_input = error_child?.querySelector('input')
