@@ -167,7 +167,7 @@ rsOnline =
                         re_mul = /.*?(\d+).*?/
                         mul = parseInt(re_mul.exec(descr)?[1])
                         if not isNaN(mul)
-                            line.quantity = quantity + (mul - (quantity % mul))
+                            line.quantity = mul - (quantity % mul)
                     else
                         min = parseInt(min)
                         if not isNaN(min)
