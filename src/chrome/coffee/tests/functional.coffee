@@ -50,7 +50,10 @@ asyncTest 'Clear All', () ->
             start()
 
 asyncTest 'Add lines', () ->
-    lines = [{'part':'754-1173-1-ND', 'quantity':2, 'reference':'test'}]
+    lines = [
+        {'part':'754-1173-1-ND', 'quantity':2, 'reference':'test'}
+        {'part':'MAX2606EUT+TCT-ND', 'quantity':2, 'reference':'test'}
+    ]
     stop(digikey_locations.length - 1)
     for l in digikey_locations
         r = new Digikey(l)

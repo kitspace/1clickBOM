@@ -98,7 +98,9 @@ class Digikey extends RetailerInterface
                         callback(result)
     _add_line: (line, callback) ->
         url = 'http' + @site + @addline
-        params = 'qty=' + line.quantity + '&part=' + line.part + '&cref=' + line.reference
+        params = 'qty=' + line.quantity + '&part=' +
+            encodeURIComponent(line.part) + '&cref=' +
+            encodeURIComponent(line.reference)
         result = {success:true, fails:[]}
         post url, params, {line:line}, (event)->
             doc = browser.parseDOM(event.target.responseText)
