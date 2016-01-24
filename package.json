@@ -9,12 +9,13 @@
     "url": "https://github.com/monostable/1clickBOM"
   },
   "author": "Kaspar Emanuel",
-  "license": "CPAL",
+  "license": "CPAL-1.0",
   "bugs": {
     "url": "https://github.com/monostable/1clickBOM/issues"
   },
   "homepage": "http://1clickBOM.com",
   "devDependencies": {
+    "1-click-bom": "monostable/nodejs-1-click-bom",
     "browserify": "^10.2.4",
     "coffee-script": "^1.9.3",
     "coffeeify": "^1.1.0",

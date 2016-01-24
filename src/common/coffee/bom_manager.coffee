@@ -16,6 +16,7 @@
 #
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
+{parseTSV}      = require '1-click-bom'
 
 http            = require './http'
 {browser }      = require './browser'
@@ -24,9 +25,8 @@ http            = require './http'
 {Mouser  }      = require './mouser'
 {RS      }      = require './rs'
 {Newark  }      = require './newark'
-{parseTSV}      = require './parser'
 {badge}         = require './badge'
-{retailer_list} = require './line_data'
+{retailer_list} = require('1-click-bom').lineData
 {autoComplete}  = require './auto_complete'
 
 bom_manager =

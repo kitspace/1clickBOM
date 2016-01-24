@@ -18,7 +18,7 @@
 # the Original Code is Kaspar Emanuel.
 
 {messenger} = require './messenger'
-{retailer_list, isComplete, hasSKUs} = require './line_data'
+{retailer_list, isComplete, hasSKUs} = require('1-click-bom').lineData
 
 element_Bom         = document.querySelector('#bom')
 element_Table       = document.querySelector('#bom_table')

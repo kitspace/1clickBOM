@@ -23,7 +23,6 @@
 {Mouser  } = require './mouser'
 {RS      } = require './rs'
 {Newark  } = require './newark'
-{parseTSV} = require './parser'
 qunit      = require './qunit-1.11.0'
 {browser}  = require './browser'
 
@@ -85,12 +84,3 @@ test 'Newark: InvalidCountryError Thrown', () ->
     throws () ->
         new Newark('XX', {}, ()->)
     , InvalidCountryError
-
-test 'Parser: Catches negative quantities', () ->
-    {lines, invalid} = parseTSV('test\t-1\tFarnell\t898989')
-    deepEqual(lines, [])
-    deepEqual(invalid[0].reason, 'Quantity is less than one.')
-
-test 'Parser: Replaces dashes', () ->
-    {lines, invalid} = parseTSV('test\t1\tFarnell\t898-989')
-    deepEqual(lines[0].retailers.Farnell, '898989')

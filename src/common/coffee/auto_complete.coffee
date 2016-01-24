@@ -17,7 +17,8 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{retailer_list, field_list, isComplete} = require './line_data'
+{retailer_list, isComplete, field_list} = require('1-click-bom').lineData
+
 octopart  = require './octopart'
 findchips = require './findchips'
 

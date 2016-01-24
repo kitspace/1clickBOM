@@ -167,6 +167,7 @@ clean-package:
 	rm -rf *.xpi *.zip $(CHROME_PACKAGE_NAME)
 
 run-firefox: firefox
+	cp -r node_modules build/firefox/
 	jpm run --addon-dir $(PWD)/build/firefox --binary $(shell which firefox)
 
 #post to firefox extension auto-installer

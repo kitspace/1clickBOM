@@ -23,7 +23,6 @@
 {Mouser  } = require './mouser'
 {RS      } = require './rs'
 {Newark  } = require './newark'
-{parseTSV} = require './parser'
 qunit      = require './qunit-1.11.0'
 
 module    = qunit.module

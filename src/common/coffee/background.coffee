@@ -17,13 +17,13 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
+{parseTSV, writeTSV}      = require '1-click-bom'
+{retailer_list} = require('1-click-bom').lineData
+
 {bom_manager}   = require './bom_manager'
 {browser}       = require './browser'
-{parseTSV}      = require './parser'
 http            = require './http'
 {badge}         = require './badge'
-{writeTSV}      = require './writer'
-{retailer_list} = require './line_data'
 
 
 exports.background = (messenger) ->
