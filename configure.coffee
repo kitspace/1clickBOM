@@ -161,7 +161,8 @@ ninja.edge(manifest).from(manifest.replace('build','src'))
 targets.chrome.push(manifest)
 
 
-ninja.rule('makeFirefoxPackageJSON').run("coffee makeFirefoxPackageJSON.coffee #{version}")
+ninja.rule('makeFirefoxPackageJSON')
+    .run("coffee makeFirefoxPackageJSON.coffee #{version}")
 ninja.edge('build/firefox/package.json')
     .from(['src/common/data/countries.json','src/firefox/package.json'])
     .using('makeFirefoxPackageJSON')
@@ -181,11 +182,17 @@ for file in moduleFiles
     ninja.edge('build/firefox/' + file).from(file).using('copy')
     targets.firefox.push('build/firefox/' + file)
 
+ninja.edge('build/firefox/.jpmignore').from('src/firefox/.jpmignore').using('copy')
+targets.firefox.push('build/firefox/.jpmignore')
+
+
 firefox_package_name = "1clickBOM-v#{version}-firefox"
 ninja.rule('package-firefox')
-    .run("jpm xpi --addon-dir=#{__dirname}/build/firefox && mv build/firefox/*.xpi $out")
+    .run("jpm xpi --addon-dir=#{__dirname}/build/firefox
+        && mv build/firefox/*.xpi $out")
 ninja.edge("#{firefox_package_name}.xpi").need('firefox').using('package-firefox')
 ninja.edge('package-firefox').need("#{firefox_package_name}.xpi")
+
 
 ninja.edge('all').from(browser for browser of targets)
 ninja.byDefault('all')
