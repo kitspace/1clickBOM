@@ -146,8 +146,7 @@ The code is available on [GitHub][7]. To get started you will need:
 
 - Chrome or Chromium
 - Firefox (optionally with [Extension Autoinstaller][16])
-- [Mozilla Add-on SDK][18] (cfx)
-- GNU Make
+- [Ninja Build](https://ninja-build.org/)
 - sed
 - npm
 
@@ -159,7 +158,8 @@ The rest of the dependencies can be retrieved via `npm install`.
 
 - Get dependencies above and make sure executables are on your path
 - `npm install --global` (or `npm install && export PATH=$PATH:$(pwd)/node_modules/.bin`)
-- `make`
+- `./configure.coffee`
+- `ninja`
 
 #### Load
 
@@ -209,5 +209,3 @@ software as a service. See the [LICENSE][6] file for details.
 [20]:https://addons.mozilla.org/en-US/firefox/addon/1clickbom/
 [21]:https://github.com/monostable/1clickBOM/blob/master/examples/bus_pirate.tsv
 [22]:https://github.com/monostable/1clickBOM/blob/feat-auto-complete/readme_images/youtube.png
-
-
