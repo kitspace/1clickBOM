@@ -159,7 +159,7 @@ ninja.edge(manifest).from(manifest.replace('build','src'))
 targets.chrome.push(manifest)
 
 
-ninja.rule('makeFirefoxPackageJSON').run('coffee makeFirefoxPackageJSON.coffee')
+ninja.rule('makeFirefoxPackageJSON').run("coffee makeFirefoxPackageJSON.coffee #{version}")
 ninja.edge('build/firefox/package.json')
     .from(['src/common/data/countries.json','src/firefox/package.json'])
     .using('makeFirefoxPackageJSON')
