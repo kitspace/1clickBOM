@@ -53,6 +53,8 @@ _auto_complete = (search_engine, lines) ->
                         /RL$/.test(result.retailers[retailer])
                             result.retailers[retailer] =
                                 result.retailers[retailer].replace('RL','')
+                        if retailer != 'Digikey'
+                            result.retailers[retailer] = result.retailers[retailer].replace(/-/g,'')
                         line.retailers[retailer] = result.retailers[retailer]
                 return line
             ).bind(undefined, line)
