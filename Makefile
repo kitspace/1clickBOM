@@ -171,7 +171,7 @@ run-firefox: firefox
 
 #post to firefox extension auto-installer
 #https://palant.de/2012/01/13/extension-auto-installer
-load-firefox:
+load-firefox: firefox
 	jpm post --addon-dir $(PWD)/build/firefox --binary $(shell which firefox) \
 		--post-url http://localhost:8888
 

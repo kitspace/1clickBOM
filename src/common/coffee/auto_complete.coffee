@@ -21,7 +21,7 @@
 octopart  = require './octopart'
 findchips = require './findchips'
 
-_auto_complete = (search_engine, lines) ->
+_auto_complete = (search_engine, lines, preferDescription=false) ->
     promise_array = for line in lines
         retailers = []
         other_fields = []
@@ -31,9 +31,14 @@ _auto_complete = (search_engine, lines) ->
         for field in field_list
             if line[field] == ''
                 other_fields.push(field)
-        query = line.partNumber
-        if query == ''
+        if preferDescription
             query = line.description
+            if query == ''
+                query = line.partNumber
+        else
+            query = line.partNumber
+            if query == ''
+                query = line.description
         if query == ''
             for retailer in retailer_list
                 if line.retailers[retailer] != ''
@@ -54,7 +59,8 @@ _auto_complete = (search_engine, lines) ->
                             result.retailers[retailer] =
                                 result.retailers[retailer].replace('RL','')
                         if retailer != 'Digikey'
-                            result.retailers[retailer] = result.retailers[retailer].replace(/-/g,'')
+                            result.retailers[retailer] = result.retailers[retailer]
+                                .replace(/-/g,'')
                         line.retailers[retailer] = result.retailers[retailer]
                 return line
             ).bind(undefined, line)
@@ -71,13 +77,23 @@ _auto_complete = (search_engine, lines) ->
 
 
 autoComplete = (lines, callback) ->
-    p = _auto_complete(octopart, lines)
-    p.then (newLines) ->
-        if not isComplete(newLines)
-            p = _auto_complete(findchips, newLines)
-            p.then (newLines_) ->
-                callback(newLines_)
-        else
+    _auto_complete(octopart, lines)
+        .then (newLines) ->
+            if not isComplete(newLines)
+                return _auto_complete(findchips, newLines)
+            else
+                return newLines
+        .then (newLines) ->
+            if not isComplete(newLines)
+                return _auto_complete(octopart, newLines, preferDescription=true)
+            else
+                return newLines
+        .then (newLines) ->
+            if not isComplete(newLines)
+                return _auto_complete(findchips, newLines, preferDescription=true)
+            else
+                return newLines
+        .then (newLines) ->
             callback(newLines)
 
 
