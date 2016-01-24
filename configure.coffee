@@ -165,6 +165,15 @@ ninja.edge('build/firefox/package.json')
     .using('makeFirefoxPackageJSON')
 targets.firefox.push('build/firefox/package.json')
 
+chrome_package_name = "1clickBOM-chrome-v#{version}"
+ninja.rule('package-chrome').run("
+    cp -r build/chrome  #{chrome_package_name} &&
+    rm -rf #{chrome_package_name}/js/{functional,unit,qunit}.js
+        #{chrome_package_name}/html/test.html #{chrome_package_name}/libs &&
+    zip -r #{chrome_package_name}.zip #{chrome_package_name}/ &&
+    rm -rf #{chrome_package_name}")
+ninja.edge("#{chrome_package_name}.zip").need('chrome').using('package-chrome')
+ninja.edge('package-chrome').need("#{chrome_package_name}.zip")
 
 ninja.edge('all').from(browser for browser of targets)
 ninja.byDefault('all')
