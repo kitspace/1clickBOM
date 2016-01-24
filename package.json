@@ -16,12 +16,14 @@
   "main": "lib/main.js",
   "homepage": "http://1clickBOM.com",
   "devDependencies": {
-    "1-click-bom": "monostable/nodejs-1-click-bom",
     "browserify": "^10.2.4",
     "coffee-script": "^1.9.3",
     "coffeeify": "^1.1.0",
     "globule": "^0.2.0",
     "jpm": "^1.0.4",
     "source-map-support": "^0.4.0"
+  },
+  "dependencies": {
+    "1-click-bom": "monostable/nodejs-1-click-bom"
   }
 }

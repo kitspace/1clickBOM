@@ -76,6 +76,8 @@ copyFiles = (browser) ->
         'src/common/data/*.json'
     ])
 
+moduleFiles = globule.find("node_modules/**/*", {filter:'isFile'})
+
 #- Edges -#
 
 targets = {firefox:[], chrome:[]}
@@ -165,7 +167,7 @@ ninja.edge('build/firefox/package.json')
     .using('makeFirefoxPackageJSON')
 targets.firefox.push('build/firefox/package.json')
 
-chrome_package_name = "1clickBOM-chrome-v#{version}"
+chrome_package_name = "1clickBOM-v#{version}-chrome"
 ninja.rule('package-chrome')
     .run("cp -r build/chrome  #{chrome_package_name} &&
         rm -rf #{chrome_package_name}/js/{functional,unit,qunit}.js
@@ -175,9 +177,13 @@ ninja.rule('package-chrome')
 ninja.edge("#{chrome_package_name}.zip").need('chrome').using('package-chrome')
 ninja.edge('package-chrome').need("#{chrome_package_name}.zip")
 
-firefox_package_name = "1clickBOM-firefox-v#{version}"
+for file in moduleFiles
+    ninja.edge('build/firefox/' + file).from(file).using('copy')
+    targets.firefox.push('build/firefox/' + file)
+
+firefox_package_name = "1clickBOM-v#{version}-firefox"
 ninja.rule('package-firefox')
-    .run("cfx xpi --pkgdir=build/firefox --output-file=#{firefox_package_name}.xpi")
+    .run("jpm xpi --addon-dir=#{__dirname}/build/firefox && mv build/firefox/*.xpi $out")
 ninja.edge("#{firefox_package_name}.xpi").need('firefox').using('package-firefox')
 ninja.edge('package-firefox').need("#{firefox_package_name}.xpi")
 
