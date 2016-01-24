@@ -170,7 +170,7 @@ targets.firefox.push('build/firefox/package.json')
 
 chrome_package_name = "1clickBOM-v#{version}-chrome"
 ninja.rule('package-chrome')
-    .run("cp -r build/chrome  #{chrome_package_name} &&
+    .run("cd build/ && cp -r chrome  #{chrome_package_name} &&
         rm -rf #{chrome_package_name}/js/{functional,unit,qunit}.js
             #{chrome_package_name}/html/test.html #{chrome_package_name}/libs &&
         zip -r #{chrome_package_name}.zip #{chrome_package_name}/ &&
@@ -178,6 +178,7 @@ ninja.rule('package-chrome')
 ninja.edge("#{chrome_package_name}.zip").need('chrome').using('package-chrome')
 ninja.edge('package-chrome').need("#{chrome_package_name}.zip")
 
+#copy all of node_modules/* to firefox build dir
 for file in moduleFiles
     ninja.edge('build/firefox/' + file).from(file).using('copy')
     targets.firefox.push('build/firefox/' + file)
@@ -186,12 +187,12 @@ ninja.edge('build/firefox/.jpmignore').from('src/firefox/.jpmignore').using('cop
 targets.firefox.push('build/firefox/.jpmignore')
 
 
-firefox_package_name = "1clickBOM-v#{version}-firefox"
+firefox_package = "build/1clickBOM-v#{version}-firefox.xpi"
 ninja.rule('package-firefox')
     .run("jpm xpi --addon-dir=#{__dirname}/build/firefox
-        && mv build/firefox/*.xpi $out")
-ninja.edge("#{firefox_package_name}.xpi").need('firefox').using('package-firefox')
-ninja.edge('package-firefox').need("#{firefox_package_name}.xpi")
+        && mv build/firefox/*.xpi $out && echo 'moved to #{firefox_package}'")
+ninja.edge(firefox_package).need('firefox').using('package-firefox')
+ninja.edge('package-firefox').need(firefox_package)
 
 
 ninja.edge('all').from(browser for browser of targets)
