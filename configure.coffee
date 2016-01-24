@@ -3,7 +3,7 @@ fs      = require('fs')
 globule = require('globule')
 path    = require('path')
 cp      = require('child_process')
-ninjaBuildGen = require('./ninja-build-gen')
+ninjaBuildGen = require('ninja-build-gen')
 
 version = "0.5.6.1"
 
