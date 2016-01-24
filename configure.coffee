@@ -5,7 +5,7 @@ path    = require('path')
 cp      = require('child_process')
 ninjaBuildGen = require('./ninja-build-gen')
 
-version = "0.5.4.1"
+version = "0.5.6.1"
 
 browserify = 'browserify -x $exclude --debug --extension=".coffee" --transform coffeeify'
 
@@ -151,6 +151,14 @@ manifest = 'build/chrome/manifest.json'
 ninja.edge(manifest).from(manifest.replace('build','src'))
     .assign('regex',"/@version/\"#{version}\"/").using('sed')
 targets.chrome.push(manifest)
+
+
+ninja.rule('makeFirefoxPackageJSON').run('coffee makeFirefoxPackageJSON.coffee')
+ninja.edge('build/firefox/package.json')
+    .from(['src/common/data/countries.json','src/firefox/package.json'])
+    .using('makeFirefoxPackageJSON')
+targets.firefox.push('build/firefox/package.json')
+
 
 ninja.edge('all').from(browser for browser of targets)
 ninja.byDefault('all')
