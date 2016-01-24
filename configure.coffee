@@ -98,6 +98,12 @@ for layer in ['main', 'popup']
 browserifyEdge('build/firefox/data/popup.js', 'firefox', 'popup')
 
 
+for file in sourceJs('firefox')
+    target = "build/firefox/lib/#{path.basename(file)}"
+    ninja.edge(target).from(file).using('copy')
+    targets.firefox.push(target)
+
+
 for f in sourceCoffee('firefox')
     target = f.replace(/src\/.*?\/.*?\//, 'build/firefox/lib/')
         .replace('.coffee', '.js')
