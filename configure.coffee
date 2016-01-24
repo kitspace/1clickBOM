@@ -166,14 +166,20 @@ ninja.edge('build/firefox/package.json')
 targets.firefox.push('build/firefox/package.json')
 
 chrome_package_name = "1clickBOM-chrome-v#{version}"
-ninja.rule('package-chrome').run("
-    cp -r build/chrome  #{chrome_package_name} &&
-    rm -rf #{chrome_package_name}/js/{functional,unit,qunit}.js
-        #{chrome_package_name}/html/test.html #{chrome_package_name}/libs &&
-    zip -r #{chrome_package_name}.zip #{chrome_package_name}/ &&
-    rm -rf #{chrome_package_name}")
+ninja.rule('package-chrome')
+    .run("cp -r build/chrome  #{chrome_package_name} &&
+        rm -rf #{chrome_package_name}/js/{functional,unit,qunit}.js
+            #{chrome_package_name}/html/test.html #{chrome_package_name}/libs &&
+        zip -r #{chrome_package_name}.zip #{chrome_package_name}/ &&
+        rm -rf #{chrome_package_name}")
 ninja.edge("#{chrome_package_name}.zip").need('chrome').using('package-chrome')
 ninja.edge('package-chrome').need("#{chrome_package_name}.zip")
+
+firefox_package_name = "1clickBOM-firefox-v#{version}"
+ninja.rule('package-firefox')
+    .run("cfx xpi --pkgdir=build/firefox --output-file=#{firefox_package_name}.xpi")
+ninja.edge("#{firefox_package_name}.xpi").need('firefox').using('package-firefox')
+ninja.edge('package-firefox').need("#{firefox_package_name}.xpi")
 
 ninja.edge('all').from(browser for browser of targets)
 ninja.byDefault('all')
