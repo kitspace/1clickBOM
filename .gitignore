@@ -9,3 +9,4 @@ tmp.xpi
 build/*
 node_modules/*
 .~lock.*.*#
+build.ninja

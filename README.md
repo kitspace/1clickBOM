@@ -164,7 +164,7 @@ The rest of the dependencies can be retrieved via `npm install`.
 #### Load
 
 - For Chrome enable developer mode in `chrome://extensions` and load the unpacked extension from `build/chrome`
-- For Firefox run `make run-firefox` (or setup [Autoinstaller][16] and run `make load-firefox`)
+- For Firefox run `./firefox.sh run` (or setup [Autoinstaller][16] and run `./firefox.sh post`)
 
 #### Test
 
