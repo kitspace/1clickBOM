@@ -17,6 +17,8 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
+rateLimit = require('promise-rate-limit')
+
 http = require './http'
 
 aliases =
@@ -26,7 +28,7 @@ aliases =
     'Farnell element14'  : 'Farnell'
     'Newark element14'   : 'Newark'
 
-exports.search = (query, retailers_to_search = [], other_fields = []) ->
+_search = (query, retailers_to_search = [], other_fields = []) ->
     if query == ''
         return Promise.resolve({retailers:{}})
     url = "http://www.findchips.com/lite/#{query}"
@@ -80,3 +82,5 @@ exports.search = (query, retailers_to_search = [], other_fields = []) ->
             return result
         .catch (reason) ->
             return {retailers:{}}
+
+exports.search = rateLimit(1, 10, _search)
