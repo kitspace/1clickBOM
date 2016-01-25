@@ -22,24 +22,28 @@
 octopart  = require './octopart'
 findchips = require './findchips'
 
+_next_query = (line, queries) ->
+    query = ''
+    other_fields = []
+    retailers = []
+    for key in retailer_list
+        sku = line.retailers[key]
+        if sku != '' && (sku not in queries)
+            query = sku
+        else if sku == ''
+            retailers.push(key)
+    if query == ''
+        for key in field_list
+            field = line[key]
+            if field != '' && (field not in queries)
+                query = field
+            else if field == ''
+                other_fields.push(field)
+    return {query, other_fields, retailers}
+
 _auto_complete = (search_engine, lines) ->
     promise_array = for line in lines
-        retailers = []
-        other_fields = []
-        for retailer in retailer_list
-            if (line.retailers[retailer] == '')
-                retailers.push(retailer)
-        for field in field_list
-            if line[field] == ''
-                other_fields.push(field)
-        query = line.partNumber
-        if query == ''
-            query = line.description
-        if query == ''
-            for retailer in retailer_list
-                if line.retailers[retailer] != ''
-                    query = line.retailers[retailer]
-                    break
+        {query, other_fields, retailers} = _next_query(line, [])
         if retailers.length == 0 and other_fields.length == 0
             Promise.resolve(line)
         else
