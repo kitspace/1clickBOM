@@ -30,15 +30,21 @@ _next_query = (line, queries) ->
         sku = line.retailers[key]
         if sku != '' && (sku not in queries)
             query = sku
-        else if sku == ''
-            retailers.push(key)
+            break
     if query == ''
         for key in field_list
             field = line[key]
             if field != '' && (field not in queries)
                 query = field
-            else if field == ''
-                other_fields.push(field)
+                break
+    for key in retailer_list
+        sku = line.retailers[key]
+        if sku == ''
+            retailers.push(key)
+    for key in field_list
+        field = line[key]
+        if field == ''
+            other_fields.push(field)
     return {query, other_fields, retailers}
 
 _auto_complete = (search_engine, lines) ->
