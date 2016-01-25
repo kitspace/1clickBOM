@@ -44,7 +44,7 @@ _next_query = (line, queries) ->
     for key in field_list
         field = line[key]
         if field == ''
-            other_fields.push(field)
+            other_fields.push(key)
     return {query, other_fields, retailers}
 
 _auto_complete = (search_engine, lines) ->
