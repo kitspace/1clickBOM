@@ -49,12 +49,15 @@ _next_query = (line, queries) ->
 
 _auto_complete = (search_engine, lines) ->
     promise_array = for line in lines
-        {query, other_fields, retailers} = _next_query(line, [])
-        if retailers.length == 0 and other_fields.length == 0
-            Promise.resolve(line)
-        else
+        queries = []
+        searchPromises = []
+        search = ({line, queries}) ->
+            {query, other_fields, retailers} = _next_query(line, queries)
+            if (retailers.length == 0 and other_fields.length == 0) or query == ''
+                return Promise.resolve({line, queries})
+            queries.push(query)
             p = search_engine.search(query, retailers, other_fields)
-            p.then ((line, result) ->
+            return p.then ((line, queries, result) ->
                 for field,v of result
                     if field != 'retailers' and v?
                         line[field] = v
@@ -65,11 +68,16 @@ _auto_complete = (search_engine, lines) ->
                             result.retailers[retailer] =
                                 result.retailers[retailer].replace('RL','')
                         if retailer != 'Digikey'
-                            result.retailers[retailer] = result.retailers[retailer].replace(/-/g,'')
+                            result.retailers[retailer] =
+                                result.retailers[retailer].replace(/-/g,'')
                         line.retailers[retailer] = result.retailers[retailer]
-                return line
-            ).bind(undefined, line)
-
+                return {line, queries}
+            ).bind(undefined, line, queries)
+        p = search({line:line, queries:[]})
+        for _ in retailer_list.concat(field_list)
+            p.then search
+        p.then ({line, queries}) ->
+            Promise.resolve(line)
 
     final = promise_array.reduce (prev, promise) ->
         prev.then (newLines) ->
