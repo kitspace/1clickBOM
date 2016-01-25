@@ -32,55 +32,60 @@ _search = (query, retailers_to_search = [], other_fields = []) ->
     if query == ''
         return Promise.resolve({retailers:{}})
     url = "http://www.findchips.com/lite/#{encodeURIComponent(query)}"
-    http.promiseGet(url)
-        .then (doc)->
-            result = {retailers:{}}
-            elements = doc.getElementsByClassName('distributor-title')
-            for h in elements
-                title = h.firstElementChild.innerHTML.trim()
-                retailer = ''
-                for k,v of aliases
-                    regex = RegExp("^#{k}")
-                    if regex.test(title)
-                        retailer = v
-                        break
-                if retailer not in retailers_to_search
-                    continue
-                min_quantities = []
-                additional_elements =
-                    h.parentElement.getElementsByClassName('additional-title')
-                for span in additional_elements
-                    if span.innerHTML == 'Min Qty'
-                        min_quantities.push(span.nextElementSibling)
-                {span, n} = min_quantities.reduce (prev, span) ->
-                    n = parseInt(span.innerHTML.trim())
-                    if prev?.n < n or isNaN(n)
-                        return prev
-                    else
-                        return {span, n}
-                , {}
-                if not span?
-                    for span in additional_elements
-                        if span.innerHTML == 'Distri #:'
-                            part = span.nextElementSibling.innerHTML.trim()
-                            break
+    p = http.promiseGet(url)
+        .catch ((url, event) ->
+            status = event.currentTarget.status
+            if status == 502
+                return http.promiseGet(url)
+        ).bind(null, url)
+    p.then (doc)->
+        result = {retailers:{}}
+        elements = doc.getElementsByClassName('distributor-title')
+        for h in elements
+            title = h.firstElementChild.innerHTML.trim()
+            retailer = ''
+            for k,v of aliases
+                regex = RegExp("^#{k}")
+                if regex.test(title)
+                    retailer = v
+                    break
+            if retailer not in retailers_to_search
+                continue
+            min_quantities = []
+            additional_elements =
+                h.parentElement.getElementsByClassName('additional-title')
+            for span in additional_elements
+                if span.innerHTML == 'Min Qty'
+                    min_quantities.push(span.nextElementSibling)
+            {span, n} = min_quantities.reduce (prev, span) ->
+                n = parseInt(span.innerHTML.trim())
+                if prev?.n < n or isNaN(n)
+                    return prev
                 else
-                    tr = span.parentElement?.parentElement?.parentElement
-                    if tr?
-                        for span in tr?.getElementsByClassName('additional-title')
-                            if span.innerHTML == 'Distri #:' and span.nextElementSibling?
-                                part = span.nextElementSibling.innerHTML.trim()
+                    return {span, n}
+            , {}
+            if not span?
+                for span in additional_elements
+                    if span.innerHTML == 'Distri #:'
+                        part = span.nextElementSibling.innerHTML.trim()
+                        break
+            else
+                tr = span.parentElement?.parentElement?.parentElement
+                if tr?
+                    for span in tr?.getElementsByClassName('additional-title')
+                        if span.innerHTML == 'Distri #:' and span.nextElementSibling?
+                            part = span.nextElementSibling.innerHTML.trim()
 
-                                #sometimes there are some erroneous 'Distri #'
-                                #in the results like '77M8756 CE TMK107 B7224KA-T'
-                                if (part.split(' ').length > 1)
-                                    part = part.split(' ')[0]
+                            #sometimes there are some erroneous 'Distri #'
+                            #in the results like '77M8756 CE TMK107 B7224KA-T'
+                            if (part.split(' ').length > 1)
+                                part = part.split(' ')[0]
 
-                                break
-                if part?
-                    result.retailers[retailer] = part
-            return result
-        .catch (reason) ->
-            return {retailers:{}}
+                            break
+            if part?
+                result.retailers[retailer] = part
+        return result
+    .catch (reason) ->
+        return {retailers:{}}
 
-exports.search = rateLimit(100, 10, _search)
+exports.search = rateLimit(1, 100, _search)

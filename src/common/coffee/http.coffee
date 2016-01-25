@@ -38,7 +38,7 @@ network_callback = (event, callback, error_callback, notify=true) ->
 
                 badge.setDecaying('' + event.target.status, '#CC00FF', priority=3)
             if error_callback?
-                error_callback(event.target.line)
+                error_callback(event)
 
 post = (url, params, {line:line, notify:notify, timeout:timeout, json:json},  callback, error_callback) ->
     if not line?
@@ -111,8 +111,8 @@ promiseGet = (url) ->
     new Promise (resolve, reject) ->
         get url, {}, (event) ->
             resolve(browser.parseDOM(event.target.responseText))
-        , () ->
-            reject()
+        , (event) ->
+            reject(event)
 
 
 exports.post        = post
