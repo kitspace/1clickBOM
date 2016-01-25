@@ -32,7 +32,7 @@ _next_query = (line, queries) ->
             query = sku
             break
     if query == ''
-        for key in field_list
+        for key in field_list.filter((f) -> f != 'manufacturer')
             field = line[key]
             if field != '' && (field not in queries)
                 query = field
