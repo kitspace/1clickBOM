@@ -31,7 +31,7 @@ aliases =
 _search = (query, retailers_to_search = [], other_fields = []) ->
     if query == ''
         return Promise.resolve({retailers:{}})
-    url = "http://www.findchips.com/lite/#{query}"
+    url = "http://www.findchips.com/lite/#{encodeURIComponent(query)}"
     http.promiseGet(url)
         .then (doc)->
             result = {retailers:{}}
@@ -83,4 +83,4 @@ _search = (query, retailers_to_search = [], other_fields = []) ->
         .catch (reason) ->
             return {retailers:{}}
 
-exports.search = rateLimit(1, 10, _search)
+exports.search = rateLimit(100, 10, _search)
