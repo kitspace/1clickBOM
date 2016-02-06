@@ -17,6 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 {parseTSV}      = require '1-click-bom'
+{retailer_list, numberOfEmpty} = require('1-click-bom').lineData
 
 http            = require './http'
 {browser }      = require './browser'
@@ -26,7 +27,6 @@ http            = require './http'
 {RS      }      = require './rs'
 {Newark  }      = require './newark'
 {badge}         = require './badge'
-{retailer_list} = require('1-click-bom').lineData
 {autoComplete}  = require './auto_complete'
 
 bom_manager =
@@ -70,12 +70,13 @@ bom_manager =
 
     autoComplete: (callback) ->
         @getBOM (bom) =>
-            autoComplete bom.lines, (lines) =>
+            autoComplete bom.lines, ((prev_lines, lines) ->
                 bom = {}
                 bom.lines = lines
                 bom.retailers = @_to_retailers(lines)
                 browser.storageSet {bom:bom}, () ->
-                    callback?()
+                    callback?(numberOfEmpty(prev_lines) - numberOfEmpty(lines))
+            ).bind(this, bom.lines)
 
     addToBOM: (text, callback) ->
         {lines, invalid, warnings} = parseTSV(text)

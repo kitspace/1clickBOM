@@ -100,9 +100,23 @@ exports.background = (messenger) ->
         bom_manager.openCart(name)
 
     messenger.on 'autoComplete', () ->
-        bom_manager.autoComplete ()->
+        bom_manager.autoComplete (completed)->
             sendState()
-            badge.setDecaying('OK','#00CF0F')
+            if completed > 0
+                browser.notificationsCreate
+                    type:'basic'
+                    title:'Auto-complete successful'
+                    message:"Completed #{completed} fields for you by searching
+                        Octopart and Findchips."
+                    iconUrl:'/images/ok.png'
+                badge.setDecaying('OK','#00CF0F')
+            else
+                browser.notificationsCreate
+                    type:'basic'
+                    title:'Auto-complete search did not return any results'
+                    message:'Could not complete any fields for you.'
+                    iconUrl:'/images/warning.png'
+                badge.setDecaying('Warn','#FF8A00')
 
     messenger.on 'emptyCart', (name) ->
         bom_manager.emptyCart name, ((name) ->

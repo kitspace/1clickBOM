@@ -22,7 +22,7 @@
 octopart  = require './octopart'
 findchips = require './findchips'
 
-DEPTH = 2
+DEPTH = 1
 
 _next_query = (line, queries) ->
     query = ''
@@ -76,8 +76,9 @@ _auto_complete = (search_engine, lines) ->
                 return {line, queries}
             ).bind(undefined, line, queries)
         p = search({line:line, queries:[]})
-        for _ in [1..DEPTH]
-            p.then search
+        if (DEPTH - 1) > 0
+            for _ in [1..(DEPTH-1)]
+                p.then search
         p.then ({line, queries}) ->
             Promise.resolve(line)
 
@@ -92,6 +93,7 @@ _auto_complete = (search_engine, lines) ->
 
 
 autoComplete = (lines, callback) ->
+    lines = JSON.parse(JSON.stringify(lines))
     p = _auto_complete(octopart, lines)
     p.then (newLines) ->
         if not isComplete(newLines)
