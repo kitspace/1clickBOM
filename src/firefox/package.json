@@ -5,7 +5,7 @@
   "description":"Quickly fill shopping carts with electronic components.",
   "author": "monostable",
   "homepage": "http://1clickBOM.com",
-  "license": "CPAL 1.0",
+  "license": "CPAL-1.0",
   "icon": "data/images/logo48.png",
   "main":"lib/main.js",
   "preferences": [{
