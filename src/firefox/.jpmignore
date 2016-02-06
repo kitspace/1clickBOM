@@ -1,2 +1,5 @@
-.jpmignore
-*.map
+.*
+*
+!package.json
+!node_modules/**
+!data/**

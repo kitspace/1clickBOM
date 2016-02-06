@@ -5,7 +5,7 @@ path    = require('path')
 cp      = require('child_process')
 ninjaBuildGen = require('ninja-build-gen')
 
-version = "0.7.0-dev"
+version = "0.6.0-dev"
 
 browserify = 'browserify -x $exclude --debug --extension=".coffee" --transform coffeeify'
 
@@ -181,7 +181,10 @@ ninja.rule('npm-install').run('cd build/firefox/ && npm install')
 ninja.edge('build/firefox/node_modules').from('build/firefox/package.json').using('npm-install')
 targets.firefox.push('build/firefox/node_modules')
 
-ninja.edge('build/firefox/.jpmignore').from('src/firefox/.jpmignore').using('copy')
+ninja.rule('make-jpmignore').run("coffee make-jpmignore.coffee $in")
+ninja.edge('build/firefox/.jpmignore').from('build/firefox/lib/main.js')
+    .need(['src/firefox/.jpmignore', 'make-jpmignore.coffee'])
+    .using('make-jpmignore')
 targets.firefox.push('build/firefox/.jpmignore')
 
 firefox_package = "build/1clickBOM-v#{version}-firefox.xpi"
