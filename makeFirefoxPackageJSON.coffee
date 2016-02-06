@@ -1,14 +1,17 @@
 fs = require 'fs'
 
 countries = JSON.parse(fs.readFileSync('src/common/data/countries.json', 'utf8'))
-packageJ  = JSON.parse(fs.readFileSync('src/firefox/package.json', 'utf8'))
+firefoxPackageJ  = JSON.parse(fs.readFileSync('src/firefox/package.json', 'utf8'))
+packageJ  = JSON.parse(fs.readFileSync('./package.json', 'utf8'))
 
 options = []
 for name, code of countries
     options.push({label: name, value: code})
 
-packageJ.preferences[0].options = options
+firefoxPackageJ.dependencies = packageJ.dependencies
 
-packageJ.version = process.argv[2]
+firefoxPackageJ.preferences[0].options = options
 
-fs.writeFileSync('build/firefox/package.json', JSON.stringify(packageJ))
+firefoxPackageJ.version = process.argv[2]
+
+fs.writeFileSync('build/firefox/package.json', JSON.stringify(firefoxPackageJ))

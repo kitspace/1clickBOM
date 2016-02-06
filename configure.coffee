@@ -5,7 +5,7 @@ path    = require('path')
 cp      = require('child_process')
 ninjaBuildGen = require('ninja-build-gen')
 
-version = "0.5.6.1"
+version = "0.7.0-dev"
 
 browserify = 'browserify -x $exclude --debug --extension=".coffee" --transform coffeeify'
 
@@ -75,8 +75,6 @@ copyFiles = (browser) ->
         'src/common/images/*'
         'src/common/data/*.json'
     ])
-
-moduleFiles = globule.find("node_modules/**/*", {filter:'isFile'})
 
 #- Edges -#
 
@@ -164,7 +162,7 @@ targets.chrome.push(manifest)
 ninja.rule('makeFirefoxPackageJSON')
     .run("coffee makeFirefoxPackageJSON.coffee #{version}")
 ninja.edge('build/firefox/package.json')
-    .from(['src/common/data/countries.json','src/firefox/package.json'])
+    .from(['src/common/data/countries.json','src/firefox/package.json', 'package.json'])
     .using('makeFirefoxPackageJSON')
 targets.firefox.push('build/firefox/package.json')
 
@@ -178,14 +176,13 @@ ninja.rule('package-chrome')
 ninja.edge("#{chrome_package_name}.zip").need('chrome').using('package-chrome')
 ninja.edge('package-chrome').need("#{chrome_package_name}.zip")
 
-#copy all of node_modules/* to firefox build dir
-for file in moduleFiles
-    ninja.edge('build/firefox/' + file).from(file).using('copy')
-    targets.firefox.push('build/firefox/' + file)
+
+ninja.rule('npm-install').run('cd build/firefox/ && npm install')
+ninja.edge('build/firefox/node_modules').from('build/firefox/package.json').using('npm-install')
+targets.firefox.push('build/firefox/node_modules')
 
 ninja.edge('build/firefox/.jpmignore').from('src/firefox/.jpmignore').using('copy')
 targets.firefox.push('build/firefox/.jpmignore')
-
 
 firefox_package = "build/1clickBOM-v#{version}-firefox.xpi"
 ninja.rule('package-firefox')

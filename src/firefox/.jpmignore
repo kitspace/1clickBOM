@@ -1,3 +1,2 @@
 .jpmignore
-node_modules/
 *.map
