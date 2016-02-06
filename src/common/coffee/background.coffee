@@ -113,7 +113,7 @@ exports.background = (messenger) ->
             else
                 browser.notificationsCreate
                     type:'basic'
-                    title:'Auto-complete search did not return any results'
+                    title:'Auto-complete returned 0 results'
                     message:'Could not complete any fields for you.'
                     iconUrl:'/images/warning.png'
                 badge.setDecaying('Warn','#FF8A00')
