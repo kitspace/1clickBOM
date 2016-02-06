@@ -91,7 +91,7 @@ browserifyEdge = (target, browser, layer, exclude='') ->
     targets[browser].push(target)
 
 
-for layer in ['main', 'popup']
+for layer in ['main', 'popup', 'options']
     browserifyEdge("build/chrome/js/#{layer}.js", 'chrome', layer)
 
 
