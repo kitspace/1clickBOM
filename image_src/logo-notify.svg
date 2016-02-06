@@ -52382,9 +52382,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.51205416"
-     inkscape:cx="540.36691"
-     inkscape:cy="-19.671087"
+     inkscape:zoom="0.36207697"
+     inkscape:cx="-146.89321"
+     inkscape:cy="-374.00419"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -52404,7 +52404,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -57637,18 +57637,14 @@
            sodipodi:role="line">Error</tspan></text>
     </g>
     <g
-       transform="translate(-1004.1811,283.11567)"
-       id="g23456-3"
-       inkscape:export-filename="/home/kaspar/projects/kitnic/1clickBOM/src/firefox/images/ok.png"
-       inkscape:export-xdpi="6.6729226"
-       inkscape:export-ydpi="6.6729226">
+       id="g37460">
       <g
          inkscape:export-ydpi="16.236217"
          inkscape:export-xdpi="16.236217"
          inkscape:export-filename="/home/kaspar/projects/1clickBOM/code/src/firefox/images/net_error.png"
          style="stroke:#000000;stroke-linejoin:miter;stroke-opacity:1"
          id="g13759-7-5"
-         transform="translate(901.24802,529.20889)">
+         transform="translate(-102.93308,812.32456)">
         <path
            style="fill:none;stroke:#000000;stroke-width:1.25752854px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="m 363.68239,384.22056 0,-40.664"
@@ -58490,11 +58486,11 @@
          inkscape:export-ydpi="17.790001"
          inkscape:export-xdpi="17.790001"
          inkscape:export-filename="/home/kaspar/projects/1clickBOM/code/src/firefox/images/warning.png"
-         transform="matrix(1.9789289,0,0,1.9789289,236.90378,-267.5177)"
+         transform="matrix(1.9789289,0,0,1.9789289,-767.27732,15.59797)"
          sodipodi:open="true"
          sodipodi:end="6.2702824"
          sodipodi:start="0"
-         d="m 691.42854,650.2193 c 0,90.338 -73.23342,163.57143 -163.57142,163.57143 -90.33801,0 -163.57143,-73.23343 -163.57143,-163.57143 0,-90.338 73.23342,-163.57143 163.57143,-163.57143 89.51488,0 162.40284,71.95351 163.55781,161.46094"
+         d="m 691.42854,650.2193 a 163.57143,163.57143 0 1 1 -0.0136,-2.11049"
          sodipodi:ry="163.57143"
          sodipodi:rx="163.57143"
          sodipodi:cy="650.2193"
@@ -58507,7 +58503,7 @@
          inkscape:export-xdpi="16.236217"
          inkscape:export-filename="/home/kaspar/projects/1clickBOM/code/src/firefox/images/net_error.png"
          id="g13575-68-0"
-         transform="translate(901.24802,529.20889)">
+         transform="translate(-102.93308,812.32456)">
         <g
            transform="matrix(-1,0,0,1,697.63688,-31.428571)"
            id="g6348-6-2-0">
@@ -59369,7 +59365,7 @@
          inkscape:export-xdpi="16.236217"
          inkscape:export-filename="/home/kaspar/projects/1clickBOM/code/src/firefox/images/net_error.png"
          id="g13575-6-4-3"
-         transform="translate(901.24802,529.20889)">
+         transform="translate(-102.93308,812.32456)">
         <g
            transform="matrix(-1,0,0,1,697.63688,-31.428571)"
            id="g6348-6-3-2-4">
@@ -60231,8 +60227,8 @@
          inkscape:export-xdpi="16.236217"
          inkscape:export-filename="/home/kaspar/projects/1clickBOM/code/src/firefox/images/net_error.png"
          rx="15"
-         y="1041.1395"
-         x="1214.3953"
+         y="1324.2552"
+         x="210.21416"
          height="128.28937"
          width="287.89346"
          id="rect6172-7-5"
@@ -60243,13 +60239,13 @@
          inkscape:export-filename="/home/kaspar/projects/1clickBOM/code/src/firefox/images/net_error.png"
          sodipodi:linespacing="125%"
          id="text6174-0-8"
-         y="1127.9911"
-         x="1308.9089"
+         y="1411.1068"
+         x="304.72784"
          style="font-size:58px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
          xml:space="preserve"><tspan
            style="font-size:58px;font-weight:bold;text-align:start;text-anchor:start;fill:#ffffff;-inkscape-font-specification:Sans Bold"
-           y="1127.9911"
-           x="1308.9089"
+           y="1411.1068"
+           x="304.72784"
            id="tspan6176-4-6"
            sodipodi:role="line">OK</tspan></text>
     </g>
