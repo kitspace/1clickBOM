@@ -22,6 +22,8 @@
 octopart  = require './octopart'
 findchips = require './findchips'
 
+DEPTH = 2
+
 _next_query = (line, queries) ->
     query = ''
     other_fields = []
@@ -74,7 +76,7 @@ _auto_complete = (search_engine, lines) ->
                 return {line, queries}
             ).bind(undefined, line, queries)
         p = search({line:line, queries:[]})
-        for _ in retailer_list.concat(field_list)
+        for _ in [1..DEPTH]
             p.then search
         p.then ({line, queries}) ->
             Promise.resolve(line)
