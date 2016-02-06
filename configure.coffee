@@ -159,11 +159,11 @@ ninja.edge(manifest).from(manifest.replace('build','src'))
 targets.chrome.push(manifest)
 
 
-ninja.rule('makeFirefoxPackageJSON')
-    .run("coffee makeFirefoxPackageJSON.coffee #{version}")
+ninja.rule('make-package-json')
+    .run("coffee make-package-json.coffee #{version}")
 ninja.edge('build/firefox/package.json')
     .from(['src/common/data/countries.json','src/firefox/package.json', 'package.json'])
-    .using('makeFirefoxPackageJSON')
+    .using('make-package-json')
 targets.firefox.push('build/firefox/package.json')
 
 chrome_package_name = "1clickBOM-v#{version}-chrome"
