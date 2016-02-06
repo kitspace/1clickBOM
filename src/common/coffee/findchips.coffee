@@ -17,8 +17,6 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-rateLimit = require('promise-rate-limit')
-
 http = require './http'
 
 aliases =
@@ -88,4 +86,4 @@ _search = (query, retailers_to_search = [], other_fields = []) ->
     .catch (reason) ->
         return {retailers:{}}
 
-exports.search = rateLimit(1, 100, _search)
+exports.search = _search
