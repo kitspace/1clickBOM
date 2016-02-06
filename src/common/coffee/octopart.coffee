@@ -36,12 +36,15 @@ _search = (query, retailers = [], other_fields = []) ->
     http.promiseGet(url)
         .then (doc) ->
             result = {retailers:{}}
-            if 'manufacturer' in other_fields
-                result.manufacturer = doc.querySelector('.PartHeader__brand')
-                    ?.firstElementChild?.innerHTML.trim()
             if 'partNumber' in other_fields
-                result.partNumber = doc.querySelector('.PartHeader__mpn')
+                manufacturer = doc.querySelector('.PartHeader__brand')
                     ?.firstElementChild?.innerHTML.trim()
+                if not manufacturer?
+                    manufacturer = ''
+                number = doc.querySelector('.PartHeader__mpn')
+                    ?.firstElementChild?.innerHTML.trim()
+                if number?
+                    result.partNumber = "#{manufacturer} #{number}".trim()
             tds = doc.querySelectorAll('td.col-seller')
             elements_moq = []
             for td in tds

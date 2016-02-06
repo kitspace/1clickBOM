@@ -24,7 +24,6 @@ element_Bom         = document.querySelector('#bom')
 element_Table       = document.querySelector('#bom_table')
 element_TotalItems  = document.querySelector('#total_items')
 element_TotalPartNumbers  = document.querySelector('#total_partNumbers')
-element_TotalManufacturers  = document.querySelector('#total_manufacturers')
 element_TotalLines  = document.querySelector('#total_lines')
 button_Clear        = document.querySelector('button#clear')
 button_LoadFromPage = document.querySelector('button#load_from_page')
@@ -127,14 +126,6 @@ render = (state) ->
     removeChildren(element_TotalPartNumbers)
     element_TotalPartNumbers.appendChild(
         document.createTextNode("#{part_numbers} with MPN"))
-
-    manufacturers = bom.lines.reduce (prev, line) ->
-        prev += line.manufacturer != ''
-    , 0
-
-    removeChildren(element_TotalManufacturers)
-    element_TotalManufacturers.appendChild(
-        document.createTextNode("#{manufacturers} with M/F"))
 
     quantity = 0
     for line in bom.lines
