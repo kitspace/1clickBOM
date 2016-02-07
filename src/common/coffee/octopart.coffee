@@ -26,6 +26,7 @@ aliases =
 _search = (query, retailers = [], other_fields = []) ->
     if query == ''
         return Promise.resolve({retailers:{}})
+    query.replace(' / ', ' ') #search doesn't seem to like ' / '
     url = "https://octopart.com/search?q=#{query}&start=0"
     for retailer in retailers
         for k,v of aliases
