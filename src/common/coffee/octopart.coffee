@@ -36,8 +36,8 @@ _search = (query, retailers = [], other_fields = []) ->
     url += '&filter[fields][avg_avail][]=[1 TO *]'
     http.promiseGet(url)
         .then (doc) ->
-            result = {retailers:{}}
-            if 'partNumber' in other_fields
+            result = {retailers:{}, partNumbers:[]}
+            if 'partNumbers' in other_fields
                 manufacturer = doc.querySelector('.PartHeader__brand')
                     ?.firstElementChild?.innerHTML.trim()
                 if not manufacturer?
@@ -45,7 +45,7 @@ _search = (query, retailers = [], other_fields = []) ->
                 number = doc.querySelector('.PartHeader__mpn')
                     ?.firstElementChild?.innerHTML.trim()
                 if number?
-                    result.partNumber = "#{manufacturer} #{number}".trim()
+                    result.partNumbers.push("#{manufacturer} #{number}".trim())
             tds = doc.querySelectorAll('td.col-seller')
             elements_moq = []
             for td in tds

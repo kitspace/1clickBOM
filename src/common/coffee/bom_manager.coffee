@@ -18,6 +18,7 @@
 # the Original Code is Kaspar Emanuel.
 {parseTSV}      = require '1-click-bom'
 {retailer_list, numberOfEmpty} = require('1-click-bom').lineData
+line_data = require('1-click-bom').lineData
 
 http            = require './http'
 {browser }      = require './browser'
@@ -66,6 +67,12 @@ bom_manager =
                 bom.retailers = {}
             if not bom.lines?
                 bom.lines = []
+            for line in bom.lines
+                if not line.partNumbers?
+                    line.partNumbers = []
+                    if line.partNumber != ''
+                        line.partNumbers.push "#{line.manufacturer}
+                            #{line.partNumber}".trim()
             callback(bom)
 
     autoComplete: (callback) ->
@@ -128,49 +135,9 @@ bom_manager =
         return r
 
 
-    _merge_lines: (lines1, lines2) ->
-        warnings = []
-        duplicates = {}
-        merged = lines1
-        for line2, index in lines2
-            for line2_, index_ in lines2
-                if index != index_ and line2.reference == line2_.reference
-                    d = duplicates[line2.reference]
-                    if d?
-                        if index not in d
-                            d.push(index)
-                        if index_ not in d
-                            d.push(index_)
-                    else
-                         duplicates[line2.reference] = [index, index_]
-            exists = false
-            for line1 in merged
-                if line1.reference == line2.reference
-                    exists = true
-                    for r in retailer_list
-                        if line2.retailers[r] != ''
-                            line1.retailers[r] = line2.retailers[r]
-                    if line2.partNumber != ''
-                        line1.partNumber = line2.partNumber
-                    if line2.manufacturer != ''
-                        line1.manufacturer = line2.manufacturer
-                    line1.quantity += line2.quantity
-                    break
-            if not exists
-                merged.push(line2)
-        for ref, d of duplicates
-            warnings.push(
-                title:'Duplicate lines detected'
-                message:"You have the exact same reference '#{ref}' on lines
-                    #{n + 1 for n in d[0..(d.length-2)]} and #{d[d.length-1] + 1}.
-                    These have been merged"
-            )
-        return [merged, warnings]
-
-
     _add_to_bom: (lines, invalid, callback) ->
         @getBOM (bom) =>
-            [bom.lines, warnings] = @_merge_lines(bom.lines, lines)
+            [bom.lines, warnings] = line_data.merge(bom.lines, lines)
             for warning in warnings
                 browser.notificationsCreate
                     type:'basic'

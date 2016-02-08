@@ -28,25 +28,17 @@ _next_query = (line, queries) ->
     query = ''
     other_fields = []
     retailers = []
+    for n in list.partNumbers
+        if n not in queries
+            query = n
+            break
     for key in retailer_list
         sku = line.retailers[key]
         if sku != '' && (sku not in queries)
             query = sku
             break
-    if query == ''
-        for key in field_list.filter((f) -> f != 'manufacturer')
-            field = line[key]
-            if field != '' && (field not in queries)
-                query = field
-                break
-    for key in retailer_list
-        sku = line.retailers[key]
-        if sku == ''
-            retailers.push(key)
-    for key in field_list
-        field = line[key]
-        if field == ''
-            other_fields.push(key)
+    if line.partNumbers.length < 1
+        other_fields.push('partNumbers')
     return {query, other_fields, retailers}
 
 _auto_complete = (search_engine, lines) ->

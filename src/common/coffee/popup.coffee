@@ -120,7 +120,7 @@ render = (state) ->
                 line#{if bom.lines.length != 1 then 's' else ''}"))
 
     part_numbers = bom.lines.reduce (prev, line) ->
-        prev += line.partNumber != ''
+        prev += line.partNumbers.length > 0
     , 0
 
     removeChildren(element_TotalPartNumbers)
