@@ -86,21 +86,8 @@ exports.background = (messenger) ->
                 bom_manager:bom_manager
                 onDotTSV: tsvPageNotifier.onDotTSV)
 
-    messenger.on 'getBackgroundState', () ->
-        sendState()
-
-    messenger.on 'fillCart', (name, callback) ->
-        bom_manager.fillCart name, ((name) ->
-            bom_manager.openCart(name)
-            sendState()
-        ).bind(undefined, name)
-        sendState()
-
-    messenger.on 'openCart', (name) ->
-        bom_manager.openCart(name)
-
-    messenger.on 'autoComplete', () ->
-        bom_manager.autoComplete (completed)->
+    autoComplete = (deep = false) ->
+        bom_manager.autoComplete deep, (completed)->
             sendState()
             if completed > 0
                 browser.notificationsCreate
@@ -117,6 +104,25 @@ exports.background = (messenger) ->
                     message:'Could not complete any fields for you.'
                     iconUrl:'/images/warning.png'
                 badge.setDecaying('Warn','#FF8A00')
+
+    messenger.on 'getBackgroundState', () ->
+        sendState()
+
+    messenger.on 'fillCart', (name, callback) ->
+        bom_manager.fillCart name, ((name) ->
+            bom_manager.openCart(name)
+            sendState()
+        ).bind(undefined, name)
+        sendState()
+
+    messenger.on 'openCart', (name) ->
+        bom_manager.openCart(name)
+
+    messenger.on 'autoComplete', () ->
+        autoComplete()
+
+    messenger.on 'deepAutoComplete', () ->
+        autoComplete(deep=true)
 
     messenger.on 'emptyCart', (name) ->
         bom_manager.emptyCart name, ((name) ->

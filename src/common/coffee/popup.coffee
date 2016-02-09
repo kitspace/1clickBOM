@@ -20,18 +20,19 @@
 {messenger} = require './messenger'
 {retailer_list, isComplete, hasSKUs} = require('1-click-bom').lineData
 
-element_Bom         = document.querySelector('#bom')
-element_Table       = document.querySelector('#bom_table')
-element_TotalItems  = document.querySelector('#total_items')
-element_TotalPartNumbers  = document.querySelector('#total_partNumbers')
-element_TotalLines  = document.querySelector('#total_lines')
-button_Clear        = document.querySelector('button#clear')
-button_LoadFromPage = document.querySelector('button#load_from_page')
-button_Complete     = document.querySelector('button#quick_complete')
-button_Copy         = document.querySelector('button#copy')
-button_Paste        = document.querySelector('button#paste')
-button_FillCarts    = document.querySelector('button#fill_carts')
-button_EmptyCarts   = document.querySelector('button#empty_carts')
+element_Bom              = document.querySelector('#bom')
+element_Table            = document.querySelector('#bom_table')
+element_TotalItems       = document.querySelector('#total_items')
+element_TotalPartNumbers = document.querySelector('#total_partNumbers')
+element_TotalLines       = document.querySelector('#total_lines')
+button_Clear             = document.querySelector('button#clear')
+button_LoadFromPage      = document.querySelector('button#load_from_page')
+button_QuickComplete     = document.querySelector('button#quick_complete')
+button_DeepComplete      = document.querySelector('button#deep_complete')
+button_Copy              = document.querySelector('button#copy')
+button_Paste             = document.querySelector('button#paste')
+button_FillCarts         = document.querySelector('button#fill_carts')
+button_EmptyCarts        = document.querySelector('button#empty_carts')
 
 
 button_FillCarts.addEventListener 'click', () ->
@@ -59,16 +60,20 @@ button_LoadFromPage.addEventListener 'click', () ->
 button_Copy.addEventListener 'click', () ->
     messenger.send('copy')
 
-button_Complete.addEventListener 'click', () ->
+button_QuickComplete.addEventListener 'click', () ->
     messenger.send('autoComplete')
+
+button_DeepComplete.addEventListener 'click', () ->
+    messenger.send('deepAutoComplete')
 
 
 hideOrShow = (bom, onDotTSV) ->
     hasBOM = Boolean(Object.keys(bom.lines).length)
 
-    button_Clear.disabled      = not hasBOM
-    button_Complete.disabled   = (not hasBOM) or isComplete(bom.lines)
-    button_Copy.disabled       = not hasBOM
+    button_Clear.disabled         = not hasBOM
+    button_QuickComplete.disabled = (not hasBOM) or isComplete(bom.lines)
+    button_DeepComplete.disabled  = (not hasBOM) or isComplete(bom.lines)
+    button_Copy.disabled          = not hasBOM
 
     button_LoadFromPage.hidden = not onDotTSV
 

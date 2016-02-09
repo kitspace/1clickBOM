@@ -75,7 +75,7 @@ bom_manager =
                             #{line.partNumber}".trim()
             callback(bom)
 
-    autoComplete: (callback) ->
+    autoComplete: (deep, callback) ->
         @getBOM (bom) =>
             autoComplete bom.lines, ((prev_lines, lines) ->
                 bom = {}
@@ -84,6 +84,7 @@ bom_manager =
                 browser.storageSet {bom:bom}, () ->
                     callback?(numberOfEmpty(prev_lines) - numberOfEmpty(lines))
             ).bind(this, bom.lines)
+            , deep
 
     addToBOM: (text, callback) ->
         {lines, invalid, warnings} = parseTSV(text)
