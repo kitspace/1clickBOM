@@ -37,7 +37,7 @@ _search = (query, retailers_to_search = [], other_fields = []) ->
                 return http.promiseGet(url)
         ).bind(null, url)
     p.then (doc)->
-        result = {retailers:{}}
+        result = {retailers:{}, partNumbers:[]}
         elements = doc.getElementsByClassName('distributor-title')
         for h in elements
             title = h.firstElementChild.innerHTML.trim()
@@ -84,6 +84,6 @@ _search = (query, retailers_to_search = [], other_fields = []) ->
                 result.retailers[retailer] = part
         return result
     .catch (reason) ->
-        return {retailers:{}}
+        return {retailers:{}, partNumbers:[]}
 
 exports.search = _search

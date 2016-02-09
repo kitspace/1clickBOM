@@ -28,7 +28,7 @@ _next_query = (line, queries) ->
     query = ''
     other_fields = []
     retailers = []
-    for n in list.partNumbers
+    for n in line.partNumbers
         if n not in queries
             query = n
             break
@@ -37,6 +37,10 @@ _next_query = (line, queries) ->
         if sku != '' && (sku not in queries)
             query = sku
             break
+    for key in retailer_list
+        sku = line.retailers[key]
+        if sku == ''
+            retailers.push(key)
     if line.partNumbers.length < 1
         other_fields.push('partNumbers')
     return {query, other_fields, retailers}
@@ -52,9 +56,7 @@ _auto_complete = (search_engine, lines) ->
             queries.push(query)
             p = search_engine.search(query, retailers, other_fields)
             return p.then ((line, queries, result) ->
-                for field,v of result
-                    if field != 'retailers' and v?
-                        line[field] = v
+                line.partNumbers = line.partNumbers.concat(result.partNumbers)
                 for retailer in retailer_list
                     if result.retailers[retailer]?
                         if retailer == 'Farnell' &&

@@ -67,6 +67,6 @@ _search = (query, retailers = [], other_fields = []) ->
                         result.retailers[retailer] = sku
             return result
     .catch (reason) ->
-            return {retailers:{}}
+            return {retailers:{}, partNumbers:[]}
 
 exports.search = _search
