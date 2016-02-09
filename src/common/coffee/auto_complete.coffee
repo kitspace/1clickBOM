@@ -16,13 +16,10 @@
 #
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
-
 {retailer_list, isComplete, field_list} = require('1-click-bom').lineData
 
 octopart  = require './octopart'
 findchips = require './findchips'
-
-DEPTH = 1
 
 _next_query = (line, queries) ->
     query = ''
@@ -45,7 +42,7 @@ _next_query = (line, queries) ->
         other_fields.push('partNumbers')
     return {query, other_fields, retailers}
 
-_auto_complete = (search_engine, lines) ->
+_auto_complete = (search_engine, lines, depth) ->
     promise_array = for line in lines
         queries = []
         searchPromises = []
@@ -70,8 +67,8 @@ _auto_complete = (search_engine, lines) ->
                 return {line, queries}
             ).bind(undefined, line, queries)
         p = search({line:line, queries:[]})
-        if (DEPTH - 1) > 0
-            for _ in [1..(DEPTH-1)]
+        if (depth - 1) > 0
+            for _ in [1..(depth-1)]
                 p.then search
         p.then ({line, queries}) ->
             Promise.resolve(line)
@@ -86,12 +83,16 @@ _auto_complete = (search_engine, lines) ->
     return final
 
 
-autoComplete = (lines, callback) ->
+autoComplete = (lines, callback, deep=false) ->
     lines = JSON.parse(JSON.stringify(lines))
-    p = _auto_complete(octopart, lines)
+    if deep
+        depth = retailer_list.length + field_list.length
+    else
+        depth = 1
+    p = _auto_complete(octopart, lines, depth)
     p.then (newLines) ->
         if not isComplete(newLines)
-            p = _auto_complete(findchips, newLines)
+            p = _auto_complete(findchips, newLines, depth)
             p.then (newLines_) ->
                 callback(newLines_)
         else

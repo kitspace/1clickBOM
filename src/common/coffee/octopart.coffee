@@ -16,6 +16,7 @@
 #
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
+rateLimit = require 'promise-rate-limit'
 
 http = require './http'
 
@@ -24,8 +25,6 @@ aliases =
     'RS Components' : 'RS'
 
 _search = (query, retailers = [], other_fields = []) ->
-    if query == ''
-        return Promise.resolve({retailers:{}})
     query.replace(' / ', ' ') #search doesn't seem to like ' / '
     url = "https://octopart.com/search?q=#{query}&start=0"
     for retailer in retailers
@@ -46,6 +45,8 @@ _search = (query, retailers = [], other_fields = []) ->
                     ?.firstElementChild?.innerHTML.trim()
                 if number?
                     result.partNumbers.push("#{manufacturer} #{number}".trim())
+
+            #we prefer the lowest minimum order quantities (moq)
             tds = doc.querySelectorAll('td.col-seller')
             elements_moq = []
             for td in tds
@@ -66,7 +67,9 @@ _search = (query, retailers = [], other_fields = []) ->
                         moqs[retailer] = moq
                         result.retailers[retailer] = sku
             return result
+
     .catch (reason) ->
             return {retailers:{}, partNumbers:[]}
 
-exports.search = _search
+
+exports.search = rateLimit(n=60, time_period_ms=20000, _search)
