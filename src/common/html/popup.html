@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>1clickBOM's popup</title>
-<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/jgthms/bulma/master/css/bulma.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/jgthms/bulma/master/css/bulma.css" />
 <style>
 body {
     margin: 0px 0px 0px 0px;
@@ -38,7 +38,6 @@ button.buttons {
     border: 1px solid grey;
     border-radius: 3px;
     background-image: linear-gradient(to top,#D5D5D5,#FFFFFF);
-    margin: 2px 2px 2px 2px;
 }
 
 button.buttons:hover {
@@ -51,13 +50,11 @@ button.buttons:active {
     background-image: linear-gradient(to bottom,#DDDDDD,#FFFFFF);
 }
 
-button.top_buttons {
+button {
     min-width: 72px;
+    margin: 10px;
 }
 
-button.bottom_buttons {
-    min-width: 100px;
-}
 
 span.button_icon {
     font-family:"Foundation Icons";
@@ -86,9 +83,8 @@ table#bom_table {
     margin: 0 auto;
 }
 
-table#overview_table {
+#overview {
     border: none;
-    max-height:40px;
     text-align: center;
     background-color: grey;
     color: white;
@@ -142,10 +138,6 @@ a.bom_retailer_name {
     color: black;
     text-decoration:none;
 }
-div#bom
-{
-    text-align: left;
-}
 div#bottom_toolbar {
     text-align: center;
 }
@@ -155,7 +147,7 @@ div#bottom_toolbar {
 <body>
 <center>
 <div id=main_content>
-    <div style="text-align:center;">
+    <div style="display:flex; justify-content:center;">
         <button class="button" id="clear" title="Clear entire BOM">
             <span class=button_icon>&#xf182;</span>
             <span class=button_text>Clear</span>
@@ -170,35 +162,28 @@ div#bottom_toolbar {
         </button>
     </div>
 
-    <div id=overview style="max-height:48px">
-        <div id=top_spacer></div>
-        <table id="overview_table">
-            <tr>
-                <td class=overview_td id=total_lines></td>
-                <td class=overview_td id=total_partNumbers></td>
-                <td class=overview_td id=total_items></td>
-            </tr>
-        </table>
+    <div class="columns is-mobile" id=overview>
+        <div class="column" id=total_lines></div>
+        <div class="column" id=total_partNumbers></div>
+        <div class="column" id=total_items></div>
     </div>
 
     <div id=bom>
-        <div id=top_spacer></div>
         <table id="bom_table"></table>
-        <div id=bottom_spacer></div>
     </div>
     <div class="columns is-mobile">
-        <div class="column is-quarter">
+        <div class="column" style="display:none">
         <button class="button is-info" id="load_from_page" title="Load BOM data from page">
             <span class=button_icon>↑</span>
         </button >
         </div>
-        <div class="column is-quarter">
+        <div class="column">
         <button class="button" id="fill_carts" title="Add all BOM lines to retailer carts">
             <span class=button_icon>&#xf21e;</span>
             <span class=button_text>Add</span>
         </button>
         </div>
-        <div class="column is-quarter">
+        <div class="column">
         <button class="button" id="empty_carts" title="Empty all retailer carts">
             <span class=button_icon>&#xf21b;</span>
             <span class=button_text>Empty</span>
@@ -206,14 +191,19 @@ div#bottom_toolbar {
         </div>
     </div>
     <div class="columns is-mobile">
-        <button class="column button" id="quick_complete" title="Attempt to auto fill out empty fields by searching Octopart and Findchips.com">
+        <div class="column is-half">
+        <button class="button" id="quick_complete" title="Attempt to auto fill out empty fields by searching Octopart and Findchips.com">
             <span class=button_icon>&#xf223;</span>
             <span class=button_text> Quick Complete</span>
         </button>
-        <button class="column button" id="deep_complete" title="Attempt to auto fill out empty fields by searching Octopart and Findchips.com recursively">
+        </div>
+        <div class="column is-half">
+        <button class="button" id="deep_complete" title="Attempt to auto fill out empty fields by searching Octopart and Findchips.com recursively">
             <span class=button_icon>&#xf227;</span>
             <span class=button_text> Deep Complete</span>
         </button>
+        </div>
+        <div class="column is-half">
     </div>
 </div>
 <script src="../js/popup.js"></script>
