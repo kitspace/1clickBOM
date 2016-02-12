@@ -72,4 +72,4 @@ _search = (query, retailers = [], other_fields = []) ->
             return {retailers:{}, partNumbers:[]}
 
 
-exports.search = rateLimit(n=60, time_period_ms=20000, _search)
+exports.search = rateLimit(n=30, time_period_ms=10000, _search)
