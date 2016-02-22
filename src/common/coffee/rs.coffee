@@ -156,8 +156,7 @@ rsOnline =
                 #blabla 10 (minimum) blablabla 10 (multiple of) blabla
                 # or
                 #blabla 10 (multiple of) blabla
-                descr = elem.previousElementSibling?.previousElementSibling
-                    ?.firstElementChild?.innerHTML
+                descr = elem.previousElementSibling?.firstElementChild?.innerHTML
                 quantity = parseInt(elem.querySelector('.quantityTd')
                     ?.firstElementChild?.value)
                 if not isNaN(quantity)
