@@ -62,14 +62,28 @@ class Digikey extends RetailerInterface
                         , (new_line) =>
                             @_add_line new_line, (_, r) =>
                                 if not r.success
-                                    @_get_suggested new_line, id, 'TapeReelQuantityTooLow'
+                                    @_get_suggested line, id, 'CutTapeQuantityIsMultipleOfReelQuantity'
                                     , (new_line) =>
-                                        @_add_line new_line, (_, r) ->
-                                            result.success &&= r.success
-                                            result.fails = result.fails.concat(r.fails)
-                                            count--
-                                            if (count == 0)
-                                                callback(result)
+                                        @_add_line new_line, (_, r) =>
+                                            if not r.success
+                                                @_get_suggested new_line, id, 'TapeReelQuantityTooLow'
+                                                , (new_line) =>
+                                                    @_add_line new_line, (_, r) ->
+                                                        result.success &&= r.success
+                                                        result.fails = result.fails.concat(r.fails)
+                                                        count--
+                                                        if (count == 0)
+                                                            callback(result)
+                                                , () ->
+                                                    result.success = false
+                                                    result.fails.push(line)
+                                                    count--
+                                                    if (count == 0)
+                                                        callback(result)
+                                            else
+                                                count--
+                                                if (count == 0)
+                                                    callback(result)
                                     , () ->
                                         result.success = false
                                         result.fails.push(line)
@@ -141,6 +155,7 @@ class Digikey extends RetailerInterface
             switch error
                 when 'TapeReelQuantityTooLow'       then choice = doc.getElementById('rb1')
                 when 'NextBreakQuanIsLowerExtPrice' then choice = doc.getElementById('rb2')
+                when 'CutTapeQuantityIsMultipleOfReelQuantity' then choice = doc.getElementById('rb1')
             if choice?
                 label = choice.nextElementSibling
                 if label?
