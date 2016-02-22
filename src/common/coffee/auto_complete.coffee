@@ -38,6 +38,8 @@ _next_query = (line, queries) ->
         sku = line.retailers[key]
         if sku == ''
             retailers.push(key)
+    if query == ''
+        query = line.description
     if line.partNumbers.length < 1
         other_fields.push('partNumbers')
     return {query, other_fields, retailers}
