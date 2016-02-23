@@ -16,7 +16,8 @@
 #
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
-rateLimit = require 'promise-rate-limit'
+
+rateLimit = require './promise-rate-limit'
 
 http = require './http'
 

@@ -88,7 +88,7 @@ _auto_complete = (search_engine, lines, depth) ->
 autoComplete = (lines, callback, deep=false) ->
     lines = JSON.parse(JSON.stringify(lines))
     if deep
-        depth = retailer_list.length + field_list.length
+        depth = 3
     else
         depth = 1
     p = _auto_complete(octopart, lines, depth)

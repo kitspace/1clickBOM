@@ -26,7 +26,6 @@
     "source-map-support": "^0.4.0"
   },
   "dependencies": {
-    "1-click-bom": "^0.4.3",
-    "promise-rate-limit": "0.0.1"
+    "1-click-bom": "^0.4.3"
   }
 }
