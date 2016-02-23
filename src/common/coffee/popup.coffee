@@ -27,7 +27,6 @@ element_TotalPartNumbers = document.querySelector('#total_partNumbers')
 element_TotalLines       = document.querySelector('#total_lines')
 button_Clear             = document.querySelector('button#clear')
 button_LoadFromPage      = document.querySelector('button#load_from_page')
-button_QuickComplete     = document.querySelector('button#quick_complete')
 button_DeepComplete      = document.querySelector('button#deep_complete')
 button_Copy              = document.querySelector('button#copy')
 button_Paste             = document.querySelector('button#paste')
@@ -60,8 +59,6 @@ button_LoadFromPage.addEventListener 'click', () ->
 button_Copy.addEventListener 'click', () ->
     messenger.send('copy')
 
-button_QuickComplete.addEventListener 'click', () ->
-    messenger.send('autoComplete')
 
 button_DeepComplete.addEventListener 'click', () ->
     messenger.send('deepAutoComplete')
@@ -71,7 +68,6 @@ hideOrShow = (bom, onDotTSV) ->
     hasBOM = Boolean(Object.keys(bom.lines).length)
 
     button_Clear.disabled         = not hasBOM
-    button_QuickComplete.disabled = (not hasBOM) or isComplete(bom.lines)
     button_DeepComplete.disabled  = (not hasBOM) or isComplete(bom.lines)
     button_Copy.disabled          = not hasBOM
 
