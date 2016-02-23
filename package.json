@@ -27,6 +27,6 @@
     "source-map-support": "^0.4.0"
   },
   "dependencies": {
-    "1-click-bom": "monostable/nodejs-1-click-BOM"
+    "1-click-bom": "^0.4.1"
   }
 }
