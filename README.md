@@ -51,31 +51,47 @@ Check the [roadmap](#roadmap) for more details on planned features.
 
 In your tab-seperated values (`.tsv`) or spreadsheet you must have a column for
 line-note, one for the quantity and at least one retailer. Column titles are
-interpreted in the following way by 1clickBOM. Capitalisation is ignored.
+interpreted in the following way by 1clickBOM. Capitalisation is ignored, characters within brackets, like`(s)`, denote they are optional.
 
-    reference                : References
-    references               : References
-    line-note                : References
-    line note                : References
-    comment                  : Description
-    comments                 : Description
-    cmnts                    : Description
-    description              : Description
-    descr.                   : Description
-    qty                      : Quantity
-    quantity                 : Quantity
-    part-number              : Part Number
-    partnumber               : Part Number
-    part number              : Part Number
-    m/f part                 : Part Number
-    manuf. part              : Part Number
-    mpn                      : Part Number
-    m/f part number          : Part Number
-    manuf. part number       : Part Number
-    manufacturer part        : Part Number
-    manufacturer part number : Part Number
-    manufacturer             : Manufacturer
-    m/f                      : Manufacturer
+    ref(s)                      : References
+    reference(s)                : References
+    line-note(s)                : References
+    line note(s)                : References
+    comment(s)                  : Description
+    description(s)              : Description
+    cmnt(s)                     : Description
+    descr(s)                    : Description
+    qty(s)                      : Quantity
+    quantity                    : Quantity
+    part-number(s)              : Part Number
+    partnumber(s)               : Part Number
+    part number(s)              : Part Number
+    m(/)f part(s)               : Part Number
+    manuf(.) part(s)            : Part Number
+    mpn(s)                      : Part Number
+    m(/)f part number(s)        : Part Number
+    manuf(.) part number(s)     : Part Number
+    manufacturer part(s)        : Part Number
+    manufacturer part number(s) : Part Number
+    prt(s)                      : Part Number
+    part(s)                     : Part Number
+    farnell                     : Farnell
+    fec                         : Farnell
+    premier                     : Farnell
+    element14                   : Farnell
+    digikey                     : Digikey
+    digi-key                    : Digikey
+    mouser                      : Mouser
+    rs                          : RS
+    rsonline                    : RS
+    rs-online                   : RS
+    rs-delivers                 : RS
+    rsdelivers                  : RS
+    radio spares                : RS
+    radiospares                 : RS
+    rs components               : RS
+    newark                      : Newark
+
 
 If you visit a page that ends in `.tsv` and has data in the right format
 available 1clickBOM will show a blue badge and button with an arrow. Clicking
@@ -116,16 +132,17 @@ If you need any help or think you found a bug please get in touch via
 
 ## Roadmap ##
 
-* 0.6
+* 0.7
+    * Improve user interface
     * Add retailer preference ranking
     * Add function to reduce BOM (and add to cart?) according to retailer preference
 
 * 1.0
-    * Support for direct loading from Google docs pages
-    * Add buttons to pages with BOM data
+    * Kitnic.it site interaction
     * Remove legacy BOM format support
 
 * 2.0
+    * Support for direct loading from Google docs pages
     * BOM details and editing page
     * Display cart summaries
     * Allied, Arrow, AVNet, Conrad and Rapid
@@ -146,8 +163,7 @@ The code is available on [GitHub][7]. To get started you will need:
 
 - Chrome or Chromium
 - Firefox (optionally with [Extension Autoinstaller][16])
-- [Mozilla Add-on SDK][18] (cfx)
-- GNU Make
+- [Ninja Build](https://ninja-build.org/)
 - sed
 - npm
 
@@ -159,12 +175,13 @@ The rest of the dependencies can be retrieved via `npm install`.
 
 - Get dependencies above and make sure executables are on your path
 - `npm install --global` (or `npm install && export PATH=$PATH:$(pwd)/node_modules/.bin`)
-- `make`
+- `./configure.coffee`
+- `ninja`
 
 #### Load
 
 - For Chrome enable developer mode in `chrome://extensions` and load the unpacked extension from `build/chrome`
-- For Firefox run `make run-firefox` (or setup [Autoinstaller][16] and run `make load-firefox`)
+- For Firefox run `./firefox.sh run` (or setup [Autoinstaller][16] and run `./firefox.sh post`)
 
 #### Test
 
@@ -209,5 +226,3 @@ software as a service. See the [LICENSE][6] file for details.
 [20]:https://addons.mozilla.org/en-US/firefox/addon/1clickbom/
 [21]:https://github.com/monostable/1clickBOM/blob/master/examples/bus_pirate.tsv
 [22]:https://github.com/monostable/1clickBOM/blob/feat-auto-complete/readme_images/youtube.png
-
-

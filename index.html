@@ -96,30 +96,45 @@
 <p>Check the <a href="#roadmap">roadmap</a> for more details on planned features.</p>
 <h2 id="usage">Usage</h2>
 <h3 id="adding-items">Adding Items</h3>
-<p>In your tab-seperated values (<code>.tsv</code>) or spreadsheet you must have a column for line-note, one for the quantity and at least one retailer. Column titles are interpreted in the following way by 1clickBOM. Capitalisation is ignored.</p>
-<pre><code>reference                : References
-references               : References
-line-note                : References
-line note                : References
-comment                  : Description
-comments                 : Description
-cmnts                    : Description
-description              : Description
-descr.                   : Description
-qty                      : Quantity
-quantity                 : Quantity
-part-number              : Part Number
-partnumber               : Part Number
-part number              : Part Number
-m/f part                 : Part Number
-manuf. part              : Part Number
-mpn                      : Part Number
-m/f part number          : Part Number
-manuf. part number       : Part Number
-manufacturer part        : Part Number
-manufacturer part number : Part Number
-manufacturer             : Manufacturer
-m/f                      : Manufacturer</code></pre>
+<p>In your tab-seperated values (<code>.tsv</code>) or spreadsheet you must have a column for line-note, one for the quantity and at least one retailer. Column titles are interpreted in the following way by 1clickBOM. Capitalisation is ignored, characters within brackets, like<code>(s)</code>, denote they are optional.</p>
+<pre><code>ref(s)                      : References
+reference(s)                : References
+line-note(s)                : References
+line note(s)                : References
+comment(s)                  : Description
+description(s)              : Description
+cmnt(s)                     : Description
+descr(s)                    : Description
+qty(s)                      : Quantity
+quantity                    : Quantity
+part-number(s)              : Part Number
+partnumber(s)               : Part Number
+part number(s)              : Part Number
+m(/)f part(s)               : Part Number
+manuf(.) part(s)            : Part Number
+mpn(s)                      : Part Number
+m(/)f part number(s)        : Part Number
+manuf(.) part number(s)     : Part Number
+manufacturer part(s)        : Part Number
+manufacturer part number(s) : Part Number
+prt(s)                      : Part Number
+part(s)                     : Part Number
+farnell                     : Farnell
+fec                         : Farnell
+premier                     : Farnell
+element14                   : Farnell
+digikey                     : Digikey
+digi-key                    : Digikey
+mouser                      : Mouser
+rs                          : RS
+rsonline                    : RS
+rs-online                   : RS
+rs-delivers                 : RS
+rsdelivers                  : RS
+radio spares                : RS
+radiospares                 : RS
+rs components               : RS
+newark                      : Newark</code></pre>
 <p>If you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Clicking the blue button will load the data into 1clickBOM. Alternatively you can paste from any spreadsheet (Excel, OpenOffice, LibreOffice, etc.) by selecting the relevant columns copying them and then clicking the paste button on 1clickBOM's popup.</p>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" /><p class="caption">Load from page</p>
@@ -142,19 +157,20 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 </script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript>.</p>
 <h2 id="roadmap">Roadmap</h2>
 <ul>
-<li>0.6
+<li>0.7
 <ul>
+<li>Improve user interface</li>
 <li>Add retailer preference ranking</li>
 <li>Add function to reduce BOM (and add to cart?) according to retailer preference</li>
 </ul></li>
 <li>1.0
 <ul>
-<li>Support for direct loading from Google docs pages</li>
-<li>Add buttons to pages with BOM data</li>
+<li>Kitnic.it site interaction</li>
 <li>Remove legacy BOM format support</li>
 </ul></li>
 <li>2.0
 <ul>
+<li>Support for direct loading from Google docs pages</li>
 <li>BOM details and editing page</li>
 <li>Display cart summaries</li>
 <li>Allied, Arrow, AVNet, Conrad and Rapid</li>
@@ -176,8 +192,7 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 <ul>
 <li>Chrome or Chromium</li>
 <li>Firefox (optionally with <a href="https://palant.de/2012/01/13/extension-auto-installer">Extension Autoinstaller</a>)</li>
-<li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK">Mozilla Add-on SDK</a> (cfx)</li>
-<li>GNU Make</li>
+<li><a href="https://ninja-build.org/">Ninja Build</a></li>
 <li>sed</li>
 <li>npm</li>
 </ul>
@@ -187,12 +202,13 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 <ul>
 <li>Get dependencies above and make sure executables are on your path</li>
 <li><code>npm install --global</code> (or <code>npm install &amp;&amp; export PATH=$PATH:$(pwd)/node_modules/.bin</code>)</li>
-<li><code>make</code></li>
+<li><code>./configure.coffee</code></li>
+<li><code>ninja</code></li>
 </ul>
 <h4 id="load">Load</h4>
 <ul>
 <li>For Chrome enable developer mode in <code>chrome://extensions</code> and load the unpacked extension from <code>build/chrome</code></li>
-<li>For Firefox run <code>make run-firefox</code> (or setup <a href="https://palant.de/2012/01/13/extension-auto-installer">Autoinstaller</a> and run <code>make load-firefox</code>)</li>
+<li>For Firefox run <code>./firefox.sh run</code> (or setup <a href="https://palant.de/2012/01/13/extension-auto-installer">Autoinstaller</a> and run <code>./firefox.sh post</code>)</li>
 </ul>
 <h4 id="test">Test</h4>
 <p>Tests are written in <a href="https://web.archive.org/web/20130128010139/http://api.qunitjs.com/">QUnit 1.11</a> and can only be run in Chrome/Chromium. Open a console on background page and execute <code>Test()</code> or test a specific module, e.g. Farnell, with <code>Test('Farnell')</code></p>
