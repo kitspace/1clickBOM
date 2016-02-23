@@ -132,16 +132,17 @@ If you need any help or think you found a bug please get in touch via
 
 ## Roadmap ##
 
-* 0.6
+* 0.7
+    * Improve user interface
     * Add retailer preference ranking
     * Add function to reduce BOM (and add to cart?) according to retailer preference
 
 * 1.0
-    * Support for direct loading from Google docs pages
-    * Add buttons to pages with BOM data
+    * Kitnic.it site interaction
     * Remove legacy BOM format support
 
 * 2.0
+    * Support for direct loading from Google docs pages
     * BOM details and editing page
     * Display cart summaries
     * Allied, Arrow, AVNet, Conrad and Rapid
