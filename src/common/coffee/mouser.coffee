@@ -96,7 +96,7 @@ class Mouser extends RetailerInterface
             &__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors"
         , {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
-            viewstate = encodeURIComponent(doc.getElementById('__VIEWSTATE').value)
+            viewstate = encodeURIComponent(doc.getElementById('__VIEWSTATE')?.value)
             post "http#{@site}#{@cart}", "__EVENTARGUMENT=&__EVENTTARGET=\
                 &__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=#{viewstate}\
                 &__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket"
@@ -142,7 +142,7 @@ class Mouser extends RetailerInterface
         url = 'http' + @site + @cart
         get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
-            viewstate = encodeURIComponent(doc.getElementById('__VIEWSTATE').value)
+            viewstate = encodeURIComponent(doc.getElementById('__VIEWSTATE')?.value)
             if callback?
                 callback(viewstate)
 
