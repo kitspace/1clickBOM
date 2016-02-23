@@ -23,10 +23,10 @@
     "jpm": "^1.0.4",
     "ninja-build-gen": "^0.2.1",
     "precinct": "^2.5.1",
-    "promise-rate-limit": "0.0.1",
     "source-map-support": "^0.4.0"
   },
   "dependencies": {
-    "1-click-bom": "^0.4.1"
+    "1-click-bom": "^0.4.1",
+    "promise-rate-limit": "0.0.1"
   }
 }
