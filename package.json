@@ -1,5 +1,5 @@
 {
-  "name": "1clickBOM",
+  "name": "1-click-BOM",
   "description": "A browser extension to add electronic components to shopping carts.",
   "scripts": {
     "test": ""
