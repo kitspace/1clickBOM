@@ -33,7 +33,7 @@ exports.background = (messenger) ->
 
     tsvPageNotifier =
         onDotTSV : false
-        re       : new RegExp('\.tsv$','i')
+        re       : new RegExp('((\.tsv$)|(^https?://.*?\.?kitnic.it/boards/))','i')
         lines    : []
         invalid  : []
         _set_not_dotTSV: () ->
@@ -47,9 +47,11 @@ exports.background = (messenger) ->
                 if tab?
                     tab_url = tab.url.split('?')[0]
                     if tab_url.match(@re)
-                        if /^http.?:\/\/github.com\//.test(tab.url)
+                        if /^https?:\/\/.*?\.?kitnic.it\/boards\//.test(tab.url)
+                            url = tab_url + '/1-click-BOM.tsv'
+                        else if /^https?:\/\/github.com\//.test(tab.url)
                             url = tab_url.replace(/blob/,'raw')
-                        else if /^http.?:\/\/bitbucket.org\//.test(tab.url)
+                        else if /^https?:\/\/bitbucket.org\//.test(tab.url)
                             url = tab_url.split('?')[0].replace(/src/,'raw')
                         else
                             url = tab_url
