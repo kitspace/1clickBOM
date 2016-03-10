@@ -50,7 +50,7 @@ out = csv.writer(f, lineterminator='\n', delimiter='\t', quotechar='\"', quoting
 out.writerow(['References', 'Qty', 'Description'])
 
 # Get all of the components in groups of matching parts + values
-# (see ky_generic_netlist_reader.py)
+# (see kicad_netlist_reader.py)
 grouped = net.groupComponents()
 
 
