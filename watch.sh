@@ -13,17 +13,18 @@ esac
 
 
 build() {
-    ninja && echo '* build succeeded *';
+    echo "ninja $1";
+    ninja $1 && echo '* build succeeded *';
 }
 
-./configure.coffee && build;
+./configure.coffee && build $1;
 
 if [ "$OS" == 'LINUX' ]; then
     while inotifywait --exclude '\..*sw.' -r -q -e modify src/; do
-      build;
+      build $1;
     done
 elif [ "$OS" == 'OSX' ]; then
     while fswatch --one-event src/; do
-      build;
+      build $1;
     done
 fi
