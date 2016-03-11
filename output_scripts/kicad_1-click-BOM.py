@@ -45,14 +45,13 @@ except IOError:
     f = sys.stdout
 
 # Create a new csv writer object to use as the output formatter
-out = csv.writer(f, lineterminator='\n', delimiter='\t', quotechar='\"', quoting=csv.QUOTE_ALL)
+out = csv.writer(f, lineterminator='\n', delimiter='\t', quotechar='\"', quoting=csv.QUOTE_MINIMAL)
 
 out.writerow(['References', 'Qty', 'Description'])
 
 # Get all of the components in groups of matching parts + values
 # (see kicad_netlist_reader.py)
 grouped = net.groupComponents()
-
 
 # Output all of the component information
 for group in grouped:
@@ -69,6 +68,10 @@ for group in grouped:
         description += " " + c.getValue()
     if c.getDescription() != "":
         description += " " + c.getDescription()
+    if c.getFootprint() != "":
+        description += " " + c.getFootprint().split(':')[-1]
+
+    description = description.replace('_', ' ').replace(':', ' ')
 
     # Fill in the component groups common data
     out.writerow([refs, len(group), description])
