@@ -133,19 +133,36 @@ If you need any help or think you found a bug please get in touch via
 ## Roadmap ##
 
 * 0.7
+    * Kitnic.it site interaction
+    * Set a timeout on all requests
+
+* 1.0
+    * Remove legacy BOM format support
+
+* 1.1
+    * Make requests cancelable
     * Improve user interface
+
+* 1.2
     * Add retailer preference ranking
     * Add function to reduce BOM (and add to cart?) according to retailer preference
 
-* 1.0
-    * Kitnic.it site interaction
-    * Remove legacy BOM format support
+* 1.3
+    * Additional retailer support
+        * AVNet
+        * Adafruit
+        * Allied
+        * Arrow
+        * Conrad
+        * CPC
+        * Rapid
+        * Seeed
+        * Sparkfun
 
 * 2.0
     * Support for direct loading from Google docs pages
     * BOM details and editing page
     * Display cart summaries
-    * Allied, Arrow, AVNet, Conrad and Rapid
     * Function to minimize order cost + shipping
     * Allow adding components to BOM from the component page
 
