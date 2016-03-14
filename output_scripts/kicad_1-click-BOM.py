@@ -10,6 +10,7 @@
 import kicad_netlist_reader
 import csv
 import sys
+import os
 
 retailers = ["Digikey", "Mouser", "RS", "Newark", "Farnell"]
 
@@ -36,7 +37,7 @@ net = kicad_netlist_reader.netlist(sys.argv[1])
 # Open a file to write to, if the file cannot be opened output to stdout
 # instead
 
-path = sys.argv[2] + "-1-click-BOM.tsv"
+path = os.path.dirname(sys.argv[2]) + os.sep + "1-click-BOM.tsv"
 try:
     f = open(path, "w")
 except IOError:
@@ -80,9 +81,13 @@ for group in grouped:
     for word in words:
         while words.count(word) > 1:
             words.remove(word)
+        if word == "":
+            words.remove(word)
     words.reverse()
 
     description = " ".join(words)
 
     # Fill in the component groups common data
     out.writerow([refs, len(group), description])
+
+print("generated %s" % path)
