@@ -11,43 +11,43 @@ import kicad_netlist_reader
 import csv
 import sys
 
-retailers = ['Digikey', 'Mouser', 'RS', 'Newark', 'Farnell']
+retailers = ["Digikey", "Mouser", "RS", "Newark", "Farnell"]
 
 retailer_aliases = {
-    'Farnell'            : 'Farnell',
-    'FEC'                : 'Farnell',
-    'Premier'            : 'Farnell',
-    'element14'          : 'Farnell',
-    'Digi(-| )?key'      : 'Digikey',
-    'Mouser'             : 'Mouser' ,
-    'RS'                 : 'RS'     ,
-    'RS(-| )?Online'     : 'RS'     ,
-    'RS(-| )?Delivers'   : 'RS'     ,
-    'Radio(-| )?Spares'  : 'RS'     ,
-    'RS(-| )?Components' : 'RS'     ,
-    'Newark'             : 'Newark'
+    "Farnell"            : "Farnell",
+    "FEC"                : "Farnell",
+    "Premier"            : "Farnell",
+    "element14"          : "Farnell",
+    "Digi(-| )?key"      : "Digikey",
+    "Mouser"             : "Mouser" ,
+    "RS"                 : "RS"     ,
+    "RS(-| )?Online"     : "RS"     ,
+    "RS(-| )?Delivers"   : "RS"     ,
+    "Radio(-| )?Spares"  : "RS"     ,
+    "RS(-| )?Components" : "RS"     ,
+    "Newark"             : "Newark"
 }
 
 
 # Generate an instance of a generic netlist, and load the netlist tree from
-# the command line option. If the file doesn't exist, execution will stop
+# the command line option. If the file doesn"t exist, execution will stop
 net = kicad_netlist_reader.netlist(sys.argv[1])
 
 # Open a file to write to, if the file cannot be opened output to stdout
 # instead
 
-path = sys.argv[2] + '-1-click-BOM.tsv'
+path = sys.argv[2] + "-1-click-BOM.tsv"
 try:
-    f = open(path, 'w')
+    f = open(path, "w")
 except IOError:
     e = "Can't open output file for writing: " + path
     print(__file__, ":", e, sys.stderr)
     f = sys.stdout
 
 # Create a new csv writer object to use as the output formatter
-out = csv.writer(f, lineterminator='\n', delimiter='\t', quotechar='\"', quoting=csv.QUOTE_MINIMAL)
+out = csv.writer(f, lineterminator="\n", delimiter="\t", quotechar="\"", quoting=csv.QUOTE_MINIMAL)
 
-out.writerow(['References', 'Qty', 'Description'])
+out.writerow(["References", "Qty", "Description"])
 
 # Get all of the components in groups of matching parts + values
 # (see kicad_netlist_reader.py)
@@ -69,11 +69,11 @@ for group in grouped:
     if c.getDescription() != "":
         description += " " + c.getDescription()
     if c.getFootprint() != "":
-        description += " " + c.getFootprint().split(':')[-1]
+        description += " " + c.getFootprint().split(":")[-1]
 
-    description = description.replace('_', ' ').replace(':', ' ')
+    description = description.replace("_", " ").replace(":", " ")
 
-    words = description.split(' ')
+    words = description.split(" ")
 
     #we reverse to remove the duplicates starting from the end
     words.reverse()
