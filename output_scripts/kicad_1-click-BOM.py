@@ -14,18 +14,18 @@ import sys
 retailers = ['Digikey', 'Mouser', 'RS', 'Newark', 'Farnell']
 
 retailer_aliases = {
-    'Farnell'            : 'Farnell'
-    , 'FEC'                : 'Farnell'
-    , 'Premier'            : 'Farnell'
-    , 'element14'          : 'Farnell'
-    , 'Digi(-| )?key'      : 'Digikey'
-    , 'Mouser'             : 'Mouser'
-    , 'RS'                 : 'RS'
-    , 'RS(-| )?Online'     : 'RS'
-    , 'RS(-| )?Delivers'   : 'RS'
-    , 'Radio(-| )?Spares'  : 'RS'
-    , 'RS(-| )?Components' : 'RS'
-    , 'Newark'             : 'Newark'
+    'Farnell'            : 'Farnell',
+    'FEC'                : 'Farnell',
+    'Premier'            : 'Farnell',
+    'element14'          : 'Farnell',
+    'Digi(-| )?key'      : 'Digikey',
+    'Mouser'             : 'Mouser' ,
+    'RS'                 : 'RS'     ,
+    'RS(-| )?Online'     : 'RS'     ,
+    'RS(-| )?Delivers'   : 'RS'     ,
+    'Radio(-| )?Spares'  : 'RS'     ,
+    'RS(-| )?Components' : 'RS'     ,
+    'Newark'             : 'Newark'
 }
 
 
@@ -72,6 +72,17 @@ for group in grouped:
         description += " " + c.getFootprint().split(':')[-1]
 
     description = description.replace('_', ' ').replace(':', ' ')
+
+    words = description.split(' ')
+
+    #we reverse to remove the duplicates starting from the end
+    words.reverse()
+    for word in words:
+        while words.count(word) > 1:
+            words.remove(word)
+    words.reverse()
+
+    description = " ".join(words)
 
     # Fill in the component groups common data
     out.writerow([refs, len(group), description])
