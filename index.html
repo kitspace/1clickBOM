@@ -32,13 +32,15 @@
 <h1 id="section-1"></h1>
 <link href="favicon.png" rel="shortcut icon" type="image/png"></link>
 <center>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/611TW315pZM" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/611TW315pZM" frameborder="0" allowfullscreen>
+</iframe>
 </center>
 <h1 id="section-2"></h1>
-<center><p>
+<center>
+<p>
 <a id="chromelink" href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi"><img id="chromeimage" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" alt="Available on Chrome" /></a><a href=https://addons.mozilla.org/firefox/downloads/latest/634060/addon-634060-latest.xpi><img alt="Add to Firefox" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png"></a>
-</p></center>
-
+</p>
+</center>
 <script type="text/javascript">
 
     //fix favicon on firefox (due to github.io hosting)
@@ -60,9 +62,6 @@
     }
 
 </script>
-
-
-
 <h2 id="section"></h2>
 <h2 id="section-1"></h2>
 <h2 id="summary">Summary</h2>
@@ -161,163 +160,151 @@
 </tbody>
 </table>
 <p>You can find this and other examples in TSV format in the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/">examples directory</a>.</p>
-<p>The examples are mostly in the format that 1-click BOM will output but it is less strict about reading. When you paste/load into the extension column titles are interpreted in the following way. (Capitalisation is ignored, characters within brackets, like<code>(s)</code>, denote they are optional.)</p>
+<p>The examples are mostly in the format that 1-click BOM will output but it is less strict about reading. Below are tables of title aliases 1-click-BOM recognizes. If you have any more suggestions please <a href="#issues">get in touch</a>. (Capitalisation is ignored, characters within brackets, like<code>(s)</code>, denote they are optional.)</p>
 <table>
+<thead>
+<tr class="header">
+<th align="left">References</th>
+<th align="left">Description</th>
+<th align="left">Quantity</th>
+<th align="left">Part Number</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
 <td align="left">ref(s)</td>
-<td align="left">References</td>
+<td align="left">comment(s)</td>
+<td align="left">qty(s)</td>
+<td align="left">part-number(s)</td>
 </tr>
 <tr class="even">
 <td align="left">reference(s)</td>
-<td align="left">References</td>
+<td align="left">description(s)</td>
+<td align="left">quantity</td>
+<td align="left">partnumber(s)</td>
 </tr>
 <tr class="odd">
 <td align="left">line-note(s)</td>
-<td align="left">References</td>
+<td align="left">cmnt(s)</td>
+<td align="left"></td>
+<td align="left">part number(s)</td>
 </tr>
 <tr class="even">
 <td align="left">line note(s)</td>
-<td align="left">References</td>
-</tr>
-<tr class="odd">
-<td align="left">comment(s)</td>
-<td align="left">Description</td>
-</tr>
-<tr class="even">
-<td align="left">description(s)</td>
-<td align="left">Description</td>
-</tr>
-<tr class="odd">
-<td align="left">cmnt(s)</td>
-<td align="left">Description</td>
-</tr>
-<tr class="even">
 <td align="left">descr(s)</td>
-<td align="left">Description</td>
-</tr>
-<tr class="odd">
-<td align="left">qty(s)</td>
-<td align="left">Quantity</td>
-</tr>
-<tr class="even">
-<td align="left">quantity</td>
-<td align="left">Quantity</td>
-</tr>
-<tr class="odd">
-<td align="left">part-number(s)</td>
-<td align="left">Part Number</td>
-</tr>
-<tr class="even">
-<td align="left">partnumber(s)</td>
-<td align="left">Part Number</td>
-</tr>
-<tr class="odd">
-<td align="left">part number(s)</td>
-<td align="left">Part Number</td>
-</tr>
-<tr class="even">
+<td align="left"></td>
 <td align="left">m(/)f part(s)</td>
-<td align="left">Part Number</td>
 </tr>
 <tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">manuf(.) part(s)</td>
-<td align="left">Part Number</td>
 </tr>
 <tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">mpn(s)</td>
-<td align="left">Part Number</td>
 </tr>
 <tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">m(/)f part number(s)</td>
-<td align="left">Part Number</td>
 </tr>
 <tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">manuf(.) part number(s)</td>
-<td align="left">Part Number</td>
 </tr>
 <tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">manufacturer part(s)</td>
-<td align="left">Part Number</td>
 </tr>
 <tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">manufacturer part number(s)</td>
-<td align="left">Part Number</td>
 </tr>
 <tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">prt(s)</td>
-<td align="left">Part Number</td>
 </tr>
 <tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">part(s)</td>
-<td align="left">Part Number</td>
 </tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Farnell</th>
+<th align="left">Digikey</th>
+<th align="left">Mouser</th>
+<th align="left">RS</th>
+<th align="left">Newark</th>
+</tr>
+</thead>
+<tbody>
 <tr class="odd">
 <td align="left">farnell</td>
-<td align="left">Farnell</td>
+<td align="left">digi(-)key</td>
+<td align="left">mouser</td>
+<td align="left">rs</td>
+<td align="left">newark</td>
 </tr>
 <tr class="even">
 <td align="left">fec</td>
-<td align="left">Farnell</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">rsonline</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="left">premier</td>
-<td align="left">Farnell</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">rs-online</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
 <td align="left">element14</td>
-<td align="left">Farnell</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">rs(-)delivers</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td align="left">digi(-)key</td>
-<td align="left">Digikey</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">radio( )spares</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td align="left">mouser</td>
-<td align="left">Mouser</td>
-</tr>
-<tr class="odd">
-<td align="left">rs</td>
-<td align="left">RS</td>
-</tr>
-<tr class="even">
-<td align="left">rsonline</td>
-<td align="left">RS</td>
-</tr>
-<tr class="odd">
-<td align="left">rs-online</td>
-<td align="left">RS</td>
-</tr>
-<tr class="even">
-<td align="left">rs-delivers</td>
-<td align="left">RS</td>
-</tr>
-<tr class="odd">
-<td align="left">rsdelivers</td>
-<td align="left">RS</td>
-</tr>
-<tr class="even">
-<td align="left">radio spares</td>
-<td align="left">RS</td>
-</tr>
-<tr class="odd">
-<td align="left">radiospares</td>
-<td align="left">RS</td>
-</tr>
-<tr class="even">
-<td align="left">rs components</td>
-<td align="left">RS</td>
-</tr>
-<tr class="odd">
-<td align="left">newark</td>
-<td align="left">Newark</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">rs( )components</td>
+<td align="left"></td>
 </tr>
 </tbody>
 </table>
 <h3 id="loading-an-online-bom">Loading an online BOM</h3>
 <p>If you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Clicking the blue button will load the data into 1clickBOM.</p>
 <div class="figure">
-<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" /><p class="caption">Load from page</p>
+<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" />
+<p class="caption">Load from page</p>
 </div>
 <h3 id="lets-go-shopping">Let's go shopping!</h3>
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
@@ -331,7 +318,7 @@
 <p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">GitHub</a> or <script type="text/javascript">
 <!--
 h='&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#x69;&#110;&#102;&#x6f;';e=n+a+h;
-document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
+document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+'email'+'<\/'+'a'+'>');
 // -->
 </script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript>.</p>
 <h2 id="roadmap">Roadmap</h2>
@@ -418,7 +405,7 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 <p>1clickBOM is free and open source software. It is licensed under a CPAL license which means you are free to use the code in your own applications (even proprietary ones) as long as you display appropriate attribution and share your code-improvements to 1clickBOM itself under the CPAL as well. This also applies to software you are solely making available to users over a network i.e. software as a service. See the <a href="https://github.com/monostable/1clickBOM/blob/master/LICENSE">LICENSE</a> file for details.</p>
 <h1 id="section-2"></h1>
 <h1 id="section-3"></h1>
-<center> 
+<center>
 <a href="http://monostable.co.uk"><img src="monostable.png" alt="logo" /></a>
 </center>
 </body>

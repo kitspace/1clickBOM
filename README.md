@@ -101,10 +101,6 @@ are optional.)
 | element14 |            |        | rs(-)delivers |        | 
 |           |            |        | radio( )spares|        | 
 |           |            |        | rs( )components |        | 
-|           |            |        |               |        | 
-|           |            |        |               |        | 
-|           |            |        |               |        | 
-|           |            |        |               |        | 
 
 ### Loading an online BOM ###
 
