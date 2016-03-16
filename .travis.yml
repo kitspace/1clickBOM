@@ -1,9 +1,10 @@
 language: node_js
 node_js:
   - "5"
+sudo: required
 script:
   - ./configure.coffee
   - wget https://github.com/ninja-build/ninja/releases/download/v1.6.0/ninja-linux.zip
   - unzip ninja-linux.zip
   - ./ninja
-  - git checkout gh-pages
+  - ./deploy.sh
