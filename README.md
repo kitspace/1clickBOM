@@ -72,50 +72,35 @@ Here is a small example which is well suited for [auto-completing](#completion):
 
 You can find this and other examples in TSV format in the [examples directory][2].
 
-The examples are mostly in the format that 1-click BOM will output but it is less
-strict about reading.  When you paste/load into the extension column titles are
-interpreted in the following way. (Capitalisation is ignored, characters within
-brackets, like`(s)`, denote they are optional.)
+The examples are mostly in the format that 1-click BOM will output but it is
+less strict about reading. Below are tables of title aliases 1-click-BOM
+recognizes. If you have any more suggestions please [get in touch](#issues).
+(Capitalisation is ignored, characters within brackets, like`(s)`, denote they
+are optional.)
 
-|                             |             |
-|-----------------------------|-------------|
-| ref(s)                      | References  |
-| reference(s)                | References  |
-| line-note(s)                | References  |
-| line note(s)                | References  |
-| comment(s)                  | Description |
-| description(s)              | Description |
-| cmnt(s)                     | Description |
-| descr(s)                    | Description |
-| qty(s)                      | Quantity    |
-| quantity                    | Quantity    |
-| part-number(s)              | Part Number |
-| partnumber(s)               | Part Number |
-| part number(s)              | Part Number |
-| m(/)f part(s)               | Part Number |
-| manuf(.) part(s)            | Part Number |
-| mpn(s)                      | Part Number |
-| m(/)f part number(s)        | Part Number |
-| manuf(.) part number(s)     | Part Number |
-| manufacturer part(s)        | Part Number |
-| manufacturer part number(s) | Part Number |
-| prt(s)                      | Part Number |
-| part(s)                     | Part Number |
-| farnell                     | Farnell     |
-| fec                         | Farnell     |
-| premier                     | Farnell     |
-| element14                   | Farnell     |
-| digi(-)key                  | Digikey     |
-| mouser                      | Mouser      |
-| rs                          | RS          |
-| rsonline                    | RS          |
-| rs-online                   | RS          |
-| rs-delivers                 | RS          |
-| rsdelivers                  | RS          |
-| radio spares                | RS          |
-| radiospares                 | RS          |
-| rs components               | RS          |
-| newark                      | Newark      |
+| References   | Description    | Quantity | Part Number                 |
+|--------------|----------------|----------|-----------------------------|
+| ref(s)       | comment(s)     | qty(s)   | part-number(s)              |
+| reference(s) | description(s) | quantity | partnumber(s)               |
+| line-note(s) | cmnt(s)        |          | part number(s)              |
+| line note(s) | descr(s)       |          | m(/)f part(s)               |
+|              |                |          | manuf(.) part(s)            |
+|              |                |          | mpn(s)                      |
+|              |                |          | m(/)f part number(s)        |
+|              |                |          | manuf(.) part number(s)     |
+|              |                |          | manufacturer part(s)        |
+|              |                |          | manufacturer part number(s) |
+|              |                |          | prt(s)                      |
+|              |                |          | part(s)                     |
+
+| Farnell   | Digikey    | Mouser | RS            | Newark | 
+|-----------|------------|--------|---------------|--------| 
+| farnell   | digi(-)key | mouser | rs            | newark | 
+| fec       |            |        | rsonline      |        | 
+| premier   |            |        | rs-online     |        | 
+| element14 |            |        | rs(-)delivers |        | 
+|           |            |        | radio( )spares|        | 
+|           |            |        | rs( )components |        | 
 
 ### Loading an online BOM ###
 
