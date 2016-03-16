@@ -17,5 +17,5 @@ else
     git checkout gh-pages
     make || exit 1
     make commit || exit 0 # allowed to fail if nothing to commit
-    git push origin gh-pages
+    git push origin gh-pages --quiet > /dev/null 2>&1
 fi
