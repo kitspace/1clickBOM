@@ -57,7 +57,7 @@ multiple possible manufacturer part numbers per schematic reference.
 When saving files from your external editor/spreadsheet save them as
 tab-seperated values with a `.tsv` extension.
 
-Here is a minimal example:
+Here is a small example which is well suited for [auto-completing](#Completion):
 
 | References | Qty | Description   | Part Number                        |
 |------------|-----|---------------|------------------------------------|
@@ -70,61 +70,58 @@ Here is a minimal example:
 | R3         | 1   | 300k  0603    |                                    |
 | SW1        | 1   |               | TE Connectivity 4-1437565-1        |
 
-For more see this [example tsv][2] and the [Bus Pirate tsv][21].
+You can find this and other examples in TSV format in the [examples directory][2].
 
-The examples are in the format that 1-click BOM will output but it is less
+The examples are mostly in the format that 1-click BOM will output but it is less
 strict about reading.  When you paste/load into the extension column titles are
 interpreted in the following way. (Capitalisation is ignored, characters within
 brackets, like`(s)`, denote they are optional.)
 
-|                             |             | 
-|-----------------------------|-------------| 
-| ref(s)                      | References  | 
-| reference(s)                | References  | 
-| line-note(s)                | References  | 
-| line note(s)                | References  | 
-| comment(s)                  | Description | 
-| description(s)              | Description | 
-| cmnt(s)                     | Description | 
-| descr(s)                    | Description | 
-| qty(s)                      | Quantity    | 
-| quantity                    | Quantity    | 
-| part-number(s)              | Part Number | 
-| partnumber(s)               | Part Number | 
-| part number(s)              | Part Number | 
-| m(/)f part(s)               | Part Number | 
-| manuf(.) part(s)            | Part Number | 
-| mpn(s)                      | Part Number | 
-| m(/)f part number(s)        | Part Number | 
-| manuf(.) part number(s)     | Part Number | 
-| manufacturer part(s)        | Part Number | 
-| manufacturer part number(s) | Part Number | 
-| prt(s)                      | Part Number | 
-| part(s)                     | Part Number | 
-| farnell                     | Farnell     | 
-| fec                         | Farnell     | 
-| premier                     | Farnell     | 
-| element14                   | Farnell     | 
-| digi(-)key                  | Digikey     | 
-| mouser                      | Mouser      | 
-| rs                          | RS          | 
-| rsonline                    | RS          | 
-| rs-online                   | RS          | 
-| rs-delivers                 | RS          | 
-| rsdelivers                  | RS          | 
-| radio spares                | RS          | 
-| radiospares                 | RS          | 
-| rs components               | RS          | 
-| newark                      | Newark      | 
+|                             |             |
+|-----------------------------|-------------|
+| ref(s)                      | References  |
+| reference(s)                | References  |
+| line-note(s)                | References  |
+| line note(s)                | References  |
+| comment(s)                  | Description |
+| description(s)              | Description |
+| cmnt(s)                     | Description |
+| descr(s)                    | Description |
+| qty(s)                      | Quantity    |
+| quantity                    | Quantity    |
+| part-number(s)              | Part Number |
+| partnumber(s)               | Part Number |
+| part number(s)              | Part Number |
+| m(/)f part(s)               | Part Number |
+| manuf(.) part(s)            | Part Number |
+| mpn(s)                      | Part Number |
+| m(/)f part number(s)        | Part Number |
+| manuf(.) part number(s)     | Part Number |
+| manufacturer part(s)        | Part Number |
+| manufacturer part number(s) | Part Number |
+| prt(s)                      | Part Number |
+| part(s)                     | Part Number |
+| farnell                     | Farnell     |
+| fec                         | Farnell     |
+| premier                     | Farnell     |
+| element14                   | Farnell     |
+| digi(-)key                  | Digikey     |
+| mouser                      | Mouser      |
+| rs                          | RS          |
+| rsonline                    | RS          |
+| rs-online                   | RS          |
+| rs-delivers                 | RS          |
+| rsdelivers                  | RS          |
+| radio spares                | RS          |
+| radiospares                 | RS          |
+| rs components               | RS          |
+| newark                      | Newark      |
 
 ### Loading an online BOM ###
 
 If you visit a page that ends in `.tsv` and has data in the right format
 available 1clickBOM will show a blue badge and button with an arrow. Clicking
-the blue button will load the data into 1clickBOM.  Alternatively you can paste
-from any spreadsheet (Excel, OpenOffice, LibreOffice, etc.) by selecting the
-relevant columns copying them and then clicking the paste button on 1clickBOM's
-popup.
+the blue button will load the data into 1clickBOM.
 
 ![Load from page][3]
 
@@ -159,7 +156,7 @@ If you need any help or think you found a bug please get in touch via
 
 * 0.7
     * Kitnic.it site interaction
-    * Set a timeout on all requests
+    * Set a timeout on all UI requests so that extension cannot get stuck
 
 * 1.0
     * Remove legacy BOM format support
@@ -247,7 +244,7 @@ code-improvements to 1clickBOM itself under the CPAL as well. This also applies
 to software you are solely making available to users over a network i.e.
 software as a service. See the [LICENSE][6] file for details.
 
-[2]:https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv
+[2]:https://github.com/monostable/1clickBOM/blob/master/examples/
 [3]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png
 [4]:http://coffeescript.org
 [5]:https://qunitjs.com/
@@ -266,5 +263,4 @@ software as a service. See the [LICENSE][6] file for details.
 [18]:https://developer.mozilla.org/en-US/Add-ons/SDK
 [19]:http://1clickBOM.com
 [20]:https://addons.mozilla.org/en-US/firefox/addon/1clickbom/
-[21]:https://github.com/monostable/1clickBOM/blob/master/examples/bus_pirate.tsv
 [22]:https://github.com/monostable/1clickBOM/blob/feat-auto-complete/readme_images/youtube.png
