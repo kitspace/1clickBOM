@@ -3,7 +3,6 @@
 
 [![Available on Chrome][8]][14] [![Add to Firefox][9]][13]
 
-
 ## Summary ##
 
 1-click BOM is a browser extension that fills your shopping carts for you on
@@ -47,69 +46,78 @@ Check the [roadmap](#roadmap) for more details on planned features.
 
 ## Usage ##
 
-### Adding Items ###
+### Making a 1-click-BOM ###
 
-In your tab-seperated values (`.tsv`) or spreadsheet you must have a column for
-line-note, one for the quantity and at least one retailer.
+You can copy and paste into the extension from a text editor or spread sheet
+program (LibreOffice, Excel). You must have a column for line-note, one for the
+quantity and at least one retailer. Optional columns are 'Description' and
+'Part Number'. You can have multiple 'Part Number' columns for specifying
+multiple possible manufacturer part numbers per schematic reference.
 
-Here is an example:
+When saving files from your external editor/spreadsheet save them as
+tab-seperated values with a `.tsv` extension.
 
-| References | Qty | Description   | Part Number                        | Digikey           | Mouser             | RS      | Newark  | Farnell | 
-|------------|-----|---------------|------------------------------------|-------------------|--------------------|---------|---------|---------| 
-| C1         | 1   | 1uF 0603 X5R  | TDK C0603X5R0J104K030BC            | 445-1796-1-ND     | CC0603KRX5R7BB105  | 7882818 | 04X3188 | 2354048 | 
-| C2         | 1   | 10uF 0603 X5R | TDK C1608X5R1A106M080AC            | 445-6853-1-ND     | 06036D106MAT2A     | 7882893 | 04X3239 | 2211164 | 
-| D1         | 1   |               | Multicomp 1N4148WS                 | 1N4148WS-FDICT-ND | 1N4148WSE318       | 7613476 | 74M5710 | 1466524 | 
-| Q1         | 1   |               | International Rectifier IRF7309PBF | IRF7309PBFCT-ND   | IRF7309PBF         | 5429377 | 19K8239 | 2468006 | 
-| R1         | 1   | 10k 0603      | Vishay CRCW060310K0JNEA            | 541-10KGCT-ND     | CRCW060310K0JNEAHP | 8206928 | 52K8066 | 1469749 | 
-| R2, R4     | 2   | 100k  0603    | Vishay CRCW0603100KJNEA            | 541-100KGCT-ND    | CRCW0603100KJNEAHP | 8206916 | 59M6763 | 1692517 | 
-| R3         | 1   | 300k  0603    | Vishay CRCW0603300KFKEA            | 311-300KGRCT-ND   | RC0603JR07300KL    | 8280617 | 52K8409 | 1652871 | 
-| SW1        | 1   |               | TE Connectivity 4-1437565-1        | 450-1129-ND       | 414375651          | 4791508 | 93K3887 | 3801305 | 
+Here is a minimal example:
 
+| References | Qty | Description   | Part Number                        |
+|------------|-----|---------------|------------------------------------|
+| C1         | 1   | 1uF 0603 X5R  |                                    |
+| C2         | 1   | 10uF 0603 X5R |                                    |
+| D1         | 1   |               | Multicomp 1N4148WS                 |
+| Q1         | 1   |               | International Rectifier IRF7309PBF |
+| R1         | 1   | 10k 0603      |                                    |
+| R2, R4     | 2   | 100k  0603    |                                    |
+| R3         | 1   | 300k  0603    |                                    |
+| SW1        | 1   |               | TE Connectivity 4-1437565-1        |
 
-The above is what 1clickBOM will output but the parsing is less strict. Column
-titles are interpreted in the following way. Capitalisation is ignored,
-characters within brackets, like`(s)`, denote they are optional.
+For more see this [example tsv][2] and the [Bus Pirate tsv][21].
 
+The examples are in the format that 1-click BOM will output but it is less
+strict about reading.  When you paste/load into the extension column titles are
+interpreted in the following way. (Capitalisation is ignored, characters within
+brackets, like`(s)`, denote they are optional.)
 
-    ref(s)                      : References
-    reference(s)                : References
-    line-note(s)                : References
-    line note(s)                : References
-    comment(s)                  : Description
-    description(s)              : Description
-    cmnt(s)                     : Description
-    descr(s)                    : Description
-    qty(s)                      : Quantity
-    quantity                    : Quantity
-    part-number(s)              : Part Number
-    partnumber(s)               : Part Number
-    part number(s)              : Part Number
-    m(/)f part(s)               : Part Number
-    manuf(.) part(s)            : Part Number
-    mpn(s)                      : Part Number
-    m(/)f part number(s)        : Part Number
-    manuf(.) part number(s)     : Part Number
-    manufacturer part(s)        : Part Number
-    manufacturer part number(s) : Part Number
-    prt(s)                      : Part Number
-    part(s)                     : Part Number
-    farnell                     : Farnell
-    fec                         : Farnell
-    premier                     : Farnell
-    element14                   : Farnell
-    digikey                     : Digikey
-    digi-key                    : Digikey
-    mouser                      : Mouser
-    rs                          : RS
-    rsonline                    : RS
-    rs-online                   : RS
-    rs-delivers                 : RS
-    rsdelivers                  : RS
-    radio spares                : RS
-    radiospares                 : RS
-    rs components               : RS
-    newark                      : Newark
+|                             |             | 
+|-----------------------------|-------------| 
+| ref(s)                      | References  | 
+| reference(s)                | References  | 
+| line-note(s)                | References  | 
+| line note(s)                | References  | 
+| comment(s)                  | Description | 
+| description(s)              | Description | 
+| cmnt(s)                     | Description | 
+| descr(s)                    | Description | 
+| qty(s)                      | Quantity    | 
+| quantity                    | Quantity    | 
+| part-number(s)              | Part Number | 
+| partnumber(s)               | Part Number | 
+| part number(s)              | Part Number | 
+| m(/)f part(s)               | Part Number | 
+| manuf(.) part(s)            | Part Number | 
+| mpn(s)                      | Part Number | 
+| m(/)f part number(s)        | Part Number | 
+| manuf(.) part number(s)     | Part Number | 
+| manufacturer part(s)        | Part Number | 
+| manufacturer part number(s) | Part Number | 
+| prt(s)                      | Part Number | 
+| part(s)                     | Part Number | 
+| farnell                     | Farnell     | 
+| fec                         | Farnell     | 
+| premier                     | Farnell     | 
+| element14                   | Farnell     | 
+| digi(-)key                  | Digikey     | 
+| mouser                      | Mouser      | 
+| rs                          | RS          | 
+| rsonline                    | RS          | 
+| rs-online                   | RS          | 
+| rs-delivers                 | RS          | 
+| rsdelivers                  | RS          | 
+| radio spares                | RS          | 
+| radiospares                 | RS          | 
+| rs components               | RS          | 
+| newark                      | Newark      | 
 
+### Loading an online BOM ###
 
 If you visit a page that ends in `.tsv` and has data in the right format
 available 1clickBOM will show a blue badge and button with an arrow. Clicking
@@ -120,7 +128,6 @@ popup.
 
 ![Load from page][3]
 
-See the [example tsv][2] and the [Bus Pirate tsv][21].
 
 ### Let's go shopping! ###
 
