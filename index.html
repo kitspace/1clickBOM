@@ -96,7 +96,7 @@ if (/Chrome/.test(navigator.userAgent)) {
 <h3 id="making-a-1-click-bom">Making a 1-click-BOM</h3>
 <p>You can copy and paste into the extension from a text editor or spread sheet program (LibreOffice, Excel). You must have a column for line-note, one for the quantity and at least one retailer. Optional columns are 'Description' and 'Part Number'. You can have multiple 'Part Number' columns for specifying multiple possible manufacturer part numbers per schematic reference.</p>
 <p>When saving files from your external editor/spreadsheet save them as tab-seperated values with a <code>.tsv</code> extension.</p>
-<p>Here is a minimal example:</p>
+<p>Here is a small example which is well suited for <a href="#Completion">auto-completing</a>:</p>
 <table>
 <thead>
 <tr class="header">
@@ -157,8 +157,8 @@ if (/Chrome/.test(navigator.userAgent)) {
 </tr>
 </tbody>
 </table>
-<p>For more see this <a href="https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv">example tsv</a> and the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/bus_pirate.tsv">Bus Pirate tsv</a>.</p>
-<p>The examples are in the format that 1-click BOM will output but it is less strict about reading. When you paste/load into the extension column titles are interpreted in the following way. (Capitalisation is ignored, characters within brackets, like<code>(s)</code>, denote they are optional.)</p>
+<p>You can find this and other examples in TSV format in the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/">examples directory</a>.</p>
+<p>The examples are mostly in the format that 1-click BOM will output but it is less strict about reading. When you paste/load into the extension column titles are interpreted in the following way. (Capitalisation is ignored, characters within brackets, like<code>(s)</code>, denote they are optional.)</p>
 <table>
 <tbody>
 <tr class="odd">
@@ -312,7 +312,7 @@ if (/Chrome/.test(navigator.userAgent)) {
 </tbody>
 </table>
 <h3 id="loading-an-online-bom">Loading an online BOM</h3>
-<p>If you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Clicking the blue button will load the data into 1clickBOM. Alternatively you can paste from any spreadsheet (Excel, OpenOffice, LibreOffice, etc.) by selecting the relevant columns copying them and then clicking the paste button on 1clickBOM's popup.</p>
+<p>If you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Clicking the blue button will load the data into 1clickBOM.</p>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" />
 <p class="caption">Load from page</p>
@@ -337,7 +337,7 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+'&#x6
 <li>0.7
 <ul>
 <li>Kitnic.it site interaction</li>
-<li>Set a timeout on all requests</li>
+<li>Set a timeout on all UI requests so that extension cannot get stuck</li>
 </ul></li>
 <li>1.0
 <ul>
