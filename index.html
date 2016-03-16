@@ -24,7 +24,6 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
   <title></title>
-  <style type="text/css">code{white-space: pre;}</style>
   <link rel="stylesheet" href="markdown7.css" type="text/css" />
 </head>
 <body><div id="title"><img src="logo.png"/><span>1clickBOM</span></div>
@@ -95,51 +94,19 @@
 </ul>
 <p>Check the <a href="#roadmap">roadmap</a> for more details on planned features.</p>
 <h2 id="usage">Usage</h2>
-<h3 id="adding-items">Adding Items</h3>
-<p>In your tab-seperated values (<code>.tsv</code>) or spreadsheet you must have a column for line-note, one for the quantity and at least one retailer. Column titles are interpreted in the following way by 1clickBOM. Capitalisation is ignored, characters within brackets, like<code>(s)</code>, denote they are optional.</p>
-<pre><code>ref(s)                      : References
-reference(s)                : References
-line-note(s)                : References
-line note(s)                : References
-comment(s)                  : Description
-description(s)              : Description
-cmnt(s)                     : Description
-descr(s)                    : Description
-qty(s)                      : Quantity
-quantity                    : Quantity
-part-number(s)              : Part Number
-partnumber(s)               : Part Number
-part number(s)              : Part Number
-m(/)f part(s)               : Part Number
-manuf(.) part(s)            : Part Number
-mpn(s)                      : Part Number
-m(/)f part number(s)        : Part Number
-manuf(.) part number(s)     : Part Number
-manufacturer part(s)        : Part Number
-manufacturer part number(s) : Part Number
-prt(s)                      : Part Number
-part(s)                     : Part Number
-farnell                     : Farnell
-fec                         : Farnell
-premier                     : Farnell
-element14                   : Farnell
-digikey                     : Digikey
-digi-key                    : Digikey
-mouser                      : Mouser
-rs                          : RS
-rsonline                    : RS
-rs-online                   : RS
-rs-delivers                 : RS
-rsdelivers                  : RS
-radio spares                : RS
-radiospares                 : RS
-rs components               : RS
-newark                      : Newark</code></pre>
+<h3 id="making-a-1-click-bom">Making a 1-click-BOM</h3>
+<p>You can copy and paste into the extension from a text editor or spread sheet program (LibreOffice, Excel). You must have a column for line-note, one for the quantity and at least one retailer. Optional columns are 'Description' and 'Part Number'. You can have multiple 'Part Number' columns for specifying multiple possible manufacturer part numbers per schematic reference.</p>
+<p>When saving files from your external editor/spreadsheet save them as tab-seperated values with a <code>.tsv</code> extension.</p>
+<p>Here is a minimal example:</p>
+<p>| References | Qty | Description | Part Number | |------------|-----|---------------|------------------------------------| | C1 | 1 | 1uF 0603 X5R | | | C2 | 1 | 10uF 0603 X5R | | | D1 | 1 | | Multicomp 1N4148WS | | Q1 | 1 | | International Rectifier IRF7309PBF | | R1 | 1 | 10k 0603 | | | R2, R4 | 2 | 100k 0603 | | | R3 | 1 | 300k 0603 | | | SW1 | 1 | | TE Connectivity 4-1437565-1 |</p>
+<p>For more see this <a href="https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv">example tsv</a> and the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/bus_pirate.tsv">Bus Pirate tsv</a>.</p>
+<p>The examples are in the format that 1-click BOM will output but it is less strict about reading. When you paste/load into the extension column titles are interpreted in the following way. (Capitalisation is ignored, characters within brackets, like<code>(s)</code>, denote they are optional.)</p>
+<p>| | | |-----------------------------|-------------| | ref(s) | References | | reference(s) | References | | line-note(s) | References | | line note(s) | References | | comment(s) | Description | | description(s) | Description | | cmnt(s) | Description | | descr(s) | Description | | qty(s) | Quantity | | quantity | Quantity | | part-number(s) | Part Number | | partnumber(s) | Part Number | | part number(s) | Part Number | | m(/)f part(s) | Part Number | | manuf(.) part(s) | Part Number | | mpn(s) | Part Number | | m(/)f part number(s) | Part Number | | manuf(.) part number(s) | Part Number | | manufacturer part(s) | Part Number | | manufacturer part number(s) | Part Number | | prt(s) | Part Number | | part(s) | Part Number | | farnell | Farnell | | fec | Farnell | | premier | Farnell | | element14 | Farnell | | digi(-)key | Digikey | | mouser | Mouser | | rs | RS | | rsonline | RS | | rs-online | RS | | rs-delivers | RS | | rsdelivers | RS | | radio spares | RS | | radiospares | RS | | rs components | RS | | newark | Newark |</p>
+<h3 id="loading-an-online-bom">Loading an online BOM</h3>
 <p>If you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Clicking the blue button will load the data into 1clickBOM. Alternatively you can paste from any spreadsheet (Excel, OpenOffice, LibreOffice, etc.) by selecting the relevant columns copying them and then clicking the paste button on 1clickBOM's popup.</p>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" /><p class="caption">Load from page</p>
 </div>
-<p>See the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv">example tsv</a> and the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/bus_pirate.tsv">Bus Pirate tsv</a>.</p>
 <h3 id="lets-go-shopping">Let's go shopping!</h3>
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
 <h3 id="completion">Completion</h3>
@@ -151,10 +118,10 @@ newark                      : Newark</code></pre>
 <h2 id="issues">Issues</h2>
 <p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">GitHub</a> or <script type="text/javascript">
 <!--
-h='&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#x69;&#110;&#102;&#x6f;';e=n+a+h;
+h='&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#98;&#x6f;&#x6d;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#x69;&#110;&#102;&#x6f;';e=n+a+h;
 document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 // -->
-</script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript>.</p>
+</script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#98;&#x6f;&#x6d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript>.</p>
 <h2 id="roadmap">Roadmap</h2>
 <ul>
 <li>0.7
@@ -242,5 +209,6 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 <center> 
 <a href="http://monostable.co.uk"><img src="monostable.png" alt="logo" /></a>
 </center>
+
 </body>
 </html>
