@@ -9,10 +9,12 @@ then
     exit 0
 else
     sudo apt-get install pandoc
-    git clean -xdf
-    git branch gh-pages
-    git fetch origin gh-pages
-    git reset --hard origin/gh-pages
-    make && make commit
-    git push  "https://${GH_TOKEN}@github.com/monostable/1clickBOM" gh-pages:gh-pages > /dev/null 2>&1
+    git clone https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG} pages
+    cd pages
+    git checkout gh-pages
+    make || exit 1
+    make commit || exit 0 # allowed to fail if nothing to commit
+    git config user.name "Travis CI"
+    git config user.email "travisCI@monostable.co.uk"
+    git push origin gh-pages
 fi
