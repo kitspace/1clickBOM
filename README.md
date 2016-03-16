@@ -59,7 +59,7 @@ tab-seperated values with a `.tsv` extension.
 
 Here is a small example which is well suited for [auto-completing](#completion):
 
-| References | Qty | Description   | PartNumber                  | 
+| References | Qty | Description   | Part Number                 | 
 |------------|-----|---------------|-----------------------------| 
 | C1         | 1   | 1uF 0603 X5R  |                             | 
 | C2         | 1   | 10uF 0603 X5R |                             | 
@@ -78,29 +78,28 @@ recognizes. If you have any more suggestions please [get in touch](#issues).
 (Capitalisation is ignored, characters within brackets, like`(s)`, denote they
 are optional.)
 
-| References   | Description    | Quantity | Part Number                 |
-|--------------|----------------|----------|-----------------------------|
-| ref(s)       | comment(s)     | qty(s)   | part-number(s)              |
-| reference(s) | description(s) | quantity | partnumber(s)               |
-| line-note(s) | cmnt(s)        |          | part number(s)              |
-| line note(s) | descr(s)       |          | m(/)f part(s)               |
-|              |                |          | manuf(.) part(s)            |
-|              |                |          | mpn(s)                      |
-|              |                |          | m(/)f part number(s)        |
-|              |                |          | manuf(.) part number(s)     |
-|              |                |          | manufacturer part(s)        |
-|              |                |          | manufacturer part number(s) |
-|              |                |          | prt(s)                      |
-|              |                |          | part(s)                     |
+| References   | Quantity    | Description    | Part Number                 | 
+|--------------|-------------|----------------|-----------------------------| 
+| ref(s)       | qty(s)      | comment(s)     | part(-)number(s)            | 
+| reference(s) | quantity(s) | description(s) | partnumber(s)               | 
+| line-note(s) |             | cmnt(s)        | part number(s)              | 
+| line note(s) |             | descr(s)       | m(/)f part(s)               | 
+|              |             |                | manuf(.) part(s)            | 
+|              |             |                | mpn(s)                      | 
+|              |             |                | m(/)f part number(s)        | 
+|              |             |                | manuf(.) part number(s)     | 
+|              |             |                | manufacturer part(s)        | 
+|              |             |                | manufacturer part number(s) | 
+|              |             |                | prt(s)                      | 
+|              |             |                | part(s)                     | 
 
-| Farnell   | Digikey    | Mouser | RS            | Newark | 
-|-----------|------------|--------|---------------|--------| 
-| farnell   | digi(-)key | mouser | rs            | newark | 
-| fec       |            |        | rsonline      |        | 
-| premier   |            |        | rs-online     |        | 
-| element14 |            |        | rs(-)delivers |        | 
-|           |            |        | radio( )spares|        | 
-|           |            |        | rs( )components |        | 
+| Digikey    | Mouser | RS              | Newark | Farnell   | 
+|------------|--------|-----------------|--------|-----------| 
+| digi(-)key | mouser | rs              | newark | farnell   | 
+|            |        | rs(-)online     |        | fec       | 
+|            |        | rs(-)delivers   |        | premier   | 
+|            |        | radio( )spares  |        | element14 | 
+|            |        | rs( )components |        |           | 
 
 ### Loading an online BOM ###
 
