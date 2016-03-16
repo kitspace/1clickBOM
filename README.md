@@ -59,16 +59,16 @@ tab-seperated values with a `.tsv` extension.
 
 Here is a small example which is well suited for [auto-completing](#Completion):
 
-| References | Qty | Description   | Part Number                        |
-|------------|-----|---------------|------------------------------------|
-| C1         | 1   | 1uF 0603 X5R  |                                    |
-| C2         | 1   | 10uF 0603 X5R |                                    |
-| D1         | 1   |               | Multicomp 1N4148WS                 |
-| Q1         | 1   |               | International Rectifier IRF7309PBF |
-| R1         | 1   | 10k 0603      |                                    |
-| R2, R4     | 2   | 100k  0603    |                                    |
-| R3         | 1   | 300k  0603    |                                    |
-| SW1        | 1   |               | TE Connectivity 4-1437565-1        |
+| References | Qty | Description   | PartNumber                  | 
+|------------|-----|---------------|-----------------------------| 
+| C1         | 1   | 1uF 0603 X5R  |                             | 
+| C2         | 1   | 10uF 0603 X5R |                             | 
+| D1         | 1   |               | 1N4148WS                    | 
+| Q1         | 1   |               | IRF7309PBF                  | 
+| R1         | 1   | 10k 0603      |                             | 
+| R2,R4      | 2   | 100k 0603     |                             | 
+| R3         | 1   | 300k 0603     |                             | 
+| SW1        | 1   |               | TE Connectivity 4-1437565-1 | 
 
 You can find this and other examples in TSV format in the [examples directory][2].
 
