@@ -24,6 +24,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
   <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
   <link rel="stylesheet" href="markdown7.css" type="text/css" />
 </head>
 <body><div id="title"><img src="logo.png"/><span>1clickBOM</span></div>
@@ -31,36 +32,34 @@
 <h1 id="section-1"></h1>
 <link href="favicon.png" rel="shortcut icon" type="image/png"></link>
 <center>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/611TW315pZM" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/611TW315pZM" frameborder="0" allowfullscreen>
+</iframe>
 </center>
 <h1 id="section-2"></h1>
-<center><p>
+<center>
+<p>
 <a id="chromelink" href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi"><img id="chromeimage" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" alt="Available on Chrome" /></a><a href=https://addons.mozilla.org/firefox/downloads/latest/634060/addon-634060-latest.xpi><img alt="Add to Firefox" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png"></a>
-</p></center>
-<script type"text/javascript">
+</p>
+</center>
+<p>&lt;script type&quot;text/javascript&quot;&gt;</p>
+<pre><code>//fix favicon on firefox (due to github.io hosting)
+link=document.createElement(&quot;link&quot;);
+link.setAttribute(&quot;href&quot;, &quot;favicon.png&quot;);
+link.setAttribute(&quot;rel&quot;, &quot;shortcut icon&quot;);
+link.setAttribute(&quot;type&quot;, &quot;image/png&quot;);
+document.head.appendChild(link);
 
-    //fix favicon on firefox (due to github.io hosting)
-    link=document.createElement("link");
-    link.setAttribute("href", "favicon.png");
-    link.setAttribute("rel", "shortcut icon");
-    link.setAttribute("type", "image/png");
-    document.head.appendChild(link);
-
-    //add quick installation for chrome to link and track it
-    var chromelink = document.getElementById("chromelink");
-    if (/Chrome/.test(navigator.userAgent)) {
-        chromelink.href = "#";
-        chromelink.onclick = function () {
-            chrome.webstore.install(undefined, function () {
-                _paq.push(['trackEvent', 'Install', 'chrome-install']);
-            });
-        };
-    }
-
+//add quick installation for chrome to link and track it
+var chromelink = document.getElementById(&quot;chromelink&quot;);
+if (/Chrome/.test(navigator.userAgent)) {
+    chromelink.href = &quot;#&quot;;
+    chromelink.onclick = function () {
+        chrome.webstore.install(undefined, function () {
+            _paq.push([&#39;trackEvent&#39;, &#39;Install&#39;, &#39;chrome-install&#39;]);
+        });
+    };
+}</code></pre>
 </script>
-
-
-
 <h2 id="section"></h2>
 <h2 id="section-1"></h2>
 <h2 id="summary">Summary</h2>
@@ -98,14 +97,225 @@
 <p>You can copy and paste into the extension from a text editor or spread sheet program (LibreOffice, Excel). You must have a column for line-note, one for the quantity and at least one retailer. Optional columns are 'Description' and 'Part Number'. You can have multiple 'Part Number' columns for specifying multiple possible manufacturer part numbers per schematic reference.</p>
 <p>When saving files from your external editor/spreadsheet save them as tab-seperated values with a <code>.tsv</code> extension.</p>
 <p>Here is a minimal example:</p>
-<p>| References | Qty | Description | Part Number | |------------|-----|---------------|------------------------------------| | C1 | 1 | 1uF 0603 X5R | | | C2 | 1 | 10uF 0603 X5R | | | D1 | 1 | | Multicomp 1N4148WS | | Q1 | 1 | | International Rectifier IRF7309PBF | | R1 | 1 | 10k 0603 | | | R2, R4 | 2 | 100k 0603 | | | R3 | 1 | 300k 0603 | | | SW1 | 1 | | TE Connectivity 4-1437565-1 |</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">References</th>
+<th align="left">Qty</th>
+<th align="left">Description</th>
+<th align="left">Part Number</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">C1</td>
+<td align="left">1</td>
+<td align="left">1uF 0603 X5R</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">C2</td>
+<td align="left">1</td>
+<td align="left">10uF 0603 X5R</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">D1</td>
+<td align="left">1</td>
+<td align="left"></td>
+<td align="left">Multicomp 1N4148WS</td>
+</tr>
+<tr class="even">
+<td align="left">Q1</td>
+<td align="left">1</td>
+<td align="left"></td>
+<td align="left">International Rectifier IRF7309PBF</td>
+</tr>
+<tr class="odd">
+<td align="left">R1</td>
+<td align="left">1</td>
+<td align="left">10k 0603</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">R2, R4</td>
+<td align="left">2</td>
+<td align="left">100k 0603</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">R3</td>
+<td align="left">1</td>
+<td align="left">300k 0603</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">SW1</td>
+<td align="left">1</td>
+<td align="left"></td>
+<td align="left">TE Connectivity 4-1437565-1</td>
+</tr>
+</tbody>
+</table>
 <p>For more see this <a href="https://github.com/monostable/1clickBOM/blob/master/examples/example.tsv">example tsv</a> and the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/bus_pirate.tsv">Bus Pirate tsv</a>.</p>
 <p>The examples are in the format that 1-click BOM will output but it is less strict about reading. When you paste/load into the extension column titles are interpreted in the following way. (Capitalisation is ignored, characters within brackets, like<code>(s)</code>, denote they are optional.)</p>
-<p>| | | |-----------------------------|-------------| | ref(s) | References | | reference(s) | References | | line-note(s) | References | | line note(s) | References | | comment(s) | Description | | description(s) | Description | | cmnt(s) | Description | | descr(s) | Description | | qty(s) | Quantity | | quantity | Quantity | | part-number(s) | Part Number | | partnumber(s) | Part Number | | part number(s) | Part Number | | m(/)f part(s) | Part Number | | manuf(.) part(s) | Part Number | | mpn(s) | Part Number | | m(/)f part number(s) | Part Number | | manuf(.) part number(s) | Part Number | | manufacturer part(s) | Part Number | | manufacturer part number(s) | Part Number | | prt(s) | Part Number | | part(s) | Part Number | | farnell | Farnell | | fec | Farnell | | premier | Farnell | | element14 | Farnell | | digi(-)key | Digikey | | mouser | Mouser | | rs | RS | | rsonline | RS | | rs-online | RS | | rs-delivers | RS | | rsdelivers | RS | | radio spares | RS | | radiospares | RS | | rs components | RS | | newark | Newark |</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left">ref(s)</td>
+<td align="left">References</td>
+</tr>
+<tr class="even">
+<td align="left">reference(s)</td>
+<td align="left">References</td>
+</tr>
+<tr class="odd">
+<td align="left">line-note(s)</td>
+<td align="left">References</td>
+</tr>
+<tr class="even">
+<td align="left">line note(s)</td>
+<td align="left">References</td>
+</tr>
+<tr class="odd">
+<td align="left">comment(s)</td>
+<td align="left">Description</td>
+</tr>
+<tr class="even">
+<td align="left">description(s)</td>
+<td align="left">Description</td>
+</tr>
+<tr class="odd">
+<td align="left">cmnt(s)</td>
+<td align="left">Description</td>
+</tr>
+<tr class="even">
+<td align="left">descr(s)</td>
+<td align="left">Description</td>
+</tr>
+<tr class="odd">
+<td align="left">qty(s)</td>
+<td align="left">Quantity</td>
+</tr>
+<tr class="even">
+<td align="left">quantity</td>
+<td align="left">Quantity</td>
+</tr>
+<tr class="odd">
+<td align="left">part-number(s)</td>
+<td align="left">Part Number</td>
+</tr>
+<tr class="even">
+<td align="left">partnumber(s)</td>
+<td align="left">Part Number</td>
+</tr>
+<tr class="odd">
+<td align="left">part number(s)</td>
+<td align="left">Part Number</td>
+</tr>
+<tr class="even">
+<td align="left">m(/)f part(s)</td>
+<td align="left">Part Number</td>
+</tr>
+<tr class="odd">
+<td align="left">manuf(.) part(s)</td>
+<td align="left">Part Number</td>
+</tr>
+<tr class="even">
+<td align="left">mpn(s)</td>
+<td align="left">Part Number</td>
+</tr>
+<tr class="odd">
+<td align="left">m(/)f part number(s)</td>
+<td align="left">Part Number</td>
+</tr>
+<tr class="even">
+<td align="left">manuf(.) part number(s)</td>
+<td align="left">Part Number</td>
+</tr>
+<tr class="odd">
+<td align="left">manufacturer part(s)</td>
+<td align="left">Part Number</td>
+</tr>
+<tr class="even">
+<td align="left">manufacturer part number(s)</td>
+<td align="left">Part Number</td>
+</tr>
+<tr class="odd">
+<td align="left">prt(s)</td>
+<td align="left">Part Number</td>
+</tr>
+<tr class="even">
+<td align="left">part(s)</td>
+<td align="left">Part Number</td>
+</tr>
+<tr class="odd">
+<td align="left">farnell</td>
+<td align="left">Farnell</td>
+</tr>
+<tr class="even">
+<td align="left">fec</td>
+<td align="left">Farnell</td>
+</tr>
+<tr class="odd">
+<td align="left">premier</td>
+<td align="left">Farnell</td>
+</tr>
+<tr class="even">
+<td align="left">element14</td>
+<td align="left">Farnell</td>
+</tr>
+<tr class="odd">
+<td align="left">digi(-)key</td>
+<td align="left">Digikey</td>
+</tr>
+<tr class="even">
+<td align="left">mouser</td>
+<td align="left">Mouser</td>
+</tr>
+<tr class="odd">
+<td align="left">rs</td>
+<td align="left">RS</td>
+</tr>
+<tr class="even">
+<td align="left">rsonline</td>
+<td align="left">RS</td>
+</tr>
+<tr class="odd">
+<td align="left">rs-online</td>
+<td align="left">RS</td>
+</tr>
+<tr class="even">
+<td align="left">rs-delivers</td>
+<td align="left">RS</td>
+</tr>
+<tr class="odd">
+<td align="left">rsdelivers</td>
+<td align="left">RS</td>
+</tr>
+<tr class="even">
+<td align="left">radio spares</td>
+<td align="left">RS</td>
+</tr>
+<tr class="odd">
+<td align="left">radiospares</td>
+<td align="left">RS</td>
+</tr>
+<tr class="even">
+<td align="left">rs components</td>
+<td align="left">RS</td>
+</tr>
+<tr class="odd">
+<td align="left">newark</td>
+<td align="left">Newark</td>
+</tr>
+</tbody>
+</table>
 <h3 id="loading-an-online-bom">Loading an online BOM</h3>
 <p>If you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Clicking the blue button will load the data into 1clickBOM. Alternatively you can paste from any spreadsheet (Excel, OpenOffice, LibreOffice, etc.) by selecting the relevant columns copying them and then clicking the paste button on 1clickBOM's popup.</p>
 <div class="figure">
-<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" /><p class="caption">Load from page</p>
+<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" />
+<p class="caption">Load from page</p>
 </div>
 <h3 id="lets-go-shopping">Let's go shopping!</h3>
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
@@ -118,10 +328,10 @@
 <h2 id="issues">Issues</h2>
 <p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">GitHub</a> or <script type="text/javascript">
 <!--
-h='&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#98;&#x6f;&#x6d;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#x69;&#110;&#102;&#x6f;';e=n+a+h;
-document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
+h='&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#x69;&#110;&#102;&#x6f;';e=n+a+h;
+document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+'&#x65;&#x6d;&#x61;&#x69;&#108;'+'<\/'+'a'+'>');
 // -->
-</script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#98;&#x6f;&#x6d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript>.</p>
+</script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript>.</p>
 <h2 id="roadmap">Roadmap</h2>
 <ul>
 <li>0.7
@@ -206,9 +416,8 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 <p>1clickBOM is free and open source software. It is licensed under a CPAL license which means you are free to use the code in your own applications (even proprietary ones) as long as you display appropriate attribution and share your code-improvements to 1clickBOM itself under the CPAL as well. This also applies to software you are solely making available to users over a network i.e. software as a service. See the <a href="https://github.com/monostable/1clickBOM/blob/master/LICENSE">LICENSE</a> file for details.</p>
 <h1 id="section-2"></h1>
 <h1 id="section-3"></h1>
-<center> 
+<center>
 <a href="http://monostable.co.uk"><img src="monostable.png" alt="logo" /></a>
 </center>
-
 </body>
 </html>
