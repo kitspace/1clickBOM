@@ -3,4 +3,8 @@ node_js:
   - "5"
 sudo: required
 script:
+  - ./configure.coffee
+  - wget https://github.com/ninja-build/ninja/releases/download/v1.6.0/ninja-linux.zip
+  - unzip ninja-linux.zip
+  - ./ninja
   - ./deploy.sh
