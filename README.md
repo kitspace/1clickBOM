@@ -57,7 +57,7 @@ multiple possible manufacturer part numbers per schematic reference.
 When saving files from your external editor/spreadsheet save them as
 tab-seperated values with a `.tsv` extension.
 
-Here is a small example which is well suited for [auto-completing](#Completion):
+Here is a small example which is well suited for [auto-completing](#completion):
 
 | References | Qty | Description   | PartNumber                  | 
 |------------|-----|---------------|-----------------------------| 
