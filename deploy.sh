@@ -8,7 +8,8 @@ if [ "${TRAVIS_BRANCH}" != "master" ] || [ "${TRAVIS_PULL_REQUEST}" != "false" ]
 then
     exit 0
 else
-    sudo apt-get install pandoc
+    wget https://github.com/jgm/pandoc/releases/download/1.16.0.2/pandoc-1.16.0.2-1-amd64.deb
+    sudo dpkg -i pandoc-1.16.0.2-1-amd64.deb
     git clone https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG} pages
     cd pages
     git config user.name "Travis CI"
@@ -16,5 +17,5 @@ else
     git checkout gh-pages
     make || exit 1
     make commit || exit 0 # allowed to fail if nothing to commit
-    git push origin gh-pages --quiet > /dev/null 2>&1
+    git push origin gh-pages
 fi
