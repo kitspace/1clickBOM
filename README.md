@@ -78,20 +78,20 @@ recognizes. If you have any more suggestions please [get in touch](#issues).
 (Capitalisation is ignored, characters within brackets, like`(s)`, denote they
 are optional.)
 
-| References   | Quantity | Description    | Part Number                 | 
-|--------------|----------|----------------|-----------------------------| 
-| ref(s)       | qty(s)   | comment(s)     | part(-)number(s)            | 
-| reference(s) | quantity | description(s) | partnumber(s)               | 
-| line-note(s) |          | cmnt(s)        | part number(s)              | 
-| line note(s) |          | descr(s)       | m(/)f part(s)               | 
-|              |          |                | manuf(.) part(s)            | 
-|              |          |                | mpn(s)                      | 
-|              |          |                | m(/)f part number(s)        | 
-|              |          |                | manuf(.) part number(s)     | 
-|              |          |                | manufacturer part(s)        | 
-|              |          |                | manufacturer part number(s) | 
-|              |          |                | prt(s)                      | 
-|              |          |                | part(s)                     | 
+| References   | Quantity    | Description    | Part Number                 | 
+|--------------|-------------|----------------|-----------------------------| 
+| ref(s)       | qty(s)      | comment(s)     | part(-)number(s)            | 
+| reference(s) | quantity(s) | description(s) | partnumber(s)               | 
+| line-note(s) |             | cmnt(s)        | part number(s)              | 
+| line note(s) |             | descr(s)       | m(/)f part(s)               | 
+|              |             |                | manuf(.) part(s)            | 
+|              |             |                | mpn(s)                      | 
+|              |             |                | m(/)f part number(s)        | 
+|              |             |                | manuf(.) part number(s)     | 
+|              |             |                | manufacturer part(s)        | 
+|              |             |                | manufacturer part number(s) | 
+|              |             |                | prt(s)                      | 
+|              |             |                | part(s)                     | 
 
 | Digikey    | Mouser | RS              | Newark | Farnell   | 
 |------------|--------|-----------------|--------|-----------| 
@@ -100,7 +100,6 @@ are optional.)
 |            |        | rs(-)delivers   |        | premier   | 
 |            |        | radio( )spares  |        | element14 | 
 |            |        | rs( )components |        |           | 
-|            |        |                 |        |           | 
 
 ### Loading an online BOM ###
 
