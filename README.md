@@ -49,9 +49,9 @@ Check the [roadmap](#roadmap) for more details on planned features.
 ### Making a 1-click-BOM ###
 
 You can copy and paste into the extension from a text editor or spread sheet
-program (LibreOffice, Excel). You must have a column for line-note, one for the
-quantity and at least one retailer. Optional columns are 'Description' and
-'Part Number'. You can have multiple 'Part Number' columns for specifying
+program (LibreOffice, Excel). You must have a column for references, one for the
+quantity and at least one of: decription, part number or a retailer column. 
+You can have multiple part number columns for specifying
 multiple possible manufacturer part numbers per schematic reference.
 
 When saving files from your external editor/spreadsheet save them as
@@ -72,9 +72,8 @@ Here is a small example which is well suited for [auto-completing](#completion):
 
 You can find this and other examples in TSV format in the [examples directory][2].
 
-The examples are mostly in the format that 1-click BOM will output but it is
-less strict about reading. Below are tables of title aliases 1-click-BOM
-recognizes. If you have any more suggestions please [get in touch](#issues).
+The examples are mostly in the format that the extension will output. Reading is less strict. 
+Below are tables of title aliases 1-click-BOM recognizes. If you have any more suggestions please [get in touch](#issues).
 (Capitalisation is ignored, characters within brackets, like`(s)`, denote they
 are optional.)
 
