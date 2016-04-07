@@ -17,69 +17,16 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{parseTSV, writeTSV}      = require '1-click-bom'
-{retailer_list} = require('1-click-bom').lineData
+{writeTSV} = require '1-click-bom'
+{retailer_list}      = require('1-click-bom').lineData
 
-{bom_manager}   = require './bom_manager'
-{browser}       = require './browser'
-http            = require './http'
-{badge}         = require './badge'
-
+{bom_manager}     = require './bom_manager'
+{browser}         = require './browser'
+http              = require './http'
 
 exports.background = (messenger) ->
-
     browser.prefsOnChanged ['country', 'settings'], () ->
         bom_manager.init()
-
-    tsvPageNotifier =
-        onDotTSV : false
-        re       : new RegExp('((\.tsv$)|(^https?://.*?\.?kitnic.it/boards/))','i')
-        lines    : []
-        invalid  : []
-        _set_not_dotTSV: () ->
-            badge.setDefault('')
-            @onDotTSV = false
-            @lines    = []
-            @invalid  = []
-            sendState()
-        checkPage: (callback) ->
-            browser.tabsGetActive (tab) =>
-                if tab?
-                    tab_url = tab.url.split('?')[0]
-                    if tab_url.match(@re)
-                        if /^https?:\/\/.*?\.?kitnic.it\/boards\//.test(tab.url)
-                            url = tab_url + '/1-click-BOM.tsv'
-                        else if /^https?:\/\/github.com\//.test(tab.url)
-                            url = tab_url.replace(/blob/,'raw')
-                        else if /^https?:\/\/bitbucket.org\//.test(tab.url)
-                            url = tab_url.split('?')[0].replace(/src/,'raw')
-                        else
-                            url = tab_url
-                        http.get url, {notify:false}, (event) =>
-                            {lines, invalid} = parseTSV(event.target.responseText)
-                            if lines.length > 0
-                                badge.setDefault('\u2191', '#0000FF')
-                                @onDotTSV = true
-                                @lines    = lines
-                                @invalid  = invalid
-                                sendState()
-                            else
-                                @_set_not_dotTSV()
-                        , () =>
-                            @_set_not_dotTSV()
-                    else
-                        @_set_not_dotTSV()
-                    if callback?
-                        callback()
-                else if callback?
-                    callback()
-        addToBOM: (callback) ->
-            @checkPage () =>
-                if @onDotTSV
-                    bom_manager._add_to_bom(@lines, @invalid, callback)
-
-    browser.tabsOnUpdated () =>
-        tsvPageNotifier.checkPage()
 
     sendState = () ->
         bom_manager.getBOM (bom) ->
@@ -87,6 +34,11 @@ exports.background = (messenger) ->
                 bom:bom
                 bom_manager:bom_manager
                 onDotTSV: tsvPageNotifier.onDotTSV)
+
+    tsvPageNotifier = require('./tsv_page_notifier').tsvPageNotifier(sendState)
+
+    browser.tabsOnUpdated () =>
+        tsvPageNotifier.checkPage()
 
     autoComplete = (deep = false) ->
         bom_manager.autoComplete deep, (completed)->
