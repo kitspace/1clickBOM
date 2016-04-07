@@ -14,17 +14,12 @@ exports.main = (options, callbacks) ->
               onReady: (tab) ->
                 tab.attach(
                   contentScriptWhen: 'end',
-                  #the check for AddonManager is there because errors came up
-                  #in the log, not sure why AddonManager is sometimes not
-                  #defined but better to not throw an error either way
                   contentScript:"
-                      if (AddonManager != null) {
-                          AddonManager.getAddonByID('1clickBOM@monostable',
-                              function(aAddon) {
-                                window.gViewController.commands
-                                .cmd_showItemDetails.doCommand(aAddon, true);
-                              });
-                      }"
+                      AddonManager.getAddonByID('1clickBOM@monostable',
+                          function(aAddon) {
+                            window.gViewController.commands
+                            .cmd_showItemDetails.doCommand(aAddon, true);
+                          });"
                 )
             )
 
