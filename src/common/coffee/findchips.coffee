@@ -29,8 +29,8 @@ aliases =
     'Newark element14'   : 'Newark'
 
 _search = (query, retailers_to_search = [], other_fields = []) ->
-    if query == ''
-        return Promise.resolve({retailers:{}})
+    if not query or query == ''
+        return Promise.resolve(retailers:{}, partNumbers:[])
     url = "http://www.findchips.com/lite/#{encodeURIComponent(query)}"
     p = http.promiseGet(url)
         .catch ((url, event) ->

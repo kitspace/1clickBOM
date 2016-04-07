@@ -26,6 +26,8 @@ aliases =
     'RS Components' : 'RS'
 
 _search = (query, retailers = [], other_fields = []) ->
+    if not query or query == ''
+        return Promise.resolve(retailers:{}, partNumbers:[])
     query = query.replace(' / ', ' ') #search doesn't seem to like ' / '
     url = "https://octopart.com/search?q=#{encodeURIComponent(query)}&start=0"
     for retailer in retailers

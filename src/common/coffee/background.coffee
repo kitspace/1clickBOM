@@ -17,12 +17,13 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{writeTSV} = require '1-click-bom'
-{retailer_list}      = require('1-click-bom').lineData
+{writeTSV}      = require '1-click-bom'
+{retailer_list} = require('1-click-bom').lineData
 
-{bom_manager}     = require './bom_manager'
-{browser}         = require './browser'
-http              = require './http'
+{bom_manager} = require './bom_manager'
+{browser}     = require './browser'
+http          = require './http'
+{badge}       = require './badge'
 
 exports.background = (messenger) ->
     browser.prefsOnChanged ['country', 'settings'], () ->
@@ -41,7 +42,8 @@ exports.background = (messenger) ->
         tsvPageNotifier.checkPage()
 
     autoComplete = (deep = false) ->
-        bom_manager.autoComplete deep, (completed)->
+        finish = (timeout_id, completed) ->
+            browser.clearTimeout(timeout_id)
             sendState()
             if completed > 0
                 browser.notificationsCreate
@@ -58,6 +60,8 @@ exports.background = (messenger) ->
                     message:'Could not complete any fields for you.'
                     iconUrl:'/images/warning.png'
                 badge.setDecaying('Warn','#FF8A00')
+        timeout_id = browser.setTimeout(finish.bind(null, timeout_id, 0), 180000)
+        bom_manager.autoComplete(deep, finish.bind(null, timeout_id))
 
     messenger.on 'getBackgroundState', () ->
         sendState()
@@ -71,9 +75,6 @@ exports.background = (messenger) ->
 
     messenger.on 'openCart', (name) ->
         bom_manager.openCart(name)
-
-    messenger.on 'autoComplete', () ->
-        autoComplete()
 
     messenger.on 'deepAutoComplete', () ->
         autoComplete(deep=true)
