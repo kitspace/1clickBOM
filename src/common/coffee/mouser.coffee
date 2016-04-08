@@ -105,7 +105,6 @@ class Mouser extends RetailerInterface
                    callback()
 
     clearCart: (callback) ->
-        @clearing_cart = true
         @_get_cart_viewstate (viewstate) =>
             @_clear_cart(viewstate, callback)
     _clear_cart: (viewstate, callback)->
@@ -118,11 +117,9 @@ class Mouser extends RetailerInterface
             if callback?
                 callback({success:true}, this)
             @refreshCartTabs()
-            @clearing_cart = false
         , () =>
             if callback?
                 callback({success:false}, this)
-            @clearing_cart = false
     _get_adding_viewstate: (callback, arg)->
         #we get the quick-add form , extend it to 99 lines (the max) and get the viewstate from the response
         url = 'http' + @site + @addline

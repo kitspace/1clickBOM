@@ -30,12 +30,10 @@ class Newark extends RetailerInterface
             callback(this)
 
     clearCart: (callback) ->
-        @clearing_cart = true
         @_get_item_ids (ids) =>
             @_clear_cart ids, (obj) =>
                 @refreshCartTabs()
                 @refreshSiteTabs()
-                @clearing_cart = false
                 if callback?
                     callback(obj)
 

@@ -29,13 +29,11 @@ class Digikey extends RetailerInterface
         super('Digikey', country_code, 'data/digikey.json', settings, callback)
 
     clearCart: (callback) ->
-        @clearing_cart = true
         url = 'http' + @site + @cart + '?webid=-1'
         get url, {}, () =>
             if callback?
                 callback({success:true})
             @refreshCartTabs()
-            @clearing_cart = false
         , () =>
             if callback?
                 callback({success:false})

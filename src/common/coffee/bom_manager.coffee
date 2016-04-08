@@ -246,8 +246,6 @@ bom_manager =
             @notifyEmptyCart(retailer, result)
             callback?(result)
 
-    openCart: (retailer)->
-        @interfaces[retailer].openCartTab()
 
 bom_manager.init()
 

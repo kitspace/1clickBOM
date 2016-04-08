@@ -73,20 +73,22 @@ exports.background = (messenger) ->
 
     messenger.on 'fillCart', (name, callback) ->
         bom_manager.fillCart name, ((name) ->
-            bom_manager.openCart(name)
+            bom_manager.interfaces[name].openCartTab()
             sendState()
         ).bind(undefined, name)
         sendState()
 
     messenger.on 'openCart', (name) ->
-        bom_manager.openCart(name)
+        bom_manager.interfaces[name].openCartTab()
 
     messenger.on 'deepAutoComplete', () ->
         autoComplete(deep=true)
 
     messenger.on 'emptyCart', (name) ->
+        bom_manager.interfaces[name].clearing_cart = true
         bom_manager.emptyCart name, ((name) ->
-            bom_manager.openCart(name)
+            bom_manager.interfaces[name].clearing_cart = false
+            bom_manager.interfaces[name].openCartTab()
             sendState()
         ).bind(undefined, name)
         sendState()
@@ -110,14 +112,17 @@ exports.background = (messenger) ->
 
     messenger.on 'emptyCarts', () ->
         for name in retailer_list
-            bom_manager.emptyCart name, () ->
+            bom_manager.interfaces[name].clearing_cart = true
+            bom_manager.emptyCart name, ((name) ->
+                bom_manager.interfaces[name].clearing_cart = false
                 sendState()
+            ).bind(null, name)
         sendState()
 
     messenger.on 'fillCarts', () ->
         for name in retailer_list
             bom_manager.fillCart name, ((name) ->
-                bom_manager.openCart(name)
+                bom_manager.interfaces[name].openCartTab()
                 sendState()
             ).bind(undefined, name)
         sendState()

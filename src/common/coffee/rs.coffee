@@ -25,13 +25,11 @@ http      = require './http'
 
 rsOnline =
     clearCart: (callback) ->
-        @clearing_cart = true
         @_get_clear_viewstate (viewstate, form_ids) =>
             @_clear_cart viewstate, form_ids, (result) =>
                 callback?(result, this)
                 @refreshCartTabs()
                 @refreshSiteTabs()
-                @clearing_cart = false
 
 
     _clear_cart: (viewstate, form_ids, callback) ->
@@ -292,17 +290,14 @@ rsOnline =
 
 rsDelivers =
     clearCart: (callback) ->
-        @clearing_cart = true
         url = "http#{@site}/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart"
         http.post url, '', {json:true}, (event) =>
             if callback?
                 callback({success: true}, this)
             @refreshSiteTabs()
             @refreshCartTabs()
-            @clearing_cart = false
         , () =>
             callback({success: false}, this)
-            @clearing_cart = false
 
 
     _clear_invalid: (callback) ->
