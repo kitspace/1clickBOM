@@ -60,8 +60,11 @@ exports.background = (messenger) ->
                     message:'Could not complete any fields for you.'
                     iconUrl:'/images/warning.png'
                 badge.setDecaying('Warn','#FF8A00')
-        timeout_id = browser.setTimeout(finish.bind(null, timeout_id, 0), 180000)
-        bom_manager.autoComplete(deep, finish.bind(null, timeout_id))
+        timeout_id = browser.setTimeout () ->
+            promise.cancel()
+            finish(timeout_id, 0)
+        , 180000
+        promise = bom_manager.autoComplete(deep, finish.bind(null, timeout_id))
 
     messenger.on 'getBackgroundState', () ->
         sendState()

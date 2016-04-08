@@ -79,15 +79,17 @@ bom_manager =
             callback(bom)
 
     autoComplete: (deep, callback) ->
-        @getBOM (bom) =>
-            autoComplete bom.lines, ((prev_lines, lines) ->
-                bom = {}
-                bom.lines = lines
-                bom.retailers = @_to_retailers(lines)
-                browser.storageSet {bom:bom}, () ->
-                    callback?(numberOfEmpty(prev_lines) - numberOfEmpty(lines))
-            ).bind(this, bom.lines)
-            , deep
+        new Promise (resolve, reject) =>
+            @getBOM (bom) =>
+                p = autoComplete bom.lines, ((prev_lines, lines) ->
+                    bom = {}
+                    bom.lines = lines
+                    bom.retailers = @_to_retailers(lines)
+                    browser.storageSet {bom:bom}, () ->
+                        callback?(numberOfEmpty(prev_lines) - numberOfEmpty(lines))
+                ).bind(this, bom.lines)
+                , deep
+                p.then resolve
 
     addToBOM: (text, callback) ->
         {lines, invalid, warnings} = parseTSV(text)
