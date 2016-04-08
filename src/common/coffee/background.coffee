@@ -32,9 +32,9 @@ exports.background = (messenger) ->
     sendState = () ->
         bom_manager.getBOM (bom) ->
             messenger.send('sendBackgroundState',
-                bom:bom
-                bom_manager:bom_manager
-                onDotTSV: tsvPageNotifier.onDotTSV)
+                bom         : bom
+                bom_manager : bom_manager
+                onDotTSV    : tsvPageNotifier.onDotTSV)
 
     tsvPageNotifier = require('./tsv_page_notifier').tsvPageNotifier(sendState)
 
@@ -47,18 +47,18 @@ exports.background = (messenger) ->
             sendState()
             if completed > 0
                 browser.notificationsCreate
-                    type:'basic'
-                    title:'Auto-complete successful'
-                    message:"Completed #{completed} fields for you by searching
+                    type    : 'basic'
+                    title   : 'Auto-complete successful'
+                    message : "Completed #{completed} fields for you by searching
                         Octopart and Findchips."
-                    iconUrl:'/images/ok.png'
+                    iconUrl : '/images/ok.png'
                 badge.setDecaying('OK','#00CF0F')
             else
                 browser.notificationsCreate
-                    type:'basic'
-                    title:'Auto-complete returned 0 results'
-                    message:'Could not complete any fields for you.'
-                    iconUrl:'/images/warning.png'
+                    type    : 'basic'
+                    title   : 'Auto-complete returned 0 results'
+                    message : 'Could not complete any fields for you.'
+                    iconUrl : '/images/warning.png'
                 badge.setDecaying('Warn','#FF8A00')
         timeout_id = browser.setTimeout () ->
             promise.cancel()

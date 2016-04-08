@@ -134,9 +134,9 @@ bom_manager =
                     if not r[retailer]?
                         r[retailer] = []
                     r[retailer].push
-                        part     : part
-                        quantity : line.quantity
-                        reference  : line.reference
+                        part      : part
+                        quantity  : line.quantity
+                        reference : line.reference
         return r
 
 
