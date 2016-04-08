@@ -146,7 +146,7 @@ render = (state) ->
         lines = []
         if retailer_name of bom.retailers
             lines = bom.retailers[retailer_name]
-        retailer = state.bom_manager.interfaces[retailer_name]
+        retailer = state.interfaces[retailer_name]
         no_of_lines = 0
         for line in lines
             no_of_lines += line.quantity

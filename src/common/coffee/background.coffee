@@ -32,9 +32,9 @@ exports.background = (messenger) ->
     sendState = () ->
         bom_manager.getBOM (bom) ->
             messenger.send('sendBackgroundState',
-                bom         : bom
-                bom_manager : bom_manager
-                onDotTSV    : tsvPageNotifier.onDotTSV)
+                bom        : bom
+                interfaces : bom_manager.interfaces
+                onDotTSV   : tsvPageNotifier.onDotTSV)
 
     tsvPageNotifier = require('./tsv_page_notifier').tsvPageNotifier(sendState)
 
