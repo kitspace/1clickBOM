@@ -16,7 +16,7 @@
 #
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
-Promise = require('bluebird')
+Promise = require('./bluebird')
 Promise.config({cancellation:true})
 
 {parseTSV}      = require '1-click-bom'
