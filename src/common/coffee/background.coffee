@@ -41,7 +41,7 @@ exports.background = (messenger) ->
     browser.tabsOnUpdated () =>
         tsvPageNotifier.checkPage()
 
-    autoComplete = (deep = false) ->
+    autoComplete = (deep=false) ->
         finish = (timeout_id, completed) ->
             browser.clearTimeout(timeout_id)
             sendState()
@@ -64,7 +64,9 @@ exports.background = (messenger) ->
             promise.cancel()
             finish(timeout_id, 0)
         , 180000
-        promise = bom_manager.autoComplete(deep, finish.bind(null, timeout_id))
+        promise = bom_manager.autoComplete(deep)
+        promise.then (completed) ->
+            finish(timeout_id, completed)
 
     messenger.on 'getBackgroundState', () ->
         sendState()

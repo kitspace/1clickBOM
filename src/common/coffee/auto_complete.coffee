@@ -88,7 +88,7 @@ _auto_complete = (search_engine, lines, depth) ->
     return final
 
 
-autoComplete = (lines, callback, deep=false) ->
+autoComplete = (lines, deep=false) ->
     lines = JSON.parse(JSON.stringify(lines))
     if deep
         depth = 3
@@ -99,9 +99,9 @@ autoComplete = (lines, callback, deep=false) ->
         if not isComplete(newLines)
             p = _auto_complete(findchips, newLines, depth)
             p.then (newLines_) ->
-                callback(newLines_)
+                return newLines_
         else
-            callback(newLines)
+            return newLines
 
 
 exports.autoComplete = autoComplete
