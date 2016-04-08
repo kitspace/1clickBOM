@@ -16,6 +16,8 @@
 #
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
+Promise = require('bluebird')
+Promise.config({cancellation:true})
 
 rateLimit = require './promise-rate-limit'
 

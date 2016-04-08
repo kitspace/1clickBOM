@@ -16,6 +16,9 @@
 #
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
+Promise = require('bluebird')
+Promise.config({cancellation:true})
+
 {retailer_list, isComplete, field_list} = require('1-click-bom').lineData
 
 octopart  = require './octopart'

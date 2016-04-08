@@ -1,4 +1,6 @@
 'use strict';
+Promise = require('bluebird');
+Promise.config({cancellation:true});
 
 const rateLimit = require('./function-rate-limit');
 
