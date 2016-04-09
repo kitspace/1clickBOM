@@ -42,15 +42,15 @@ exports.background = (messenger) ->
         tsvPageNotifier.checkPage()
 
     autoComplete = (deep=false) ->
-        finish = (timeout_id, completed) ->
+        finish = (timeout_id, no_of_completed) ->
             browser.clearTimeout(timeout_id)
             sendState()
-            if completed > 0
+            if no_of_completed > 0
                 browser.notificationsCreate
                     type    : 'basic'
                     title   : 'Auto-complete successful'
-                    message : "Completed #{completed} fields for you by searching
-                        Octopart and Findchips."
+                    message : "Completed #{no_of_completed} fields for you
+                        by searching Octopart and Findchips."
                     iconUrl : '/images/ok.png'
                 badge.setDecaying('OK','#00CF0F')
             else
@@ -65,8 +65,8 @@ exports.background = (messenger) ->
             finish(timeout_id, 0)
         , 180000
         promise = bom_manager.autoComplete(deep)
-        promise.then (completed) ->
-            finish(timeout_id, completed)
+        promise.then (no_of_completed) ->
+            finish(timeout_id, no_of_completed)
 
     emptyCart = (name) ->
         bom_manager.interfaces[name].clearing_cart = true
