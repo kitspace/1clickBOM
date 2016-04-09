@@ -86,11 +86,17 @@ exports.background = (messenger) ->
 
     messenger.on 'emptyCart', (name) ->
         bom_manager.interfaces[name].clearing_cart = true
-        bom_manager.emptyCart name, ((name) ->
+        timeout_id = browser.setTimeout ((name) ->
+            bom_manager.interfaces[name].clearing_cart = false
+            sendState()
+        ).bind(null, name)
+        , 180000
+        bom_manager.emptyCart name, ((name, timeout_id) ->
+            browser.clearTimeout(timeout_id)
             bom_manager.interfaces[name].clearing_cart = false
             bom_manager.interfaces[name].openCartTab()
             sendState()
-        ).bind(undefined, name)
+        ).bind(null, name, timeout_id)
         sendState()
 
     messenger.on 'clearBOM', () ->
