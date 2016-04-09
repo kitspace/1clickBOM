@@ -8,7 +8,6 @@ all:
 	rm header.html
 	sed -i 's!^<li><a href="#section.*"></a></li>!!' index.html
 	sed -i 's!<body>!<body><div id="title"><img src="logo.png"/><span>1clickBOM</span></div>!' index.html
-	sed -i 's!<head>!<head>\n  <meta name="google-site-verification" content="no3OyqIUt7RYgKwphZ6du5ZjhIwZt3eEik9OnVbldeM" />\n  <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/mflpmlediakefinapghmabapjeippfdi">!' index.html
 	sed -i 's!<head>!<head>\n <title>1clickBOM.com</title>\n!' index.html
 	sed -i '/<head>/ r piwik.html' index.html
 	sed -i '/<img src="https:\/\/raw.githubusercontent.com\/monostable\/1clickBOM\/master\/readme_images\/chrome.png" alt="Available on Chrome" \/>/d' index.html

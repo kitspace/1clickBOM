@@ -17,16 +17,5 @@
     link.setAttribute("type", "image/png");
     document.head.appendChild(link);
 
-    //add quick installation for chrome to link and track it
-    var chromelink = document.getElementById("chromelink");
-    if (/Chrome/.test(navigator.userAgent)) {
-        chromelink.href = "#";
-        chromelink.onclick = function () {
-            chrome.webstore.install(undefined, function () {
-                _paq.push(['trackEvent', 'Install', 'chrome-install']);
-            });
-        };
-    }
-
 </script>
 
