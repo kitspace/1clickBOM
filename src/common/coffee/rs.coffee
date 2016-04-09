@@ -121,8 +121,6 @@ rsOnline =
             callback({success: true, fails: []})
             return
 
-        @adding_lines = true
-
         add = (lines, callback) =>
             @_clear_invalid () =>
                 @_get_adding_viewstate (viewstate, form_id) =>
@@ -132,7 +130,6 @@ rsOnline =
             callback(result, this, lines)
             @refreshCartTabs()
             @refreshSiteTabs()
-            @adding_lines = false
 
         add lines, (result) ->
             if not result.success
@@ -343,9 +340,7 @@ rsDelivers =
         if lines.length == 0
             callback({success: true, fails: []})
             return
-        @adding_lines = true
         @_add_lines lines, 0, {success:true, fails:[]}, (result) =>
-            @adding_lines = false
             callback(result, this, lines)
             @refreshCartTabs()
             @refreshSiteTabs()

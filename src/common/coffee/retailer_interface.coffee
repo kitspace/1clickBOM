@@ -67,7 +67,6 @@ class RetailerInterface
 
         @addline_params = data.addline_params
         @name           = name
-        @adding_lines   = false
         @icon_src       = 'https://www.google.com/s2/favicons?domain=http' + @site
         #this puts the image in cache but also uses our backup if
         #google.com/s2/favicons fails

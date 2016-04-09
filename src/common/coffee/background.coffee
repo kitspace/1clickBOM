@@ -83,15 +83,25 @@ exports.background = (messenger) ->
         ).bind(null, name, timeout_id)
         sendState()
 
+    fillCart = (name) ->
+        bom_manager.interfaces[name].adding_lines = true
+        timeout_id = browser.setTimeout ((name) ->
+            bom_manager.interfaces[name].adding_lines = false
+            sendState()
+        ).bind(null, name)
+        , 180000
+        bom_manager.fillCart name, ((name, timeout_id) ->
+            browser.clearTimeout(timeout_id)
+            bom_manager.interfaces[name].adding_lines = false
+            bom_manager.interfaces[name].openCartTab()
+            sendState()
+        ).bind(null, name, timeout_id)
+        sendState()
+
     messenger.on 'getBackgroundState', () ->
         sendState()
 
-    messenger.on 'fillCart', (name, callback) ->
-        bom_manager.fillCart name, ((name) ->
-            bom_manager.interfaces[name].openCartTab()
-            sendState()
-        ).bind(undefined, name)
-        sendState()
+    messenger.on('fillCart', fillCart)
 
     messenger.on 'openCart', (name) ->
         bom_manager.interfaces[name].openCartTab()
@@ -124,10 +134,6 @@ exports.background = (messenger) ->
 
     messenger.on 'fillCarts', () ->
         for name in retailer_list
-            bom_manager.fillCart name, ((name) ->
-                bom_manager.interfaces[name].openCartTab()
-                sendState()
-            ).bind(undefined, name)
-        sendState()
+            fillCart(name)
 
     sendState()

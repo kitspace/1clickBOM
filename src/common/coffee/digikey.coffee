@@ -42,12 +42,10 @@ class Digikey extends RetailerInterface
         if lines.length == 0
             callback({success: true, fails: []})
             return
-        @adding_lines = true
         @_add_lines lines, (result) =>
             if callback?
                 callback(result, this, lines)
             @refreshCartTabs()
-            @adding_lines = false
 
     _add_lines: (lines, callback) ->
         result = {success:true, fails:[]}

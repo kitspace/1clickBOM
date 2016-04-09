@@ -43,7 +43,6 @@ class Mouser extends RetailerInterface
         if lines.length == 0
             callback({success: true, fails: []})
             return
-        @adding_lines = true
         count = 0
         big_result = {success:true, fails:[]}
         @_get_cart_viewstate (viewstate) =>
@@ -59,7 +58,6 @@ class Mouser extends RetailerInterface
                             if count <= 0
                                 callback(big_result, this, lines)
                                 @refreshCartTabs()
-                                @adding_lines = false
     _add_lines: (lines, viewstate, callback) ->
         params = @addline_params + viewstate
         params += '&ctl00$ContentMain$hNumberOfLines=99'

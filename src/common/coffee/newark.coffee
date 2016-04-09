@@ -83,11 +83,9 @@ class Newark extends RetailerInterface
         if lines.length == 0
             callback({success: true, fails: []})
             return
-        @adding_lines = true
         @_add_lines  lines, (result) =>
             @refreshCartTabs()
             @refreshSiteTabs()
-            @adding_lines = false
             callback(result, this, lines)
 
     _add_lines: (lines, callback) ->
