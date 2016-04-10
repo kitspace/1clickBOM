@@ -69,7 +69,8 @@
         "*://*.digikey.co.uk/*",
         "*://*.google.com/*",
         "*://freegeoip.net/*",
-        "*://*/*.tsv"
+        "*://*/*.tsv",
+        "*://127.0.0.1:*/*"
     ],
     "browser_action": {
         "default_icon": "images/button19.png",
@@ -85,6 +86,12 @@
              , "38" :"images/logo38.png"
              , "48" :"images/logo48.png"
              , "128":"images/logo128.png"
-             }
-
+             },
+    "content_scripts": [
+        {
+          "matches": ["*://127.0.0.1:*/*"],
+          "js": ["js/kitnic.js"],
+          "run_at": "document_end"
+        }
+      ]
 }
