@@ -27,7 +27,7 @@ http          = require './http'
 exports.tsvPageNotifier = (sendState) ->
     return {
         onDotTSV : false
-        re       : new RegExp('((\.tsv$)|(^https?://.*?\.?kitnic.it/boards/))','i')
+        re       : new RegExp('((\.tsv$)|(^https?://.*?\.?kitnic.it/boards/)|(https?://127.0.0.1:8080/boards/))','i')
         lines    : []
         invalid  : []
         _set_not_dotTSV: () ->
@@ -41,7 +41,10 @@ exports.tsvPageNotifier = (sendState) ->
                 if tab?
                     tab_url = tab.url.split('?')[0]
                     if tab_url.match(@re)
+                        console.log(tab_url)
                         if /^https?:\/\/.*?\.?kitnic.it\/boards\//.test(tab.url)
+                            url = tab_url + '/1-click-BOM.tsv'
+                        else if /^https?:\/\/127.0.0.1:8080\/boards\//.test(tab.url)
                             url = tab_url + '/1-click-BOM.tsv'
                         else if /^https?:\/\/github.com\//.test(tab.url)
                             url = tab_url.replace(/blob/,'raw')
@@ -75,6 +78,7 @@ exports.tsvPageNotifier = (sendState) ->
             @checkPage () =>
                 if @onDotTSV
                     parts = bom_manager._to_retailers(@lines)
+                    console.log('parts', parts)
                     bom_manager.interfaces[retailer].addToCart parts[retailer], (result) ->
                         bom_manager.notifyFillCart(parts[retailer], retailer, result)
     }
