@@ -136,4 +136,8 @@ exports.background = (messenger) ->
         for name in retailer_list
             fillCart(name)
 
+    messenger.on 'quickAddToCart', (retailer) ->
+        console.log('received quickAddToCart', retailer)
+        tsvPageNotifier.quickAddToCart(retailer)
+
     sendState()

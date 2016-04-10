@@ -71,4 +71,10 @@ exports.tsvPageNotifier = (sendState) ->
             @checkPage () =>
                 if @onDotTSV
                     bom_manager._add_to_bom(@lines, @invalid, callback)
+        quickAddToCart: (retailer) ->
+            @checkPage () =>
+                if @onDotTSV
+                    parts = bom_manager._to_retailers(@lines)
+                    bom_manager.interfaces[retailer].addToCart parts[retailer], (result) ->
+                        bom_manager.notifyFillCart(parts[retailer], retailer, result)
     }
