@@ -208,8 +208,8 @@ render = (state) ->
                     startSpinning(this)
                     messenger.send(@message, @value)
                 td.appendChild(a)
-                if retailer[lookup[i]]
-                    startSpinning(a)
+            if retailer[lookup[i]]
+                startSpinning(span)
             any_adding   |= retailer.adding_lines
             any_emptying |= retailer.clearing_cart
 
