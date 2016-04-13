@@ -21,10 +21,9 @@
 
 http          = require './http'
 {browser}     = require './browser'
-{bom_manager} = require './bom_manager'
 {badge}       = require './badge'
 
-exports.tsvPageNotifier = (sendState) ->
+exports.tsvPageNotifier = (sendState, bom_manager) ->
     return {
         onDotTSV : false
         re       : new RegExp('((\.tsv$)|(^https?://.*?\.?kitnic.it/boards/)|(https?://127.0.0.1:8080/boards/))','i')
@@ -77,7 +76,21 @@ exports.tsvPageNotifier = (sendState) ->
             @checkPage () =>
                 if @onDotTSV
                     parts = bom_manager._to_retailers(@lines)
-                    bom_manager.interfaces[retailer].addLines parts[retailer], (result) ->
-                        bom_manager.interfaces[retailer].openCartTab()
-                        bom_manager.notifyFillCart(parts[retailer], retailer, result)
+                    bom_manager.interfaces[retailer].adding_lines = true
+                    timeout_id = browser.setTimeout ((retailer) ->
+                        bom_manager.interfaces[retailer].adding_lines = false
+                        sendState()
+                    ).bind(null, retailer)
+                    , 180000
+                    bom_manager.interfaces[retailer].addLines(parts[retailer],
+                        ((timeout_id, retailer, result) ->
+                            browser.clearTimeout(timeout_id)
+                            bom_manager.interfaces[retailer].adding_lines = false
+                            sendState()
+                            bom_manager.interfaces[retailer].openCartTab()
+                            bom_manager.notifyFillCart(parts[retailer]
+                            , retailer, result)
+                        ).bind(null, timeout_id, retailer)
+                    )
+
     }

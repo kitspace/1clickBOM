@@ -30,5 +30,9 @@ messenger =
             @listening = true
     send: (msgName, input) ->
         chrome.runtime.sendMessage({name:msgName, value:input})
+        if chrome.tabs?
+            chrome.tabs.query {url:['*://kitnic.it/boards/*', '*://127.0.0.1/boards/*']}, (tabs) ->
+                for tab in tabs
+                    chrome.tabs.sendMessage(tab.id, {name:msgName, value:input})
 
 exports.messenger = messenger

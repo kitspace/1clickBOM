@@ -1,9 +1,16 @@
 {messenger} = require('./messenger')
-window.postMessage({type:'FromExtension'}, '*')
+window.postMessage({from:'extension', message:'register'}, '*')
+messenger.send('getBackgroundState')
+
+messenger.on 'updateKitnic', (interfaces) ->
+    adding = {}
+    for name, retailer of interfaces
+        adding[name] = retailer.adding_lines
+    window.postMessage({from:'extension', message:'updateAddingState', value:adding}, '*')
 
 window.addEventListener 'message', (event) ->
     if event.source != window
         return
-    if event.data.type && (event.data.type == 'FromPage')
-        messenger.send('quickAddToCart', event.data.retailer)
+    if event.data.from == 'page'
+        messenger.send(event.data.message, event.data.value)
 , false
