@@ -23,20 +23,18 @@ ninja.rule('copy').run('cp $in $out')
 #browserify and put dependency list in $out.d in makefile format using
 #relative paths
 ninja.rule('browserify')
-    .run("echo -n '$out: ' > $out.d && #{browserify} $in --list
-        | sed 's!#{__dirname}/!!' | tr '\\n' ' '
-        >> $out.d && #{browserify} $in -o $out")
+    .run("#{browserify} $in --list > $out.d
+        && coffee ./depfileify.coffee $out $out.d
+        && #{browserify} $in -o $out")
     .depfile('$out.d')
     .description("browserify $in -o $out")
 
-
 ninja.rule('browserify-require')
-    .run("echo -n '$out: ' > $out.d && #{browserify} --require='./$in' --list
-        | sed 's!#{__dirname}/!!' | tr '\\n' ' '
-        >> $out.d && #{browserify} --require='./$in' -o $out")
+    .run("#{browserify} --require='./$in' --list > $out.d
+        && coffee ./depfileify.coffee $out $out.d
+        && #{browserify} --require='./$in' -o $out")
     .depfile('$out.d')
-    .description("browserify --require='./$in' -o $out")
-
+    .description("browserify $in -o $out")
 
 ninja.rule('coffee')
     .run("#{coffee} -o $dir $in")
