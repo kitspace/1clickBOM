@@ -35,8 +35,9 @@ exports.background = (messenger) ->
                 bom        : bom
                 interfaces : bom_manager.interfaces
                 onDotTSV   : tsvPageNotifier.onDotTSV)
+            messenger.send('updateKitnic', bom_manager.interfaces)
 
-    tsvPageNotifier = require('./tsv_page_notifier').tsvPageNotifier(sendState)
+    tsvPageNotifier = require('./tsv_page_notifier').tsvPageNotifier(sendState, bom_manager)
 
     browser.tabsOnUpdated () =>
         tsvPageNotifier.checkPage()
@@ -135,5 +136,8 @@ exports.background = (messenger) ->
     messenger.on 'fillCarts', () ->
         for name in retailer_list
             fillCart(name)
+
+    messenger.on 'quickAddToCart', (retailer) ->
+        tsvPageNotifier.quickAddToCart(retailer)
 
     sendState()
