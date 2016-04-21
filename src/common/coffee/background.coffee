@@ -129,6 +129,13 @@ exports.background = (messenger) ->
         tsvPageNotifier.addToBOM () ->
             sendState()
 
+    messenger.on 'loadFromRef', (ref) ->
+        browser.notificationsCreate
+            type    : 'basic'
+            title   : 'added '+ref
+            message : 'added '+ref+' to BOM and ... .'
+            iconUrl : '/images/ok.png'
+
     messenger.on 'emptyCarts', () ->
         for name in retailer_list
             emptyCart(name)

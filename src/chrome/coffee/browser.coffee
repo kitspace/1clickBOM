@@ -93,6 +93,8 @@ browser =
         clearTimeout(id)
     parseDOM: (str) ->
         dom.parseFromString(str, 'text/html')
+    searchPart: (str) ->
+        chrome.tabs.create({url: 'https://octopart.com/search?q=' + str})
 
 exports.browser        = browser
 exports.XMLHttpRequest = XMLHttpRequest

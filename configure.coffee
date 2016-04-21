@@ -92,6 +92,7 @@ browserifyEdge = (target, browser, layer, exclude='') ->
 for layer in ['main', 'popup', 'options', 'kitnic']
     browserifyEdge("build/chrome/js/#{layer}.js", 'chrome', layer)
 
+browserifyEdge("build/chrome/js/link_to_add.js", 'chrome', 'link_to_add')
 
 browserifyEdge('build/firefox/data/popup.js', 'firefox', 'popup')
 

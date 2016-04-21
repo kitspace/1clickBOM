@@ -2,10 +2,11 @@
     "manifest_version": 2,
     "name": "1-click BOM",
     "description": "Quickly fill shopping carts with electronic components.",
-    "version": @version,
+    "version": "0.6.2",
     "homepage_url":"http://1clickBOM.com",
     "permissions": [
-        "tabs", "clipboardRead", "clipboardWrite", "storage", "notifications",
+        "*://octopart.com/search",
+        "tabs", "clipboardRead", "clipboardWrite", "storage", "notifications", "contextMenus",
         "*://*.mouser.com/*",
         "*://*.mouser.be/*",
         "*://*.mouser.bg/*",
@@ -81,16 +82,23 @@
         "page":"html/background.html"
     },
     "options_page":"html/options.html",
+
     "icons": { "16" :"images/logo16.png"
              , "19" :"images/button19.png"
              , "38" :"images/logo38.png"
              , "48" :"images/logo48.png"
              , "128":"images/logo128.png"
              },
+    "web_accessible_resources": ["images/logo38.png"],
     "content_scripts": [
         {
           "matches": ["*://127.0.0.1:*/boards/*", "*://kitnic.it/boards/*", "*://*.kitnic.it/boards/*"],
           "js": ["js/kitnic.js"],
+          "run_at": "document_end"
+        },
+        {
+          "matches": ["*://octopart.com/*"],
+          "js": ["js/link_to_add.js"],
           "run_at": "document_end"
         }
       ]
