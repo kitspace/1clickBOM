@@ -129,6 +129,14 @@ exports.background = (messenger) ->
         tsvPageNotifier.addToBOM () ->
             sendState()
 
+    messenger.on 'loadFromPartNumber', (partNumber) ->
+        console.log('got here2')
+        browser.notificationsCreate
+            type    : 'basic'
+            title   : 'added '+partNumber
+            message : 'added '+partNumber+' to BOM.'
+            iconUrl : '/images/ok.png'
+
     messenger.on 'emptyCarts', () ->
         for name in retailer_list
             emptyCart(name)
