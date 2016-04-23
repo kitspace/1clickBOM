@@ -100,8 +100,9 @@ exports.background = (messenger) ->
         sendState()
 
     #TODO: review how to determine what we parse and where this snippet should live.
+    #TODO: currently, this would incorrectly return true if a highlighted <table> submitted
     isTSV = (selection) ->
-      selection.matches(/part/g)
+      selection.match(/part|prt|mpn/gi)
 
     messenger.on 'getBackgroundState', () ->
         sendState()
