@@ -17,7 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-{writeTSV}      = require '1-click-bom'
+{parseTSV, writeTSV}  = require '1-click-bom'
 {retailer_list} = require('1-click-bom').lineData
 
 {bom_manager} = require './bom_manager'
@@ -99,6 +99,10 @@ exports.background = (messenger) ->
         ).bind(null, name, timeout_id)
         sendState()
 
+    #TODO: review how to determine what we parse and where this snippet should live.
+    isTSV = (selection) ->
+      selection.matches(/part/g)
+
     messenger.on 'getBackgroundState', () ->
         sendState()
 
@@ -129,13 +133,22 @@ exports.background = (messenger) ->
         tsvPageNotifier.addToBOM () ->
             sendState()
 
-    messenger.on 'loadFromPartNumber', (partNumber) ->
-        console.log('got here2')
-        browser.notificationsCreate
-            type    : 'basic'
-            title   : 'added '+partNumber
-            message : 'added '+partNumber+' to BOM.'
-            iconUrl : '/images/ok.png'
+    messenger.on 'loadFromSelection', (selection) ->
+        if isTSV(selection)?
+            tsv_text = selection
+        else
+            rand_1_to_1000 = Math.floor(Math.random() * (1000 - 1) + 1)
+            #TODO: verify that ref 'nocat'+rand_1_to_1000 is not already used...
+            tsv_text = 'reference\tpart\tqty\nnocat'+rand_1_to_1000.toString()+'\t'+selection+'\t1'
+
+        bom_manager.addToBOM tsv_text, () ->
+            sendState()
+            #TODO: read state to determine whether successful.
+            browser.notificationsCreate
+                type    : 'basic'
+                title   : 'added one or more parts'
+                message : 'Next step: press Auto-complete to validate part number(s) recognized.'
+                iconUrl : '/images/ok.png'
 
     messenger.on 'emptyCarts', () ->
         for name in retailer_list

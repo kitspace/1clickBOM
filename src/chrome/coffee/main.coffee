@@ -37,14 +37,9 @@ chrome.runtime.onInstalled.addListener (details)->
                     settings[country][retailer][setting] = info.value
         browser.prefsSet({settings:settings})
 
-#temporary; pre-defining to determine if my lack of coffeescript knowledge is the problem
-loadFromPartNumber = (info, tab)-> 
-  debugger
-  messenger.send('loadFromPartNumber', info.selectionText)
-
 
 chrome.contextMenus.create({ 
-  'title'    : '1clickBOM: select a part number to add',
+  'title'    : '1clickBOM: to add parts, select a part number (or several in TSV format)',
   'contexts' : ['page'], 
   })
 
@@ -53,13 +48,12 @@ root = chrome.contextMenus.create({
   'contexts' : ['selection'], 
   }, () ->
     chrome.contextMenus.create({
-      'title': 'Add by part number: "%s" then Auto-Complete to further specify',
+      'title': 'Add: "%s"',
       'contexts': ['selection'],
       'parentId': root,
-      'onclick'  : loadFromPartNumber 
+      'onclick'  : (info, tab)-> messenger.send('loadFromSelection', info.selectionText)
     })
   )
-  #onclick: (evt) -> chrome.tabs.create({ url: evt.pageUrl })
 
 
 # tests only work in chrome currently, open a console on background and execute
