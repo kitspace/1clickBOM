@@ -78,6 +78,12 @@ pageMod.PageMod
     include: RegExp('https?://(.+\.)?kitnic.it/boards/.*', 'i')
     contentScriptFile: data.url('kitnic.js')
     onAttach: (worker) ->
+        if worker not in message_exchange.receivers
+            message_exchange.receivers.push(worker)
+            worker.on 'detach', () ->
+                index = message_exchange.receivers.indexOf(this)
+                if index >= 0
+                    message_exchange.receivers.splice(index, 1)
         for add in message_exchange.adders
             add(worker)
 
