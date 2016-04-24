@@ -19,10 +19,21 @@
 
 #this is the messenger object used by the background in firefox
 
-bgMessenger = (popup) ->
+bgMessenger = (popup, message_exchange) ->
     on: (msgName, callback) ->
         popup.port.on(msgName, callback)
+        message_exchange.adders.push ((msgName, callback, worker) ->
+            worker.port.on(msgName, callback)
+            if worker not in message_exchange.receivers
+                message_exchange.receivers.push(worker)
+                worker.on 'detach', () ->
+                    index = message_exchange.receivers.indexOf(this)
+                    if index >= 0
+                        message_exchange.receivers.splice(index, 1)
+        ).bind(null, msgName, callback)
     send:(msgName, input) ->
         popup.port.emit(msgName, input)
+        for worker in message_exchange.receivers
+            worker.port.emit(msgName, input)
 
 exports.bgMessenger = bgMessenger

@@ -17,7 +17,7 @@
 # The Original Developer is the Initial Developer. The Original Developer of
 # the Original Code is Kaspar Emanuel.
 
-#this is the messenger object used by the popup in firefox
+#this is the messenger object used by the popup and content-scripts in firefox
 
 messenger =
     on: (msgName, callback) ->
