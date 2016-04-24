@@ -9,6 +9,7 @@ messenger.on 'updateKitnic', (interfaces) ->
     window.postMessage({from:'extension', message:'updateAddingState', value:adding}, '*')
 
 window.addEventListener 'message', (event) ->
+    console.log(event.data)
     if event.source != window
         return
     if event.data.from == 'page'

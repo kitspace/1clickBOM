@@ -71,6 +71,12 @@ popup.on 'show', () ->
 
 preference_listeners = {}
 
+pageMod = require("sdk/page-mod");
+
+pageMod.PageMod
+  include: RegExp('https?://(.+\.)?kitnic.it/boards/.*', 'i')
+  contentScriptFile: data.url('kitnic.js')
+
 browser =
     prefsSet: (obj, callback) ->
         for k,v of obj
