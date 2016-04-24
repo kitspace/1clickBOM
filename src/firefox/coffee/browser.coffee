@@ -29,6 +29,7 @@ windowUtils      = require 'sdk/window/utils'
 timers           = require 'sdk/timers'
 {storage}        = require 'sdk/simple-storage'
 preferences      = require 'sdk/simple-prefs'
+pageMod          = require 'sdk/page-mod'
 locationChanged  = require './location_changed'
 {Cc, Ci}         = require 'chrome'
 dom = Cc['@mozilla.org/xmlextras/domparser;1'].createInstance(Ci.nsIDOMParser)
@@ -70,6 +71,21 @@ popup.on 'show', () ->
     popup.port.emit('show')
 
 preference_listeners = {}
+
+
+message_exchange = {adders:[], receivers:[]}
+pageMod.PageMod
+    include: RegExp('https?://(.+\.)?kitnic.it/boards/.*', 'i')
+    contentScriptFile: data.url('kitnic.js')
+    onAttach: (worker) ->
+        if worker not in message_exchange.receivers
+            message_exchange.receivers.push(worker)
+            worker.on 'detach', () ->
+                index = message_exchange.receivers.indexOf(this)
+                if index >= 0
+                    message_exchange.receivers.splice(index, 1)
+        for add in message_exchange.adders
+            add(worker)
 
 browser =
     prefsSet: (obj, callback) ->
@@ -182,6 +198,7 @@ preferences.on '', (prefName) ->
             for callback in callbacks
                 callback()
 
-exports.browser        = browser
-exports.XMLHttpRequest = XMLHttpRequest
-exports.popup          = popup
+exports.browser          = browser
+exports.XMLHttpRequest   = XMLHttpRequest
+exports.popup            = popup
+exports.message_exchange = message_exchange

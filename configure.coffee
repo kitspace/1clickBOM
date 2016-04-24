@@ -94,6 +94,7 @@ for layer in ['main', 'popup', 'options', 'kitnic']
 
 
 browserifyEdge('build/firefox/data/popup.js', 'firefox', 'popup')
+browserifyEdge('build/firefox/data/kitnic.js', 'firefox', 'kitnic')
 
 
 for file in sourceJs('firefox')

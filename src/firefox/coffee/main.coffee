@@ -1,6 +1,6 @@
 {background}  = require './background'
 {bgMessenger} = require './bg_messenger'
-{popup}       = require './browser'
+{popup, message_exchange} = require './browser'
 http          = require './http'
 firefoxTabs   = require 'sdk/tabs'
 notifications = require 'sdk/notifications'
@@ -23,4 +23,4 @@ exports.main = (options, callbacks) ->
                 )
             )
 
-    background(bgMessenger(popup))
+    background(bgMessenger(popup, message_exchange))
