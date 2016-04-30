@@ -1,3 +1,4 @@
+#adds exception for jpmignore for files actually used
 precinct = require('precinct')
 path = require('path')
 fs = require('fs')

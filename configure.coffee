@@ -97,9 +97,11 @@ browserifyEdge('build/firefox/data/popup.js', 'firefox', 'popup')
 browserifyEdge('build/firefox/data/kitnic.js', 'firefox', 'kitnic')
 
 
+firefox_js = []
 for file in sourceJs('firefox')
     target = "build/firefox/lib/#{path.basename(file)}"
     ninja.edge(target).from(file).using('copy')
+    firefox_js.push(target)
     targets.firefox.push(target)
 
 
@@ -182,7 +184,7 @@ targets.firefox.push('build/firefox/node_modules')
 
 ninja.rule('make-jpmignore').run("coffee make-jpmignore.coffee $in")
 ninja.edge('build/firefox/.jpmignore').from('build/firefox/lib/main.js')
-    .need(['src/firefox/.jpmignore', 'make-jpmignore.coffee'])
+    .need(firefox_js.concat(['src/firefox/.jpmignore', 'make-jpmignore.coffee']))
     .using('make-jpmignore')
 targets.firefox.push('build/firefox/.jpmignore')
 
