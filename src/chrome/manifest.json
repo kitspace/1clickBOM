@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "1-click BOM",
+    "name": "Kitnic 1-click BOM",
     "description": "Quickly fill shopping carts with electronic components.",
     "version": @version,
     "homepage_url":"http://1clickBOM.com",
