@@ -49,7 +49,7 @@ _search = (query, retailers = [], other_fields = []) ->
                 number = doc.querySelector('.PartHeader__mpn')
                     ?.firstElementChild?.innerHTML.trim()
                 if number?
-                    result.partNumbers.push("#{manufacturer} #{number}".trim())
+                    result.partNumbers.push({manufacturer:manufacturer, part:number})
 
             #we prefer the lowest minimum order quantities (moq)
             tds = doc.querySelectorAll('td.col-seller')

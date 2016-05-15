@@ -74,8 +74,9 @@ bom_manager =
                 if not line.partNumbers?
                     line.partNumbers = []
                     if line.partNumber != ''
-                        line.partNumbers.push "#{line.manufacturer}
-                            #{line.partNumber}".trim()
+                        line.partNumbers.push
+                            manufacturer:line.manufacturer.trim()
+                            part: line.partNumber.trim()
             callback(bom)
 
     autoComplete: (deep) ->

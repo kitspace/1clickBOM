@@ -29,8 +29,9 @@ _next_query = (line, queries) ->
     other_fields = []
     retailers = []
     for n in line.partNumbers
-        if n not in queries
-            query = n
+        q = "#{n.manufacturer} #{n.part}"
+        if q not in queries
+            query = q
             break
     for key in retailer_list
         sku = line.retailers[key]
@@ -61,6 +62,7 @@ _auto_complete = (search_engine, lines, depth) ->
                 line.partNumbers = line.partNumbers.concat(result.partNumbers)
                 for retailer in retailer_list
                     if result.retailers[retailer]?
+                        #replace reeled components with non-reeled for Farnell
                         if retailer == 'Farnell' &&
                         /RL$/.test(result.retailers[retailer])
                             result.retailers[retailer] =
