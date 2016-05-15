@@ -112,7 +112,7 @@ module('Mouser')
 # Mouser's site is unified, changing the basket somewhere will change the
 # basket everywhere.
 # TODO would be good to find a way to test more locations, tried doing it like
-# the other retailers but the locations can interefer with each other
+# the other retailers but the locations can interfere with each other
 
 asyncTest 'Clear All', () ->
     r = new Mouser('AU')
@@ -129,7 +129,7 @@ asyncTest 'Add lines fails but adds again', () ->
     r.addLines lines, (result, that) ->
         deepEqual(result.success, false, that.country)
         deepEqual(result.fails, [lines[0]], that.country)
-        lines = [{'part':'607-GALILEO','quantity':2, 'reference':'test'}]
+        lines = [{'part':'607-GALILEO2','quantity':2, 'reference':'test'}]
         that.addLines lines, (result, that) ->
             #the order here is important as we want to make sure the 'errors' were cleared after the failed add
             deepEqual(result.success, true, that.country)
