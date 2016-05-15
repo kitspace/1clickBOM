@@ -92,7 +92,7 @@ getLocation = (callback) ->
     countries_data = browser.getLocal('data/countries.json')
     for _,code of countries_data
         used_country_codes.push(code)
-    url = 'http://preview.kitnic.it:8080/json'
+    url = 'https://freegeoip.kitnic.it'
     get url, {timeout:5000}, (event) =>
         response = JSON.parse(event.target.responseText)
         code = response.country_code
