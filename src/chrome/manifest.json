@@ -25,7 +25,7 @@
              },
     "content_scripts": [
         {
-          "matches": ["*://127.0.0.1:*/boards/*", "*://kitnic.it/boards/*", "*://*.kitnic.it/boards/*"],
+          "matches": ["*://kitnic.it/boards/*", "*://*.kitnic.it/boards/*"],
           "js": ["js/kitnic.js"],
           "run_at": "document_end"
         }
