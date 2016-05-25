@@ -137,12 +137,6 @@ If you need any help or think you found a bug please get in touch via
 
 ## Roadmap ##
 
-* 0.7
-    * Kitnic.it site interaction
-    * Set a timeout on all UI requests so that extension cannot get stuck
-
-* 1.0
-    * Remove legacy BOM format support
 
 * 1.1
     * Make requests cancelable
