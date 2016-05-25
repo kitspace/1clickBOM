@@ -3458,7 +3458,6 @@ function toFastProperties(obj) {
     var l = 8;
     while (l--) new FakeConstructor();
     return obj;
-    eval(obj);
 }
 
 var rident = /^[a-z$_][a-z$_0-9]*$/i;
