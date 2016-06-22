@@ -72,23 +72,32 @@ exports.tsvPageNotifier = (sendState, bom_manager) ->
             @checkPage () =>
                 if @onDotTSV
                     bom_manager._add_to_bom(@lines, @invalid, callback)
-        quickAddToCart: (retailer) ->
+        quickAddToCart: (input) ->
+            if typeof input == 'string'
+                retailer = input
+                multiplier = 1
+            else
+                retailer = input.retailer
+                multiplier = input.multiplier
             @checkPage () =>
                 if @onDotTSV
-                    parts = bom_manager._to_retailers(@lines)
+                    parts = bom_manager._to_retailers(@lines)[retailer]
+                    parts = parts.map (line) ->
+                        line.quantity = Math.ceil(line.quantity * multiplier)
+                        return line
                     bom_manager.interfaces[retailer].adding_lines = true
                     timeout_id = browser.setTimeout ((retailer) ->
                         bom_manager.interfaces[retailer].adding_lines = false
                         sendState()
                     ).bind(null, retailer)
                     , 180000
-                    bom_manager.interfaces[retailer].addLines(parts[retailer],
+                    bom_manager.interfaces[retailer].addLines(parts,
                         ((timeout_id, retailer, result) ->
                             browser.clearTimeout(timeout_id)
                             bom_manager.interfaces[retailer].adding_lines = false
                             sendState()
                             bom_manager.interfaces[retailer].openCartTab()
-                            bom_manager.notifyFillCart(parts[retailer]
+                            bom_manager.notifyFillCart(parts
                             , retailer, result)
                         ).bind(null, timeout_id, retailer)
                     )
