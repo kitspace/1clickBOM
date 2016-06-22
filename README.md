@@ -23,6 +23,7 @@ retailers.
 * [License](#license)
 
 ## News ##
+- [Check out our electronics sharing site: Kitnic!](https://kitnic.it)
 
 - [Added function to auto-complete BOM](#completion)
 
@@ -50,7 +51,7 @@ Check the [roadmap](#roadmap) for more details on planned features.
 
 You can copy and paste into the extension from a text editor or spread sheet
 program (LibreOffice, Excel). You must have a column for references, one for the
-quantity and at least one of: decription, part number or a retailer column. 
+quantity and at least one of: decription, part number or a retailer column.
 You can have multiple part number columns for specifying
 multiple possible manufacturer part numbers per schematic reference.
 
@@ -59,46 +60,44 @@ tab-seperated values with a `.tsv` extension.
 
 Here is a small example which is well suited for [auto-completing](#completion):
 
-| References | Qty | Description   | Part Number                 | 
-|------------|-----|---------------|-----------------------------| 
-| C1         | 1   | 1uF 0603 X5R  |                             | 
-| C2         | 1   | 10uF 0603 X5R |                             | 
-| D1         | 1   |               | 1N4148WS                    | 
-| Q1         | 1   |               | IRF7309PBF                  | 
-| R1         | 1   | 10k 0603      |                             | 
-| R2,R4      | 2   | 100k 0603     |                             | 
-| R3         | 1   | 300k 0603     |                             | 
-| SW1        | 1   |               | TE Connectivity 4-1437565-1 | 
+| References | Qty | Description   | Part Number |
+|------------|-----|---------------|-------------|
+| C1         | 1   | 1uF 0603 X5R  |             |
+| C2         | 1   | 10uF 0603 X5R |             |
+| D1         | 1   |               | 1N4148WS    |
+| Q1         | 1   |               | IRF7309PBF  |
+| R1         | 1   | 10k 0603      |             |
+| R2,R4      | 2   | 100k 0603     |             |
+| R3         | 1   | 300k 0603     |             |
+| SW1        | 1   |               | 4-1437565-1 |
 
 You can find this and other examples in TSV format in the [examples directory][2].
 
-The examples are mostly in the format that the extension will output. Reading is less strict. 
+The examples are mostly in the format that the extension will output. Reading is less strict.
 Below are tables of title aliases 1-click-BOM recognizes. If you have any more suggestions please [get in touch](#issues).
 (Capitalisation is ignored, characters within brackets, like`(s)`, denote they
 are optional.)
 
-| References   | Quantity    | Description    | Part Number                 | 
-|--------------|-------------|----------------|-----------------------------| 
-| ref(s)       | qty(s)      | comment(s)     | part(-)number(s)            | 
-| reference(s) | quantity(s) | description(s) | partnumber(s)               | 
-| line-note(s) |             | cmnt(s)        | part number(s)              | 
-| line note(s) |             | descr(s)       | m(/)f part(s)               | 
-|              |             |                | manuf(.) part(s)            | 
-|              |             |                | mpn(s)                      | 
-|              |             |                | m(/)f part number(s)        | 
-|              |             |                | manuf(.) part number(s)     | 
-|              |             |                | manufacturer part(s)        | 
-|              |             |                | manufacturer part number(s) | 
-|              |             |                | prt(s)                      | 
-|              |             |                | part(s)                     | 
+| References   | Quantity    | Description    | MPN                         |
+|--------------|-------------|----------------|-----------------------------|
+| ref(s)       | qty(s)      | comment(s)     | part(-)number(s)            |
+| reference(s) | quantity(s) | description(s) | partnumber(s)               |
+| line-note(s) |             | cmnt(s)        | part number(s)              |
+| line note(s) |             | descr(s)       | m(/)f part(s)               |
+| part(s)      |             |                | manuf(.) part(s)            |
+|              |             |                | mpn(s)                      |
+|              |             |                | m(/)f part number(s)        |
+|              |             |                | manuf(.) part number(s)     |
+|              |             |                | manufacturer part(s)        |
+|              |             |                | manufacturer part number(s) |
 
-| Digikey    | Mouser | RS              | Newark | Farnell   | 
-|------------|--------|-----------------|--------|-----------| 
-| digi(-)key | mouser | rs              | newark | farnell   | 
-|            |        | rs(-)online     |        | fec       | 
-|            |        | rs(-)delivers   |        | premier   | 
-|            |        | radio( )spares  |        | element14 | 
-|            |        | rs( )components |        |           | 
+| Digikey    | Mouser | RS              | Newark | Farnell   |
+|------------|--------|-----------------|--------|-----------|
+| digi(-)key | mouser | rs              | newark | farnell   |
+|            |        | rs(-)online     |        | fec       |
+|            |        | rs(-)delivers   |        | premier   |
+|            |        | radio( )spares  |        | element14 |
+|            |        | rs( )components |        |           |
 
 ### Loading an online BOM ###
 
@@ -138,15 +137,15 @@ If you need any help or think you found a bug please get in touch via
 ## Roadmap ##
 
 
-* 1.1
+* 1.2
     * Make requests cancelable
     * Improve user interface
 
-* 1.2
+* 1.3
     * Add retailer preference ranking
     * Add function to reduce BOM (and add to cart?) according to retailer preference
 
-* 1.3
+* 1.4
     * Additional retailer support
         * AVNet
         * Adafruit
