@@ -1,34 +1,16 @@
 #
-# Python script to generate a 1-click-BOM.tsv
+# Python script to generate a 1-click-bom.tsv
 #
 
 """
     @package
-    Generate a 1-click-BOM
+    Generate a 1-click BOM merging known fields into a description column for use with auto-completing.
 """
 # Import the KiCad python helper module and the csv formatter
 import kicad_netlist_reader
 import csv
 import sys
 import os
-
-retailers = ["Digikey", "Mouser", "RS", "Newark", "Farnell"]
-
-retailer_aliases = {
-    "Farnell"            : "Farnell",
-    "FEC"                : "Farnell",
-    "Premier"            : "Farnell",
-    "element14"          : "Farnell",
-    "Digi(-| )?key"      : "Digikey",
-    "Mouser"             : "Mouser" ,
-    "RS"                 : "RS"     ,
-    "RS(-| )?Online"     : "RS"     ,
-    "RS(-| )?Delivers"   : "RS"     ,
-    "Radio(-| )?Spares"  : "RS"     ,
-    "RS(-| )?Components" : "RS"     ,
-    "Newark"             : "Newark"
-}
-
 
 # Generate an instance of a generic netlist, and load the netlist tree from
 # the command line option. If the file doesn"t exist, execution will stop
@@ -37,7 +19,7 @@ net = kicad_netlist_reader.netlist(sys.argv[1])
 # Open a file to write to, if the file cannot be opened output to stdout
 # instead
 
-path = os.path.dirname(sys.argv[2]) + os.sep + "1-click-BOM.tsv"
+path = os.path.dirname(sys.argv[2]) + os.sep + "1-click-bom.tsv"
 try:
     f = open(path, "w")
 except IOError:
@@ -48,7 +30,7 @@ except IOError:
 # Create a new csv writer object to use as the output formatter
 out = csv.writer(f, lineterminator="\n", delimiter="\t", quotechar="\"", quoting=csv.QUOTE_MINIMAL)
 
-out.writerow(["References", "Qty", "Description"])
+out.writerow(["References", "Qty", "Description", ])
 
 # Get all of the components in groups of matching parts + values
 # (see kicad_netlist_reader.py)
