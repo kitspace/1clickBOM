@@ -52,7 +52,7 @@
 <h2 id="section"></h2>
 <h2 id="section-1"></h2>
 <h2 id="summary">Summary</h2>
-<p>1-click BOM is a browser extension that fills your shopping carts for you on sites like Digikey and Mouser, you simply paste from a spreadsheet or visit an online <code>.tsv</code> file. This way you can keep one bill of materials (BOM) that lets you and people you share the BOM with quickly purchase items from multiple retailers.</p>
+<p>1-click BOM is a browser extension that fills your shopping carts for you on sites like Digikey and Mouser. It's main purpose is to work with the elctronic project sharing site <a href="https://kitnic.it">kitnic.it</a>. But you can also use it from a spreadsheet or load an online <code>.tsv</code> file from any other site.</p>
 <h2 id="table-of-contents">Table of Contents</h2>
 <ul>
 <li><a href="#summary">Summary</a></li>
@@ -84,6 +84,7 @@
 <p>Check the <a href="#roadmap">roadmap</a> for more details on planned features.</p>
 <h2 id="usage">Usage</h2>
 <h3 id="making-a-1-click-bom">Making a 1-click-BOM</h3>
+<p>We are working on export utilities for various CAD programs in the <a href="output_scripts" class="uri">output_scripts</a> directory.</p>
 <p>You can copy and paste into the extension from a text editor or spread sheet program (LibreOffice, Excel). You must have a column for references, one for the quantity and at least one of: decription, part number or a retailer column. You can have multiple part number columns for specifying multiple possible manufacturer part numbers per schematic reference.</p>
 <p>When saving files from your external editor/spreadsheet save them as tab-seperated values with a <code>.tsv</code> extension.</p>
 <p>Here is a small example which is well suited for <a href="#completion">auto-completing</a>:</p>
@@ -270,7 +271,7 @@
 </tbody>
 </table>
 <h3 id="loading-an-online-bom">Loading an online BOM</h3>
-<p>If you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Clicking the blue button will load the data into 1clickBOM.</p>
+<p>If you visit a page on <a href="https://kitnic.it">kitnic.it</a> or one that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Clicking the blue button will load the data into the extension.</p>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" />
 <p class="caption">Load from page</p>
@@ -278,18 +279,14 @@
 <h3 id="lets-go-shopping">Let's go shopping!</h3>
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
 <h3 id="completion">Completion</h3>
-<p>New in version 0.5 is a function to search Octopart.com and Findchips.com to try and complete a BOM for you. A complete BOM is one that has a part number for <em>every</em> retailer. Simply press the button labeled 'Complete' and 1clickBOM will use other fields to search for the fields that are left blank.</p>
-<h3 id="legacy-bom-format">Legacy BOM format</h3>
-<p>The format used prior to version <code>0.3</code> simply had the items in the following order:</p>
-<pre><code>line-note | quantity | retailer | part-number</code></pre>
-<p>This format is still supported but deprecated and will be phased out by version <code>1.0</code>.</p>
+<p>1-click BOM can try complete an incomplet BOM for by searching Octopart and Findchips. A complete BOM is where every part has a manufacturer part number and a part number for <em>every</em> retailer. Simply press the button labeled 'Complete' and 1clickBOM will use other fields to search for the fields that are left blank.</p>
 <h2 id="issues">Issues</h2>
-<p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">GitHub</a> or <script type="text/javascript">
+<p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">GitHub</a>, <script type="text/javascript">
 <!--
 h='&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#x69;&#110;&#102;&#x6f;';e=n+a+h;
 document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+'email'+'<\/'+'a'+'>');
 // -->
-</script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript>.</p>
+</script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript> or visit the <a href="https://gitter.im/monostable/kitnic">Kitnic chat room</a></p>
 <h2 id="roadmap">Roadmap</h2>
 <ul>
 <li>1.2
