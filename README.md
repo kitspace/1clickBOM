@@ -47,8 +47,28 @@ Check the [roadmap](#roadmap) for more details on planned features.
 
 ### Making a 1-click-BOM ###
 
-We are working on export utilities for various CAD programs in the
-[output_scripts][output_scripts] directory.
+#### Eagle
+
+![][eagle_bom_export.png]
+
+1. In the schematic window, select "File -> Export -> BOM". Select "List Type" values and "Output Format" CSV (see image) and press save.
+2. Open the `.csv` in a spreadsheet program (LibreOffice, Excel). Select a semi-colon seperator when importing.
+3. Select everything in your spreadsheet program, copy and paste into the extension. 
+4. Press "complete" in the extension, wait till it's done and then press copy.
+5. Open a new spreadsheet and paste into it. Save it as tab-seperated values, with a `.tsv` extension and UTF-8 encoding.
+6. Check over all the part numbers and make sure they are correct. Put them into your shopping cart using the extension to confirm they have the right minimum order quantity etc.
+
+#### KiCad
+
+1. Download the Python files from the [output_scripts/kicad][output_scripts/kicad] directory. Put them all together into a directory where you want to keep them.
+2. In Eeschema, the schematic tool, select "Tools -> Generate Bill of Materials" then "Add Plugin". Select:
+    - 1-click-bom_description.py to try and extract a description for auto-complete
+    - 1-click-bom_fields.py if you have fields in your symbols that 1-click BOM will understand (see [below](#field-matching)).
+3. Open the resulting file in a spreadsheet program or text editor and copy and paste it into the extension
+4. Try auto-completing in the extension if you wish, check all the values afterwards
+
+
+#### Generally
 
 You can copy and paste into the extension from a text editor or spread sheet
 program (LibreOffice, Excel). You must have a column for references, one for the
@@ -56,8 +76,8 @@ quantity and at least one of: decription, part number or a retailer column.
 You can have multiple part number columns for specifying
 multiple possible manufacturer part numbers per schematic reference.
 
-When saving files from your external editor/spreadsheet save them as
-tab-seperated values with a `.tsv` extension.
+When saving files from your external editor or spreadsheet save them as
+tab-seperated values with a `.tsv` extension with UTF-8 encoding.
 
 Here is a small example which is well suited for [auto-completing](#completion):
 
@@ -73,6 +93,8 @@ Here is a small example which is well suited for [auto-completing](#completion):
 | SW1        | 1   |               | 4-1437565-1 |
 
 You can find this and other examples in TSV format in the [examples directory][2].
+
+### Field Matching
 
 The examples are mostly in the format that the extension will output. Reading
 is less strict.  Below are tables of title aliases 1-click-BOM recognizes. If
@@ -216,7 +238,8 @@ to software you are solely making available to users over a network i.e.
 software as a service. See the [LICENSE][6] file for details.
 
 [kitnic gitter]:https://gitter.im/monostable/kitnic
-[output_scripts]:https://github.com/monostable/1clickBOM/blob/master/output_scripts
+[output_scripts/kicad]:https://github.com/monostable/1clickBOM/blob/master/output_scripts/kicad
+[eagle_bom_export.png]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/eagle_bom_export.png
 
 [2]:https://github.com/monostable/1clickBOM/blob/master/examples/
 [3]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png
