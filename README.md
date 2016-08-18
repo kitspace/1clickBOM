@@ -1,4 +1,3 @@
-
 [![Youtube Demo][22]](https://youtu.be/611TW315pZM)
 
 [![Available on Chrome][8]][14] [![Add to Firefox][9]][13]
@@ -6,10 +5,9 @@
 ## Summary ##
 
 1-click BOM is a browser extension that fills your shopping carts for you on
-sites like Digikey and Mouser, you simply paste from a spreadsheet or visit an
-online `.tsv` file. This way you can keep one bill of materials (BOM) that lets
-you and people you share the BOM with quickly purchase items from multiple
-retailers.
+sites like Digikey and Mouser. It's main purpose is to work with the electronic
+project sharing site [kitnic.it](https://kitnic.it). But you can also use it
+from a spreadsheet or load an online `.tsv` file from any other site.
 
 ## Table of Contents ##
 
@@ -49,6 +47,9 @@ Check the [roadmap](#roadmap) for more details on planned features.
 
 ### Making a 1-click-BOM ###
 
+We are working on export utilities for various CAD programs in the
+[output_scripts][output_scripts] directory.
+
 You can copy and paste into the extension from a text editor or spread sheet
 program (LibreOffice, Excel). You must have a column for references, one for the
 quantity and at least one of: decription, part number or a retailer column.
@@ -73,10 +74,10 @@ Here is a small example which is well suited for [auto-completing](#completion):
 
 You can find this and other examples in TSV format in the [examples directory][2].
 
-The examples are mostly in the format that the extension will output. Reading is less strict.
-Below are tables of title aliases 1-click-BOM recognizes. If you have any more suggestions please [get in touch](#issues).
-(Capitalisation is ignored, characters within brackets, like`(s)`, denote they
-are optional.)
+The examples are mostly in the format that the extension will output. Reading
+is less strict.  Below are tables of title aliases 1-click-BOM recognizes. If
+you have any more suggestions please [get in touch](#issues).  (Capitalisation
+is ignored, characters within brackets, like`(s)`, denote they are optional.)
 
 | References   | Quantity    | Description    | MPN                         |
 |--------------|-------------|----------------|-----------------------------|
@@ -101,9 +102,10 @@ are optional.)
 
 ### Loading an online BOM ###
 
-If you visit a page that ends in `.tsv` and has data in the right format
-available 1clickBOM will show a blue badge and button with an arrow. Clicking
-the blue button will load the data into 1clickBOM.
+If you visit a page on [kitnic.it](https://kitnic.it) or one that ends in
+`.tsv` and has data in the right format available 1clickBOM will show a blue
+badge and button with an arrow. Clicking the blue button will load the data
+into the extension.
 
 ![Load from page][3]
 
@@ -115,24 +117,17 @@ using the buttons on the popup. You can also quickly view and empty your carts.
 
 ### Completion ###
 
-New in version 0.5 is a function to search Octopart.com and Findchips.com to try
-and complete a BOM for you. A complete BOM is one that has a part number for
-_every_ retailer. Simply press the button labeled 'Complete' and 1clickBOM will
-use other fields to search for the fields that are left blank.
-
-### Legacy BOM format ###
-
-The format used prior to version `0.3` simply had the items in the following order:
-
-    line-note | quantity | retailer | part-number
-
-This format is still supported but deprecated and will be phased out by version
-`1.0`.
+1-click BOM can try complete an incomplet BOM for by searching Octopart and
+Findchips. A complete BOM is where every part has a manufacturer part number
+and a part number for _every_ retailer. Simply press the button labeled
+'Complete' and 1clickBOM will use other fields to search for the fields that
+are left blank.
 
 ## Issues ##
 
 If you need any help or think you found a bug please get in touch via
-[GitHub][10] or [email][11].
+[GitHub][10], [email][11] or visit the [Kitnic chat
+room][kitnic gitter]
 
 ## Roadmap ##
 
@@ -219,6 +214,9 @@ proprietary ones) as long as you display appropriate attribution and share your
 code-improvements to 1clickBOM itself under the CPAL as well. This also applies
 to software you are solely making available to users over a network i.e.
 software as a service. See the [LICENSE][6] file for details.
+
+[kitnic gitter]:https://gitter.im/monostable/kitnic
+[output_scripts]:https://github.com/monostable/1clickBOM/blob/master/output_scripts
 
 [2]:https://github.com/monostable/1clickBOM/blob/master/examples/
 [3]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png

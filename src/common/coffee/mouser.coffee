@@ -119,7 +119,8 @@ class Mouser extends RetailerInterface
             if callback?
                 callback({success:false}, this)
     _get_adding_viewstate: (callback, arg)->
-        #we get the quick-add form , extend it to 99 lines (the max) and get the viewstate from the response
+        #we get the quick-add form, extend it to 99 lines (the max) and get
+        #the viewstate from the response
         url = 'http' + @site + @addline
         get url, {}, (event) =>
             doc = browser.parseDOM(event.target.responseText)
