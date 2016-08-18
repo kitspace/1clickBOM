@@ -145,7 +145,9 @@ using the buttons on the popup. You can also quickly view and empty your carts.
 Findchips. A complete BOM is where every part has a manufacturer part number
 and a part number for _every_ retailer. Simply press the button labeled
 'Complete' and 1clickBOM will use other fields to search for the fields that
-are left blank.
+are left blank. This works well sometimes and other times selects completely
+random parts. It really depends on the fields you already give it. We are very
+much still working on improving this .
 
 ## Issues ##
 
