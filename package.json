@@ -16,13 +16,13 @@
   "main": "lib/main.js",
   "homepage": "http://1clickBOM.com",
   "devDependencies": {
-    "browserify": "^10.2.4",
+    "browserify": "^13.1.0",
     "coffee-script": "^1.9.3",
-    "coffeeify": "^1.1.0",
-    "globule": "^0.2.0",
+    "coffeeify": "^2.0.1",
+    "globule": "^1.0.0",
     "jpm": "^1.0.4",
     "ninja-build-gen": "^0.2.1",
-    "precinct": "^2.5.1",
+    "precinct": "^3.1.1",
     "source-map-support": "^0.4.0"
   },
   "dependencies": {
