@@ -98,9 +98,13 @@
 <li>Check over all the part numbers and make sure they are correct. Put them into your shopping cart using the extension to confirm they have the right minimum order quantity etc.</li>
 </ol>
 <h4 id="kicad">KiCad</h4>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/kicad_bom_export.png" alt="" />
+
+</div>
 <ol style="list-style-type: decimal">
 <li>Download the Python files from the <a href="https://github.com/monostable/1clickBOM/blob/master/output_scripts/kicad">output_scripts/kicad</a> directory. Put them all together into a directory where you want to keep them.</li>
-<li>In Eeschema, the schematic tool, select &quot;Tools -&gt; Generate Bill of Materials&quot; then &quot;Add Plugin&quot;. Select:
+<li>In Eeschema, the schematic tool, select <code>Tools -&gt; Generate Bill of Materials</code> then <code>Add Plugin</code> and then <code>Generate</code> Select:
 <ul>
 <li>1-click-bom_description.py to try and extract a description for auto-complete</li>
 <li>1-click-bom_fields.py if you have fields in your symbols that 1-click BOM will understand (see <a href="#field-matching">below</a>).</li>

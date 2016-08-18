@@ -60,8 +60,10 @@ Check the [roadmap](#roadmap) for more details on planned features.
 
 #### KiCad
 
+![][kicad_bom_export.png]
+
 1. Download the Python files from the [output_scripts/kicad][output_scripts/kicad] directory. Put them all together into a directory where you want to keep them.
-2. In Eeschema, the schematic tool, select "Tools -> Generate Bill of Materials" then "Add Plugin". Select:
+2. In Eeschema, the schematic tool, select `Tools -> Generate Bill of Materials` then `Add Plugin` and then `Generate` Select:
     - 1-click-bom_description.py to try and extract a description for auto-complete
     - 1-click-bom_fields.py if you have fields in your symbols that 1-click BOM will understand (see [below](#field-matching)).
 3. Open the resulting file in a spreadsheet program or text editor and copy and paste it into the extension
@@ -240,6 +242,7 @@ software as a service. See the [LICENSE][6] file for details.
 [kitnic gitter]:https://gitter.im/monostable/kitnic
 [output_scripts/kicad]:https://github.com/monostable/1clickBOM/blob/master/output_scripts/kicad
 [eagle_bom_export.png]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/eagle_bom_export.png
+[kicad_bom_export.png]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/kicad_bom_export.png
 
 [2]:https://github.com/monostable/1clickBOM/blob/master/examples/
 [3]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png
