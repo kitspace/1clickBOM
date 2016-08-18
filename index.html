@@ -84,9 +84,33 @@
 <p>Check the <a href="#roadmap">roadmap</a> for more details on planned features.</p>
 <h2 id="usage">Usage</h2>
 <h3 id="making-a-1-click-bom">Making a 1-click-BOM</h3>
-<p>We are working on export utilities for various CAD programs in the <a href="https://github.com/monostable/1clickBOM/blob/master/output_scripts">output_scripts</a> directory.</p>
+<h4 id="eagle">Eagle</h4>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/eagle_bom_export.png" alt="" />
+
+</div>
+<ol style="list-style-type: decimal">
+<li>In the schematic window, select &quot;File -&gt; Export -&gt; BOM&quot;. Select &quot;List Type&quot; values and &quot;Output Format&quot; CSV (see image) and press save.</li>
+<li>Open the <code>.csv</code> in a spreadsheet program (LibreOffice, Excel). Select a semi-colon seperator when importing.</li>
+<li>Select everything in your spreadsheet program, copy and paste into the extension.</li>
+<li>Press &quot;complete&quot; in the extension, wait till it's done and then press copy.</li>
+<li>Open a new spreadsheet and paste into it. Save it as tab-seperated values, with a <code>.tsv</code> extension and UTF-8 encoding.</li>
+<li>Check over all the part numbers and make sure they are correct. Put them into your shopping cart using the extension to confirm they have the right minimum order quantity etc.</li>
+</ol>
+<h4 id="kicad">KiCad</h4>
+<ol style="list-style-type: decimal">
+<li>Download the Python files from the <a href="https://github.com/monostable/1clickBOM/blob/master/output_scripts/kicad">output_scripts/kicad</a> directory. Put them all together into a directory where you want to keep them.</li>
+<li>In Eeschema, the schematic tool, select &quot;Tools -&gt; Generate Bill of Materials&quot; then &quot;Add Plugin&quot;. Select:
+<ul>
+<li>1-click-bom_description.py to try and extract a description for auto-complete</li>
+<li>1-click-bom_fields.py if you have fields in your symbols that 1-click BOM will understand (see <a href="#field-matching">below</a>).</li>
+</ul></li>
+<li>Open the resulting file in a spreadsheet program or text editor and copy and paste it into the extension</li>
+<li>Try auto-completing in the extension if you wish, check all the values afterwards</li>
+</ol>
+<h4 id="generally">Generally</h4>
 <p>You can copy and paste into the extension from a text editor or spread sheet program (LibreOffice, Excel). You must have a column for references, one for the quantity and at least one of: decription, part number or a retailer column. You can have multiple part number columns for specifying multiple possible manufacturer part numbers per schematic reference.</p>
-<p>When saving files from your external editor/spreadsheet save them as tab-seperated values with a <code>.tsv</code> extension.</p>
+<p>When saving files from your external editor or spreadsheet save them as tab-seperated values with a <code>.tsv</code> extension with UTF-8 encoding.</p>
 <p>Here is a small example which is well suited for <a href="#completion">auto-completing</a>:</p>
 <table>
 <thead>
@@ -149,6 +173,7 @@
 </tbody>
 </table>
 <p>You can find this and other examples in TSV format in the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/">examples directory</a>.</p>
+<h3 id="field-matching">Field Matching</h3>
 <p>The examples are mostly in the format that the extension will output. Reading is less strict. Below are tables of title aliases 1-click-BOM recognizes. If you have any more suggestions please <a href="#issues">get in touch</a>. (Capitalisation is ignored, characters within brackets, like<code>(s)</code>, denote they are optional.)</p>
 <table>
 <thead>
