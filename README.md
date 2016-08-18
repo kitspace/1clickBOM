@@ -141,7 +141,7 @@ using the buttons on the popup. You can also quickly view and empty your carts.
 
 ### Completion ###
 
-1-click BOM can try complete an incomplet BOM for by searching Octopart and
+1-click BOM can try complete an incomplete BOM for by searching Octopart and
 Findchips. A complete BOM is where every part has a manufacturer part number
 and a part number for _every_ retailer. Simply press the button labeled
 'Complete' and 1clickBOM will use other fields to search for the fields that
