@@ -64,7 +64,7 @@ Check the [roadmap](#roadmap) for more details on planned features.
 
 1. Download the Python files from the [output_scripts/kicad][output_scripts/kicad] directory. Put them all together into a directory where you want to keep them.
 2. In Eeschema, the schematic tool, select `Tools -> Generate Bill of Materials` then `Add Plugin` and then `Generate` Select:
-    - 1-click-bom_description.py to try and extract a description for auto-complete
+    - 1-click-bom_description.py to try and extract a description for [auto-complete](#completion)
     - 1-click-bom_fields.py if you have fields in your symbols that 1-click BOM will understand (see [below](#field-matching)).
 3. Open the resulting file in a spreadsheet program or text editor and copy and paste it into the extension
 4. Try auto-completing in the extension if you wish, check all the values afterwards
@@ -141,13 +141,13 @@ using the buttons on the popup. You can also quickly view and empty your carts.
 
 ### Completion ###
 
-1-click BOM can try complete an incomplet BOM for by searching Octopart and
-Findchips. A complete BOM is where every part has a manufacturer part number
-and a part number for _every_ retailer. Simply press the button labeled
-'Complete' and 1clickBOM will use other fields to search for the fields that
-are left blank. This works well sometimes and other times selects completely
-random parts. It really depends on the fields you already give it. We are very
-much still working on improving this .
+1-click BOM can try and complete an incomplete BOM for you by searching
+Octopart and Findchips. A complete BOM is where every part has a manufacturer
+part number and a part number for _every_ retailer. Simply press the button
+labeled 'Complete' and 1clickBOM will use other fields to search for the fields
+that are left blank. This works well sometimes and other times selects
+completely random parts. It really depends on the fields you already give it.
+We are very much still working on improving this .
 
 ## Issues ##
 
