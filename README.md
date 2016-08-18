@@ -48,7 +48,7 @@ Check the [roadmap](#roadmap) for more details on planned features.
 ### Making a 1-click-BOM ###
 
 We are working on export utilities for various CAD programs in the
-[output_scripts](output_scripts) directory.
+[output_scripts][output_scripts] directory.
 
 You can copy and paste into the extension from a text editor or spread sheet
 program (LibreOffice, Excel). You must have a column for references, one for the
@@ -216,6 +216,7 @@ to software you are solely making available to users over a network i.e.
 software as a service. See the [LICENSE][6] file for details.
 
 [kitnic gitter]:https://gitter.im/monostable/kitnic
+[output_scripts]:https://github.com/monostable/1clickBOM/blob/master/output_scripts
 
 [2]:https://github.com/monostable/1clickBOM/blob/master/examples/
 [3]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png
