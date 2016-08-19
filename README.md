@@ -68,6 +68,7 @@ Check the [roadmap](#roadmap) for more details on planned features.
     - 1-click-bom_fields.py if you have fields in your symbols that 1-click BOM will understand (see [below](#field-matching)).
 3. Open the resulting file in a spreadsheet program or text editor and copy and paste it into the extension
 4. Try auto-completing in the extension if you wish, check all the values afterwards
+5. To sync any changes back into your schematic you can use [KiField](https://pypi.python.org/pypi/kifield).
 
 
 #### Generally
