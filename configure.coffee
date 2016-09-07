@@ -5,7 +5,7 @@ path    = require('path')
 cp      = require('child_process')
 ninjaBuildGen = require('ninja-build-gen')
 
-version = "1.1.1"
+version = "1.1.2"
 
 browserify = 'browserify -x $exclude --debug --extension=".coffee" --transform coffeeify'
 

@@ -26,6 +26,6 @@
     "source-map-support": "^0.4.0"
   },
   "dependencies": {
-    "1-click-bom": "^1.0.0"
+    "1-click-bom": "^1.0.5"
   }
 }
