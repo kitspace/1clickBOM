@@ -1,11 +1,11 @@
 import { messenger } from './messenger';
 import { background } from './background';
-import { getLocation } from './http';
+import http from './http';
 import { browser } from './browser';
 
 chrome.runtime.onInstalled.addListener(function(details){
     if (details.reason === 'install') {
-        getLocation(() => browser.tabsCreate(browser.getURL('html/options.html')));
+        http.getLocation(() => browser.tabsCreate(browser.getURL('html/options.html')));
         //set-up settings with default values
         let set_scheme = browser.getLocal('data/settings.json');
         let settings = {};

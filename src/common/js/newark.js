@@ -61,10 +61,7 @@ class Newark extends RetailerInterface {
 
     _clear_cart(ids, callback) {
         let url = `https${this.site}/webapp/wcs/stores/servlet/ProcessBasket`;
-        let params = `langId=-1&orderId=&catalogId=15003&BASE_URL=BasketPage\
-        &errorViewName=AjaxOrderItemDisplayView&storeId=${this.store_id}\
-        &URL=BasketDataAjaxResponse&isEmpty=false&LoginTimeout=&LoginTimeoutURL=\
-        &blankLinesResponse=10&orderItemDeleteAll=`;
+        let params = `langId=-1&orderId=&catalogId=15003&BASE_URL=BasketPage&errorViewName=AjaxOrderItemDisplayView&storeId=${this.store_id}&URL=BasketDataAjaxResponse&isEmpty=false&LoginTimeout=&LoginTimeoutURL=&blankLinesResponse=10&orderItemDeleteAll=`;
         for (let i = 0; i < ids.length; i++) {
             let id = ids[i];
             params += `&orderItemDelete=${id}`;

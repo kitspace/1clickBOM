@@ -269,8 +269,7 @@ let bom_manager = {
                 for (let i = 0; i < fails.length; i++) {
                     let fail = fails[i];
                     failed_lines.push({
-                        title:`line: ${fail.reference} | ${fail.quantity}
-                        | ${fail.part}`,
+                        title:`line: ${fail.reference} | ${fail.quantity} | ${fail.part}`,
                         message:''
                     });
                 }

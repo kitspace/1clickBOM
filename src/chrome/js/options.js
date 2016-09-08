@@ -110,7 +110,7 @@ var load_options = () =>
                 if (selected != null) {
                     selected.checked = 'checked';
                 }
-                result.push(document.getElementsByTagName('input').map((input) => input.onclick = save_options));
+                result.push([].slice.call(document.getElementsByTagName('input')).map((input) => input.onclick = save_options));
             }
             return result;
         })();

@@ -97,35 +97,25 @@ test('Newark: Constructs for all countries', () =>
 
 );
 
-test('InvalidCountryError Exists', () => ok(new InvalidCountryError() instanceof Error)
+test('InvalidCountryError Exists', () => ok(new InvalidCountryError instanceof Error)
 );
 
-test('Digikey: InvalidCountryError Thrown', () =>
-    throws(() => new Digikey('XX', {}, function(){})
-    , InvalidCountryError)
+test('Digikey: InvalidCountryError Thrown', () => {
+    throws(() => new Digikey('XX', {}, function(){}));
+});
 
-);
+test('Farnell: InvalidCountryError Thrown', () => {
+    throws(() => new Farnell('XX', {}, function(){}));
+});
 
-test('Farnell: InvalidCountryError Thrown', () =>
-    throws(() => new Farnell('XX', {}, function(){})
-    , InvalidCountryError)
+test('Mouser: InvalidCountryError Thrown', () => {
+    throws(() => new Mouser('XX', {}, function(){}));
+});
 
-);
+test('RS: InvalidCountryError Thrown', () => {
+    throws(() => new RS('XX', {}, function(){}));
+});
 
-test('Mouser: InvalidCountryError Thrown', () =>
-    throws(() => new Mouser('XX', {}, function(){})
-    , InvalidCountryError)
-
-);
-
-test('RS: InvalidCountryError Thrown', () =>
-    throws(() => new RS('XX', {}, function(){})
-    , InvalidCountryError)
-
-);
-
-test('Newark: InvalidCountryError Thrown', () =>
-    throws(() => new Newark('XX', {}, function(){})
-    , InvalidCountryError)
-
-);
+test('Newark: InvalidCountryError Thrown', () => {
+    throws(() => new Newark('XX', {}, function(){}));
+});

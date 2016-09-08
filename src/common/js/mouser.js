@@ -81,9 +81,7 @@ class Mouser extends RetailerInterface {
         params += '&ctl00$ContentMain$txtNumberOfLines=94';
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i];
-            params += `&ctl00$ContentMain$txtCustomerPartNumber${i+1}=${line.reference}\
-                       &ctl00$ContentMain$txtPartNumber${i+1}=${line.part}\
-                       &ctl00$ContentMain$txtQuantity${i+1}=}${line.quantity}`;
+            params += `&ctl00$ContentMain$txtCustomerPartNumber${i+1}=${line.reference}&ctl00$ContentMain$txtPartNumber${i+1}=${line.part}&ctl00$ContentMain$txtQuantity${i+1}=}${line.quantity}`;
         }
         let url = `http${this.site}${this.addline}`;
         let result = {success: true, fails:[]};
@@ -122,15 +120,11 @@ class Mouser extends RetailerInterface {
     }
 
     _clear_errors(viewstate, callback) {
-        return http.post(`http${this.site}${this.cart}`, `__EVENTARGUMENT=&__EVENTTARGET=\
-            &__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=${viewstate}\
-            &__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors`
+        return http.post(`http${this.site}${this.cart}`, `__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=${viewstate}&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors`
         , {}, event => {
             let doc = browser.parseDOM(event.target.responseText);
             viewstate = encodeURIComponent(__guard__(doc.getElementById('__VIEWSTATE'), x => x.value));
-            return http.post(`http${this.site}${this.cart}`, `__EVENTARGUMENT=&__EVENTTARGET=\
-                &__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=${viewstate}\
-                &__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket`
+            return http.post(`http${this.site}${this.cart}`, `__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=${viewstate}&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket`
             , {}, event => {
                if (callback != null) {
                    return callback();
@@ -150,9 +144,7 @@ class Mouser extends RetailerInterface {
     _clear_cart(viewstate, callback){
         //don't ask, this is what works...
         let url = `http${this.site}${this.cart}`;
-        let params =  `__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=\
-            &__SCROLLPOSITIONY=&__VIEWSTATE=${viewstate}\
-            &__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket`;
+        let params =  `__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=${viewstate}&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket`;
         return http.post(url, params, {}, event => {
             if (callback != null) {
                 callback({success:true}, this);

@@ -46,47 +46,47 @@ let rsOnline = {
 
     _clear_invalid(callback) {
         return this._get_clear_viewstate((viewstate, form_ids) => {
-            let params1 = `AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasket\
-            Form&=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&s\
-            hoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_\
-            1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickStoc\
-            kNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3Aquick\
-            StockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3Aq\
-            uickStockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm\
-            %3AquickStockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasket\
-            Form%3AquickStockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBa\
-            sketForm%3AquickStockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppi\
-            ngBasketForm%3AquickStockNo_8=&shoppingBasketForm%3AquickQty_8=&sh\
-            oppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%3AquickQty_9\
-            =&shoppingBasketForm%3Aj_id1085=&shoppingBasketForm%3Aj_id1091=&sh\
-            oppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decora\
-            te%3AQuickOrderWidgetAction_listItems=Paste%20or%20type%20your%20l\
-            ist%20here%20and%20click%20'Add'.&shoppingBasketForm%3Aj_id1182%3A\
-            0%3Aj_id1228=505-1441&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1248\
-            =1&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction\
-            _promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionMod\
-            alLayerOpenedState=&shoppingBasketForm%3AsendToColleagueWidgetPane\
-            lOpenedState=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetA\
-            ction_senderName_decorate%3AGuestUserSendToColleagueWidgetAction_s\
-            enderName=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetActi\
-            on_senderEmail_decorate%3AGuestUserSendToColleagueWidgetAction_sen\
-            derEmail=name%40company.com&shoppingBasketForm%3AGuestUserSendToCo\
-            lleagueWidgetAction_mailTo_decorate%3AGuestUserSendToColleagueWidg\
-            etAction_mailTo=name%40company.com&shoppingBasketForm%3AGuestUserS\
-            endToColleagueWidgetAction_subject_decorate%3AGuestUserSendToColle\
-            agueWidgetAction_subject=Copy%20of%20order%20from%20RS%20Online&sh\
-            oppingBasketForm%3AGuestUserSendToColleagueWidgetAction_message_de\
-            corate%3AGuestUserSendToColleagueWidgetAction_message=&shoppingBas\
-            ketForm%3AsendToColleagueSuccessWidgetPanelOpenedState=&javax.face\
-            s.ViewState=${viewstate}`;
-            let params2 = `AJAXREQUEST=_viewRoot&${form_ids[0]}=${form_ids[0]}&jav\
-            ax.faces.ViewState=${viewstate}&ajaxSingle=${form_ids[0]}%3A\
-            ${form_ids[1]}&${form_ids[0]}%3A${form_ids[1]}=${form_ids[0]}%3A\
-            ${form_ids[1]}&`;
-            let params3 = `AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&autoScr\
-            oll=&javax.faces.ViewState=${viewstate}&a4jCloseForm%3A\
-            ${form_ids[2]}=a4jCloseForm%3A${form_ids[2]}&`;
-
+            let params1 =
+            'AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasket' +
+            'Form&=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&s' +
+            'hoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_' +
+            '1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickStoc' +
+            'kNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3Aquick' +
+            'StockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3Aq' +
+            'uickStockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm' +
+            '%3AquickStockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasket' +
+            'Form%3AquickStockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBa' +
+            'sketForm%3AquickStockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppi' +
+            'ngBasketForm%3AquickStockNo_8=&shoppingBasketForm%3AquickQty_8=&sh' +
+            'oppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%3AquickQty_9' +
+            '=&shoppingBasketForm%3Aj_id1085=&shoppingBasketForm%3Aj_id1091=&sh' +
+            'oppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decora' +
+            'te%3AQuickOrderWidgetAction_listItems=Paste%20or%20type%20your%20l' +
+            'ist%20here%20and%20click%20\'Add\'.&shoppingBasketForm%3Aj_id1182%3A' +
+            '0%3Aj_id1228=505-1441&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1248' +
+            '=1&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction' +
+            '_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionMod' +
+            'alLayerOpenedState=&shoppingBasketForm%3AsendToColleagueWidgetPane' +
+            'lOpenedState=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetA' +
+            'ction_senderName_decorate%3AGuestUserSendToColleagueWidgetAction_s' +
+            'enderName=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetActi' +
+            'on_senderEmail_decorate%3AGuestUserSendToColleagueWidgetAction_sen' +
+            'derEmail=name%40company.com&shoppingBasketForm%3AGuestUserSendToCo' +
+            'lleagueWidgetAction_mailTo_decorate%3AGuestUserSendToColleagueWidg' +
+            'etAction_mailTo=name%40company.com&shoppingBasketForm%3AGuestUserS' +
+            'endToColleagueWidgetAction_subject_decorate%3AGuestUserSendToColle' +
+            'agueWidgetAction_subject=Copy%20of%20order%20from%20RS%20Online&sh' +
+            'oppingBasketForm%3AGuestUserSendToColleagueWidgetAction_message_de' +
+            'corate%3AGuestUserSendToColleagueWidgetAction_message=&shoppingBas' +
+            'ketForm%3AsendToColleagueSuccessWidgetPanelOpenedState=&javax.face' +
+            `s.ViewState=${viewstate}`;
+            let params2 = `AJAXREQUEST=_viewRoot&${form_ids[0]}=${form_ids[0]}&` +
+              `javax.faces.ViewState=${viewstate}&ajaxSingle=${form_ids[0]}%3A` +
+              `${form_ids[1]}&${form_ids[0]}%3A${form_ids[1]}=${form_ids[0]}%3A` +
+              `${form_ids[1]}&`;
+            let params3 = `AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&auto` +
+              `Scroll=&javax.faces.ViewState=${viewstate}&a4jCloseForm%3A` +
+              `${form_ids[2]}=a4jCloseForm%3A${form_ids[2]}&`;
             let p = http.promiseGet(`http${this.site}${this.cart}`);
             return p.then(doc => {
                 let error_lines = doc.querySelectorAll('.dataRow.errorRow');
@@ -104,30 +104,21 @@ let rsOnline = {
                         } else {
                             return Promise.resolve(_doc);
                         }
-                    }
-                    )
-                    .then(_doc => {
+                    }).then(_doc => {
                         let error_line = __guard__(__guard__(_doc, x1 => x1.querySelector('.dataRow.errorRow')), x => x.querySelector('.quantityTd'));
                         let id = __guard__(__guard__(__guard__(error_line, x4 => x4.children[3]), x3 => x3.children[0]), x2 => x2.id);
                         let param_id = params1 + '&' + encodeURIComponent(id);
                         return http.promisePost(`http${this.site}${this.cart}`, param_id);
-                    }
-                    )
-                    .then(() => {
+                    }).then(() => {
                         return http.promisePost(`http${this.site}${this.cart}`, params2);
-                    }
-                    )
-                    .then(() => {
+                    }).then(() => {
                         return http.promisePost(`http${this.site}${this.cart}`, params3);
-                    }
-                    );
+                    });
                 }
                 , Promise.resolve(doc));
                 chain.then(() => callback({success:true}));
                 return chain.catch(() => callback({success:false}));
-            }
-            )
-            .catch(() => callback({success:false}));
+            }).catch(() => callback({success:false}));
         }
         );
     },
@@ -227,34 +218,34 @@ let rsOnline = {
             var lines = lines_incoming;
         }
         let url = `http${this.site}${this.cart}`;
-        let params = `AJAXREQUEST=shoppingBasketForm%3A${form_id}&shoppingBasketFo\
-        rm=shoppingBasketForm&=QuickAdd&=DELIVERY&shoppingBasketForm%3AquickSt\
-        ockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickSt\
-        ockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickSt\
-        ockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickSt\
-        ockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickSt\
-        ockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickSt\
-        ockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickSt\
-        ockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickSt\
-        ockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickSt\
-        ockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickSt\
-        ockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3AQuickOr\
-        derWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_li\
-        stItems=`;
+        let params = `AJAXREQUEST=shoppingBasketForm%3A${form_id}&shoppingBasketFo` +
+        `rm=shoppingBasketForm&=QuickAdd&=DELIVERY&shoppingBasketForm%3AquickSt` +
+        `ockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickSt` +
+        `ockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickSt` +
+        `ockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickSt` +
+        `ockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickSt` +
+        `ockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickSt` +
+        `ockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickSt` +
+        `ockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickSt` +
+        `ockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickSt` +
+        `ockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickSt` +
+        `ockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3AQuickOr` +
+        `derWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_li` +
+        `stItems=`;
 
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i];
-            params += encodeURIComponent(`${line.part},${line.quantity},,\
-            ${line.reference}\n`);
+            params += encodeURIComponent(`${line.part},${line.quantity},,` +
+            `${line.reference}\n`);
         }
 
-        params += `&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetA\
-        ction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionMo\
-        dalLayerOpenedState=&javax.faces.ViewState=${viewstate}&shoppingBasket\
-        Form%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderW\
-        idgetAction_quickOrderTextBoxbtn=shoppingBasketForm%3AQuickOrderWidget\
-        Action_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderT\
-        extBoxbtn&`;
+        params += `&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetA` +
+        `ction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionMo` +
+        `dalLayerOpenedState=&javax.faces.ViewState=${viewstate}&shoppingBasket` +
+        `Form%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderW` +
+        `idgetAction_quickOrderTextBoxbtn=shoppingBasketForm%3AQuickOrderWidget` +
+        `Action_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderT` +
+        `extBoxbtn&`;
 
         return http.post(url, params, {}, event => {
             return this._get_and_correct_invalid_lines(invalid_lines => {
@@ -375,8 +366,7 @@ let rsDelivers = {
 
 
     _delete_invalid(ids, callback) {
-        let url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/\
-        RemoveMultiple`;
+        let url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/RemoveMultiple`;
         let params = '{"request":{"encodedString":"';
         for (let i = 0; i < ids.length; i++) {
             let id = ids[i];
@@ -441,13 +431,12 @@ let rsDelivers = {
         if (i < lines_incoming.length) {
             let lines = lines_incoming.slice(i, i+99 + 1);
             return this._clear_invalid(() => {
-                let url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/\
-                BulkOrder`;
+                let url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder`;
                 let params = '{"request":{"lines":"';
                 for (let j = 0; j < lines.length; j++) {
                     let line = lines[j];
-                    params += `${line.part},${line.quantity},,\
-                    ${line.reference}\n`;
+                    params += `${line.part},${line.quantity},,` +
+                    `${line.reference}\n`;
                 }
                 params += '"}}';
                 return http.post(url, params, {json:true}, event => {

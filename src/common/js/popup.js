@@ -19,7 +19,7 @@
 
 import { messenger } from './messenger';
 import oneClickBOM from '1-click-bom';
-let {retailer_list, isComplete, hasSKUs} = oneClickBOM;
+let {retailer_list, isComplete, hasSKUs} = oneClickBOM.lineData;
 
 let element_Bom              = document.querySelector('#bom');
 let element_Table            = document.querySelector('#bom_table');

@@ -30,9 +30,9 @@ ninja.rule('browserify')
     .description("browserify $in -o $out")
 
 ninja.rule('browserify-require')
-    .run("#{browserify} --require='./$in' --list > $out.d
+    .run("browserify --require='./$in' --list > $out.d
         && coffee ./depfileify.coffee $out $out.d
-        && #{browserify} --require='./$in' -o $out")
+        && browserify --require='./$in' -o $out")
     .depfile('$out.d')
     .description("browserify $in -o $out")
 
@@ -62,7 +62,6 @@ copyFiles = (browser) ->
         "src/#{browser}/html/*"
         "src/#{browser}/images/*"
         "src/#{browser}/data/*.json"
-        "src/#{browser}/js/*.css"
         'src/common/html/*'
         'src/common/images/*'
         'src/common/data/*.json'

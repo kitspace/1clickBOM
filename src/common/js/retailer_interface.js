@@ -27,7 +27,7 @@ class RetailerInterface {
         let data = browser.getLocal(data_path);
         let country_code_lookedup = data.lookup[country_code];
         if (!country_code_lookedup) {
-            let error = new InvalidCountryError();
+            let error = new InvalidCountryError;
             error.message += ` '${country_code}' given to ${name}`;
             throw error;
         }
