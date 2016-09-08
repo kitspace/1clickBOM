@@ -7,7 +7,7 @@ ninjaBuildGen = require('ninja-build-gen')
 
 version = "1.1.2"
 
-browserify = 'browserify -x $exclude --debug --transform [ babelify --presets [ es2015 ] --plugins [ transform-class-properties ] ]'
+browserify = 'browserify -x $exclude --debug --transform [ babelify --presets [ es2015 ] ]'
 
 coffee = 'coffee -m -c'
 
