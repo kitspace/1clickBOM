@@ -7,7 +7,7 @@ ninjaBuildGen = require('ninja-build-gen')
 
 version = "1.1.2"
 
-browserify = 'browserify -x $exclude --debug --extension=".coffee" --transform coffeeify'
+browserify = 'browserify -x $exclude --debug --transform [ babelify --presets [ es2015 ] --plugins [ transform-class-properties ] ]'
 
 coffee = 'coffee -m -c'
 
@@ -48,27 +48,21 @@ ninja.rule('remove').run('rm -rf $in')
 
 #- Lists of Files -#
 
-sourceCoffee = (browser) ->
-    globule.find([
-        "src/#{browser}/coffee/**/*.coffee"
-        'src/common/coffee/**/*.coffee'
-    ])
-
 sourceJs = (browser) ->
     globule.find([
-        "src/#{browser}/libs/*.js"
-        'src/common/libs/*.js'
+        "src/#{browser}/js/**/*.js"
+        'src/common/js/*.js'
     ])
 
 sourceFiles = (browser) ->
-    sourceCoffee(browser).concat(sourceJs(browser))
+    sourceJs(browser)
 
 copyFiles = (browser) ->
     globule.find([
         "src/#{browser}/html/*"
         "src/#{browser}/images/*"
         "src/#{browser}/data/*.json"
-        "src/#{browser}/libs/*.css"
+        "src/#{browser}/js/*.css"
         'src/common/html/*'
         'src/common/images/*'
         'src/common/data/*.json'
@@ -80,7 +74,7 @@ targets = {firefox:[], chrome:[]}
 
 browserifyEdge = (target, browser, layer, exclude='') ->
     ninja.edge(target)
-        .from("build/.temp-#{browser}/#{layer}.coffee")
+        .from("build/.temp-#{browser}/#{layer}.js")
         .assign('exclude', exclude)
         .after(sourceFiles(browser)
             .map (f) ->
@@ -105,14 +99,6 @@ for file in sourceJs('firefox')
     targets.firefox.push(target)
 
 
-for f in sourceCoffee('firefox')
-    target = f.replace(/src\/.*?\/.*?\//, 'build/firefox/lib/')
-        .replace('.coffee', '.js')
-    dir = path.dirname(target)
-    ninja.edge(target).assign('dir', dir).from(f).using('coffee')
-    targets['firefox'].push(target)
-
-
 for browser,list of targets
     for f in sourceFiles(browser)
         target = "build/.temp-#{browser}/#{path.basename(f)}"
@@ -126,13 +112,13 @@ ninja.edge('build/chrome/js/qunit.js').from(qunitSrc)
 targets.chrome.push('build/chrome/js/qunit.js')
 
 
-ninja.edge('build/chrome/js/unit.js').from('build/.temp-chrome/unit.coffee')
+ninja.edge('build/chrome/js/unit.js').from('build/.temp-chrome/unit.js')
     .assign('exclude', qunitSrc)
     .using('browserify')
 targets.chrome.push('build/chrome/js/unit.js')
 
 
-ninja.edge('build/chrome/js/functional.js').from('build/.temp-chrome/functional.coffee')
+ninja.edge('build/chrome/js/functional.js').from('build/.temp-chrome/functional.js')
     .assign('exclude', qunitSrc)
     .using('browserify')
 targets.chrome.push('build/chrome/js/functional.js')
@@ -171,7 +157,7 @@ chrome_package_name = "1clickBOM-v#{version}-chrome"
 ninja.rule('package-chrome')
     .run("cd build/ && cp -r chrome  #{chrome_package_name} &&
         rm -rf #{chrome_package_name}/js/{functional,unit,qunit}.js
-            #{chrome_package_name}/html/test.html #{chrome_package_name}/libs &&
+            #{chrome_package_name}/html/test.html #{chrome_package_name}/js &&
         zip -r #{chrome_package_name}.zip #{chrome_package_name}/ &&
         rm -rf #{chrome_package_name}")
 ninja.edge("#{chrome_package_name}.zip").need('chrome').using('package-chrome')
