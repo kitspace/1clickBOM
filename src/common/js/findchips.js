@@ -18,12 +18,12 @@
 // the Original Code is Kaspar Emanuel.
 let n;
 let time_period_ms;
-import Promise from './bluebird';
+const Promise = require('./bluebird');
 Promise.config({cancellation:true});
 
-import rateLimit from './promise-rate-limit';
+const rateLimit = require('./promise-rate-limit');
 
-import http from './http';
+const http = require('./http');
 
 let aliases = {
     'Digi-Key'           : 'Digikey',
@@ -115,7 +115,7 @@ let _search = function(query, retailers_to_search = [], other_fields = []) {
     .catch(reason => ({retailers:{}, partNumbers:[]}));
 };
 
-export let search = rateLimit(n=60, time_period_ms=20000, _search);
+exports.search = rateLimit(n=60, time_period_ms=20000, _search);
 
 function __in__(needle, haystack) {
   return haystack.indexOf(needle) >= 0;

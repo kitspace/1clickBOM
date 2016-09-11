@@ -34,4 +34,4 @@ let bgMessenger = (popup, message_exchange) =>
     })
 ;
 
-export { bgMessenger };
+exports.bgMessenger = bgMessenger;

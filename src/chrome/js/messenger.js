@@ -47,4 +47,4 @@ let messenger = {
     }
 };
 
-export { messenger };
+exports.messenger = messenger;

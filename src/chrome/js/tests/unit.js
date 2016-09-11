@@ -17,14 +17,14 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-import { RetailerInterface, InvalidCountryError } from './retailer_interface';
-import { Digikey } from './digikey';
-import { Farnell } from './farnell';
-import { Mouser } from './mouser';
-import { RS } from './rs';
-import { Newark } from './newark';
-import qunit from './qunit-1.11.0';
-import { browser } from './browser';
+const { RetailerInterface, InvalidCountryError } = require('./retailer_interface');
+const { Digikey } = require('./digikey');
+const { Farnell } = require('./farnell');
+const { Mouser }  = require('./mouser');
+const { RS }      = require('./rs');
+const { Newark }  = require('./newark');
+const qunit       = require('./qunit-1.11.0');
+const { browser } = require('./browser');
 
 let { module }    = qunit;
 let { test }      = qunit;

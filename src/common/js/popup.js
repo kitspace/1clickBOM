@@ -17,8 +17,8 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-import { messenger } from './messenger';
-import oneClickBOM from '1-click-bom';
+const { messenger } = require('./messenger');
+const oneClickBOM = require('1-click-bom');
 let {retailer_list, isComplete, hasSKUs} = oneClickBOM.lineData;
 
 let element_Bom              = document.querySelector('#bom');

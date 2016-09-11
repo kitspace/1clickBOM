@@ -16,11 +16,11 @@
 //
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
-import Promise from './bluebird';
+const Promise = require('./bluebird');
 Promise.config({cancellation:true});
 
-import { browser, XMLHttpRequest } from './browser';
-import { badge } from './badge';
+const { browser, XMLHttpRequest } = require('./browser');
+const { badge } = require('./badge');
 
 let network_callback = function(event, callback, error_callback, notify=true) {
     if (event.target.readyState === 4) {
@@ -137,8 +137,11 @@ let promiseGet = url =>
 ;
 
 
-let http = {post, get, promisePost, promiseGet, getLocation};
-export default http;
+exports.post        = post;
+exports.get         = get;
+exports.promisePost = promisePost;
+exports.promiseGet  = promiseGet;
+exports.getLocation = getLocation;
 
 function __in__(needle, haystack) {
   return haystack.indexOf(needle) >= 0;

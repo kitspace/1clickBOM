@@ -17,21 +17,21 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-import clipboard from 'sdk/clipboard';
-import firefoxTabs from 'sdk/tabs';
-import notifications from 'sdk/notifications';
-import tabsUtils from 'sdk/tabs/utils';
-import windowUtils from 'sdk/window/utils';
-import { ActionButton } from 'sdk/ui/button/action';
-import { XMLHttpRequest } from 'sdk/net/xhr';
-import { data } from 'sdk/self';
-import { modelFor } from 'sdk/model/core';
-import timers from 'sdk/timers';
-import { storage } from 'sdk/simple-storage';
-import preferences from 'sdk/simple-prefs';
-import pageMod from 'sdk/page-mod';
-import locationChanged from './location_changed';
-import { Cc, Ci } from 'chrome';
+const clipboard = require('sdk/clipboard');
+const firefoxTabs = require('sdk/tabs');
+const notifications = require('sdk/notifications');
+const tabsUtils = require('sdk/tabs/utils');
+const windowUtils = require('sdk/window/utils');
+const { ActionButton } = require('sdk/ui/button/action');
+const { XMLHttpRequest } = require('sdk/net/xhr');
+const { data } = require('sdk/self');
+const { modelFor } = require('sdk/model/core');
+const timers = require('sdk/timers');
+const { storage } = require('sdk/simple-storage');
+const preferences = require('sdk/simple-prefs');
+const pageMod = require('sdk/page-mod');
+const locationChanged = require('./location_changed');
+const { Cc, Ci } = require('chrome');
 let dom = Cc['@mozilla.org/xmlextras/domparser;1'].createInstance(Ci.nsIDOMParser);
 
 let globToRegex = function(glob) {
@@ -273,10 +273,10 @@ preferences.on('', prefName =>
 
 );
 
-export { browser };
-export { XMLHttpRequest };
-export { popup };
-export { message_exchange };
+exports.browser = browser;
+exports.XMLHttpRequest = XMLHttpRequest;
+exports.popup = popup;
+exports.message_exchange = message_exchange;
 
 function __in__(needle, haystack) {
   return haystack.indexOf(needle) >= 0;

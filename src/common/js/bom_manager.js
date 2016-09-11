@@ -16,23 +16,23 @@
 //
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
-import Promise from './bluebird';
+const Promise = require('./bluebird');
 Promise.config({cancellation:true});
 
-import { parseTSV } from '1-click-bom';
-let { retailer_list }   = require('1-click-bom').lineData;
-let { numberOfEmpty }   = require('1-click-bom').lineData;
-import { lineData as line_data } from '1-click-bom';
+const { parseTSV }      = require('1-click-bom');
+const { retailer_list } = require('1-click-bom').lineData;
+const { numberOfEmpty } = require('1-click-bom').lineData;
+const line_data         = require('1-click-bom').lineData;
 
-import http from './http';
-import { browser } from './browser';
-import { Digikey } from './digikey';
-import { Farnell } from './farnell';
-import { Mouser } from './mouser';
-import { RS } from './rs';
-import { Newark } from './newark';
-import { badge } from './badge';
-import { autoComplete } from './auto_complete';
+const http             = require('./http');
+const { browser }      = require('./browser');
+const { Digikey }      = require('./digikey');
+const { Farnell }      = require('./farnell');
+const { Mouser }       = require('./mouser');
+const { RS }           = require('./rs');
+const { Newark }       = require('./newark');
+const { badge }        = require('./badge');
+const { autoComplete } = require('./auto_complete');
 
 let bom_manager = {
     retailers: [Digikey, Farnell, Mouser, RS, Newark],
@@ -344,7 +344,7 @@ let bom_manager = {
 
 bom_manager.init();
 
-export { bom_manager };
+exports.bom_manager = bom_manager;
 
 function __guard__(value, transform) {
   return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;

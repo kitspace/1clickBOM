@@ -17,8 +17,8 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-import { RetailerInterface } from './retailer_interface';
-import { Newark } from './newark';
+const { RetailerInterface } = require('./retailer_interface');
+const { Newark } = require('./newark');
 
 class Farnell extends RetailerInterface {
     constructor(country_code, settings, callback) {
@@ -38,4 +38,4 @@ class Farnell extends RetailerInterface {
     }
 }
 
-export { Farnell };
+exports.Farnell = Farnell;

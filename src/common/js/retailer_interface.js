@@ -17,9 +17,9 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-import http from './http';
-import { md5 } from './md5';
-import { browser } from './browser';
+const http = require('./http');
+const { md5 } = require('./md5');
+const { browser } = require('./browser');
 
 class RetailerInterface {
     constructor(name, country_code, data_path, settings, callback) {
@@ -164,5 +164,5 @@ class InvalidCountryError extends Error {
     }
 }
 
-export { RetailerInterface };
-export { InvalidCountryError };
+exports.RetailerInterface = RetailerInterface;
+exports.InvalidCountryError = InvalidCountryError;

@@ -17,7 +17,7 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-import { browser } from './browser';
+const { browser } = require('./browser');
 
 let badge = {
     decaying_set  : false,
@@ -50,4 +50,4 @@ let badge = {
     }
 };
 
-export { badge };
+exports.badge = badge;

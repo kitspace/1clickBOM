@@ -1,7 +1,7 @@
-import { messenger } from './messenger';
-import { background } from './background';
-import http from './http';
-import { browser } from './browser';
+const { messenger } = require('./messenger');
+const { background } = require('./background');
+const http = require('./http');
+const { browser } = require('./browser');
 
 chrome.runtime.onInstalled.addListener(function(details){
     if (details.reason === 'install') {

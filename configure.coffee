@@ -7,18 +7,18 @@ ninjaBuildGen = require('ninja-build-gen')
 
 version = "1.1.2"
 
-browserify = 'browserify -x $exclude --debug --transform [ babelify --presets [ es2015 ] ]'
-
-coffee = 'coffee -m -c'
-
 ninja = ninjaBuildGen('1.5.1', 'build/')
-
 ninja.header("#generated from #{path.basename(module.filename)}")
+
+presets = "--presets es2015-script"
+browserify = "browserify -x $exclude --debug --transform [ babelify #{presets} ]"
+coffee = 'coffee -m -c'
 
 #- Rules -#
 
 ninja.rule('copy').run('cp $in $out')
 
+ninja.rule('babel').run("babel #{presets} $in -o $out")
 
 #browserify and put dependency list in $out.d in makefile format using
 #relative paths
@@ -93,7 +93,7 @@ browserifyEdge('build/firefox/data/kitnic.js', 'firefox', 'kitnic')
 firefox_js = []
 for file in sourceJs('firefox')
     target = "build/firefox/lib/#{path.basename(file)}"
-    ninja.edge(target).from(file).using('copy')
+    ninja.edge(target).from(file).using('babel')
     firefox_js.push(target)
     targets.firefox.push(target)
 

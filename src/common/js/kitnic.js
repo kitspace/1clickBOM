@@ -1,4 +1,4 @@
-import { messenger } from './messenger';
+const { messenger } = require('./messenger');
 window.postMessage({from:'extension', message:'register'}, '*');
 messenger.send('getBackgroundState');
 

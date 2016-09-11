@@ -16,7 +16,8 @@
   "main": "lib/main.js",
   "homepage": "http://1clickBOM.com",
   "devDependencies": {
-    "babel-preset-es2015": "^6.14.0",
+    "babel-cli": "^6.14.0",
+    "babel-preset-es2015-script": "^1.1.0",
     "babelify": "^7.3.0",
     "browserify": "^13.1.0",
     "coffee-script": "^1.9.3",

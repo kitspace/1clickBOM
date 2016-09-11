@@ -1,8 +1,8 @@
-import tabs from 'sdk/tabs';
-import { viewFor } from 'sdk/view/core';
-import { modelFor } from 'sdk/model/core';
-import { Ci, Cu } from 'chrome';
-import { getBrowserForTab, getTabForContentWindow } from 'sdk/tabs/utils';
+const tabs = require('sdk/tabs');
+const { viewFor } = require('sdk/view/core');
+const { modelFor } = require('sdk/model/core');
+const { Ci, Cu } = require('chrome');
+const { getBrowserForTab, getTabForContentWindow } = require('sdk/tabs/utils');
 Cu.import('resource://gre/modules/XPCOMUtils.jsm', this);
 
 let listeners = [];
@@ -29,6 +29,6 @@ for (let i = 0; i < tabs.length; i++) {
 
 tabs.on('open', attach);
 
-export function on(callback) {
+exports.on = function on(callback) {
     return listeners.push(callback);
 }

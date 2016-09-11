@@ -17,9 +17,9 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-import { RetailerInterface } from './retailer_interface';
-import http from './http';
-import { browser } from './browser';
+const { RetailerInterface } = require('./retailer_interface');
+const http = require('./http');
+const { browser } = require('./browser');
 
 class Mouser extends RetailerInterface {
     constructor(country_code, settings) {
@@ -193,7 +193,7 @@ class Mouser extends RetailerInterface {
     }
 }
 
-export { Mouser };
+exports.Mouser = Mouser;
 
 function __guard__(value, transform) {
   return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;

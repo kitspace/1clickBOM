@@ -17,13 +17,13 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-import { parseTSV, writeTSV } from '1-click-bom';
+const { parseTSV, writeTSV } = require('1-click-bom');
 
-import http from './http';
-import { browser } from './browser';
-import { badge } from './badge';
+const http = require('./http');
+const { browser } = require('./browser');
+const { badge } = require('./badge');
 
-export function tsvPageNotifier(sendState, bom_manager) {
+exports.tsvPageNotifier = function tsvPageNotifier(sendState, bom_manager) {
     return {
         onDotTSV : false,
         re       : new RegExp('((\.tsv$)|(^https?://.*?\.?kitnic.it/boards/)|(https?://127.0.0.1:8080/boards/))','i'),

@@ -16,12 +16,12 @@
 //
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
-import Promise from './bluebird';
+const Promise = require('./bluebird');
 Promise.config({cancellation:true});
 
-import { RetailerInterface } from './retailer_interface';
-import http from './http';
-import { browser } from './browser';
+const { RetailerInterface } = require('./retailer_interface');
+const http = require('./http');
+const { browser } = require('./browser');
 
 let rsOnline = {
     clearCart(callback) {
@@ -501,7 +501,7 @@ class RS extends RetailerInterface {
 }
 
 
-export { RS };
+exports.RS = RS;
 
 function __guardFunc__(func, transform) {
   return typeof func === 'function' ? transform(func) : undefined;

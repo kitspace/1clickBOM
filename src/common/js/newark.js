@@ -17,9 +17,9 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-import { RetailerInterface } from './retailer_interface';
-import { browser } from './browser';
-import http from './http';
+const { RetailerInterface } = require('./retailer_interface');
+const { browser } = require('./browser');
+const http = require('./http');
 
 class Newark extends RetailerInterface {
     constructor(country_code, settings,callback) {
@@ -267,7 +267,7 @@ class Newark extends RetailerInterface {
     }
 }
 
-export { Newark };
+exports.Newark = Newark;
 
 function __in__(needle, haystack) {
   return haystack.indexOf(needle) >= 0;

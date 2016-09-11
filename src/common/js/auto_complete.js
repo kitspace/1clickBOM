@@ -16,14 +16,14 @@
 //
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
-import Promise from './bluebird';
+const Promise = require('./bluebird');
 Promise.config({cancellation:true});
 
-import oneClickBOM from '1-click-bom';
+const oneClickBOM = require('1-click-bom');
 let {retailer_list, isComplete, field_list} = oneClickBOM.lineData;
 
-import octopart from './octopart';
-import findchips from './findchips';
+const octopart = require('./octopart');
+const findchips = require('./findchips');
 
 let _next_query = function(line, queries) {
     let query = '';
@@ -143,7 +143,7 @@ let autoComplete = function(lines, deep=false) {
 };
 
 
-export { autoComplete };
+exports.autoComplete = autoComplete;
 
 
 function __in__(needle, haystack) {

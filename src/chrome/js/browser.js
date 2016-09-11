@@ -130,6 +130,5 @@ let browser = {
     }
 };
 
-export { browser };
-let XMLHttpRequest$1 = XMLHttpRequest;
-export { XMLHttpRequest$1 as XMLHttpRequest };
+exports.browser = browser;
+exports.XMLHttpRequest = XMLHttpRequest

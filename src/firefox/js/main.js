@@ -1,11 +1,11 @@
-import { background } from './background';
-import { bgMessenger } from './bg_messenger';
-import { popup, message_exchange } from './browser';
-import http from './http';
-import firefoxTabs from 'sdk/tabs';
-import notifications from 'sdk/notifications';
+const { background } = require('./background');
+const { bgMessenger } = require('./bg_messenger');
+const { popup, message_exchange } = require('./browser');
+const http = require('./http');
+const firefoxTabs = require('sdk/tabs');
+const notifications = require('sdk/notifications');
 
-export function main(options, callbacks) {
+exports.main = function main(options, callbacks) {
     if (options.loadReason === 'install') {
         http.getLocation(() =>
             //open 1clickBOM preferences

@@ -17,15 +17,15 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-import { writeTSV } from '1-click-bom';
+const { writeTSV } = require('1-click-bom');
 let { retailer_list } = require('1-click-bom').lineData;
 
-import { bom_manager } from './bom_manager';
-import { browser } from './browser';
-import http from './http';
-import { badge } from './badge';
+const { bom_manager } = require('./bom_manager');
+const { browser } = require('./browser');
+const http = require('./http');
+const { badge } = require('./badge');
 
-export function background(messenger) {
+exports.background = function background(messenger) {
     browser.prefsOnChanged(['country', 'settings'], () => bom_manager.init()
     );
 
@@ -133,13 +133,13 @@ export function background(messenger) {
     messenger.on('clearBOM', () =>
         browser.storageRemove('bom' , () => sendState()
         )
-    
+
     );
 
     messenger.on('paste', () =>
         bom_manager.addToBOM(browser.paste(), () => sendState()
         )
-    
+
     );
 
     messenger.on('copy', () =>
@@ -147,24 +147,24 @@ export function background(messenger) {
             browser.copy(writeTSV(bom.lines));
             return badge.setDecaying('OK','#00CF0F');
         })
-    
+
     );
 
     messenger.on('loadFromPage', () =>
         tsvPageNotifier.addToBOM(() => sendState())
-    
+
     );
 
     messenger.on('emptyCarts', () =>
         retailer_list.map((name) =>
             emptyCart(name))
-    
+
     );
 
     messenger.on('fillCarts', () =>
         retailer_list.map((name) =>
             fillCart(name))
-    
+
     );
 
     messenger.on('quickAddToCart', obj => tsvPageNotifier.quickAddToCart(obj)
