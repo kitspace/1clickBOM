@@ -1,5 +1,4 @@
 *.sw*
-js/
 chrome/*
 !chrome/manifest.json
 firefox/*
