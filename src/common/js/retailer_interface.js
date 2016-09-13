@@ -18,7 +18,6 @@
 // the Original Code is Kaspar Emanuel.
 
 const http = require('./http')
-const { md5 } = require('./md5')
 const { browser } = require('./browser')
 
 class RetailerInterface {
@@ -79,22 +78,7 @@ class RetailerInterface {
 
         this.addline_params = data.addline_params
         this.name           = name
-        this.icon_src       = `https://www.google.com/s2/favicons?domain=http${this.site}`
-        //this puts the image in cache but also uses our backup if
-        //google.com/s2/favicons fails
-        http.get(this.icon_src, {notify:false},  event => {
-            let md = md5(event.target.response)
-            //failure response image, different on ff vs chrome for some reason
-            let failure_md5_ff     = '0dbc42f9ddbc4a887493dd2dcc50a78a'
-            let failure_md5_chrome = '6e2001c87afacf376c7df4a011376511'
-            if (md === failure_md5_chrome || md === failure_md5_ff) {
-                return this.icon_src = browser.getURL(`images/${this.name.toLowerCase()}.ico`)
-            }
-        }
-        , () => {
-            return this.icon_src = browser.getURL(`images/${this.name.toLowerCase()}.ico`)
-        }
-        )
+        this.icon_src       =  browser.getURL(`images/${this.name.toLowerCase()}.ico`)
         if (callback != null) {
             callback()
         }
