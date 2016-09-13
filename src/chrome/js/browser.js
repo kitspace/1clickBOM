@@ -17,118 +17,118 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-let dom = new DOMParser();
+let dom = new DOMParser()
 
 let browser = {
     storageGet(keys, callback) {
-        return chrome.storage.local.get(keys, callback);
+        return chrome.storage.local.get(keys, callback)
     },
     storageSet(obj, callback) {
-        return chrome.storage.local.set(obj, callback);
+        return chrome.storage.local.set(obj, callback)
     },
     prefsGet(keys, callback) {
-        return chrome.storage.local.get(keys, callback);
+        return chrome.storage.local.get(keys, callback)
     },
     prefsSet(obj, callback) {
-        return chrome.storage.local.set(obj, callback);
+        return chrome.storage.local.set(obj, callback)
     },
     storageRemove(key, callback) {
         return chrome.storage.local.remove(key, function() {
             if (callback != null) {
-                return callback();
+                return callback()
             }
         }
-        );
+        )
     },
     prefsOnChanged(keys, callback) {
         return chrome.storage.onChanged.addListener(function(changes, namespace) {
             if (namespace === 'local' && (keys.filter(x => x in changes).length > 0)) {
-                return callback();
+                return callback()
             }
-        });
+        })
     },
     tabsGetActive(callback) {
         return chrome.tabs.query({active:true, currentWindow:true}, function(tabs) {
             if (tabs.length >= 1) {
-                return callback(tabs[0]);
+                return callback(tabs[0])
             } else {
-                return callback(null);
+                return callback(null)
             }
         }
-        );
+        )
     },
     tabsQuery(obj, callback) {
-        return chrome.tabs.query(obj, callback);
+        return chrome.tabs.query(obj, callback)
     },
     tabsUpdate(tab, url) {
-        return chrome.tabs.update(tab.id, {url});
+        return chrome.tabs.update(tab.id, {url})
     },
     tabsReload(tab) {
-        return chrome.tabs.reload(tab.id);
+        return chrome.tabs.reload(tab.id)
     },
     tabsActivate(tab) {
-        return chrome.tabs.update(tab.id, {active: true});
+        return chrome.tabs.update(tab.id, {active: true})
     },
     tabsCreate(url) {
-        return chrome.tabs.create({url, active: true});
+        return chrome.tabs.create({url, active: true})
     },
     tabsOnUpdated(callback) {
-        chrome.tabs.onUpdated.addListener(callback);
-        chrome.tabs.onActivated.addListener(callback);
-        return chrome.windows.onFocusChanged.addListener(callback);
+        chrome.tabs.onUpdated.addListener(callback)
+        chrome.tabs.onActivated.addListener(callback)
+        return chrome.windows.onFocusChanged.addListener(callback)
     },
     getBackgroundPage(callback) {
-        return chrome.runtime.getBackgroundPage(callback);
+        return chrome.runtime.getBackgroundPage(callback)
     },
     getURL(url) {
-        return chrome.extension.getURL(url);
+        return chrome.extension.getURL(url)
     },
     getLocal(url, json=true){
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', chrome.extension.getURL(url), false);
-        xhr.send();
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', chrome.extension.getURL(url), false)
+        xhr.send()
         if (xhr.status === 200) {
             if (json) {
-                return JSON.parse(xhr.responseText);
+                return JSON.parse(xhr.responseText)
             } else {
-                return xhr.responseText;
+                return xhr.responseText
             }
         }
     },
     setBadge(obj) {
         if (obj.color != null) {
-            chrome.browserAction.setBadgeBackgroundColor({color:obj.color});
+            chrome.browserAction.setBadgeBackgroundColor({color:obj.color})
         }
         if (obj.text != null) {
-            return chrome.browserAction.setBadgeText(({text:obj.text}));
+            return chrome.browserAction.setBadgeText(({text:obj.text}))
         }
     },
     notificationsCreate(obj, callback) {
-        return chrome.notifications.create('', obj, callback);
+        return chrome.notifications.create('', obj, callback)
     },
     paste() {
-        let textarea = document.getElementById('pastebox');
-        textarea.select();
-        document.execCommand('paste');
-        return textarea.value;
+        let textarea = document.getElementById('pastebox')
+        textarea.select()
+        document.execCommand('paste')
+        return textarea.value
     },
     copy(text) {
-        let textarea = document.getElementById('pastebox');
-        textarea.value = text;
-        textarea.select();
-        document.execCommand('SelectAll');
-        return document.execCommand('Copy');
+        let textarea = document.getElementById('pastebox')
+        textarea.value = text
+        textarea.select()
+        document.execCommand('SelectAll')
+        return document.execCommand('Copy')
     },
     setTimeout(callback, time) {
-        return setTimeout(callback, time);
+        return setTimeout(callback, time)
     },
     clearTimeout(id) {
-        return clearTimeout(id);
+        return clearTimeout(id)
     },
     parseDOM(str) {
-        return dom.parseFromString(str, 'text/html');
+        return dom.parseFromString(str, 'text/html')
     }
-};
+}
 
-exports.browser = browser;
+exports.browser = browser
 exports.XMLHttpRequest = XMLHttpRequest

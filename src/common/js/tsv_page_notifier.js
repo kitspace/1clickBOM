@@ -17,11 +17,11 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const { parseTSV, writeTSV } = require('1-click-bom');
+const { parseTSV, writeTSV } = require('1-click-bom')
 
-const http = require('./http');
-const { browser } = require('./browser');
-const { badge } = require('./badge');
+const http = require('./http')
+const { browser } = require('./browser')
+const { badge } = require('./badge')
 
 exports.tsvPageNotifier = function tsvPageNotifier(sendState, bom_manager) {
     return {
@@ -30,99 +30,99 @@ exports.tsvPageNotifier = function tsvPageNotifier(sendState, bom_manager) {
         lines    : [],
         invalid  : [],
         _set_not_dotTSV() {
-            badge.setDefault('');
-            this.onDotTSV = false;
-            this.lines    = [];
-            this.invalid  = [];
-            return sendState();
+            badge.setDefault('')
+            this.onDotTSV = false
+            this.lines    = []
+            this.invalid  = []
+            return sendState()
         },
         checkPage(callback) {
             return browser.tabsGetActive(tab => {
                 if (tab != null) {
-                    let tab_url = tab.url.split('?')[0];
+                    let tab_url = tab.url.split('?')[0]
                     if (tab_url.match(this.re)) {
                         if (/^https?:\/\/.*?\.?kitnic.it\/boards\//.test(tab.url)) {
-                            var url = tab_url + '/1-click-BOM.tsv';
+                            var url = tab_url + '/1-click-BOM.tsv'
                         } else if (/^https?:\/\/127.0.0.1:8080\/boards\//.test(tab.url)) {
-                            var url = tab_url + '/1-click-BOM.tsv';
+                            var url = tab_url + '/1-click-BOM.tsv'
                         } else if (/^https?:\/\/github.com\//.test(tab.url)) {
-                            var url = tab_url.replace(/blob/,'raw');
+                            var url = tab_url.replace(/blob/,'raw')
                         } else if (/^https?:\/\/bitbucket.org\//.test(tab.url)) {
-                            var url = tab_url.split('?')[0].replace(/src/,'raw');
+                            var url = tab_url.split('?')[0].replace(/src/,'raw')
                         } else {
-                            var url = tab_url;
+                            var url = tab_url
                         }
                         http.get(url, {notify:false}, event => {
-                            let {lines, invalid} = parseTSV(event.target.responseText);
+                            let {lines, invalid} = parseTSV(event.target.responseText)
                             if (lines.length > 0) {
-                                badge.setDefault('\u2191', '#0000FF');
-                                this.onDotTSV = true;
-                                this.lines    = lines;
-                                this.invalid  = invalid;
-                                return sendState();
+                                badge.setDefault('\u2191', '#0000FF')
+                                this.onDotTSV = true
+                                this.lines    = lines
+                                this.invalid  = invalid
+                                return sendState()
                             } else {
-                                return this._set_not_dotTSV();
+                                return this._set_not_dotTSV()
                             }
                         }
                         , () => {
-                            return this._set_not_dotTSV();
+                            return this._set_not_dotTSV()
                         }
-                        );
+                        )
                     } else {
-                        this._set_not_dotTSV();
+                        this._set_not_dotTSV()
                     }
                     if (callback != null) {
-                        return callback();
+                        return callback()
                     }
                 } else if (callback != null) {
-                    return callback();
+                    return callback()
                 }
             }
-            );
+            )
         },
         addToBOM(callback) {
             return this.checkPage(() => {
                 if (this.onDotTSV) {
-                    return bom_manager._add_to_bom(this.lines, this.invalid, callback);
+                    return bom_manager._add_to_bom(this.lines, this.invalid, callback)
                 }
             }
-            );
+            )
         },
         quickAddToCart(input) {
             if (typeof input === 'string') {
-                var retailer = input;
-                var multiplier = 1;
+                var retailer = input
+                var multiplier = 1
             } else {
-                var { retailer } = input;
-                var { multiplier } = input;
+                var { retailer } = input
+                var { multiplier } = input
             }
             return this.checkPage(() => {
                 if (this.onDotTSV) {
-                    let parts = bom_manager._to_retailers(this.lines)[retailer];
+                    let parts = bom_manager._to_retailers(this.lines)[retailer]
                     parts = parts.map(function(line) {
-                        line.quantity = Math.ceil(line.quantity * multiplier);
-                        return line;
-                    });
-                    bom_manager.interfaces[retailer].adding_lines = true;
+                        line.quantity = Math.ceil(line.quantity * multiplier)
+                        return line
+                    })
+                    bom_manager.interfaces[retailer].adding_lines = true
                     let timeout_id = browser.setTimeout((function(retailer) {
-                        bom_manager.interfaces[retailer].adding_lines = false;
-                        return sendState();
+                        bom_manager.interfaces[retailer].adding_lines = false
+                        return sendState()
                     }).bind(null, retailer)
-                    , 180000);
+                    , 180000)
                     return bom_manager.interfaces[retailer].addLines(parts,
                         (function(timeout_id, retailer, result) {
-                            browser.clearTimeout(timeout_id);
-                            bom_manager.interfaces[retailer].adding_lines = false;
-                            sendState();
-                            bom_manager.interfaces[retailer].openCartTab();
+                            browser.clearTimeout(timeout_id)
+                            bom_manager.interfaces[retailer].adding_lines = false
+                            sendState()
+                            bom_manager.interfaces[retailer].openCartTab()
                             return bom_manager.notifyFillCart(parts
-                            , retailer, result);
+                            , retailer, result)
                         }).bind(null, timeout_id, retailer)
-                    );
+                    )
                 }
             }
-            );
+            )
         }
 
-    };
+    }
 }

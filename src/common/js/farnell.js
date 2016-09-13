@@ -17,25 +17,25 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const { RetailerInterface } = require('./retailer_interface');
-const { Newark } = require('./newark');
+const { RetailerInterface } = require('./retailer_interface')
+const { Newark } = require('./newark')
 
 class Farnell extends RetailerInterface {
     constructor(country_code, settings, callback) {
-        super('Farnell', country_code, 'data/farnell.json', settings);
+        super('Farnell', country_code, 'data/farnell.json', settings)
         //all Farnell sites are Newark style sites now so we use Newark's
         //methods
         let names = Object.getOwnPropertyNames(Newark.prototype)
         for (let index in names) {
-            let method = Newark.prototype[names[index]];
-            this[names[index]] = method;
+            let method = Newark.prototype[names[index]]
+            this[names[index]] = method
         }
-        this.cart = '/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView';
+        this.cart = '/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView'
         this._set_store_id(() => {
-            return callback(this);
+            return callback(this)
         }
-        );
+        )
     }
 }
 
-exports.Farnell = Farnell;
+exports.Farnell = Farnell

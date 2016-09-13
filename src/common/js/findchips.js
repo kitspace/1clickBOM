@@ -16,14 +16,14 @@
 //
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
-let n;
-let time_period_ms;
-const Promise = require('./bluebird');
-Promise.config({cancellation:true});
+let n
+let time_period_ms
+const Promise = require('./bluebird')
+Promise.config({cancellation:true})
 
-const rateLimit = require('./promise-rate-limit');
+const rateLimit = require('./promise-rate-limit')
 
-const http = require('./http');
+const http = require('./http')
 
 let aliases = {
     'Digi-Key'           : 'Digikey',
@@ -31,95 +31,95 @@ let aliases = {
     'Mouser Electronics' : 'Mouser',
     'Farnell element14'  : 'Farnell',
     'Newark element14'   : 'Newark'
-};
+}
 
 let _search = function(query, retailers_to_search = [], other_fields = []) {
     if (!query || query === '') {
-        return Promise.resolve({retailers:{}, partNumbers:[]});
+        return Promise.resolve({retailers:{}, partNumbers:[]})
     }
-    let url = `http://www.findchips.com/lite/${encodeURIComponent(query)}`;
+    let url = `http://www.findchips.com/lite/${encodeURIComponent(query)}`
     let p = http.promiseGet(url)
         .catch((function(url, event) {
-            let { status } = event.currentTarget;
+            let { status } = event.currentTarget
             if (status === 502) {
-                return http.promiseGet(url);
+                return http.promiseGet(url)
             }
         }).bind(null, url)
-    );
+    )
     return p.then(function(doc){
-        let result = {retailers:{}, partNumbers:[]};
-        let elements = doc.getElementsByClassName('distributor-title');
+        let result = {retailers:{}, partNumbers:[]}
+        let elements = doc.getElementsByClassName('distributor-title')
         for (let i = 0; i < elements.length; i++) {
-            let h = elements[i];
-            let title = h.firstElementChild.innerHTML.trim();
-            let retailer = '';
+            let h = elements[i]
+            let title = h.firstElementChild.innerHTML.trim()
+            let retailer = ''
             for (let k in aliases) {
-                let v = aliases[k];
-                let regex = RegExp(`^${k}`);
+                let v = aliases[k]
+                let regex = RegExp(`^${k}`)
                 if (regex.test(title)) {
-                    retailer = v;
-                    break;
+                    retailer = v
+                    break
                 }
             }
             if (!__in__(retailer, retailers_to_search)) {
-                continue;
+                continue
             }
-            let min_quantities = [];
-            let additional_elements = h.parentElement.getElementsByClassName('additional-title');
+            let min_quantities = []
+            let additional_elements = h.parentElement.getElementsByClassName('additional-title')
             for (let j = 0; j < additional_elements.length; j++) {
-                var span = additional_elements[j];
+                var span = additional_elements[j]
                 if (span.innerHTML === 'Min Qty') {
-                    min_quantities.push(span.nextElementSibling);
+                    min_quantities.push(span.nextElementSibling)
                 }
             }
             var {span, n} = min_quantities.reduce(function(prev, span) {
-                n = parseInt(span.innerHTML.trim());
+                n = parseInt(span.innerHTML.trim())
                 if (__guard__(prev, x => x.n) < n || isNaN(n)) {
-                    return prev;
+                    return prev
                 } else {
-                    return {span, n};
+                    return {span, n}
                 }
             }
-            , {});
+            , {})
             if (span == null) {
                 for (let i1 = 0; i1 < additional_elements.length; i1++) {
-                    span = additional_elements[i1];
+                    span = additional_elements[i1]
                     if (span.innerHTML === 'Distri #:') {
-                        var part = span.nextElementSibling.innerHTML.trim();
-                        break;
+                        var part = span.nextElementSibling.innerHTML.trim()
+                        break
                     }
                 }
             } else {
-                let tr = __guard__(__guard__(span.parentElement, x1 => x1.parentElement), x => x.parentElement);
+                let tr = __guard__(__guard__(span.parentElement, x1 => x1.parentElement), x => x.parentElement)
                 if (tr != null) {
-                    let iterable = tr.getElementsByClassName('additional-title');
+                    let iterable = tr.getElementsByClassName('additional-title')
                     for (let j1 = 0; j1 < iterable.length; j1++) {
-                        span = iterable[j1];
+                        span = iterable[j1]
                         if (span.innerHTML === 'Distri #:' && (span.nextElementSibling != null)) {
-                            var part = span.nextElementSibling.innerHTML.trim();
+                            var part = span.nextElementSibling.innerHTML.trim()
                             //sometimes there are some erroneous 'Distri #'
                             //after a space in the results
                             //like '77M8756 CE TMK107 B7224KA-T'
-                            part = part.split(' ')[0];
-                            break;
+                            part = part.split(' ')[0]
+                            break
                         }
                     }
                 }
             }
             if (part != null) {
-                result.retailers[retailer] = part;
+                result.retailers[retailer] = part
             }
         }
-        return result;
+        return result
     })
-    .catch(reason => ({retailers:{}, partNumbers:[]}));
-};
+    .catch(reason => ({retailers:{}, partNumbers:[]}))
+}
 
-exports.search = rateLimit(n=60, time_period_ms=20000, _search);
+exports.search = rateLimit(n=60, time_period_ms=20000, _search)
 
 function __in__(needle, haystack) {
-  return haystack.indexOf(needle) >= 0;
+  return haystack.indexOf(needle) >= 0
 }
 function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
+  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
 }

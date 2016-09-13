@@ -21,11 +21,11 @@
 
 let messenger = {
     on(msgName, callback) {
-        return self.port.on(msgName, callback);
+        return self.port.on(msgName, callback)
     },
     send(msgName, input) {
-        return self.port.emit(msgName, input);
+        return self.port.emit(msgName, input)
     }
-};
+}
 
-exports.messenger = messenger;
+exports.messenger = messenger

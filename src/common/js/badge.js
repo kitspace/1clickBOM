@@ -17,7 +17,7 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const { browser } = require('./browser');
+const { browser } = require('./browser')
 
 let badge = {
     decaying_set  : false,
@@ -27,27 +27,27 @@ let badge = {
     setDecaying(text, color='#0000FF', priority = 1) {
         if (priority >= this.priority) {
             if (this.decaying_set && this.id > 0) {
-                browser.clearTimeout(this.id);
+                browser.clearTimeout(this.id)
             }
-            this._set(text, color, priority);
+            this._set(text, color, priority)
             return this.id = browser.setTimeout(() => {
-                this.decaying_set = false;
-                return this._set(this.default_text, this.default_color, 0);
+                this.decaying_set = false
+                return this._set(this.default_text, this.default_color, 0)
             }
-            , 5000);
+            , 5000)
         }
     },
     setDefault(text, color='#0000FF', priority = 0) {
         if (priority >= this.priority) {
-            this._set(text, color, priority);
+            this._set(text, color, priority)
         }
-        this.default_color = color;
-        return this.default_text = text;
+        this.default_color = color
+        return this.default_text = text
     },
     _set(text, color, priority) {
-        browser.setBadge({color, text});
-        return this.priority = priority;
+        browser.setBadge({color, text})
+        return this.priority = priority
     }
-};
+}
 
-exports.badge = badge;
+exports.badge = badge

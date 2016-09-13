@@ -22,16 +22,16 @@
 let bgMessenger = (popup, message_exchange) =>
     ({
         on(msgName, callback) {
-            popup.port.on(msgName, callback);
+            popup.port.on(msgName, callback)
             return message_exchange.adders.push(((msgName, callback, worker) => worker.port.on(msgName, callback)).bind(null, msgName, callback)
-            );
+            )
         },
         send(msgName, input) {
-            popup.port.emit(msgName, input);
+            popup.port.emit(msgName, input)
             return message_exchange.receivers.map((worker) =>
-                worker.port.emit(msgName, input));
+                worker.port.emit(msgName, input))
         }
     })
-;
 
-exports.bgMessenger = bgMessenger;
+
+exports.bgMessenger = bgMessenger

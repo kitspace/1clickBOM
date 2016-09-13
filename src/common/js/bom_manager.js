@@ -16,38 +16,38 @@
 //
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
-const Promise = require('./bluebird');
-Promise.config({cancellation:true});
+const Promise = require('./bluebird')
+Promise.config({cancellation:true})
 
-const { parseTSV }      = require('1-click-bom');
-const { retailer_list } = require('1-click-bom').lineData;
-const { numberOfEmpty } = require('1-click-bom').lineData;
-const line_data         = require('1-click-bom').lineData;
+const { parseTSV }      = require('1-click-bom')
+const { retailer_list } = require('1-click-bom').lineData
+const { numberOfEmpty } = require('1-click-bom').lineData
+const line_data         = require('1-click-bom').lineData
 
-const http             = require('./http');
-const { browser }      = require('./browser');
-const { Digikey }      = require('./digikey');
-const { Farnell }      = require('./farnell');
-const { Mouser }       = require('./mouser');
-const { RS }           = require('./rs');
-const { Newark }       = require('./newark');
-const { badge }        = require('./badge');
-const { autoComplete } = require('./auto_complete');
+const http             = require('./http')
+const { browser }      = require('./browser')
+const { Digikey }      = require('./digikey')
+const { Farnell }      = require('./farnell')
+const { Mouser }       = require('./mouser')
+const { RS }           = require('./rs')
+const { Newark }       = require('./newark')
+const { badge }        = require('./badge')
+const { autoComplete } = require('./auto_complete')
 
 let bom_manager = {
     retailers: [Digikey, Farnell, Mouser, RS, Newark],
     init(callback) {
-        this.filling_carts  = false;
-        this.emptying_carts = false;
+        this.filling_carts  = false
+        this.emptying_carts = false
         return browser.prefsGet(['country', 'settings']
         , ({country, settings:stored_settings}) => {
-            let retailer;
-            let setting_values;
-            this.interfaces = {};
+            let retailer
+            let setting_values
+            this.interfaces = {}
             if (!country) {
-                country = 'Other';
+                country = 'Other'
             }
-            let count = this.retailers.length;
+            let count = this.retailers.length
             return this.retailers.map((retailer_interface) =>
                 (retailer = retailer_interface.name,
                 (__guard__(__guard__(stored_settings, x1 => x1[country]), x => x[retailer]) != null) ?
@@ -56,222 +56,222 @@ let bom_manager = {
                     setting_values = {},
                 this.interfaces[retailer] = new retailer_interface(country
                 , setting_values, function() {
-                    count -= 1;
+                    count -= 1
                     if (count === 0) {
-                        return __guardFunc__(callback, f => f());
+                        return __guardFunc__(callback, f => f())
                     }
                 }
-                )));
+                )))
         }
-        );
+        )
     },
 
     getBOM(callback) {
         return browser.storageGet(['bom'], ({bom}) => {
             if (bom == null) {
-                bom = {};
+                bom = {}
             } else {
                 let old_bom = retailer_list.reduce((prev, k) => prev || (prev = (bom[k] != null))
-                , false);
+                , false)
                 if (old_bom) {
-                    bom = {};
+                    bom = {}
                 }
             }
             if (bom.retailers == null) {
-                bom.retailers = {};
+                bom.retailers = {}
             }
             if (bom.lines == null) {
-                bom.lines = [];
+                bom.lines = []
             }
             for (let i = 0; i < bom.lines.length; i++) {
-                let line = bom.lines[i];
+                let line = bom.lines[i]
                 if (line.partNumbers == null) {
-                    line.partNumbers = [];
+                    line.partNumbers = []
                     if (line.partNumber !== '') {
                         line.partNumbers.push({
                             manufacturer:line.manufacturer.trim(),
                             part: line.partNumber.trim()
-                        });
+                        })
                     }
                 }
             }
-            return callback(bom);
+            return callback(bom)
         }
-        );
+        )
     },
 
     autoComplete(deep) {
         return new Promise((resolve, reject) => {
             return this.getBOM(bom => {
-                let prev_lines = bom.lines;
-                let p = autoComplete(bom.lines, deep);
+                let prev_lines = bom.lines
+                let p = autoComplete(bom.lines, deep)
                 return p.then(lines => {
-                    bom = {};
-                    bom.lines = lines;
-                    bom.retailers = this._to_retailers(lines);
+                    bom = {}
+                    bom.lines = lines
+                    bom.retailers = this._to_retailers(lines)
                     return browser.storageSet({bom}, () => resolve(numberOfEmpty(prev_lines) - numberOfEmpty(lines))
-                    );
+                    )
                 }
-                );
+                )
             }
-            );
+            )
         }
-        );
+        )
     },
 
     addToBOM(text, callback) {
-        let {lines, invalid, warnings} = parseTSV(text);
+        let {lines, invalid, warnings} = parseTSV(text)
         if (invalid.length > 0) {
             for (let i = 0; i < invalid.length; i++) {
-                var priority;
-                let inv = invalid[i];
-                var title = 'Could not parse row ';
-                title += inv.row;
-                var message = inv.reason + '\n';
+                var priority
+                let inv = invalid[i]
+                var title = 'Could not parse row '
+                title += inv.row
+                var message = inv.reason + '\n'
                 browser.notificationsCreate({
                     type:'basic',
                     title,
                     message,
                     iconUrl:'/images/warning.png'
-                });
-                badge.setDecaying('Warn','#FF8A00', priority=2);
+                })
+                badge.setDecaying('Warn','#FF8A00', priority=2)
             }
         } else if (lines.length === 0) {
-            var priority;
-            var title = 'Nothing pasted ';
-            var message = 'Clipboard is empty';
+            var priority
+            var title = 'Nothing pasted '
+            var message = 'Clipboard is empty'
             browser.notificationsCreate({
                 type:'basic',
                 title,
                 message,
                 iconUrl:'/images/warning.png'
-            });
-            badge.setDecaying('Warn','#FF8A00', priority=2);
+            })
+            badge.setDecaying('Warn','#FF8A00', priority=2)
         } else if (__guard__(warnings, x => x.length) > 0) {
             for (let j = 0; j < warnings.length; j++) {
-                var priority;
-                let w = warnings[j];
-                var { title } = w;
-                var { message } = w;
+                var priority
+                let w = warnings[j]
+                var { title } = w
+                var { message } = w
                 browser.notificationsCreate({
                     type:'basic',
                     title,
                     message,
                     iconUrl:'/images/warning.png'
-                });
-                badge.setDecaying('Warn','#FF8A00', priority=2);
+                })
+                badge.setDecaying('Warn','#FF8A00', priority=2)
             }
         } else if (lines.length > 0) {
-            badge.setDecaying('OK','#00CF0F');
+            badge.setDecaying('OK','#00CF0F')
         }
-        return this._add_to_bom(lines, invalid, callback);
+        return this._add_to_bom(lines, invalid, callback)
     },
 
     _to_retailers(lines) {
-        let r = {};
+        let r = {}
         for (let i = 0; i < lines.length; i++) {
-            let line = lines[i];
+            let line = lines[i]
             for (let retailer in line.retailers) {
-                let part = line.retailers[retailer];
+                let part = line.retailers[retailer]
                 if ((part != null) && part !== '') {
                     if (r[retailer] == null) {
-                        r[retailer] = [];
+                        r[retailer] = []
                     }
                     r[retailer].push({
                         part,
                         quantity  : line.quantity,
                         reference : line.reference
-                    });
+                    })
                 }
             }
         }
-        return r;
+        return r
     },
 
 
     _add_to_bom(lines, invalid, callback) {
         return this.getBOM(bom => {
-            let warnings;
-            [lines, warnings] = line_data.merge(bom.lines, lines);
-            bom.lines = lines;
+            let warnings
+            [lines, warnings] = line_data.merge(bom.lines, lines)
+            bom.lines = lines
             for (let i = 0; i < warnings.length; i++) {
-                var priority;
-                let warning = warnings[i];
+                var priority
+                let warning = warnings[i]
                 browser.notificationsCreate({
                     type:'basic',
                     title:warning.title,
                     message:warning.message,
                     iconUrl:'/images/warning.png'
-                });
-                badge.setDecaying('Warn','#FF8A00', priority=2);
+                })
+                badge.setDecaying('Warn','#FF8A00', priority=2)
             }
-            bom.retailers = this._to_retailers(bom.lines);
-            let over = [];
+            bom.retailers = this._to_retailers(bom.lines)
+            let over = []
             for (var retailer in bom.retailers) {
-                lines = bom.retailers[retailer];
+                lines = bom.retailers[retailer]
                 if (lines.length > 100) {
-                    over.push(retailer);
+                    over.push(retailer)
                 }
             }
             if (over.length > 0) {
-                var priority;
-                let title = "That's a lot of lines!";
-                let message = 'You have over 100 lines for ';
-                message += over[0];
+                var priority
+                let title = "That's a lot of lines!"
+                let message = 'You have over 100 lines for '
+                message += over[0]
                 if (over.length > 1) {
-                    let iterable = over.slice(1 ,  over.length - 2 + 1);
+                    let iterable = over.slice(1 ,  over.length - 2 + 1)
                     for (let j = 0; j < iterable.length; j++) {
-                        retailer = iterable[j];
-                        message += `, ${retailer}`;
+                        retailer = iterable[j]
+                        message += `, ${retailer}`
                     }
-                    message += ' and ';
-                    message += over[over.length - 1];
+                    message += ' and '
+                    message += over[over.length - 1]
                 }
-                message += ". Adding the lines may take a very long time (or even forever). It may be OK but it really depends on the site.";
+                message += ". Adding the lines may take a very long time (or even forever). It may be OK but it really depends on the site."
                 browser.notificationsCreate({
                     type:'basic',
                     title,
                     message,
                     iconUrl:'/images/warning.png'
-                });
-                badge.setDecaying('Warn','#FF8A00', priority=2);
+                })
+                badge.setDecaying('Warn','#FF8A00', priority=2)
             }
             return browser.storageSet({bom}, () => {
-                return __guardFunc__(callback, f => f(this));
+                return __guardFunc__(callback, f => f(this))
             }
-            );
+            )
         }
-        );
+        )
     },
 
 
     notifyFillCart(lines, retailer, result) {
         if (!result.success) {
-            var priority;
-            let { fails } = result;
-            let failed_lines = [];
+            var priority
+            let { fails } = result
+            let failed_lines = []
             if (fails.length === 0) {
-                var title = 'There may have been problems adding lines';
-                title += ` to ${retailer} cart. `;
+                var title = 'There may have been problems adding lines'
+                title += ` to ${retailer} cart. `
                 failed_lines.push({
                     title:'Please check the cart to try and ' ,
                     message:''
-                });
+                })
                 failed_lines.push({
                     title:'correct any issues.',
                     message:''
-                });
+                })
             } else {
-                var title = `Could not add ${fails.length}`;
-                title += ` out of ${lines.length} line`;
-                title += lines.length > 1 ? 's' : '';
-                title += ` to ${retailer} cart:`;
+                var title = `Could not add ${fails.length}`
+                title += ` out of ${lines.length} line`
+                title += lines.length > 1 ? 's' : ''
+                title += ` to ${retailer} cart:`
                 for (let i = 0; i < fails.length; i++) {
-                    let fail = fails[i];
+                    let fail = fails[i]
                     failed_lines.push({
                         title:`line: ${fail.reference} | ${fail.quantity} | ${fail.part}`,
                         message:''
-                    });
+                    })
                 }
             }
             browser.notificationsCreate({
@@ -280,14 +280,14 @@ let bom_manager = {
                 message:'',
                 items:failed_lines,
                 iconUrl:'/images/error.png'
-            });
-            badge.setDecaying('Err','#FF0000', priority=2);
+            })
+            badge.setDecaying('Err','#FF0000', priority=2)
         } else {
-            badge.setDecaying('OK','#00CF0F');
+            badge.setDecaying('OK','#00CF0F')
         }
         if (result.warnings != null) {
-            var title;
-            var priority;
+            var title
+            var priority
             return result.warnings.map((warning) =>
                 (title = warning,
                 browser.notificationsCreate({
@@ -296,24 +296,24 @@ let bom_manager = {
                     message:'',
                     iconUrl:'/images/warning.png'
                 }),
-                badge.setDecaying('Warn','#FF8A00', priority=1)));
+                badge.setDecaying('Warn','#FF8A00', priority=1)))
         }
     },
 
 
     notifyEmptyCart(retailer, result) {
         if (!result.success) {
-            let priority;
-            let title = `Could not empty ${retailer} cart`;
+            let priority
+            let title = `Could not empty ${retailer} cart`
             browser.notificationsCreate({
                 type:'basic',
                 title,
                 message:'',
                 iconUrl:'/images/error.png'
-            });
-            return badge.setDecaying('Err','#FF0000', priority=2);
+            })
+            return badge.setDecaying('Err','#FF0000', priority=2)
         } else {
-            return badge.setDecaying('OK','#00CF0F');
+            return badge.setDecaying('OK','#00CF0F')
         }
     },
 
@@ -323,32 +323,32 @@ let bom_manager = {
             if (bom.retailers[retailer] != null) {
                 return this.interfaces[retailer].addLines(bom.retailers[retailer]
                 , result => {
-                    this.notifyFillCart(bom.retailers[retailer], retailer, result);
-                    return callback(result);
+                    this.notifyFillCart(bom.retailers[retailer], retailer, result)
+                    return callback(result)
                 }
-                );
+                )
             }
         }
-        );
+        )
     },
 
     emptyCart(retailer, callback){
         return this.interfaces[retailer].clearCart(result => {
-            this.notifyEmptyCart(retailer, result);
-            return __guardFunc__(callback, f => f(result));
+            this.notifyEmptyCart(retailer, result)
+            return __guardFunc__(callback, f => f(result))
         }
-        );
+        )
     }
-};
+}
 
 
-bom_manager.init();
+bom_manager.init()
 
-exports.bom_manager = bom_manager;
+exports.bom_manager = bom_manager
 
 function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
+  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
 }
 function __guardFunc__(func, transform) {
-  return typeof func === 'function' ? transform(func) : undefined;
+  return typeof func === 'function' ? transform(func) : undefined
 }

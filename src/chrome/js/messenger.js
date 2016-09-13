@@ -21,30 +21,30 @@ let messenger = {
     msgNames: [],
     listening: false,
     on(msgName, callback) {
-        this.msgNames.push({msgName, callback});
+        this.msgNames.push({msgName, callback})
         if (!this.listening) {
             chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 for (let i = 0; i < this.msgNames.length; i++) {
-                    ({msgName, callback} = this.msgNames[i]);
+                    ({msgName, callback} = this.msgNames[i])
                     if (request.name === msgName) {
-                        return callback(request.value, sendResponse);
+                        return callback(request.value, sendResponse)
                     }
                 }
             }
-            );
-            return this.listening = true;
+            )
+            return this.listening = true
         }
     },
     send(msgName, input) {
-        chrome.runtime.sendMessage({name:msgName, value:input});
+        chrome.runtime.sendMessage({name:msgName, value:input})
         if (chrome.tabs != null) {
             return chrome.tabs.query({url:['*://*.kitnic.it/boards/*', '*://kitnic.it/boards/*', '*://127.0.0.1/boards/*']}, tabs =>
                 tabs.map((tab) =>
                     chrome.tabs.sendMessage(tab.id, {name:msgName, value:input}))
             
-            );
+            )
         }
     }
-};
+}
 
-exports.messenger = messenger;
+exports.messenger = messenger

@@ -17,17 +17,17 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const { writeTSV } = require('1-click-bom');
-let { retailer_list } = require('1-click-bom').lineData;
+const { writeTSV } = require('1-click-bom')
+let { retailer_list } = require('1-click-bom').lineData
 
-const { bom_manager } = require('./bom_manager');
-const { browser } = require('./browser');
-const http = require('./http');
-const { badge } = require('./badge');
+const { bom_manager } = require('./bom_manager')
+const { browser } = require('./browser')
+const http = require('./http')
+const { badge } = require('./badge')
 
 exports.background = function background(messenger) {
     browser.prefsOnChanged(['country', 'settings'], () => bom_manager.init()
-    );
+    )
 
     let sendState = () =>
         bom_manager.getBOM(function(bom) {
@@ -36,22 +36,22 @@ exports.background = function background(messenger) {
                 interfaces : bom_manager.interfaces,
                 onDotTSV   : tsvPageNotifier.onDotTSV
             }
-            );
-            return messenger.send('updateKitnic', bom_manager.interfaces);
+            )
+            return messenger.send('updateKitnic', bom_manager.interfaces)
         })
-    ;
+    
 
-    var tsvPageNotifier = require('./tsv_page_notifier').tsvPageNotifier(sendState, bom_manager);
+    var tsvPageNotifier = require('./tsv_page_notifier').tsvPageNotifier(sendState, bom_manager)
 
     browser.tabsOnUpdated(() => {
-        return tsvPageNotifier.checkPage();
+        return tsvPageNotifier.checkPage()
     }
-    );
+    )
 
     let autoComplete = function(deep=false) {
         let finish = function(timeout_id, no_of_completed) {
-            browser.clearTimeout(timeout_id);
-            sendState();
+            browser.clearTimeout(timeout_id)
+            sendState()
             if (no_of_completed > 0) {
                 browser.notificationsCreate({
                     type    : 'basic',
@@ -59,116 +59,116 @@ exports.background = function background(messenger) {
                     message : `Completed ${no_of_completed} fields for you
                         by searching Octopart and Findchips.`,
                     iconUrl : '/images/ok.png'
-                });
-                return badge.setDecaying('OK','#00CF0F');
+                })
+                return badge.setDecaying('OK','#00CF0F')
             } else {
                 browser.notificationsCreate({
                     type    : 'basic',
                     title   : 'Auto-complete returned 0 results',
                     message : 'Could not complete any fields for you.',
                     iconUrl : '/images/warning.png'
-                });
-                return badge.setDecaying('Warn','#FF8A00');
+                })
+                return badge.setDecaying('Warn','#FF8A00')
             }
-        };
-        let timeout_id = browser.setTimeout(function() {
-            promise.cancel();
-            return finish(timeout_id, 0);
         }
-        , 180000);
-        var promise = bom_manager.autoComplete(deep);
-        return promise.then(no_of_completed => finish(timeout_id, no_of_completed));
-    };
+        let timeout_id = browser.setTimeout(function() {
+            promise.cancel()
+            return finish(timeout_id, 0)
+        }
+        , 180000)
+        var promise = bom_manager.autoComplete(deep)
+        return promise.then(no_of_completed => finish(timeout_id, no_of_completed))
+    }
 
     let emptyCart = function(name) {
-        bom_manager.interfaces[name].clearing_cart = true;
+        bom_manager.interfaces[name].clearing_cart = true
         let timeout_id = browser.setTimeout((function(name) {
-            bom_manager.interfaces[name].clearing_cart = false;
-            return sendState();
+            bom_manager.interfaces[name].clearing_cart = false
+            return sendState()
         }).bind(null, name)
-        , 180000);
+        , 180000)
         bom_manager.emptyCart(name, (function(name, timeout_id) {
-            browser.clearTimeout(timeout_id);
-            bom_manager.interfaces[name].clearing_cart = false;
-            bom_manager.interfaces[name].openCartTab();
-            return sendState();
+            browser.clearTimeout(timeout_id)
+            bom_manager.interfaces[name].clearing_cart = false
+            bom_manager.interfaces[name].openCartTab()
+            return sendState()
         }).bind(null, name, timeout_id)
-        );
-        return sendState();
-    };
+        )
+        return sendState()
+    }
 
     let fillCart = function(name) {
-        bom_manager.interfaces[name].adding_lines = true;
+        bom_manager.interfaces[name].adding_lines = true
         let timeout_id = browser.setTimeout((function(name) {
-            bom_manager.interfaces[name].adding_lines = false;
-            return sendState();
+            bom_manager.interfaces[name].adding_lines = false
+            return sendState()
         }).bind(null, name)
-        , 180000);
+        , 180000)
         bom_manager.fillCart(name, (function(name, timeout_id) {
-            browser.clearTimeout(timeout_id);
-            bom_manager.interfaces[name].adding_lines = false;
-            bom_manager.interfaces[name].openCartTab();
-            return sendState();
+            browser.clearTimeout(timeout_id)
+            bom_manager.interfaces[name].adding_lines = false
+            bom_manager.interfaces[name].openCartTab()
+            return sendState()
         }).bind(null, name, timeout_id)
-        );
-        return sendState();
-    };
+        )
+        return sendState()
+    }
 
     messenger.on('getBackgroundState', () => sendState()
-    );
+    )
 
-    messenger.on('fillCart', fillCart);
+    messenger.on('fillCart', fillCart)
 
     messenger.on('openCart', name => bom_manager.interfaces[name].openCartTab()
-    );
+    )
 
     messenger.on('deepAutoComplete', function() {
-        let deep;
-        return autoComplete(deep=true);
+        let deep
+        return autoComplete(deep=true)
     }
-    );
+    )
 
-    messenger.on('emptyCart', emptyCart);
+    messenger.on('emptyCart', emptyCart)
 
     messenger.on('clearBOM', () =>
         browser.storageRemove('bom' , () => sendState()
         )
 
-    );
+    )
 
     messenger.on('paste', () =>
         bom_manager.addToBOM(browser.paste(), () => sendState()
         )
 
-    );
+    )
 
     messenger.on('copy', () =>
         bom_manager.getBOM(function(bom) {
-            browser.copy(writeTSV(bom.lines));
-            return badge.setDecaying('OK','#00CF0F');
+            browser.copy(writeTSV(bom.lines))
+            return badge.setDecaying('OK','#00CF0F')
         })
 
-    );
+    )
 
     messenger.on('loadFromPage', () =>
         tsvPageNotifier.addToBOM(() => sendState())
 
-    );
+    )
 
     messenger.on('emptyCarts', () =>
         retailer_list.map((name) =>
             emptyCart(name))
 
-    );
+    )
 
     messenger.on('fillCarts', () =>
         retailer_list.map((name) =>
             fillCart(name))
 
-    );
+    )
 
     messenger.on('quickAddToCart', obj => tsvPageNotifier.quickAddToCart(obj)
-    );
+    )
 
-    return sendState();
+    return sendState()
 }
