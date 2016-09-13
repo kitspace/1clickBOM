@@ -69,7 +69,7 @@ button_DeepComplete.addEventListener('click', () => messenger.send('deepAutoComp
 )
 
 
-let hideOrShow = function(bom, onDotTSV) {
+function hideOrShow(bom, onDotTSV) {
     let hasBOM = Boolean(Object.keys(bom.lines).length)
 
     button_Clear.disabled         = !hasBOM
@@ -80,7 +80,7 @@ let hideOrShow = function(bom, onDotTSV) {
 }
 
 
-let startSpinning = function(link) {
+function startSpinning(link) {
     let td = link.parentNode
     let counter = 0
     let spinner = document.createElement('div')
@@ -105,7 +105,7 @@ let startSpinning = function(link) {
 }
 
 
-let stopSpinning = function(link) {
+function stopSpinning(link) {
     if ((link.spinning != null) && link.spinning) {
         let td            = link.parentNode
         let spinner       = td.querySelector('div.spinner')
@@ -127,7 +127,7 @@ let removeChildren = element =>
 
 
 
-let render = function(state) {
+function render(state) {
     let { bom } = state
 
     hideOrShow(bom, state.onDotTSV)

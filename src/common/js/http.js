@@ -22,7 +22,7 @@ Promise.config({cancellation:true})
 const { browser, XMLHttpRequest } = require('./browser')
 const { badge } = require('./badge')
 
-let network_callback = function(event, callback, error_callback, notify=true) {
+function network_callback(event, callback, error_callback, notify=true) {
     if (event.target.readyState === 4) {
         if (event.target.status === 200) {
             if (callback != null) {
@@ -50,7 +50,7 @@ let network_callback = function(event, callback, error_callback, notify=true) {
     }
 }
 
-let post = function(url, params, {line, notify, timeout, json},  callback, error_callback) {
+function post(url, params, {line, notify, timeout, json},  callback, error_callback) {
     if (line == null) {
         line=null
     }
@@ -78,7 +78,7 @@ let post = function(url, params, {line, notify, timeout, json},  callback, error
     return xhr.send(params)
 }
 
-let get = function(url, {line, notify, timeout}, callback, error_callback) {
+function get(url, {line, notify, timeout}, callback, error_callback) {
     if (line == null) {
         line=null
     }
@@ -101,7 +101,7 @@ let get = function(url, {line, notify, timeout}, callback, error_callback) {
 
 let used_country_codes = []
 
-let getLocation = function(callback) {
+function getLocation(callback) {
     used_country_codes = []
     let countries_data = browser.getLocal('data/countries.json')
     for (let _ in countries_data) {

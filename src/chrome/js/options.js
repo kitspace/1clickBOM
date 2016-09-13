@@ -22,7 +22,7 @@ const { browser } = require('./browser')
 let countries_data = browser.getLocal('data/countries.json')
 let settings_data  = browser.getLocal('data/settings.json')
 
-let save_options = function() {
+function save_options() {
     let select = document.getElementById('country')
     let country = select.children[select.selectedIndex].value
     let { settings } = document

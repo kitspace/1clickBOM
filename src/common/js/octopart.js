@@ -30,7 +30,7 @@ let aliases = {
     'RS Components' : 'RS'
 }
 
-let _search = function(query, retailers = [], other_fields = []) {
+function _search(query, retailers = [], other_fields = []) {
     if (!query || query === '') {
         return Promise.resolve({retailers:{}, partNumbers:[]})
     }

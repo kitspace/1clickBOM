@@ -20,12 +20,12 @@ const Promise = require('./bluebird')
 Promise.config({cancellation:true})
 
 const oneClickBOM = require('1-click-bom')
-let {retailer_list, isComplete, field_list} = oneClickBOM.lineData
+const {retailer_list, isComplete, field_list} = oneClickBOM.lineData
 
 const octopart = require('./octopart')
 const findchips = require('./findchips')
 
-let _next_query = function(line, queries) {
+function _next_query(line, queries) {
     let query = ''
     let other_fields = []
     let retailers = []
@@ -38,16 +38,16 @@ let _next_query = function(line, queries) {
         }
     }
     for (let j = 0; j < retailer_list.length; j++) {
-        var key = retailer_list[j]
-        var sku = line.retailers[key]
+        let key = retailer_list[j]
+        let sku = line.retailers[key]
         if (sku !== '' && (!__in__(sku, queries))) {
             query = sku
             break
         }
     }
     for (let k = 0; k < retailer_list.length; k++) {
-        var key = retailer_list[k]
-        var sku = line.retailers[key]
+        let key = retailer_list[k]
+        let sku = line.retailers[key]
         if (sku === '') {
             retailers.push(key)
         }
@@ -61,14 +61,14 @@ let _next_query = function(line, queries) {
     return {query, other_fields, retailers}
 }
 
-let _auto_complete = function(search_engine, lines, depth) {
+function _auto_complete(search_engine, lines, depth) {
     let promise_array = (() => {
         let result = []
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i]
             let queries = []
             let searchPromises = []
-            let search = function({line, queries}) {
+            function search({line, queries}) {
                 let {query, other_fields, retailers} = _next_query(line, queries)
                 if ((retailers.length === 0 && other_fields.length === 0) || query === '') {
                     return Promise.resolve({line, queries})
@@ -117,14 +117,14 @@ let _auto_complete = function(search_engine, lines, depth) {
                 return newLines
             })
         )
-    
+
     , Promise.resolve([]))
 
     return final
 }
 
 
-let autoComplete = function(lines, deep=false) {
+function autoComplete(lines, deep=false) {
     lines = JSON.parse(JSON.stringify(lines))
     if (deep) {
         var depth = 3

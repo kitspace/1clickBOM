@@ -34,7 +34,7 @@ const locationChanged = require('./location_changed')
 const { Cc, Ci } = require('chrome')
 let dom = Cc['@mozilla.org/xmlextras/domparser;1'].createInstance(Ci.nsIDOMParser)
 
-let globToRegex = function(glob) {
+function globToRegex(glob) {
     let specialChars = '\\^$*+?.()|{}[]'
     let regexChars = ['^']
     for (let i = 0; i < glob.length; i++) {

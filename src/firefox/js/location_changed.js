@@ -15,7 +15,7 @@ let progressListener = {
     }
 }
 
-let attach = function(tab) {
+function attach(tab) {
     let low_level_tab = viewFor(tab)
     let browser       = getBrowserForTab(low_level_tab)
     return browser.addProgressListener(progressListener)

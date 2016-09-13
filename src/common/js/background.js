@@ -48,8 +48,8 @@ exports.background = function background(messenger) {
     }
     )
 
-    let autoComplete = function(deep=false) {
-        let finish = function(timeout_id, no_of_completed) {
+    function autoComplete(deep=false) {
+        function finish(timeout_id, no_of_completed) {
             browser.clearTimeout(timeout_id)
             sendState()
             if (no_of_completed > 0) {
@@ -80,7 +80,7 @@ exports.background = function background(messenger) {
         return promise.then(no_of_completed => finish(timeout_id, no_of_completed))
     }
 
-    let emptyCart = function(name) {
+    function emptyCart(name) {
         bom_manager.interfaces[name].clearing_cart = true
         let timeout_id = browser.setTimeout((function(name) {
             bom_manager.interfaces[name].clearing_cart = false
@@ -97,7 +97,7 @@ exports.background = function background(messenger) {
         return sendState()
     }
 
-    let fillCart = function(name) {
+    function fillCart(name) {
         bom_manager.interfaces[name].adding_lines = true
         let timeout_id = browser.setTimeout((function(name) {
             bom_manager.interfaces[name].adding_lines = false

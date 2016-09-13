@@ -33,7 +33,7 @@ let aliases = {
     'Newark element14'   : 'Newark'
 }
 
-let _search = function(query, retailers_to_search = [], other_fields = []) {
+function _search(query, retailers_to_search = [], other_fields = []) {
     if (!query || query === '') {
         return Promise.resolve({retailers:{}, partNumbers:[]})
     }
