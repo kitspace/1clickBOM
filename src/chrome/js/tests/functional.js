@@ -49,8 +49,7 @@ asyncTest('Clear All', function() {
             deepEqual(result.success, true)
             return start()
         })))
-}
-)
+})
 
 asyncTest('Add lines', function() {
     let r
@@ -66,8 +65,7 @@ asyncTest('Add lines', function() {
             return start()
         }
         )))
-}
-)
+})
 
 asyncTest('Add lines fails', function() {
     let r
@@ -84,8 +82,7 @@ asyncTest('Add lines fails', function() {
             return start()
         }
         )))
-}
-)
+})
 
 module('Farnell')
 
@@ -102,8 +99,7 @@ asyncTest('Clear All', function() {
             })
 
         ))
-}
-)
+})
 
 asyncTest('Add lines', function() {
     let r
@@ -118,8 +114,7 @@ asyncTest('Add lines', function() {
             )
 
         ))
-}
-)
+})
 
 asyncTest('Add lines fails', function() {
     let r
@@ -138,8 +133,7 @@ asyncTest('Add lines fails', function() {
             )
 
         ))
-}
-)
+})
 
 module('Mouser')
 
@@ -154,8 +148,7 @@ asyncTest('Clear All', function() {
         deepEqual(result.success, true)
         return start()
     })
-}
-)
+})
 
 asyncTest('Add lines fails but adds again', function() {
     let lines = [
@@ -171,12 +164,9 @@ asyncTest('Add lines fails but adds again', function() {
             //the order here is important as we want to make sure the 'errors' were cleared after the failed add
             deepEqual(result.success, true, that.country)
             return start()
-        }
-        )
-    }
-    )
-}
-)
+        })
+    })
+})
 
 module('RS')
 
@@ -194,14 +184,14 @@ let rs_locations = rs_locations_online.concat(rs_locations_delivers)
 asyncTest('Clear all', function() {
     let r
     stop(rs_locations.length - 1)
-    return rs_locations.map((l) =>
-        (r = new RS(l),
+    return rs_locations.map((l) => {
+        r = new RS(l),
         r.clearCart(function(result, that) {
             deepEqual(result.success, true, `1:${that.country}`)
             return start()
-        })))
-}
-)
+        })
+    })
+})
 
 asyncTest('Add lines fails but adds again', function() {
     let r

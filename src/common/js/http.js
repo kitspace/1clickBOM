@@ -38,10 +38,13 @@ function network_callback(event, callback, error_callback, notify=true) {
                 message += event.target.url
             }
             if (notify) {
-                let priority
-                browser.notificationsCreate({type:'basic', title:'Network Error Occured', message, iconUrl:'/images/net_error.png'}, function() {})
-
-                badge.setDecaying(`${event.target.status}`, '#CC00FF', priority=3)
+                browser.notificationsCreate({
+                  type:'basic',
+                  title:'Network Error Occured',
+                  message,
+                  iconUrl:'/images/net_error.png'
+                }, function () {} )
+                badge.setDecaying(`${event.target.status}`, '#CC00FF', 3)
             }
             if (error_callback != null) {
                 return error_callback(event)
@@ -99,10 +102,9 @@ function get(url, {line, notify, timeout}, callback, error_callback) {
     return xhr.send()
 }
 
-let used_country_codes = []
 
 function getLocation(callback) {
-    used_country_codes = []
+    let used_country_codes = []
     let countries_data = browser.getLocal('data/countries.json')
     for (let _ in countries_data) {
         let code = countries_data[_]
@@ -115,26 +117,22 @@ function getLocation(callback) {
         if (code === 'GB') { code = 'UK'; }
         if (!__in__(code, used_country_codes)) { code = 'Other'; }
         return browser.prefsSet({country: code}, callback)
-    }
-    , () => callback()
-    )
+    }, () => callback())
 }
 
-let promisePost = (url, params) =>
-    new Promise((resolve, reject) =>
-        post(url, params, {}, event => resolve()
-        , () => reject()
-        )
-    )
+function promisePost(url, params) {
+    return new Promise((resolve, reject) => {
+        post(url, params, {}, () => resolve(), () => reject())
+    })
+}
 
 
-let promiseGet = url =>
-    new Promise((resolve, reject) =>
+function promiseGet(url) {
+    return new Promise((resolve, reject) => {
         get(url, {}, event => resolve(browser.parseDOM(event.target.responseText))
-        , event => reject(event)
-        )
-    )
-
+            , reject)
+    })
+}
 
 
 exports.post        = post
