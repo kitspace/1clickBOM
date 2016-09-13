@@ -246,6 +246,7 @@ software as a service. See the [LICENSE][6] file for details.
 [output_scripts/kicad]:https://github.com/monostable/1clickBOM/blob/master/output_scripts/kicad
 [eagle_bom_export.png]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/eagle_bom_export.png
 [kicad_bom_export.png]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/kicad_bom_export.png
+[youtube.png]:https://github.com/monostable/1clickBOM/blob/master/readme_images/youtube.png
 
 [2]:https://github.com/monostable/1clickBOM/blob/master/examples/
 [3]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png
@@ -265,4 +266,4 @@ software as a service. See the [LICENSE][6] file for details.
 [18]:https://developer.mozilla.org/en-US/Add-ons/SDK
 [19]:http://1clickBOM.com
 [20]:https://addons.mozilla.org/en-US/firefox/addon/1clickbom/
-[22]:https://github.com/monostable/1clickBOM/blob/feat-auto-complete/readme_images/youtube.png
+
