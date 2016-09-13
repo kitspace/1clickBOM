@@ -212,7 +212,7 @@ The rest of the dependencies can be retrieved via `npm install`.
 
 - Get dependencies above and make sure executables are on your path
 - `npm install --global` (or `npm install && export PATH=$PATH:$(pwd)/node_modules/.bin`)
-- `./configure.coffee`
+- `./configure.js`
 - `ninja`
 
 #### Load
@@ -249,7 +249,6 @@ software as a service. See the [LICENSE][6] file for details.
 
 [2]:https://github.com/monostable/1clickBOM/blob/master/examples/
 [3]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png
-[4]:http://coffeescript.org
 [5]:https://qunitjs.com/
 [6]:https://github.com/monostable/1clickBOM/blob/master/LICENSE
 [7]:https://github.com/monostable/1clickBOM
