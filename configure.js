@@ -23,12 +23,14 @@ ninja.rule('babel').run(`babel ${presets} $in -o $out`)
 //browserify and put dependency list in $out.d in makefile format using
 //relative paths
 ninja.rule('browserify')
-    .run(`${browserify} $in --list > $out.d && node ./depfileify.js $out $out.d && ${browserify} $in -o $out`)
+    .run(`${browserify} $in --list > $out.d `
+         + `&& node ./depfileify.js $out $out.d && ${browserify} $in -o $out`)
     .depfile('$out.d')
     .description("browserify $in -o $out")
 
 ninja.rule('browserify-require')
-    .run("browserify --require='./$in' --list > $out.d && node ./depfileify.js $out $out.d && browserify --require='./$in' -o $out")
+    .run("browserify --require='./$in' --list > $out.d"
+         + "&& node ./depfileify.js $out $out.d && browserify --require='./$in' -o $out")
     .depfile('$out.d')
     .description("browserify $in -o $out")
 
@@ -164,13 +166,19 @@ targets.firefox.push('build/firefox/package.json')
 
 const chrome_package_name = `1clickBOM-v${version}-chrome`
 ninja.rule('package-chrome')
-    .run(`cd build/ && cp -r chrome  ${chrome_package_name} && rm -rf ${chrome_package_name}/js/{functional,unit,qunit}.js ${chrome_package_name}/html/test.html ${chrome_package_name}/js && zip -r ${chrome_package_name}.zip ${chrome_package_name}/ && rm -rf ${chrome_package_name}`)
+    .run(`cd build/ && cp -r chrome  ${chrome_package_name}`
+         + `&& rm -rf ${chrome_package_name}/js/{functional,unit,qunit}.js `
+         + `${chrome_package_name}/html/test.html ${chrome_package_name}/js `
+         + `+&& zip -r ${chrome_package_name}.zip ${chrome_package_name}/ `
+         + `&& rm -rf ${chrome_package_name}`)
 ninja.edge(`${chrome_package_name}.zip`).need('chrome').using('package-chrome')
 ninja.edge('package-chrome').need(`${chrome_package_name}.zip`)
 
 
 ninja.rule('npm-install').run('cd build/firefox/ && npm install')
-ninja.edge('build/firefox/node_modules').from('build/firefox/package.json').using('npm-install')
+ninja.edge('build/firefox/node_modules')
+    .from('build/firefox/package.json')
+    .using('npm-install')
 targets.firefox.push('build/firefox/node_modules')
 
 ninja.rule('make-jpmignore').run("node make-jpmignore.js $in")
@@ -181,7 +189,8 @@ targets.firefox.push('build/firefox/.jpmignore')
 
 const firefox_package = `build/1clickBOM-v${version}-firefox.xpi`
 ninja.rule('package-firefox')
-    .run(`jpm xpi --addon-dir=${__dirname}/build/firefox && mv build/firefox/*.xpi $out && echo 'moved to ${firefox_package}'`)
+    .run(`jpm xpi --addon-dir=${__dirname}/build/firefox `
+            + `&& mv build/firefox/*.xpi $out && echo 'moved to ${firefox_package}'`)
 ninja.edge(firefox_package).need('firefox').using('package-firefox')
 ninja.edge('package-firefox').need(firefox_package)
 
