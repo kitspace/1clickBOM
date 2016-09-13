@@ -158,16 +158,20 @@ room][kitnic gitter]
 
 ## Roadmap ##
 
-
 * 1.2
+    * Improved completion of generic resistors and capacitors
+    * Improved completion by searching retailer sites directly
+    * Ability to add components to BOM from retailer site
+
+* 1.3
     * Make requests cancelable
     * Improve user interface
 
-* 1.3
+* 1.4
     * Add retailer preference ranking
     * Add function to reduce BOM (and add to cart?) according to retailer preference
 
-* 1.4
+* 1.5
     * Additional retailer support
         * AVNet
         * Adafruit
