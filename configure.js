@@ -169,7 +169,7 @@ ninja.rule('package-chrome')
     .run(`cd build/ && cp -r chrome  ${chrome_package_name}`
          + `&& rm -rf ${chrome_package_name}/js/{functional,unit,qunit}.js `
          + `${chrome_package_name}/html/test.html ${chrome_package_name}/js `
-         + `+&& zip -r ${chrome_package_name}.zip ${chrome_package_name}/ `
+         + `&& zip -r ${chrome_package_name}.zip ${chrome_package_name}/ `
          + `&& rm -rf ${chrome_package_name}`)
 ninja.edge(`${chrome_package_name}.zip`).need('chrome').using('package-chrome')
 ninja.edge('package-chrome').need(`${chrome_package_name}.zip`)

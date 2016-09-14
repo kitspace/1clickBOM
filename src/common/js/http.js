@@ -55,16 +55,16 @@ function network_callback(event, callback, error_callback, notify=true) {
 
 function post(url, params, {line, notify, timeout, json},  callback, error_callback) {
     if (line == null) {
-        line=null
+        line = null
     }
     if (notify == null) {
-        notify=true
+        notify = true
     }
     if (timeout == null) {
-        timeout=60000
+        timeout = 60000
     }
     if (json == null) {
-        json=false
+        json = false
     }
     let xhr = new XMLHttpRequest()
     xhr.open('POST', url, true)
@@ -83,13 +83,13 @@ function post(url, params, {line, notify, timeout, json},  callback, error_callb
 
 function get(url, {line, notify, timeout}, callback, error_callback) {
     if (line == null) {
-        line=null
+        line = null
     }
     if (notify == null) {
-        notify=false
+        notify = false
     }
     if (timeout == null) {
-        timeout=60000
+        timeout = 60000
     }
     let xhr = new XMLHttpRequest()
     xhr.line = line

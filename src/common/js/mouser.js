@@ -81,7 +81,10 @@ class Mouser extends RetailerInterface {
         params += '&ctl00$ContentMain$txtNumberOfLines=94'
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i]
-            params += `&ctl00$ContentMain$txtCustomerPartNumber${i+1}=${line.reference}&ctl00$ContentMain$txtPartNumber${i+1}=${line.part}&ctl00$ContentMain$txtQuantity${i+1}=}${line.quantity}`
+            params += `&ctl00$ContentMain$txtCustomerPartNumber${i+1}=`
+                + `${line.reference}&ctl00$ContentMain$txtPartNumber${i+1}=`
+                + `${line.part}&ctl00$ContentMain$txtQuantity${i+1}=}`
+                + `${line.quantity}`
         }
         let url = `http${this.site}${this.addline}`
         let result = {success: true, fails:[]}
@@ -115,8 +118,7 @@ class Mouser extends RetailerInterface {
             if (callback != null) {
                 return callback({success:false, fails:lines})
             }
-        }
-        )
+        })
     }
 
     _clear_errors(viewstate, callback) {
@@ -129,17 +131,14 @@ class Mouser extends RetailerInterface {
                if (callback != null) {
                    return callback()
                }
-           }
-            )
-        }
-        )
+           })
+        })
     }
 
     clearCart(callback) {
         return this._get_cart_viewstate(viewstate => {
             return this._clear_cart(viewstate, callback)
-        }
-        )
+        })
     }
     _clear_cart(viewstate, callback){
         //don't ask, this is what works...
@@ -155,8 +154,7 @@ class Mouser extends RetailerInterface {
             if (callback != null) {
                 return callback({success:false}, this)
             }
-        }
-        )
+        })
     }
     _get_adding_viewstate(callback, arg){
         //we get the quick-add form, extend it to 99 lines (the max) and get
@@ -175,10 +173,8 @@ class Mouser extends RetailerInterface {
                 if (callback != null) {
                     return callback(viewstate, arg)
                 }
-            }
-            )
-        }
-        )
+            })
+        })
     }
     _get_cart_viewstate(callback){
         let url = `http${this.site}${this.cart}`
@@ -188,8 +184,7 @@ class Mouser extends RetailerInterface {
             if (callback != null) {
                 return callback(viewstate)
             }
-        }
-        )
+        })
     }
 }
 

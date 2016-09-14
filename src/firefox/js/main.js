@@ -14,10 +14,19 @@ exports.main = function main(options, callbacks) {
               onReady(tab) {
                 return tab.attach({
                   contentScriptWhen: 'end',
-                  contentScript:"AddonManager.getAddonByID('1clickBOM@monostable', function(aAddon) { window.gViewController.commands .cmd_showItemDetails.doCommand(aAddon, true); });"
+                  contentScript:
+                      "AddonManager.getAddonByID("
+                          + "'1clickBOM@monostable',           "
+                          + "function(aAddon) {                "
+                          + "    window                        "
+                          + "        .gViewController          "
+                          + "        .commands                 "
+                          + "        .cmd_showItemDetails      "
+                          + "        .doCommand(aAddon, true)  "
+                          + "})                                "
                 })
             }
-            })
+          })
         )
     }
 
