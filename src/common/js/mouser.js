@@ -81,9 +81,9 @@ class Mouser extends RetailerInterface {
         }
         let url = `http${this.site}${this.addline}`
         let result = {success: true, fails:[]}
-        return http.post(url, params, {}, event => {
+        return http.post(url, params, {}, responseText => {
             //if there is an error, there will be some error-class lines with display set to ''
-            let doc = browser.parseDOM(event.target.responseText)
+            let doc = browser.parseDOM(responseText)
             let errors = doc.getElementsByClassName('error')
             for (let j = 0; j < errors.length; j++) {
                 let error = errors[j]
@@ -116,8 +116,8 @@ class Mouser extends RetailerInterface {
 
     _clear_errors(viewstate, callback) {
         return http.post(`http${this.site}${this.cart}`, `__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=${viewstate}&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors`
-        , {}, event => {
-            let doc = browser.parseDOM(event.target.responseText)
+        , {}, responseText => {
+            let doc = browser.parseDOM(responseText)
             viewstate = encodeURIComponent(__guard__(doc.getElementById('__VIEWSTATE'), x => x.value))
             return http.post(`http${this.site}${this.cart}`, `__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=${viewstate}&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket`
             , {}, event => {
@@ -153,15 +153,15 @@ class Mouser extends RetailerInterface {
         //we get the quick-add form, extend it to 99 lines (the max) and get
         //the viewstate from the response
         let url = `http${this.site}${this.addline}`
-        return http.get(url, {}, event => {
-            let doc = browser.parseDOM(event.target.responseText)
+        return http.get(url, {}, responseText => {
+            let doc = browser.parseDOM(responseText)
             let params = this.addline_params
             params += encodeURIComponent(doc.getElementById('__VIEWSTATE').value)
             params += '&ctl00$ContentMain$btnAddLines=Lines to Forms'
             params += '&ctl00$ContentMain$hNumberOfLines=5'
             params += '&ctl00$ContentMain$txtNumberOfLines=94'
-            return http.post(url, params, {}, event => {
-                doc = browser.parseDOM(event.target.responseText)
+            return http.post(url, params, {}, responseText => {
+                doc = browser.parseDOM(responseText)
                 let viewstate = encodeURIComponent(doc.getElementById('__VIEWSTATE').value)
                 if (callback != null) {
                     return callback(viewstate, arg)
@@ -171,8 +171,8 @@ class Mouser extends RetailerInterface {
     }
     _get_cart_viewstate(callback){
         let url = `http${this.site}${this.cart}`
-        return http.get(url, {}, event => {
-            let doc = browser.parseDOM(event.target.responseText)
+        return http.get(url, {}, responseText => {
+            let doc = browser.parseDOM(responseText)
             let viewstate = encodeURIComponent(__guard__(doc.getElementById('__VIEWSTATE'), x => x.value))
             if (callback != null) {
                 return callback(viewstate)

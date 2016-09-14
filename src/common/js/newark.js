@@ -46,8 +46,8 @@ class Newark extends RetailerInterface {
 
     _set_store_id(callback) {
         let url = `https${this.site}${this.cart}`
-        return http.get(url, {}, event => {
-            let doc = browser.parseDOM(event.target.responseText)
+        return http.get(url, {}, response => {
+            let doc = browser.parseDOM(response)
             let id_elem = doc.getElementById('storeId')
             if (id_elem != null) {
                 this.store_id = id_elem.value
@@ -78,8 +78,8 @@ class Newark extends RetailerInterface {
 
     _get_item_ids(callback) {
         let url = `https${this.site}${this.cart}`
-        return http.get(url, {}, event => {
-            let doc = browser.parseDOM(event.target.responseText)
+        return http.get(url, {}, responseText => {
+            let doc = browser.parseDOM(responseText)
             let order_details = doc.querySelector('#order_details')
             if (order_details != null) {
                 let tbody = order_details.querySelector('tbody')
@@ -139,8 +139,8 @@ class Newark extends RetailerInterface {
             params += encodeURIComponent(line.quantity) + ','
             params += encodeURIComponent(line.reference) + '\n'
         }
-        return http.post(url, params, {}, event => {
-            let doc = browser.parseDOM(event.target.responseText)
+        return http.post(url, params, {}, responseText => {
+            let doc = browser.parseDOM(responseText)
             let form_errors = doc.querySelector('#formErrors')
             let success = true
             if (form_errors != null) {
@@ -213,8 +213,8 @@ class Newark extends RetailerInterface {
             }
             params += encodeURIComponent(line.reference.substr(0,30)) + '\n'
         }
-        return http.post(url, params, {}, event => {
-            let stxt = event.target.responseText.split('\n')
+        return http.post(url, params, {}, responseText => {
+            let stxt = responseText.split('\n')
             let stxt2 = stxt.slice(3 ,  (stxt.length - 4) + 1)
             let stxt3 = ''
             for (let j = 0; j < stxt2.length; j++) {

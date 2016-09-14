@@ -197,13 +197,13 @@ asyncTest('Add lines fails but adds again', function() {
     let r
     let lines
     stop(rs_locations.length - 1)
-    return rs_locations.map((l) =>
-        (r = new RS(l),
+    return rs_locations.map((l) => {
+        r = new RS(l)
         lines = [
             {'part':'264-7881','quantity':2, 'reference':'test'},
             {'part':'fail1','quantity':2, 'reference':'test'},
             {'part':'fail2','quantity':2, 'reference':'test'}
-        ],
+        ]
         r.addLines(lines, function(result, that) {
             let expected_fails = [
                 {'part':'fail1','quantity':2, 'reference':'test'},
@@ -217,10 +217,9 @@ asyncTest('Add lines fails but adds again', function() {
                 return start()
             }
             )
-        }
-        )))
-}
-)
+        })
+    })
+})
 
 module('Newark')
 

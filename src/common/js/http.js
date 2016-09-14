@@ -26,17 +26,11 @@ function network_callback(event, callback, error_callback, notify=true) {
     if (event.target.readyState === 4) {
         if (event.target.status === 200) {
             if (callback != null) {
-                return callback(event)
+                return callback(event.target.responseText)
             }
         } else {
             let message = event.target.status + '\n'
-            if (event.target.line != null) {
-                let { line } = event.target
-                message += 'Trying to process '
-                message +=  line.part + '\n'
-            } else {
-                message += event.target.url
-            }
+            message += event.target.url
             if (notify) {
                 browser.notificationsCreate({
                   type:'basic',
@@ -53,10 +47,7 @@ function network_callback(event, callback, error_callback, notify=true) {
     }
 }
 
-function post(url, params, {line, notify, timeout, json},  callback, error_callback) {
-    if (line == null) {
-        line = null
-    }
+function post(url, params, {notify, timeout, json},  callback, error_callback) {
     if (notify == null) {
         notify = true
     }
@@ -68,23 +59,23 @@ function post(url, params, {line, notify, timeout, json},  callback, error_callb
     }
     let xhr = new XMLHttpRequest()
     xhr.open('POST', url, true)
-    xhr.line = line
     if (json) {
         xhr.setRequestHeader('Content-type', 'application/JSON')
     } else {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
     }
     xhr.url = url
-    xhr.onreadystatechange = event => network_callback(event, callback, error_callback, notify)
+    xhr.onreadystatechange = event => {
+        network_callback(event, callback, error_callback, notify)
+    }
     xhr.timeout = timeout
-    xhr.ontimedout = event => network_callback(event, callback, error_callback, notify)
+    xhr.ontimedout = event => {
+        network_callback(event, callback, error_callback, notify)
+    }
     return xhr.send(params)
 }
 
-function get(url, {line, notify, timeout}, callback, error_callback) {
-    if (line == null) {
-        line = null
-    }
+function get(url, {notify, timeout}, callback, error_callback) {
     if (notify == null) {
         notify = false
     }
@@ -92,7 +83,6 @@ function get(url, {line, notify, timeout}, callback, error_callback) {
         timeout = 60000
     }
     let xhr = new XMLHttpRequest()
-    xhr.line = line
     xhr.open('GET', url, true)
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
     xhr.url = url
@@ -129,7 +119,7 @@ function promisePost(url, params) {
 
 function promiseGet(url) {
     return new Promise((resolve, reject) => {
-        get(url, {}, event => resolve(browser.parseDOM(event.target.responseText))
+        get(url, {}, responseText => resolve(browser.parseDOM(responseText))
             , reject)
     })
 }

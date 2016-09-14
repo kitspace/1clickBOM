@@ -161,8 +161,8 @@ let rsOnline = {
 
     _get_and_correct_invalid_lines(callback) {
         let url = `http${this.site}${this.cart}`
-        return http.get(url, {}, event => {
-            let doc = browser.parseDOM(event.target.responseText)
+        return http.get(url, {}, responseText => {
+            let doc = browser.parseDOM(responseText)
             let lines = []
             let iterable = doc.querySelectorAll('.dataRow.errorRow')
             for (let i = 0; i < iterable.length; i++) {
@@ -247,7 +247,7 @@ let rsOnline = {
         `Action_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderT` +
         `extBoxbtn&`
 
-        return http.post(url, params, {}, event => {
+        return http.post(url, params, {}, () => {
             return this._get_and_correct_invalid_lines(invalid_lines => {
                 let success = invalid_lines.length === 0
                 let invalid = []
@@ -271,8 +271,7 @@ let rsOnline = {
                     warnings:result.warnings
                 }
                 , this, lines_incoming))
-            }
-            )
+            })
         }
         , () => {
             return __guardFunc__(callback, f => f({
@@ -287,8 +286,8 @@ let rsOnline = {
 
     _get_adding_viewstate(callback){
         let url = `http${this.site}${this.cart}`
-        return http.get(url, {}, event => {
-            let doc = browser.parseDOM(event.target.responseText)
+        return http.get(url, {}, responseText => {
+            let doc = browser.parseDOM(responseText)
             let viewstate_element  = doc.getElementById("javax.faces.ViewState")
             if (viewstate_element != null) {
                 var viewstate = viewstate_element.value
@@ -311,8 +310,8 @@ let rsOnline = {
 
     _get_clear_viewstate(callback){
         let url = `http${this.site}${this.cart}`
-        return http.get(url, {}, event => {
-            let doc = browser.parseDOM(event.target.responseText)
+        return http.get(url, {}, responseText => {
+            let doc = browser.parseDOM(responseText)
             let viewstate_elem = doc.getElementById("javax.faces.ViewState")
             if (viewstate_elem != null) {
                 var viewstate = doc.getElementById("javax.faces.ViewState").value
@@ -343,7 +342,7 @@ let rsOnline = {
 let rsDelivers = {
     clearCart(callback) {
         let url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart`
-        return http.post(url, '', {json:true}, event => {
+        return http.post(url, '', {json:true}, responseText => {
             if (callback != null) {
                 callback({success: true}, this)
             }
@@ -377,20 +376,18 @@ let rsDelivers = {
             if (callback != null) {
                 return callback()
             }
-        }
-        , function() {
+        }, function() {
             if (callback != null) {
                 return callback()
             }
-        }
-        )
+        })
     },
 
 
     _get_invalid_line_ids(callback) {
         let url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/GetCartHtml`
-        return http.post(url, undefined, {json:true}, function(event) {
-            let doc = browser.parseDOM(JSON.parse(event.target.responseText).html)
+        return http.post(url, undefined, {json:true}, function(responseText) {
+            let doc = browser.parseDOM(JSON.parse(responseText).html)
             let ids = []
             let parts = []
             let iterable = doc.getElementsByClassName("errorOrderLine")
@@ -439,9 +436,8 @@ let rsDelivers = {
                     `${line.reference}\n`
                 }
                 params += '"}}'
-                return http.post(url, params, {json:true}, event => {
-                    let doc = browser.parseDOM(
-                        JSON.parse(event.target.responseText).html)
+                return http.post(url, params, {json:true}, responseText => {
+                    let doc = browser.parseDOM(JSON.parse(responseText).html)
                     let success = doc.querySelector("#hidErrorAtLineLevel")
                         .value === "0"
                     if (!success) {
