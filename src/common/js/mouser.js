@@ -49,31 +49,24 @@ class Mouser extends RetailerInterface {
         return this._get_cart_viewstate(viewstate => {
             return this._clear_errors(viewstate, () => {
                 return this._get_adding_viewstate(viewstate => {
-                    return (() => {
-                        let result = []
-                        for (let i = 0; i < lines.length; i += 99) {
-                            let _ = lines[i]
-                            let _99_lines = lines.slice(i, i+98 + 1)
-                            count += 1
-                            result.push(this._add_lines(_99_lines, viewstate, result => {
-                                if (big_result.success) { big_result.success = result.success; }
-                                big_result.fails = big_result.fails.concat(result.fails)
-                                count -= 1
-                                if (count <= 0) {
-                                    callback(big_result, this, lines)
-                                    return this.refreshCartTabs()
-                                }
-                            }
-                            ))
-                        }
-                        return result
-                    })()
-                }
-                )
-            }
-            )
-        }
-        )
+                      let result = []
+                      for (let i = 0; i < lines.length; i += 99) {
+                          let _99_lines = lines.slice(i, i+98 + 1)
+                          count += 1
+                          result.push(this._add_lines(_99_lines, viewstate, result => {
+                              if (big_result.success) { big_result.success = result.success; }
+                              big_result.fails = big_result.fails.concat(result.fails)
+                              count -= 1
+                              if (count <= 0) {
+                                  callback(big_result, this, lines)
+                                  return this.refreshCartTabs()
+                              }
+                          }))
+                      }
+                      return result
+                })
+            })
+        })
     }
     _add_lines(lines, viewstate, callback) {
         let params = this.addline_params + viewstate
