@@ -88,43 +88,27 @@ class RetailerInterface {
         //we reload any tabs with the cart URL but the path is case insensitive
         //so we use a regex. we update the matching tabs to the cart URL instead
         //of using tabs.refresh so we don't re-pass any parameters to the cart
-        let re = new RegExp(this.cart, 'i')
+        const re = new RegExp(this.cart, 'i')
         return browser.tabsQuery({url:`*${this.site}/*`}, tabs => {
-            return (() => {
-                let result = []
-                for (let i = 0; i < tabs.length; i++) {
-                    let tab = tabs[i]
-                    let item
-                    if (tab.url.match(re)) {
-                        let protocol = tab.url.split('://')[0]
-                        item = browser.tabsUpdate(tab, protocol + this.site + this.cart)
-                    }
-                    result.push(item)
+            tabs.forEach(tab => {
+                if (tab.url.match(re)) {
+                    let protocol = tab.url.split('://')[0]
+                    browser.tabsUpdate(tab, protocol + this.site + this.cart)
                 }
-                return result
-            })()
-        }
-        )
+            })
+        })
     }
     refreshSiteTabs() {
         //refresh the tabs that are not the cart url. XXX could some of the
         //passed params cause problems on, say, quick-add urls?
-        let re = new RegExp(this.cart, "i")
-        return browser.tabsQuery({url:`*${this.site}/*`}, tabs =>
-            (() => {
-                let result = []
-                for (let i = 0; i < tabs.length; i++) {
-                    let tab = tabs[i]
-                    let item
-                    if (!(tab.url.match(re))) {
-                        item = browser.tabsReload(tab)
-                    }
-                    result.push(item)
+        const re = new RegExp(this.site, "i")
+        return browser.tabsQuery({url:`*${this.site}/*`}, tabs => {
+            tabs.forEach(tab => {
+                if (!(tab.url.match(re))) {
+                    browser.tabsReload(tab)
                 }
-                return result
-            })()
-
-        )
+            })
+        })
     }
 
     openCartTab() {
@@ -135,8 +119,7 @@ class RetailerInterface {
             } else {
                 return browser.tabsCreate(`http${this.site}${this.cart}`)
             }
-        }
-        )
+        })
     }
 }
 
