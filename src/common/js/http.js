@@ -83,17 +83,20 @@ function post(url, params, options, callback, error_callback) {
 }
 
 function get(url, options, callback, error_callback) {
-    let { notify, timeout } = options
+    let { notify } = options
     return fetch(url, {
       headers: {'Content-type': 'application/x-www-form-urlencoded'},
       credentials: 'include',
     }).then(response => {
+        if (response.status != 200) {
+            throw response
+        }
         return response.text()
     }).then(responseText => {
         callback(responseText)
         return responseText
-    }).catch(e => {
-        console.error(e)
+    }).catch(response => {
+        console.error(response)
         if (notify) {
             browser.notificationsCreate({
               type:'basic',
@@ -101,7 +104,7 @@ function get(url, options, callback, error_callback) {
               message,
               iconUrl:'/images/net_error.png'
             }, function () {} )
-            badge.setDecaying(`${event.target.status}`, '#CC00FF', 3)
+            badge.setDecaying(`${response.status}`, '#CC00FF', 3)
         }
         if (error_callback != null) {
             return error_callback()
