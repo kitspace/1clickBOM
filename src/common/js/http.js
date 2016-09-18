@@ -82,8 +82,7 @@ function post(url, params, options, callback, error_callback) {
     return xhr.send(params)
 }
 
-function get(url, options, callback, error_callback) {
-    let { notify } = options
+function get(url, callback, error_callback) {
     return fetch(url, {
       headers: {'Content-type': 'application/x-www-form-urlencoded'},
       credentials: 'include',
@@ -97,15 +96,6 @@ function get(url, options, callback, error_callback) {
         return responseText
     }).catch(response => {
         console.error(response)
-        if (notify) {
-            browser.notificationsCreate({
-              type:'basic',
-              title:'Network Error Occured',
-              message,
-              iconUrl:'/images/net_error.png'
-            }, function () {} )
-            badge.setDecaying(`${response.status}`, '#CC00FF', 3)
-        }
         if (error_callback != null) {
             return error_callback()
         }

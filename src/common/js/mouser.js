@@ -38,7 +38,6 @@ class Mouser extends RetailerInterface {
         }
         http.post(`http://www2.mouser.com/api/Preferences/SetSubdomain?subdomainName=${s}`
             , ""
-            , {notify:false}
             , (function() {}), (function() {}))
     }
     addLines(lines, callback) {

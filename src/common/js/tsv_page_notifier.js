@@ -52,7 +52,7 @@ exports.tsvPageNotifier = function tsvPageNotifier(sendState, bom_manager) {
                         } else {
                             var url = tab_url
                         }
-                        http.get(url, {notify:false}, responseText => {
+                        http.get(url, responseText => {
                             let {lines, invalid} = parseTSV(responseText)
                             if (lines.length > 0) {
                                 badge.setDefault('\u2191', '#0000FF')

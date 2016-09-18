@@ -39,7 +39,7 @@ exports.background = function background(messenger) {
             )
             return messenger.send('updateKitnic', bom_manager.interfaces)
         })
-    
+
 
     var tsvPageNotifier = require('./tsv_page_notifier').tsvPageNotifier(sendState, bom_manager)
 

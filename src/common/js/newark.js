@@ -114,7 +114,7 @@ class Newark extends RetailerInterface {
 
     _add_lines(lines, callback) {
         let url = `https${this.site}/AjaxPasteOrderChangeServiceItemAdd`
-        return http.get(url, {notify:false}, () => {
+        return http.get(url, () => {
             return this._add_lines_ajax(lines, callback)
         }
         , () => {

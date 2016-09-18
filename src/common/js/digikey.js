@@ -173,7 +173,7 @@ class Digikey extends RetailerInterface {
         let url = `http${this.site}/product-detail/en/`
         url += line.part + '/'
         url += line.part + '/'
-        return http.get(url, {notify:false}, function(responseText) {
+        return http.get(url, function(responseText) {
             let doc = browser.parseDOM(responseText)
             let inputs = doc.querySelectorAll('input')
             for (let i = 0; i < inputs.length; i++) {
