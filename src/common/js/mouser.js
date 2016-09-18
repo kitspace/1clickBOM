@@ -129,14 +129,13 @@ class Mouser extends RetailerInterface {
     }
 
     clearCart(callback) {
-        return this._get_cart_viewstate(viewstate => {
-            return this._clear_cart(viewstate, callback)
+        return this._get_token(token => {
+            return this._clear_cart(token, callback)
         })
     }
-    _clear_cart(viewstate, callback){
-        //don't ask, this is what works...
-        let url = `http${this.site}${this.cart}`
-        let params =  `__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=${viewstate}&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket`
+    _clear_cart(token, callback){
+        const url = 'http' + this.site + this.cart + '/DeleteCart'
+        const params = `__RequestVerificationToken=${token}`
         return http.post(url, params, {}, event => {
             if (callback != null) {
                 callback({success:true}, this)
@@ -177,6 +176,14 @@ class Mouser extends RetailerInterface {
             if (callback != null) {
                 return callback(viewstate)
             }
+        })
+    }
+    _get_token(callback) {
+        url = `http${this.site}${this.cart}`
+        http.get(url, {}, responseText => {
+            const doc = browser.parseDOM(responseText)
+            const token = doc.querySelector('form#cart-form > input').value
+            callback(token)
         })
     }
 }
