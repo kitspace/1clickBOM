@@ -47,7 +47,8 @@ function network_callback(event, callback, error_callback, notify=true) {
     }
 }
 
-function post(url, params, {notify, timeout, json},  callback, error_callback) {
+function post(url, params, options, callback, error_callback) {
+    let {notify, timeout, json} = options
     if (notify == null) {
         notify = true
     }
