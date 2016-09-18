@@ -76,21 +76,31 @@ function post(url, params, options, callback, error_callback) {
     return xhr.send(params)
 }
 
-function get(url, {notify, timeout}, callback, error_callback) {
-    if (notify == null) {
-        notify = false
-    }
-    if (timeout == null) {
-        timeout = 60000
-    }
-    let xhr = new XMLHttpRequest()
-    xhr.open('GET', url, true)
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
-    xhr.url = url
-    xhr.onreadystatechange = event => network_callback(event, callback, error_callback, notify)
-    xhr.timeout = timeout
-    xhr.ontimedout = event => network_callback(event, callback, error_callback, notify)
-    return xhr.send()
+function get(url, options, callback, error_callback) {
+    let { notify, timeout } = options
+    return fetch(url, {
+      headers: {'Content-type': 'application/x-www-form-urlencoded'},
+      credentials: 'include',
+    }).then(response => {
+        return response.text()
+    }).then(responseText => {
+        callback(responseText)
+        return responseText
+    }).catch(e => {
+        console.error(e)
+        if (notify) {
+            browser.notificationsCreate({
+              type:'basic',
+              title:'Network Error Occured',
+              message,
+              iconUrl:'/images/net_error.png'
+            }, function () {} )
+            badge.setDecaying(`${event.target.status}`, '#CC00FF', 3)
+        }
+        if (error_callback != null) {
+            return error_callback()
+        }
+    })
 }
 
 
