@@ -122,7 +122,7 @@ class Mouser extends RetailerInterface {
             errors.forEach(e => item_ids.push(e.getAttribute('data-cartitemid')))
             const promiseArray = item_ids.map(id => {
                 return http.promisePost(
-                    `http${this.site}${this.cart}/DeleteCartItem?cartItemId=${id}&page=null&grid-column=SortColumn&grid-dir=0`,
+                    `http${this.site}${this.cart}/cart/DeleteCartItem?cartItemId=${id}&page=null&grid-column=SortColumn&grid-dir=0`,
                     `__RequestVerificationToken=${token}`
                 ).catch(e => console.error(e))
             })
@@ -140,7 +140,7 @@ class Mouser extends RetailerInterface {
         })
     }
     _clear_cart(token, callback){
-        const url = 'http' + this.site + this.cart + '/DeleteCart'
+        const url = 'http' + this.site + this.cart + '/cart/DeleteCart'
         const params = `__RequestVerificationToken=${token}`
         return http.post(url, params, {}, event => {
             if (callback != null) {
