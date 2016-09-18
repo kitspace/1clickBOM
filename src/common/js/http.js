@@ -22,6 +22,12 @@ Promise.config({cancellation:true})
 const { browser, XMLHttpRequest } = require('./browser')
 const { badge } = require('./badge')
 
+const {fetch, Request, Response, Headers} = require('fetch-ponyfill')({
+    Promise: Promise,
+    XMLHttpRequest: XMLHttpRequest
+})
+
+
 function network_callback(event, callback, error_callback, notify=true) {
     if (event.target.readyState === 4) {
         if (event.target.status === 200) {
@@ -143,5 +149,5 @@ exports.promiseGet  = promiseGet
 exports.getLocation = getLocation
 
 function __in__(needle, haystack) {
-  return haystack.indexOf(needle) >= 0
+    return haystack.indexOf(needle) >= 0
 }
