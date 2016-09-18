@@ -20,6 +20,8 @@
 const { RetailerInterface } = require('./retailer_interface')
 const http = require('./http')
 const { browser } = require('./browser')
+const Promise = require('./bluebird')
+Promise.config({cancellation:true})
 
 class Mouser extends RetailerInterface {
     constructor(country_code, settings) {
@@ -46,24 +48,26 @@ class Mouser extends RetailerInterface {
         }
         let count = 0
         let big_result = {success:true, fails:[]}
-        return this._get_cart_viewstate(viewstate => {
-            return this._clear_errors(viewstate, () => {
-                return this._get_adding_viewstate(viewstate => {
-                      let result = []
-                      for (let i = 0; i < lines.length; i += 99) {
-                          let _99_lines = lines.slice(i, i+98 + 1)
-                          count += 1
-                          result.push(this._add_lines(_99_lines, viewstate, result => {
-                              if (big_result.success) { big_result.success = result.success; }
-                              big_result.fails = big_result.fails.concat(result.fails)
-                              count -= 1
-                              if (count <= 0) {
-                                  callback(big_result, this, lines)
-                                  return this.refreshCartTabs()
-                              }
-                          }))
-                      }
-                      return result
+        return this._get_token(token => {
+            return this._clear_errors(token, () => {
+                return this._get_cart_viewstate(viewstate => {
+                    return this._get_adding_viewstate(viewstate => {
+                          let result = []
+                          for (let i = 0; i < lines.length; i += 99) {
+                              let _99_lines = lines.slice(i, i+98 + 1)
+                              count += 1
+                              result.push(this._add_lines(_99_lines, viewstate, result => {
+                                  if (big_result.success) { big_result.success = result.success; }
+                                  big_result.fails = big_result.fails.concat(result.fails)
+                                  count -= 1
+                                  if (count <= 0) {
+                                      callback(big_result, this, lines)
+                                      return this.refreshCartTabs()
+                                  }
+                              }))
+                          }
+                          return result
+                    })
                 })
             })
         })
@@ -82,25 +86,17 @@ class Mouser extends RetailerInterface {
         let url = `http${this.site}${this.addline}`
         let result = {success: true, fails:[]}
         return http.post(url, params, {}, responseText => {
-            //if there is an error, there will be some error-class lines with display set to ''
-            let doc = browser.parseDOM(responseText)
-            let errors = doc.getElementsByClassName('error')
+            const errors = this._get_errors(responseText)
             for (let j = 0; j < errors.length; j++) {
-                let error = errors[j]
-                if (error.style.display === '') {
-                    // this padding5 error element just started appearing, doesn't indicate anything
-                    if (!((error.firstChild != null) && (error.firstChild.nextSibling != null) && error.firstChild.nextSibling.className === 'padding5')) {
-                        let part = error.getAttribute('data-partnumber')
-                        if (part != null) {
-                            for (let k = 0; k < lines.length; k++) {
-                                let line = lines[k]
-                                if (line.part === part.replace(/-/g, '')) {
-                                    result.fails.push(line)
-                                }
-                            }
-                            result.success = false
+                let part = errors[j].getAttribute('data-partnumber')
+                if (part != null) {
+                    for (let k = 0; k < lines.length; k++) {
+                        let line = lines[k]
+                        if (line.part === part.replace(/-/g, '')) {
+                            result.fails.push(line)
                         }
                     }
+                    result.success = false
                 }
             }
             if (callback != null) {
@@ -114,17 +110,27 @@ class Mouser extends RetailerInterface {
         })
     }
 
-    _clear_errors(viewstate, callback) {
-        return http.post(`http${this.site}${this.cart}`, `__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=${viewstate}&__VIEWSTATEENCRYPTED=&ctl00$ctl00$ContentMain$btn3=Errors`
-        , {}, responseText => {
-            let doc = browser.parseDOM(responseText)
-            viewstate = encodeURIComponent(__guard__(doc.getElementById('__VIEWSTATE'), x => x.value))
-            return http.post(`http${this.site}${this.cart}`, `__EVENTARGUMENT=&__EVENTTARGET=&__SCROLLPOSITIONX=&__SCROLLPOSITIONY=&__VIEWSTATE=${viewstate}&__VIEWSTATEENCRYPTED=&ctl00$ContentMain$btn7=Update Basket`
-            , {}, event => {
+    _get_errors(responseText) {
+        const doc = browser.parseDOM(responseText)
+        return doc.querySelectorAll('.grid-row.row-error')
+    }
+
+    _clear_errors(token, callback) {
+        http.get(`http${this.site}${this.cart}`, {}, responseText => {
+            const errors = this._get_errors(responseText)
+            const item_ids = []
+            errors.forEach(e => item_ids.push(e.getAttribute('data-cartitemid')))
+            const promiseArray = item_ids.map(id => {
+                return http.promisePost(
+                    `http${this.site}${this.cart}/DeleteCartItem?cartItemId=${id}&page=null&grid-column=SortColumn&grid-dir=0`,
+                    `__RequestVerificationToken=${token}`
+                ).catch(e => console.error(e))
+            })
+            return Promise.all(promiseArray).then(() => {
                if (callback != null) {
                    return callback()
                }
-           })
+            })
         })
     }
 
