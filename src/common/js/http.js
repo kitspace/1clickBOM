@@ -92,11 +92,13 @@ function get(url, callback, error_callback) {
         }
         return response.text()
     }).then(responseText => {
-        callback(responseText)
+        if (typeof callback === 'function') {
+            callback(responseText)
+        }
         return responseText
     }).catch(response => {
         console.error(response)
-        if (error_callback != null) {
+        if (typeof error_callback === 'function') {
             return error_callback()
         }
     })
