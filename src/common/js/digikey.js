@@ -194,7 +194,7 @@ class Digikey extends RetailerInterface {
         url += `&qty=${line.quantity}`
         url += `&partId=${id}`
         url += `&error=${error}&cref=&esc=-1&returnURL=%2f%2fwww.digikey.co.uk%2fclassic%2fordering%2faddpart.aspx&fastAdd=false&showUpsell=True`
-        return http.get(url, {line, notify:false}, function(event) {
+        return http.get(url, {line, notify:false}, function(responseText) {
             let doc = browser.parseDOM(responseText)
             switch (error) {
                 case 'TapeReelQuantityTooLow':       var choice = doc.getElementById('rb1'); break

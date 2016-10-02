@@ -102,8 +102,8 @@ function getLocation(callback) {
         used_country_codes.push(code)
     }
     let url = 'https://freegeoip.kitnic.it'
-    return get(url, {timeout:5000}, event => {
-        let response = JSON.parse(event.target.responseText)
+    return get(url, {timeout:5000}, responseText => {
+        let response = JSON.parse(responseText)
         let code = response.country_code
         if (code === 'GB') { code = 'UK'; }
         if (!__in__(code, used_country_codes)) { code = 'Other'; }

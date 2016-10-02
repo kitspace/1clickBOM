@@ -6,7 +6,7 @@ const path    = require('path')
 const cp      = require('child_process')
 const ninjaBuildGen = require('ninja-build-gen')
 
-const version = "1.1.6"
+const version = "1.1.7"
 
 const ninja = ninjaBuildGen('1.5.1', 'build/')
 ninja.header(`#generated from ${path.basename(module.filename)}`)
