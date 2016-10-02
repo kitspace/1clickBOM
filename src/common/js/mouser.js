@@ -119,7 +119,9 @@ class Mouser extends RetailerInterface {
         http.get(`http${this.site}${this.cart}`, {}, responseText => {
             const errors = this._get_errors(responseText)
             const item_ids = []
-            errors.forEach(e => item_ids.push(e.getAttribute('data-cartitemid')))
+            for (let i = 0; i < errors.length; ++i) {
+                item_ids.push(errors[i].getAttribute('data-cartitemid'))
+            }
             const promiseArray = item_ids.map(id => {
                 return http.promisePost(
                     `http${this.site}${this.cart}/cart/DeleteCartItem?cartItemId=${id}&page=null&grid-column=SortColumn&grid-dir=0`,

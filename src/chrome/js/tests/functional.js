@@ -153,15 +153,17 @@ asyncTest('Clear All', function() {
 asyncTest('Add lines fails but adds again', function() {
     let lines = [
         {'part':'fail','quantity':2, 'reference':'test'},
-        {'part':'607-GALILEO','quantity':2, 'reference':'test'}
+        {'part':'607-GALILEO2','quantity':2, 'reference':'test'},
+        {'part':'fail2','quantity':2, 'reference':'test'},
     ]
     let r = new Mouser('UK')
     return r.addLines(lines, function(result, that) {
         deepEqual(result.success, false, that.country)
-        deepEqual(result.fails, [lines[0]], that.country)
+        deepEqual(result.fails, [lines[0], lines[2]], that.country)
         lines = [{'part':'607-GALILEO2','quantity':2, 'reference':'test'}]
         return that.addLines(lines, function(result, that) {
-            //the order here is important as we want to make sure the 'errors' were cleared after the failed add
+            //the order here is important as we want to make sure the 'errors'
+            //were cleared after the failed add
             deepEqual(result.success, true, that.country)
             return start()
         })
