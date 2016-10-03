@@ -160,18 +160,23 @@ room][kitnic gitter]
 
 * 1.2
     * Improved completion of generic resistors and capacitors
-    * Improved completion by searching retailer sites directly
-    * Ability to add components to BOM from retailer site
+    * Refresh Kitnic page on first install
 
 * 1.3
+    * Improved completion by searching retailer sites directly
+
+* 1.4
+    * Ability to add components to BOM from retailer site
+
+* 1.5
     * Make requests cancelable
     * Improve user interface
 
-* 1.4
+* 1.6
     * Add retailer preference ranking
     * Add function to reduce BOM (and add to cart?) according to retailer preference
 
-* 1.5
+* 1.7
     * Additional retailer support
         * AVNet
         * Adafruit
