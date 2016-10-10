@@ -21,9 +21,11 @@ const Promise = require('./bluebird')
 Promise.config({cancellation:true})
 const fuzzy   = require('fuzzy')
 const Qty     = require('js-quantities')
+const resistorData = require('resistor-data')
 
 const { browser } = require('./browser')
 const capacitors = browser.getLocal('data/capacitors.json')
+const resistors = browser.getLocal('data/resistors.json')
 
 exports.search = function search() {
     return Promise.resolve(_search(...arguments))
@@ -32,14 +34,72 @@ exports.search = function search() {
 function _search(query, retailers = [], other_fields = []) {
     if(/capacitor/i.test(query)) {
         return getCapacitors(query)
+    } else if (/resistor/i.test(query)) {
+        return getResistors(query)
     }
     return {retailers:{}, partNumbers:[]}
 }
 
-function getCapacitors(term) {
-    let results = [].concat(capacitors)
+function getResistors(term) {
+    let results = resistors.slice()
 
-    let match = extract.bind(null, term, results)
+    function match(regex, f) {
+        const match = regex.exec(term)
+        if (match != null) {
+            const value = match[0]
+            console.log('value', value)
+            term = term.replace(value, '')
+            return results.filter(f.bind(null, value))
+        }
+        return results
+    }
+
+    //results = match(/\d*\.?\d* ?(ohm|Ω|Ω)/i, (value, r) => {
+    //    return Qty(r.extravals.Resistance).eq(Qty(value))
+    //})
+
+
+    //1.5k style
+    results = match(/\d*\.?\d*(k|m)/i, (value, r) => {
+        let v = value + 'ohm'
+        return Qty(r.extravals.Resistance).eq(Qty(v))
+    })
+
+
+    //1k5 style
+    results = match(/\d+(k|m)\d+/i, (value, r) => {
+        let v = resistorData.notationToValue(value) + ' ohm'
+        return Qty(r.extravals.Resistance).eq(Qty(v))
+    })
+
+    results = match(/(0402|0603|0805|1206|2312|1210)/, (size, c) => {
+        return c.extravals.Size === size
+    })
+
+    console.log(term)
+
+    if (results.length > 1 && term.trim() !== '') {
+        const descriptions = results.map(describe.bind(null, 'Resistor'))
+        const filtered = fuzzy.filter(term, descriptions).map(r => results[r.index])
+    }
+
+    return combine(results)
+}
+
+function getCapacitors(term) {
+    let results = capacitors.slice()
+
+    function match(regex, f) {
+        const match = regex.exec(term)
+        if (match != null) {
+            const value = match[0]
+            console.log('value', value)
+            term = term.replace(value, '')
+            return results.filter(f.bind(null, value))
+        }
+        return results
+    }
+
 
     results = match(/\d*\.?\d* ?(p|n|u|µ)F/i, (value, c) => {
         return Qty(c.extravals.Capacitance).eq(Qty(value))
@@ -62,10 +122,14 @@ function getCapacitors(term) {
     })
 
     if (results.length > 1 && term.trim() !== '') {
-        const descriptions = results.map(describe)
+        const descriptions = results.map(describe.bind(null, 'Capacitor'))
         results = fuzzy.filter(term, descriptions).map(r => results[r.index])
     }
 
+    return combine(results)
+}
+
+function combine(results) {
     return results.reduce((prev, item) => {
         Object.keys(item.retailers).forEach(name => {
             if (prev.retailers[name] == null)  {
@@ -75,23 +139,12 @@ function getCapacitors(term) {
         prev.partNumbers = prev.partNumbers.concat(item.partNumbers)
         return prev
     }, {retailers:{}, partNumbers:[]})
-
-}
-
-function extract(term, results, regex, f) {
-    const match = regex.exec(term)
-    if (match != null) {
-        const value = match[0]
-        term = term.replace(value, '')
-        return results.filter(f.bind(null, value))
-    }
-    return results
 }
 
 
 
-function describe(item) {
-    return "Capacitor " + Object.keys(item.extravals).reduce((prev, k) => {
+function describe(prefix, item) {
+    return prefix + " " + Object.keys(item.extravals).reduce((prev, k) => {
         return prev + item.extravals[k] + ' '
     }, '').trim()
 }
