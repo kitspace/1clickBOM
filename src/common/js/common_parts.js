@@ -47,7 +47,6 @@ function getResistors(term) {
         const match = regex.exec(term)
         if (match != null) {
             const value = match[0]
-            console.log('value', value)
             term = term.replace(value, '')
             return results.filter(f.bind(null, value))
         }
@@ -75,12 +74,12 @@ function getResistors(term) {
     })
 
     results = match(/\d*\.?\d* ?(m|k)?W/i, (rating, c) => {
-        return Qty(c.extravals['Power Rating']).eq(Qty(rating))
+        return Qty(c.extravals['Power Rating']).gte(Qty(rating))
     })
 
     if (results.length > 1 && term.trim() !== '') {
         const descriptions = results.map(describe.bind(null, 'Resistor'))
-        const filtered = fuzzy.filter(term, descriptions).map(r => results[r.index])
+        results = fuzzy.filter(term, descriptions).map(r => results[r.index])
     }
 
     return combine(results)
@@ -93,7 +92,6 @@ function getCapacitors(term) {
         const match = regex.exec(term)
         if (match != null) {
             const value = match[0]
-            console.log('value', value)
             term = term.replace(value, '')
             return results.filter(f.bind(null, value))
         }
@@ -106,7 +104,7 @@ function getCapacitors(term) {
     })
 
     results = match(/\d*\.?\d* ?V/i, (rating, c) => {
-        return Qty(c.extravals['Voltage Rating (DC)']).eq(Qty(rating))
+        return Qty(c.extravals['Voltage Rating (DC)']).gte(Qty(rating))
     })
 
     results = match(/\d*\.?\d* ?%/, (tolerance, c) => {
