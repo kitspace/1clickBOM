@@ -32,15 +32,20 @@ exports.search = function search() {
 }
 
 function _search(query, retailers = [], other_fields = []) {
-    if(/capacitor/i.test(query)) {
-        return getCapacitors(query)
-    } else if (/resistor/i.test(query)) {
-        return getResistors(query)
+    if (query.trim() !== '') {
+        if(/capacitor/i.test(query)) {
+            return getCapacitors(query.replace(/capacitors?/ig, ''))
+        } else if (/resistor/i.test(query)) {
+            return getResistors(query.replace(/resistors?/ig, ''))
+        }
     }
-    return {retailers:{}, partNumbers:[]}
+    return combine([])
 }
 
 function getResistors(term) {
+    if (term.trim() === '') {
+        return combine([])
+    }
     let results = resistors.slice()
 
     function match(regex, f) {
@@ -52,6 +57,12 @@ function getResistors(term) {
         }
         return results
     }
+
+    //1 Ohm style
+    results = match(/\d+\.?\d* ?(ohm|Ω|Ω)/i, (value, r) => {
+        let v = value.split(' ').join('')
+        return Qty(r.extravals.Resistance).eq(Qty(v))
+    })
 
     //1k5 style
     results = match(/\d+(k|m)\d+/i, (value, r) => {
@@ -78,7 +89,7 @@ function getResistors(term) {
     })
 
     if (results.length > 1 && term.trim() !== '') {
-        const descriptions = results.map(describe.bind(null, 'Resistor'))
+        const descriptions = results.map(describe)
         results = fuzzy.filter(term, descriptions).map(r => results[r.index])
     }
 
@@ -86,6 +97,9 @@ function getResistors(term) {
 }
 
 function getCapacitors(term) {
+    if (term.trim() === '') {
+        return combine([])
+    }
     let results = capacitors.slice()
 
     function match(regex, f) {
@@ -98,9 +112,12 @@ function getCapacitors(term) {
         return results
     }
 
-
     results = match(/\d*\.?\d* ?(p|n|u|µ)F/i, (value, c) => {
         return Qty(c.extravals.Capacitance).eq(Qty(value))
+    })
+
+    results = match(/\d*\.?\d* ?(p|n|u|µ)/i, (value, c) => {
+        return Qty(c.extravals.Capacitance).eq(Qty(value + 'F'))
     })
 
     results = match(/\d*\.?\d* ?V/i, (rating, c) => {
@@ -119,8 +136,9 @@ function getCapacitors(term) {
         return RegExp(characteristic).test(c.extravals.Characteristic)
     })
 
+
     if (results.length > 1 && term.trim() !== '') {
-        const descriptions = results.map(describe.bind(null, 'Capacitor'))
+        const descriptions = results.map(describe)
         results = fuzzy.filter(term, descriptions).map(r => results[r.index])
     }
 
@@ -139,8 +157,8 @@ function combine(results) {
     }, {retailers:{}, partNumbers:[]})
 }
 
-function describe(prefix, item) {
-    return prefix + " " + Object.keys(item.extravals).reduce((prev, k) => {
+function describe(item) {
+    return Object.keys(item.extravals).reduce((prev, k) => {
         return prev + item.extravals[k] + ' '
     }, '').trim()
 }

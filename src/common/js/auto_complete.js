@@ -53,13 +53,13 @@ function _next_query(line, queries) {
             retailers.push(key)
         }
     }
-    if (query === '') {
+    if (query === '' && line.description !== '') {
         query = line.description
         if (/R\d+/i.test(line.reference)) {
             if (!/^resistor/i.test(query)) {
                 query = 'Resistor ' + query
             }
-        } else if (/C\d+/i.test(line.reference)) {
+        } else if (/(^| |,)C\d+/i.test(line.reference)) {
             if (!/^capacitor/i.test(query)) {
                 query = 'Capacitor ' + query
             }
