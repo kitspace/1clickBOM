@@ -39,7 +39,7 @@ exports.background = function background(messenger) {
             )
             return messenger.send('updateKitnic', bom_manager.interfaces)
         })
-    
+
 
     var tsvPageNotifier = require('./tsv_page_notifier').tsvPageNotifier(sendState, bom_manager)
 
@@ -56,8 +56,7 @@ exports.background = function background(messenger) {
                 browser.notificationsCreate({
                     type    : 'basic',
                     title   : 'Auto-complete successful',
-                    message : `Completed ${no_of_completed} fields for you
-                        by searching Octopart and Findchips.`,
+                    message : `Completed ${no_of_completed} fields for you by searching Octopart and Findchips.`,
                     iconUrl : '/images/ok.png'
                 })
                 return badge.setDecaying('OK','#00CF0F')

@@ -54,6 +54,15 @@ function _next_query(line, queries) {
     }
     if (query === '') {
         query = line.description
+        if (/R\d\+/i.test(line.references)) {
+            if (!/^resistor/i.test(query)) {
+                query = 'Resistor ' + query
+            }
+        } else if (/C\d\+/i.test(line.references)) {
+            if (!/^capacitor/i.test(query)) {
+                query = 'Capacitor ' + query
+            }
+        }
     }
     if (line.partNumbers.length < 1) {
         other_fields.push('partNumbers')
