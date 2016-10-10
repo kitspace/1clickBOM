@@ -1,0 +1,2222 @@
+[
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0402CRNPO9BN1R0"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0402C109C5GACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-C0G-0402-1PF-50V",
+    "title": "Capacitor 1 pF ±0.25pF 50 V 0402 C0G/NP0",
+    "extravals": {
+      "Capacitance": "1 pF",
+      "Characteristic": "C0G/NP0",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0402",
+      "Tolerance": "±0.25pF",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-2076-1-ND",
+        "399-7767-6-ND",
+        "399-7767-1-ND",
+        "311-2076-6-ND",
+        "399-7767-2-ND",
+        "311-2076-2-ND"
+      ],
+      "Mouser": [
+        "603-CC402CRNPO9BN1R0",
+        "80-C0402C109C5G"
+      ],
+      "RS": [],
+      "Newark": [
+        "69C9578",
+        "74R3344",
+        "65R7420",
+        "68R4566",
+        "78H4798"
+      ],
+      "Farnell": [
+        "1362479",
+        "3019100",
+        "1800794"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0402JRNPO9BN100"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0402C100C5GACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-C0G-0402-10PF-50V",
+    "title": "Capacitor 10 pF ±5% 50 V 0402 C0G/NP0",
+    "extravals": {
+      "Capacitance": "10 pF",
+      "Characteristic": "C0G/NP0",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0402",
+      "Tolerance": "±5%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1014-1-ND",
+        "399-7744-6-ND",
+        "399-7744-1-ND",
+        "311-1014-6-ND",
+        "311-1014-2-ND",
+        "399-7744-2-ND"
+      ],
+      "Mouser": [
+        "603-CC402JRNPO9BN100",
+        "80-C0402C100C5G"
+      ],
+      "RS": [
+        "6169256"
+      ],
+      "Newark": [
+        "68R4597",
+        "65R7554",
+        "07X0672",
+        "78H4740"
+      ],
+      "Farnell": [
+        "1362438",
+        "3019160"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603JRNPO9BN100"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0603C100C5GACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-C0G-0603-10PF-50V",
+    "title": "Capacitor 10 pF ±5% 50 V 0603 C0G/NP0",
+    "extravals": {
+      "Capacitance": "10 pF",
+      "Characteristic": "C0G/NP0",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±5%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1058-1-ND",
+        "399-7814-1-ND",
+        "399-7814-6-ND",
+        "311-1058-6-ND",
+        "311-1058-2-ND",
+        "399-7814-2-ND"
+      ],
+      "Mouser": [
+        "80-C0603C100C5G",
+        "603-C0603JRNPO9BN100"
+      ],
+      "RS": [
+        "8015252",
+        "6169054"
+      ],
+      "Newark": [
+        "68R4712",
+        "53M7174",
+        "46WX076",
+        "65R8032",
+        "25H9374"
+      ],
+      "Farnell": [
+        "721967",
+        "1414599",
+        "2408494"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603JRNPO9BN120"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0603C120J5GACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-C0G-0603-12PF-50V",
+    "title": "Capacitor 12 pF ±5% 50 V 0603 C0G/NP0",
+    "extravals": {
+      "Capacitance": "12 pF",
+      "Characteristic": "C0G/NP0",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±5%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "399-1050-6-ND",
+        "311-1059-6-ND",
+        "311-1059-1-ND",
+        "399-1050-1-ND",
+        "399-1050-2-ND",
+        "311-1059-2-ND"
+      ],
+      "Mouser": [
+        "603-CC603JRNPO9BN120",
+        "80-C0603C120J5G"
+      ],
+      "RS": [
+        "147437"
+      ],
+      "Newark": [
+        "68R4715",
+        "19C1214",
+        "65R8037",
+        "77R3555"
+      ],
+      "Farnell": [
+        "721979",
+        "1414612",
+        "2392142"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603JRNPO9BN180"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0603C180J5GACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-C0G-0603-18PF-50V",
+    "title": "Capacitor 18 pF ±5% 50 V 0603 C0G/NP0",
+    "extravals": {
+      "Capacitance": "18 pF",
+      "Characteristic": "C0G/NP0",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±5%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1061-6-ND",
+        "399-1052-6-ND",
+        "399-1052-1-ND",
+        "311-1061-1-ND",
+        "399-1052-2-ND",
+        "311-1061-2-ND"
+      ],
+      "Mouser": [
+        "80-C0603C180J5G",
+        "603-CC603JRNPO9BN180"
+      ],
+      "RS": [
+        "147415"
+      ],
+      "Newark": [
+        "64K2845",
+        "68R4719",
+        "46WX085",
+        "19H9969",
+        "65R8046"
+      ],
+      "Farnell": [
+        "721992",
+        "1414620",
+        "2408496",
+        "2370665",
+        "2392149"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603CRNPO9BN1R0"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0603C109C5GACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-C0G-0603-1PF-50V",
+    "title": "Capacitor 1 pF ±0.25pF 50 V 0603 C0G/NP0",
+    "extravals": {
+      "Capacitance": "1 pF",
+      "Characteristic": "C0G/NP0",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±0.25pF",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1049-1-ND",
+        "311-1049-6-ND",
+        "399-1045-1-ND",
+        "399-1045-6-ND",
+        "399-1045-2-ND",
+        "311-1049-2-ND"
+      ],
+      "Mouser": [
+        "80-C0603C109C5G",
+        "603-CC603CRNPO9BN1R0"
+      ],
+      "RS": [
+        "2644488",
+        "6169048"
+      ],
+      "Newark": [
+        "46WX078",
+        "01J3309",
+        "77R3554",
+        "65R7830"
+      ],
+      "Farnell": [
+        "721840",
+        "1414611"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0402JRNPO9BN220"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0603C180J5GACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-C0G-0402-22PF-50V",
+    "title": "Capacitor 22 pF ±5% 50 V 0402 C0G/NP0",
+    "extravals": {
+      "Capacitance": "22 pF",
+      "Characteristic": "C0G/NP0",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0402",
+      "Tolerance": "±5%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "399-1052-1-ND",
+        "311-1018-6-ND",
+        "399-1052-6-ND",
+        "311-1018-1-ND",
+        "399-1052-2-ND",
+        "311-1018-2-ND"
+      ],
+      "Mouser": [
+        "80-C0603C180J5G",
+        "603-CC402JRNPO9BN220"
+      ],
+      "RS": [
+        "147415"
+      ],
+      "Newark": [
+        "68R4606",
+        "64K2845",
+        "19H9969",
+        "65R7569"
+      ],
+      "Farnell": [
+        "1362481",
+        "3019184",
+        "1414620",
+        "2392149"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603JRNPO9BN220"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0603C220J5GACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-C0G-0603-22PF-50V",
+    "title": "Capacitor 22 pF ±5% 50 V 0603 C0G/NP0",
+    "extravals": {
+      "Capacitance": "22 pF",
+      "Characteristic": "C0G/NP0",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±5%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1062-1-ND",
+        "399-1053-1-ND",
+        "399-1053-6-ND",
+        "311-1062-6-ND",
+        "311-1062-2-ND",
+        "399-1053-2-ND"
+      ],
+      "Mouser": [
+        "80-C0603C220J5G",
+        "603-CC603JRNPO9BN220"
+      ],
+      "RS": [
+        "2644501",
+        "6169133"
+      ],
+      "Newark": [
+        "68R4722",
+        "64K2846",
+        "53M7195",
+        "20C6182",
+        "65R8050"
+      ],
+      "Farnell": [
+        "1362450",
+        "722005",
+        "1414622",
+        "2408497",
+        "2392153"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603JRNPO9BN270"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0603C270J5GACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-C0G-0603-27PF-50V",
+    "title": "Capacitor 27 pF ±5% 50 V 0603 C0G/NP0",
+    "extravals": {
+      "Capacitance": "27 pF",
+      "Characteristic": "C0G/NP0",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±5%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "399-1054-6-ND",
+        "311-1063-1-ND",
+        "399-1054-1-ND",
+        "311-1063-6-ND",
+        "399-1054-2-ND",
+        "311-1063-2-ND"
+      ],
+      "Mouser": [
+        "80-C0603C270J5G",
+        "603-CC603JRNPO9BN270"
+      ],
+      "RS": [
+        "147409"
+      ],
+      "Newark": [
+        "03M7462",
+        "24J4463",
+        "68R4724",
+        "65R8056"
+      ],
+      "Farnell": [
+        "1362435",
+        "722017",
+        "1414627",
+        "2408498",
+        "2392157"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603JRNPO9BN390"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0603C330J5GACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-C0G-0603-33PF-50V",
+    "title": "Capacitor 33 pF ±5% 50 V 0603 C0G/NP0",
+    "extravals": {
+      "Capacitance": "33 pF",
+      "Characteristic": "C0G/NP0",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±5%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "399-1055-6-ND",
+        "311-1774-6-ND",
+        "311-1774-1-ND",
+        "399-1055-1-ND",
+        "311-1774-2-ND",
+        "399-1055-2-ND"
+      ],
+      "Mouser": [
+        "80-C0603C330J5G",
+        "603-CC603JRNPO9BN390"
+      ],
+      "RS": [
+        "2989337"
+      ],
+      "Newark": [
+        "64K2857",
+        "46WX093",
+        "65R8065",
+        "28C2984"
+      ],
+      "Farnell": [
+        "722030",
+        "1414633",
+        "2392160"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603JRNPO9BN221"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0603C221J5GACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-C0G-0603-220PF-50V",
+    "title": "Capacitor 220 pF ±5% 50 V 0603 C0G/NP0",
+    "extravals": {
+      "Capacitance": "220 pF",
+      "Characteristic": "C0G/NP0",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±5%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "399-1066-6-ND",
+        "311-1073-6-ND",
+        "399-1066-1-ND",
+        "311-1073-1-ND",
+        "311-1073-2-ND",
+        "399-1066-2-ND"
+      ],
+      "Mouser": [
+        "80-C0603C221J5G",
+        "603-C0603JRNPO9BN221"
+      ],
+      "RS": [
+        "2644539",
+        "6169105"
+      ],
+      "Newark": [
+        "68R4723",
+        "64K2847",
+        "53M7196",
+        "68C4428",
+        "65R8051",
+        "19C5694"
+      ],
+      "Farnell": [
+        "430948",
+        "1414623",
+        "2392155"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603JRNPO9BN101"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0603C101J5GACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-C0G-0603-100PF-50V",
+    "title": "Capacitor 100 pF ±5% 50 V 0603 C0G/NP0",
+    "extravals": {
+      "Capacitance": "100 pF",
+      "Characteristic": "C0G/NP0",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±5%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "399-1061-1-ND",
+        "311-1069-6-ND",
+        "399-1061-6-ND",
+        "311-1069-1-ND",
+        "311-1069-2-ND",
+        "399-1061-2-ND"
+      ],
+      "Mouser": [
+        "80-C0603C101J5G7867",
+        "80-C0603C101J5G",
+        "603-CC603JRNPO9BN101"
+      ],
+      "RS": [
+        "2644523",
+        "6250267"
+      ],
+      "Newark": [
+        "68R4713",
+        "64K2833",
+        "53M7178",
+        "65R8033",
+        "74C1322"
+      ],
+      "Farnell": [
+        "1362465",
+        "722080",
+        "1414603",
+        "2408495",
+        "2392139"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603KRX7R9BB102"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM1885C1H102JA01D"
+      }
+    ],
+    "cplid": "CPL-CAP-C0G-0603-1NF-50V",
+    "title": "Capacitor 1 nF ±5% 50 V 0603 C0G/NP0",
+    "extravals": {
+      "Capacitance": "1 nF",
+      "Characteristic": "C0G/NP0",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±5%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1080-6-ND",
+        "490-1451-1-ND",
+        "490-1451-6-ND",
+        "311-1080-1-ND",
+        "490-1451-2-ND",
+        "311-1080-2-ND"
+      ],
+      "Mouser": [
+        "603-CC603KRX7R9BB102",
+        "81-GRM39C102J50"
+      ],
+      "RS": [
+        "7235795",
+        "6169492"
+      ],
+      "Newark": [
+        "68R4786",
+        "38K1678",
+        "65R8249"
+      ],
+      "Farnell": [
+        "1118172",
+        "1362437",
+        "722170",
+        "8819920",
+        "2408504"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0402KRX7R9BB102"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM1555C1H102JA01D"
+      }
+    ],
+    "cplid": "CPL-CAP-X7R-0402-1NF-50V",
+    "title": "Capacitor 1 nF ±10% 50 V 0402 X7R",
+    "extravals": {
+      "Capacitance": "1 nF",
+      "Characteristic": "X7R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0402",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-3244-1-ND",
+        "311-1036-1-ND",
+        "311-1036-6-ND",
+        "490-3244-6-ND",
+        "311-1036-2-ND",
+        "490-3244-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM1555C1H102JA1D",
+        "603-CC402KRX7R9BB102"
+      ],
+      "RS": [
+        "6242913",
+        "6169593"
+      ],
+      "Newark": [
+        "68R4657",
+        "38K1651",
+        "48Y4389",
+        "65R7702"
+      ],
+      "Farnell": [
+        "1362424",
+        "3019380",
+        "8819556",
+        "2408520"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603KRX7R9BB102"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM188R71H102KA01D"
+      }
+    ],
+    "cplid": "CPL-CAP-X7R-0603-1NF-50V",
+    "title": "Capacitor 1 nF ±10% 50 V 0603 X7R",
+    "extravals": {
+      "Capacitance": "1 nF",
+      "Characteristic": "X7R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1080-1-ND",
+        "490-1494-1-ND",
+        "490-1494-6-ND",
+        "311-1080-6-ND",
+        "311-1080-2-ND",
+        "490-1494-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM39X102K050",
+        "603-CC603KRX7R9BB102"
+      ],
+      "RS": [
+        "7235660",
+        "6169492"
+      ],
+      "Newark": [
+        "68R4786",
+        "38K1668",
+        "18X5186",
+        "65R8249"
+      ],
+      "Farnell": [
+        "1362437",
+        "722170",
+        "8819955",
+        "2408504",
+        "2408525"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603KRX7R9BB472"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM188R71H471KA01D"
+      }
+    ],
+    "cplid": "CPL-CAP-X7R-0603-4.7NF-50V",
+    "title": "Capacitor 4.7 nF ±10% 50 V 0603",
+    "extravals": {
+      "Capacitance": "4.7 nF",
+      "Characteristic": "X7R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1083-6-ND",
+        "490-1489-1-ND",
+        "490-1489-6-ND",
+        "311-1083-1-ND",
+        "490-1489-2-ND",
+        "311-1083-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM39X471K50D",
+        "603-C0603KRX7R9BB472"
+      ],
+      "RS": [
+        "7235714"
+      ],
+      "Newark": [
+        "68R4808",
+        "55Y9863",
+        "65R8280"
+      ],
+      "Farnell": [
+        "722212",
+        "2494241",
+        "2370698"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0402KRX7R9BB103"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM155R71H103KA88D"
+      }
+    ],
+    "cplid": "CPL-CAP-X7R-0402-10NF-50V",
+    "title": "Capacitor 10 nF ±10% 50 V 0402",
+    "extravals": {
+      "Capacitance": "10 nF",
+      "Characteristic": "X7R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0402",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-4516-1-ND",
+        "311-1349-1-ND",
+        "311-1349-6-ND",
+        "490-4516-6-ND",
+        "311-1349-2-ND",
+        "490-4516-2-ND"
+      ],
+      "Mouser": [
+        "603-CC402KRX7R9BB103",
+        "81-GRM155R71H103KA8D"
+      ],
+      "RS": [
+        "6169644",
+        "7235278"
+      ],
+      "Newark": [
+        "68R4658",
+        "14T3284",
+        "65R7703"
+      ],
+      "Farnell": [
+        "1828887"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603KRX7R9BB103"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM188R71H103KA01D"
+      }
+    ],
+    "cplid": "CPL-CAP-X7R-0603-10NF-50V",
+    "title": "Capacitor 10 nF ±10% 50 V 0603",
+    "extravals": {
+      "Capacitance": "10 nF",
+      "Characteristic": "X7R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-1512-6-ND",
+        "311-1085-6-ND",
+        "311-1085-1-ND",
+        "490-1512-1-ND",
+        "490-1512-2-ND",
+        "311-1085-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM39X103K50D",
+        "603-CC603KRX7R9BB103"
+      ],
+      "RS": [
+        "2040779",
+        "6169537"
+      ],
+      "Newark": [
+        "38K1669",
+        "68R4787",
+        "42Y0344",
+        "65R8250",
+        "18X5187"
+      ],
+      "Farnell": [
+        "1362418",
+        "722236",
+        "8819980",
+        "2462748",
+        "2408505",
+        "2368957",
+        "2408526"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603KRX7R9BB223"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM188R71H223KA01D"
+      }
+    ],
+    "cplid": "CPL-CAP-X7R-0603-22NF-50V",
+    "title": "Capacitor 22 nF ±10% 50 V 0603",
+    "extravals": {
+      "Capacitance": "22 nF",
+      "Characteristic": "X7R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1370-1-ND",
+        "490-1517-6-ND",
+        "490-1517-1-ND",
+        "311-1370-6-ND",
+        "311-1370-2-ND",
+        "490-1517-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM39X223K50D",
+        "603-CC603KRX7R9BB223"
+      ],
+      "RS": [
+        "6242452"
+      ],
+      "Newark": [
+        "68R4799",
+        "38K1672",
+        "65R8266"
+      ],
+      "Farnell": [
+        "1118179",
+        "3019755",
+        "8819998",
+        "2408507"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603KRX7R9BB473"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM188R71H473KA61D"
+      }
+    ],
+    "cplid": "CPL-CAP-X7R-0603-47NF-50V",
+    "title": "Capacitor 47 nF ±10% 50 V 0603",
+    "extravals": {
+      "Capacitance": "47 nF",
+      "Characteristic": "X7R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-3287-1-ND",
+        "311-1427-1-ND",
+        "311-1427-6-ND",
+        "490-3287-6-ND",
+        "490-3287-2-ND",
+        "311-1427-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM188R71H473KA61",
+        "603-C0603KRX7R9BB473"
+      ],
+      "RS": [
+        "6242474",
+        "6698811"
+      ],
+      "Newark": [
+        "68R4809",
+        "38K1674",
+        "65R8281"
+      ],
+      "Farnell": [
+        "1118181",
+        "8820015",
+        "2370699",
+        "2408528"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Murata",
+        "part": "GRM155R71C104KA88D"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0603C104K5RACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-X7R-0402-100NF-16V",
+    "title": "Capacitor 100 nF ±10% 16 V 0402",
+    "extravals": {
+      "Capacitance": "100 nF",
+      "Characteristic": "X7R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0402",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "16 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-3261-1-ND",
+        "490-3261-6-ND",
+        "399-5089-1-ND",
+        "399-5089-6-ND",
+        "399-5089-2-ND",
+        "490-3261-2-ND"
+      ],
+      "Mouser": [
+        "80-C0603C104K5R7867",
+        "80-C0603C104K5R",
+        "81-GRM155R71C104KA88"
+      ],
+      "RS": [
+        "7235228",
+        "8015347"
+      ],
+      "Newark": [
+        "72J5992",
+        "38K1647",
+        "25M8782",
+        "97H5226",
+        "36X2617",
+        "18X5178"
+      ],
+      "Farnell": [
+        "1288255",
+        "8819742",
+        "2392305",
+        "2408523"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603KRX7R9BB104"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM188R71H104KA93D"
+      }
+    ],
+    "cplid": "CPL-CAP-X7R-0603-100NF-50V",
+    "title": "Capacitor 100 nF ±10% 50 V 0603",
+    "extravals": {
+      "Capacitance": "100 nF",
+      "Characteristic": "X7R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-1519-6-ND",
+        "311-1344-1-ND",
+        "311-1344-6-ND",
+        "490-1519-1-ND",
+        "311-1344-2-ND",
+        "490-1519-2-ND"
+      ],
+      "Mouser": [
+        "603-CC603KRX7R9BB104",
+        "81-GRM39X104K50D"
+      ],
+      "RS": [
+        "7235676",
+        "6698767"
+      ],
+      "Newark": [
+        "68R4788",
+        "38K1670",
+        "50M6494",
+        "18X5188",
+        "65R8251"
+      ],
+      "Farnell": [
+        "8820023",
+        "1362556",
+        "2408527"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0805KRX7R9BB104"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM21BR71H104KA01L"
+      }
+    ],
+    "cplid": "CPL-CAP-X7R-0805-100NF-50V",
+    "title": "Capacitor 100 nF ±10% 50 V 0805",
+    "extravals": {
+      "Capacitance": "100 nF",
+      "Characteristic": "X7R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0805",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-1666-1-ND",
+        "311-1140-6-ND",
+        "490-1666-6-ND",
+        "311-1140-1-ND",
+        "490-1666-2-ND",
+        "311-1140-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM40X104K50L",
+        "603-CC805KRX7R9BB104"
+      ],
+      "RS": [
+        "7900698",
+        "6698842"
+      ],
+      "Newark": [
+        "38K1694",
+        "68R4910",
+        "18X5191",
+        "65R8992"
+      ],
+      "Farnell": [
+        "1118193",
+        "1362416",
+        "8820120",
+        "3019949",
+        "2408531",
+        "2408516"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603KRX7R7BB224"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM188R71E224KA88D"
+      }
+    ],
+    "cplid": "CPL-CAP-X7R-0603-220NF-16V",
+    "title": "Capacitor 220 nF ±10% 16 V 0603",
+    "extravals": {
+      "Capacitance": "220 nF",
+      "Characteristic": "X7R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "16 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-3290-6-ND",
+        "311-1426-6-ND",
+        "490-3290-1-ND",
+        "311-1426-1-ND",
+        "311-1426-2-ND",
+        "490-3290-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM188R71E224KA88",
+        "603-CC603KRX7R7BB224"
+      ],
+      "RS": [
+        "6242496",
+        "6698789"
+      ],
+      "Newark": [
+        "68R4772",
+        "91R0949",
+        "65R8209"
+      ],
+      "Farnell": [
+        "1828900",
+        "2370685",
+        "1403778"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0402KRX5R5BB105"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM155R60J105KE19D"
+      }
+    ],
+    "cplid": "CPL-CAP-X5R-0402-1UF-6.3V",
+    "title": "Capacitor 1 µF ±10% 6.3 V 0402",
+    "extravals": {
+      "Capacitance": "1 µF",
+      "Characteristic": "X5R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0402",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "6.3 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-1320-6-ND",
+        "311-1438-1-ND",
+        "490-1320-1-ND",
+        "311-1438-6-ND",
+        "311-1438-2-ND",
+        "490-1320-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM155R60J105KE19",
+        "603-CC402KRX5R5BB105"
+      ],
+      "RS": [
+        "7235180"
+      ],
+      "Newark": [
+        "68R4627",
+        "13T1188",
+        "65R7644"
+      ],
+      "Farnell": [
+        "1362485",
+        "1845729",
+        "9402063"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0603KRX7R8BB105"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM188R71E224KA88D"
+      }
+    ],
+    "cplid": "CPL-CAP-X7R-0603-1UF-25V",
+    "title": "Capacitor 1 µF ±10% 25 V 0603",
+    "extravals": {
+      "Capacitance": "1 µF",
+      "Characteristic": "X7R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "25 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1802-6-ND",
+        "311-1802-1-ND",
+        "490-3290-6-ND",
+        "490-3290-1-ND",
+        "311-1802-2-ND",
+        "490-3290-2-ND"
+      ],
+      "Mouser": [
+        "603-CC603KRX7R8BB105",
+        "81-GRM188R71E224KA88"
+      ],
+      "RS": [
+        "6242496"
+      ],
+      "Newark": [
+        "91R0949",
+        "76T5629"
+      ],
+      "Farnell": [
+        "1828900",
+        "1403778"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "CC0805KKX7R8BB105"
+      },
+      {
+        "manufacturer": "Murata",
+        "part": "GRM21BR71H105KA12L"
+      }
+    ],
+    "cplid": "CPL-CAP-X7R-0805-1UF-25V",
+    "title": "Capacitor 1 µF ±10% 25 V 0805",
+    "extravals": {
+      "Capacitance": "1 µF",
+      "Characteristic": "X7R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0805",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "25 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-4736-1-ND",
+        "311-1456-6-ND",
+        "311-1456-1-ND",
+        "490-4736-6-ND",
+        "490-4736-2-ND",
+        "311-1456-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM21BR71H105KA2L",
+        "603-CC805KKX7R8BB105"
+      ],
+      "RS": [
+        "7236102"
+      ],
+      "Newark": [
+        "68R4884",
+        "24R6342",
+        "19X1722",
+        "18X5192",
+        "65R8877"
+      ],
+      "Farnell": [
+        "1735541",
+        "1458903",
+        "1828953"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Murata",
+        "part": "GRM188R61A475KE15D"
+      },
+      {
+        "manufacturer": "Kemet",
+        "part": "C0603C475K8PACTU"
+      }
+    ],
+    "cplid": "CPL-CAP-X5R-0603-4.7UF-10V",
+    "title": "Capacitor 4.7 µF ±10% 10 V 0603",
+    "extravals": {
+      "Capacitance": "4.7 µF",
+      "Characteristic": "X5R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0603",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "10 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-10477-6-ND",
+        "490-10477-1-ND",
+        "399-5503-1-ND",
+        "399-5503-6-ND",
+        "490-10477-2-ND",
+        "399-5503-2-ND"
+      ],
+      "Mouser": [
+        "80-C0603C475K8P7867",
+        "81-GRM188R61A475KE5D",
+        "80-C0603C475K8P"
+      ],
+      "RS": [
+        "6911155",
+        "8467296"
+      ],
+      "Newark": [
+        "14N2177",
+        "40X5880",
+        "60M0172"
+      ],
+      "Farnell": [
+        "1572625",
+        "2362098",
+        "2392249"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Murata",
+        "part": "GRM21BR61E475KA12L"
+      }
+    ],
+    "cplid": "CPL-CAP-X5R-0805-4.7UF-25V",
+    "title": "Capacitor 4.7 µF ±10% 25 V 0805",
+    "extravals": {
+      "Capacitance": "4.7 µF",
+      "Characteristic": "X5R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0805",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "25 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-3335-1-ND",
+        "490-3335-6-ND",
+        "490-3335-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM21BR61E475KA12"
+      ],
+      "RS": [
+        "7236057"
+      ],
+      "Newark": [
+        "24R6340"
+      ],
+      "Farnell": [
+        "1735529"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Murata",
+        "part": "GRM21BR61C106KE15L"
+      }
+    ],
+    "cplid": "CPL-CAP-X5R-0805-10UF-16V",
+    "title": "Capacitor 10 µF ±10% 16 V 0805",
+    "extravals": {
+      "Capacitance": "10 µF",
+      "Characteristic": "X5R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0805",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "16 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-3886-1-ND",
+        "490-3886-6-ND",
+        "490-3886-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM21BR61C106KE15"
+      ],
+      "RS": [
+        "7236039"
+      ],
+      "Newark": [
+        "35R0687"
+      ],
+      "Farnell": [
+        "1762635"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Murata",
+        "part": "GRM21BR60J226ME39L"
+      }
+    ],
+    "cplid": "CPL-CAP-X5R-0805-22UF-6.3V",
+    "title": "Capacitor 22 µF ±20% 6.3 V 0805",
+    "extravals": {
+      "Capacitance": "22 µF",
+      "Characteristic": "X5R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "0805",
+      "Tolerance": "±20%",
+      "Voltage Rating (DC)": "6.3 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-1719-1-ND",
+        "490-1719-6-ND",
+        "490-1719-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM21R60J226ME39L"
+      ],
+      "RS": [
+        "7236029"
+      ],
+      "Newark": [
+        "24R6338",
+        "18X9673"
+      ],
+      "Farnell": [
+        "1735531",
+        "1403940"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Murata",
+        "part": "GRM31CR60J107ME39L"
+      }
+    ],
+    "cplid": "CPL-CAP-X5R-1206-100UF-6.3V",
+    "title": "Capacitor 100 µF ±20% 6.3 V 1206",
+    "extravals": {
+      "Capacitance": "100 µF",
+      "Characteristic": "X5R",
+      "Dielectric Material": "Ceramic Multilayer",
+      "Size": "1206",
+      "Tolerance": "±20%",
+      "Voltage Rating (DC)": "6.3 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "490-4539-1-ND",
+        "490-4539-6-ND",
+        "490-4539-2-ND"
+      ],
+      "Mouser": [
+        "81-GRM31CR60J107ME9L"
+      ],
+      "RS": [
+        "7236515"
+      ],
+      "Newark": [
+        "24R6343"
+      ],
+      "Farnell": [
+        "1735535",
+        "2611952"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "AVX",
+        "part": "TAJA475K016RNJ"
+      }
+    ],
+    "cplid": "CPL-CAP-TAN-1206-4.7UF-16V",
+    "title": "Capacitor 4.7 µF ±10% 16 V 1206",
+    "extravals": {
+      "Capacitance": "4.7 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Tantalum",
+      "Size": "1206",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "16 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "478-3868-6-ND",
+        "478-3868-1-ND",
+        "478-3868-2-ND"
+      ],
+      "Mouser": [
+        "581-TAJA475K016R"
+      ],
+      "RS": [],
+      "Newark": [
+        "60R5857",
+        "30H0284"
+      ],
+      "Farnell": [
+        "197269",
+        "4765357",
+        "2217219"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "AVX",
+        "part": "TAJA105K035RNJ"
+      }
+    ],
+    "cplid": "CPL-CAP-TAN-1206-1UF-35V",
+    "title": "Capacitor 1 µF ±10% 35 V 1206",
+    "extravals": {
+      "Capacitance": "1 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Tantalum",
+      "Size": "1206",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "35 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "478-1651-1-ND",
+        "478-1651-6-ND",
+        "478-1651-2-ND"
+      ],
+      "Mouser": [
+        "581-TAJA105K035R"
+      ],
+      "RS": [
+        "5484302"
+      ],
+      "Newark": [
+        "60R5820",
+        "30H0203"
+      ],
+      "Farnell": [
+        "1135061",
+        "2217187"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "AVX",
+        "part": "TAJA106K016RNJ"
+      }
+    ],
+    "cplid": "CPL-CAP-TAN-1206-10UF-16V",
+    "title": "Capacitor 10 µF ±10% 16 V 1206",
+    "extravals": {
+      "Capacitance": "10 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Tantalum",
+      "Size": "1206",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "16 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "478-1655-1-ND",
+        "478-1655-6-ND",
+        "478-1655-2-ND"
+      ],
+      "Mouser": [
+        "581-TAJA106K016R"
+      ],
+      "RS": [],
+      "Newark": [
+        "60R5827",
+        "54J2910"
+      ],
+      "Farnell": [
+        "1432339",
+        "2217190"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "AVX",
+        "part": "TAJB226K016RNJ"
+      }
+    ],
+    "cplid": "CPL-CAP-TAN-1210-22UF-16V",
+    "title": "Capacitor 22 µF ±10% 16 V 1210",
+    "extravals": {
+      "Capacitance": "22 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Tantalum",
+      "Size": "1210",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "16 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "478-1682-6-ND",
+        "478-1682-1-ND",
+        "478-1682-2-ND"
+      ],
+      "Mouser": [
+        "581-TAJB226K016"
+      ],
+      "RS": [
+        "4647754"
+      ],
+      "Newark": [
+        "60R5892",
+        "18J9843",
+        "54J3074"
+      ],
+      "Farnell": [
+        "197294",
+        "4765394",
+        "2217250"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "AVX",
+        "part": "TAJC476K016RNJ"
+      }
+    ],
+    "cplid": "CPL-CAP-TAN-2312-47UF-16V",
+    "title": "Capacitor 47 µF ±10% 16 V 2312",
+    "extravals": {
+      "Capacitance": "47 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Tantalum",
+      "Size": "2312",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "16 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "478-1718-1-ND",
+        "478-1718-6-ND",
+        "478-1718-2-ND"
+      ],
+      "Mouser": [
+        "581-TAJC476K016R"
+      ],
+      "RS": [
+        "4648016"
+      ],
+      "Newark": [
+        "73C5840",
+        "60R5961",
+        "54J3341"
+      ],
+      "Farnell": [
+        "4765412",
+        "197324",
+        "2217308"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "AVX",
+        "part": "TAJB106K016RNJ"
+      }
+    ],
+    "cplid": "CPL-CAP-TAN-1210-10UF-16V",
+    "title": "Capacitor 10 µF ±10% 16 V 1210",
+    "extravals": {
+      "Capacitance": "10 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Tantalum",
+      "Size": "1210",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "16 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "478-1673-6-ND",
+        "478-1673-1-ND",
+        "478-1673-2-ND"
+      ],
+      "Mouser": [
+        "581-TAJB106K016"
+      ],
+      "RS": [],
+      "Newark": [
+        "51R7549",
+        "30H0311"
+      ],
+      "Farnell": [
+        "498737",
+        "2217233"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "AVX",
+        "part": "TAJC107K010RNJ"
+      }
+    ],
+    "cplid": "CPL-CAP-TAN-2312-100UF-10V",
+    "title": "Capacitor 100 µF ±10% 10 V 2312",
+    "extravals": {
+      "Capacitance": "100 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Tantalum",
+      "Size": "2312",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "10 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "478-1704-6-ND",
+        "478-1704-1-ND",
+        "478-1704-2-ND"
+      ],
+      "Mouser": [
+        "581-TAJC107K010R"
+      ],
+      "RS": [
+        "4647877"
+      ],
+      "Newark": [
+        "60R5934",
+        "18J9853",
+        "09R6179"
+      ],
+      "Farnell": [
+        "4765369",
+        "197180",
+        "2217285"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "AVX",
+        "part": "TAJC107K016RNJ"
+      }
+    ],
+    "cplid": "CPL-CAP-TAN-2312-100UF-16V",
+    "title": "Capacitor 100 µF ±10% 16 V 2312",
+    "extravals": {
+      "Capacitance": "100 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Tantalum",
+      "Size": "2312",
+      "Tolerance": "±10%",
+      "Voltage Rating (DC)": "16 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "478-5258-6-ND",
+        "478-5258-1-ND",
+        "478-5258-2-ND"
+      ],
+      "Mouser": [
+        "581-TAJC107K016RNJ"
+      ],
+      "RS": [],
+      "Newark": [
+        "09R6180"
+      ],
+      "Farnell": [
+        "2333048"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Panasonic",
+        "part": "ECA-1HM2R2"
+      }
+    ],
+    "cplid": "CPL-CAP-ALU-RAD-2.2UF-50V",
+    "title": "Capacitor 2.2 µF ±20% 50 V Through-Hole",
+    "extravals": {
+      "Capacitance": "2.2 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Aluminium Electrolytic",
+      "Size": "Through-Hole",
+      "Tolerance": "±20%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "P5175-ND"
+      ],
+      "Mouser": [
+        "667-ECA-1HM2R2"
+      ],
+      "RS": [
+        "2286852",
+        "1078074"
+      ],
+      "Newark": [
+        "96K9178"
+      ],
+      "Farnell": [
+        "9693742"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Panasonic",
+        "part": "ECA-1HM220"
+      }
+    ],
+    "cplid": "CPL-CAP-ALU-RAD-22UF-50V",
+    "title": "Capacitor 22 µF ±20% 50 V Through-Hole",
+    "extravals": {
+      "Capacitance": "22 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Aluminium Electrolytic",
+      "Size": "Through-Hole",
+      "Tolerance": "±20%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "P5179-ND"
+      ],
+      "Mouser": [
+        "667-ECA-1HM220"
+      ],
+      "RS": [
+        "2286880",
+        "1078082"
+      ],
+      "Newark": [
+        "96K9179"
+      ],
+      "Farnell": [
+        "9693777",
+        "3201685"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Panasonic",
+        "part": "ECA-1HM4R7"
+      }
+    ],
+    "cplid": "CPL-CAP-ALU-RAD-4.7UF-50V",
+    "title": "Capacitor 4.7 µF ±20% 50 V Through-Hole",
+    "extravals": {
+      "Capacitance": "4.7 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Aluminium Electrolytic",
+      "Size": "Through-Hole",
+      "Tolerance": "±20%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "P5177-ND"
+      ],
+      "Mouser": [
+        "667-ECA-1HM4R7"
+      ],
+      "RS": [
+        "2286868",
+        "1078075"
+      ],
+      "Newark": [
+        "96K9181"
+      ],
+      "Farnell": [
+        "9693750"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Panasonic",
+        "part": "ECA-1HM100"
+      }
+    ],
+    "cplid": "CPL-CAP-ALU-RAD-10UF-50V",
+    "title": "Capacitor 10 µF ±20% 50 V Through-Hole",
+    "extravals": {
+      "Capacitance": "10 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Aluminium Electrolytic",
+      "Size": "Through-Hole",
+      "Tolerance": "±20%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "P5178-ND"
+      ],
+      "Mouser": [
+        "667-ECA-1HM100"
+      ],
+      "RS": [
+        "2286874",
+        "1078079"
+      ],
+      "Newark": [
+        "96K9175"
+      ],
+      "Farnell": [
+        "9693769",
+        "3201673"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Panasonic",
+        "part": "ECA-1HM221"
+      }
+    ],
+    "cplid": "CPL-CAP-ALU-RAD-220UF-50V",
+    "title": "Capacitor 220 µF ±20% 50 V Through-Hole",
+    "extravals": {
+      "Capacitance": "220 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Aluminium Electrolytic",
+      "Size": "Through-Hole",
+      "Tolerance": "±20%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "P5183-ND"
+      ],
+      "Mouser": [
+        "667-ECA-1HM221"
+      ],
+      "RS": [
+        "2286919"
+      ],
+      "Newark": [
+        "96K9180"
+      ],
+      "Farnell": [
+        "9693807"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Panasonic",
+        "part": "ECA-1HM470"
+      }
+    ],
+    "cplid": "CPL-CAP-ALU-RAD-47UF-50V",
+    "title": "Capacitor 47 µF ±20% 50 V Through-Hole",
+    "extravals": {
+      "Capacitance": "47 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Aluminium Electrolytic",
+      "Size": "Through-Hole",
+      "Tolerance": "±20%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "P5181-ND"
+      ],
+      "Mouser": [
+        "667-ECA-1HM470"
+      ],
+      "RS": [
+        "2286896"
+      ],
+      "Newark": [
+        "96K9182"
+      ],
+      "Farnell": [
+        "9693785"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Panasonic",
+        "part": "ECA-1HM101"
+      }
+    ],
+    "cplid": "CPL-CAP-ALU-RAD-100UF-50V",
+    "title": "Capacitor 100 µF ±20% 50 V Through-Hole",
+    "extravals": {
+      "Capacitance": "100 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Aluminium Electrolytic",
+      "Size": "Through-Hole",
+      "Tolerance": "±20%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "P5182-ND"
+      ],
+      "Mouser": [
+        "667-ECA-1HM101"
+      ],
+      "RS": [
+        "2286903"
+      ],
+      "Newark": [
+        "96K9176"
+      ],
+      "Farnell": [
+        "3201703",
+        "9693793"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Panasonic",
+        "part": "ECA-1HM471"
+      }
+    ],
+    "cplid": "CPL-CAP-ALU-RAD-470UF-50V",
+    "title": "Capacitor 470 µF ±20% 50 V Through-Hole",
+    "extravals": {
+      "Capacitance": "470 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Aluminium Electrolytic",
+      "Size": "Through-Hole",
+      "Tolerance": "±20%",
+      "Voltage Rating (DC)": "50 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "P5185-ND"
+      ],
+      "Mouser": [
+        "667-ECA-1HM471"
+      ],
+      "RS": [
+        "2286925"
+      ],
+      "Newark": [
+        "96K9183"
+      ],
+      "Farnell": [
+        "9693815"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Panasonic",
+        "part": "ECA-1EM102"
+      }
+    ],
+    "cplid": "CPL-CAP-ALU-RAD-1000UF-25V",
+    "title": "Capacitor 1000 µF ±20% 25 V Through-Hole",
+    "extravals": {
+      "Capacitance": "1000 µF",
+      "Characteristic": "–",
+      "Dielectric Material": "Aluminium Electrolytic",
+      "Size": "Through-Hole",
+      "Tolerance": "±20%",
+      "Voltage Rating (DC)": "25 V"
+    },
+    "retailers": {
+      "Digikey": [
+        "P5156-ND"
+      ],
+      "Mouser": [
+        "667-ECA-1EM102"
+      ],
+      "RS": [
+        "7270559"
+      ],
+      "Newark": [
+        "17T5005"
+      ],
+      "Farnell": [
+        "1848503"
+      ]
+    }
+  }
+]

@@ -88,9 +88,7 @@ function _search(query, retailers = [], other_fields = []) {
                 }
             }
             return result
-    })
-
-    .catch(reason => ({retailers:{}, partNumbers:[]}))
+    }).catch(reason => ({retailers:{}, partNumbers:[]}))
 }
 
 

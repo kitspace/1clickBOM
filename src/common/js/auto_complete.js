@@ -22,8 +22,9 @@ Promise.config({cancellation:true})
 const oneClickBOM = require('1-click-bom')
 const {retailer_list, isComplete, field_list} = oneClickBOM.lineData
 
-const octopart = require('./octopart')
-const findchips = require('./findchips')
+const octopart    = require('./octopart')
+const findchips   = require('./findchips')
+const commonParts = require('./common_parts')
 
 function _next_query(line, queries) {
     let query = ''
@@ -54,13 +55,14 @@ function _next_query(line, queries) {
     }
     if (query === '') {
         query = line.description
-        if (/R\d\+/i.test(line.references)) {
+        if (/R\d+/i.test(line.reference)) {
             if (!/^resistor/i.test(query)) {
                 query = 'Resistor ' + query
             }
-        } else if (/C\d\+/i.test(line.references)) {
+        } else if (/C\d+/i.test(line.reference)) {
             if (!/^capacitor/i.test(query)) {
                 query = 'Capacitor ' + query
+                console.log(query)
             }
         }
     }
@@ -140,11 +142,15 @@ function autoComplete(lines, deep=false) {
     } else {
         var depth = 1
     }
-    let p = _auto_complete(octopart, lines, depth)
-    return p.then(function(newLines) {
+    return _auto_complete(commonParts, lines, depth).then(newLines => {
         if (!isComplete(newLines)) {
-            p = _auto_complete(findchips, newLines, depth)
-            return p.then(newLines_ => newLines_)
+            return _auto_complete(octopart, newLines, depth)
+        } else {
+            return newLines
+        }
+    }).then(newLines => {
+        if (!isComplete(newLines)) {
+            return _auto_complete(findchips, newLines, depth)
         } else {
             return newLines
         }
@@ -156,14 +162,14 @@ exports.autoComplete = autoComplete
 
 
 function __in__(needle, haystack) {
-  return haystack.indexOf(needle) >= 0
+    return haystack.indexOf(needle) >= 0
 }
 function __range__(left, right, inclusive) {
-  let range = []
-  let ascending = left < right
-  let end = !inclusive ? right : ascending ? right + 1 : right - 1
-  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-    range.push(i)
-  }
-  return range
+    let range = []
+    let ascending = left < right
+    let end = !inclusive ? right : ascending ? right + 1 : right - 1
+    for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
+        range.push(i)
+    }
+    return range
 }
