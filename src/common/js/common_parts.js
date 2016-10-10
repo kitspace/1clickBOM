@@ -54,10 +54,11 @@ function getResistors(term) {
         return results
     }
 
-    //results = match(/\d*\.?\d* ?(ohm|Ω|Ω)/i, (value, r) => {
-    //    return Qty(r.extravals.Resistance).eq(Qty(value))
-    //})
-
+    //1k5 style
+    results = match(/\d+(k|m)\d+/i, (value, r) => {
+        let v = resistorData.notationToValue(value) + ' ohm'
+        return Qty(r.extravals.Resistance).eq(Qty(v))
+    })
 
     //1.5k style
     results = match(/\d*\.?\d*(k|m)/i, (value, r) => {
@@ -65,18 +66,17 @@ function getResistors(term) {
         return Qty(r.extravals.Resistance).eq(Qty(v))
     })
 
-
-    //1k5 style
-    results = match(/\d+(k|m)\d+/i, (value, r) => {
-        let v = resistorData.notationToValue(value) + ' ohm'
-        return Qty(r.extravals.Resistance).eq(Qty(v))
-    })
-
     results = match(/(0402|0603|0805|1206|2312|1210)/, (size, c) => {
         return c.extravals.Size === size
     })
 
-    console.log(term)
+    results = match(/\d*\.?\d* ?%/, (tolerance, r) => {
+        return parseFloat(tolerance) >= parseFloat(r.extravals['Resistance Tolerance'].slice(1))
+    })
+
+    results = match(/\d*\.?\d* ?(m|k)?W/i, (rating, c) => {
+        return Qty(c.extravals['Power Rating']).eq(Qty(rating))
+    })
 
     if (results.length > 1 && term.trim() !== '') {
         const descriptions = results.map(describe.bind(null, 'Resistor'))
@@ -140,8 +140,6 @@ function combine(results) {
         return prev
     }, {retailers:{}, partNumbers:[]})
 }
-
-
 
 function describe(prefix, item) {
     return prefix + " " + Object.keys(item.extravals).reduce((prev, k) => {
