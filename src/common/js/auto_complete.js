@@ -62,7 +62,6 @@ function _next_query(line, queries) {
         } else if (/C\d+/i.test(line.reference)) {
             if (!/^capacitor/i.test(query)) {
                 query = 'Capacitor ' + query
-                console.log(query)
             }
         }
     }

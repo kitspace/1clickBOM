@@ -37,36 +37,27 @@ function _search(query, retailers = [], other_fields = []) {
 }
 
 function getCapacitors(term) {
-
-
     let results = [].concat(capacitors)
 
-    function match(regex, f) {
-        const match = regex.exec(term)
-        if (match != null) {
-            const value = match[0]
-            term = term.replace(value, '')
-            results = results.filter(f.bind(null, value))
-        }
-    }
+    let match = extract.bind(null, term, results)
 
-    match(/\d*\.?\d* ?(p|n|u|µ)F/i, (value, c) => {
+    results = match(/\d*\.?\d* ?(p|n|u|µ)F/i, (value, c) => {
         return Qty(c.extravals.Capacitance).eq(Qty(value))
     })
 
-    match(/\d*\.?\d* ?V/i, (rating, c) => {
+    results = match(/\d*\.?\d* ?V/i, (rating, c) => {
         return Qty(c.extravals['Voltage Rating (DC)']).eq(Qty(rating))
     })
 
-    match(/\d*\.?\d* ?%/, (tolerance, c) => {
+    results = match(/\d*\.?\d* ?%/, (tolerance, c) => {
         return parseFloat(tolerance) >= parseFloat(c.extravals.Tolerance.slice(1))
     })
 
-    match(/(0402|0603|0805|1206|2312|1210)/, (size, c) => {
+    results = match(/(0402|0603|0805|1206|2312|1210)/, (size, c) => {
         return c.extravals.Size === size
     })
 
-    match(/(X7R|X5R|C0G|NP0)/i, (characteristic, c) => {
+    results = match(/(X7R|X5R|C0G|NP0)/i, (characteristic, c) => {
         return RegExp(characteristic).test(c.extravals.Characteristic)
     })
 
@@ -85,6 +76,16 @@ function getCapacitors(term) {
         return prev
     }, {retailers:{}, partNumbers:[]})
 
+}
+
+function extract(term, results, regex, f) {
+    const match = regex.exec(term)
+    if (match != null) {
+        const value = match[0]
+        term = term.replace(value, '')
+        return results.filter(f.bind(null, value))
+    }
+    return results
 }
 
 
