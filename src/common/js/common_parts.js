@@ -38,7 +38,6 @@ function _search(query, retailers = [], other_fields = []) {
 
 function getCapacitors(term) {
 
-    console.log(term)
 
     let results = [].concat(capacitors)
 
@@ -46,7 +45,6 @@ function getCapacitors(term) {
         const match = regex.exec(term)
         if (match != null) {
             const value = match[0]
-            console.log('value', value)
             term = term.replace(value, '')
             results = results.filter(f.bind(null, value))
         }
