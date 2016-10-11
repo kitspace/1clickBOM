@@ -1,12 +1,15 @@
 const { background } = require('./background')
 const { bgMessenger } = require('./bg_messenger')
-const { popup, message_exchange } = require('./browser')
+const { browser, popup, message_exchange } = require('./browser')
 const http = require('./http')
 const firefoxTabs = require('sdk/tabs')
 const notifications = require('sdk/notifications')
 
 exports.main = function main(options, callbacks) {
     if (options.loadReason === 'install') {
+        browser.tabsQuery({url:'*://kitnic.it/boards/*'}, tabs => {
+            tabs.forEach(browser.tabsReload)
+        })
         http.getLocation(() =>
             //open 1clickBOM preferences
             firefoxTabs.open({

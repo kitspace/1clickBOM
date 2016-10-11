@@ -5,6 +5,9 @@ const { browser } = require('./browser')
 
 chrome.runtime.onInstalled.addListener(function(details){
     if (details.reason === 'install') {
+        browser.tabsQuery({url:'*://kitnic.it/boards/*'}, tabs => {
+            tabs.forEach(browser.tabsReload)
+        })
         http.getLocation(() => browser.tabsCreate(browser.getURL('html/options.html')))
         //set-up settings with default values
         let set_scheme = browser.getLocal('data/settings.json')
