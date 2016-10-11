@@ -120,8 +120,7 @@ function promisePost(url, params) {
 
 function promiseGet(url) {
     return new Promise((resolve, reject) => {
-        get(url, {}, responseText => resolve(browser.parseDOM(responseText))
-            , reject)
+        get(url, {}, responseText => resolve(browser.parseDOM(responseText)), reject)
     })
 }
 

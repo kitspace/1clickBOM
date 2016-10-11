@@ -24,12 +24,16 @@ const { Mouser }  = require('./mouser')
 const { RS }      = require('./rs')
 const { Newark }  = require('./newark')
 const qunit       = require('./qunit-1.11.0')
+const octopart    = require('./octopart')
+
+const { retailer_list } = require('1-click-bom').lineData
 
 let { module }    = qunit
 let { asyncTest } = qunit
 let { stop }      = qunit
 let { start }     = qunit
 let { deepEqual } = qunit
+let { ok } = qunit
 
 let digikey_data = browser.getLocal('data/digikey.json')
 let farnell_data = browser.getLocal('data/farnell.json')
@@ -265,8 +269,27 @@ asyncTest('Add lines', function() {
                     return start()
                 }
             )
-        }
-	)
-}
-)
+        })
+})
 
+module('Octopart')
+
+asyncTest('Auto complete fails', function() {
+    let query = 'wizzooooabbbaa'
+    octopart.search(query, retailer_list).then(new_lines => {
+        retailer_list.forEach(name => {
+            ok(!new_lines.retailers[name])
+        })
+        start()
+    })
+})
+
+asyncTest('Auto complete', function() {
+    let query = 'IRF7309PBF'
+    octopart.search(query, retailer_list).then(new_lines => {
+        retailer_list.forEach(name => {
+            ok(new_lines.retailers[name])
+        })
+        start()
+    })
+})

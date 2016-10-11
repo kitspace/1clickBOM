@@ -74,7 +74,7 @@ function _search(query, retailers = [], other_fields = []) {
             let moqs = {}
             for (let i1 = 0; i1 < elements_moq.length; i1++) {
                 let {tr,moq} = elements_moq[i1]
-                let retailer = tr.querySelector('td.col-seller').innerHTML.trim()
+                let retailer = tr.querySelector('td.col-seller').firstElementChild.innerHTML.split('\n')[2].trim()
                 for (let k in aliases) {
                     let v = aliases[k]
                     retailer = retailer.replace(k,v)
@@ -88,17 +88,18 @@ function _search(query, retailers = [], other_fields = []) {
                 }
             }
             return result
+    }).catch(event => {
+      console.error(event.target.status)
+      return {retailers:{}, partNumbers:[]}
     })
-
-    .catch(reason => ({retailers:{}, partNumbers:[]}))
 }
 
 
 exports.search = rateLimit(n=30, time_period_ms=10000, _search)
 
 function __in__(needle, haystack) {
-  return haystack.indexOf(needle) >= 0
+    return haystack.indexOf(needle) >= 0
 }
 function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
+    return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
 }

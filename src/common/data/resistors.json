@@ -1,0 +1,4826 @@
+[
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0402JR-070RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-2GE0R00X"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW04020000Z0ED"
+      }
+    ],
+    "cplid": "CPL-RES-0402-0-0.063W",
+    "title": "Resistor 0 Ω 0402 63 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "63 mW",
+      "Resistance": "0 Ω",
+      "Resistance Tolerance": "–",
+      "Size": "0402"
+    },
+    "retailers": {
+      "Digikey": [
+        "P0.0JDKR-ND",
+        "311-0.0JRCT-ND",
+        "541-0.0JDKR-ND",
+        "541-0.0JCT-ND",
+        "P0.0JCT-ND",
+        "311-0.0JRDKR-ND",
+        "P0.0JTR-ND",
+        "541-0.0JTR-ND",
+        "311-0.0JRTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-2GE0R00X",
+        "603-RC0402JR-070RL",
+        "71-CRCW0402-0-E3"
+      ],
+      "RS": [
+        "3932326",
+        "8121556",
+        "6185804",
+        "7324851",
+        "1067123"
+      ],
+      "Newark": [
+        "65T8307",
+        "67R9963",
+        "98K7493",
+        "66R1737",
+        "97W7189"
+      ],
+      "Farnell": [
+        "1469661",
+        "2059190",
+        "9232516",
+        "2421887",
+        "2121349"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603JR-070RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3GEY0R00V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW06030000Z0EA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-0-0.1W",
+    "title": "Resistor 0 Ω 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "0 Ω",
+      "Resistance Tolerance": "–",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P0.0GCT-ND",
+        "311-0.0GRDKR-ND",
+        "541-0.0GCT-ND",
+        "541-0.0GDKR-ND",
+        "311-0.0GRCT-ND",
+        "P0.0GDKR-ND",
+        "311-0.0GRTR-ND",
+        "P0.0GTR-ND",
+        "541-0.0GTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3GEY0R00V",
+        "71-CRCW0603-0-E3",
+        "603-RC0603JR-070RL"
+      ],
+      "RS": [
+        "8206736",
+        "2508364822",
+        "7325646",
+        "1067101"
+      ],
+      "Newark": [
+        "65T8702",
+        "68R0136",
+        "66R2644",
+        "97W7591"
+      ],
+      "Farnell": [
+        "1469739",
+        "9233130",
+        "2059527",
+        "2421846",
+        "2122112"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0805JR-070RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-6GEY0R00V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW08050000Z0EA"
+      }
+    ],
+    "cplid": "CPL-RES-0805-0-0.125W",
+    "title": "Resistor 0 Ω 0805 125 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "125 mW",
+      "Resistance": "0 Ω",
+      "Resistance Tolerance": "–",
+      "Size": "0805"
+    },
+    "retailers": {
+      "Digikey": [
+        "P0.0ADKR-ND",
+        "311-0.0ARDKR-ND",
+        "541-0.0ACT-ND",
+        "541-0.0ADKR-ND",
+        "311-0.0ARCT-ND",
+        "P0.0ACT-ND",
+        "P0.0ATR-ND",
+        "541-0.0ATR-ND",
+        "311-0.0ARTR-ND"
+      ],
+      "Mouser": [
+        "603-RC0805JR-070RL",
+        "667-ERJ-6GEY0R00V",
+        "71-CRCW0805-0-E3"
+      ],
+      "RS": [
+        "8123353",
+        "6790800",
+        "7326514",
+        "1067106"
+      ],
+      "Newark": [
+        "65T8846",
+        "68R0252",
+        "66R3563",
+        "97W7729"
+      ],
+      "Farnell": [
+        "1469846",
+        "2057661",
+        "9233750",
+        "2122874",
+        "2421933"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC1206JR-070RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-8GEY0R00V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW12060000Z0EA"
+      }
+    ],
+    "cplid": "CPL-RES-1206-0-0.25W",
+    "title": "Resistor 0 Ω 1206 250 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "250 mW",
+      "Resistance": "0 Ω",
+      "Resistance Tolerance": "–",
+      "Size": "1206"
+    },
+    "retailers": {
+      "Digikey": [
+        "P0.0EDKR-ND",
+        "311-0.0ERDKR-ND",
+        "541-0.0ECT-ND",
+        "541-0.0EDKR-ND",
+        "311-0.0ERCT-ND",
+        "P0.0ECT-ND",
+        "541-0.0ETR-ND",
+        "P0.0ETR-ND",
+        "311-0.0ERTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-8GEY0R00V",
+        "71-CRCW1206-0-E3",
+        "603-RC1206JR-070RL"
+      ],
+      "RS": [
+        "8121773",
+        "6791768",
+        "434589"
+      ],
+      "Newark": [
+        "65T8967",
+        "68R0297",
+        "97W7827",
+        "66R4482"
+      ],
+      "Farnell": [
+        "1469963",
+        "9240276",
+        "2057791",
+        "2421900",
+        "2123636"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0402FR-0710RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-2RKF10R0X"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW040210R0FKED"
+      }
+    ],
+    "cplid": "CPL-RES-0402-10-0.063W",
+    "title": "Resistor 10 Ω ±1% 0402 63 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "63 mW",
+      "Resistance": "10 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0402"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-10.0LRCT-ND",
+        "541-10.0LCT-ND",
+        "541-10.0LDKR-ND",
+        "311-10.0LRDKR-ND",
+        "P10.0LDKR-ND",
+        "P10.0LCT-ND",
+        "P10.0LTR-ND",
+        "311-10.0LRTR-ND",
+        "541-10.0LTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0402-10-E3",
+        "667-ERJ-2RKF10R0X",
+        "603-RC0402FR-0710RL"
+      ],
+      "RS": [
+        "6788703",
+        "8121571",
+        "6185848",
+        "7325252"
+      ],
+      "Newark": [
+        "52K6600",
+        "64R5245",
+        "67R9886",
+        "90W2943",
+        "66R1121"
+      ],
+      "Farnell": [
+        "2302417",
+        "9238999",
+        "1652742",
+        "2396962",
+        "2121350"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0710RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF10R0V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060310R0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-10-0.1W",
+    "title": "Resistor 10 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "10 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-10.0HRDKR-ND",
+        "541-10.0HDKR-ND",
+        "541-10.0HCT-ND",
+        "311-10.0HRCT-ND",
+        "P10.0HCT-ND",
+        "P10.0HDKR-ND",
+        "P10.0HTR-ND",
+        "541-10.0HTR-ND",
+        "311-10.0HRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-10-E3",
+        "667-ERJ-3EKF10R0V",
+        "603-RC0603FR-0710RL"
+      ],
+      "RS": [
+        "8206751",
+        "6789695",
+        "1058469"
+      ],
+      "Newark": [
+        "64R5306",
+        "68R0050",
+        "66R1992",
+        "42K3663",
+        "90W3094"
+      ],
+      "Farnell": [
+        "9238247",
+        "2302958",
+        "1469751",
+        "2421855",
+        "2397504",
+        "2122113"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0805FR-0710RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-6ENF10R0V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW080510R0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0805-10-0.125W",
+    "title": "Resistor 10 Ω ±1% 0805 125 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "125 mW",
+      "Resistance": "10 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0805"
+    },
+    "retailers": {
+      "Digikey": [
+        "P10.0CCT-ND",
+        "311-10.0CRCT-ND",
+        "541-10.0CDKR-ND",
+        "541-10.0CCT-ND",
+        "311-10.0CRDKR-ND",
+        "P10.0CDKR-ND",
+        "P10.0CTR-ND",
+        "311-10.0CRTR-ND",
+        "541-10.0CTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-6ENF10R0V",
+        "603-RC0805FR-0710RL",
+        "71-CRCW0805-10-E3"
+      ],
+      "RS": [
+        "8123372",
+        "6790825",
+        "6185179",
+        "7326053"
+      ],
+      "Newark": [
+        "64R5367",
+        "68R0230",
+        "90W3236",
+        "66R2901"
+      ],
+      "Farnell": [
+        "1469859",
+        "9237240",
+        "2303326",
+        "2421943",
+        "2397872",
+        "2122875"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC1206FR-0710RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-8ENF10R0V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW120610R0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-1206-10-0.25W",
+    "title": "Resistor 10 Ω ±1% 1206 250 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "250 mW",
+      "Resistance": "10 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "1206"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-10.0FRDKR-ND",
+        "311-10.0FRCT-ND",
+        "541-10.0FCT-ND",
+        "P10.0FCT-ND",
+        "P10.0FDKR-ND",
+        "541-10.0FDKR-ND",
+        "311-10.0FRTR-ND",
+        "541-10.0FTR-ND",
+        "P10.0FTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW1206-10-E3",
+        "667-ERJ-8ENF10R0V",
+        "603-RC1206FR-0710RL"
+      ],
+      "RS": [
+        "8121782",
+        "6791774",
+        "1117953"
+      ],
+      "Newark": [
+        "68R0293",
+        "64R5428",
+        "42K4760",
+        "66R3824",
+        "90W3542"
+      ],
+      "Farnell": [
+        "1653051",
+        "9236643",
+        "2307314",
+        "1469974",
+        "2421908",
+        "2123637",
+        "2398488"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0712RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF12R0V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060312R0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-12-0.1W",
+    "title": "Resistor 12 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "12 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "541-12.0HCT-ND",
+        "311-12.0HRDKR-ND",
+        "541-12.0HDKR-ND",
+        "P12.0HDKR-ND",
+        "P12.0HCT-ND",
+        "311-12.0HRCT-ND",
+        "541-12.0HTR-ND",
+        "311-12.0HRTR-ND",
+        "P12.0HTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-12-E3",
+        "603-RC0603FR-0712RL",
+        "667-ERJ-3EKF12R0V"
+      ],
+      "RS": [
+        "6789734",
+        "1058487"
+      ],
+      "Newark": [
+        "52K8108",
+        "98K7354",
+        "85Y8522",
+        "66R2024",
+        "52K8109",
+        "64R5312"
+      ],
+      "Farnell": [
+        "1652838",
+        "9238255",
+        "2302967",
+        "2397513",
+        "2122122"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0715RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF15R0V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060315R0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-15-0.1W",
+    "title": "Resistor 15 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "15 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-15.0HRDKR-ND",
+        "541-15.0HCT-ND",
+        "541-15.0HDKR-ND",
+        "P15.0HCT-ND",
+        "P15.0HDKR-ND",
+        "311-15.0HRCT-ND",
+        "311-15.0HRTR-ND",
+        "P15.0HTR-ND",
+        "541-15.0HTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-15-E3",
+        "603-RC0603FR-0715RL",
+        "667-ERJ-3EKF15R0V"
+      ],
+      "RS": [
+        "8206764",
+        "6789800"
+      ],
+      "Newark": [
+        "64R5317",
+        "98K7365",
+        "90W3126",
+        "66R2063"
+      ],
+      "Farnell": [
+        "9238263",
+        "1652841",
+        "2302978",
+        "2122132",
+        "2397524"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0722RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF22R0V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060322R0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-22-0.1W",
+    "title": "Resistor 22 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "22 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P22.0HCT-ND",
+        "311-22.0HRDKR-ND",
+        "541-22.0HDKR-ND",
+        "P22.0HDKR-ND",
+        "311-22.0HRCT-ND",
+        "541-22.0HCT-ND",
+        "P22.0HTR-ND",
+        "311-22.0HRTR-ND",
+        "541-22.0HTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3EKF22R0V",
+        "71-CRCW0603-22-E3",
+        "603-RC0603FR-0722RL"
+      ],
+      "RS": [
+        "8206809",
+        "1058487"
+      ],
+      "Newark": [
+        "64R5327",
+        "68R0073",
+        "66R2189",
+        "90W3155",
+        "24W2788"
+      ],
+      "Farnell": [
+        "2302996",
+        "1469781",
+        "9238280",
+        "2397542",
+        "2421868",
+        "2122152"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0733R2L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF33R2V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060333R2FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-33.2-0.1W",
+    "title": "Resistor 33.2 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "33.2 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-33.2HRDKR-ND",
+        "541-33.2HDKR-ND",
+        "541-33.2HCT-ND",
+        "311-33.2HRCT-ND",
+        "P33.2HDKR-ND",
+        "P33.2HCT-ND",
+        "P33.2HTR-ND",
+        "541-33.2HTR-ND",
+        "311-33.2HRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-33.2-E3",
+        "603-RC0603FR-0733R2L",
+        "667-ERJ-3EKF33R2V"
+      ],
+      "RS": [
+        "6790248",
+        "1229282"
+      ],
+      "Newark": [
+        "65T8428",
+        "68R0086",
+        "27W4220",
+        "97W7350",
+        "66R2315"
+      ],
+      "Farnell": [
+        "1652873",
+        "2059267",
+        "2122177"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0747RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF47R0V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060347R0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-47-0.1W",
+    "title": "Resistor 47 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "47 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-47.0HRDKR-ND",
+        "541-47.0HCT-ND",
+        "541-47.0HDKR-ND",
+        "311-47.0HRCT-ND",
+        "P47.0HCT-ND",
+        "P47.0HDKR-ND",
+        "P47.0HTR-ND",
+        "541-47.0HTR-ND",
+        "311-47.0HRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-47-E3",
+        "603-RC0603FR-0747RL",
+        "667-ERJ-3EKF47R0V"
+      ],
+      "RS": [
+        "8206859",
+        "6790437",
+        "8146208",
+        "1229338"
+      ],
+      "Newark": [
+        "64R5347",
+        "60K0426",
+        "90W3198",
+        "42K3928"
+      ],
+      "Farnell": [
+        "9238328",
+        "2141241",
+        "2303030",
+        "2421881",
+        "2397576",
+        "2122197"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0749R9L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF49R9V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060349R9FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-49.9-0.1W",
+    "title": "Resistor 49.9 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "49.9 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-49.9HRCT-ND",
+        "541-49.9HDKR-ND",
+        "P49.9HDKR-ND",
+        "P49.9HCT-ND",
+        "311-49.9HRDKR-ND",
+        "541-49.9HCT-ND",
+        "311-49.9HRTR-ND",
+        "P49.9HTR-ND",
+        "541-49.9HTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-49.9-E3",
+        "667-ERJ-3EKF49R9V",
+        "603-RC0603FR-0749R9L"
+      ],
+      "RS": [
+        "8206861",
+        "6790459",
+        "1229343"
+      ],
+      "Newark": [
+        "68R0100",
+        "65T8468",
+        "66R2430",
+        "52K8567",
+        "97W7387"
+      ],
+      "Farnell": [
+        "1469817",
+        "2059274",
+        "2122201"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0756R2L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF56R2V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060356R2FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-56.2-0.1W",
+    "title": "Resistor 56.2 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "56.2 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-56.2HRDKR-ND",
+        "541-56.2HCT-ND",
+        "541-56.2HDKR-ND",
+        "P56.2HCT-ND",
+        "P56.2HDKR-ND",
+        "311-56.2HRCT-ND",
+        "311-56.2HRTR-ND",
+        "541-56.2HTR-ND",
+        "P56.2HTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-56.2-E3",
+        "603-RC0603FR-0756R2L",
+        "667-ERJ-3EKF56R2V"
+      ],
+      "RS": [
+        "6790554",
+        "1229363"
+      ],
+      "Newark": [
+        "52K8617",
+        "68R0107",
+        "65T8490",
+        "52K8618",
+        "97W7409",
+        "66R2477"
+      ],
+      "Farnell": [
+        "2059279",
+        "2141249",
+        "2122208"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0768R1L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF68R1V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060368R1FKEA"
+      },
+      {
+        "manufacturer": "Multicomp",
+        "part": "MC0063W0603168R1"
+      }
+    ],
+    "cplid": "CPL-RES-0603-68.1-0.1W",
+    "title": "Resistor 68.1 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "68.1 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-68.1HRDKR-ND",
+        "P68.1HDKR-ND",
+        "541-68.1HDKR-ND",
+        "311-68.1HRCT-ND",
+        "P68.1HCT-ND",
+        "541-68.1HCT-ND",
+        "311-68.1HRTR-ND",
+        "P68.1HTR-ND",
+        "541-68.1HTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-68.1-E3",
+        "667-ERJ-3EKF68R1V",
+        "603-RC0603FR-0768R1L"
+      ],
+      "RS": [
+        "6790649",
+        "1229386"
+      ],
+      "Newark": [
+        "65T8509",
+        "66R2538",
+        "42K3999",
+        "97W7428"
+      ],
+      "Farnell": [
+        "1170671"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0775RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF75R0V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060375R0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-75-0.1W",
+    "title": "Resistor 75 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "75 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-75.0HRDKR-ND",
+        "541-75.0HDKR-ND",
+        "P75.0HCT-ND",
+        "P75.0HDKR-ND",
+        "311-75.0HRCT-ND",
+        "541-75.0HCT-ND",
+        "311-75.0HRTR-ND",
+        "P75.0HTR-ND",
+        "541-75.0HTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-75-E3",
+        "603-RC0603FR-0775RL",
+        "667-ERJ-3EKF75R0V"
+      ],
+      "RS": [
+        "8206893",
+        "6790699",
+        "1229395"
+      ],
+      "Newark": [
+        "68R0115",
+        "65T8518",
+        "66R2565",
+        "42K4014",
+        "97W7437"
+      ],
+      "Farnell": [
+        "1469838",
+        "2059282",
+        "2122223"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0782R5L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF82R5V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060382R5FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-82.5-0.1W",
+    "title": "Resistor 82.5 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "82.5 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-82.5HRDKR-ND",
+        "541-82.5HDKR-ND",
+        "541-82.5HCT-ND",
+        "P82.5HCT-ND",
+        "P82.5HDKR-ND",
+        "311-82.5HRCT-ND",
+        "P82.5HTR-ND",
+        "311-82.5HRTR-ND",
+        "541-82.5HTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-82.5-E3",
+        "667-ERJ-3EKF82R5V",
+        "603-RC0603FR-0782R5L"
+      ],
+      "RS": [
+        "6790743",
+        "1140684"
+      ],
+      "Newark": [
+        "65T8529",
+        "97W7448",
+        "66R2596",
+        "52K8741"
+      ],
+      "Farnell": [
+        "2059283"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0402FR-07100RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-2RKF1000X"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0402100RFKED"
+      }
+    ],
+    "cplid": "CPL-RES-0402-100-0.063W",
+    "title": "Resistor 100 Ω ±1% 0402 63 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "63 mW",
+      "Resistance": "100 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0402"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-100LRCT-ND",
+        "541-100LCT-ND",
+        "541-100LDKR-ND",
+        "P100LCT-ND",
+        "P100LDKR-ND",
+        "311-100LRDKR-ND",
+        "P100LTR-ND",
+        "541-100LTR-ND",
+        "311-100LRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0402-100-E3",
+        "667-ERJ-2RKF1000X",
+        "603-RC0402FR-07100RL"
+      ],
+      "RS": [
+        "6784688",
+        "6650695",
+        "8121568",
+        "7325249"
+      ],
+      "Newark": [
+        "64R5246",
+        "67R9888",
+        "98K7495",
+        "90W2947",
+        "66R1126"
+      ],
+      "Farnell": [
+        "1469672",
+        "9239111",
+        "2302528",
+        "2397073",
+        "2421888",
+        "2121477"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07100RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF1000V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603100RFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-100-0.1W",
+    "title": "Resistor 100 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "100 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-100HRDKR-ND",
+        "P100HDKR-ND",
+        "541-100HDKR-ND",
+        "541-100HCT-ND",
+        "P100HCT-ND",
+        "311-100HRCT-ND",
+        "P100HTR-ND",
+        "541-100HTR-ND",
+        "311-100HRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-100-E3",
+        "667-ERJ-3EKF1000V",
+        "603-RC0603FR-07100RL"
+      ],
+      "RS": [
+        "8206748",
+        "8145889",
+        "2509682456",
+        "1051155"
+      ],
+      "Newark": [
+        "64R5307",
+        "68R0052",
+        "66R1997",
+        "90W3098"
+      ],
+      "Farnell": [
+        "2303059",
+        "1469752",
+        "9238360",
+        "2421848",
+        "2397605",
+        "2122239"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0805FR-07100RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-6ENF1000V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0805100RFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0805-100-0.125W",
+    "title": "Resistor 100 Ω ±1% 0805 125 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "125 mW",
+      "Resistance": "100 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0805"
+    },
+    "retailers": {
+      "Digikey": [
+        "P100CCT-ND",
+        "311-100CRDKR-ND",
+        "541-100CDKR-ND",
+        "541-100CCT-ND",
+        "311-100CRCT-ND",
+        "P100CDKR-ND",
+        "P100CTR-ND",
+        "311-100CRTR-ND",
+        "541-100CTR-ND"
+      ],
+      "Mouser": [
+        "603-RC0805FR-07100RL",
+        "667-ERJ-6ENF1000V",
+        "71-CRCW0805-100-E3"
+      ],
+      "RS": [
+        "8123362",
+        "6790807",
+        "6185135",
+        "7326034"
+      ],
+      "Newark": [
+        "64R5368",
+        "68R0232",
+        "66R2906",
+        "90W3240"
+      ],
+      "Farnell": [
+        "1469862",
+        "9237364",
+        "2123001",
+        "2421934"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC1206FR-07100RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-8ENF1000V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW1206100RFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-1206-100-0.25W",
+    "title": "Resistor 100 Ω ±1% 1206 250 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "250 mW",
+      "Resistance": "100 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "1206"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-100FRDKR-ND",
+        "541-100FDKR-ND",
+        "541-100FCT-ND",
+        "311-100FRCT-ND",
+        "P100FCT-ND",
+        "P100FDKR-ND",
+        "P100FTR-ND",
+        "541-100FTR-ND",
+        "311-100FRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW1206-100-E3",
+        "667-ERJ-8ENF1000V",
+        "603-RC1206FR-07100RL"
+      ],
+      "RS": [
+        "8121770",
+        "1117945"
+      ],
+      "Newark": [
+        "64R5429",
+        "68R0295",
+        "98K7617",
+        "90W3546"
+      ],
+      "Farnell": [
+        "1469977",
+        "9240888",
+        "2307293",
+        "2398467",
+        "2123763",
+        "2421901"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07120RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF1200V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603120RFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-120-0.1W",
+    "title": "Resistor 120 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "120 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-120HRDKR-ND",
+        "311-120HRCT-ND",
+        "541-120HDKR-ND",
+        "P120HDKR-ND",
+        "541-120HCT-ND",
+        "P120HCT-ND",
+        "P120HTR-ND",
+        "311-120HRTR-ND",
+        "541-120HTR-ND"
+      ],
+      "Mouser": [
+        "603-RC0603FR-07120RL",
+        "71-CRCW0603-120-E3",
+        "667-ERJ-3EKF1200V"
+      ],
+      "RS": [
+        "8206754",
+        "6789718",
+        "1051578"
+      ],
+      "Newark": [
+        "64R5313",
+        "68R0056",
+        "66R2029",
+        "90W3115"
+      ],
+      "Farnell": [
+        "1652832",
+        "9238379",
+        "2303067",
+        "2397612",
+        "2122247"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07150RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF1500V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603150RFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-150-0.1W",
+    "title": "Resistor 150 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "150 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P150HCT-ND",
+        "311-150HRCT-ND",
+        "541-150HCT-ND",
+        "541-150HDKR-ND",
+        "P150HDKR-ND",
+        "311-150HRDKR-ND",
+        "P150HTR-ND",
+        "311-150HRTR-ND",
+        "541-150HTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-150-E3",
+        "667-ERJ-3EKF1500V",
+        "603-RC0603FR-07150RL"
+      ],
+      "RS": [
+        "8206767",
+        "6789784",
+        "1053110"
+      ],
+      "Newark": [
+        "68R0061",
+        "64R5318",
+        "90W3129",
+        "66R2067",
+        "52K8161"
+      ],
+      "Farnell": [
+        "2303076",
+        "9238387",
+        "1469760",
+        "2122259",
+        "2397621",
+        "2421856"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07220RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF2200V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603220RFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-220-0.1W",
+    "title": "Resistor 220 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "220 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-220HRDKR-ND",
+        "541-220HDKR-ND",
+        "541-220HCT-ND",
+        "P220HCT-ND",
+        "P220HDKR-ND",
+        "311-220HRCT-ND",
+        "311-220HRTR-ND",
+        "P220HTR-ND",
+        "541-220HTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3EKF2200V",
+        "71-CRCW0603-220-E3",
+        "603-RC0603FR-07220RL"
+      ],
+      "RS": [
+        "8206802",
+        "6789995",
+        "1058479"
+      ],
+      "Newark": [
+        "64R5328",
+        "90W3157",
+        "42K3792",
+        "66R2193"
+      ],
+      "Farnell": [
+        "9238409",
+        "2303090",
+        "1652857",
+        "2421863",
+        "2122279",
+        "2397635"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07330RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF3300V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603330RFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-330-0.1W",
+    "title": "Resistor 330 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "330 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-330HRDKR-ND",
+        "541-330HCT-ND",
+        "541-330HDKR-ND",
+        "P330HDKR-ND",
+        "P330HCT-ND",
+        "311-330HRCT-ND",
+        "P330HTR-ND",
+        "541-330HTR-ND",
+        "311-330HRTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3EKF3300V",
+        "71-CRCW0603-330-E3",
+        "603-RC0603FR-07330RL"
+      ],
+      "RS": [
+        "8206830",
+        "6790226",
+        "1229278"
+      ],
+      "Newark": [
+        "64R5338",
+        "98K7391",
+        "75X0150",
+        "90W3179"
+      ],
+      "Farnell": [
+        "9238425",
+        "1469803",
+        "2303104",
+        "2122302",
+        "2421869",
+        "2397649"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07390RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF3900V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603390RFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-390-0.1W",
+    "title": "Resistor 390 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "390 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P390HDKR-ND",
+        "311-390HRDKR-ND",
+        "541-390HCT-ND",
+        "311-390HRCT-ND",
+        "P390HCT-ND",
+        "541-390HDKR-ND",
+        "311-390HRTR-ND",
+        "P390HTR-ND",
+        "541-390HTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3EKF3900V",
+        "71-CRCW0603-390-E3",
+        "603-RC0603FR-07390RL"
+      ],
+      "RS": [
+        "8206846",
+        "6790273"
+      ],
+      "Newark": [
+        "64R5343",
+        "68R0091",
+        "66R2353",
+        "90W3190",
+        "42K3889"
+      ],
+      "Farnell": [
+        "9238433",
+        "1652875",
+        "2303111",
+        "2122312",
+        "2397657"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07470RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF4700V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603470RFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-470-0.1W",
+    "title": "Resistor 470 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "470 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-470HRDKR-ND",
+        "541-470HCT-ND",
+        "541-470HDKR-ND",
+        "P470HCT-ND",
+        "311-470HRCT-ND",
+        "P470HDKR-ND",
+        "P470HTR-ND",
+        "311-470HRTR-ND",
+        "541-470HTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-470-E3",
+        "667-ERJ-3EKF4700V",
+        "603-RC0603FR-07470RL"
+      ],
+      "RS": [
+        "8206852",
+        "6790419",
+        "1229335"
+      ],
+      "Newark": [
+        "64R5348",
+        "68R0099",
+        "26M6758",
+        "66R2422",
+        "90W3199"
+      ],
+      "Farnell": [
+        "1469815",
+        "2303120",
+        "9238441",
+        "2397666",
+        "2122323",
+        "2421875"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07560RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF5600V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603560RFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-560-0.1W",
+    "title": "Resistor 560 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "560 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-560HRDKR-ND",
+        "541-560HDKR-ND",
+        "541-560HCT-ND",
+        "311-560HRCT-ND",
+        "P560HDKR-ND",
+        "P560HCT-ND",
+        "311-560HRTR-ND",
+        "P560HTR-ND",
+        "541-560HTR-ND"
+      ],
+      "Mouser": [
+        "603-RC0603FR-07560RL",
+        "71-CRCW0603-560-E3",
+        "667-ERJ-3EKF5600V"
+      ],
+      "RS": [
+        "8206871",
+        "6790541"
+      ],
+      "Newark": [
+        "64R5353",
+        "68R0108",
+        "66R2479",
+        "90W3207",
+        "26M6760"
+      ],
+      "Farnell": [
+        "2303124",
+        "1469828",
+        "9238450",
+        "2397670",
+        "2122333"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07681RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF6810V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603681RFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-681-0.1W",
+    "title": "Resistor 681 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "681 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-681HRDKR-ND",
+        "541-681HDKR-ND",
+        "541-681HCT-ND",
+        "P681HDKR-ND",
+        "P681HCT-ND",
+        "311-681HRCT-ND",
+        "311-681HRTR-ND",
+        "541-681HTR-ND",
+        "P681HTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-681-E3",
+        "603-RC0603FR-07681RL",
+        "667-ERJ-3EKF6810V"
+      ],
+      "RS": [
+        "8145577"
+      ],
+      "Newark": [
+        "52K8687",
+        "53W4669",
+        "66R2542",
+        "51W9554"
+      ],
+      "Farnell": [
+        "2303132",
+        "1652896",
+        "2397678",
+        "2122346"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07820RL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF8200V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603820RFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-820-0.1W",
+    "title": "Resistor 820 Ω ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "820 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "541-820HDKR-ND",
+        "311-820HRCT-ND",
+        "541-820HCT-ND",
+        "P820HCT-ND",
+        "P820HDKR-ND",
+        "311-820HRDKR-ND",
+        "P820HTR-ND",
+        "541-820HTR-ND",
+        "311-820HRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-820-E3",
+        "603-RC0603FR-07820RL",
+        "667-ERJ-3EKF8200V"
+      ],
+      "RS": [
+        "8206903",
+        "6790724"
+      ],
+      "Newark": [
+        "64R5363",
+        "98K7438",
+        "42K4033",
+        "66R2598",
+        "90W3225"
+      ],
+      "Farnell": [
+        "1469841",
+        "9238476",
+        "2303136",
+        "2122355"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0402FR-071KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-2RKF1001X"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW04021K00FKED"
+      }
+    ],
+    "cplid": "CPL-RES-0402-1K-0.063W",
+    "title": "Resistor 1 kΩ ±1% 0402 63 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "63 mW",
+      "Resistance": "1 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0402"
+    },
+    "retailers": {
+      "Digikey": [
+        "P1.00KLDKR-ND",
+        "311-1.00KLRCT-ND",
+        "541-1.00KLDKR-ND",
+        "541-1.00KLCT-ND",
+        "P1.00KLCT-ND",
+        "311-1.00KLRDKR-ND",
+        "311-1.00KLRTR-ND",
+        "541-1.00KLTR-ND",
+        "P1.00KLTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-2RKF1001X",
+        "71-CRCW0402-1.0K-E3",
+        "603-RC0402FR-071KL"
+      ],
+      "RS": [
+        "6788872",
+        "6650771",
+        "8121596",
+        "7325242",
+        "1067097"
+      ],
+      "Newark": [
+        "67R9877",
+        "64R5247",
+        "98K7497",
+        "66R1054",
+        "90W2948"
+      ],
+      "Farnell": [
+        "9239235",
+        "2302638",
+        "1469662",
+        "2121603",
+        "2421889",
+        "2397185"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-071KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF1001V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW06031K00FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-1K-0.1W",
+    "title": "Resistor 1 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "1 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1.00KHRDKR-ND",
+        "541-1.00KHDKR-ND",
+        "541-1.00KHCT-ND",
+        "311-1.00KHRCT-ND",
+        "P1.00KHCT-ND",
+        "P1.00KHDKR-ND",
+        "P1.00KHTR-ND",
+        "311-1.00KHRTR-ND",
+        "541-1.00KHTR-ND"
+      ],
+      "Mouser": [
+        "603-RC0603FR-071KL",
+        "71-CRCW0603-1.0K-E3",
+        "667-ERJ-3EKF1001V"
+      ],
+      "RS": [
+        "8206776",
+        "6789875",
+        "8145889"
+      ],
+      "Newark": [
+        "52K8015",
+        "64R5308",
+        "68R0042",
+        "61M5328",
+        "66R1908",
+        "90W3099",
+        "24W2536",
+        "52K8016",
+        "98K7336"
+      ],
+      "Farnell": [
+        "2303145",
+        "9238484",
+        "1469740",
+        "2397690",
+        "2122366",
+        "2421849"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0805FR-071KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-6ENF1001V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW08051K00FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0805-1K-0.125W",
+    "title": "Resistor 1 kΩ ±1% 0805 125 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "125 mW",
+      "Resistance": "1 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0805"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1.00KCRDKR-ND",
+        "311-1.00KCRCT-ND",
+        "P1.00KCCT-ND",
+        "541-1.00KCDKR-ND",
+        "541-1.00KCCT-ND",
+        "P1.00KCDKR-ND",
+        "P1.00KCTR-ND",
+        "541-1.00KCTR-ND",
+        "311-1.00KCRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0805-1.0K-E3",
+        "667-ERJ-6ENF1001V",
+        "603-RC0805FR-071KL"
+      ],
+      "RS": [
+        "8123435",
+        "6790982",
+        "6183583",
+        "7326037",
+        "1067110"
+      ],
+      "Newark": [
+        "64R5369",
+        "68R0225",
+        "82K7536",
+        "90W3241",
+        "66R2815"
+      ],
+      "Farnell": [
+        "2303550",
+        "1469847",
+        "9237496",
+        "2398095",
+        "2123128",
+        "2421935"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC1206FR-071KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-8ENF1001V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW12061K00FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-1206-1K-0.25W",
+    "title": "Resistor 1 kΩ ±1% 1206 250 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "250 mW",
+      "Resistance": "1 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "1206"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1.00KFRDKR-ND",
+        "541-1.00KFCT-ND",
+        "541-1.00KFDKR-ND",
+        "311-1.00KFRCT-ND",
+        "P1.00KFCT-ND",
+        "P1.00KFDKR-ND",
+        "P1.00KFTR-ND",
+        "311-1.00KFRTR-ND",
+        "541-1.00KFTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW1206-1.0K-E3",
+        "603-RC1206FR-071KL",
+        "667-ERJ-8ENF1001V"
+      ],
+      "RS": [
+        "8121809",
+        "6791844",
+        "6180528"
+      ],
+      "Newark": [
+        "64R5430",
+        "68R0290",
+        "66R3736",
+        "90W3547",
+        "53K1780"
+      ],
+      "Farnell": [
+        "9240942",
+        "1469965",
+        "2307294",
+        "2421903",
+        "2398468",
+        "2123890"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-071K2L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF1201V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW06031K20FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-1.2K-0.1W",
+    "title": "Resistor 1.2 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "1.2 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P1.20KHDKR-ND",
+        "311-1.20KHRDKR-ND",
+        "541-1.20KHCT-ND",
+        "P1.20KHCT-ND",
+        "311-1.20KHRCT-ND",
+        "541-1.20KHDKR-ND",
+        "311-1.20KHRTR-ND",
+        "P1.20KHTR-ND",
+        "541-1.20KHTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3EKF1201V",
+        "71-CRCW0603-1.2K-E3",
+        "603-RC0603FR-071K2L"
+      ],
+      "RS": [
+        "8206770",
+        "6789888"
+      ],
+      "Newark": [
+        "64R5314",
+        "68R0044",
+        "66R1916",
+        "90W3116",
+        "52K8026"
+      ],
+      "Farnell": [
+        "2303150",
+        "1469741",
+        "9238492",
+        "2397695",
+        "2122374"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-071K5L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF1501V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW06031K50FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-1.5K-0.1W",
+    "title": "Resistor 1.5 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "1.5 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P1.50KHCT-ND",
+        "311-1.50KHRDKR-ND",
+        "541-1.50KHDKR-ND",
+        "P1.50KHDKR-ND",
+        "311-1.50KHRCT-ND",
+        "541-1.50KHCT-ND",
+        "311-1.50KHRTR-ND",
+        "P1.50KHTR-ND",
+        "541-1.50KHTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3EKF1501V",
+        "71-CRCW0603-1.5K-E3",
+        "603-RC0603FR-071K5L"
+      ],
+      "RS": [
+        "8206789",
+        "6789908"
+      ],
+      "Newark": [
+        "64R5319",
+        "68R0045",
+        "66R1926",
+        "90W3130",
+        "52K8037"
+      ],
+      "Farnell": [
+        "2303156",
+        "1469743",
+        "9238506",
+        "2122385",
+        "2421857",
+        "2397701"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0805JR-072KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF2001V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW06032K00FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-2K-0.1W",
+    "title": "Resistor 2 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "2 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-2.0KARCT-ND",
+        "311-2.0KARDKR-ND",
+        "541-3.60KHCT-ND",
+        "541-3.60KHDKR-ND",
+        "P2.00KHDKR-ND",
+        "P2.00KHCT-ND",
+        "311-2.0KARTR-ND",
+        "541-3.60KHTR-ND",
+        "P2.00KHTR-ND"
+      ],
+      "Mouser": [
+        "603-RC0805JR-072KL",
+        "71-CRCW0603-3.6K-E3",
+        "667-ERJ-3EKF2001V"
+      ],
+      "RS": [
+        "8306292",
+        "8206815",
+        "1058464"
+      ],
+      "Newark": [
+        "65T8366",
+        "68R0263",
+        "97W7288",
+        "66R3614",
+        "43C4310"
+      ],
+      "Farnell": [
+        "2059343",
+        "1652878",
+        "2122435"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0402FR-073K3L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-2RKF3301X"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW04023K30FKED"
+      }
+    ],
+    "cplid": "CPL-RES-0603-3.3K-0.1W",
+    "title": "Resistor 3.3 kΩ ±1% 0402 63 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "63 mW",
+      "Resistance": "3.3 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0402"
+    },
+    "retailers": {
+      "Digikey": [
+        "P3.30KLCT-ND",
+        "311-3.30KLRDKR-ND",
+        "541-3.30KLCT-ND",
+        "541-3.30KLDKR-ND",
+        "P3.30KLDKR-ND",
+        "311-3.30KLRCT-ND",
+        "311-3.30KLRTR-ND",
+        "P3.30KLTR-ND",
+        "541-3.30KLTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0402-3.3K-E3",
+        "603-RC0402FR-073K3L",
+        "667-ERJ-2RKF3301X"
+      ],
+      "RS": [
+        "6789263",
+        "8121663",
+        "7325448"
+      ],
+      "Newark": [
+        "64R5278",
+        "67R9921",
+        "66R1370",
+        "43C3726",
+        "90W3030"
+      ],
+      "Farnell": [
+        "2302691",
+        "9239294",
+        "2140818",
+        "2397235",
+        "2121666"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-073K3L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF3301V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW06033K30FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-3.3K-0.1W",
+    "title": "Resistor 3.3 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "3.3 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P3.30KHCT-ND",
+        "311-3.30KHRCT-ND",
+        "541-3.30KHCT-ND",
+        "541-3.30KHDKR-ND",
+        "P3.30KHDKR-ND",
+        "311-3.30KHRDKR-ND",
+        "311-3.30KHRTR-ND",
+        "541-3.30KHTR-ND",
+        "P3.30KHTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-3.3K-E3",
+        "667-ERJ-3EKF3301V",
+        "603-RC0603FR-073K3L"
+      ],
+      "RS": [
+        "8206843",
+        "6790311"
+      ],
+      "Newark": [
+        "68R0079",
+        "64R5339",
+        "90W3180",
+        "66R2255",
+        "52K8377"
+      ],
+      "Farnell": [
+        "2303173",
+        "9238549",
+        "1469793",
+        "2397719",
+        "2122429",
+        "2421870"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0805FR-073K3L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-6ENF3301V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW08053K30FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-3.3K-0.1W",
+    "title": "Resistor 3.3 kΩ ±1% 0805 125 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "125 mW",
+      "Resistance": "3.3 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0805"
+    },
+    "retailers": {
+      "Digikey": [
+        "P3.30KCDKR-ND",
+        "311-3.30KCRDKR-ND",
+        "541-3.30KCCT-ND",
+        "P3.30KCCT-ND",
+        "311-3.30KCRCT-ND",
+        "541-3.30KCDKR-ND",
+        "311-3.30KCRTR-ND",
+        "541-3.30KCTR-ND",
+        "P3.30KCTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-6ENF3301V",
+        "71-CRCW0805-3.3K-E3",
+        "603-RC0805FR-073K3L"
+      ],
+      "RS": [
+        "6791351",
+        "7326309"
+      ],
+      "Newark": [
+        "64R5400",
+        "68R0241",
+        "90W3414",
+        "66R3162"
+      ],
+      "Farnell": [
+        "2303604",
+        "1469911",
+        "9237682",
+        "2123191",
+        "2398150",
+        "2421958"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC1206FR-073K3L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-8ENF3301V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW12063K30FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-3.3K-0.1W",
+    "title": "Resistor 3.3 kΩ ±1% 1206 250 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "250 mW",
+      "Resistance": "3.3 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "1206"
+    },
+    "retailers": {
+      "Digikey": [
+        "P3.30KFCT-ND",
+        "311-3.30KFRDKR-ND",
+        "541-3.30KFCT-ND",
+        "311-3.30KFRCT-ND",
+        "P3.30KFDKR-ND",
+        "541-3.30KFDKR-ND",
+        "P3.30KFTR-ND",
+        "311-3.30KFRTR-ND",
+        "541-3.30KFTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-8ENF3301V",
+        "71-CRCW1206-3.3K-E3",
+        "603-RC1206FR-073K3L"
+      ],
+      "RS": [
+        "8121896",
+        "6792106",
+        "1118085"
+      ],
+      "Newark": [
+        "90W3832",
+        "74K2547",
+        "42K4964",
+        "48Y4553",
+        "56W0636"
+      ],
+      "Farnell": [
+        "2307629",
+        "1653122",
+        "9240977",
+        "2123954",
+        "2421921",
+        "2398803"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-073K6L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF3601V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW06033K60FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-3.6K-0.1W",
+    "title": "Resistor 3.6 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "3.6 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "541-3.60KHCT-ND",
+        "311-3.60KHRCT-ND",
+        "541-3.60KHDKR-ND",
+        "P3.60KHCT-ND",
+        "P3.60KHDKR-ND",
+        "311-3.60KHRDKR-ND",
+        "P3.60KHTR-ND",
+        "541-3.60KHTR-ND",
+        "311-3.60KHRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-3.6K-E3",
+        "667-ERJ-3EKF3601V",
+        "603-RC0603FR-073K6L"
+      ],
+      "RS": [
+        "6790324",
+        "1229292"
+      ],
+      "Newark": [
+        "68R0080",
+        "53W4605",
+        "51W9479",
+        "43C4310",
+        "66R2260"
+      ],
+      "Farnell": [
+        "1652878",
+        "2303175",
+        "2122435",
+        "2397721"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0402FR-074K7L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-2RKF4701X"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW04024K70FKED"
+      }
+    ],
+    "cplid": "CPL-RES-0402-4.7K-0.063W",
+    "title": "Resistor 4.7 kΩ ±1% 0402 63 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "63 mW",
+      "Resistance": "4.7 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0402"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-4.7KLRDKR-ND",
+        "311-4.7KLRCT-ND",
+        "541-4.70KLDKR-ND",
+        "541-4.70KLCT-ND",
+        "P4.70KLDKR-ND",
+        "P4.70KLCT-ND",
+        "311-4.7KLRTR-ND",
+        "P4.70KLTR-ND",
+        "541-4.70KLTR-ND"
+      ],
+      "Mouser": [
+        "603-RC0402FR-074K7L",
+        "71-CRCW0402-4.7K-E3",
+        "667-ERJ-2RKF4701X"
+      ],
+      "RS": [
+        "6789392",
+        "6650822",
+        "8121685",
+        "7325517"
+      ],
+      "Newark": [
+        "64R5288",
+        "67R9933",
+        "66R1471",
+        "90W3054"
+      ],
+      "Farnell": [
+        "1469712",
+        "9239316",
+        "2302707",
+        "2421897",
+        "2397253",
+        "2121688"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-074K7L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF4701V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW06034K70FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-4.7K-0.1W",
+    "title": "Resistor 4.7 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "4.7 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "541-4.70KHDKR-ND",
+        "541-4.70KHCT-ND",
+        "P4.70KHCT-ND",
+        "P4.70KHDKR-ND",
+        "541-4.70KHTR-ND",
+        "P4.70KHTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3EKF4701V",
+        "71-CRCW0603-4.7K-E3",
+        "603-RC0603FR-134K7L"
+      ],
+      "RS": [
+        "8206865",
+        "6790484",
+        "1065958"
+      ],
+      "Newark": [
+        "68R0133",
+        "64R5349",
+        "85Y8747",
+        "90W3200",
+        "28X3146"
+      ],
+      "Farnell": [
+        "2303181",
+        "1469807",
+        "2397726",
+        "2122450"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0805FR-074K7L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-6ENF4701V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW08054K70FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0805-4.7K-0.125W",
+    "title": "Resistor 4.7 kΩ ±1% 0805 125 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "125 mW",
+      "Resistance": "4.7 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0805"
+    },
+    "retailers": {
+      "Digikey": [
+        "P4.70KCDKR-ND",
+        "311-4.70KCRCT-ND",
+        "541-4.70KCCT-ND",
+        "P4.70KCCT-ND",
+        "311-4.70KCRDKR-ND",
+        "541-4.70KCDKR-ND",
+        "311-4.70KCRTR-ND",
+        "541-4.70KCTR-ND",
+        "P4.70KCTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-6ENF4701V",
+        "71-CRCW0805-4.7K-E3",
+        "603-RC0805FR-074K7L"
+      ],
+      "RS": [
+        "7326378",
+        "8123574",
+        "6791496",
+        "6181408",
+        "1067112"
+      ],
+      "Newark": [
+        "64R5410",
+        "68R0243",
+        "90W3459",
+        "66R3271",
+        "53K0216"
+      ],
+      "Farnell": [
+        "2303623",
+        "9237704",
+        "1469923",
+        "2123212",
+        "2421964"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC1206FR-072K2L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-8ENF4701V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW12064K70FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-1206-4.7K-0.25W",
+    "title": "Resistor 4.7 kΩ ±1% 1206 250 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "250 mW",
+      "Resistance": "4.7 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "1206"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-2.20KFRDKR-ND",
+        "541-4.70KFDKR-ND",
+        "541-4.70KFCT-ND",
+        "P4.70KFCT-ND",
+        "P4.70KFDKR-ND",
+        "311-2.20KFRCT-ND",
+        "311-2.20KFRTR-ND",
+        "541-4.70KFTR-ND",
+        "P4.70KFTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-8ENF4701V",
+        "71-CRCW1206-4.7K-E3",
+        "603-RC1206FR-072K2L"
+      ],
+      "RS": [
+        "8121919",
+        "6792184",
+        "6181240",
+        "1142910"
+      ],
+      "Newark": [
+        "64R5471",
+        "98K7658",
+        "53K2355",
+        "90W3917",
+        "75X0166"
+      ],
+      "Farnell": [
+        "1470013",
+        "9240969",
+        "2307727",
+        "2123974",
+        "2421915",
+        "2398901"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-075K6L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF5601V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW06035K60FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-5.6K-0.1W",
+    "title": "Resistor 5.6 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "5.6 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-5.60KHRDKR-ND",
+        "541-5.60KHDKR-ND",
+        "541-5.60KHCT-ND",
+        "P5.60KHDKR-ND",
+        "P5.60KHCT-ND",
+        "311-5.60KHRCT-ND",
+        "311-5.60KHRTR-ND",
+        "P5.60KHTR-ND",
+        "541-5.60KHTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3EKF5601V",
+        "71-CRCW0603-5.6K-E3",
+        "603-RC0603FR-075K6L"
+      ],
+      "RS": [
+        "6790572"
+      ],
+      "Newark": [
+        "64R5354",
+        "66R2438",
+        "90W3208",
+        "42K3942"
+      ],
+      "Farnell": [
+        "1469820",
+        "9238573",
+        "2303182",
+        "2122460",
+        "2397727"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-076K8L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF6801V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW06036K80FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-6.8K-0.1W",
+    "title": "Resistor 6.8 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "6.8 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P6.80KHDKR-ND",
+        "311-6.80KHRDKR-ND",
+        "541-6.80KHDKR-ND",
+        "541-6.80KHCT-ND",
+        "P6.80KHCT-ND",
+        "311-6.80KHRCT-ND",
+        "P6.80KHTR-ND",
+        "311-6.80KHRTR-ND",
+        "541-6.80KHTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-6.8K-E3",
+        "667-ERJ-3EKF6801V",
+        "603-RC0603FR-076K8L"
+      ],
+      "RS": [
+        "8206899",
+        "6790670"
+      ],
+      "Newark": [
+        "68R0109",
+        "64R5359",
+        "90W3216",
+        "66R2496",
+        "42K3978"
+      ],
+      "Farnell": [
+        "2303185",
+        "9238581",
+        "1469831",
+        "2421883",
+        "2122471",
+        "2397732"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-078K2L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF8201V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW06038K20FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-8.2K-0.1W",
+    "title": "Resistor 8.2 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "8.2 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-8.20KHRCT-ND",
+        "541-8.20KHCT-ND",
+        "541-8.20KHDKR-ND",
+        "311-8.20KHRDKR-ND",
+        "P8.20KHCT-ND",
+        "P8.20KHDKR-ND",
+        "P8.20KHTR-ND",
+        "311-8.20KHRTR-ND",
+        "541-8.20KHTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-8.2K-E3",
+        "667-ERJ-3EKF8201V",
+        "603-RC0603FR-078K2L"
+      ],
+      "RS": [
+        "8206919",
+        "6790759"
+      ],
+      "Newark": [
+        "64R5364",
+        "68R0116",
+        "66R2577",
+        "52K8725",
+        "90W3226"
+      ],
+      "Farnell": [
+        "2303187",
+        "1652902",
+        "9238590",
+        "2122482",
+        "2397734"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0402FR-0710KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-2RKF1002X"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW040210K0FKED"
+      }
+    ],
+    "cplid": "CPL-RES-0402-10K-0.063W",
+    "title": "Resistor 10 kΩ ±1% 0402 63 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "63 mW",
+      "Resistance": "10 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0402"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-10.0KLRCT-ND",
+        "P10.0KLCT-ND",
+        "541-10.0KLCT-ND",
+        "541-10.0KLDKR-ND",
+        "311-10.0KLRDKR-ND",
+        "P10.0KLDKR-ND",
+        "P10.0KLTR-ND",
+        "311-10.0KLRTR-ND",
+        "541-10.0KLTR-ND"
+      ],
+      "Mouser": [
+        "603-RC0402FR-0710KL",
+        "71-CRCW0402-10K-E3",
+        "667-ERJ-2RKF1002X"
+      ],
+      "RS": [
+        "6784697",
+        "6650856",
+        "8121562",
+        "7325246",
+        "1067096"
+      ],
+      "Newark": [
+        "64R5248",
+        "67R9884",
+        "98K7499",
+        "75X0131",
+        "66R1116",
+        "90W2949"
+      ],
+      "Farnell": [
+        "2302739",
+        "1469669",
+        "9239359",
+        "2397284",
+        "2421890",
+        "2121730"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0805FR-0710KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-6ENF1002V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW080510K0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0805-10K-0.125W",
+    "title": "Resistor 10 kΩ ±1% 0805 125 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "125 mW",
+      "Resistance": "10 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0805"
+    },
+    "retailers": {
+      "Digikey": [
+        "P10.0KCCT-ND",
+        "311-10.0KCRCT-ND",
+        "541-10.0KCDKR-ND",
+        "541-10.0KCCT-ND",
+        "311-10.0KCRDKR-ND",
+        "P10.0KCDKR-ND",
+        "P10.0KCTR-ND",
+        "541-10.0KCTR-ND",
+        "311-10.0KCRTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-6ENF1002V",
+        "71-CRCW0805-10K-E3",
+        "603-RC0805FR-0710KL"
+      ],
+      "RS": [
+        "8123375",
+        "6790816",
+        "6185163",
+        "7326031",
+        "1067108"
+      ],
+      "Newark": [
+        "64R5370",
+        "68R0229",
+        "05M4535",
+        "66R2896",
+        "90W3242"
+      ],
+      "Farnell": [
+        "1469856",
+        "9237755",
+        "2303654",
+        "2398200",
+        "2421936",
+        "2123255"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0710KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF1002V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060310K0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-10K-0.1W",
+    "title": "Resistor 10 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "10 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P10.0KHDKR-ND",
+        "311-10.0KHRCT-ND",
+        "541-10.0KHDKR-ND",
+        "541-10.0KHCT-ND",
+        "P10.0KHCT-ND",
+        "311-10.0KHRDKR-ND",
+        "311-10.0KHRTR-ND",
+        "541-10.0KHTR-ND",
+        "P10.0KHTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-10K-E3",
+        "603-RC0603FR-0710KL",
+        "667-ERJ-3EKF1002V"
+      ],
+      "RS": [
+        "8206742",
+        "6789667",
+        "1051156"
+      ],
+      "Newark": [
+        "64R5309",
+        "68R0049",
+        "52K8062",
+        "61M5335",
+        "52K8063",
+        "66R1987",
+        "90W3100"
+      ],
+      "Farnell": [
+        "2303192",
+        "9238603",
+        "1469748",
+        "2397737",
+        "2421850",
+        "2122493"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC1206FR-0710KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-8ENF1002V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW120610K0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-1206-10K-0.25W",
+    "title": "Resistor 10 kΩ ±1% 1206 250 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "250 mW",
+      "Resistance": "10 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "1206"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-10.0KFRDKR-ND",
+        "541-10.0KFCT-ND",
+        "541-10.0KFDKR-ND",
+        "311-10.0KFRCT-ND",
+        "P10.0KFDKR-ND",
+        "P10.0KFCT-ND",
+        "311-10.0KFRTR-ND",
+        "P10.0KFTR-ND",
+        "541-10.0KFTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-8ENF1002V",
+        "71-CRCW1206-10K-E3",
+        "603-RC1206FR-0710KL"
+      ],
+      "RS": [
+        "8121789",
+        "6791765",
+        "1117946"
+      ],
+      "Newark": [
+        "64R5431",
+        "68R0292",
+        "98K7621",
+        "90W3548"
+      ],
+      "Farnell": [
+        "1469970",
+        "9241000",
+        "2124017",
+        "2398469",
+        "2421904"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0712KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF1202V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060312K0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-12K-0.1W",
+    "title": "Resistor 12 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "12 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P12.0KHDKR-ND",
+        "311-12.0KHRCT-ND",
+        "541-12.0KHDKR-ND",
+        "P12.0KHCT-ND",
+        "311-12.0KHRDKR-ND",
+        "541-12.0KHCT-ND",
+        "541-12.0KHTR-ND",
+        "311-12.0KHRTR-ND",
+        "P12.0KHTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3EKF1202V",
+        "71-CRCW0603-12K-E3",
+        "603-RC0603FR-0712KL"
+      ],
+      "RS": [
+        "8206758",
+        "6789724",
+        "1052999"
+      ],
+      "Newark": [
+        "64R5315",
+        "68R0054",
+        "66R2020",
+        "52K8104",
+        "90W3117"
+      ],
+      "Farnell": [
+        "2303195",
+        "1652834",
+        "9238611",
+        "2397740",
+        "2122501"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0715KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF1502V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060315K0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-15K-0.1W",
+    "title": "Resistor 15 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "15 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-15.0KHRDKR-ND",
+        "311-15.0KHRCT-ND",
+        "P15.0KHCT-ND",
+        "P15.0KHDKR-ND",
+        "541-15.0KHCT-ND",
+        "541-15.0KHDKR-ND",
+        "P15.0KHTR-ND",
+        "541-15.0KHTR-ND",
+        "311-15.0KHRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-15K-E3",
+        "667-ERJ-3EKF1502V",
+        "603-RC0603FR-0715KL"
+      ],
+      "RS": [
+        "8206760",
+        "6789793",
+        "1053110"
+      ],
+      "Newark": [
+        "68R0059",
+        "64R5320",
+        "66R2060",
+        "42K3721",
+        "24W2673",
+        "90W3131"
+      ],
+      "Farnell": [
+        "2304702",
+        "2303197",
+        "1469758",
+        "2397743",
+        "2122513"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0722KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF2202V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060322K0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-22K-0.1W",
+    "title": "Resistor 22 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "22 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P22.0KHDKR-ND",
+        "311-22.0KHRCT-ND",
+        "541-22.0KHDKR-ND",
+        "P22.0KHCT-ND",
+        "311-22.0KHRDKR-ND",
+        "541-22.0KHCT-ND",
+        "P22.0KHTR-ND",
+        "311-22.0KHRTR-ND",
+        "541-22.0KHTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3EKF2202V",
+        "71-CRCW0603-22K-E3",
+        "603-RC0603FR-0722KL"
+      ],
+      "RS": [
+        "8206805",
+        "6790005"
+      ],
+      "Newark": [
+        "64R5330",
+        "68R0072",
+        "66R2186",
+        "90W3159",
+        "52K8287"
+      ],
+      "Farnell": [
+        "2303201",
+        "1469779",
+        "9238646",
+        "2122532",
+        "2397747",
+        "2421865"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0733K2L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF3322V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060333K2FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-33.2K-0.1W",
+    "title": "Resistor 33.2 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "33.2 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-33.2KHRCT-ND",
+        "541-33.2KHDKR-ND",
+        "541-33.2KHCT-ND",
+        "P33.2KHCT-ND",
+        "P33.2KHDKR-ND",
+        "311-33.2KHRDKR-ND",
+        "311-33.2KHRTR-ND",
+        "P33.2KHTR-ND",
+        "541-33.2KHTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-33.2K-E3",
+        "667-ERJ-3EKF3322V",
+        "603-RC0603FR-0733K2L"
+      ],
+      "RS": [
+        "1229281"
+      ],
+      "Newark": [
+        "65T8431",
+        "66R2313",
+        "97W7353",
+        "42K3861"
+      ],
+      "Farnell": [
+        "2059456"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0747KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF4702V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060347K0FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-47K-0.1W",
+    "title": "Resistor 47 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "47 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P47.0KHDKR-ND",
+        "311-47.0KHRDKR-ND",
+        "541-47.0KHCT-ND",
+        "P47.0KHCT-ND",
+        "311-47.0KHRCT-ND",
+        "541-47.0KHDKR-ND",
+        "311-47.0KHRTR-ND",
+        "P47.0KHTR-ND",
+        "541-47.0KHTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-47K-E3",
+        "603-RC0603FR-0747KL",
+        "667-ERJ-3EKF4702V"
+      ],
+      "RS": [
+        "8206855",
+        "6790425"
+      ],
+      "Newark": [
+        "64R5350",
+        "26M6759",
+        "90W3201",
+        "24W3000"
+      ],
+      "Farnell": [
+        "9238689",
+        "1469811",
+        "2303213",
+        "2397759",
+        "2421877",
+        "2122577"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0756K2L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF5622V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060356K2FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-56.2K-0.1W",
+    "title": "Resistor 56.2 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "56.2 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-56.2KHRDKR-ND",
+        "541-56.2KHDKR-ND",
+        "541-56.2KHCT-ND",
+        "P56.2KHCT-ND",
+        "P56.2KHDKR-ND",
+        "311-56.2KHRCT-ND",
+        "P56.2KHTR-ND",
+        "541-56.2KHTR-ND",
+        "311-56.2KHRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-56.2K-E3",
+        "603-RC0603FR-0756K2L",
+        "667-ERJ-3EKF5622V"
+      ],
+      "RS": [
+        "1229362"
+      ],
+      "Newark": [
+        "65T8492",
+        "42K3963",
+        "66R2475",
+        "97W7411",
+        "24W3055"
+      ],
+      "Farnell": [
+        "1469827",
+        "2122588"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0768K1L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF6812V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060368K1FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-68.1K-0.1W",
+    "title": "Resistor 68.1 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "68.1 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "541-68.1KHDKR-ND",
+        "311-68.1KHRCT-ND",
+        "541-68.1KHCT-ND",
+        "311-68.1KHRDKR-ND",
+        "P68.1KHCT-ND",
+        "P68.1KHDKR-ND",
+        "P68.1KHTR-ND",
+        "541-68.1KHTR-ND",
+        "311-68.1KHRTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3EKF6812V",
+        "603-RC0603FR-0768K1L",
+        "71-CRCW0603-68.1K-E3"
+      ],
+      "RS": [
+        "6790642",
+        "1229385"
+      ],
+      "Newark": [
+        "65T8511",
+        "27W4333",
+        "97W7430",
+        "66R2536",
+        "42K3998"
+      ],
+      "Farnell": [
+        "2138482",
+        "2122599"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-0782K5L"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF8252V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW060382K5FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-82.5K-0.1W",
+    "title": "Resistor 82.5 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "82.5 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-82.5KHRCT-ND",
+        "311-82.5KHRDKR-ND",
+        "P82.5KHCT-ND",
+        "541-82.5KHDKR-ND",
+        "541-82.5KHCT-ND",
+        "P82.5KHDKR-ND",
+        "P82.5KHTR-ND",
+        "541-82.5KHTR-ND",
+        "311-82.5KHRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-82.5K-E3",
+        "667-ERJ-3EKF8252V",
+        "603-RC0603FR-0782K5L"
+      ],
+      "RS": [
+        "6790730",
+        "1140683"
+      ],
+      "Newark": [
+        "65T8532",
+        "66R2594",
+        "42K4032",
+        "97W7451"
+      ],
+      "Farnell": [
+        "2059489",
+        "1469840",
+        "2122609"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0402FR-07100KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-2RKF1003X"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0402100KFKED"
+      }
+    ],
+    "cplid": "CPL-RES-0402-100K-0.063W",
+    "title": "Resistor 100 kΩ ±1% 0402 63 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "63 mW",
+      "Resistance": "100 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0402"
+    },
+    "retailers": {
+      "Digikey": [
+        "P100KLDKR-ND",
+        "311-100KLRCT-ND",
+        "541-100KLCT-ND",
+        "311-100KLRDKR-ND",
+        "P100KLCT-ND",
+        "541-100KLDKR-ND",
+        "P100KLTR-ND",
+        "541-100KLTR-ND",
+        "311-100KLRTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-2RKF1003X",
+        "71-CRCW0402-100K-E3",
+        "603-RC0402FR-07100KL"
+      ],
+      "RS": [
+        "6784684",
+        "8121565",
+        "7325255",
+        "1067095"
+      ],
+      "Newark": [
+        "64R5249",
+        "67R9887",
+        "90W2950",
+        "66R1125"
+      ],
+      "Farnell": [
+        "9239472",
+        "2302839",
+        "1469671",
+        "2421891",
+        "2397384",
+        "2121857"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07100KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF1003V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603100KFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-100K-0.1W",
+    "title": "Resistor 100 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "100 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-100KHRCT-ND",
+        "541-100KHCT-ND",
+        "541-100KHDKR-ND",
+        "311-100KHRDKR-ND",
+        "P100KHCT-ND",
+        "P100KHDKR-ND",
+        "P100KHTR-ND",
+        "541-100KHTR-ND",
+        "311-100KHRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-100K-E3",
+        "603-RC0603FR-07100KL",
+        "667-ERJ-3EKF1003V"
+      ],
+      "RS": [
+        "8206745",
+        "6789673",
+        "8145889",
+        "1051155"
+      ],
+      "Newark": [
+        "64R5310",
+        "68R0051",
+        "98K7340",
+        "66R1996",
+        "90W3101"
+      ],
+      "Farnell": [
+        "1469649",
+        "9238727",
+        "2303232",
+        "2122619",
+        "2421851",
+        "2397776"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0805FR-07100KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-6ENF1003V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW1206100KFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0805-100K-0.125W",
+    "title": "Resistor 100 kΩ ±1% 0805 125 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "125 mW",
+      "Resistance": "100 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0805"
+    },
+    "retailers": {
+      "Digikey": [
+        "P100KCCT-ND",
+        "311-100KCRDKR-ND",
+        "541-100KFDKR-ND",
+        "541-100KFCT-ND",
+        "311-100KCRCT-ND",
+        "P100KCDKR-ND",
+        "P100KCTR-ND",
+        "311-100KCRTR-ND",
+        "541-100KFTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW1206-100K-E3",
+        "667-ERJ-6ENF1003V",
+        "603-RC0805FR-07100KL"
+      ],
+      "RS": [
+        "8121776",
+        "6791761",
+        "7326040",
+        "1067107"
+      ],
+      "Newark": [
+        "64R5371",
+        "68R0231",
+        "53K1920",
+        "05M4536",
+        "45Y6904",
+        "66R2905",
+        "90W3243",
+        "53K1921"
+      ],
+      "Farnell": [
+        "2303757",
+        "1469975",
+        "9237879",
+        "2421937",
+        "2398303",
+        "2124144"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC1206FR-07100KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-8ENF1003V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0805100KFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-1206-100K-0.25W",
+    "title": "Resistor 100 kΩ ±1% 1206 250 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "250 mW",
+      "Resistance": "100 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "1206"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-100KFRCT-ND",
+        "311-100KFRDKR-ND",
+        "541-100KCDKR-ND",
+        "541-100KCCT-ND",
+        "P100KFCT-ND",
+        "P100KFDKR-ND",
+        "P100KFTR-ND",
+        "311-100KFRTR-ND",
+        "541-100KCTR-ND"
+      ],
+      "Mouser": [
+        "603-RC1206FR-07100KL",
+        "71-CRCW0805-100K-E3",
+        "667-ERJ-8ENF1003V"
+      ],
+      "RS": [
+        "8123350",
+        "6790803"
+      ],
+      "Newark": [
+        "64R5432",
+        "68R0294",
+        "98K7623",
+        "66R3827",
+        "90W3549"
+      ],
+      "Farnell": [
+        "1469860",
+        "9241060",
+        "2307296",
+        "2398470",
+        "2123382"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07120KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF1203V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603120KFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-120K-0.1W",
+    "title": "Resistor 120 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "120 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P120KHCT-ND",
+        "311-120KHRCT-ND",
+        "541-120KHCT-ND",
+        "541-120KHDKR-ND",
+        "P120KHDKR-ND",
+        "311-120KHRDKR-ND",
+        "311-120KHRTR-ND",
+        "P120KHTR-ND",
+        "541-120KHTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-120K-E3",
+        "667-ERJ-3EKF1203V",
+        "603-RC0603FR-07120KL"
+      ],
+      "RS": [
+        "6789715"
+      ],
+      "Newark": [
+        "64R5316",
+        "26M6750",
+        "72M6822",
+        "90W3118",
+        "66R2028"
+      ],
+      "Farnell": [
+        "9238735",
+        "2138506",
+        "2397782",
+        "2122628"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07150KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF1503V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603150KFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-150K-0.1W",
+    "title": "Resistor 150 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "150 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P150KHDKR-ND",
+        "311-150KHRDKR-ND",
+        "541-150KHCT-ND",
+        "P150KHCT-ND",
+        "311-150KHRCT-ND",
+        "541-150KHDKR-ND",
+        "311-150KHRTR-ND",
+        "541-150KHTR-ND",
+        "P150KHTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3EKF1503V",
+        "71-CRCW0603-150K-E3",
+        "603-RC0603FR-07150KL"
+      ],
+      "RS": [
+        "6789780"
+      ],
+      "Newark": [
+        "64R5321",
+        "68R0060",
+        "90W3132",
+        "66R2066",
+        "52K8159"
+      ],
+      "Farnell": [
+        "9238743",
+        "2303240",
+        "1469759",
+        "2122639",
+        "2397786",
+        "2421861"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07220KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF2203V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603220KFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-220K-0.1W",
+    "title": "Resistor 220 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "220 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P220KHCT-ND",
+        "311-220KHRDKR-ND",
+        "541-220KHCT-ND",
+        "541-220KHDKR-ND",
+        "311-220KHRCT-ND",
+        "P220KHDKR-ND",
+        "P220KHTR-ND",
+        "311-220KHRTR-ND",
+        "541-220KHTR-ND"
+      ],
+      "Mouser": [
+        "667-ERJ-3EKF2203V",
+        "71-CRCW0603-220K-E3",
+        "603-RC0603FR-07220KL"
+      ],
+      "RS": [
+        "6789986",
+        "1058479"
+      ],
+      "Newark": [
+        "64R5331",
+        "68R0074",
+        "90W3160",
+        "66R2192"
+      ],
+      "Farnell": [
+        "9238760",
+        "1469783",
+        "2397798",
+        "2122659",
+        "2421866"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07332KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF3323V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603332KFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-332K-0.1W",
+    "title": "Resistor 332 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "332 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-332KHRCT-ND",
+        "541-332KHDKR-ND",
+        "P332KHCT-ND",
+        "P332KHDKR-ND",
+        "541-332KHCT-ND",
+        "311-332KHRDKR-ND",
+        "541-332KHTR-ND",
+        "P332KHTR-ND",
+        "311-332KHRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-332K-E3",
+        "667-ERJ-3EKF3323V",
+        "603-RC0603FR-07332KL"
+      ],
+      "RS": [
+        "6790229"
+      ],
+      "Newark": [
+        "65T8432",
+        "27W4222",
+        "66R2318",
+        "97W7354"
+      ],
+      "Farnell": [
+        "2059518",
+        "2138548",
+        "2122683"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07470KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF4703V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603470KFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-470K-0.1W",
+    "title": "Resistor 470 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "470 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "P470KHDKR-ND",
+        "311-470KHRDKR-ND",
+        "541-470KHCT-ND",
+        "P470KHCT-ND",
+        "541-470KHDKR-ND",
+        "311-470KHRCT-ND",
+        "541-470KHTR-ND",
+        "311-470KHRTR-ND",
+        "P470KHTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-470K-E3",
+        "667-ERJ-3EKF4703V",
+        "603-RC0603FR-07470KL"
+      ],
+      "RS": [
+        "6790415",
+        "1229335"
+      ],
+      "Newark": [
+        "64R5351",
+        "68R0098",
+        "42K3929",
+        "66R2421",
+        "90W3202"
+      ],
+      "Farnell": [
+        "2303289",
+        "9238808",
+        "1469814",
+        "2122703",
+        "2421878",
+        "2397835"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07562KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF5623V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603562KFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-562K-0.1W",
+    "title": "Resistor 562 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "562 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-562KHRCT-ND",
+        "541-562KHDKR-ND",
+        "541-562KHCT-ND",
+        "P562KHCT-ND",
+        "P562KHDKR-ND",
+        "311-562KHRDKR-ND",
+        "541-562KHTR-ND",
+        "311-562KHRTR-ND",
+        "P562KHTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-562K-E3",
+        "603-RC0603FR-07562KL",
+        "667-ERJ-3EKF5623V"
+      ],
+      "RS": [
+        "8145460"
+      ],
+      "Newark": [
+        "42K3965",
+        "53W4647",
+        "66R2480",
+        "52K8623",
+        "51W9529"
+      ],
+      "Farnell": [
+        "2138576",
+        "2397842",
+        "2122714"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07681KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF6813V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603681KFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-681K-0.1W",
+    "title": "Resistor 681 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "681 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-681KHRCT-ND",
+        "541-681KHCT-ND",
+        "541-681KHDKR-ND",
+        "311-681KHRDKR-ND",
+        "P681KHCT-ND",
+        "P681KHDKR-ND",
+        "P681KHTR-ND",
+        "311-681KHRTR-ND",
+        "541-681KHTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-681K-E3",
+        "667-ERJ-3EKF6813V",
+        "603-RC0603FR-07681KL"
+      ],
+      "RS": [
+        "6790636",
+        "8145574"
+      ],
+      "Newark": [
+        "53W4670",
+        "52K8685",
+        "51W9555",
+        "66R2541"
+      ],
+      "Farnell": [
+        "2303306",
+        "2397852"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-07825KL"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF8253V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW0603825KFKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-825K-0.1W",
+    "title": "Resistor 825 kΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "825 kΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-825KHRCT-ND",
+        "P825KHDKR-ND",
+        "P825KHCT-ND",
+        "311-825KHRDKR-ND",
+        "541-825KHDKR-ND",
+        "541-825KHCT-ND",
+        "311-825KHRTR-ND",
+        "P825KHTR-ND",
+        "541-825KHTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-825K-E3",
+        "667-ERJ-3EKF8253V",
+        "603-RC0603FR-07825KL"
+      ],
+      "RS": [
+        "6790728P",
+        "6790728",
+        "6790730"
+      ],
+      "Newark": [
+        "66R2599",
+        "52K8745",
+        "42K4034",
+        "51W9574",
+        "53W4683"
+      ],
+      "Farnell": [
+        "2303316",
+        "2138598",
+        "2122736",
+        "2397861"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Yageo",
+        "part": "RC0603FR-071ML"
+      },
+      {
+        "manufacturer": "Panasonic",
+        "part": "ERJ-3EKF1004V"
+      },
+      {
+        "manufacturer": "Vishay",
+        "part": "CRCW06031M00FKEA"
+      }
+    ],
+    "cplid": "CPL-RES-0603-1M-0.1W",
+    "title": "Resistor 1 MegaΩ ±1% 0603 100 mW",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "1 MegaΩ",
+      "Resistance Tolerance": "±1%",
+      "Size": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "311-1.00MHRDKR-ND",
+        "311-1.00MHRCT-ND",
+        "541-1.00MHCT-ND",
+        "541-1.00MHDKR-ND",
+        "P1.00MHCT-ND",
+        "P1.00MHDKR-ND",
+        "P1.00MHTR-ND",
+        "541-1.00MHTR-ND",
+        "311-1.00MHRTR-ND"
+      ],
+      "Mouser": [
+        "71-CRCW0603-1.0M-E3",
+        "603-RC0603FR-071ML",
+        "667-ERJ-3EKF1004V"
+      ],
+      "RS": [
+        "8206786",
+        "6789932",
+        "1051157"
+      ],
+      "Newark": [
+        "64R5311",
+        "68R0047",
+        "98K7342",
+        "66R1940",
+        "90W3102"
+      ],
+      "Farnell": [
+        "1469746",
+        "9238840",
+        "2303325",
+        "2397871",
+        "2421852",
+        "2122746"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Bourns",
+        "part": "TC33X-2-103E"
+      },
+      {
+        "manufacturer": "BI Technologies",
+        "part": "35WR10KLFTR"
+      },
+      {
+        "manufacturer": "BI Technologies",
+        "part": "35WR10KLFTR"
+      }
+    ],
+    "cplid": "CPL-RES-POT-10K-0.1W",
+    "title": "Potentiometer",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "100 mW",
+      "Resistance": "10 kΩ",
+      "Resistance Tolerance": "±25%",
+      "Size": "3 mm"
+    },
+    "retailers": {
+      "Digikey": [
+        "TC33X-103EDKR-ND",
+        "987-1694-1-ND",
+        "987-1694-6-ND",
+        "TC33X-103ECT-ND",
+        "987-1694-2-ND",
+        "TC33X-103ETR-ND"
+      ],
+      "Mouser": [
+        "858-35WR10KLFTR",
+        "652-TC33X-2-103E"
+      ],
+      "RS": [
+        "4617135"
+      ],
+      "Newark": [
+        "46M2527",
+        "97M3836",
+        "28X2711",
+        "60H9648"
+      ],
+      "Farnell": [
+        "1689863"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Bourns",
+        "part": "CAY16-221J4LF"
+      }
+    ],
+    "cplid": "CPL-ARR-1206-220OHM-0.062W",
+    "title": "Resistor Array 220 Ω 1206 62 mW x4",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "62 mW",
+      "Resistance": "220 Ω",
+      "Resistance Tolerance": "±5%",
+      "Size": "1206"
+    },
+    "retailers": {
+      "Digikey": [
+        "CAY16-221J4LFDKR-ND",
+        "CAY16-221J4LFCT-ND",
+        "CAY16-221J4LFTR-ND"
+      ],
+      "Mouser": [
+        "652-CAY16-221J4LF"
+      ],
+      "RS": [
+        "5225636"
+      ],
+      "Newark": [
+        "06X4919",
+        "02J1136"
+      ],
+      "Farnell": [
+        "2321743"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Bourns",
+        "part": "CAY16-102J4LF"
+      }
+    ],
+    "cplid": "CPL-ARR-1206-1KOHM-0.062W",
+    "title": "Resistor Array 1 kΩ 1206 62 mW x4",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "62 mW",
+      "Resistance": "1 kΩ",
+      "Resistance Tolerance": "±5%",
+      "Size": "1206"
+    },
+    "retailers": {
+      "Digikey": [
+        "CAY16-102J4LFCT-ND",
+        "CAY16-102J4LFDKR-ND",
+        "CAY16-102J4LFTR-ND"
+      ],
+      "Mouser": [
+        "652-CAY16-102J4LF"
+      ],
+      "RS": [
+        "5225579"
+      ],
+      "Newark": [
+        "96M0890",
+        "61J4751"
+      ],
+      "Farnell": [
+        "1770133"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Bourns",
+        "part": "CAY16-103J4LF"
+      }
+    ],
+    "cplid": "CPL-ARR-1206-10KOHM-0.062W",
+    "title": "Resistor Array 10 kΩ 1206 62 mW x4",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "62 mW",
+      "Resistance": "10 kΩ",
+      "Resistance Tolerance": "±5%",
+      "Size": "1206"
+    },
+    "retailers": {
+      "Digikey": [
+        "CAY16-103J4LFDKR-ND",
+        "CAY16-103J4LFCT-ND",
+        "CAY16-103J4LFTR-ND"
+      ],
+      "Mouser": [
+        "652-CAY16-103J4LF"
+      ],
+      "RS": [
+        "5225585"
+      ],
+      "Newark": [
+        "02J1097",
+        "84W7218"
+      ],
+      "Farnell": [
+        "1770137",
+        "2467557"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Ohmite",
+        "part": "MCS1632R050FER"
+      },
+      {
+        "manufacturer": "Vishay Dale",
+        "part": "WSLP1206R0500FEA"
+      }
+    ],
+    "cplid": "CPL-RES-1206-0.05-1W",
+    "title": "Resistor 0.05 Ω ±1% 1206 1W",
+    "extravals": {
+      "Mounting": "SMD",
+      "Power Rating": "1W",
+      "Resistance": "0.05 Ω",
+      "Resistance Tolerance": "±1%",
+      "Size": "1206"
+    },
+    "retailers": {
+      "Digikey": [
+        "WSLP-.05DKR-ND",
+        "MCS1632R050FERCT-ND",
+        "WSLP-.05CT-ND",
+        "MCS1632R050FERDKR-ND",
+        "WSLP-.05TR-ND",
+        "MCS1632R050FERTR-ND"
+      ],
+      "Mouser": [
+        "71-WSLP1206R0500FEA",
+        "588-MCS1632R050FER"
+      ],
+      "RS": [
+        "8933589",
+        "6836215"
+      ],
+      "Newark": [
+        "63R6364",
+        "28X3249",
+        "28X3111"
+      ],
+      "Farnell": [
+        "2364014",
+        "2420763",
+        "2448999"
+      ]
+    }
+  }
+]
