@@ -8,7 +8,7 @@ let jpmIgnore = fs.readFileSync('src/firefox/.jpmignore');
 
 let dir = path.dirname(process.argv[2]);
 
-let getDeps = function(filePath) {
+function getDeps(filePath) {
     let list = precinct.paperwork(filePath);
     let deps = [];
     for (let i = 0; i < list.length; i++) {
