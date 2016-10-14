@@ -52,11 +52,12 @@ Check the [roadmap](#roadmap) for more details on planned features.
 ![][eagle_bom_export.png]
 
 1. In the schematic window, select "File -> Export -> BOM". Select "List Type" values and "Output Format" CSV (see image) and press save.
-2. Open the `.csv` in a spreadsheet program (LibreOffice, Excel). Select a semi-colon seperator when importing.
-3. Select everything in your spreadsheet program, copy and paste into the extension. 
-4. Press "complete" in the extension, wait till it's done and then press copy.
-5. Open a new spreadsheet and paste into it. Save it as tab-seperated values, with a `.tsv` extension and UTF-8 encoding.
-6. Check over all the part numbers and make sure they are correct. Put them into your shopping cart using the extension to confirm they have the right minimum order quantity etc.
+1. Open the `.csv` in a spreadsheet program (LibreOffice, Excel). Select a semi-colon seperator when importing.
+1. Adjust the description column to be more informative, e.g. "10uf 0603 X7R" for a capcitor or "1k 0805" for a resistor or the MPN for ICs and transistors. The description will be used for auto-completing.
+1. Select everything in your spreadsheet program, copy and paste into the extension. 
+1. Press "complete" in the extension, wait till it's done and then press copy.
+1. Open a new spreadsheet and paste into it. Save it as tab-seperated values, with a `.tsv` extension and UTF-8 encoding.
+1. Check over all the part numbers and make sure they are correct. Put them into your shopping cart using the extension to confirm they have the right minimum order quantity etc.
 
 #### KiCad
 
