@@ -54,12 +54,14 @@ function getResistors(term) {
         return combine([])
     }
     let results = resistors.slice()
+    let n_matchable_terms = 0
 
     function match(regex, f) {
         const match = regex.exec(term)
         if (match != null) {
             const value = match[0]
-            term = term.replace(value, '')
+            term = term.replace(RegExp(value, 'g'), '')
+            n_matchable_terms += 1
             return results.filter(f.bind(null, value))
         }
         return results
@@ -67,19 +69,19 @@ function getResistors(term) {
 
     //1 Ohm style
     results = match(/\d+\.?\d* ?(ohm|Ω|Ω)/i, (value, r) => {
-        let v = value.split(' ').join('')
+        const v = value.split(' ').join('')
         return Qty(r.extravals.Resistance).eq(Qty(v))
     })
 
     //1k5 style
     results = match(/\d+(k|m)\d+/i, (value, r) => {
-        let v = resistorData.notationToValue(value) + ' ohm'
+        const v = resistorData.notationToValue(value) + ' ohm'
         return Qty(r.extravals.Resistance).eq(Qty(v))
     })
 
     //1.5k style
     results = match(/\d*\.?\d*(k|m)/i, (value, r) => {
-        let v = value + 'ohm'
+        const v = value + 'ohm'
         return Qty(r.extravals.Resistance).eq(Qty(v))
     })
 
@@ -95,7 +97,7 @@ function getResistors(term) {
         return Qty(c.extravals['Power Rating']).gte(Qty(rating))
     })
 
-    if (results.length > 1 && term.trim() !== '') {
+    if (n_matchable_terms < 2 && term.trim() !== '') {
         const descriptions = results.map(describe)
         results = fuzzy.filter(term, descriptions).map(r => results[r.index])
     }
@@ -108,22 +110,25 @@ function getCapacitors(term) {
         return combine([])
     }
     let results = capacitors.slice()
+    let n_matchable_terms = 0
 
     function match(regex, f) {
         const match = regex.exec(term)
         if (match != null) {
             const value = match[0]
             term = term.replace(value, '')
+            n_matchable_terms += 1
             return results.filter(f.bind(null, value))
         }
         return results
     }
 
-    results = match(/\d*\.?\d* ?(p|n|u|µ)F/i, (value, c) => {
+
+    results = match(/\d*\.?\d* ?(p|n|u|µ)F /i, (value, c) => {
         return Qty(c.extravals.Capacitance).eq(Qty(value))
     })
 
-    results = match(/\d*\.?\d* ?(p|n|u|µ)/i, (value, c) => {
+    results = match(/\d*\.?\d+ ?(p|n|u|µ) /i, (value, c) => {
         return Qty(c.extravals.Capacitance).eq(Qty(value + 'F'))
     })
 
@@ -139,12 +144,13 @@ function getCapacitors(term) {
         return c.extravals.Size === size
     })
 
+
     results = match(/(X7R|X5R|C0G|NP0)/i, (characteristic, c) => {
         return RegExp(characteristic).test(c.extravals.Characteristic)
     })
 
 
-    if (results.length > 1 && term.trim() !== '') {
+    if (n_matchable_terms < 2 && term.trim() !== '') {
         const descriptions = results.map(describe)
         results = fuzzy.filter(term, descriptions).map(r => results[r.index])
     }

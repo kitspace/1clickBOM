@@ -106,6 +106,7 @@ function _auto_complete(search_engine, lines, depth) {
                         return {line, queries}
                     }.bind(null, line, queries))
                     .catch(function (e) {
+                        console.error(e)
                         return {line, queries}
                     }.bind(null, line, queries))
             }
