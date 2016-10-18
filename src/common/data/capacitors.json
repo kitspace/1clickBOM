@@ -17,7 +17,7 @@
       "Characteristic": "C0G/NP0",
       "Dielectric Material": "Ceramic Multilayer",
       "Size": "0402",
-      "Tolerance": "±0.25pF",
+      "Tolerance": "±25%",
       "Voltage Rating (DC)": "50 V"
     },
     "retailers": {
@@ -271,7 +271,7 @@
       "Characteristic": "C0G/NP0",
       "Dielectric Material": "Ceramic Multilayer",
       "Size": "0603",
-      "Tolerance": "±0.25pF",
+      "Tolerance": "±25%",
       "Voltage Rating (DC)": "50 V"
     },
     "retailers": {
