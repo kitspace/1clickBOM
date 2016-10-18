@@ -293,3 +293,11 @@ asyncTest('Auto complete', function() {
         start()
     })
 })
+
+asyncTest('Auto complete returns on empty result', function() {
+    let query = 'C Small 0.1uF Unpolarized capacitor 1206 HandSoldering'
+    octopart.search(query, retailer_list).then(new_lines => {
+        ok(new_lines.partNumbers.length == 0)
+        start()
+    })
+})

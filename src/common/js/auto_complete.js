@@ -115,6 +115,10 @@ function _auto_complete(search_engine, lines, depth) {
                     p.then(search)
                 }
             }
+            p.catch(e => {
+                console.error(e)
+                return {retailers:{}, partNumbers:[]}
+            })
             result.push(p.then(({line, queries}) => Promise.resolve(line)))
         }
         return result
