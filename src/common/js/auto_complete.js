@@ -84,28 +84,30 @@ function _auto_complete(search_engine, lines, depth) {
                     return Promise.resolve({line, queries})
                 }
                 queries.push(query)
-                let p = search_engine.search(query, retailers, other_fields)
-                return p.then((function(line, queries, result) {
-                    line.partNumbers = line.partNumbers.concat(result.partNumbers)
-                    for (let j = 0; j < retailer_list.length; j++) {
-                        let retailer = retailer_list[j]
-                        if (result.retailers[retailer] != null) {
-                            //replace reeled components with non-reeled for Farnell
-                            if (retailer === 'Farnell' &&
-                            /RL$/.test(result.retailers[retailer])) {
-                                result.retailers[retailer] =
-                                    result.retailers[retailer].replace('RL','')
+                return search_engine.search(query, retailers, other_fields)
+                    .then(function(line, queries, result) {
+                        line.partNumbers = line.partNumbers.concat(result.partNumbers)
+                        for (let j = 0; j < retailer_list.length; j++) {
+                            let retailer = retailer_list[j]
+                            if (result.retailers[retailer] != null) {
+                                //replace reeled components with non-reeled for Farnell
+                                if (retailer === 'Farnell' &&
+                                /RL$/.test(result.retailers[retailer])) {
+                                    result.retailers[retailer] =
+                                        result.retailers[retailer].replace('RL','')
+                                }
+                                if (retailer !== 'Digikey') {
+                                    result.retailers[retailer] =
+                                        result.retailers[retailer].replace(/-/g,'')
+                                }
+                                line.retailers[retailer] = result.retailers[retailer]
                             }
-                            if (retailer !== 'Digikey') {
-                                result.retailers[retailer] =
-                                    result.retailers[retailer].replace(/-/g,'')
-                            }
-                            line.retailers[retailer] = result.retailers[retailer]
                         }
-                    }
-                    return {line, queries}
-                }).bind(undefined, line, queries)
-                )
+                        return {line, queries}
+                    }.bind(null, line, queries))
+                    .catch(function (e) {
+                        return {line, queries}
+                    }.bind(null, line, queries))
             }
             let p = search({line, queries:[]})
             if ((depth - 1) > 0) {
@@ -115,10 +117,6 @@ function _auto_complete(search_engine, lines, depth) {
                     p.then(search)
                 }
             }
-            p.catch(e => {
-                console.error(e)
-                return {retailers:{}, partNumbers:[]}
-            })
             result.push(p.then(({line, queries}) => Promise.resolve(line)))
         }
         return result

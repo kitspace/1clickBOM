@@ -27,8 +27,15 @@ const { browser } = require('./browser')
 const capacitors = browser.getLocal('data/capacitors.json')
 const resistors = browser.getLocal('data/resistors.json')
 
+
+//we wrap in a promise to be compatible the completers that send async web requests
 exports.search = function search() {
-    return Promise.resolve(_search(...arguments))
+    try {
+        const result = _search(...arguments)
+        return Promise.resolve(result)
+    } catch (e) {
+        return Promise.reject(e)
+    }
 }
 
 function _search(query, retailers = [], other_fields = []) {
