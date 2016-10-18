@@ -341,7 +341,7 @@ let rsOnline = {
 
 let rsDelivers = {
     clearCart(callback) {
-        let url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart`
+        const url = `http${this.site}/CheckoutServices/DeleteAllProductsInCart`
         return http.post(url, '', {json:true}, responseText => {
             if (callback != null) {
                 callback({success: true}, this)
@@ -365,7 +365,7 @@ let rsDelivers = {
 
 
     _delete_invalid(ids, callback) {
-        let url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/RemoveMultiple`
+        let url = `http${this.site}/shoppingCart/RemoveMultiple`
         let params = '{"request":{"encodedString":"'
         for (let i = 0; i < ids.length; i++) {
             let id = ids[i]
@@ -385,9 +385,9 @@ let rsDelivers = {
 
 
     _get_invalid_line_ids(callback) {
-        let url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/GetCartHtml`
-        return http.post(url, undefined, {json:true}, function(responseText) {
-            let doc = browser.parseDOM(JSON.parse(responseText).html)
+        let url = `http${this.site}/shoppingCart`
+        return http.get(url, {}, function(responseText) {
+            let doc = browser.parseDOM(responseText)
             let ids = []
             let parts = []
             let iterable = doc.getElementsByClassName("errorOrderLine")
@@ -401,6 +401,7 @@ let rsDelivers = {
                     .nextElementSibling.firstElementChild.nextElementSibling
                     .innerText.trim())
             }
+            console.log(ids, parts)
             return callback(ids, parts)
         }
         , () => callback([],[])
@@ -428,15 +429,14 @@ let rsDelivers = {
         if (i < lines_incoming.length) {
             let lines = lines_incoming.slice(i, i+99 + 1)
             return this._clear_invalid(() => {
-                let url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder`
-                let params = '{"request":{"lines":"'
-                for (let j = 0; j < lines.length; j++) {
-                    let line = lines[j]
-                    params += `${line.part},${line.quantity},,` +
-                    `${line.reference}\n`
-                }
-                params += '"}}'
-                return http.post(url, params, {json:true}, responseText => {
+                let url = `http${this.site}/CheckoutServices/BulkAddProducts`
+                let params = 'productString='
+                lines.forEach(line => {
+                    params += `${line.part},${line.quantity},"${line.reference}"\n`
+                })
+                return http.post(url, params, responseText => {
+                    console.log(responseText)
+                    return callback({success:true})
                     let doc = browser.parseDOM(JSON.parse(responseText).html)
                     let success = doc.querySelector("#hidErrorAtLineLevel")
                         .value === "0"
