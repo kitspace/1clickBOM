@@ -67,8 +67,8 @@ Check the [roadmap](#roadmap) for more details on planned features.
 2. In Eeschema, the schematic tool, select `Tools -> Generate Bill of Materials` then `Add Plugin` and then `Generate` Select:
     - 1-click-bom_description.py to try and extract a description for [auto-complete](#completion)
     - 1-click-bom_fields.py if you have fields in your symbols that 1-click BOM will understand (see [below](#field-matching)).
-3. Open the resulting file in a spreadsheet program or text editor and copy and paste it into the extension
-4. Try auto-completing in the extension if you wish, check all the values afterwards
+3. Open the resulting file in a spreadsheet program or text editor. Reduce the descriptions down to the bare minimum if you want to use auto-completing. Copy and paste it into the extension.
+4. Try auto-completing in the extension if you wish, check all the values afterwards. 
 5. To sync any changes back into your schematic you can use [KiField](https://pypi.python.org/pypi/kifield).
 
 
@@ -147,6 +147,8 @@ using the buttons on the popup. You can also quickly view and empty your carts.
 A complete BOM is where every part has a manufacturer part number and a part number for _every_ retailer. 
 Simply press the button labeled 'Complete' and 1clickBOM will use other fields to search for the fields that are left blank.
 You should always check over the parts it has selected for you.
+
+Auto-completion works best if you have limited text in the description. Try and reduce the description column down to the bare-minimum or add an MPN field. "1uF 0603 X5R" is a good description while "C Capacitor 1uF 1 micro Farad SM0603 0603 SMD" isn't. 
 
 ## Issues ##
 

@@ -110,8 +110,8 @@
 <li>1-click-bom_description.py to try and extract a description for <a href="#completion">auto-complete</a></li>
 <li>1-click-bom_fields.py if you have fields in your symbols that 1-click BOM will understand (see <a href="#field-matching">below</a>).</li>
 </ul></li>
-<li>Open the resulting file in a spreadsheet program or text editor and copy and paste it into the extension</li>
-<li>Try auto-completing in the extension if you wish, check all the values afterwards</li>
+<li>Open the resulting file in a spreadsheet program or text editor. Reduce the descriptions down to the bare minimum if you want to use auto-completing. Copy and paste it into the extension.</li>
+<li>Try auto-completing in the extension if you wish, check all the values afterwards.</li>
 <li>To sync any changes back into your schematic you can use <a href="https://pypi.python.org/pypi/kifield">KiField</a>.</li>
 </ol>
 <h4 id="generally">Generally</h4>
@@ -311,6 +311,7 @@
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
 <h3 id="completion">Completion</h3>
 <p>1-click BOM can try and complete an incomplete BOM for you by selecting resistors and capacitors from the <a href="https://octopart.com/common-parts-library">CPL</a> and searching Octopart and Findchips. A complete BOM is where every part has a manufacturer part number and a part number for <em>every</em> retailer. Simply press the button labeled 'Complete' and 1clickBOM will use other fields to search for the fields that are left blank. You should always check over the parts it has selected for you.</p>
+<p>Auto-completion works best if you have limited text in the description. Try and reduce the description column down to the bare-minimum or add an MPN field. &quot;1uF 0603 X5R&quot; is a good description while &quot;C Capacitor 1uF 1 micro Farad SM0603 0603 SMD&quot; isn't.</p>
 <h2 id="issues">Issues</h2>
 <p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">GitHub</a>, <script type="text/javascript">
 <!--
