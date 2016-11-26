@@ -26,17 +26,7 @@
   <link rel="stylesheet" href="markdown7.css" type="text/css" />
 </head>
 <body><div id="title"><img src="logo.png"/><span>1clickBOM</span></div>
-<h1 id="section"></h1>
-<h1 id="section-1"></h1>
-<link href="favicon.png" rel="shortcut icon" type="image/png"></link>
-<center>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/611TW315pZM" frameborder="0" allowfullscreen></iframe>
-</center>
-<h1 id="section-2"></h1>
-<center><p>
-<a id="chromelink" href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi"><img id="chromeimage" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" alt="Available on Chrome" /></a><a href=https://addons.mozilla.org/firefox/downloads/latest/634060/addon-634060-latest.xpi><img alt="Add to Firefox" src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png"></a>
-</p></center>
-
+<p><link href="favicon.png" rel="shortcut icon" type="image/png"></link></p>
 <script type="text/javascript">
 
     //fix favicon on firefox (due to github.io hosting)
@@ -50,10 +40,16 @@
 
 
 
-<h2 id="section"></h2>
-<h2 id="section-1"></h2>
+<p align=center>
+<img src="readme_images/demo.gif" alt="demo.gif" />
+</p>
+
+<p align=center>
+<a href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi"><img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" alt="Available on Chrome" /></a> <a href="https://addons.mozilla.org/firefox/downloads/latest/634060/addon-634060-latest.xpi"><img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png" alt="Add to Firefox" /></a>
+</p>
+
 <h2 id="summary">Summary</h2>
-<p>1-click BOM is a browser extension that fills your shopping carts for you on sites like Digikey and Mouser, you simply paste from a spreadsheet or visit an online <code>.tsv</code> file. This way you can keep one bill of materials (BOM) that lets you and people you share the BOM with quickly purchase items from multiple retailers.</p>
+<p>1-click BOM is a browser extension that fills your shopping carts for you on sites like Digikey and Mouser. It's main purpose is to work with the electronic project sharing site <a href="https://kitnic.it">kitnic.it</a>. But you can also use it from a spreadsheet or load an online <code>.tsv</code> file from any other site.</p>
 <h2 id="table-of-contents">Table of Contents</h2>
 <ul>
 <li><a href="#summary">Summary</a></li>
@@ -67,6 +63,7 @@
 </ul>
 <h2 id="news">News</h2>
 <ul>
+<li><p><a href="https://kitnic.it">Check out our electronics sharing site: Kitnic!</a></p></li>
 <li><p><a href="#completion">Added function to auto-complete BOM</a></p></li>
 <li><p><a href="#usage">Named columns are now supported</a></p></li>
 <li><p><a href="https://addons.mozilla.org/en-US/firefox/addon/1clickbom/">1clickBOM is available for Firefox</a></p></li>
@@ -84,8 +81,37 @@
 <p>Check the <a href="#roadmap">roadmap</a> for more details on planned features.</p>
 <h2 id="usage">Usage</h2>
 <h3 id="making-a-1-click-bom">Making a 1-click-BOM</h3>
+<h4 id="eagle">Eagle</h4>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/eagle_bom_export.png" />
+</div>
+<ol style="list-style-type: decimal">
+<li>In the schematic window, select &quot;File -&gt; Export -&gt; BOM&quot;. Select &quot;List Type&quot; values and &quot;Output Format&quot; CSV (see image) and press save.</li>
+<li>Open the <code>.csv</code> in a spreadsheet program (LibreOffice, Excel). Select a semi-colon seperator when importing.</li>
+<li>Adjust the description column to be more informative, e.g. &quot;10uf 0603 X7R&quot; for a capcitor or &quot;1k 0805&quot; for a resistor or the MPN for ICs and transistors. The description will be used for auto-completing.</li>
+<li>Select everything in your spreadsheet program, copy and paste into the extension.</li>
+<li>Press &quot;complete&quot; in the extension, wait till it's done and then press copy.</li>
+<li>Open a new spreadsheet and paste into it. Save it as tab-seperated values, with a <code>.tsv</code> extension and UTF-8 encoding.</li>
+<li>Check over all the part numbers and make sure they are correct. Put them into your shopping cart using the extension to confirm they have the right minimum order quantity etc.</li>
+</ol>
+<h4 id="kicad">KiCad</h4>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/kicad_bom_export.png" />
+</div>
+<ol style="list-style-type: decimal">
+<li>Download the Python files from the <a href="https://github.com/monostable/1clickBOM/blob/master/output_scripts/kicad">output_scripts/kicad</a> directory. Put them all together into a directory where you want to keep them.</li>
+<li>In Eeschema, the schematic tool, select <code>Tools -&gt; Generate Bill of Materials</code> then <code>Add Plugin</code> and then <code>Generate</code> Select:
+<ul>
+<li>1-click-bom_description.py to try and extract a description for <a href="#completion">auto-complete</a></li>
+<li>1-click-bom_fields.py if you have fields in your symbols that 1-click BOM will understand (see <a href="#field-matching">below</a>).</li>
+</ul></li>
+<li>Open the resulting file in a spreadsheet program or text editor and copy and paste it into the extension</li>
+<li>Try auto-completing in the extension if you wish, check all the values afterwards</li>
+<li>To sync any changes back into your schematic you can use <a href="https://pypi.python.org/pypi/kifield">KiField</a>.</li>
+</ol>
+<h4 id="generally">Generally</h4>
 <p>You can copy and paste into the extension from a text editor or spread sheet program (LibreOffice, Excel). You must have a column for references, one for the quantity and at least one of: decription, part number or a retailer column. You can have multiple part number columns for specifying multiple possible manufacturer part numbers per schematic reference.</p>
-<p>When saving files from your external editor/spreadsheet save them as tab-seperated values with a <code>.tsv</code> extension.</p>
+<p>When saving files from your external editor or spreadsheet save them as tab-seperated values with a <code>.tsv</code> extension with UTF-8 encoding.</p>
 <p>Here is a small example which is well suited for <a href="#completion">auto-completing</a>:</p>
 <table>
 <thead>
@@ -143,11 +169,12 @@
 <td align="left">SW1</td>
 <td align="left">1</td>
 <td align="left"></td>
-<td align="left">TE Connectivity 4-1437565-1</td>
+<td align="left">4-1437565-1</td>
 </tr>
 </tbody>
 </table>
 <p>You can find this and other examples in TSV format in the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/">examples directory</a>.</p>
+<h3 id="field-matching">Field Matching</h3>
 <p>The examples are mostly in the format that the extension will output. Reading is less strict. Below are tables of title aliases 1-click-BOM recognizes. If you have any more suggestions please <a href="#issues">get in touch</a>. (Capitalisation is ignored, characters within brackets, like<code>(s)</code>, denote they are optional.)</p>
 <table>
 <thead>
@@ -155,7 +182,7 @@
 <th align="left">References</th>
 <th align="left">Quantity</th>
 <th align="left">Description</th>
-<th align="left">Part Number</th>
+<th align="left">MPN</th>
 </tr>
 </thead>
 <tbody>
@@ -184,7 +211,7 @@
 <td align="left">m(/)f part(s)</td>
 </tr>
 <tr class="odd">
-<td align="left"></td>
+<td align="left">part(s)</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="left">manuf(.) part(s)</td>
@@ -218,18 +245,6 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left">manufacturer part number(s)</td>
-</tr>
-<tr class="odd">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">prt(s)</td>
-</tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">part(s)</td>
 </tr>
 </tbody>
 </table>
@@ -282,47 +297,47 @@
 </tbody>
 </table>
 <h3 id="loading-an-online-bom">Loading an online BOM</h3>
-<p>If you visit a page that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Clicking the blue button will load the data into 1clickBOM.</p>
+<p>If you visit a page on <a href="https://kitnic.it">kitnic.it</a> or one that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Clicking the blue button will load the data into the extension.</p>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" /><p class="caption">Load from page</p>
 </div>
 <h3 id="lets-go-shopping">Let's go shopping!</h3>
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
 <h3 id="completion">Completion</h3>
-<p>New in version 0.5 is a function to search Octopart.com and Findchips.com to try and complete a BOM for you. A complete BOM is one that has a part number for <em>every</em> retailer. Simply press the button labeled 'Complete' and 1clickBOM will use other fields to search for the fields that are left blank.</p>
-<h3 id="legacy-bom-format">Legacy BOM format</h3>
-<p>The format used prior to version <code>0.3</code> simply had the items in the following order:</p>
-<pre><code>line-note | quantity | retailer | part-number</code></pre>
-<p>This format is still supported but deprecated and will be phased out by version <code>1.0</code>.</p>
+<p>1-click BOM can try and complete an incomplete BOM for you by selecting resistors and capacitors from the <a href="https://octopart.com/common-parts-library">CPL</a> and searching Octopart and Findchips. A complete BOM is where every part has a manufacturer part number and a part number for <em>every</em> retailer. Simply press the button labeled 'Complete' and 1clickBOM will use other fields to search for the fields that are left blank. You should always check over the parts it has selected for you.</p>
 <h2 id="issues">Issues</h2>
-<p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">GitHub</a> or <script type="text/javascript">
+<p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">GitHub</a>, <script type="text/javascript">
 <!--
 h='&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#x69;&#110;&#102;&#x6f;';e=n+a+h;
 document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 // -->
-</script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript>.</p>
+</script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript> or visit the <a href="https://gitter.im/monostable/kitnic">Kitnic chat room</a></p>
 <h2 id="roadmap">Roadmap</h2>
 <ul>
-<li>0.7
+<li>1.2
 <ul>
-<li>Kitnic.it site interaction</li>
-<li>Set a timeout on all UI requests so that extension cannot get stuck</li>
+<li>Improved completion of generic resistors and capacitors</li>
+<li>Refresh Kitnic page on first install</li>
 </ul></li>
-<li>1.0
+<li>1.3
 <ul>
-<li>Remove legacy BOM format support</li>
+<li>Improved completion by searching retailer sites directly</li>
 </ul></li>
-<li>1.1
+<li>1.4
+<ul>
+<li>Ability to add components to BOM from retailer site</li>
+</ul></li>
+<li>1.5
 <ul>
 <li>Make requests cancelable</li>
 <li>Improve user interface</li>
 </ul></li>
-<li>1.2
+<li>1.6
 <ul>
 <li>Add retailer preference ranking</li>
 <li>Add function to reduce BOM (and add to cart?) according to retailer preference</li>
 </ul></li>
-<li>1.3
+<li>1.7
 <ul>
 <li>Additional retailer support
 <ul>
@@ -370,21 +385,21 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 <ul>
 <li>Get dependencies above and make sure executables are on your path</li>
 <li><code>npm install --global</code> (or <code>npm install &amp;&amp; export PATH=$PATH:$(pwd)/node_modules/.bin</code>)</li>
-<li><code>./configure.coffee</code></li>
+<li><code>./configure.js</code></li>
 <li><code>ninja</code></li>
 </ul>
 <h4 id="load">Load</h4>
 <ul>
 <li>For Chrome enable developer mode in <code>chrome://extensions</code> and load the unpacked extension from <code>build/chrome</code></li>
-<li>For Firefox run <code>./firefox.sh run</code> (or setup <a href="https://palant.de/2012/01/13/extension-auto-installer">Autoinstaller</a> and run <code>./firefox.sh post</code>)</li>
+<li>For Firefox run <code>./firefox.sh</code></li>
 </ul>
 <h4 id="test">Test</h4>
 <p>Tests are written in <a href="https://web.archive.org/web/20130128010139/http://api.qunitjs.com/">QUnit 1.11</a> and can only be run in Chrome/Chromium. Open a console on background page and execute <code>Test()</code> or test a specific module, e.g. Farnell, with <code>Test('Farnell')</code></p>
 <p>Most of the tests are functional tests that require interaction with the various retailer sites and they make a lot of network requests to test across all the different possible locations. Sometimes they will fail because they are not an accurate representation of actual extension use. If a test fails or doesn't complete, run it again before investigating. Try and re-create the issue manually before trying to fix it.</p>
 <h2 id="license">License</h2>
 <p>1clickBOM is free and open source software. It is licensed under a CPAL license which means you are free to use the code in your own applications (even proprietary ones) as long as you display appropriate attribution and share your code-improvements to 1clickBOM itself under the CPAL as well. This also applies to software you are solely making available to users over a network i.e. software as a service. See the <a href="https://github.com/monostable/1clickBOM/blob/master/LICENSE">LICENSE</a> file for details.</p>
-<h1 id="section-2"></h1>
-<h1 id="section-3"></h1>
+<h1 id="section"></h1>
+<h1 id="section-1"></h1>
 <center> 
 <a href="http://monostable.co.uk"><img src="monostable.png" alt="logo" /></a>
 </center>
