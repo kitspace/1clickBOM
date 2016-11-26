@@ -41,11 +41,12 @@
 
 
 <p align=center>
-<img src="readme_images/demo.gif" alt="demo.gif" />
+<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif" />
 </p>
 
 <p align=center>
-<a href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi"><img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" alt="Available on Chrome" /></a> <a href="https://addons.mozilla.org/firefox/downloads/latest/634060/addon-634060-latest.xpi"><img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png" alt="Add to Firefox" /></a>
+    
+<a href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi"> <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" /> </a> <a href="https://addons.mozilla.org/firefox/downloads/latest/634060/addon-634060-latest.xpi"> <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png" /> </a>
 </p>
 
 <h2 id="summary">Summary</h2>
@@ -66,8 +67,8 @@
 <li><p><a href="https://kitnic.it">Check out our electronics sharing site: Kitnic!</a></p></li>
 <li><p><a href="#completion">Added function to auto-complete BOM</a></p></li>
 <li><p><a href="#usage">Named columns are now supported</a></p></li>
-<li><p><a href="https://addons.mozilla.org/en-US/firefox/addon/1clickbom/">1clickBOM is available for Firefox</a></p></li>
-<li><p><a href="http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4">I gave a talk about 1clickBOM at FOSDEM in 2015</a></p></li>
+<li><p>[1clickBOM is available for Firefox][20]</p></li>
+<li><p>[I gave a talk about 1clickBOM at FOSDEM in 2015][12]</p></li>
 </ul>
 <h2 id="which-retailers">Which retailers?</h2>
 <p>Currently supported retailers are:</p>
@@ -105,8 +106,8 @@
 <li>1-click-bom_description.py to try and extract a description for <a href="#completion">auto-complete</a></li>
 <li>1-click-bom_fields.py if you have fields in your symbols that 1-click BOM will understand (see <a href="#field-matching">below</a>).</li>
 </ul></li>
-<li>Open the resulting file in a spreadsheet program or text editor and copy and paste it into the extension</li>
-<li>Try auto-completing in the extension if you wish, check all the values afterwards</li>
+<li>Open the resulting file in a spreadsheet program or text editor. Reduce the descriptions down to the bare minimum if you want to use auto-completing. Copy and paste it into the extension.</li>
+<li>Try auto-completing in the extension if you wish, check all the values afterwards.</li>
 <li>To sync any changes back into your schematic you can use <a href="https://pypi.python.org/pypi/kifield">KiField</a>.</li>
 </ol>
 <h4 id="generally">Generally</h4>
@@ -173,7 +174,7 @@
 </tr>
 </tbody>
 </table>
-<p>You can find this and other examples in TSV format in the <a href="https://github.com/monostable/1clickBOM/blob/master/examples/">examples directory</a>.</p>
+<p>You can find this and other examples in TSV format in the [examples directory][2].</p>
 <h3 id="field-matching">Field Matching</h3>
 <p>The examples are mostly in the format that the extension will output. Reading is less strict. Below are tables of title aliases 1-click-BOM recognizes. If you have any more suggestions please <a href="#issues">get in touch</a>. (Capitalisation is ignored, characters within brackets, like<code>(s)</code>, denote they are optional.)</p>
 <table>
@@ -298,20 +299,14 @@
 </table>
 <h3 id="loading-an-online-bom">Loading an online BOM</h3>
 <p>If you visit a page on <a href="https://kitnic.it">kitnic.it</a> or one that ends in <code>.tsv</code> and has data in the right format available 1clickBOM will show a blue badge and button with an arrow. Clicking the blue button will load the data into the extension.</p>
-<div class="figure">
-<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png" alt="Load from page" /><p class="caption">Load from page</p>
-</div>
+<p>[Load from page][3]</p>
 <h3 id="lets-go-shopping">Let's go shopping!</h3>
 <p>Once the data is added you can use 1clickBOM to add the items to your carts using the buttons on the popup. You can also quickly view and empty your carts.</p>
 <h3 id="completion">Completion</h3>
 <p>1-click BOM can try and complete an incomplete BOM for you by selecting resistors and capacitors from the <a href="https://octopart.com/common-parts-library">CPL</a> and searching Octopart and Findchips. A complete BOM is where every part has a manufacturer part number and a part number for <em>every</em> retailer. Simply press the button labeled 'Complete' and 1clickBOM will use other fields to search for the fields that are left blank. You should always check over the parts it has selected for you.</p>
+<p>Auto-completion works best if you have limited text in the description. Try and reduce the description column down to the bare-minimum or add an MPN field. &quot;1uF 0603 X5R&quot; is a good description while &quot;C Capacitor 1uF 1 micro Farad SM0603 0603 SMD&quot; isn't.</p>
 <h2 id="issues">Issues</h2>
-<p>If you need any help or think you found a bug please get in touch via <a href="https://github.com/monostable/1clickBOM/issues">GitHub</a>, <script type="text/javascript">
-<!--
-h='&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#x69;&#110;&#102;&#x6f;';e=n+a+h;
-document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
-// -->
-</script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript> or visit the <a href="https://gitter.im/monostable/kitnic">Kitnic chat room</a></p>
+<p>If you need any help or think you found a bug please get in touch via [GitHub][10], [email][11] or visit the <a href="https://gitter.im/monostable/kitnic">Kitnic chat room</a></p>
 <h2 id="roadmap">Roadmap</h2>
 <ul>
 <li>1.2
@@ -371,10 +366,10 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 </ul>
 <h2 id="development">Development</h2>
 <h3 id="build-and-test-requirements">Build and Test Requirements</h3>
-<p>The code is available on <a href="https://github.com/monostable/1clickBOM">GitHub</a>. To get started you will need:</p>
+<p>The code is available on [GitHub][7]. To get started you will need:</p>
 <ul>
 <li>Chrome or Chromium</li>
-<li>Firefox (optionally with <a href="https://palant.de/2012/01/13/extension-auto-installer">Extension Autoinstaller</a>)</li>
+<li>Firefox (optionally with [Extension Autoinstaller][16])</li>
 <li><a href="https://ninja-build.org/">Ninja Build</a></li>
 <li>sed</li>
 <li>npm</li>
@@ -394,10 +389,11 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'email'+'<\/'+'a'+'>');
 <li>For Firefox run <code>./firefox.sh</code></li>
 </ul>
 <h4 id="test">Test</h4>
-<p>Tests are written in <a href="https://web.archive.org/web/20130128010139/http://api.qunitjs.com/">QUnit 1.11</a> and can only be run in Chrome/Chromium. Open a console on background page and execute <code>Test()</code> or test a specific module, e.g. Farnell, with <code>Test('Farnell')</code></p>
+<p>Tests are written in [QUnit 1.11][17] and can only be run in Chrome/Chromium. Open a console on background page and execute <code>Test()</code> or test a specific module, e.g. Farnell, with <code>Test('Farnell')</code></p>
 <p>Most of the tests are functional tests that require interaction with the various retailer sites and they make a lot of network requests to test across all the different possible locations. Sometimes they will fail because they are not an accurate representation of actual extension use. If a test fails or doesn't complete, run it again before investigating. Try and re-create the issue manually before trying to fix it.</p>
 <h2 id="license">License</h2>
-<p>1clickBOM is free and open source software. It is licensed under a CPAL license which means you are free to use the code in your own applications (even proprietary ones) as long as you display appropriate attribution and share your code-improvements to 1clickBOM itself under the CPAL as well. This also applies to software you are solely making available to users over a network i.e. software as a service. See the <a href="https://github.com/monostable/1clickBOM/blob/master/LICENSE">LICENSE</a> file for details.</p>
+<p>1clickBOM is free and open source software. It is licensed under a CPAL license which means you are free to use the code in your own applications (even proprietary ones) as long as you display appropriate attribution and share your code-improvements to 1clickBOM itself under the CPAL as well. This also applies to software you are solely making available to users over a network i.e. software as a service. See the [LICENSE][6] file for details.</p>
+<p>[demo.gif]: [2]:https://github.com/monostable/1clickBOM/blob/master/examples/ [3]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png [5]:https://qunitjs.com/ [6]:https://github.com/monostable/1clickBOM/blob/master/LICENSE [7]:https://github.com/monostable/1clickBOM [8]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png [10]:https://github.com/monostable/1clickBOM/issues [11]:mailto:info@1clickBOM.com [12]:http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4 [15]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif [16]:https://palant.de/2012/01/13/extension-auto-installer [17]:https://web.archive.org/web/20130128010139/http://api.qunitjs.com/ [18]:https://developer.mozilla.org/en-US/Add-ons/SDK [19]:http://1clickBOM.com [20]:https://addons.mozilla.org/en-US/firefox/addon/1clickbom/</p>
 <h1 id="section"></h1>
 <h1 id="section-1"></h1>
 <center> 
