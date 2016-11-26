@@ -1,6 +1,10 @@
-[![Youtube Demo][youtube.png]](https://youtu.be/611TW315pZM)
+<p align=center>
+![demo.gif](readme_images/demo.gif)
+</p>
 
+<p align=center>
 [![Available on Chrome][8]][14] [![Add to Firefox][9]][13]
+</p>
 
 ## Summary ##
 
@@ -54,7 +58,7 @@ Check the [roadmap](#roadmap) for more details on planned features.
 1. In the schematic window, select "File -> Export -> BOM". Select "List Type" values and "Output Format" CSV (see image) and press save.
 1. Open the `.csv` in a spreadsheet program (LibreOffice, Excel). Select a semi-colon seperator when importing.
 1. Adjust the description column to be more informative, e.g. "10uf 0603 X7R" for a capcitor or "1k 0805" for a resistor or the MPN for ICs and transistors. The description will be used for auto-completing.
-1. Select everything in your spreadsheet program, copy and paste into the extension. 
+1. Select everything in your spreadsheet program, copy and paste into the extension.
 1. Press "complete" in the extension, wait till it's done and then press copy.
 1. Open a new spreadsheet and paste into it. Save it as tab-seperated values, with a `.tsv` extension and UTF-8 encoding.
 1. Check over all the part numbers and make sure they are correct. Put them into your shopping cart using the extension to confirm they have the right minimum order quantity etc.
@@ -143,8 +147,8 @@ using the buttons on the popup. You can also quickly view and empty your carts.
 
 ### Completion ###
 
-1-click BOM can try and complete an incomplete BOM for you by selecting resistors and capacitors from the [CPL](https://octopart.com/common-parts-library) and searching Octopart and Findchips. 
-A complete BOM is where every part has a manufacturer part number and a part number for _every_ retailer. 
+1-click BOM can try and complete an incomplete BOM for you by selecting resistors and capacitors from the [CPL](https://octopart.com/common-parts-library) and searching Octopart and Findchips.
+A complete BOM is where every part has a manufacturer part number and a part number for _every_ retailer.
 Simply press the button labeled 'Complete' and 1clickBOM will use other fields to search for the fields that are left blank.
 You should always check over the parts it has selected for you.
 
@@ -275,4 +279,3 @@ software as a service. See the [LICENSE][6] file for details.
 [18]:https://developer.mozilla.org/en-US/Add-ons/SDK
 [19]:http://1clickBOM.com
 [20]:https://addons.mozilla.org/en-US/firefox/addon/1clickbom/
-
