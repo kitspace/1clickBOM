@@ -1,9 +1,14 @@
 <p align=center>
-![demo.gif][demo.gif]
+<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif" />
 </p>
 
 <p align=center>
-[![Available on Chrome][8]][14] [![Add to Firefox][9]][13]
+    <a href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi">
+        <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" />
+    </a>
+    <a href="https://addons.mozilla.org/firefox/downloads/latest/634060/addon-634060-latest.xpi">
+        <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png" />
+    </a>
 </p>
 
 ## Summary ##
@@ -260,20 +265,16 @@ software as a service. See the [LICENSE][6] file for details.
 [eagle_bom_export.png]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/eagle_bom_export.png
 [kicad_bom_export.png]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/kicad_bom_export.png
 [youtube.png]:https://github.com/monostable/1clickBOM/blob/master/readme_images/youtube.png
-[demo.gif]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif
-
+[demo.gif]:
 [2]:https://github.com/monostable/1clickBOM/blob/master/examples/
 [3]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png
 [5]:https://qunitjs.com/
 [6]:https://github.com/monostable/1clickBOM/blob/master/LICENSE
 [7]:https://github.com/monostable/1clickBOM
 [8]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png
-[9]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png
 [10]:https://github.com/monostable/1clickBOM/issues
 [11]:mailto:info@1clickBOM.com
 [12]:http://video.fosdem.org/2015/devroom-electronic_design_automation/one_click_bom.mp4
-[13]:https://addons.mozilla.org/firefox/downloads/latest/634060/addon-634060-latest.xpi
-[14]:https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi
 [15]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif
 [16]:https://palant.de/2012/01/13/extension-auto-installer
 [17]:https://web.archive.org/web/20130128010139/http://api.qunitjs.com/
