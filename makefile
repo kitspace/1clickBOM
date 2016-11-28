@@ -1,7 +1,7 @@
 all:
 	git checkout master README.md LICENSE
 	pandoc header.md > header.html
-	pandoc --standalone -c markdown7.css README.md footer.md > index.html
+	pandoc -f markdown_github --standalone -c markdown7.css README.md footer.md > index.html
 	sed -i '/<body>/ r header.html' index.html
 	rm header.html
 	sed -i 's!^<li><a href="#section.*"></a></li>!!' index.html
