@@ -265,7 +265,6 @@ software as a service. See the [LICENSE][6] file for details.
 [eagle_bom_export.png]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/eagle_bom_export.png
 [kicad_bom_export.png]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/kicad_bom_export.png
 [youtube.png]:https://github.com/monostable/1clickBOM/blob/master/readme_images/youtube.png
-[demo.gif]:
 [2]:https://github.com/monostable/1clickBOM/blob/master/examples/
 [3]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/load_from_page.png
 [5]:https://qunitjs.com/
