@@ -3,12 +3,12 @@
 </p>
 
 <p align=center>
-    <a href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi">
-        <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" />
-    </a>
-    <a href="https://addons.mozilla.org/firefox/downloads/latest/634060/addon-634060-latest.xpi">
-        <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png" />
-    </a>
+<a href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi">
+<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" />
+</a>
+<a href="https://addons.mozilla.org/firefox/downloads/latest/634060/addon-634060-latest.xpi">
+<img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png" />
+</a>
 </p>
 
 ## Summary ##
