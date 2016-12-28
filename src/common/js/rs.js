@@ -23,22 +23,20 @@ const { RetailerInterface } = require('./retailer_interface')
 const http = require('./http')
 const { browser } = require('./browser')
 
-let rsOnline = {
+const rsOnline = {
     clearCart(callback) {
         return this._get_clear_viewstate((viewstate, form_ids) => {
             return this._clear_cart(viewstate, form_ids, result => {
                 __guardFunc__(callback, f => f(result, this))
                 this.refreshCartTabs()
                 return this.refreshSiteTabs()
-            }
-            )
-        }
-        )
+            })
+        })
     },
 
 
     _clear_cart(viewstate, form_ids, callback) {
-        let url = `http${this.site}${this.cart}`
+        const url = `http${this.site}${this.cart}`
         return http.post(url, 'isRemoveAll=true', {}, () => __guardFunc__(callback, f => f({success:true}))
         , () => __guardFunc__(callback, f => f({success:false}))
         )
@@ -46,7 +44,7 @@ let rsOnline = {
 
     _clear_invalid(callback) {
         return this._get_clear_viewstate((viewstate, form_ids) => {
-            let params1 =
+            const params1 =
             'AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasket' +
             'Form&=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&s' +
             'hoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_' +
@@ -80,24 +78,23 @@ let rsOnline = {
             'corate%3AGuestUserSendToColleagueWidgetAction_message=&shoppingBas' +
             'ketForm%3AsendToColleagueSuccessWidgetPanelOpenedState=&javax.face' +
             `s.ViewState=${viewstate}`
-            let params2 = `AJAXREQUEST=_viewRoot&${form_ids[0]}=${form_ids[0]}&` +
+            const params2 = `AJAXREQUEST=_viewRoot&${form_ids[0]}=${form_ids[0]}&` +
               `javax.faces.ViewState=${viewstate}&ajaxSingle=${form_ids[0]}%3A` +
               `${form_ids[1]}&${form_ids[0]}%3A${form_ids[1]}=${form_ids[0]}%3A` +
               `${form_ids[1]}&`
-            let params3 = `AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&auto` +
+            const params3 = `AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&auto` +
               `Scroll=&javax.faces.ViewState=${viewstate}&a4jCloseForm%3A` +
               `${form_ids[2]}=a4jCloseForm%3A${form_ids[2]}&`
-            let p = http.promiseGet(`http${this.site}${this.cart}`)
+            const p = http.promiseGet(`http${this.site}${this.cart}`)
             return p.then(doc => {
-                let error_lines = doc.querySelectorAll('.dataRow.errorRow')
-                let a = []
+                const error_lines = doc.querySelectorAll('.dataRow.errorRow')
+                const a = []
                 for (let i = 0; i < error_lines.length; i++) {
-                    let _ = error_lines[i]
                     a.push(null)
                 }
                 //for each line we basically click the 'remove' link which also
                 //asks for confirmation
-                let chain = a.reduce(prev => {
+                const chain = a.reduce(prev => {
                     return prev.then(_doc => {
                         if (_doc == null) {
                             return http.promiseGet(`http${this.site}${this.cart}`)
@@ -105,9 +102,9 @@ let rsOnline = {
                             return Promise.resolve(_doc)
                         }
                     }).then(_doc => {
-                        let error_line = __guard__(__guard__(_doc, x1 => x1.querySelector('.dataRow.errorRow')), x => x.querySelector('.quantityTd'))
-                        let id = __guard__(__guard__(__guard__(error_line, x4 => x4.children[3]), x3 => x3.children[0]), x2 => x2.id)
-                        let param_id = params1 + '&' + encodeURIComponent(id)
+                        const error_line = __guard__(__guard__(_doc, x1 => x1.querySelector('.dataRow.errorRow')), x => x.querySelector('.quantityTd'))
+                        const id = __guard__(__guard__(__guard__(error_line, x4 => x4.children[3]), x3 => x3.children[0]), x2 => x2.id)
+                        const param_id = params1 + '&' + encodeURIComponent(id)
                         return http.promisePost(`http${this.site}${this.cart}`, param_id)
                     }).then(() => {
                         return http.promisePost(`http${this.site}${this.cart}`, params2)
@@ -131,7 +128,7 @@ let rsOnline = {
             return
         }
 
-        let add = (lines, callback) => {
+        const add = (lines, callback) => {
             return this._clear_invalid(() => {
                 return this._get_adding_viewstate((viewstate, form_id) => {
                     return this._add_lines(lines, viewstate, form_id, callback)
@@ -141,7 +138,7 @@ let rsOnline = {
             )
         }
 
-        let end = result => {
+        const end = result => {
             callback(result, this, lines)
             this.refreshCartTabs()
             return this.refreshSiteTabs()
@@ -160,14 +157,14 @@ let rsOnline = {
     },
 
     _get_and_correct_invalid_lines(callback) {
-        let url = `http${this.site}${this.cart}`
+        const url = `http${this.site}${this.cart}`
         return http.get(url, {}, responseText => {
-            let doc = browser.parseDOM(responseText)
-            let lines = []
-            let iterable = doc.querySelectorAll('.dataRow.errorRow')
+            const doc = browser.parseDOM(responseText)
+            const lines = []
+            const iterable = doc.querySelectorAll('.dataRow.errorRow')
             for (let i = 0; i < iterable.length; i++) {
-                let elem = iterable[i]
-                let line = {}
+                const elem = iterable[i]
+                const line = {}
                 //detect minimimum and multiple-of quantities from description
                 //and add a quantity according to those. we read the quantity
                 //from the cart as this could be a line that was already in
@@ -175,14 +172,14 @@ let rsOnline = {
                 //blabla 10 (minimum) blablabla 10 (multiple of) blabla
                 // or
                 //blabla 10 (multiple of) blabla
-                let descr = __guard__(__guard__(elem.previousElementSibling, x1 => x1.firstElementChild), x => x.innerHTML)
-                let quantity = parseInt(__guard__(__guard__(elem.querySelector('.quantityTd'), x3 => x3.firstElementChild), x2 => x2.value))
+                const descr = __guard__(__guard__(elem.previousElementSibling, x1 => x1.firstElementChild), x => x.innerHTML)
+                const quantity = parseInt(__guard__(__guard__(elem.querySelector('.quantityTd'), x3 => x3.firstElementChild), x2 => x2.value))
                 if (!isNaN(quantity)) {
-                    let re_min_mul = /.*?(\d+)\D+?(\d+).*?/
+                    const re_min_mul = /.*?(\d+)\D+?(\d+).*?/
                     let min = __guard__(re_min_mul.exec(descr), x4 => x4[1])
                     if (min == null) {
-                        let re_mul = /.*?(\d+).*?/
-                        let mul = parseInt(__guard__(re_mul.exec(descr), x5 => x5[1]))
+                        const re_mul = /.*?(\d+).*?/
+                        const mul = parseInt(__guard__(re_mul.exec(descr), x5 => x5[1]))
                         if (!isNaN(mul)) {
                             line.quantity = mul - (quantity % mul)
                         }
@@ -194,8 +191,8 @@ let rsOnline = {
                     }
                 }
                 //detect part number
-                let error_child = __guard__(elem.children, x6 => x6[1])
-                let error_input = __guard__(error_child, x7 => x7.querySelector('input'))
+                const error_child = __guard__(elem.children, x6 => x6[1])
+                const error_input = __guard__(error_child, x7 => x7.querySelector('input'))
                 if (error_input != null) {
                     line.part = __guard__(error_input.value, x8 => x8.replace(/-/g,''))
                 }
@@ -209,7 +206,7 @@ let rsOnline = {
 
 
     _add_lines(lines_incoming, viewstate, form_id, callback) {
-        let result = {success:true, fails:[]}
+        const result = {success:true, fails:[]}
         if (lines_incoming.length > 500) {
             result.warnings = ["RS cart cannot hold more than 500 lines."]
             result.fails = lines.slice(500)
@@ -217,8 +214,8 @@ let rsOnline = {
         } else {
             var lines = lines_incoming
         }
-        let url = `http${this.site}${this.cart}`
-        let params = `AJAXREQUEST=shoppingBasketForm%3A${form_id}&shoppingBasketFo` +
+        const url = `http${this.site}${this.cart}`
+        let params =`AJAXREQUEST=shoppingBasketForm%3A${form_id}&shoppingBasketFo`+
         `rm=shoppingBasketForm&=QuickAdd&=DELIVERY&shoppingBasketForm%3AquickSt` +
         `ockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickSt` +
         `ockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickSt` +
@@ -234,7 +231,7 @@ let rsOnline = {
         `stItems=`
 
         for (let i = 0; i < lines.length; i++) {
-            let line = lines[i]
+            const line = lines[i]
             params += encodeURIComponent(`${line.part},${line.quantity},,` +
             `${line.reference}\n`)
         }
@@ -249,13 +246,13 @@ let rsOnline = {
 
         return http.post(url, params, {}, () => {
             return this._get_and_correct_invalid_lines(invalid_lines => {
-                let success = invalid_lines.length === 0
-                let invalid = []
+                const success = invalid_lines.length === 0
+                const invalid = []
                 if (!success) {
                     for (let j = 0; j < lines.length; j++) {
-                        let line = lines[j]
+                        const line = lines[j]
                         for (let k = 0; k < invalid_lines.length; k++) {
-                            let inv_line = invalid_lines[k]
+                            const inv_line = invalid_lines[k]
                             if (line.part === inv_line.part) {
                                 if (inv_line.quantity != null) {
                                     line.quantity = inv_line.quantity
@@ -285,21 +282,21 @@ let rsOnline = {
 
 
     _get_adding_viewstate(callback){
-        let url = `http${this.site}${this.cart}`
+        const url = `http${this.site}${this.cart}`
         return http.get(url, {}, responseText => {
-            let doc = browser.parseDOM(responseText)
-            let viewstate_element  = doc.getElementById("javax.faces.ViewState")
+            const doc = browser.parseDOM(responseText)
+            const viewstate_element  = doc.getElementById("javax.faces.ViewState")
             if (viewstate_element != null) {
                 var viewstate = viewstate_element.value
             } else {
                 return callback("", "")
             }
-            let btn_doc = doc.getElementById("addToOrderDiv")
+            const btn_doc = doc.getElementById("addToOrderDiv")
             //the form_id element is different values depending on signed in or
             //signed out could just hardcode them but maybe this will be more
             //future-proof?  we use a regex here as DOM select methods crash on
             //this element!
-            let form_id  = /AJAX.Submit\('shoppingBasketForm\:(j_id\d+)/
+            const form_id  = /AJAX.Submit\('shoppingBasketForm\:(j_id\d+)/
                 .exec(btn_doc.innerHTML.toString())[1]
             return callback(viewstate, form_id)
         }
@@ -309,24 +306,24 @@ let rsOnline = {
 
 
     _get_clear_viewstate(callback){
-        let url = `http${this.site}${this.cart}`
+        const url = `http${this.site}${this.cart}`
         return http.get(url, {}, responseText => {
-            let doc = browser.parseDOM(responseText)
-            let viewstate_elem = doc.getElementById("javax.faces.ViewState")
+            const doc = browser.parseDOM(responseText)
+            const viewstate_elem = doc.getElementById("javax.faces.ViewState")
             if (viewstate_elem != null) {
                 var viewstate = doc.getElementById("javax.faces.ViewState").value
             } else {
                 return callback("", [])
             }
 
-            let form_elem = doc.getElementById("a4jCloseForm")
+            const form_elem = doc.getElementById("a4jCloseForm")
             if (form_elem != null) {
-                let form = form_elem.nextElementSibling.nextElementSibling
+                const form = form_elem.nextElementSibling.nextElementSibling
                 //the form_id elements are different values depending on signed
                 //in or signed out could just hardcode them but maybe this will
                 //be more future-proof?
-                let form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
-                let form_id3  = doc.getElementById("a4jCloseForm")
+                const form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
+                const form_id3  = doc.getElementById("a4jCloseForm")
                     .firstChild.id.split(":")[1]
                 return callback(viewstate, [form.id, form_id2, form_id3])
             } else {
@@ -339,7 +336,7 @@ let rsOnline = {
 }
 
 
-let rsDelivers = {
+const rsDelivers = {
     clearCart(callback) {
         const url = `http${this.site}/CheckoutServices/DeleteAllProductsInCart`
         return http.post(url, '', {json:true}, responseText => {
@@ -374,7 +371,7 @@ let rsDelivers = {
 
 
     _get_invalid_lines(callback) {
-        let url = `http${this.site}/CheckoutServices/GetCartLinesHtml`
+        const url = `http${this.site}/CheckoutServices/GetCartLinesHtml`
         return http.get(url, {}, function(responseText) {
             const html = JSON.parse(responseText).cartLinesHtml
             const doc = browser.parseDOM(html)
@@ -413,23 +410,23 @@ let rsDelivers = {
     //otherwise
     _add_lines(lines_incoming, i, result, callback) {
         if (i < lines_incoming.length) {
-            let lines = lines_incoming.slice(i, i+99 + 1)
+            const lines = lines_incoming.slice(i, i+99 + 1)
             return this._clear_invalid(() => {
-                let url = `http${this.site}/CheckoutServices/BulkAddProducts`
+                const url = `http${this.site}/CheckoutServices/BulkAddProducts`
                 let params = 'productString='
                 lines.forEach(line => {
                     params += `${line.part},${line.quantity},"${line.reference}"\n`
                 })
                 return http.post(url, params, responseText => {
                     return callback({success:true})
-                    let doc = browser.parseDOM(JSON.parse(responseText).html)
-                    let success = doc.querySelector("#hidErrorAtLineLevel")
+                    const doc = browser.parseDOM(JSON.parse(responseText).html)
+                    const success = doc.querySelector("#hidErrorAtLineLevel")
                         .value === "0"
                     if (!success) {
                         return this._get_invalid_lines(parts => {
-                            let invalid = []
+                            const invalid = []
                             for (let k = 0; k < lines.length; k++) {
-                                let line = lines[k]
+                                const line = lines[k]
                                 if (__in__(line.part, parts)) {
                                     invalid.push(line)
                                 }
