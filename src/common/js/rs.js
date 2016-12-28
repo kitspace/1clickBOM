@@ -357,52 +357,38 @@ let rsDelivers = {
 
 
     _clear_invalid(callback) {
-        return this._get_invalid_line_ids(ids => {
-            return this._delete_invalid(ids, callback)
+        return this._get_invalid_lines(parts => {
+            return this._delete_invalid(parts, callback)
         }
         )
     },
 
 
-    _delete_invalid(ids, callback) {
-        let url = `http${this.site}/shoppingCart/RemoveMultiple`
-        let params = '{"request":{"encodedString":"'
-        for (let i = 0; i < ids.length; i++) {
-            let id = ids[i]
-            params += id + "|"
-        }
-        params += '"}}'
-        return http.post(url, params, {json:true}, function() {
-            if (callback != null) {
-                return callback()
-            }
-        }, function() {
-            if (callback != null) {
-                return callback()
-            }
+    _delete_invalid(parts, callback) {
+        const url = `http${this.site}/CheckoutServices/UpdateDeleteProductsInCart`
+        const promises = parts.map(part => {
+            return http.promisePost(url, `stockCode=${part}&quantity=0`)
         })
+        Promise.all(promises).then(callback)
     },
 
 
-    _get_invalid_line_ids(callback) {
-        let url = `http${this.site}/shoppingCart`
+    _get_invalid_lines(callback) {
+        let url = `http${this.site}/CheckoutServices/GetCartLinesHtml`
         return http.get(url, {}, function(responseText) {
-            let doc = browser.parseDOM(responseText)
-            let ids = []
-            let parts = []
-            let iterable = doc.getElementsByClassName("errorOrderLine")
-            for (let i = 0; i < iterable.length; i++) {
-                let elem = iterable[i]
-                ids.push(elem.parentElement.nextElementSibling
-                    .querySelector(".quantityTd").firstElementChild
-                    .classList[3].split("_")[1])
-                parts.push(elem.parentElement.nextElementSibling
-                    .querySelector(".descriptionTd").firstElementChild
+            const html = JSON.parse(responseText).cartLinesHtml
+            const doc = browser.parseDOM(html)
+            const errors = doc.getElementsByClassName("errorOrderLine")
+            const ids = []
+            const parts = []
+            for (let i = 0; i < errors.length; i++) {
+                const error = errors[i]
+                parts.push(error.parentElement.nextElementSibling
+                    .querySelector(".descTd").firstElementChild
                     .nextElementSibling.firstElementChild.nextElementSibling
-                    .innerText.trim())
+                    .innerText.trim().replace('-',''))
             }
-            console.log(ids, parts)
-            return callback(ids, parts)
+            return callback(parts)
         }
         , () => callback([],[])
         )
@@ -435,13 +421,12 @@ let rsDelivers = {
                     params += `${line.part},${line.quantity},"${line.reference}"\n`
                 })
                 return http.post(url, params, responseText => {
-                    console.log(responseText)
                     return callback({success:true})
                     let doc = browser.parseDOM(JSON.parse(responseText).html)
                     let success = doc.querySelector("#hidErrorAtLineLevel")
                         .value === "0"
                     if (!success) {
-                        return this._get_invalid_line_ids((ids, parts) => {
+                        return this._get_invalid_lines(parts => {
                             let invalid = []
                             for (let k = 0; k < lines.length; k++) {
                                 let line = lines[k]
@@ -500,11 +485,11 @@ class RS extends RetailerInterface {
 exports.RS = RS
 
 function __guardFunc__(func, transform) {
-  return typeof func === 'function' ? transform(func) : undefined
+    return typeof func === 'function' ? transform(func) : undefined
 }
 function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
+    return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
 }
 function __in__(needle, haystack) {
-  return haystack.indexOf(needle) >= 0
+    return haystack.indexOf(needle) >= 0
 }
