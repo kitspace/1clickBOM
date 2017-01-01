@@ -24,6 +24,8 @@ const { browser } = require('./browser')
 class Digikey extends RetailerInterface {
     constructor(country_code, settings, callback) {
         super('Digikey', country_code, 'data/digikey.json', settings, callback)
+        //make sure we have a cart cookie
+        http.get(`http${this.site}${this.cart}`, {notify: false}, () => {})
     }
 
     clearCart(callback) {
@@ -38,8 +40,7 @@ class Digikey extends RetailerInterface {
             if (callback != null) {
                 return callback({success:false})
             }
-        }
-        )
+        })
     }
 
     addLines(lines, callback) {
@@ -52,8 +53,7 @@ class Digikey extends RetailerInterface {
                 callback(result, this, lines)
             }
             return this.refreshCartTabs()
-        }
-        )
+        })
     }
 
     _add_lines(lines, callback) {
