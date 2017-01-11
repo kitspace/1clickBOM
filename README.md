@@ -68,7 +68,7 @@ Check the [roadmap](#roadmap) for more details on planned features.
 1. Open a new spreadsheet and paste into it. Save it as tab-seperated values, with a `.tsv` extension and UTF-8 encoding.
 1. Check over all the part numbers and make sure they are correct. Put them into your shopping cart using the extension to confirm they have the right minimum order quantity etc.
 
-#### KiCad
+#### KiCAD
 
 ![][kicad_bom_export.png]
 
@@ -81,7 +81,7 @@ Check the [roadmap](#roadmap) for more details on planned features.
 5. To sync any changes back into your schematic you can use [KiField](https://pypi.python.org/pypi/kifield).
 
 
-#### Generally
+#### All CAD Programs
 
 You can copy and paste into the extension from a text editor or spread sheet
 program (LibreOffice, Excel). You must have a column for references, one for the
