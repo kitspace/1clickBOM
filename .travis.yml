@@ -3,8 +3,8 @@ node_js:
   - "6"
 sudo: required
 script:
-  - ./configure.js
+  - ./configure
   - wget https://github.com/ninja-build/ninja/releases/download/v1.6.0/ninja-linux.zip
   - unzip ninja-linux.zip
   - ./ninja
-  - ./deploy.sh
+  - ./deploy
