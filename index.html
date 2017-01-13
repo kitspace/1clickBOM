@@ -384,13 +384,13 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+'emai
 <ul>
 <li>Get dependencies above and make sure executables are on your path</li>
 <li><code>npm install --global</code> (or <code>npm install &amp;&amp; export PATH=$PATH:$(pwd)/node_modules/.bin</code>)</li>
-<li><code>./configure.js</code></li>
+<li><code>./configure</code></li>
 <li><code>ninja</code></li>
 </ul>
 <h4 id="load">Load</h4>
 <ul>
 <li>For Chrome enable developer mode in <code>chrome://extensions</code> and load the unpacked extension from <code>build/chrome</code></li>
-<li>For Firefox run <code>./firefox.sh</code></li>
+<li>For Firefox run <code>./run-firefox</code></li>
 </ul>
 <h4 id="test">Test</h4>
 <p>Tests are written in <a href="https://web.archive.org/web/20130128010139/http://api.qunitjs.com/">QUnit 1.11</a> and can only be run in Chrome/Chromium. Open a console on background page and execute <code>Test()</code> or test a specific module, e.g. Farnell, with <code>Test('Farnell')</code></p>
