@@ -1,5 +1,3 @@
-const setTimeout   = require('./browser').browser.setTimeout
-const clearTimeout = require('./browser').browser.clearTimeout
 /* @preserve
  * The MIT License (MIT)
  * 
@@ -30,664 +28,664 @@ const clearTimeout = require('./browser').browser.clearTimeout
  * Features disabled: race, call_get, generators, map, nodeify, promisify, props, reduce, settle, some, using, timers, filter, any, each
 */
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.Promise=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof _dereq_=="function"&&_dereq_;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof _dereq_=="function"&&_dereq_;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
-"use strict"
-var firstLineError
+"use strict";
+var firstLineError;
 try {throw new Error(); } catch (e) {firstLineError = e;}
-var schedule = _dereq_("./schedule")
-var Queue = _dereq_("./queue")
-var util = _dereq_("./util")
+var schedule = _dereq_("./schedule");
+var Queue = _dereq_("./queue");
+var util = _dereq_("./util");
 
 function Async() {
-    this._isTickUsed = false
-    this._lateQueue = new Queue(16)
-    this._normalQueue = new Queue(16)
-    this._haveDrainedQueues = false
-    this._trampolineEnabled = true
-    var self = this
+    this._isTickUsed = false;
+    this._lateQueue = new Queue(16);
+    this._normalQueue = new Queue(16);
+    this._haveDrainedQueues = false;
+    this._trampolineEnabled = true;
+    var self = this;
     this.drainQueues = function () {
-        self._drainQueues()
-    }
-    this._schedule = schedule
+        self._drainQueues();
+    };
+    this._schedule = schedule;
 }
 
 Async.prototype.enableTrampoline = function() {
-    this._trampolineEnabled = true
-}
+    this._trampolineEnabled = true;
+};
 
 Async.prototype.disableTrampolineIfNecessary = function() {
     if (util.hasDevTools) {
-        this._trampolineEnabled = false
+        this._trampolineEnabled = false;
     }
-}
+};
 
 Async.prototype.haveItemsQueued = function () {
-    return this._isTickUsed || this._haveDrainedQueues
-}
+    return this._isTickUsed || this._haveDrainedQueues;
+};
 
 
 Async.prototype.fatalError = function(e, isNode) {
     if (isNode) {
         process.stderr.write("Fatal " + (e instanceof Error ? e.stack : e) +
-            "\n")
-        process.exit(2)
+            "\n");
+        process.exit(2);
     } else {
-        this.throwLater(e)
+        this.throwLater(e);
     }
-}
+};
 
 Async.prototype.throwLater = function(fn, arg) {
     if (arguments.length === 1) {
-        arg = fn
-        fn = function () { throw arg; }
+        arg = fn;
+        fn = function () { throw arg; };
     }
     if (typeof setTimeout !== "undefined") {
         setTimeout(function() {
-            fn(arg)
-        }, 0)
+            fn(arg);
+        }, 0);
     } else try {
         this._schedule(function() {
-            fn(arg)
-        })
+            fn(arg);
+        });
     } catch (e) {
-        throw new Error("No async scheduler available\u000a\u000a    See http://goo.gl/MqrFmX\u000a")
+        throw new Error("No async scheduler available\u000a\u000a    See http://goo.gl/MqrFmX\u000a");
     }
-}
+};
 
 function AsyncInvokeLater(fn, receiver, arg) {
-    this._lateQueue.push(fn, receiver, arg)
-    this._queueTick()
+    this._lateQueue.push(fn, receiver, arg);
+    this._queueTick();
 }
 
 function AsyncInvoke(fn, receiver, arg) {
-    this._normalQueue.push(fn, receiver, arg)
-    this._queueTick()
+    this._normalQueue.push(fn, receiver, arg);
+    this._queueTick();
 }
 
 function AsyncSettlePromises(promise) {
-    this._normalQueue._pushOne(promise)
-    this._queueTick()
+    this._normalQueue._pushOne(promise);
+    this._queueTick();
 }
 
 if (!util.hasDevTools) {
-    Async.prototype.invokeLater = AsyncInvokeLater
-    Async.prototype.invoke = AsyncInvoke
-    Async.prototype.settlePromises = AsyncSettlePromises
+    Async.prototype.invokeLater = AsyncInvokeLater;
+    Async.prototype.invoke = AsyncInvoke;
+    Async.prototype.settlePromises = AsyncSettlePromises;
 } else {
     Async.prototype.invokeLater = function (fn, receiver, arg) {
         if (this._trampolineEnabled) {
-            AsyncInvokeLater.call(this, fn, receiver, arg)
+            AsyncInvokeLater.call(this, fn, receiver, arg);
         } else {
             this._schedule(function() {
                 setTimeout(function() {
-                    fn.call(receiver, arg)
-                }, 100)
-            })
+                    fn.call(receiver, arg);
+                }, 100);
+            });
         }
-    }
+    };
 
     Async.prototype.invoke = function (fn, receiver, arg) {
         if (this._trampolineEnabled) {
-            AsyncInvoke.call(this, fn, receiver, arg)
+            AsyncInvoke.call(this, fn, receiver, arg);
         } else {
             this._schedule(function() {
-                fn.call(receiver, arg)
-            })
+                fn.call(receiver, arg);
+            });
         }
-    }
+    };
 
     Async.prototype.settlePromises = function(promise) {
         if (this._trampolineEnabled) {
-            AsyncSettlePromises.call(this, promise)
+            AsyncSettlePromises.call(this, promise);
         } else {
             this._schedule(function() {
-                promise._settlePromises()
-            })
+                promise._settlePromises();
+            });
         }
-    }
+    };
 }
 
 Async.prototype.invokeFirst = function (fn, receiver, arg) {
-    this._normalQueue.unshift(fn, receiver, arg)
-    this._queueTick()
-}
+    this._normalQueue.unshift(fn, receiver, arg);
+    this._queueTick();
+};
 
 Async.prototype._drainQueue = function(queue) {
     while (queue.length() > 0) {
-        var fn = queue.shift()
+        var fn = queue.shift();
         if (typeof fn !== "function") {
-            fn._settlePromises()
-            continue
+            fn._settlePromises();
+            continue;
         }
-        var receiver = queue.shift()
-        var arg = queue.shift()
-        fn.call(receiver, arg)
+        var receiver = queue.shift();
+        var arg = queue.shift();
+        fn.call(receiver, arg);
     }
-}
+};
 
 Async.prototype._drainQueues = function () {
-    this._drainQueue(this._normalQueue)
-    this._reset()
-    this._haveDrainedQueues = true
-    this._drainQueue(this._lateQueue)
-}
+    this._drainQueue(this._normalQueue);
+    this._reset();
+    this._haveDrainedQueues = true;
+    this._drainQueue(this._lateQueue);
+};
 
 Async.prototype._queueTick = function () {
     if (!this._isTickUsed) {
-        this._isTickUsed = true
-        this._schedule(this.drainQueues)
+        this._isTickUsed = true;
+        this._schedule(this.drainQueues);
     }
-}
+};
 
 Async.prototype._reset = function () {
-    this._isTickUsed = false
-}
+    this._isTickUsed = false;
+};
 
-module.exports = Async
-module.exports.firstLineError = firstLineError
+module.exports = Async;
+module.exports.firstLineError = firstLineError;
 
 },{"./queue":17,"./schedule":18,"./util":21}],2:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 module.exports = function(Promise, INTERNAL, tryConvertToPromise, debug) {
-var calledBind = false
+var calledBind = false;
 var rejectThis = function(_, e) {
-    this._reject(e)
-}
+    this._reject(e);
+};
 
 var targetRejected = function(e, context) {
-    context.promiseRejectionQueued = true
-    context.bindingPromise._then(rejectThis, rejectThis, null, this, e)
-}
+    context.promiseRejectionQueued = true;
+    context.bindingPromise._then(rejectThis, rejectThis, null, this, e);
+};
 
 var bindingResolved = function(thisArg, context) {
     if (((this._bitField & 50397184) === 0)) {
-        this._resolveCallback(context.target)
+        this._resolveCallback(context.target);
     }
-}
+};
 
 var bindingRejected = function(e, context) {
-    if (!context.promiseRejectionQueued) this._reject(e)
-}
+    if (!context.promiseRejectionQueued) this._reject(e);
+};
 
 Promise.prototype.bind = function (thisArg) {
     if (!calledBind) {
-        calledBind = true
-        Promise.prototype._propagateFrom = debug.propagateFromFunction()
-        Promise.prototype._boundValue = debug.boundValueFunction()
+        calledBind = true;
+        Promise.prototype._propagateFrom = debug.propagateFromFunction();
+        Promise.prototype._boundValue = debug.boundValueFunction();
     }
-    var maybePromise = tryConvertToPromise(thisArg)
-    var ret = new Promise(INTERNAL)
-    ret._propagateFrom(this, 1)
-    var target = this._target()
-    ret._setBoundTo(maybePromise)
+    var maybePromise = tryConvertToPromise(thisArg);
+    var ret = new Promise(INTERNAL);
+    ret._propagateFrom(this, 1);
+    var target = this._target();
+    ret._setBoundTo(maybePromise);
     if (maybePromise instanceof Promise) {
         var context = {
             promiseRejectionQueued: false,
             promise: ret,
             target: target,
             bindingPromise: maybePromise
-        }
-        target._then(INTERNAL, targetRejected, undefined, ret, context)
+        };
+        target._then(INTERNAL, targetRejected, undefined, ret, context);
         maybePromise._then(
-            bindingResolved, bindingRejected, undefined, ret, context)
-        ret._setOnCancel(maybePromise)
+            bindingResolved, bindingRejected, undefined, ret, context);
+        ret._setOnCancel(maybePromise);
     } else {
-        ret._resolveCallback(target)
+        ret._resolveCallback(target);
     }
-    return ret
-}
+    return ret;
+};
 
 Promise.prototype._setBoundTo = function (obj) {
     if (obj !== undefined) {
-        this._bitField = this._bitField | 2097152
-        this._boundTo = obj
+        this._bitField = this._bitField | 2097152;
+        this._boundTo = obj;
     } else {
-        this._bitField = this._bitField & (~2097152)
+        this._bitField = this._bitField & (~2097152);
     }
-}
+};
 
 Promise.prototype._isBound = function () {
-    return (this._bitField & 2097152) === 2097152
-}
+    return (this._bitField & 2097152) === 2097152;
+};
 
 Promise.bind = function (thisArg, value) {
-    return Promise.resolve(value).bind(thisArg)
-}
-}
+    return Promise.resolve(value).bind(thisArg);
+};
+};
 
 },{}],3:[function(_dereq_,module,exports){
-"use strict"
-var old
-if (typeof Promise !== "undefined") old = Promise
+"use strict";
+var old;
+if (typeof Promise !== "undefined") old = Promise;
 function noConflict() {
     try { if (Promise === bluebird) Promise = old; }
     catch (e) {}
-    return bluebird
+    return bluebird;
 }
-var bluebird = _dereq_("./promise")()
-bluebird.noConflict = noConflict
-module.exports = bluebird
+var bluebird = _dereq_("./promise")();
+bluebird.noConflict = noConflict;
+module.exports = bluebird;
 
 },{"./promise":15}],4:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 module.exports = function(Promise, PromiseArray, apiRejection, debug) {
-var util = _dereq_("./util")
-var tryCatch = util.tryCatch
-var errorObj = util.errorObj
-var async = Promise._async
+var util = _dereq_("./util");
+var tryCatch = util.tryCatch;
+var errorObj = util.errorObj;
+var async = Promise._async;
 
 Promise.prototype["break"] = Promise.prototype.cancel = function() {
-    if (!debug.cancellation()) return this._warn("cancellation is disabled")
+    if (!debug.cancellation()) return this._warn("cancellation is disabled");
 
-    var promise = this
-    var child = promise
+    var promise = this;
+    var child = promise;
     while (promise.isCancellable()) {
         if (!promise._cancelBy(child)) {
             if (child._isFollowing()) {
-                child._followee().cancel()
+                child._followee().cancel();
             } else {
-                child._cancelBranched()
+                child._cancelBranched();
             }
-            break
+            break;
         }
 
-        var parent = promise._cancellationParent
+        var parent = promise._cancellationParent;
         if (parent == null || !parent.isCancellable()) {
             if (promise._isFollowing()) {
-                promise._followee().cancel()
+                promise._followee().cancel();
             } else {
-                promise._cancelBranched()
+                promise._cancelBranched();
             }
-            break
+            break;
         } else {
-            if (promise._isFollowing()) promise._followee().cancel()
-            child = promise
-            promise = parent
+            if (promise._isFollowing()) promise._followee().cancel();
+            child = promise;
+            promise = parent;
         }
     }
-}
+};
 
 Promise.prototype._branchHasCancelled = function() {
-    this._branchesRemainingToCancel--
-}
+    this._branchesRemainingToCancel--;
+};
 
 Promise.prototype._enoughBranchesHaveCancelled = function() {
     return this._branchesRemainingToCancel === undefined ||
-           this._branchesRemainingToCancel <= 0
-}
+           this._branchesRemainingToCancel <= 0;
+};
 
 Promise.prototype._cancelBy = function(canceller) {
     if (canceller === this) {
-        this._branchesRemainingToCancel = 0
-        this._invokeOnCancel()
-        return true
+        this._branchesRemainingToCancel = 0;
+        this._invokeOnCancel();
+        return true;
     } else {
-        this._branchHasCancelled()
+        this._branchHasCancelled();
         if (this._enoughBranchesHaveCancelled()) {
-            this._invokeOnCancel()
-            return true
+            this._invokeOnCancel();
+            return true;
         }
     }
-    return false
-}
+    return false;
+};
 
 Promise.prototype._cancelBranched = function() {
     if (this._enoughBranchesHaveCancelled()) {
-        this._cancel()
+        this._cancel();
     }
-}
+};
 
 Promise.prototype._cancel = function() {
-    if (!this.isCancellable()) return
+    if (!this.isCancellable()) return;
 
-    this._setCancelled()
-    async.invoke(this._cancelPromises, this, undefined)
-}
+    this._setCancelled();
+    async.invoke(this._cancelPromises, this, undefined);
+};
 
 Promise.prototype._cancelPromises = function() {
-    if (this._length() > 0) this._settlePromises()
-}
+    if (this._length() > 0) this._settlePromises();
+};
 
 Promise.prototype._unsetOnCancel = function() {
-    this._onCancelField = undefined
-}
+    this._onCancelField = undefined;
+};
 
 Promise.prototype.isCancellable = function() {
-    return this.isPending() && !this.isCancelled()
-}
+    return this.isPending() && !this.isCancelled();
+};
 
 Promise.prototype._doInvokeOnCancel = function(onCancelCallback, internalOnly) {
     if (util.isArray(onCancelCallback)) {
         for (var i = 0; i < onCancelCallback.length; ++i) {
-            this._doInvokeOnCancel(onCancelCallback[i], internalOnly)
+            this._doInvokeOnCancel(onCancelCallback[i], internalOnly);
         }
     } else if (onCancelCallback !== undefined) {
         if (typeof onCancelCallback === "function") {
             if (!internalOnly) {
-                var e = tryCatch(onCancelCallback).call(this._boundValue())
+                var e = tryCatch(onCancelCallback).call(this._boundValue());
                 if (e === errorObj) {
-                    this._attachExtraTrace(e.e)
-                    async.throwLater(e.e)
+                    this._attachExtraTrace(e.e);
+                    async.throwLater(e.e);
                 }
             }
         } else {
-            onCancelCallback._resultCancelled(this)
+            onCancelCallback._resultCancelled(this);
         }
     }
-}
+};
 
 Promise.prototype._invokeOnCancel = function() {
-    var onCancelCallback = this._onCancel()
-    this._unsetOnCancel()
-    async.invoke(this._doInvokeOnCancel, this, onCancelCallback)
-}
+    var onCancelCallback = this._onCancel();
+    this._unsetOnCancel();
+    async.invoke(this._doInvokeOnCancel, this, onCancelCallback);
+};
 
 Promise.prototype._invokeInternalOnCancel = function() {
     if (this.isCancellable()) {
-        this._doInvokeOnCancel(this._onCancel(), true)
-        this._unsetOnCancel()
+        this._doInvokeOnCancel(this._onCancel(), true);
+        this._unsetOnCancel();
     }
-}
+};
 
 Promise.prototype._resultCancelled = function() {
-    this.cancel()
-}
+    this.cancel();
+};
 
-}
+};
 
 },{"./util":21}],5:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 module.exports = function(NEXT_FILTER) {
-var util = _dereq_("./util")
-var getKeys = _dereq_("./es5").keys
-var tryCatch = util.tryCatch
-var errorObj = util.errorObj
+var util = _dereq_("./util");
+var getKeys = _dereq_("./es5").keys;
+var tryCatch = util.tryCatch;
+var errorObj = util.errorObj;
 
 function catchFilter(instances, cb, promise) {
     return function(e) {
-        var boundTo = promise._boundValue()
+        var boundTo = promise._boundValue();
         predicateLoop: for (var i = 0; i < instances.length; ++i) {
-            var item = instances[i]
+            var item = instances[i];
 
             if (item === Error ||
                 (item != null && item.prototype instanceof Error)) {
                 if (e instanceof item) {
-                    return tryCatch(cb).call(boundTo, e)
+                    return tryCatch(cb).call(boundTo, e);
                 }
             } else if (typeof item === "function") {
-                var matchesPredicate = tryCatch(item).call(boundTo, e)
+                var matchesPredicate = tryCatch(item).call(boundTo, e);
                 if (matchesPredicate === errorObj) {
-                    return matchesPredicate
+                    return matchesPredicate;
                 } else if (matchesPredicate) {
-                    return tryCatch(cb).call(boundTo, e)
+                    return tryCatch(cb).call(boundTo, e);
                 }
             } else if (util.isObject(e)) {
-                var keys = getKeys(item)
+                var keys = getKeys(item);
                 for (var j = 0; j < keys.length; ++j) {
-                    var key = keys[j]
+                    var key = keys[j];
                     if (item[key] != e[key]) {
-                        continue predicateLoop
+                        continue predicateLoop;
                     }
                 }
-                return tryCatch(cb).call(boundTo, e)
+                return tryCatch(cb).call(boundTo, e);
             }
         }
-        return NEXT_FILTER
-    }
+        return NEXT_FILTER;
+    };
 }
 
-return catchFilter
-}
+return catchFilter;
+};
 
 },{"./es5":10,"./util":21}],6:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 module.exports = function(Promise) {
-var longStackTraces = false
-var contextStack = []
+var longStackTraces = false;
+var contextStack = [];
 
-Promise.prototype._promiseCreated = function() {}
-Promise.prototype._pushContext = function() {}
-Promise.prototype._popContext = function() {return null;}
-Promise._peekContext = Promise.prototype._peekContext = function() {}
+Promise.prototype._promiseCreated = function() {};
+Promise.prototype._pushContext = function() {};
+Promise.prototype._popContext = function() {return null;};
+Promise._peekContext = Promise.prototype._peekContext = function() {};
 
 function Context() {
-    this._trace = new Context.CapturedTrace(peekContext())
+    this._trace = new Context.CapturedTrace(peekContext());
 }
 Context.prototype._pushContext = function () {
     if (this._trace !== undefined) {
-        this._trace._promiseCreated = null
-        contextStack.push(this._trace)
+        this._trace._promiseCreated = null;
+        contextStack.push(this._trace);
     }
-}
+};
 
 Context.prototype._popContext = function () {
     if (this._trace !== undefined) {
-        var trace = contextStack.pop()
-        var ret = trace._promiseCreated
-        trace._promiseCreated = null
-        return ret
+        var trace = contextStack.pop();
+        var ret = trace._promiseCreated;
+        trace._promiseCreated = null;
+        return ret;
     }
-    return null
-}
+    return null;
+};
 
 function createContext() {
-    if (longStackTraces) return new Context()
+    if (longStackTraces) return new Context();
 }
 
 function peekContext() {
-    var lastIndex = contextStack.length - 1
+    var lastIndex = contextStack.length - 1;
     if (lastIndex >= 0) {
-        return contextStack[lastIndex]
+        return contextStack[lastIndex];
     }
-    return undefined
+    return undefined;
 }
-Context.CapturedTrace = null
-Context.create = createContext
-Context.deactivateLongStackTraces = function() {}
+Context.CapturedTrace = null;
+Context.create = createContext;
+Context.deactivateLongStackTraces = function() {};
 Context.activateLongStackTraces = function() {
-    var Promise_pushContext = Promise.prototype._pushContext
-    var Promise_popContext = Promise.prototype._popContext
-    var Promise_PeekContext = Promise._peekContext
-    var Promise_peekContext = Promise.prototype._peekContext
-    var Promise_promiseCreated = Promise.prototype._promiseCreated
+    var Promise_pushContext = Promise.prototype._pushContext;
+    var Promise_popContext = Promise.prototype._popContext;
+    var Promise_PeekContext = Promise._peekContext;
+    var Promise_peekContext = Promise.prototype._peekContext;
+    var Promise_promiseCreated = Promise.prototype._promiseCreated;
     Context.deactivateLongStackTraces = function() {
-        Promise.prototype._pushContext = Promise_pushContext
-        Promise.prototype._popContext = Promise_popContext
-        Promise._peekContext = Promise_PeekContext
-        Promise.prototype._peekContext = Promise_peekContext
-        Promise.prototype._promiseCreated = Promise_promiseCreated
-        longStackTraces = false
-    }
-    longStackTraces = true
-    Promise.prototype._pushContext = Context.prototype._pushContext
-    Promise.prototype._popContext = Context.prototype._popContext
-    Promise._peekContext = Promise.prototype._peekContext = peekContext
+        Promise.prototype._pushContext = Promise_pushContext;
+        Promise.prototype._popContext = Promise_popContext;
+        Promise._peekContext = Promise_PeekContext;
+        Promise.prototype._peekContext = Promise_peekContext;
+        Promise.prototype._promiseCreated = Promise_promiseCreated;
+        longStackTraces = false;
+    };
+    longStackTraces = true;
+    Promise.prototype._pushContext = Context.prototype._pushContext;
+    Promise.prototype._popContext = Context.prototype._popContext;
+    Promise._peekContext = Promise.prototype._peekContext = peekContext;
     Promise.prototype._promiseCreated = function() {
-        var ctx = this._peekContext()
-        if (ctx && ctx._promiseCreated == null) ctx._promiseCreated = this
-    }
-}
-return Context
-}
+        var ctx = this._peekContext();
+        if (ctx && ctx._promiseCreated == null) ctx._promiseCreated = this;
+    };
+};
+return Context;
+};
 
 },{}],7:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 module.exports = function(Promise, Context) {
-var getDomain = Promise._getDomain
-var async = Promise._async
-var Warning = _dereq_("./errors").Warning
-var util = _dereq_("./util")
-var canAttachTrace = util.canAttachTrace
-var unhandledRejectionHandled
-var possiblyUnhandledRejection
+var getDomain = Promise._getDomain;
+var async = Promise._async;
+var Warning = _dereq_("./errors").Warning;
+var util = _dereq_("./util");
+var canAttachTrace = util.canAttachTrace;
+var unhandledRejectionHandled;
+var possiblyUnhandledRejection;
 var bluebirdFramePattern =
-    /[\\\/]bluebird[\\\/]js[\\\/](release|debug|instrumented)/
-var stackFramePattern = null
-var formatStack = null
-var indentStackFrames = false
-var printWarning
+    /[\\\/]bluebird[\\\/]js[\\\/](release|debug|instrumented)/;
+var stackFramePattern = null;
+var formatStack = null;
+var indentStackFrames = false;
+var printWarning;
 var debugging = !!(util.env("BLUEBIRD_DEBUG") != 0 &&
                         (true ||
                          util.env("BLUEBIRD_DEBUG") ||
-                         util.env("NODE_ENV") === "development"))
+                         util.env("NODE_ENV") === "development"));
 
 var warnings = !!(util.env("BLUEBIRD_WARNINGS") != 0 &&
-    (debugging || util.env("BLUEBIRD_WARNINGS")))
+    (debugging || util.env("BLUEBIRD_WARNINGS")));
 
 var longStackTraces = !!(util.env("BLUEBIRD_LONG_STACK_TRACES") != 0 &&
-    (debugging || util.env("BLUEBIRD_LONG_STACK_TRACES")))
+    (debugging || util.env("BLUEBIRD_LONG_STACK_TRACES")));
 
 var wForgottenReturn = util.env("BLUEBIRD_W_FORGOTTEN_RETURN") != 0 &&
-    (warnings || !!util.env("BLUEBIRD_W_FORGOTTEN_RETURN"))
+    (warnings || !!util.env("BLUEBIRD_W_FORGOTTEN_RETURN"));
 
 Promise.prototype.suppressUnhandledRejections = function() {
-    var target = this._target()
+    var target = this._target();
     target._bitField = ((target._bitField & (~1048576)) |
-                      524288)
-}
+                      524288);
+};
 
 Promise.prototype._ensurePossibleRejectionHandled = function () {
-    if ((this._bitField & 524288) !== 0) return
-    this._setRejectionIsUnhandled()
-    async.invokeLater(this._notifyUnhandledRejection, this, undefined)
-}
+    if ((this._bitField & 524288) !== 0) return;
+    this._setRejectionIsUnhandled();
+    async.invokeLater(this._notifyUnhandledRejection, this, undefined);
+};
 
 Promise.prototype._notifyUnhandledRejectionIsHandled = function () {
     fireRejectionEvent("rejectionHandled",
-                                  unhandledRejectionHandled, undefined, this)
-}
+                                  unhandledRejectionHandled, undefined, this);
+};
 
 Promise.prototype._setReturnedNonUndefined = function() {
-    this._bitField = this._bitField | 268435456
-}
+    this._bitField = this._bitField | 268435456;
+};
 
 Promise.prototype._returnedNonUndefined = function() {
-    return (this._bitField & 268435456) !== 0
-}
+    return (this._bitField & 268435456) !== 0;
+};
 
 Promise.prototype._notifyUnhandledRejection = function () {
     if (this._isRejectionUnhandled()) {
-        var reason = this._settledValue()
-        this._setUnhandledRejectionIsNotified()
+        var reason = this._settledValue();
+        this._setUnhandledRejectionIsNotified();
         fireRejectionEvent("unhandledRejection",
-                                      possiblyUnhandledRejection, reason, this)
+                                      possiblyUnhandledRejection, reason, this);
     }
-}
+};
 
 Promise.prototype._setUnhandledRejectionIsNotified = function () {
-    this._bitField = this._bitField | 262144
-}
+    this._bitField = this._bitField | 262144;
+};
 
 Promise.prototype._unsetUnhandledRejectionIsNotified = function () {
-    this._bitField = this._bitField & (~262144)
-}
+    this._bitField = this._bitField & (~262144);
+};
 
 Promise.prototype._isUnhandledRejectionNotified = function () {
-    return (this._bitField & 262144) > 0
-}
+    return (this._bitField & 262144) > 0;
+};
 
 Promise.prototype._setRejectionIsUnhandled = function () {
-    this._bitField = this._bitField | 1048576
-}
+    this._bitField = this._bitField | 1048576;
+};
 
 Promise.prototype._unsetRejectionIsUnhandled = function () {
-    this._bitField = this._bitField & (~1048576)
+    this._bitField = this._bitField & (~1048576);
     if (this._isUnhandledRejectionNotified()) {
-        this._unsetUnhandledRejectionIsNotified()
-        this._notifyUnhandledRejectionIsHandled()
+        this._unsetUnhandledRejectionIsNotified();
+        this._notifyUnhandledRejectionIsHandled();
     }
-}
+};
 
 Promise.prototype._isRejectionUnhandled = function () {
-    return (this._bitField & 1048576) > 0
-}
+    return (this._bitField & 1048576) > 0;
+};
 
 Promise.prototype._warn = function(message, shouldUseOwnTrace, promise) {
-    return warn(message, shouldUseOwnTrace, promise || this)
-}
+    return warn(message, shouldUseOwnTrace, promise || this);
+};
 
 Promise.onPossiblyUnhandledRejection = function (fn) {
-    var domain = getDomain()
+    var domain = getDomain();
     possiblyUnhandledRejection =
         typeof fn === "function" ? (domain === null ? fn : domain.bind(fn))
-                                 : undefined
-}
+                                 : undefined;
+};
 
 Promise.onUnhandledRejectionHandled = function (fn) {
-    var domain = getDomain()
+    var domain = getDomain();
     unhandledRejectionHandled =
         typeof fn === "function" ? (domain === null ? fn : domain.bind(fn))
-                                 : undefined
-}
+                                 : undefined;
+};
 
-var disableLongStackTraces = function() {}
+var disableLongStackTraces = function() {};
 Promise.longStackTraces = function () {
     if (async.haveItemsQueued() && !config.longStackTraces) {
-        throw new Error("cannot enable long stack traces after promises have been created\u000a\u000a    See http://goo.gl/MqrFmX\u000a")
+        throw new Error("cannot enable long stack traces after promises have been created\u000a\u000a    See http://goo.gl/MqrFmX\u000a");
     }
     if (!config.longStackTraces && longStackTracesIsSupported()) {
-        var Promise_captureStackTrace = Promise.prototype._captureStackTrace
-        var Promise_attachExtraTrace = Promise.prototype._attachExtraTrace
-        config.longStackTraces = true
+        var Promise_captureStackTrace = Promise.prototype._captureStackTrace;
+        var Promise_attachExtraTrace = Promise.prototype._attachExtraTrace;
+        config.longStackTraces = true;
         disableLongStackTraces = function() {
             if (async.haveItemsQueued() && !config.longStackTraces) {
-                throw new Error("cannot enable long stack traces after promises have been created\u000a\u000a    See http://goo.gl/MqrFmX\u000a")
+                throw new Error("cannot enable long stack traces after promises have been created\u000a\u000a    See http://goo.gl/MqrFmX\u000a");
             }
-            Promise.prototype._captureStackTrace = Promise_captureStackTrace
-            Promise.prototype._attachExtraTrace = Promise_attachExtraTrace
-            Context.deactivateLongStackTraces()
-            async.enableTrampoline()
-            config.longStackTraces = false
-        }
-        Promise.prototype._captureStackTrace = longStackTracesCaptureStackTrace
-        Promise.prototype._attachExtraTrace = longStackTracesAttachExtraTrace
-        Context.activateLongStackTraces()
-        async.disableTrampolineIfNecessary()
+            Promise.prototype._captureStackTrace = Promise_captureStackTrace;
+            Promise.prototype._attachExtraTrace = Promise_attachExtraTrace;
+            Context.deactivateLongStackTraces();
+            async.enableTrampoline();
+            config.longStackTraces = false;
+        };
+        Promise.prototype._captureStackTrace = longStackTracesCaptureStackTrace;
+        Promise.prototype._attachExtraTrace = longStackTracesAttachExtraTrace;
+        Context.activateLongStackTraces();
+        async.disableTrampolineIfNecessary();
     }
-}
+};
 
 Promise.hasLongStackTraces = function () {
-    return config.longStackTraces && longStackTracesIsSupported()
-}
+    return config.longStackTraces && longStackTracesIsSupported();
+};
 
 var fireDomEvent = (function() {
     try {
-        var event = document.createEvent("CustomEvent")
-        event.initCustomEvent("testingtheevent", false, true, {})
-        util.global.dispatchEvent(event)
+        var event = document.createEvent("CustomEvent");
+        event.initCustomEvent("testingtheevent", false, true, {});
+        util.global.dispatchEvent(event);
         return function(name, event) {
-            var domEvent = document.createEvent("CustomEvent")
-            domEvent.initCustomEvent(name.toLowerCase(), false, true, event)
-            return !util.global.dispatchEvent(domEvent)
-        }
+            var domEvent = document.createEvent("CustomEvent");
+            domEvent.initCustomEvent(name.toLowerCase(), false, true, event);
+            return !util.global.dispatchEvent(domEvent);
+        };
     } catch (e) {}
     return function() {
-        return false
-    }
-})()
+        return false;
+    };
+})();
 
 var fireGlobalEvent = (function() {
     if (util.isNode) {
         return function() {
-            return process.emit.apply(process, arguments)
-        }
+            return process.emit.apply(process, arguments);
+        };
     } else {
         if (!util.global) {
             return function() {
-                return false
-            }
+                return false;
+            };
         }
         return function(name) {
-            var methodName = "on" + name.toLowerCase()
-            var method = util.global[methodName]
-            if (!method) return false
-            method.apply(util.global, [].slice.call(arguments, 1))
-            return true
-        }
+            var methodName = "on" + name.toLowerCase();
+            var method = util.global[methodName];
+            if (!method) return false;
+            method.apply(util.global, [].slice.call(arguments, 1));
+            return true;
+        };
     }
-})()
+})();
 
 function generatePromiseLifecycleEventObject(name, promise) {
-    return {promise: promise}
+    return {promise: promise};
 }
 
 var eventToObjectGenerator = {
@@ -697,203 +695,203 @@ var eventToObjectGenerator = {
     promiseResolved: generatePromiseLifecycleEventObject,
     promiseCancelled: generatePromiseLifecycleEventObject,
     promiseChained: function(name, promise, child) {
-        return {promise: promise, child: child}
+        return {promise: promise, child: child};
     },
     warning: function(name, warning) {
-        return {warning: warning}
+        return {warning: warning};
     },
     unhandledRejection: function (name, reason, promise) {
-        return {reason: reason, promise: promise}
+        return {reason: reason, promise: promise};
     },
     rejectionHandled: generatePromiseLifecycleEventObject
-}
+};
 
 var activeFireEvent = function (name) {
-    var globalEventFired = false
+    var globalEventFired = false;
     try {
-        globalEventFired = fireGlobalEvent.apply(null, arguments)
+        globalEventFired = fireGlobalEvent.apply(null, arguments);
     } catch (e) {
-        async.throwLater(e)
-        globalEventFired = true
+        async.throwLater(e);
+        globalEventFired = true;
     }
 
-    var domEventFired = false
+    var domEventFired = false;
     try {
         domEventFired = fireDomEvent(name,
-                    eventToObjectGenerator[name].apply(null, arguments))
+                    eventToObjectGenerator[name].apply(null, arguments));
     } catch (e) {
-        async.throwLater(e)
-        domEventFired = true
+        async.throwLater(e);
+        domEventFired = true;
     }
 
-    return domEventFired || globalEventFired
-}
+    return domEventFired || globalEventFired;
+};
 
 Promise.config = function(opts) {
-    opts = Object(opts)
+    opts = Object(opts);
     if ("longStackTraces" in opts) {
         if (opts.longStackTraces) {
-            Promise.longStackTraces()
+            Promise.longStackTraces();
         } else if (!opts.longStackTraces && Promise.hasLongStackTraces()) {
-            disableLongStackTraces()
+            disableLongStackTraces();
         }
     }
     if ("warnings" in opts) {
-        var warningsOption = opts.warnings
-        config.warnings = !!warningsOption
-        wForgottenReturn = config.warnings
+        var warningsOption = opts.warnings;
+        config.warnings = !!warningsOption;
+        wForgottenReturn = config.warnings;
 
         if (util.isObject(warningsOption)) {
             if ("wForgottenReturn" in warningsOption) {
-                wForgottenReturn = !!warningsOption.wForgottenReturn
+                wForgottenReturn = !!warningsOption.wForgottenReturn;
             }
         }
     }
     if ("cancellation" in opts && opts.cancellation && !config.cancellation) {
         if (async.haveItemsQueued()) {
             throw new Error(
-                "cannot enable cancellation after promises are in use")
+                "cannot enable cancellation after promises are in use");
         }
         Promise.prototype._clearCancellationData =
-            cancellationClearCancellationData
-        Promise.prototype._propagateFrom = cancellationPropagateFrom
-        Promise.prototype._onCancel = cancellationOnCancel
-        Promise.prototype._setOnCancel = cancellationSetOnCancel
+            cancellationClearCancellationData;
+        Promise.prototype._propagateFrom = cancellationPropagateFrom;
+        Promise.prototype._onCancel = cancellationOnCancel;
+        Promise.prototype._setOnCancel = cancellationSetOnCancel;
         Promise.prototype._attachCancellationCallback =
-            cancellationAttachCancellationCallback
-        Promise.prototype._execute = cancellationExecute
-        propagateFromFunction = cancellationPropagateFrom
-        config.cancellation = true
+            cancellationAttachCancellationCallback;
+        Promise.prototype._execute = cancellationExecute;
+        propagateFromFunction = cancellationPropagateFrom;
+        config.cancellation = true;
     }
     if ("monitoring" in opts) {
         if (opts.monitoring && !config.monitoring) {
-            config.monitoring = true
-            Promise.prototype._fireEvent = activeFireEvent
+            config.monitoring = true;
+            Promise.prototype._fireEvent = activeFireEvent;
         } else if (!opts.monitoring && config.monitoring) {
-            config.monitoring = false
-            Promise.prototype._fireEvent = defaultFireEvent
+            config.monitoring = false;
+            Promise.prototype._fireEvent = defaultFireEvent;
         }
     }
-}
+};
 
 function defaultFireEvent() { return false; }
 
-Promise.prototype._fireEvent = defaultFireEvent
+Promise.prototype._fireEvent = defaultFireEvent;
 Promise.prototype._execute = function(executor, resolve, reject) {
     try {
-        executor(resolve, reject)
+        executor(resolve, reject);
     } catch (e) {
-        return e
+        return e;
     }
-}
-Promise.prototype._onCancel = function () {}
-Promise.prototype._setOnCancel = function (handler) { ; }
+};
+Promise.prototype._onCancel = function () {};
+Promise.prototype._setOnCancel = function (handler) { ; };
 Promise.prototype._attachCancellationCallback = function(onCancel) {
-    
-}
-Promise.prototype._captureStackTrace = function () {}
-Promise.prototype._attachExtraTrace = function () {}
-Promise.prototype._clearCancellationData = function() {}
+    ;
+};
+Promise.prototype._captureStackTrace = function () {};
+Promise.prototype._attachExtraTrace = function () {};
+Promise.prototype._clearCancellationData = function() {};
 Promise.prototype._propagateFrom = function (parent, flags) {
-    
-    
-}
+    ;
+    ;
+};
 
 function cancellationExecute(executor, resolve, reject) {
-    var promise = this
+    var promise = this;
     try {
         executor(resolve, reject, function(onCancel) {
             if (typeof onCancel !== "function") {
                 throw new TypeError("onCancel must be a function, got: " +
-                                    util.toString(onCancel))
+                                    util.toString(onCancel));
             }
-            promise._attachCancellationCallback(onCancel)
-        })
+            promise._attachCancellationCallback(onCancel);
+        });
     } catch (e) {
-        return e
+        return e;
     }
 }
 
 function cancellationAttachCancellationCallback(onCancel) {
-    if (!this.isCancellable()) return this
+    if (!this.isCancellable()) return this;
 
-    var previousOnCancel = this._onCancel()
+    var previousOnCancel = this._onCancel();
     if (previousOnCancel !== undefined) {
         if (util.isArray(previousOnCancel)) {
-            previousOnCancel.push(onCancel)
+            previousOnCancel.push(onCancel);
         } else {
-            this._setOnCancel([previousOnCancel, onCancel])
+            this._setOnCancel([previousOnCancel, onCancel]);
         }
     } else {
-        this._setOnCancel(onCancel)
+        this._setOnCancel(onCancel);
     }
 }
 
 function cancellationOnCancel() {
-    return this._onCancelField
+    return this._onCancelField;
 }
 
 function cancellationSetOnCancel(onCancel) {
-    this._onCancelField = onCancel
+    this._onCancelField = onCancel;
 }
 
 function cancellationClearCancellationData() {
-    this._cancellationParent = undefined
-    this._onCancelField = undefined
+    this._cancellationParent = undefined;
+    this._onCancelField = undefined;
 }
 
 function cancellationPropagateFrom(parent, flags) {
     if ((flags & 1) !== 0) {
-        this._cancellationParent = parent
-        var branchesRemainingToCancel = parent._branchesRemainingToCancel
+        this._cancellationParent = parent;
+        var branchesRemainingToCancel = parent._branchesRemainingToCancel;
         if (branchesRemainingToCancel === undefined) {
-            branchesRemainingToCancel = 0
+            branchesRemainingToCancel = 0;
         }
-        parent._branchesRemainingToCancel = branchesRemainingToCancel + 1
+        parent._branchesRemainingToCancel = branchesRemainingToCancel + 1;
     }
     if ((flags & 2) !== 0 && parent._isBound()) {
-        this._setBoundTo(parent._boundTo)
+        this._setBoundTo(parent._boundTo);
     }
 }
 
 function bindingPropagateFrom(parent, flags) {
     if ((flags & 2) !== 0 && parent._isBound()) {
-        this._setBoundTo(parent._boundTo)
+        this._setBoundTo(parent._boundTo);
     }
 }
-var propagateFromFunction = bindingPropagateFrom
+var propagateFromFunction = bindingPropagateFrom;
 
 function boundValueFunction() {
-    var ret = this._boundTo
+    var ret = this._boundTo;
     if (ret !== undefined) {
         if (ret instanceof Promise) {
             if (ret.isFulfilled()) {
-                return ret.value()
+                return ret.value();
             } else {
-                return undefined
+                return undefined;
             }
         }
     }
-    return ret
+    return ret;
 }
 
 function longStackTracesCaptureStackTrace() {
-    this._trace = new CapturedTrace(this._peekContext())
+    this._trace = new CapturedTrace(this._peekContext());
 }
 
 function longStackTracesAttachExtraTrace(error, ignoreSelf) {
     if (canAttachTrace(error)) {
-        var trace = this._trace
+        var trace = this._trace;
         if (trace !== undefined) {
-            if (ignoreSelf) trace = trace._parent
+            if (ignoreSelf) trace = trace._parent;
         }
         if (trace !== undefined) {
-            trace.attachExtraTrace(error)
+            trace.attachExtraTrace(error);
         } else if (!error.__stackCleaned__) {
-            var parsed = parseStackAndMessage(error)
+            var parsed = parseStackAndMessage(error);
             util.notEnumerableProp(error, "stack",
-                parsed.message + "\n" + parsed.stack.join("\n"))
-            util.notEnumerableProp(error, "__stackCleaned__", true)
+                parsed.message + "\n" + parsed.stack.join("\n"));
+            util.notEnumerableProp(error, "__stackCleaned__", true);
         }
     }
 }
@@ -902,430 +900,430 @@ function checkForgottenReturns(returnValue, promiseCreated, name, promise,
                                parent) {
     if (returnValue === undefined && promiseCreated !== null &&
         wForgottenReturn) {
-        if (parent !== undefined && parent._returnedNonUndefined()) return
-        var bitField = promise._bitField
-        if ((bitField & 65535) === 0) return
+        if (parent !== undefined && parent._returnedNonUndefined()) return;
+        var bitField = promise._bitField;
+        if ((bitField & 65535) === 0) return;
 
-        if (name) name = name + " "
+        if (name) name = name + " ";
         var msg = "a promise was created in a " + name +
-            "handler but was not returned from it"
-        promise._warn(msg, true, promiseCreated)
+            "handler but was not returned from it";
+        promise._warn(msg, true, promiseCreated);
     }
 }
 
 function deprecated(name, replacement) {
     var message = name +
-        " is deprecated and will be removed in a future version."
-    if (replacement) message += " Use " + replacement + " instead."
-    return warn(message)
+        " is deprecated and will be removed in a future version.";
+    if (replacement) message += " Use " + replacement + " instead.";
+    return warn(message);
 }
 
 function warn(message, shouldUseOwnTrace, promise) {
-    if (!config.warnings) return
-    var warning = new Warning(message)
-    var ctx
+    if (!config.warnings) return;
+    var warning = new Warning(message);
+    var ctx;
     if (shouldUseOwnTrace) {
-        promise._attachExtraTrace(warning)
+        promise._attachExtraTrace(warning);
     } else if (config.longStackTraces && (ctx = Promise._peekContext())) {
-        ctx.attachExtraTrace(warning)
+        ctx.attachExtraTrace(warning);
     } else {
-        var parsed = parseStackAndMessage(warning)
-        warning.stack = parsed.message + "\n" + parsed.stack.join("\n")
+        var parsed = parseStackAndMessage(warning);
+        warning.stack = parsed.message + "\n" + parsed.stack.join("\n");
     }
 
     if (!activeFireEvent("warning", warning)) {
-        formatAndLogError(warning, "", true)
+        formatAndLogError(warning, "", true);
     }
 }
 
 function reconstructStack(message, stacks) {
     for (var i = 0; i < stacks.length - 1; ++i) {
-        stacks[i].push("From previous event:")
-        stacks[i] = stacks[i].join("\n")
+        stacks[i].push("From previous event:");
+        stacks[i] = stacks[i].join("\n");
     }
     if (i < stacks.length) {
-        stacks[i] = stacks[i].join("\n")
+        stacks[i] = stacks[i].join("\n");
     }
-    return message + "\n" + stacks.join("\n")
+    return message + "\n" + stacks.join("\n");
 }
 
 function removeDuplicateOrEmptyJumps(stacks) {
     for (var i = 0; i < stacks.length; ++i) {
         if (stacks[i].length === 0 ||
             ((i + 1 < stacks.length) && stacks[i][0] === stacks[i+1][0])) {
-            stacks.splice(i, 1)
-            i--
+            stacks.splice(i, 1);
+            i--;
         }
     }
 }
 
 function removeCommonRoots(stacks) {
-    var current = stacks[0]
+    var current = stacks[0];
     for (var i = 1; i < stacks.length; ++i) {
-        var prev = stacks[i]
-        var currentLastIndex = current.length - 1
-        var currentLastLine = current[currentLastIndex]
-        var commonRootMeetPoint = -1
+        var prev = stacks[i];
+        var currentLastIndex = current.length - 1;
+        var currentLastLine = current[currentLastIndex];
+        var commonRootMeetPoint = -1;
 
         for (var j = prev.length - 1; j >= 0; --j) {
             if (prev[j] === currentLastLine) {
-                commonRootMeetPoint = j
-                break
+                commonRootMeetPoint = j;
+                break;
             }
         }
 
         for (var j = commonRootMeetPoint; j >= 0; --j) {
-            var line = prev[j]
+            var line = prev[j];
             if (current[currentLastIndex] === line) {
-                current.pop()
-                currentLastIndex--
+                current.pop();
+                currentLastIndex--;
             } else {
-                break
+                break;
             }
         }
-        current = prev
+        current = prev;
     }
 }
 
 function cleanStack(stack) {
-    var ret = []
+    var ret = [];
     for (var i = 0; i < stack.length; ++i) {
-        var line = stack[i]
+        var line = stack[i];
         var isTraceLine = "    (No stack trace)" === line ||
-            stackFramePattern.test(line)
-        var isInternalFrame = isTraceLine && shouldIgnore(line)
+            stackFramePattern.test(line);
+        var isInternalFrame = isTraceLine && shouldIgnore(line);
         if (isTraceLine && !isInternalFrame) {
             if (indentStackFrames && line.charAt(0) !== " ") {
-                line = "    " + line
+                line = "    " + line;
             }
-            ret.push(line)
+            ret.push(line);
         }
     }
-    return ret
+    return ret;
 }
 
 function stackFramesAsArray(error) {
-    var stack = error.stack.replace(/\s+$/g, "").split("\n")
+    var stack = error.stack.replace(/\s+$/g, "").split("\n");
     for (var i = 0; i < stack.length; ++i) {
-        var line = stack[i]
+        var line = stack[i];
         if ("    (No stack trace)" === line || stackFramePattern.test(line)) {
-            break
+            break;
         }
     }
     if (i > 0) {
-        stack = stack.slice(i)
+        stack = stack.slice(i);
     }
-    return stack
+    return stack;
 }
 
 function parseStackAndMessage(error) {
-    var stack = error.stack
-    var message = error.toString()
+    var stack = error.stack;
+    var message = error.toString();
     stack = typeof stack === "string" && stack.length > 0
-                ? stackFramesAsArray(error) : ["    (No stack trace)"]
+                ? stackFramesAsArray(error) : ["    (No stack trace)"];
     return {
         message: message,
         stack: cleanStack(stack)
-    }
+    };
 }
 
 function formatAndLogError(error, title, isSoft) {
     if (typeof console !== "undefined") {
-        var message
+        var message;
         if (util.isObject(error)) {
-            var stack = error.stack
-            message = title + formatStack(stack, error)
+            var stack = error.stack;
+            message = title + formatStack(stack, error);
         } else {
-            message = title + String(error)
+            message = title + String(error);
         }
         if (typeof printWarning === "function") {
-            printWarning(message, isSoft)
+            printWarning(message, isSoft);
         } else if (typeof console.log === "function" ||
             typeof console.log === "object") {
-            console.log(message)
+            console.log(message);
         }
     }
 }
 
 function fireRejectionEvent(name, localHandler, reason, promise) {
-    var localEventFired = false
+    var localEventFired = false;
     try {
         if (typeof localHandler === "function") {
-            localEventFired = true
+            localEventFired = true;
             if (name === "rejectionHandled") {
-                localHandler(promise)
+                localHandler(promise);
             } else {
-                localHandler(reason, promise)
+                localHandler(reason, promise);
             }
         }
     } catch (e) {
-        async.throwLater(e)
+        async.throwLater(e);
     }
 
     if (name === "unhandledRejection") {
         if (!activeFireEvent(name, reason, promise) && !localEventFired) {
-            formatAndLogError(reason, "Unhandled rejection ")
+            formatAndLogError(reason, "Unhandled rejection ");
         }
     } else {
-        activeFireEvent(name, promise)
+        activeFireEvent(name, promise);
     }
 }
 
 function formatNonError(obj) {
-    var str
+    var str;
     if (typeof obj === "function") {
         str = "[function " +
             (obj.name || "anonymous") +
-            "]"
+            "]";
     } else {
         str = obj && typeof obj.toString === "function"
-            ? obj.toString() : util.toString(obj)
-        var ruselessToString = /\[object [a-zA-Z0-9$_]+\]/
+            ? obj.toString() : util.toString(obj);
+        var ruselessToString = /\[object [a-zA-Z0-9$_]+\]/;
         if (ruselessToString.test(str)) {
             try {
-                var newStr = JSON.stringify(obj)
-                str = newStr
+                var newStr = JSON.stringify(obj);
+                str = newStr;
             }
             catch(e) {
 
             }
         }
         if (str.length === 0) {
-            str = "(empty array)"
+            str = "(empty array)";
         }
     }
-    return ("(<" + snip(str) + ">, no stack trace)")
+    return ("(<" + snip(str) + ">, no stack trace)");
 }
 
 function snip(str) {
-    var maxChars = 41
+    var maxChars = 41;
     if (str.length < maxChars) {
-        return str
+        return str;
     }
-    return str.substr(0, maxChars - 3) + "..."
+    return str.substr(0, maxChars - 3) + "...";
 }
 
 function longStackTracesIsSupported() {
-    return typeof captureStackTrace === "function"
+    return typeof captureStackTrace === "function";
 }
 
-var shouldIgnore = function() { return false; }
-var parseLineInfoRegex = /[\/<\(]([^:\/]+):(\d+):(?:\d+)\)?\s*$/
+var shouldIgnore = function() { return false; };
+var parseLineInfoRegex = /[\/<\(]([^:\/]+):(\d+):(?:\d+)\)?\s*$/;
 function parseLineInfo(line) {
-    var matches = line.match(parseLineInfoRegex)
+    var matches = line.match(parseLineInfoRegex);
     if (matches) {
         return {
             fileName: matches[1],
             line: parseInt(matches[2], 10)
-        }
+        };
     }
 }
 
 function setBounds(firstLineError, lastLineError) {
-    if (!longStackTracesIsSupported()) return
-    var firstStackLines = firstLineError.stack.split("\n")
-    var lastStackLines = lastLineError.stack.split("\n")
-    var firstIndex = -1
-    var lastIndex = -1
-    var firstFileName
-    var lastFileName
+    if (!longStackTracesIsSupported()) return;
+    var firstStackLines = firstLineError.stack.split("\n");
+    var lastStackLines = lastLineError.stack.split("\n");
+    var firstIndex = -1;
+    var lastIndex = -1;
+    var firstFileName;
+    var lastFileName;
     for (var i = 0; i < firstStackLines.length; ++i) {
-        var result = parseLineInfo(firstStackLines[i])
+        var result = parseLineInfo(firstStackLines[i]);
         if (result) {
-            firstFileName = result.fileName
-            firstIndex = result.line
-            break
+            firstFileName = result.fileName;
+            firstIndex = result.line;
+            break;
         }
     }
     for (var i = 0; i < lastStackLines.length; ++i) {
-        var result = parseLineInfo(lastStackLines[i])
+        var result = parseLineInfo(lastStackLines[i]);
         if (result) {
-            lastFileName = result.fileName
-            lastIndex = result.line
-            break
+            lastFileName = result.fileName;
+            lastIndex = result.line;
+            break;
         }
     }
     if (firstIndex < 0 || lastIndex < 0 || !firstFileName || !lastFileName ||
         firstFileName !== lastFileName || firstIndex >= lastIndex) {
-        return
+        return;
     }
 
     shouldIgnore = function(line) {
-        if (bluebirdFramePattern.test(line)) return true
-        var info = parseLineInfo(line)
+        if (bluebirdFramePattern.test(line)) return true;
+        var info = parseLineInfo(line);
         if (info) {
             if (info.fileName === firstFileName &&
                 (firstIndex <= info.line && info.line <= lastIndex)) {
-                return true
+                return true;
             }
         }
-        return false
-    }
+        return false;
+    };
 }
 
 function CapturedTrace(parent) {
-    this._parent = parent
-    this._promisesCreated = 0
-    var length = this._length = 1 + (parent === undefined ? 0 : parent._length)
-    captureStackTrace(this, CapturedTrace)
-    if (length > 32) this.uncycle()
+    this._parent = parent;
+    this._promisesCreated = 0;
+    var length = this._length = 1 + (parent === undefined ? 0 : parent._length);
+    captureStackTrace(this, CapturedTrace);
+    if (length > 32) this.uncycle();
 }
-util.inherits(CapturedTrace, Error)
-Context.CapturedTrace = CapturedTrace
+util.inherits(CapturedTrace, Error);
+Context.CapturedTrace = CapturedTrace;
 
 CapturedTrace.prototype.uncycle = function() {
-    var length = this._length
-    if (length < 2) return
-    var nodes = []
-    var stackToIndex = {}
+    var length = this._length;
+    if (length < 2) return;
+    var nodes = [];
+    var stackToIndex = {};
 
     for (var i = 0, node = this; node !== undefined; ++i) {
-        nodes.push(node)
-        node = node._parent
+        nodes.push(node);
+        node = node._parent;
     }
-    length = this._length = i
+    length = this._length = i;
     for (var i = length - 1; i >= 0; --i) {
-        var stack = nodes[i].stack
+        var stack = nodes[i].stack;
         if (stackToIndex[stack] === undefined) {
-            stackToIndex[stack] = i
+            stackToIndex[stack] = i;
         }
     }
     for (var i = 0; i < length; ++i) {
-        var currentStack = nodes[i].stack
-        var index = stackToIndex[currentStack]
+        var currentStack = nodes[i].stack;
+        var index = stackToIndex[currentStack];
         if (index !== undefined && index !== i) {
             if (index > 0) {
-                nodes[index - 1]._parent = undefined
-                nodes[index - 1]._length = 1
+                nodes[index - 1]._parent = undefined;
+                nodes[index - 1]._length = 1;
             }
-            nodes[i]._parent = undefined
-            nodes[i]._length = 1
-            var cycleEdgeNode = i > 0 ? nodes[i - 1] : this
+            nodes[i]._parent = undefined;
+            nodes[i]._length = 1;
+            var cycleEdgeNode = i > 0 ? nodes[i - 1] : this;
 
             if (index < length - 1) {
-                cycleEdgeNode._parent = nodes[index + 1]
-                cycleEdgeNode._parent.uncycle()
+                cycleEdgeNode._parent = nodes[index + 1];
+                cycleEdgeNode._parent.uncycle();
                 cycleEdgeNode._length =
-                    cycleEdgeNode._parent._length + 1
+                    cycleEdgeNode._parent._length + 1;
             } else {
-                cycleEdgeNode._parent = undefined
-                cycleEdgeNode._length = 1
+                cycleEdgeNode._parent = undefined;
+                cycleEdgeNode._length = 1;
             }
-            var currentChildLength = cycleEdgeNode._length + 1
+            var currentChildLength = cycleEdgeNode._length + 1;
             for (var j = i - 2; j >= 0; --j) {
-                nodes[j]._length = currentChildLength
-                currentChildLength++
+                nodes[j]._length = currentChildLength;
+                currentChildLength++;
             }
-            return
+            return;
         }
     }
-}
+};
 
 CapturedTrace.prototype.attachExtraTrace = function(error) {
-    if (error.__stackCleaned__) return
-    this.uncycle()
-    var parsed = parseStackAndMessage(error)
-    var message = parsed.message
-    var stacks = [parsed.stack]
+    if (error.__stackCleaned__) return;
+    this.uncycle();
+    var parsed = parseStackAndMessage(error);
+    var message = parsed.message;
+    var stacks = [parsed.stack];
 
-    var trace = this
+    var trace = this;
     while (trace !== undefined) {
-        stacks.push(cleanStack(trace.stack.split("\n")))
-        trace = trace._parent
+        stacks.push(cleanStack(trace.stack.split("\n")));
+        trace = trace._parent;
     }
-    removeCommonRoots(stacks)
-    removeDuplicateOrEmptyJumps(stacks)
-    util.notEnumerableProp(error, "stack", reconstructStack(message, stacks))
-    util.notEnumerableProp(error, "__stackCleaned__", true)
-}
+    removeCommonRoots(stacks);
+    removeDuplicateOrEmptyJumps(stacks);
+    util.notEnumerableProp(error, "stack", reconstructStack(message, stacks));
+    util.notEnumerableProp(error, "__stackCleaned__", true);
+};
 
 var captureStackTrace = (function stackDetection() {
-    var v8stackFramePattern = /^\s*at\s*/
+    var v8stackFramePattern = /^\s*at\s*/;
     var v8stackFormatter = function(stack, error) {
-        if (typeof stack === "string") return stack
+        if (typeof stack === "string") return stack;
 
         if (error.name !== undefined &&
             error.message !== undefined) {
-            return error.toString()
+            return error.toString();
         }
-        return formatNonError(error)
-    }
+        return formatNonError(error);
+    };
 
     if (typeof Error.stackTraceLimit === "number" &&
         typeof Error.captureStackTrace === "function") {
-        Error.stackTraceLimit += 6
-        stackFramePattern = v8stackFramePattern
-        formatStack = v8stackFormatter
-        var captureStackTrace = Error.captureStackTrace
+        Error.stackTraceLimit += 6;
+        stackFramePattern = v8stackFramePattern;
+        formatStack = v8stackFormatter;
+        var captureStackTrace = Error.captureStackTrace;
 
         shouldIgnore = function(line) {
-            return bluebirdFramePattern.test(line)
-        }
+            return bluebirdFramePattern.test(line);
+        };
         return function(receiver, ignoreUntil) {
-            Error.stackTraceLimit += 6
-            captureStackTrace(receiver, ignoreUntil)
-            Error.stackTraceLimit -= 6
-        }
+            Error.stackTraceLimit += 6;
+            captureStackTrace(receiver, ignoreUntil);
+            Error.stackTraceLimit -= 6;
+        };
     }
-    var err = new Error()
+    var err = new Error();
 
     if (typeof err.stack === "string" &&
         err.stack.split("\n")[0].indexOf("stackDetection@") >= 0) {
-        stackFramePattern = /@/
-        formatStack = v8stackFormatter
-        indentStackFrames = true
+        stackFramePattern = /@/;
+        formatStack = v8stackFormatter;
+        indentStackFrames = true;
         return function captureStackTrace(o) {
-            o.stack = new Error().stack
-        }
+            o.stack = new Error().stack;
+        };
     }
 
-    var hasStackAfterThrow
+    var hasStackAfterThrow;
     try { throw new Error(); }
     catch(e) {
-        hasStackAfterThrow = ("stack" in e)
+        hasStackAfterThrow = ("stack" in e);
     }
     if (!("stack" in err) && hasStackAfterThrow &&
         typeof Error.stackTraceLimit === "number") {
-        stackFramePattern = v8stackFramePattern
-        formatStack = v8stackFormatter
+        stackFramePattern = v8stackFramePattern;
+        formatStack = v8stackFormatter;
         return function captureStackTrace(o) {
-            Error.stackTraceLimit += 6
+            Error.stackTraceLimit += 6;
             try { throw new Error(); }
             catch(e) { o.stack = e.stack; }
-            Error.stackTraceLimit -= 6
-        }
+            Error.stackTraceLimit -= 6;
+        };
     }
 
     formatStack = function(stack, error) {
-        if (typeof stack === "string") return stack
+        if (typeof stack === "string") return stack;
 
         if ((typeof error === "object" ||
             typeof error === "function") &&
             error.name !== undefined &&
             error.message !== undefined) {
-            return error.toString()
+            return error.toString();
         }
-        return formatNonError(error)
-    }
+        return formatNonError(error);
+    };
 
-    return null
+    return null;
 
-})([])
+})([]);
 
 if (typeof console !== "undefined" && typeof console.warn !== "undefined") {
     printWarning = function (message) {
-        console.warn(message)
-    }
+        console.warn(message);
+    };
     if (util.isNode && process.stderr.isTTY) {
         printWarning = function(message, isSoft) {
-            var color = isSoft ? "\u001b[33m" : "\u001b[31m"
-            console.warn(color + message + "\u001b[0m\n")
-        }
+            var color = isSoft ? "\u001b[33m" : "\u001b[31m";
+            console.warn(color + message + "\u001b[0m\n");
+        };
     } else if (!util.isNode && typeof (new Error().stack) === "string") {
         printWarning = function(message, isSoft) {
             console.warn("%c" + message,
-                        isSoft ? "color: darkorange" : "color: red")
-        }
+                        isSoft ? "color: darkorange" : "color: red");
+        };
     }
 }
 
@@ -1334,28 +1332,28 @@ var config = {
     longStackTraces: false,
     cancellation: false,
     monitoring: false
-}
+};
 
-if (longStackTraces) Promise.longStackTraces()
+if (longStackTraces) Promise.longStackTraces();
 
 return {
     longStackTraces: function() {
-        return config.longStackTraces
+        return config.longStackTraces;
     },
     warnings: function() {
-        return config.warnings
+        return config.warnings;
     },
     cancellation: function() {
-        return config.cancellation
+        return config.cancellation;
     },
     monitoring: function() {
-        return config.monitoring
+        return config.monitoring;
     },
     propagateFromFunction: function() {
-        return propagateFromFunction
+        return propagateFromFunction;
     },
     boundValueFunction: function() {
-        return boundValueFunction
+        return boundValueFunction;
     },
     checkForgottenReturns: checkForgottenReturns,
     setBounds: setBounds,
@@ -1364,100 +1362,100 @@ return {
     CapturedTrace: CapturedTrace,
     fireDomEvent: fireDomEvent,
     fireGlobalEvent: fireGlobalEvent
-}
-}
+};
+};
 
 },{"./errors":9,"./util":21}],8:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 module.exports = function(Promise) {
 function returner() {
-    return this.value
+    return this.value;
 }
 function thrower() {
-    throw this.reason
+    throw this.reason;
 }
 
 Promise.prototype["return"] =
 Promise.prototype.thenReturn = function (value) {
-    if (value instanceof Promise) value.suppressUnhandledRejections()
+    if (value instanceof Promise) value.suppressUnhandledRejections();
     return this._then(
-        returner, undefined, undefined, {value: value}, undefined)
-}
+        returner, undefined, undefined, {value: value}, undefined);
+};
 
 Promise.prototype["throw"] =
 Promise.prototype.thenThrow = function (reason) {
     return this._then(
-        thrower, undefined, undefined, {reason: reason}, undefined)
-}
+        thrower, undefined, undefined, {reason: reason}, undefined);
+};
 
 Promise.prototype.catchThrow = function (reason) {
     if (arguments.length <= 1) {
         return this._then(
-            undefined, thrower, undefined, {reason: reason}, undefined)
+            undefined, thrower, undefined, {reason: reason}, undefined);
     } else {
-        var _reason = arguments[1]
-        var handler = function() {throw _reason;}
-        return this.caught(reason, handler)
+        var _reason = arguments[1];
+        var handler = function() {throw _reason;};
+        return this.caught(reason, handler);
     }
-}
+};
 
 Promise.prototype.catchReturn = function (value) {
     if (arguments.length <= 1) {
-        if (value instanceof Promise) value.suppressUnhandledRejections()
+        if (value instanceof Promise) value.suppressUnhandledRejections();
         return this._then(
-            undefined, returner, undefined, {value: value}, undefined)
+            undefined, returner, undefined, {value: value}, undefined);
     } else {
-        var _value = arguments[1]
-        if (_value instanceof Promise) _value.suppressUnhandledRejections()
-        var handler = function() {return _value;}
-        return this.caught(value, handler)
+        var _value = arguments[1];
+        if (_value instanceof Promise) _value.suppressUnhandledRejections();
+        var handler = function() {return _value;};
+        return this.caught(value, handler);
     }
-}
-}
+};
+};
 
 },{}],9:[function(_dereq_,module,exports){
-"use strict"
-var es5 = _dereq_("./es5")
-var Objectfreeze = es5.freeze
-var util = _dereq_("./util")
-var inherits = util.inherits
-var notEnumerableProp = util.notEnumerableProp
+"use strict";
+var es5 = _dereq_("./es5");
+var Objectfreeze = es5.freeze;
+var util = _dereq_("./util");
+var inherits = util.inherits;
+var notEnumerableProp = util.notEnumerableProp;
 
 function subError(nameProperty, defaultMessage) {
     function SubError(message) {
-        if (!(this instanceof SubError)) return new SubError(message)
+        if (!(this instanceof SubError)) return new SubError(message);
         notEnumerableProp(this, "message",
-            typeof message === "string" ? message : defaultMessage)
-        notEnumerableProp(this, "name", nameProperty)
+            typeof message === "string" ? message : defaultMessage);
+        notEnumerableProp(this, "name", nameProperty);
         if (Error.captureStackTrace) {
-            Error.captureStackTrace(this, this.constructor)
+            Error.captureStackTrace(this, this.constructor);
         } else {
-            Error.call(this)
+            Error.call(this);
         }
     }
-    inherits(SubError, Error)
-    return SubError
+    inherits(SubError, Error);
+    return SubError;
 }
 
-var _TypeError, _RangeError
-var Warning = subError("Warning", "warning")
-var CancellationError = subError("CancellationError", "cancellation error")
-var TimeoutError = subError("TimeoutError", "timeout error")
-var AggregateError = subError("AggregateError", "aggregate error")
+var _TypeError, _RangeError;
+var Warning = subError("Warning", "warning");
+var CancellationError = subError("CancellationError", "cancellation error");
+var TimeoutError = subError("TimeoutError", "timeout error");
+var AggregateError = subError("AggregateError", "aggregate error");
 try {
-    _TypeError = TypeError
-    _RangeError = RangeError
+    _TypeError = TypeError;
+    _RangeError = RangeError;
 } catch(e) {
-    _TypeError = subError("TypeError", "type error")
-    _RangeError = subError("RangeError", "range error")
+    _TypeError = subError("TypeError", "type error");
+    _RangeError = subError("RangeError", "range error");
 }
 
 var methods = ("join pop push shift unshift slice filter forEach some " +
-    "every map indexOf lastIndexOf reduce reduceRight sort reverse").split(" ")
+    "every map indexOf lastIndexOf reduce reduceRight sort reverse").split(" ");
 
 for (var i = 0; i < methods.length; ++i) {
     if (typeof Array.prototype[methods[i]] === "function") {
-        AggregateError.prototype[methods[i]] = Array.prototype[methods[i]]
+        AggregateError.prototype[methods[i]] = Array.prototype[methods[i]];
     }
 }
 
@@ -1466,46 +1464,46 @@ es5.defineProperty(AggregateError.prototype, "length", {
     configurable: false,
     writable: true,
     enumerable: true
-})
-AggregateError.prototype["isOperational"] = true
-var level = 0
+});
+AggregateError.prototype["isOperational"] = true;
+var level = 0;
 AggregateError.prototype.toString = function() {
-    var indent = Array(level * 4 + 1).join(" ")
-    var ret = "\n" + indent + "AggregateError of:" + "\n"
-    level++
-    indent = Array(level * 4 + 1).join(" ")
+    var indent = Array(level * 4 + 1).join(" ");
+    var ret = "\n" + indent + "AggregateError of:" + "\n";
+    level++;
+    indent = Array(level * 4 + 1).join(" ");
     for (var i = 0; i < this.length; ++i) {
-        var str = this[i] === this ? "[Circular AggregateError]" : this[i] + ""
-        var lines = str.split("\n")
+        var str = this[i] === this ? "[Circular AggregateError]" : this[i] + "";
+        var lines = str.split("\n");
         for (var j = 0; j < lines.length; ++j) {
-            lines[j] = indent + lines[j]
+            lines[j] = indent + lines[j];
         }
-        str = lines.join("\n")
-        ret += str + "\n"
+        str = lines.join("\n");
+        ret += str + "\n";
     }
-    level--
-    return ret
-}
+    level--;
+    return ret;
+};
 
 function OperationalError(message) {
     if (!(this instanceof OperationalError))
-        return new OperationalError(message)
-    notEnumerableProp(this, "name", "OperationalError")
-    notEnumerableProp(this, "message", message)
-    this.cause = message
-    this["isOperational"] = true
+        return new OperationalError(message);
+    notEnumerableProp(this, "name", "OperationalError");
+    notEnumerableProp(this, "message", message);
+    this.cause = message;
+    this["isOperational"] = true;
 
     if (message instanceof Error) {
-        notEnumerableProp(this, "message", message.message)
-        notEnumerableProp(this, "stack", message.stack)
+        notEnumerableProp(this, "message", message.message);
+        notEnumerableProp(this, "stack", message.stack);
     } else if (Error.captureStackTrace) {
-        Error.captureStackTrace(this, this.constructor)
+        Error.captureStackTrace(this, this.constructor);
     }
 
 }
-inherits(OperationalError, Error)
+inherits(OperationalError, Error);
 
-var errorTypes = Error["__BluebirdErrorTypes__"]
+var errorTypes = Error["__BluebirdErrorTypes__"];
 if (!errorTypes) {
     errorTypes = Objectfreeze({
         CancellationError: CancellationError,
@@ -1513,13 +1511,13 @@ if (!errorTypes) {
         OperationalError: OperationalError,
         RejectionError: OperationalError,
         AggregateError: AggregateError
-    })
+    });
     es5.defineProperty(Error, "__BluebirdErrorTypes__", {
         value: errorTypes,
         writable: false,
         enumerable: false,
         configurable: false
-    })
+    });
 }
 
 module.exports = {
@@ -1531,13 +1529,13 @@ module.exports = {
     TimeoutError: errorTypes.TimeoutError,
     AggregateError: errorTypes.AggregateError,
     Warning: Warning
-}
+};
 
 },{"./es5":10,"./util":21}],10:[function(_dereq_,module,exports){
 var isES5 = (function(){
-    "use strict"
-    return this === undefined
-})()
+    "use strict";
+    return this === undefined;
+})();
 
 if (isES5) {
     module.exports = {
@@ -1550,55 +1548,55 @@ if (isES5) {
         isArray: Array.isArray,
         isES5: isES5,
         propertyIsWritable: function(obj, prop) {
-            var descriptor = Object.getOwnPropertyDescriptor(obj, prop)
-            return !!(!descriptor || descriptor.writable || descriptor.set)
+            var descriptor = Object.getOwnPropertyDescriptor(obj, prop);
+            return !!(!descriptor || descriptor.writable || descriptor.set);
         }
-    }
+    };
 } else {
-    var has = {}.hasOwnProperty
-    var str = {}.toString
-    var proto = {}.constructor.prototype
+    var has = {}.hasOwnProperty;
+    var str = {}.toString;
+    var proto = {}.constructor.prototype;
 
     var ObjectKeys = function (o) {
-        var ret = []
+        var ret = [];
         for (var key in o) {
             if (has.call(o, key)) {
-                ret.push(key)
+                ret.push(key);
             }
         }
-        return ret
-    }
+        return ret;
+    };
 
     var ObjectGetDescriptor = function(o, key) {
-        return {value: o[key]}
-    }
+        return {value: o[key]};
+    };
 
     var ObjectDefineProperty = function (o, key, desc) {
-        o[key] = desc.value
-        return o
-    }
+        o[key] = desc.value;
+        return o;
+    };
 
     var ObjectFreeze = function (obj) {
-        return obj
-    }
+        return obj;
+    };
 
     var ObjectGetPrototypeOf = function (obj) {
         try {
-            return Object(obj).constructor.prototype
+            return Object(obj).constructor.prototype;
         }
         catch (e) {
-            return proto
+            return proto;
         }
-    }
+    };
 
     var ArrayIsArray = function (obj) {
         try {
-            return str.call(obj) === "[object Array]"
+            return str.call(obj) === "[object Array]";
         }
         catch(e) {
-            return false
+            return false;
         }
-    }
+    };
 
     module.exports = {
         isArray: ArrayIsArray,
@@ -1610,133 +1608,133 @@ if (isES5) {
         getPrototypeOf: ObjectGetPrototypeOf,
         isES5: isES5,
         propertyIsWritable: function() {
-            return true
+            return true;
         }
-    }
+    };
 }
 
 },{}],11:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 module.exports = function(Promise, tryConvertToPromise) {
-var util = _dereq_("./util")
-var CancellationError = Promise.CancellationError
-var errorObj = util.errorObj
+var util = _dereq_("./util");
+var CancellationError = Promise.CancellationError;
+var errorObj = util.errorObj;
 
 function PassThroughHandlerContext(promise, type, handler) {
-    this.promise = promise
-    this.type = type
-    this.handler = handler
-    this.called = false
-    this.cancelPromise = null
+    this.promise = promise;
+    this.type = type;
+    this.handler = handler;
+    this.called = false;
+    this.cancelPromise = null;
 }
 
 PassThroughHandlerContext.prototype.isFinallyHandler = function() {
-    return this.type === 0
-}
+    return this.type === 0;
+};
 
 function FinallyHandlerCancelReaction(finallyHandler) {
-    this.finallyHandler = finallyHandler
+    this.finallyHandler = finallyHandler;
 }
 
 FinallyHandlerCancelReaction.prototype._resultCancelled = function() {
-    checkCancel(this.finallyHandler)
-}
+    checkCancel(this.finallyHandler);
+};
 
 function checkCancel(ctx, reason) {
     if (ctx.cancelPromise != null) {
         if (arguments.length > 1) {
-            ctx.cancelPromise._reject(reason)
+            ctx.cancelPromise._reject(reason);
         } else {
-            ctx.cancelPromise._cancel()
+            ctx.cancelPromise._cancel();
         }
-        ctx.cancelPromise = null
-        return true
+        ctx.cancelPromise = null;
+        return true;
     }
-    return false
+    return false;
 }
 
 function succeed() {
-    return finallyHandler.call(this, this.promise._target()._settledValue())
+    return finallyHandler.call(this, this.promise._target()._settledValue());
 }
 function fail(reason) {
-    if (checkCancel(this, reason)) return
-    errorObj.e = reason
-    return errorObj
+    if (checkCancel(this, reason)) return;
+    errorObj.e = reason;
+    return errorObj;
 }
 function finallyHandler(reasonOrValue) {
-    var promise = this.promise
-    var handler = this.handler
+    var promise = this.promise;
+    var handler = this.handler;
 
     if (!this.called) {
-        this.called = true
+        this.called = true;
         var ret = this.isFinallyHandler()
             ? handler.call(promise._boundValue())
-            : handler.call(promise._boundValue(), reasonOrValue)
+            : handler.call(promise._boundValue(), reasonOrValue);
         if (ret !== undefined) {
-            promise._setReturnedNonUndefined()
-            var maybePromise = tryConvertToPromise(ret, promise)
+            promise._setReturnedNonUndefined();
+            var maybePromise = tryConvertToPromise(ret, promise);
             if (maybePromise instanceof Promise) {
                 if (this.cancelPromise != null) {
                     if (maybePromise.isCancelled()) {
                         var reason =
-                            new CancellationError("late cancellation observer")
-                        promise._attachExtraTrace(reason)
-                        errorObj.e = reason
-                        return errorObj
+                            new CancellationError("late cancellation observer");
+                        promise._attachExtraTrace(reason);
+                        errorObj.e = reason;
+                        return errorObj;
                     } else if (maybePromise.isPending()) {
                         maybePromise._attachCancellationCallback(
-                            new FinallyHandlerCancelReaction(this))
+                            new FinallyHandlerCancelReaction(this));
                     }
                 }
                 return maybePromise._then(
-                    succeed, fail, undefined, this, undefined)
+                    succeed, fail, undefined, this, undefined);
             }
         }
     }
 
     if (promise.isRejected()) {
-        checkCancel(this)
-        errorObj.e = reasonOrValue
-        return errorObj
+        checkCancel(this);
+        errorObj.e = reasonOrValue;
+        return errorObj;
     } else {
-        checkCancel(this)
-        return reasonOrValue
+        checkCancel(this);
+        return reasonOrValue;
     }
 }
 
 Promise.prototype._passThrough = function(handler, type, success, fail) {
-    if (typeof handler !== "function") return this.then()
+    if (typeof handler !== "function") return this.then();
     return this._then(success,
                       fail,
                       undefined,
                       new PassThroughHandlerContext(this, type, handler),
-                      undefined)
-}
+                      undefined);
+};
 
 Promise.prototype.lastly =
 Promise.prototype["finally"] = function (handler) {
     return this._passThrough(handler,
                              0,
                              finallyHandler,
-                             finallyHandler)
-}
+                             finallyHandler);
+};
 
 Promise.prototype.tap = function (handler) {
-    return this._passThrough(handler, 1, finallyHandler)
-}
+    return this._passThrough(handler, 1, finallyHandler);
+};
 
-return PassThroughHandlerContext
-}
+return PassThroughHandlerContext;
+};
 
 },{"./util":21}],12:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 module.exports =
 function(Promise, PromiseArray, tryConvertToPromise, INTERNAL) {
-var util = _dereq_("./util")
-var canEvaluate = util.canEvaluate
-var tryCatch = util.tryCatch
-var errorObj = util.errorObj
-var reject
+var util = _dereq_("./util");
+var canEvaluate = util.canEvaluate;
+var tryCatch = util.tryCatch;
+var errorObj = util.errorObj;
+var reject;
 
 if (!true) {
 if (canEvaluate) {
@@ -1745,32 +1743,32 @@ if (canEvaluate) {
             'use strict';                                                    \n\
             holder.pIndex = value;                                           \n\
             holder.checkFulfillment(this);                                   \n\
-            ".replace(/Index/g, i))
-    }
+            ".replace(/Index/g, i));
+    };
 
     var promiseSetter = function(i) {
         return new Function("promise", "holder", "                           \n\
             'use strict';                                                    \n\
             holder.pIndex = promise;                                         \n\
-            ".replace(/Index/g, i))
-    }
+            ".replace(/Index/g, i));
+    };
 
     var generateHolderClass = function(total) {
-        var props = new Array(total)
+        var props = new Array(total);
         for (var i = 0; i < props.length; ++i) {
-            props[i] = "this.p" + (i+1)
+            props[i] = "this.p" + (i+1);
         }
-        var assignment = props.join(" = ") + " = null;"
+        var assignment = props.join(" = ") + " = null;";
         var cancellationCode= "var promise;\n" + props.map(function(prop) {
             return "                                                         \n\
                 promise = " + prop + ";                                      \n\
                 if (promise instanceof Promise) {                            \n\
                     promise.cancel();                                        \n\
                 }                                                            \n\
-            "
-        }).join("\n")
-        var passedArguments = props.join(", ")
-        var name = "Holder$" + total
+            ";
+        }).join("\n");
+        var passedArguments = props.join(", ");
+        var name = "Holder$" + total;
 
 
         var code = "return function(tryCatch, errorObj, Promise) {           \n\
@@ -1801,332 +1799,332 @@ if (canEvaluate) {
                                                                              \n\
             return [TheName];                                                \n\
         }(tryCatch, errorObj, Promise);                                      \n\
-        "
+        ";
 
         code = code.replace(/\[TheName\]/g, name)
             .replace(/\[TheTotal\]/g, total)
             .replace(/\[ThePassedArguments\]/g, passedArguments)
             .replace(/\[TheProperties\]/g, assignment)
-            .replace(/\[CancellationCode\]/g, cancellationCode)
+            .replace(/\[CancellationCode\]/g, cancellationCode);
 
         return new Function("tryCatch", "errorObj", "Promise", code)
-                           (tryCatch, errorObj, Promise)
-    }
+                           (tryCatch, errorObj, Promise);
+    };
 
-    var holderClasses = []
-    var thenCallbacks = []
-    var promiseSetters = []
+    var holderClasses = [];
+    var thenCallbacks = [];
+    var promiseSetters = [];
 
     for (var i = 0; i < 8; ++i) {
-        holderClasses.push(generateHolderClass(i + 1))
-        thenCallbacks.push(thenCallback(i + 1))
-        promiseSetters.push(promiseSetter(i + 1))
+        holderClasses.push(generateHolderClass(i + 1));
+        thenCallbacks.push(thenCallback(i + 1));
+        promiseSetters.push(promiseSetter(i + 1));
     }
 
     reject = function (reason) {
-        this._reject(reason)
-    }
+        this._reject(reason);
+    };
 }}
 
 Promise.join = function () {
-    var last = arguments.length - 1
-    var fn
+    var last = arguments.length - 1;
+    var fn;
     if (last > 0 && typeof arguments[last] === "function") {
-        fn = arguments[last]
+        fn = arguments[last];
         if (!true) {
             if (last <= 8 && canEvaluate) {
-                var ret = new Promise(INTERNAL)
-                ret._captureStackTrace()
-                var HolderClass = holderClasses[last - 1]
-                var holder = new HolderClass(fn)
-                var callbacks = thenCallbacks
+                var ret = new Promise(INTERNAL);
+                ret._captureStackTrace();
+                var HolderClass = holderClasses[last - 1];
+                var holder = new HolderClass(fn);
+                var callbacks = thenCallbacks;
 
                 for (var i = 0; i < last; ++i) {
-                    var maybePromise = tryConvertToPromise(arguments[i], ret)
+                    var maybePromise = tryConvertToPromise(arguments[i], ret);
                     if (maybePromise instanceof Promise) {
-                        maybePromise = maybePromise._target()
-                        var bitField = maybePromise._bitField
-                        
+                        maybePromise = maybePromise._target();
+                        var bitField = maybePromise._bitField;
+                        ;
                         if (((bitField & 50397184) === 0)) {
                             maybePromise._then(callbacks[i], reject,
-                                               undefined, ret, holder)
-                            promiseSetters[i](maybePromise, holder)
+                                               undefined, ret, holder);
+                            promiseSetters[i](maybePromise, holder);
                         } else if (((bitField & 33554432) !== 0)) {
                             callbacks[i].call(ret,
-                                              maybePromise._value(), holder)
+                                              maybePromise._value(), holder);
                         } else if (((bitField & 16777216) !== 0)) {
-                            ret._reject(maybePromise._reason())
+                            ret._reject(maybePromise._reason());
                         } else {
-                            ret._cancel()
+                            ret._cancel();
                         }
                     } else {
-                        callbacks[i].call(ret, maybePromise, holder)
+                        callbacks[i].call(ret, maybePromise, holder);
                     }
                 }
                 if (!ret._isFateSealed()) {
-                    ret._setAsyncGuaranteed()
-                    ret._setOnCancel(holder)
+                    ret._setAsyncGuaranteed();
+                    ret._setOnCancel(holder);
                 }
-                return ret
+                return ret;
             }
         }
     }
-    var args = [].slice.call(arguments);
-    if (fn) args.pop()
-    var ret = new PromiseArray(args).promise()
-    return fn !== undefined ? ret.spread(fn) : ret
-}
+    var args = [].slice.call(arguments);;
+    if (fn) args.pop();
+    var ret = new PromiseArray(args).promise();
+    return fn !== undefined ? ret.spread(fn) : ret;
+};
 
-}
+};
 
 },{"./util":21}],13:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 module.exports =
 function(Promise, INTERNAL, tryConvertToPromise, apiRejection, debug) {
-var util = _dereq_("./util")
-var tryCatch = util.tryCatch
+var util = _dereq_("./util");
+var tryCatch = util.tryCatch;
 
 Promise.method = function (fn) {
     if (typeof fn !== "function") {
-        throw new Promise.TypeError("expecting a function but got " + util.classString(fn))
+        throw new Promise.TypeError("expecting a function but got " + util.classString(fn));
     }
     return function () {
-        var ret = new Promise(INTERNAL)
-        ret._captureStackTrace()
-        ret._pushContext()
-        var value = tryCatch(fn).apply(this, arguments)
-        var promiseCreated = ret._popContext()
+        var ret = new Promise(INTERNAL);
+        ret._captureStackTrace();
+        ret._pushContext();
+        var value = tryCatch(fn).apply(this, arguments);
+        var promiseCreated = ret._popContext();
         debug.checkForgottenReturns(
-            value, promiseCreated, "Promise.method", ret)
-        ret._resolveFromSyncValue(value)
-        return ret
-    }
-}
+            value, promiseCreated, "Promise.method", ret);
+        ret._resolveFromSyncValue(value);
+        return ret;
+    };
+};
 
 Promise.attempt = Promise["try"] = function (fn) {
     if (typeof fn !== "function") {
-        return apiRejection("expecting a function but got " + util.classString(fn))
+        return apiRejection("expecting a function but got " + util.classString(fn));
     }
-    var ret = new Promise(INTERNAL)
-    ret._captureStackTrace()
-    ret._pushContext()
-    var value
+    var ret = new Promise(INTERNAL);
+    ret._captureStackTrace();
+    ret._pushContext();
+    var value;
     if (arguments.length > 1) {
-        debug.deprecated("calling Promise.try with more than 1 argument")
-        var arg = arguments[1]
-        var ctx = arguments[2]
+        debug.deprecated("calling Promise.try with more than 1 argument");
+        var arg = arguments[1];
+        var ctx = arguments[2];
         value = util.isArray(arg) ? tryCatch(fn).apply(ctx, arg)
-                                  : tryCatch(fn).call(ctx, arg)
+                                  : tryCatch(fn).call(ctx, arg);
     } else {
-        value = tryCatch(fn)()
+        value = tryCatch(fn)();
     }
-    var promiseCreated = ret._popContext()
+    var promiseCreated = ret._popContext();
     debug.checkForgottenReturns(
-        value, promiseCreated, "Promise.try", ret)
-    ret._resolveFromSyncValue(value)
-    return ret
-}
+        value, promiseCreated, "Promise.try", ret);
+    ret._resolveFromSyncValue(value);
+    return ret;
+};
 
 Promise.prototype._resolveFromSyncValue = function (value) {
     if (value === util.errorObj) {
-        this._rejectCallback(value.e, false)
+        this._rejectCallback(value.e, false);
     } else {
-        this._resolveCallback(value, true)
+        this._resolveCallback(value, true);
     }
-}
-}
+};
+};
 
 },{"./util":21}],14:[function(_dereq_,module,exports){
-"use strict"
-var util = _dereq_("./util")
-var maybeWrapAsError = util.maybeWrapAsError
-var errors = _dereq_("./errors")
-var OperationalError = errors.OperationalError
-var es5 = _dereq_("./es5")
+"use strict";
+var util = _dereq_("./util");
+var maybeWrapAsError = util.maybeWrapAsError;
+var errors = _dereq_("./errors");
+var OperationalError = errors.OperationalError;
+var es5 = _dereq_("./es5");
 
 function isUntypedError(obj) {
     return obj instanceof Error &&
-        es5.getPrototypeOf(obj) === Error.prototype
+        es5.getPrototypeOf(obj) === Error.prototype;
 }
 
-var rErrorKey = /^(?:name|message|stack|cause)$/
+var rErrorKey = /^(?:name|message|stack|cause)$/;
 function wrapAsOperationalError(obj) {
-    var ret
+    var ret;
     if (isUntypedError(obj)) {
-        ret = new OperationalError(obj)
-        ret.name = obj.name
-        ret.message = obj.message
-        ret.stack = obj.stack
-        var keys = es5.keys(obj)
+        ret = new OperationalError(obj);
+        ret.name = obj.name;
+        ret.message = obj.message;
+        ret.stack = obj.stack;
+        var keys = es5.keys(obj);
         for (var i = 0; i < keys.length; ++i) {
-            var key = keys[i]
+            var key = keys[i];
             if (!rErrorKey.test(key)) {
-                ret[key] = obj[key]
+                ret[key] = obj[key];
             }
         }
-        return ret
+        return ret;
     }
-    util.markAsOriginatingFromRejection(obj)
-    return obj
+    util.markAsOriginatingFromRejection(obj);
+    return obj;
 }
 
 function nodebackForPromise(promise, multiArgs) {
     return function(err, value) {
-        if (promise === null) return
+        if (promise === null) return;
         if (err) {
-            var wrapped = wrapAsOperationalError(maybeWrapAsError(err))
-            promise._attachExtraTrace(wrapped)
-            promise._reject(wrapped)
+            var wrapped = wrapAsOperationalError(maybeWrapAsError(err));
+            promise._attachExtraTrace(wrapped);
+            promise._reject(wrapped);
         } else if (!multiArgs) {
-            promise._fulfill(value)
+            promise._fulfill(value);
         } else {
-            var args = [].slice.call(arguments, 1);
-            promise._fulfill(args)
+            var args = [].slice.call(arguments, 1);;
+            promise._fulfill(args);
         }
-        promise = null
-    }
+        promise = null;
+    };
 }
 
-module.exports = nodebackForPromise
+module.exports = nodebackForPromise;
 
 },{"./errors":9,"./es5":10,"./util":21}],15:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 module.exports = function() {
 var makeSelfResolutionError = function () {
-    return new TypeError("circular promise resolution chain\u000a\u000a    See http://goo.gl/MqrFmX\u000a")
-}
+    return new TypeError("circular promise resolution chain\u000a\u000a    See http://goo.gl/MqrFmX\u000a");
+};
 var reflectHandler = function() {
-    return new Promise.PromiseInspection(this._target())
-}
+    return new Promise.PromiseInspection(this._target());
+};
 var apiRejection = function(msg) {
-    return Promise.reject(new TypeError(msg))
-}
+    return Promise.reject(new TypeError(msg));
+};
 function Proxyable() {}
-var UNDEFINED_BINDING = {}
-var util = _dereq_("./util")
+var UNDEFINED_BINDING = {};
+var util = _dereq_("./util");
 
-var getDomain
+var getDomain;
 if (util.isNode) {
     getDomain = function() {
-        var ret = process.domain
-        if (ret === undefined) ret = null
-        return ret
-    }
+        var ret = process.domain;
+        if (ret === undefined) ret = null;
+        return ret;
+    };
 } else {
     getDomain = function() {
-        return null
-    }
+        return null;
+    };
 }
-util.notEnumerableProp(Promise, "_getDomain", getDomain)
+util.notEnumerableProp(Promise, "_getDomain", getDomain);
 
-var es5 = _dereq_("./es5")
-var Async = _dereq_("./async")
-var async = new Async()
-es5.defineProperty(Promise, "_async", {value: async})
-var errors = _dereq_("./errors")
-var TypeError = Promise.TypeError = errors.TypeError
-Promise.RangeError = errors.RangeError
-var CancellationError = Promise.CancellationError = errors.CancellationError
-Promise.TimeoutError = errors.TimeoutError
-Promise.OperationalError = errors.OperationalError
-Promise.RejectionError = errors.OperationalError
-Promise.AggregateError = errors.AggregateError
-var INTERNAL = function(){}
-var APPLY = {}
-var NEXT_FILTER = {}
-var tryConvertToPromise = _dereq_("./thenables")(Promise, INTERNAL)
+var es5 = _dereq_("./es5");
+var Async = _dereq_("./async");
+var async = new Async();
+es5.defineProperty(Promise, "_async", {value: async});
+var errors = _dereq_("./errors");
+var TypeError = Promise.TypeError = errors.TypeError;
+Promise.RangeError = errors.RangeError;
+var CancellationError = Promise.CancellationError = errors.CancellationError;
+Promise.TimeoutError = errors.TimeoutError;
+Promise.OperationalError = errors.OperationalError;
+Promise.RejectionError = errors.OperationalError;
+Promise.AggregateError = errors.AggregateError;
+var INTERNAL = function(){};
+var APPLY = {};
+var NEXT_FILTER = {};
+var tryConvertToPromise = _dereq_("./thenables")(Promise, INTERNAL);
 var PromiseArray =
     _dereq_("./promise_array")(Promise, INTERNAL,
-                               tryConvertToPromise, apiRejection, Proxyable)
-var Context = _dereq_("./context")(Promise)
+                               tryConvertToPromise, apiRejection, Proxyable);
+var Context = _dereq_("./context")(Promise);
  /*jshint unused:false*/
-var createContext = Context.create
-var debug = _dereq_("./debuggability")(Promise, Context)
-var CapturedTrace = debug.CapturedTrace
+var createContext = Context.create;
+var debug = _dereq_("./debuggability")(Promise, Context);
+var CapturedTrace = debug.CapturedTrace;
 var PassThroughHandlerContext =
-    _dereq_("./finally")(Promise, tryConvertToPromise)
-var catchFilter = _dereq_("./catch_filter")(NEXT_FILTER)
-var nodebackForPromise = _dereq_("./nodeback")
-var errorObj = util.errorObj
-var tryCatch = util.tryCatch
+    _dereq_("./finally")(Promise, tryConvertToPromise);
+var catchFilter = _dereq_("./catch_filter")(NEXT_FILTER);
+var nodebackForPromise = _dereq_("./nodeback");
+var errorObj = util.errorObj;
+var tryCatch = util.tryCatch;
 function check(self, executor) {
     if (typeof executor !== "function") {
-        throw new TypeError("expecting a function but got " + util.classString(executor))
+        throw new TypeError("expecting a function but got " + util.classString(executor));
     }
     if (self.constructor !== Promise) {
-        throw new TypeError("the promise constructor cannot be invoked directly\u000a\u000a    See http://goo.gl/MqrFmX\u000a")
+        throw new TypeError("the promise constructor cannot be invoked directly\u000a\u000a    See http://goo.gl/MqrFmX\u000a");
     }
 }
 
 function Promise(executor) {
-    this._bitField = 0
-    this._fulfillmentHandler0 = undefined
-    this._rejectionHandler0 = undefined
-    this._promise0 = undefined
-    this._receiver0 = undefined
+    this._bitField = 0;
+    this._fulfillmentHandler0 = undefined;
+    this._rejectionHandler0 = undefined;
+    this._promise0 = undefined;
+    this._receiver0 = undefined;
     if (executor !== INTERNAL) {
-        check(this, executor)
-        this._resolveFromExecutor(executor)
+        check(this, executor);
+        this._resolveFromExecutor(executor);
     }
-    this._promiseCreated()
-    this._fireEvent("promiseCreated", this)
+    this._promiseCreated();
+    this._fireEvent("promiseCreated", this);
 }
 
 Promise.prototype.toString = function () {
-    return "[object Promise]"
-}
+    return "[object Promise]";
+};
 
 Promise.prototype.caught = Promise.prototype["catch"] = function (fn) {
-    var len = arguments.length
+    var len = arguments.length;
     if (len > 1) {
         var catchInstances = new Array(len - 1),
-            j = 0, i
+            j = 0, i;
         for (i = 0; i < len - 1; ++i) {
-            var item = arguments[i]
+            var item = arguments[i];
             if (util.isObject(item)) {
-                catchInstances[j++] = item
+                catchInstances[j++] = item;
             } else {
-                return apiRejection("expecting an object but got " + util.classString(item))
+                return apiRejection("expecting an object but got " + util.classString(item));
             }
         }
-        catchInstances.length = j
-        fn = arguments[i]
-        return this.then(undefined, catchFilter(catchInstances, fn, this))
+        catchInstances.length = j;
+        fn = arguments[i];
+        return this.then(undefined, catchFilter(catchInstances, fn, this));
     }
-    return this.then(undefined, fn)
-}
+    return this.then(undefined, fn);
+};
 
 Promise.prototype.reflect = function () {
     return this._then(reflectHandler,
-        reflectHandler, undefined, this, undefined)
-}
+        reflectHandler, undefined, this, undefined);
+};
 
 Promise.prototype.then = function (didFulfill, didReject) {
     if (debug.warnings() && arguments.length > 0 &&
         typeof didFulfill !== "function" &&
         typeof didReject !== "function") {
         var msg = ".then() only accepts functions but was passed: " +
-                util.classString(didFulfill)
+                util.classString(didFulfill);
         if (arguments.length > 1) {
-            msg += ", " + util.classString(didReject)
+            msg += ", " + util.classString(didReject);
         }
-        this._warn(msg)
+        this._warn(msg);
     }
-    return this._then(didFulfill, didReject, undefined, undefined, undefined)
-}
+    return this._then(didFulfill, didReject, undefined, undefined, undefined);
+};
 
 Promise.prototype.done = function (didFulfill, didReject) {
     var promise =
-        this._then(didFulfill, didReject, undefined, undefined, undefined)
-    promise._setIsFinal()
-}
+        this._then(didFulfill, didReject, undefined, undefined, undefined);
+    promise._setIsFinal();
+};
 
 Promise.prototype.spread = function (fn) {
     if (typeof fn !== "function") {
-        return apiRejection("expecting a function but got " + util.classString(fn))
+        return apiRejection("expecting a function but got " + util.classString(fn));
     }
-    return this.all()._then(fn, undefined, undefined, APPLY, undefined)
-}
+    return this.all()._then(fn, undefined, undefined, APPLY, undefined);
+};
 
 Promise.prototype.toJSON = function () {
     var ret = {
@@ -2134,77 +2132,77 @@ Promise.prototype.toJSON = function () {
         isRejected: false,
         fulfillmentValue: undefined,
         rejectionReason: undefined
-    }
+    };
     if (this.isFulfilled()) {
-        ret.fulfillmentValue = this.value()
-        ret.isFulfilled = true
+        ret.fulfillmentValue = this.value();
+        ret.isFulfilled = true;
     } else if (this.isRejected()) {
-        ret.rejectionReason = this.reason()
-        ret.isRejected = true
+        ret.rejectionReason = this.reason();
+        ret.isRejected = true;
     }
-    return ret
-}
+    return ret;
+};
 
 Promise.prototype.all = function () {
     if (arguments.length > 0) {
-        this._warn(".all() was passed arguments but it does not take any")
+        this._warn(".all() was passed arguments but it does not take any");
     }
-    return new PromiseArray(this).promise()
-}
+    return new PromiseArray(this).promise();
+};
 
 Promise.prototype.error = function (fn) {
-    return this.caught(util.originatesFromRejection, fn)
-}
+    return this.caught(util.originatesFromRejection, fn);
+};
 
 Promise.is = function (val) {
-    return val instanceof Promise
-}
+    return val instanceof Promise;
+};
 
 Promise.fromNode = Promise.fromCallback = function(fn) {
-    var ret = new Promise(INTERNAL)
-    ret._captureStackTrace()
+    var ret = new Promise(INTERNAL);
+    ret._captureStackTrace();
     var multiArgs = arguments.length > 1 ? !!Object(arguments[1]).multiArgs
-                                         : false
-    var result = tryCatch(fn)(nodebackForPromise(ret, multiArgs))
+                                         : false;
+    var result = tryCatch(fn)(nodebackForPromise(ret, multiArgs));
     if (result === errorObj) {
-        ret._rejectCallback(result.e, true)
+        ret._rejectCallback(result.e, true);
     }
-    if (!ret._isFateSealed()) ret._setAsyncGuaranteed()
-    return ret
-}
+    if (!ret._isFateSealed()) ret._setAsyncGuaranteed();
+    return ret;
+};
 
 Promise.all = function (promises) {
-    return new PromiseArray(promises).promise()
-}
+    return new PromiseArray(promises).promise();
+};
 
 Promise.cast = function (obj) {
-    var ret = tryConvertToPromise(obj)
+    var ret = tryConvertToPromise(obj);
     if (!(ret instanceof Promise)) {
-        ret = new Promise(INTERNAL)
-        ret._captureStackTrace()
-        ret._setFulfilled()
-        ret._rejectionHandler0 = obj
+        ret = new Promise(INTERNAL);
+        ret._captureStackTrace();
+        ret._setFulfilled();
+        ret._rejectionHandler0 = obj;
     }
-    return ret
-}
+    return ret;
+};
 
-Promise.resolve = Promise.fulfilled = Promise.cast
+Promise.resolve = Promise.fulfilled = Promise.cast;
 
 Promise.reject = Promise.rejected = function (reason) {
-    var ret = new Promise(INTERNAL)
-    ret._captureStackTrace()
-    ret._rejectCallback(reason, true)
-    return ret
-}
+    var ret = new Promise(INTERNAL);
+    ret._captureStackTrace();
+    ret._rejectCallback(reason, true);
+    return ret;
+};
 
 Promise.setScheduler = function(fn) {
     if (typeof fn !== "function") {
-        throw new TypeError("expecting a function but got " + util.classString(fn))
+        throw new TypeError("expecting a function but got " + util.classString(fn));
     }
-    var prev = async._schedule
-    async._schedule = fn
-    return prev
-}
+    var prev = async._schedule;
+    async._schedule = fn;
+    return prev;
+};
 
 Promise.prototype._then = function (
     didFulfill,
@@ -2212,40 +2210,40 @@ Promise.prototype._then = function (
     _,    receiver,
     internalData
 ) {
-    var haveInternalData = internalData !== undefined
-    var promise = haveInternalData ? internalData : new Promise(INTERNAL)
-    var target = this._target()
-    var bitField = target._bitField
+    var haveInternalData = internalData !== undefined;
+    var promise = haveInternalData ? internalData : new Promise(INTERNAL);
+    var target = this._target();
+    var bitField = target._bitField;
 
     if (!haveInternalData) {
-        promise._propagateFrom(this, 3)
-        promise._captureStackTrace()
+        promise._propagateFrom(this, 3);
+        promise._captureStackTrace();
         if (receiver === undefined &&
             ((this._bitField & 2097152) !== 0)) {
             if (!((bitField & 50397184) === 0)) {
-                receiver = this._boundValue()
+                receiver = this._boundValue();
             } else {
-                receiver = target === this ? undefined : this._boundTo
+                receiver = target === this ? undefined : this._boundTo;
             }
         }
-        this._fireEvent("promiseChained", this, promise)
+        this._fireEvent("promiseChained", this, promise);
     }
 
-    var domain = getDomain()
+    var domain = getDomain();
     if (!((bitField & 50397184) === 0)) {
-        var handler, value, settler = target._settlePromiseCtx
+        var handler, value, settler = target._settlePromiseCtx;
         if (((bitField & 33554432) !== 0)) {
-            value = target._rejectionHandler0
-            handler = didFulfill
+            value = target._rejectionHandler0;
+            handler = didFulfill;
         } else if (((bitField & 16777216) !== 0)) {
-            value = target._fulfillmentHandler0
-            handler = didReject
-            target._unsetRejectionIsUnhandled()
+            value = target._fulfillmentHandler0;
+            handler = didReject;
+            target._unsetRejectionIsUnhandled();
         } else {
-            settler = target._settlePromiseLateCancellationObserver
-            value = new CancellationError("late cancellation observer")
-            target._attachExtraTrace(value)
-            handler = didReject
+            settler = target._settlePromiseLateCancellationObserver;
+            value = new CancellationError("late cancellation observer");
+            target._attachExtraTrace(value);
+            handler = didReject;
         }
 
         async.invoke(settler, target, {
@@ -2254,113 +2252,113 @@ Promise.prototype._then = function (
             promise: promise,
             receiver: receiver,
             value: value
-        })
+        });
     } else {
-        target._addCallbacks(didFulfill, didReject, promise, receiver, domain)
+        target._addCallbacks(didFulfill, didReject, promise, receiver, domain);
     }
 
-    return promise
-}
+    return promise;
+};
 
 Promise.prototype._length = function () {
-    return this._bitField & 65535
-}
+    return this._bitField & 65535;
+};
 
 Promise.prototype._isFateSealed = function () {
-    return (this._bitField & 117506048) !== 0
-}
+    return (this._bitField & 117506048) !== 0;
+};
 
 Promise.prototype._isFollowing = function () {
-    return (this._bitField & 67108864) === 67108864
-}
+    return (this._bitField & 67108864) === 67108864;
+};
 
 Promise.prototype._setLength = function (len) {
     this._bitField = (this._bitField & -65536) |
-        (len & 65535)
-}
+        (len & 65535);
+};
 
 Promise.prototype._setFulfilled = function () {
-    this._bitField = this._bitField | 33554432
-    this._fireEvent("promiseFulfilled", this)
-}
+    this._bitField = this._bitField | 33554432;
+    this._fireEvent("promiseFulfilled", this);
+};
 
 Promise.prototype._setRejected = function () {
-    this._bitField = this._bitField | 16777216
-    this._fireEvent("promiseRejected", this)
-}
+    this._bitField = this._bitField | 16777216;
+    this._fireEvent("promiseRejected", this);
+};
 
 Promise.prototype._setFollowing = function () {
-    this._bitField = this._bitField | 67108864
-    this._fireEvent("promiseResolved", this)
-}
+    this._bitField = this._bitField | 67108864;
+    this._fireEvent("promiseResolved", this);
+};
 
 Promise.prototype._setIsFinal = function () {
-    this._bitField = this._bitField | 4194304
-}
+    this._bitField = this._bitField | 4194304;
+};
 
 Promise.prototype._isFinal = function () {
-    return (this._bitField & 4194304) > 0
-}
+    return (this._bitField & 4194304) > 0;
+};
 
 Promise.prototype._unsetCancelled = function() {
-    this._bitField = this._bitField & (~65536)
-}
+    this._bitField = this._bitField & (~65536);
+};
 
 Promise.prototype._setCancelled = function() {
-    this._bitField = this._bitField | 65536
-    this._fireEvent("promiseCancelled", this)
-}
+    this._bitField = this._bitField | 65536;
+    this._fireEvent("promiseCancelled", this);
+};
 
 Promise.prototype._setAsyncGuaranteed = function() {
-    this._bitField = this._bitField | 134217728
-}
+    this._bitField = this._bitField | 134217728;
+};
 
 Promise.prototype._receiverAt = function (index) {
     var ret = index === 0 ? this._receiver0 : this[
-            index * 4 - 4 + 3]
+            index * 4 - 4 + 3];
     if (ret === UNDEFINED_BINDING) {
-        return undefined
+        return undefined;
     } else if (ret === undefined && this._isBound()) {
-        return this._boundValue()
+        return this._boundValue();
     }
-    return ret
-}
+    return ret;
+};
 
 Promise.prototype._promiseAt = function (index) {
     return this[
-            index * 4 - 4 + 2]
-}
+            index * 4 - 4 + 2];
+};
 
 Promise.prototype._fulfillmentHandlerAt = function (index) {
     return this[
-            index * 4 - 4 + 0]
-}
+            index * 4 - 4 + 0];
+};
 
 Promise.prototype._rejectionHandlerAt = function (index) {
     return this[
-            index * 4 - 4 + 1]
-}
+            index * 4 - 4 + 1];
+};
 
-Promise.prototype._boundValue = function() {}
+Promise.prototype._boundValue = function() {};
 
 Promise.prototype._migrateCallback0 = function (follower) {
-    var bitField = follower._bitField
-    var fulfill = follower._fulfillmentHandler0
-    var reject = follower._rejectionHandler0
-    var promise = follower._promise0
-    var receiver = follower._receiverAt(0)
-    if (receiver === undefined) receiver = UNDEFINED_BINDING
-    this._addCallbacks(fulfill, reject, promise, receiver, null)
-}
+    var bitField = follower._bitField;
+    var fulfill = follower._fulfillmentHandler0;
+    var reject = follower._rejectionHandler0;
+    var promise = follower._promise0;
+    var receiver = follower._receiverAt(0);
+    if (receiver === undefined) receiver = UNDEFINED_BINDING;
+    this._addCallbacks(fulfill, reject, promise, receiver, null);
+};
 
 Promise.prototype._migrateCallbackAt = function (follower, index) {
-    var fulfill = follower._fulfillmentHandlerAt(index)
-    var reject = follower._rejectionHandlerAt(index)
-    var promise = follower._promiseAt(index)
-    var receiver = follower._receiverAt(index)
-    if (receiver === undefined) receiver = UNDEFINED_BINDING
-    this._addCallbacks(fulfill, reject, promise, receiver, null)
-}
+    var fulfill = follower._fulfillmentHandlerAt(index);
+    var reject = follower._rejectionHandlerAt(index);
+    var promise = follower._promiseAt(index);
+    var receiver = follower._receiverAt(index);
+    if (receiver === undefined) receiver = UNDEFINED_BINDING;
+    this._addCallbacks(fulfill, reject, promise, receiver, null);
+};
 
 Promise.prototype._addCallbacks = function (
     fulfill,
@@ -2369,353 +2367,353 @@ Promise.prototype._addCallbacks = function (
     receiver,
     domain
 ) {
-    var index = this._length()
+    var index = this._length();
 
     if (index >= 65535 - 4) {
-        index = 0
-        this._setLength(0)
+        index = 0;
+        this._setLength(0);
     }
 
     if (index === 0) {
-        this._promise0 = promise
-        this._receiver0 = receiver
+        this._promise0 = promise;
+        this._receiver0 = receiver;
         if (typeof fulfill === "function") {
             this._fulfillmentHandler0 =
-                domain === null ? fulfill : domain.bind(fulfill)
+                domain === null ? fulfill : domain.bind(fulfill);
         }
         if (typeof reject === "function") {
             this._rejectionHandler0 =
-                domain === null ? reject : domain.bind(reject)
+                domain === null ? reject : domain.bind(reject);
         }
     } else {
-        var base = index * 4 - 4
-        this[base + 2] = promise
-        this[base + 3] = receiver
+        var base = index * 4 - 4;
+        this[base + 2] = promise;
+        this[base + 3] = receiver;
         if (typeof fulfill === "function") {
             this[base + 0] =
-                domain === null ? fulfill : domain.bind(fulfill)
+                domain === null ? fulfill : domain.bind(fulfill);
         }
         if (typeof reject === "function") {
             this[base + 1] =
-                domain === null ? reject : domain.bind(reject)
+                domain === null ? reject : domain.bind(reject);
         }
     }
-    this._setLength(index + 1)
-    return index
-}
+    this._setLength(index + 1);
+    return index;
+};
 
 Promise.prototype._proxy = function (proxyable, arg) {
-    this._addCallbacks(undefined, undefined, arg, proxyable, null)
-}
+    this._addCallbacks(undefined, undefined, arg, proxyable, null);
+};
 
 Promise.prototype._resolveCallback = function(value, shouldBind) {
-    if (((this._bitField & 117506048) !== 0)) return
+    if (((this._bitField & 117506048) !== 0)) return;
     if (value === this)
-        return this._rejectCallback(makeSelfResolutionError(), false)
-    var maybePromise = tryConvertToPromise(value, this)
-    if (!(maybePromise instanceof Promise)) return this._fulfill(value)
+        return this._rejectCallback(makeSelfResolutionError(), false);
+    var maybePromise = tryConvertToPromise(value, this);
+    if (!(maybePromise instanceof Promise)) return this._fulfill(value);
 
-    if (shouldBind) this._propagateFrom(maybePromise, 2)
+    if (shouldBind) this._propagateFrom(maybePromise, 2);
 
-    var promise = maybePromise._target()
+    var promise = maybePromise._target();
 
     if (promise === this) {
-        this._reject(makeSelfResolutionError())
-        return
+        this._reject(makeSelfResolutionError());
+        return;
     }
 
-    var bitField = promise._bitField
+    var bitField = promise._bitField;
     if (((bitField & 50397184) === 0)) {
-        var len = this._length()
-        if (len > 0) promise._migrateCallback0(this)
+        var len = this._length();
+        if (len > 0) promise._migrateCallback0(this);
         for (var i = 1; i < len; ++i) {
-            promise._migrateCallbackAt(this, i)
+            promise._migrateCallbackAt(this, i);
         }
-        this._setFollowing()
-        this._setLength(0)
-        this._setFollowee(promise)
+        this._setFollowing();
+        this._setLength(0);
+        this._setFollowee(promise);
     } else if (((bitField & 33554432) !== 0)) {
-        this._fulfill(promise._value())
+        this._fulfill(promise._value());
     } else if (((bitField & 16777216) !== 0)) {
-        this._reject(promise._reason())
+        this._reject(promise._reason());
     } else {
-        var reason = new CancellationError("late cancellation observer")
-        promise._attachExtraTrace(reason)
-        this._reject(reason)
+        var reason = new CancellationError("late cancellation observer");
+        promise._attachExtraTrace(reason);
+        this._reject(reason);
     }
-}
+};
 
 Promise.prototype._rejectCallback =
 function(reason, synchronous, ignoreNonErrorWarnings) {
-    var trace = util.ensureErrorObject(reason)
-    var hasStack = trace === reason
+    var trace = util.ensureErrorObject(reason);
+    var hasStack = trace === reason;
     if (!hasStack && !ignoreNonErrorWarnings && debug.warnings()) {
         var message = "a promise was rejected with a non-error: " +
-            util.classString(reason)
-        this._warn(message, true)
+            util.classString(reason);
+        this._warn(message, true);
     }
-    this._attachExtraTrace(trace, synchronous ? hasStack : false)
-    this._reject(reason)
-}
+    this._attachExtraTrace(trace, synchronous ? hasStack : false);
+    this._reject(reason);
+};
 
 Promise.prototype._resolveFromExecutor = function (executor) {
-    var promise = this
-    this._captureStackTrace()
-    this._pushContext()
-    var synchronous = true
+    var promise = this;
+    this._captureStackTrace();
+    this._pushContext();
+    var synchronous = true;
     var r = this._execute(executor, function(value) {
-        promise._resolveCallback(value)
+        promise._resolveCallback(value);
     }, function (reason) {
-        promise._rejectCallback(reason, synchronous)
-    })
-    synchronous = false
-    this._popContext()
+        promise._rejectCallback(reason, synchronous);
+    });
+    synchronous = false;
+    this._popContext();
 
     if (r !== undefined) {
-        promise._rejectCallback(r, true)
+        promise._rejectCallback(r, true);
     }
-}
+};
 
 Promise.prototype._settlePromiseFromHandler = function (
     handler, receiver, value, promise
 ) {
-    var bitField = promise._bitField
-    if (((bitField & 65536) !== 0)) return
-    promise._pushContext()
-    var x
+    var bitField = promise._bitField;
+    if (((bitField & 65536) !== 0)) return;
+    promise._pushContext();
+    var x;
     if (receiver === APPLY) {
         if (!value || typeof value.length !== "number") {
-            x = errorObj
+            x = errorObj;
             x.e = new TypeError("cannot .spread() a non-array: " +
-                                    util.classString(value))
+                                    util.classString(value));
         } else {
-            x = tryCatch(handler).apply(this._boundValue(), value)
+            x = tryCatch(handler).apply(this._boundValue(), value);
         }
     } else {
-        x = tryCatch(handler).call(receiver, value)
+        x = tryCatch(handler).call(receiver, value);
     }
-    var promiseCreated = promise._popContext()
-    bitField = promise._bitField
-    if (((bitField & 65536) !== 0)) return
+    var promiseCreated = promise._popContext();
+    bitField = promise._bitField;
+    if (((bitField & 65536) !== 0)) return;
 
     if (x === NEXT_FILTER) {
-        promise._reject(value)
+        promise._reject(value);
     } else if (x === errorObj) {
-        promise._rejectCallback(x.e, false)
+        promise._rejectCallback(x.e, false);
     } else {
-        debug.checkForgottenReturns(x, promiseCreated, "",  promise, this)
-        promise._resolveCallback(x)
+        debug.checkForgottenReturns(x, promiseCreated, "",  promise, this);
+        promise._resolveCallback(x);
     }
-}
+};
 
 Promise.prototype._target = function() {
-    var ret = this
-    while (ret._isFollowing()) ret = ret._followee()
-    return ret
-}
+    var ret = this;
+    while (ret._isFollowing()) ret = ret._followee();
+    return ret;
+};
 
 Promise.prototype._followee = function() {
-    return this._rejectionHandler0
-}
+    return this._rejectionHandler0;
+};
 
 Promise.prototype._setFollowee = function(promise) {
-    this._rejectionHandler0 = promise
-}
+    this._rejectionHandler0 = promise;
+};
 
 Promise.prototype._settlePromise = function(promise, handler, receiver, value) {
-    var isPromise = promise instanceof Promise
-    var bitField = this._bitField
-    var asyncGuaranteed = ((bitField & 134217728) !== 0)
+    var isPromise = promise instanceof Promise;
+    var bitField = this._bitField;
+    var asyncGuaranteed = ((bitField & 134217728) !== 0);
     if (((bitField & 65536) !== 0)) {
-        if (isPromise) promise._invokeInternalOnCancel()
+        if (isPromise) promise._invokeInternalOnCancel();
 
         if (receiver instanceof PassThroughHandlerContext &&
             receiver.isFinallyHandler()) {
-            receiver.cancelPromise = promise
+            receiver.cancelPromise = promise;
             if (tryCatch(handler).call(receiver, value) === errorObj) {
-                promise._reject(errorObj.e)
+                promise._reject(errorObj.e);
             }
         } else if (handler === reflectHandler) {
-            promise._fulfill(reflectHandler.call(receiver))
+            promise._fulfill(reflectHandler.call(receiver));
         } else if (receiver instanceof Proxyable) {
-            receiver._promiseCancelled(promise)
+            receiver._promiseCancelled(promise);
         } else if (isPromise || promise instanceof PromiseArray) {
-            promise._cancel()
+            promise._cancel();
         } else {
-            receiver.cancel()
+            receiver.cancel();
         }
     } else if (typeof handler === "function") {
         if (!isPromise) {
-            handler.call(receiver, value, promise)
+            handler.call(receiver, value, promise);
         } else {
-            if (asyncGuaranteed) promise._setAsyncGuaranteed()
-            this._settlePromiseFromHandler(handler, receiver, value, promise)
+            if (asyncGuaranteed) promise._setAsyncGuaranteed();
+            this._settlePromiseFromHandler(handler, receiver, value, promise);
         }
     } else if (receiver instanceof Proxyable) {
         if (!receiver._isResolved()) {
             if (((bitField & 33554432) !== 0)) {
-                receiver._promiseFulfilled(value, promise)
+                receiver._promiseFulfilled(value, promise);
             } else {
-                receiver._promiseRejected(value, promise)
+                receiver._promiseRejected(value, promise);
             }
         }
     } else if (isPromise) {
-        if (asyncGuaranteed) promise._setAsyncGuaranteed()
+        if (asyncGuaranteed) promise._setAsyncGuaranteed();
         if (((bitField & 33554432) !== 0)) {
-            promise._fulfill(value)
+            promise._fulfill(value);
         } else {
-            promise._reject(value)
+            promise._reject(value);
         }
     }
-}
+};
 
 Promise.prototype._settlePromiseLateCancellationObserver = function(ctx) {
-    var handler = ctx.handler
-    var promise = ctx.promise
-    var receiver = ctx.receiver
-    var value = ctx.value
+    var handler = ctx.handler;
+    var promise = ctx.promise;
+    var receiver = ctx.receiver;
+    var value = ctx.value;
     if (typeof handler === "function") {
         if (!(promise instanceof Promise)) {
-            handler.call(receiver, value, promise)
+            handler.call(receiver, value, promise);
         } else {
-            this._settlePromiseFromHandler(handler, receiver, value, promise)
+            this._settlePromiseFromHandler(handler, receiver, value, promise);
         }
     } else if (promise instanceof Promise) {
-        promise._reject(value)
+        promise._reject(value);
     }
-}
+};
 
 Promise.prototype._settlePromiseCtx = function(ctx) {
-    this._settlePromise(ctx.promise, ctx.handler, ctx.receiver, ctx.value)
-}
+    this._settlePromise(ctx.promise, ctx.handler, ctx.receiver, ctx.value);
+};
 
 Promise.prototype._settlePromise0 = function(handler, value, bitField) {
-    var promise = this._promise0
-    var receiver = this._receiverAt(0)
-    this._promise0 = undefined
-    this._receiver0 = undefined
-    this._settlePromise(promise, handler, receiver, value)
-}
+    var promise = this._promise0;
+    var receiver = this._receiverAt(0);
+    this._promise0 = undefined;
+    this._receiver0 = undefined;
+    this._settlePromise(promise, handler, receiver, value);
+};
 
 Promise.prototype._clearCallbackDataAtIndex = function(index) {
-    var base = index * 4 - 4
+    var base = index * 4 - 4;
     this[base + 2] =
     this[base + 3] =
     this[base + 0] =
-    this[base + 1] = undefined
-}
+    this[base + 1] = undefined;
+};
 
 Promise.prototype._fulfill = function (value) {
-    var bitField = this._bitField
-    if (((bitField & 117506048) >>> 16)) return
+    var bitField = this._bitField;
+    if (((bitField & 117506048) >>> 16)) return;
     if (value === this) {
-        var err = makeSelfResolutionError()
-        this._attachExtraTrace(err)
-        return this._reject(err)
+        var err = makeSelfResolutionError();
+        this._attachExtraTrace(err);
+        return this._reject(err);
     }
-    this._setFulfilled()
-    this._rejectionHandler0 = value
+    this._setFulfilled();
+    this._rejectionHandler0 = value;
 
     if ((bitField & 65535) > 0) {
         if (((bitField & 134217728) !== 0)) {
-            this._settlePromises()
+            this._settlePromises();
         } else {
-            async.settlePromises(this)
+            async.settlePromises(this);
         }
     }
-}
+};
 
 Promise.prototype._reject = function (reason) {
-    var bitField = this._bitField
-    if (((bitField & 117506048) >>> 16)) return
-    this._setRejected()
-    this._fulfillmentHandler0 = reason
+    var bitField = this._bitField;
+    if (((bitField & 117506048) >>> 16)) return;
+    this._setRejected();
+    this._fulfillmentHandler0 = reason;
 
     if (this._isFinal()) {
-        return async.fatalError(reason, util.isNode)
+        return async.fatalError(reason, util.isNode);
     }
 
     if ((bitField & 65535) > 0) {
-        async.settlePromises(this)
+        async.settlePromises(this);
     } else {
-        this._ensurePossibleRejectionHandled()
+        this._ensurePossibleRejectionHandled();
     }
-}
+};
 
 Promise.prototype._fulfillPromises = function (len, value) {
     for (var i = 1; i < len; i++) {
-        var handler = this._fulfillmentHandlerAt(i)
-        var promise = this._promiseAt(i)
-        var receiver = this._receiverAt(i)
-        this._clearCallbackDataAtIndex(i)
-        this._settlePromise(promise, handler, receiver, value)
+        var handler = this._fulfillmentHandlerAt(i);
+        var promise = this._promiseAt(i);
+        var receiver = this._receiverAt(i);
+        this._clearCallbackDataAtIndex(i);
+        this._settlePromise(promise, handler, receiver, value);
     }
-}
+};
 
 Promise.prototype._rejectPromises = function (len, reason) {
     for (var i = 1; i < len; i++) {
-        var handler = this._rejectionHandlerAt(i)
-        var promise = this._promiseAt(i)
-        var receiver = this._receiverAt(i)
-        this._clearCallbackDataAtIndex(i)
-        this._settlePromise(promise, handler, receiver, reason)
+        var handler = this._rejectionHandlerAt(i);
+        var promise = this._promiseAt(i);
+        var receiver = this._receiverAt(i);
+        this._clearCallbackDataAtIndex(i);
+        this._settlePromise(promise, handler, receiver, reason);
     }
-}
+};
 
 Promise.prototype._settlePromises = function () {
-    var bitField = this._bitField
-    var len = (bitField & 65535)
+    var bitField = this._bitField;
+    var len = (bitField & 65535);
 
     if (len > 0) {
         if (((bitField & 16842752) !== 0)) {
-            var reason = this._fulfillmentHandler0
-            this._settlePromise0(this._rejectionHandler0, reason, bitField)
-            this._rejectPromises(len, reason)
+            var reason = this._fulfillmentHandler0;
+            this._settlePromise0(this._rejectionHandler0, reason, bitField);
+            this._rejectPromises(len, reason);
         } else {
-            var value = this._rejectionHandler0
-            this._settlePromise0(this._fulfillmentHandler0, value, bitField)
-            this._fulfillPromises(len, value)
+            var value = this._rejectionHandler0;
+            this._settlePromise0(this._fulfillmentHandler0, value, bitField);
+            this._fulfillPromises(len, value);
         }
-        this._setLength(0)
+        this._setLength(0);
     }
-    this._clearCancellationData()
-}
+    this._clearCancellationData();
+};
 
 Promise.prototype._settledValue = function() {
-    var bitField = this._bitField
+    var bitField = this._bitField;
     if (((bitField & 33554432) !== 0)) {
-        return this._rejectionHandler0
+        return this._rejectionHandler0;
     } else if (((bitField & 16777216) !== 0)) {
-        return this._fulfillmentHandler0
+        return this._fulfillmentHandler0;
     }
-}
+};
 
 function deferResolve(v) {this.promise._resolveCallback(v);}
 function deferReject(v) {this.promise._rejectCallback(v, false);}
 
 Promise.defer = Promise.pending = function() {
-    debug.deprecated("Promise.defer", "new Promise")
-    var promise = new Promise(INTERNAL)
+    debug.deprecated("Promise.defer", "new Promise");
+    var promise = new Promise(INTERNAL);
     return {
         promise: promise,
         resolve: deferResolve,
         reject: deferReject
-    }
-}
+    };
+};
 
 util.notEnumerableProp(Promise,
                        "_makeSelfResolutionError",
-                       makeSelfResolutionError)
+                       makeSelfResolutionError);
 
 _dereq_("./method")(Promise, INTERNAL, tryConvertToPromise, apiRejection,
-    debug)
-_dereq_("./bind")(Promise, INTERNAL, tryConvertToPromise, debug)
-_dereq_("./cancel")(Promise, PromiseArray, apiRejection, debug)
-_dereq_("./direct_resolve")(Promise)
-_dereq_("./synchronous_inspection")(Promise)
+    debug);
+_dereq_("./bind")(Promise, INTERNAL, tryConvertToPromise, debug);
+_dereq_("./cancel")(Promise, PromiseArray, apiRejection, debug);
+_dereq_("./direct_resolve")(Promise);
+_dereq_("./synchronous_inspection")(Promise);
 _dereq_("./join")(
-    Promise, PromiseArray, tryConvertToPromise, INTERNAL, debug)
-Promise.Promise = Promise
+    Promise, PromiseArray, tryConvertToPromise, INTERNAL, debug);
+Promise.Promise = Promise;
                                                          
     util.toFastProperties(Promise);                                          
     util.toFastProperties(Promise.prototype);                                
@@ -2739,627 +2737,627 @@ Promise.Promise = Promise
     debug.setBounds(Async.firstLineError, util.lastLineError);               
     return Promise;                                                          
 
-}
+};
 
 },{"./async":1,"./bind":2,"./cancel":4,"./catch_filter":5,"./context":6,"./debuggability":7,"./direct_resolve":8,"./errors":9,"./es5":10,"./finally":11,"./join":12,"./method":13,"./nodeback":14,"./promise_array":16,"./synchronous_inspection":19,"./thenables":20,"./util":21}],16:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 module.exports = function(Promise, INTERNAL, tryConvertToPromise,
     apiRejection, Proxyable) {
-var util = _dereq_("./util")
-var isArray = util.isArray
+var util = _dereq_("./util");
+var isArray = util.isArray;
 
 function toResolutionValue(val) {
     switch(val) {
-    case -2: return []
-    case -3: return {}
+    case -2: return [];
+    case -3: return {};
     }
 }
 
 function PromiseArray(values) {
-    var promise = this._promise = new Promise(INTERNAL)
+    var promise = this._promise = new Promise(INTERNAL);
     if (values instanceof Promise) {
-        promise._propagateFrom(values, 3)
+        promise._propagateFrom(values, 3);
     }
-    promise._setOnCancel(this)
-    this._values = values
-    this._length = 0
-    this._totalResolved = 0
-    this._init(undefined, -2)
+    promise._setOnCancel(this);
+    this._values = values;
+    this._length = 0;
+    this._totalResolved = 0;
+    this._init(undefined, -2);
 }
-util.inherits(PromiseArray, Proxyable)
+util.inherits(PromiseArray, Proxyable);
 
 PromiseArray.prototype.length = function () {
-    return this._length
-}
+    return this._length;
+};
 
 PromiseArray.prototype.promise = function () {
-    return this._promise
-}
+    return this._promise;
+};
 
 PromiseArray.prototype._init = function init(_, resolveValueIfEmpty) {
-    var values = tryConvertToPromise(this._values, this._promise)
+    var values = tryConvertToPromise(this._values, this._promise);
     if (values instanceof Promise) {
-        values = values._target()
-        var bitField = values._bitField
-        
-        this._values = values
+        values = values._target();
+        var bitField = values._bitField;
+        ;
+        this._values = values;
 
         if (((bitField & 50397184) === 0)) {
-            this._promise._setAsyncGuaranteed()
+            this._promise._setAsyncGuaranteed();
             return values._then(
                 init,
                 this._reject,
                 undefined,
                 this,
                 resolveValueIfEmpty
-           )
+           );
         } else if (((bitField & 33554432) !== 0)) {
-            values = values._value()
+            values = values._value();
         } else if (((bitField & 16777216) !== 0)) {
-            return this._reject(values._reason())
+            return this._reject(values._reason());
         } else {
-            return this._cancel()
+            return this._cancel();
         }
     }
-    values = util.asArray(values)
+    values = util.asArray(values);
     if (values === null) {
         var err = apiRejection(
-            "expecting an array or an iterable object but got " + util.classString(values)).reason()
-        this._promise._rejectCallback(err, false)
-        return
+            "expecting an array or an iterable object but got " + util.classString(values)).reason();
+        this._promise._rejectCallback(err, false);
+        return;
     }
 
     if (values.length === 0) {
         if (resolveValueIfEmpty === -5) {
-            this._resolveEmptyArray()
+            this._resolveEmptyArray();
         }
         else {
-            this._resolve(toResolutionValue(resolveValueIfEmpty))
+            this._resolve(toResolutionValue(resolveValueIfEmpty));
         }
-        return
+        return;
     }
-    this._iterate(values)
-}
+    this._iterate(values);
+};
 
 PromiseArray.prototype._iterate = function(values) {
-    var len = this.getActualLength(values.length)
-    this._length = len
-    this._values = this.shouldCopyValues() ? new Array(len) : this._values
-    var result = this._promise
-    var isResolved = false
-    var bitField = null
+    var len = this.getActualLength(values.length);
+    this._length = len;
+    this._values = this.shouldCopyValues() ? new Array(len) : this._values;
+    var result = this._promise;
+    var isResolved = false;
+    var bitField = null;
     for (var i = 0; i < len; ++i) {
-        var maybePromise = tryConvertToPromise(values[i], result)
+        var maybePromise = tryConvertToPromise(values[i], result);
 
         if (maybePromise instanceof Promise) {
-            maybePromise = maybePromise._target()
-            bitField = maybePromise._bitField
+            maybePromise = maybePromise._target();
+            bitField = maybePromise._bitField;
         } else {
-            bitField = null
+            bitField = null;
         }
 
         if (isResolved) {
             if (bitField !== null) {
-                maybePromise.suppressUnhandledRejections()
+                maybePromise.suppressUnhandledRejections();
             }
         } else if (bitField !== null) {
             if (((bitField & 50397184) === 0)) {
-                maybePromise._proxy(this, i)
-                this._values[i] = maybePromise
+                maybePromise._proxy(this, i);
+                this._values[i] = maybePromise;
             } else if (((bitField & 33554432) !== 0)) {
-                isResolved = this._promiseFulfilled(maybePromise._value(), i)
+                isResolved = this._promiseFulfilled(maybePromise._value(), i);
             } else if (((bitField & 16777216) !== 0)) {
-                isResolved = this._promiseRejected(maybePromise._reason(), i)
+                isResolved = this._promiseRejected(maybePromise._reason(), i);
             } else {
-                isResolved = this._promiseCancelled(i)
+                isResolved = this._promiseCancelled(i);
             }
         } else {
-            isResolved = this._promiseFulfilled(maybePromise, i)
+            isResolved = this._promiseFulfilled(maybePromise, i);
         }
     }
-    if (!isResolved) result._setAsyncGuaranteed()
-}
+    if (!isResolved) result._setAsyncGuaranteed();
+};
 
 PromiseArray.prototype._isResolved = function () {
-    return this._values === null
-}
+    return this._values === null;
+};
 
 PromiseArray.prototype._resolve = function (value) {
-    this._values = null
-    this._promise._fulfill(value)
-}
+    this._values = null;
+    this._promise._fulfill(value);
+};
 
 PromiseArray.prototype._cancel = function() {
-    if (this._isResolved() || !this._promise.isCancellable()) return
-    this._values = null
-    this._promise._cancel()
-}
+    if (this._isResolved() || !this._promise.isCancellable()) return;
+    this._values = null;
+    this._promise._cancel();
+};
 
 PromiseArray.prototype._reject = function (reason) {
-    this._values = null
-    this._promise._rejectCallback(reason, false)
-}
+    this._values = null;
+    this._promise._rejectCallback(reason, false);
+};
 
 PromiseArray.prototype._promiseFulfilled = function (value, index) {
-    this._values[index] = value
-    var totalResolved = ++this._totalResolved
+    this._values[index] = value;
+    var totalResolved = ++this._totalResolved;
     if (totalResolved >= this._length) {
-        this._resolve(this._values)
-        return true
+        this._resolve(this._values);
+        return true;
     }
-    return false
-}
+    return false;
+};
 
 PromiseArray.prototype._promiseCancelled = function() {
-    this._cancel()
-    return true
-}
+    this._cancel();
+    return true;
+};
 
 PromiseArray.prototype._promiseRejected = function (reason) {
-    this._totalResolved++
-    this._reject(reason)
-    return true
-}
+    this._totalResolved++;
+    this._reject(reason);
+    return true;
+};
 
 PromiseArray.prototype._resultCancelled = function() {
-    if (this._isResolved()) return
-    var values = this._values
-    this._cancel()
+    if (this._isResolved()) return;
+    var values = this._values;
+    this._cancel();
     if (values instanceof Promise) {
-        values.cancel()
+        values.cancel();
     } else {
         for (var i = 0; i < values.length; ++i) {
             if (values[i] instanceof Promise) {
-                values[i].cancel()
+                values[i].cancel();
             }
         }
     }
-}
+};
 
 PromiseArray.prototype.shouldCopyValues = function () {
-    return true
-}
+    return true;
+};
 
 PromiseArray.prototype.getActualLength = function (len) {
-    return len
-}
+    return len;
+};
 
-return PromiseArray
-}
+return PromiseArray;
+};
 
 },{"./util":21}],17:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 function arrayMove(src, srcIndex, dst, dstIndex, len) {
     for (var j = 0; j < len; ++j) {
-        dst[j + dstIndex] = src[j + srcIndex]
-        src[j + srcIndex] = void 0
+        dst[j + dstIndex] = src[j + srcIndex];
+        src[j + srcIndex] = void 0;
     }
 }
 
 function Queue(capacity) {
-    this._capacity = capacity
-    this._length = 0
-    this._front = 0
+    this._capacity = capacity;
+    this._length = 0;
+    this._front = 0;
 }
 
 Queue.prototype._willBeOverCapacity = function (size) {
-    return this._capacity < size
-}
+    return this._capacity < size;
+};
 
 Queue.prototype._pushOne = function (arg) {
-    var length = this.length()
-    this._checkCapacity(length + 1)
-    var i = (this._front + length) & (this._capacity - 1)
-    this[i] = arg
-    this._length = length + 1
-}
+    var length = this.length();
+    this._checkCapacity(length + 1);
+    var i = (this._front + length) & (this._capacity - 1);
+    this[i] = arg;
+    this._length = length + 1;
+};
 
 Queue.prototype._unshiftOne = function(value) {
-    var capacity = this._capacity
-    this._checkCapacity(this.length() + 1)
-    var front = this._front
+    var capacity = this._capacity;
+    this._checkCapacity(this.length() + 1);
+    var front = this._front;
     var i = (((( front - 1 ) &
-                    ( capacity - 1) ) ^ capacity ) - capacity )
-    this[i] = value
-    this._front = i
-    this._length = this.length() + 1
-}
+                    ( capacity - 1) ) ^ capacity ) - capacity );
+    this[i] = value;
+    this._front = i;
+    this._length = this.length() + 1;
+};
 
 Queue.prototype.unshift = function(fn, receiver, arg) {
-    this._unshiftOne(arg)
-    this._unshiftOne(receiver)
-    this._unshiftOne(fn)
-}
+    this._unshiftOne(arg);
+    this._unshiftOne(receiver);
+    this._unshiftOne(fn);
+};
 
 Queue.prototype.push = function (fn, receiver, arg) {
-    var length = this.length() + 3
+    var length = this.length() + 3;
     if (this._willBeOverCapacity(length)) {
-        this._pushOne(fn)
-        this._pushOne(receiver)
-        this._pushOne(arg)
-        return
+        this._pushOne(fn);
+        this._pushOne(receiver);
+        this._pushOne(arg);
+        return;
     }
-    var j = this._front + length - 3
-    this._checkCapacity(length)
-    var wrapMask = this._capacity - 1
-    this[(j + 0) & wrapMask] = fn
-    this[(j + 1) & wrapMask] = receiver
-    this[(j + 2) & wrapMask] = arg
-    this._length = length
-}
+    var j = this._front + length - 3;
+    this._checkCapacity(length);
+    var wrapMask = this._capacity - 1;
+    this[(j + 0) & wrapMask] = fn;
+    this[(j + 1) & wrapMask] = receiver;
+    this[(j + 2) & wrapMask] = arg;
+    this._length = length;
+};
 
 Queue.prototype.shift = function () {
     var front = this._front,
-        ret = this[front]
+        ret = this[front];
 
-    this[front] = undefined
-    this._front = (front + 1) & (this._capacity - 1)
-    this._length--
-    return ret
-}
+    this[front] = undefined;
+    this._front = (front + 1) & (this._capacity - 1);
+    this._length--;
+    return ret;
+};
 
 Queue.prototype.length = function () {
-    return this._length
-}
+    return this._length;
+};
 
 Queue.prototype._checkCapacity = function (size) {
     if (this._capacity < size) {
-        this._resizeTo(this._capacity << 1)
+        this._resizeTo(this._capacity << 1);
     }
-}
+};
 
 Queue.prototype._resizeTo = function (capacity) {
-    var oldCapacity = this._capacity
-    this._capacity = capacity
-    var front = this._front
-    var length = this._length
-    var moveItemsCount = (front + length) & (oldCapacity - 1)
-    arrayMove(this, 0, this, oldCapacity, moveItemsCount)
-}
+    var oldCapacity = this._capacity;
+    this._capacity = capacity;
+    var front = this._front;
+    var length = this._length;
+    var moveItemsCount = (front + length) & (oldCapacity - 1);
+    arrayMove(this, 0, this, oldCapacity, moveItemsCount);
+};
 
-module.exports = Queue
+module.exports = Queue;
 
 },{}],18:[function(_dereq_,module,exports){
-"use strict"
-var util = _dereq_("./util")
-var schedule
+"use strict";
+var util = _dereq_("./util");
+var schedule;
 var noAsyncScheduler = function() {
-    throw new Error("No async scheduler available\u000a\u000a    See http://goo.gl/MqrFmX\u000a")
-}
+    throw new Error("No async scheduler available\u000a\u000a    See http://goo.gl/MqrFmX\u000a");
+};
 if (util.isNode && typeof MutationObserver === "undefined") {
-    var GlobalSetImmediate = global.setImmediate
-    var ProcessNextTick = process.nextTick
+    var GlobalSetImmediate = global.setImmediate;
+    var ProcessNextTick = process.nextTick;
     schedule = util.isRecentNode
                 ? function(fn) { GlobalSetImmediate.call(global, fn); }
-                : function(fn) { ProcessNextTick.call(process, fn); }
+                : function(fn) { ProcessNextTick.call(process, fn); };
 } else if ((typeof MutationObserver !== "undefined") &&
           !(typeof window !== "undefined" &&
             window.navigator &&
             window.navigator.standalone)) {
     schedule = (function() {
-        var div = document.createElement("div")
-        var opts = {attributes: true}
-        var toggleScheduled = false
-        var div2 = document.createElement("div")
+        var div = document.createElement("div");
+        var opts = {attributes: true};
+        var toggleScheduled = false;
+        var div2 = document.createElement("div");
         var o2 = new MutationObserver(function() {
-            div.classList.toggle("foo")
-          toggleScheduled = false
-        })
-        o2.observe(div2, opts)
+            div.classList.toggle("foo");
+          toggleScheduled = false;
+        });
+        o2.observe(div2, opts);
 
         var scheduleToggle = function() {
-            if (toggleScheduled) return
-          toggleScheduled = true
-          div2.classList.toggle("foo")
-        }
+            if (toggleScheduled) return;
+          toggleScheduled = true;
+          div2.classList.toggle("foo");
+        };
 
         return function schedule(fn) {
           var o = new MutationObserver(function() {
-            o.disconnect()
-            fn()
-          })
-          o.observe(div, opts)
-          scheduleToggle()
-        }
-    })()
+            o.disconnect();
+            fn();
+          });
+          o.observe(div, opts);
+          scheduleToggle();
+        };
+    })();
 } else if (typeof setImmediate !== "undefined") {
     schedule = function (fn) {
-        setImmediate(fn)
-    }
+        setImmediate(fn);
+    };
 } else if (typeof setTimeout !== "undefined") {
     schedule = function (fn) {
-        setTimeout(fn, 0)
-    }
+        setTimeout(fn, 0);
+    };
 } else {
-    schedule = noAsyncScheduler
+    schedule = noAsyncScheduler;
 }
-module.exports = schedule
+module.exports = schedule;
 
 },{"./util":21}],19:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 module.exports = function(Promise) {
 function PromiseInspection(promise) {
     if (promise !== undefined) {
-        promise = promise._target()
-        this._bitField = promise._bitField
+        promise = promise._target();
+        this._bitField = promise._bitField;
         this._settledValueField = promise._isFateSealed()
-            ? promise._settledValue() : undefined
+            ? promise._settledValue() : undefined;
     }
     else {
-        this._bitField = 0
-        this._settledValueField = undefined
+        this._bitField = 0;
+        this._settledValueField = undefined;
     }
 }
 
 PromiseInspection.prototype._settledValue = function() {
-    return this._settledValueField
-}
+    return this._settledValueField;
+};
 
 var value = PromiseInspection.prototype.value = function () {
     if (!this.isFulfilled()) {
-        throw new TypeError("cannot get fulfillment value of a non-fulfilled promise\u000a\u000a    See http://goo.gl/MqrFmX\u000a")
+        throw new TypeError("cannot get fulfillment value of a non-fulfilled promise\u000a\u000a    See http://goo.gl/MqrFmX\u000a");
     }
-    return this._settledValue()
-}
+    return this._settledValue();
+};
 
 var reason = PromiseInspection.prototype.error =
 PromiseInspection.prototype.reason = function () {
     if (!this.isRejected()) {
-        throw new TypeError("cannot get rejection reason of a non-rejected promise\u000a\u000a    See http://goo.gl/MqrFmX\u000a")
+        throw new TypeError("cannot get rejection reason of a non-rejected promise\u000a\u000a    See http://goo.gl/MqrFmX\u000a");
     }
-    return this._settledValue()
-}
+    return this._settledValue();
+};
 
 var isFulfilled = PromiseInspection.prototype.isFulfilled = function() {
-    return (this._bitField & 33554432) !== 0
-}
+    return (this._bitField & 33554432) !== 0;
+};
 
 var isRejected = PromiseInspection.prototype.isRejected = function () {
-    return (this._bitField & 16777216) !== 0
-}
+    return (this._bitField & 16777216) !== 0;
+};
 
 var isPending = PromiseInspection.prototype.isPending = function () {
-    return (this._bitField & 50397184) === 0
-}
+    return (this._bitField & 50397184) === 0;
+};
 
 var isResolved = PromiseInspection.prototype.isResolved = function () {
-    return (this._bitField & 50331648) !== 0
-}
+    return (this._bitField & 50331648) !== 0;
+};
 
 PromiseInspection.prototype.isCancelled =
 Promise.prototype._isCancelled = function() {
-    return (this._bitField & 65536) === 65536
-}
+    return (this._bitField & 65536) === 65536;
+};
 
 Promise.prototype.isCancelled = function() {
-    return this._target()._isCancelled()
-}
+    return this._target()._isCancelled();
+};
 
 Promise.prototype.isPending = function() {
-    return isPending.call(this._target())
-}
+    return isPending.call(this._target());
+};
 
 Promise.prototype.isRejected = function() {
-    return isRejected.call(this._target())
-}
+    return isRejected.call(this._target());
+};
 
 Promise.prototype.isFulfilled = function() {
-    return isFulfilled.call(this._target())
-}
+    return isFulfilled.call(this._target());
+};
 
 Promise.prototype.isResolved = function() {
-    return isResolved.call(this._target())
-}
+    return isResolved.call(this._target());
+};
 
 Promise.prototype.value = function() {
-    return value.call(this._target())
-}
+    return value.call(this._target());
+};
 
 Promise.prototype.reason = function() {
-    var target = this._target()
-    target._unsetRejectionIsUnhandled()
-    return reason.call(target)
-}
+    var target = this._target();
+    target._unsetRejectionIsUnhandled();
+    return reason.call(target);
+};
 
 Promise.prototype._value = function() {
-    return this._settledValue()
-}
+    return this._settledValue();
+};
 
 Promise.prototype._reason = function() {
-    this._unsetRejectionIsUnhandled()
-    return this._settledValue()
-}
+    this._unsetRejectionIsUnhandled();
+    return this._settledValue();
+};
 
-Promise.PromiseInspection = PromiseInspection
-}
+Promise.PromiseInspection = PromiseInspection;
+};
 
 },{}],20:[function(_dereq_,module,exports){
-"use strict"
+"use strict";
 module.exports = function(Promise, INTERNAL) {
-var util = _dereq_("./util")
-var errorObj = util.errorObj
-var isObject = util.isObject
+var util = _dereq_("./util");
+var errorObj = util.errorObj;
+var isObject = util.isObject;
 
 function tryConvertToPromise(obj, context) {
     if (isObject(obj)) {
-        if (obj instanceof Promise) return obj
-        var then = getThen(obj)
+        if (obj instanceof Promise) return obj;
+        var then = getThen(obj);
         if (then === errorObj) {
-            if (context) context._pushContext()
-            var ret = Promise.reject(then.e)
-            if (context) context._popContext()
-            return ret
+            if (context) context._pushContext();
+            var ret = Promise.reject(then.e);
+            if (context) context._popContext();
+            return ret;
         } else if (typeof then === "function") {
             if (isAnyBluebirdPromise(obj)) {
-                var ret = new Promise(INTERNAL)
+                var ret = new Promise(INTERNAL);
                 obj._then(
                     ret._fulfill,
                     ret._reject,
                     undefined,
                     ret,
                     null
-                )
-                return ret
+                );
+                return ret;
             }
-            return doThenable(obj, then, context)
+            return doThenable(obj, then, context);
         }
     }
-    return obj
+    return obj;
 }
 
 function doGetThen(obj) {
-    return obj.then
+    return obj.then;
 }
 
 function getThen(obj) {
     try {
-        return doGetThen(obj)
+        return doGetThen(obj);
     } catch (e) {
-        errorObj.e = e
-        return errorObj
+        errorObj.e = e;
+        return errorObj;
     }
 }
 
-var hasProp = {}.hasOwnProperty
+var hasProp = {}.hasOwnProperty;
 function isAnyBluebirdPromise(obj) {
-    return hasProp.call(obj, "_promise0")
+    return hasProp.call(obj, "_promise0");
 }
 
 function doThenable(x, then, context) {
-    var promise = new Promise(INTERNAL)
-    var ret = promise
-    if (context) context._pushContext()
-    promise._captureStackTrace()
-    if (context) context._popContext()
-    var synchronous = true
-    var result = util.tryCatch(then).call(x, resolve, reject)
-    synchronous = false
+    var promise = new Promise(INTERNAL);
+    var ret = promise;
+    if (context) context._pushContext();
+    promise._captureStackTrace();
+    if (context) context._popContext();
+    var synchronous = true;
+    var result = util.tryCatch(then).call(x, resolve, reject);
+    synchronous = false;
 
     if (promise && result === errorObj) {
-        promise._rejectCallback(result.e, true, true)
-        promise = null
+        promise._rejectCallback(result.e, true, true);
+        promise = null;
     }
 
     function resolve(value) {
-        if (!promise) return
-        promise._resolveCallback(value)
-        promise = null
+        if (!promise) return;
+        promise._resolveCallback(value);
+        promise = null;
     }
 
     function reject(reason) {
-        if (!promise) return
-        promise._rejectCallback(reason, synchronous, true)
-        promise = null
+        if (!promise) return;
+        promise._rejectCallback(reason, synchronous, true);
+        promise = null;
     }
-    return ret
+    return ret;
 }
 
-return tryConvertToPromise
-}
+return tryConvertToPromise;
+};
 
 },{"./util":21}],21:[function(_dereq_,module,exports){
-"use strict"
-var es5 = _dereq_("./es5")
-var canEvaluate = typeof navigator == "undefined"
+"use strict";
+var es5 = _dereq_("./es5");
+var canEvaluate = typeof navigator == "undefined";
 
-var errorObj = {e: {}}
-var tryCatchTarget
+var errorObj = {e: {}};
+var tryCatchTarget;
 var globalObject = typeof self !== "undefined" ? self :
     typeof window !== "undefined" ? window :
     typeof global !== "undefined" ? global :
-    this !== undefined ? this : null
+    this !== undefined ? this : null;
 
 function tryCatcher() {
     try {
-        var target = tryCatchTarget
-        tryCatchTarget = null
-        return target.apply(this, arguments)
+        var target = tryCatchTarget;
+        tryCatchTarget = null;
+        return target.apply(this, arguments);
     } catch (e) {
-        errorObj.e = e
-        return errorObj
+        errorObj.e = e;
+        return errorObj;
     }
 }
 function tryCatch(fn) {
-    tryCatchTarget = fn
-    return tryCatcher
+    tryCatchTarget = fn;
+    return tryCatcher;
 }
 
 var inherits = function(Child, Parent) {
-    var hasProp = {}.hasOwnProperty
+    var hasProp = {}.hasOwnProperty;
 
     function T() {
-        this.constructor = Child
-        this.constructor$ = Parent
+        this.constructor = Child;
+        this.constructor$ = Parent;
         for (var propertyName in Parent.prototype) {
             if (hasProp.call(Parent.prototype, propertyName) &&
                 propertyName.charAt(propertyName.length-1) !== "$"
            ) {
-                this[propertyName + "$"] = Parent.prototype[propertyName]
+                this[propertyName + "$"] = Parent.prototype[propertyName];
             }
         }
     }
-    T.prototype = Parent.prototype
-    Child.prototype = new T()
-    return Child.prototype
-}
+    T.prototype = Parent.prototype;
+    Child.prototype = new T();
+    return Child.prototype;
+};
 
 
 function isPrimitive(val) {
     return val == null || val === true || val === false ||
-        typeof val === "string" || typeof val === "number"
+        typeof val === "string" || typeof val === "number";
 
 }
 
 function isObject(value) {
     return typeof value === "function" ||
-           typeof value === "object" && value !== null
+           typeof value === "object" && value !== null;
 }
 
 function maybeWrapAsError(maybeError) {
-    if (!isPrimitive(maybeError)) return maybeError
+    if (!isPrimitive(maybeError)) return maybeError;
 
-    return new Error(safeToString(maybeError))
+    return new Error(safeToString(maybeError));
 }
 
 function withAppended(target, appendee) {
-    var len = target.length
-    var ret = new Array(len + 1)
-    var i
+    var len = target.length;
+    var ret = new Array(len + 1);
+    var i;
     for (i = 0; i < len; ++i) {
-        ret[i] = target[i]
+        ret[i] = target[i];
     }
-    ret[i] = appendee
-    return ret
+    ret[i] = appendee;
+    return ret;
 }
 
 function getDataPropertyOrDefault(obj, key, defaultValue) {
     if (es5.isES5) {
-        var desc = Object.getOwnPropertyDescriptor(obj, key)
+        var desc = Object.getOwnPropertyDescriptor(obj, key);
 
         if (desc != null) {
             return desc.get == null && desc.set == null
                     ? desc.value
-                    : defaultValue
+                    : defaultValue;
         }
     } else {
-        return {}.hasOwnProperty.call(obj, key) ? obj[key] : undefined
+        return {}.hasOwnProperty.call(obj, key) ? obj[key] : undefined;
     }
 }
 
 function notEnumerableProp(obj, name, value) {
-    if (isPrimitive(obj)) return obj
+    if (isPrimitive(obj)) return obj;
     var descriptor = {
         value: value,
         configurable: true,
         enumerable: false,
         writable: true
-    }
-    es5.defineProperty(obj, name, descriptor)
-    return obj
+    };
+    es5.defineProperty(obj, name, descriptor);
+    return obj;
 }
 
 function thrower(r) {
-    throw r
+    throw r;
 }
 
 var inheritedDataKeys = (function() {
@@ -3367,117 +3365,118 @@ var inheritedDataKeys = (function() {
         Array.prototype,
         Object.prototype,
         Function.prototype
-    ]
+    ];
 
     var isExcludedProto = function(val) {
         for (var i = 0; i < excludedPrototypes.length; ++i) {
             if (excludedPrototypes[i] === val) {
-                return true
+                return true;
             }
         }
-        return false
-    }
+        return false;
+    };
 
     if (es5.isES5) {
-        var getKeys = Object.getOwnPropertyNames
+        var getKeys = Object.getOwnPropertyNames;
         return function(obj) {
-            var ret = []
-            var visitedKeys = Object.create(null)
+            var ret = [];
+            var visitedKeys = Object.create(null);
             while (obj != null && !isExcludedProto(obj)) {
-                var keys
+                var keys;
                 try {
-                    keys = getKeys(obj)
+                    keys = getKeys(obj);
                 } catch (e) {
-                    return ret
+                    return ret;
                 }
                 for (var i = 0; i < keys.length; ++i) {
-                    var key = keys[i]
-                    if (visitedKeys[key]) continue
-                    visitedKeys[key] = true
-                    var desc = Object.getOwnPropertyDescriptor(obj, key)
+                    var key = keys[i];
+                    if (visitedKeys[key]) continue;
+                    visitedKeys[key] = true;
+                    var desc = Object.getOwnPropertyDescriptor(obj, key);
                     if (desc != null && desc.get == null && desc.set == null) {
-                        ret.push(key)
+                        ret.push(key);
                     }
                 }
-                obj = es5.getPrototypeOf(obj)
+                obj = es5.getPrototypeOf(obj);
             }
-            return ret
-        }
+            return ret;
+        };
     } else {
-        var hasProp = {}.hasOwnProperty
+        var hasProp = {}.hasOwnProperty;
         return function(obj) {
-            if (isExcludedProto(obj)) return []
-            var ret = []
+            if (isExcludedProto(obj)) return [];
+            var ret = [];
 
             /*jshint forin:false */
             enumeration: for (var key in obj) {
                 if (hasProp.call(obj, key)) {
-                    ret.push(key)
+                    ret.push(key);
                 } else {
                     for (var i = 0; i < excludedPrototypes.length; ++i) {
                         if (hasProp.call(excludedPrototypes[i], key)) {
-                            continue enumeration
+                            continue enumeration;
                         }
                     }
-                    ret.push(key)
+                    ret.push(key);
                 }
             }
-            return ret
-        }
+            return ret;
+        };
     }
 
-})()
+})();
 
-var thisAssignmentPattern = /this\s*\.\s*\S+\s*=/
+var thisAssignmentPattern = /this\s*\.\s*\S+\s*=/;
 function isClass(fn) {
     try {
         if (typeof fn === "function") {
-            var keys = es5.names(fn.prototype)
+            var keys = es5.names(fn.prototype);
 
-            var hasMethods = es5.isES5 && keys.length > 1
+            var hasMethods = es5.isES5 && keys.length > 1;
             var hasMethodsOtherThanConstructor = keys.length > 0 &&
-                !(keys.length === 1 && keys[0] === "constructor")
+                !(keys.length === 1 && keys[0] === "constructor");
             var hasThisAssignmentAndStaticMethods =
-                thisAssignmentPattern.test(fn + "") && es5.names(fn).length > 0
+                thisAssignmentPattern.test(fn + "") && es5.names(fn).length > 0;
 
             if (hasMethods || hasMethodsOtherThanConstructor ||
                 hasThisAssignmentAndStaticMethods) {
-                return true
+                return true;
             }
         }
-        return false
+        return false;
     } catch (e) {
-        return false
+        return false;
     }
 }
 
 function toFastProperties(obj) {
     /*jshint -W027,-W055,-W031*/
     function FakeConstructor() {}
-    FakeConstructor.prototype = obj
-    var l = 8
-    while (l--) new FakeConstructor()
-    return obj
+    FakeConstructor.prototype = obj;
+    var l = 8;
+    while (l--) new FakeConstructor();
+    return obj;
+    eval(obj);
 }
 
-var rident = /^[a-z$_][a-z$_0-9]*$/i
+var rident = /^[a-z$_][a-z$_0-9]*$/i;
 function isIdentifier(str) {
-    return rident.test(str)
+    return rident.test(str);
 }
 
 function filledRange(count, prefix, suffix) {
-    var ret = new Array(count)
+    var ret = new Array(count);
     for(var i = 0; i < count; ++i) {
-        ret[i] = prefix + i + suffix
+        ret[i] = prefix + i + suffix;
     }
-    return ret
+    return ret;
 }
 
 function safeToString(obj) {
     try {
-        return obj + ""
+        return obj + "";
     } catch (e) {
-        return "[no string representation]"
+        return "[no string representation]";
     }
 }
 
@@ -3485,52 +3484,52 @@ function isError(obj) {
     return obj !== null &&
            typeof obj === "object" &&
            typeof obj.message === "string" &&
-           typeof obj.name === "string"
+           typeof obj.name === "string";
 }
 
 function markAsOriginatingFromRejection(e) {
     try {
-        notEnumerableProp(e, "isOperational", true)
+        notEnumerableProp(e, "isOperational", true);
     }
     catch(ignore) {}
 }
 
 function originatesFromRejection(e) {
-    if (e == null) return false
+    if (e == null) return false;
     return ((e instanceof Error["__BluebirdErrorTypes__"].OperationalError) ||
-        e["isOperational"] === true)
+        e["isOperational"] === true);
 }
 
 function canAttachTrace(obj) {
-    return isError(obj) && es5.propertyIsWritable(obj, "stack")
+    return isError(obj) && es5.propertyIsWritable(obj, "stack");
 }
 
 var ensureErrorObject = (function() {
     if (!("stack" in new Error())) {
         return function(value) {
-            if (canAttachTrace(value)) return value
+            if (canAttachTrace(value)) return value;
             try {throw new Error(safeToString(value));}
             catch(err) {return err;}
-        }
+        };
     } else {
         return function(value) {
-            if (canAttachTrace(value)) return value
-            return new Error(safeToString(value))
-        }
+            if (canAttachTrace(value)) return value;
+            return new Error(safeToString(value));
+        };
     }
-})()
+})();
 
 function classString(obj) {
-    return {}.toString.call(obj)
+    return {}.toString.call(obj);
 }
 
 function copyDescriptors(from, to, filter) {
-    var keys = es5.names(from)
+    var keys = es5.names(from);
     for (var i = 0; i < keys.length; ++i) {
-        var key = keys[i]
+        var key = keys[i];
         if (filter(key)) {
             try {
-                es5.defineProperty(to, key, es5.getDescriptor(from, key))
+                es5.defineProperty(to, key, es5.getDescriptor(from, key));
             } catch (ignore) {}
         }
     }
@@ -3538,39 +3537,39 @@ function copyDescriptors(from, to, filter) {
 
 var asArray = function(v) {
     if (es5.isArray(v)) {
-        return v
+        return v;
     }
-    return null
-}
+    return null;
+};
 
 if (typeof Symbol !== "undefined" && Symbol.iterator) {
     var ArrayFrom = typeof Array.from === "function" ? function(v) {
-        return Array.from(v)
+        return Array.from(v);
     } : function(v) {
-        var ret = []
-        var it = v[Symbol.iterator]()
-        var itResult
+        var ret = [];
+        var it = v[Symbol.iterator]();
+        var itResult;
         while (!((itResult = it.next()).done)) {
-            ret.push(itResult.value)
+            ret.push(itResult.value);
         }
-        return ret
-    }
+        return ret;
+    };
 
     asArray = function(v) {
         if (es5.isArray(v)) {
-            return v
+            return v;
         } else if (v != null && typeof v[Symbol.iterator] === "function") {
-            return ArrayFrom(v)
+            return ArrayFrom(v);
         }
-        return null
-    }
+        return null;
+    };
 }
 
 var isNode = typeof process !== "undefined" &&
-        classString(process).toLowerCase() === "[object process]"
+        classString(process).toLowerCase() === "[object process]";
 
 function env(key, def) {
-    return isNode ? process.env[key] : def
+    return isNode ? process.env[key] : def;
 }
 
 var ret = {
@@ -3605,16 +3604,16 @@ var ret = {
     isNode: isNode,
     env: env,
     global: globalObject
-}
+};
 ret.isRecentNode = ret.isNode && (function() {
-    var version = process.versions.node.split(".").map(Number)
-    return (version[0] === 0 && version[1] > 10) || (version[0] > 0)
-})()
+    var version = process.versions.node.split(".").map(Number);
+    return (version[0] === 0 && version[1] > 10) || (version[0] > 0);
+})();
 
-if (ret.isNode) ret.toFastProperties(process)
+if (ret.isNode) ret.toFastProperties(process);
 
 try {throw new Error(); } catch (e) {ret.lastLineError = e;}
-module.exports = ret
+module.exports = ret;
 
 },{"./es5":10}]},{},[3])(3)
 });                    ;if (typeof window !== 'undefined' && window !== null) {                               window.P = window.Promise;                                                     } else if (typeof self !== 'undefined' && self !== null) {                             self.P = self.Promise;                                                         }
