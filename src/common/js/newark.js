@@ -26,8 +26,7 @@ class Newark extends RetailerInterface {
         super('Newark', country_code, 'data/newark.json', settings)
         this._set_store_id(() => {
             return callback(this)
-        }
-        )
+        })
     }
 
     clearCart(callback) {
@@ -38,10 +37,8 @@ class Newark extends RetailerInterface {
                 if (callback != null) {
                     return callback(obj)
                 }
-            }
-            )
-        }
-        )
+            })
+        })
     }
 
     _set_store_id(callback) {
@@ -53,9 +50,7 @@ class Newark extends RetailerInterface {
                 this.store_id = id_elem.value
                 return callback()
             }
-        }
-        , () => callback()
-        )
+        }, () => callback())
     }
 
 
@@ -68,12 +63,10 @@ class Newark extends RetailerInterface {
         }
         return http.post(url, params, {}, event => {
             return callback({success:true}, this)
-        }
-        , () => {
+        }, () => {
             //we actually successfully clear the cart on 404s
             return callback({success:true}, this)
-        }
-        )
+        })
     }
 
     _get_item_ids(callback) {
@@ -95,8 +88,7 @@ class Newark extends RetailerInterface {
                 }
             }
             return callback(ids)
-        }
-        )
+        })
     }
 
     addLines(lines, callback) {
@@ -108,8 +100,7 @@ class Newark extends RetailerInterface {
             this.refreshCartTabs()
             this.refreshSiteTabs()
             return callback(result, this, lines)
-        }
-        )
+        })
     }
 
     _add_lines(lines, callback) {
@@ -119,8 +110,7 @@ class Newark extends RetailerInterface {
         }
         , () => {
             return this._add_lines_non_ajax(lines, callback)
-        }
-        )
+        })
     }
 
     _add_lines_non_ajax(lines, callback) {
