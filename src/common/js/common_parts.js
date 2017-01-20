@@ -40,7 +40,7 @@ exports.search = function search() {
 
 function _search(query, retailers = [], other_fields = []) {
     if (query.trim() !== '') {
-        if(/capacitor/i.test(query)) {
+        if (/capacitor/i.test(query)) {
             return getCapacitors(query.replace(/capacitors?/ig, ''))
         } else if (/resistor/i.test(query)) {
             return getResistors(query.replace(/resistors?/ig, ''))

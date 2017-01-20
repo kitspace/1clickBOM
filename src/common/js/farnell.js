@@ -25,9 +25,9 @@ class Farnell extends RetailerInterface {
         super('Farnell', country_code, 'data/farnell.json', settings)
         //all Farnell sites are Newark style sites now so we use Newark's
         //methods
-        let names = Object.getOwnPropertyNames(Newark.prototype)
-        for (let index in names) {
-            let method = Newark.prototype[names[index]]
+        const names = Object.getOwnPropertyNames(Newark.prototype)
+        for (const index in names) {
+            const method = Newark.prototype[names[index]]
             this[names[index]] = method
         }
         this.cart = '/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView'

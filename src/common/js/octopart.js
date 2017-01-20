@@ -25,7 +25,7 @@ const rateLimit = require('./promise-rate-limit')
 
 const http = require('./http')
 
-let aliases = {
+const aliases = {
     'Digi-Key' : 'Digikey',
     'RS Components' : 'RS'
 }
@@ -38,8 +38,8 @@ function _search(query, retailers = [], other_fields = []) {
     let url = `https://octopart.com/search?q=${encodeURIComponent(query)}&start=0`
     for (let i = 0; i < retailers.length; i++) {
         let retailer = retailers[i]
-        for (let k in aliases) {
-            let v = aliases[k]
+        for (const k in aliases) {
+            const v = aliases[k]
             retailer = retailer.replace(v,k)
         }
         retailer = encodeURIComponent(retailer)
@@ -48,22 +48,22 @@ function _search(query, retailers = [], other_fields = []) {
     url += '&avg_avail=(1__*)&start=0'
     return http.promiseGet(url)
         .then(function(doc) {
-            let result = {retailers:{}, partNumbers:[]}
+            const result = {retailers:{}, partNumbers:[]}
             if (__in__('partNumbers', other_fields)) {
                 let manufacturer = __guard__(doc.querySelector('.part-card-manufacturer'), x => x.innerHTML.trim())
                 if (manufacturer == null) {
                     manufacturer = ''
                 }
-                let number = __guard__(doc.querySelector('.part-card-mpn'), x1 => x1.innerHTML.trim())
+                const number = __guard__(doc.querySelector('.part-card-mpn'), x1 => x1.innerHTML.trim())
                 if (number != null) {
                     result.partNumbers.push({manufacturer, part:number})
                 }
             }
             //we prefer the lowest minimum order quantities (moq)
-            let tds = doc.querySelectorAll('td.col-seller')
-            let elements_moq = []
+            const tds = doc.querySelectorAll('td.col-seller')
+            const elements_moq = []
             for (let j = 0; j < tds.length; j++) {
-                let td = tds[j]
+                const td = tds[j]
                 let min_qty = __guard__(td.parentElement, x2 => x2.querySelector('td.col-moq'))
                 min_qty = parseInt(__guard__(min_qty, x3 => x3.innerHTML.trim().replace(/,/g,'')))
                 if (isNaN(min_qty)) {
@@ -71,16 +71,16 @@ function _search(query, retailers = [], other_fields = []) {
                 }
                 elements_moq.push({tr:td.parentElement, moq:min_qty})
             }
-            let moqs = {}
+            const moqs = {}
             for (let i1 = 0; i1 < elements_moq.length; i1++) {
-                let {tr,moq} = elements_moq[i1]
+                const {tr,moq} = elements_moq[i1]
                 let retailer = tr.querySelector('td.col-seller').firstElementChild.innerHTML.split('\n')[2].trim()
-                for (let k in aliases) {
-                    let v = aliases[k]
+                for (const k in aliases) {
+                    const v = aliases[k]
                     retailer = retailer.replace(k,v)
                 }
                 if ((moqs[retailer] == null) || ((moq != null) && moqs[retailer] > moq)) {
-                    let sku = __guard__(__guard__(tr.querySelector('td.col-sku'), x5 => x5.firstElementChild), x4 => x4.innerHTML.trim())
+                    const sku = __guard__(__guard__(tr.querySelector('td.col-sku'), x5 => x5.firstElementChild), x4 => x4.innerHTML.trim())
                     if (sku != null) {
                         moqs[retailer] = moq
                         result.retailers[retailer] = sku
@@ -88,14 +88,14 @@ function _search(query, retailers = [], other_fields = []) {
                 }
             }
             return result
-    }).catch(event => {
-      console.error(event.target.status)
-      return {retailers:{}, partNumbers:[]}
-    })
+        }).catch(event => {
+            console.error(event.target.status)
+            return {retailers:{}, partNumbers:[]}
+        })
 }
 
 
-exports.search = rateLimit(n=30, time_period_ms=10000, _search)
+exports.search = rateLimit(n = 30, time_period_ms = 10000, _search)
 
 function __in__(needle, haystack) {
     return haystack.indexOf(needle) >= 0

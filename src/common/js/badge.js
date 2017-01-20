@@ -19,12 +19,12 @@
 
 const { browser } = require('./browser')
 
-let badge = {
+const badge = {
     decaying_set  : false,
     priority      : 0,
     default_text  : '',
     default_color : '#0000FF',
-    setDecaying(text, color='#0000FF', priority = 1) {
+    setDecaying(text, color = '#0000FF', priority = 1) {
         if (priority >= this.priority) {
             if (this.decaying_set && this.id > 0) {
                 browser.clearTimeout(this.id)
@@ -37,7 +37,7 @@ let badge = {
             , 5000)
         }
     },
-    setDefault(text, color='#0000FF', priority = 0) {
+    setDefault(text, color = '#0000FF', priority = 0) {
         if (priority >= this.priority) {
             this._set(text, color, priority)
         }

@@ -25,7 +25,7 @@ const rateLimit = require('./promise-rate-limit')
 
 const http = require('./http')
 
-let aliases = {
+const aliases = {
     'Digi-Key'           : 'Digikey',
     'RS Components'      : 'RS',
     'Mouser Electronics' : 'Mouser',
@@ -37,25 +37,25 @@ function _search(query, retailers_to_search = [], other_fields = []) {
     if (!query || query === '') {
         return Promise.resolve({retailers:{}, partNumbers:[]})
     }
-    let url = `http://www.findchips.com/lite/${encodeURIComponent(query)}`
-    let p = http.promiseGet(url)
+    const url = `http://www.findchips.com/lite/${encodeURIComponent(query)}`
+    const p = http.promiseGet(url)
         .catch((function(url, event) {
-            let { status } = event.currentTarget
+            const { status } = event.currentTarget
             if (status === 502) {
                 return http.promiseGet(url)
             }
         }).bind(null, url)
     )
     return p.then(function(doc){
-        let result = {retailers:{}, partNumbers:[]}
-        let elements = doc.getElementsByClassName('distributor-title')
+        const result = {retailers:{}, partNumbers:[]}
+        const elements = doc.getElementsByClassName('distributor-title')
         for (let i = 0; i < elements.length; i++) {
-            let h = elements[i]
-            let title = h.firstElementChild.innerHTML.trim()
+            const h = elements[i]
+            const title = h.firstElementChild.innerHTML.trim()
             let retailer = ''
-            for (let k in aliases) {
-                let v = aliases[k]
-                let regex = RegExp(`^${k}`)
+            for (const k in aliases) {
+                const v = aliases[k]
+                const regex = RegExp(`^${k}`)
                 if (regex.test(title)) {
                     retailer = v
                     break
@@ -64,8 +64,8 @@ function _search(query, retailers_to_search = [], other_fields = []) {
             if (!__in__(retailer, retailers_to_search)) {
                 continue
             }
-            let min_quantities = []
-            let additional_elements = h.parentElement.getElementsByClassName('additional-title')
+            const min_quantities = []
+            const additional_elements = h.parentElement.getElementsByClassName('additional-title')
             for (let j = 0; j < additional_elements.length; j++) {
                 var span = additional_elements[j]
                 if (span.innerHTML === 'Min Qty') {
@@ -90,9 +90,9 @@ function _search(query, retailers_to_search = [], other_fields = []) {
                     }
                 }
             } else {
-                let tr = __guard__(__guard__(span.parentElement, x1 => x1.parentElement), x => x.parentElement)
+                const tr = __guard__(__guard__(span.parentElement, x1 => x1.parentElement), x => x.parentElement)
                 if (tr != null) {
-                    let iterable = tr.getElementsByClassName('additional-title')
+                    const iterable = tr.getElementsByClassName('additional-title')
                     for (let j1 = 0; j1 < iterable.length; j1++) {
                         span = iterable[j1]
                         if (span.innerHTML === 'Distri #:' && (span.nextElementSibling != null)) {
@@ -115,11 +115,11 @@ function _search(query, retailers_to_search = [], other_fields = []) {
     .catch(reason => ({retailers:{}, partNumbers:[]}))
 }
 
-exports.search = rateLimit(n=60, time_period_ms=20000, _search)
+exports.search = rateLimit(n = 60, time_period_ms = 20000, _search)
 
 function __in__(needle, haystack) {
-  return haystack.indexOf(needle) >= 0
+    return haystack.indexOf(needle) >= 0
 }
 function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
+    return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
 }

@@ -82,7 +82,7 @@ const rsOnline = {
               `javax.faces.ViewState=${viewstate}&ajaxSingle=${form_ids[0]}%3A` +
               `${form_ids[1]}&${form_ids[0]}%3A${form_ids[1]}=${form_ids[0]}%3A` +
               `${form_ids[1]}&`
-            const params3 = `AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&auto` +
+            const params3 = 'AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&auto' +
               `Scroll=&javax.faces.ViewState=${viewstate}&a4jCloseForm%3A` +
               `${form_ids[2]}=a4jCloseForm%3A${form_ids[2]}&`
             const p = http.promiseGet(`http${this.site}${this.cart}`)
@@ -208,27 +208,27 @@ const rsOnline = {
     _add_lines(lines_incoming, viewstate, form_id, callback) {
         const result = {success:true, fails:[]}
         if (lines_incoming.length > 500) {
-            result.warnings = ["RS cart cannot hold more than 500 lines."]
+            result.warnings = ['RS cart cannot hold more than 500 lines.']
             result.fails = lines.slice(500)
             var lines = lines_incoming.slice(0, 500)
         } else {
             var lines = lines_incoming
         }
         const url = `http${this.site}${this.cart}`
-        let params =`AJAXREQUEST=shoppingBasketForm%3A${form_id}&shoppingBasketFo`+
-        `rm=shoppingBasketForm&=QuickAdd&=DELIVERY&shoppingBasketForm%3AquickSt` +
-        `ockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickSt` +
-        `ockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickSt` +
-        `ockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickSt` +
-        `ockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickSt` +
-        `ockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickSt` +
-        `ockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickSt` +
-        `ockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickSt` +
-        `ockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickSt` +
-        `ockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickSt` +
-        `ockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3AQuickOr` +
-        `derWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_li` +
-        `stItems=`
+        let params = `AJAXREQUEST=shoppingBasketForm%3A${form_id}&shoppingBasketFo` +
+        'rm=shoppingBasketForm&=QuickAdd&=DELIVERY&shoppingBasketForm%3AquickSt' +
+        'ockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickSt' +
+        'ockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickSt' +
+        'ockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickSt' +
+        'ockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickSt' +
+        'ockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickSt' +
+        'ockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickSt' +
+        'ockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickSt' +
+        'ockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickSt' +
+        'ockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickSt' +
+        'ockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3AQuickOr' +
+        'derWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_li' +
+        'stItems='
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i]
@@ -236,13 +236,13 @@ const rsOnline = {
             `${line.reference}\n`)
         }
 
-        params += `&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetA` +
-        `ction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionMo` +
+        params += '&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetA' +
+        'ction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionMo' +
         `dalLayerOpenedState=&javax.faces.ViewState=${viewstate}&shoppingBasket` +
-        `Form%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderW` +
-        `idgetAction_quickOrderTextBoxbtn=shoppingBasketForm%3AQuickOrderWidget` +
-        `Action_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderT` +
-        `extBoxbtn&`
+        'Form%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderW' +
+        'idgetAction_quickOrderTextBoxbtn=shoppingBasketForm%3AQuickOrderWidget' +
+        'Action_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderT' +
+        'extBoxbtn&'
 
         return http.post(url, params, {}, () => {
             return this._get_and_correct_invalid_lines(invalid_lines => {
@@ -285,13 +285,13 @@ const rsOnline = {
         const url = `http${this.site}${this.cart}`
         return http.get(url, {}, responseText => {
             const doc = browser.parseDOM(responseText)
-            const viewstate_element  = doc.getElementById("javax.faces.ViewState")
+            const viewstate_element  = doc.getElementById('javax.faces.ViewState')
             if (viewstate_element != null) {
                 var viewstate = viewstate_element.value
             } else {
-                return callback("", "")
+                return callback('', '')
             }
-            const btn_doc = doc.getElementById("addToOrderDiv")
+            const btn_doc = doc.getElementById('addToOrderDiv')
             //the form_id element is different values depending on signed in or
             //signed out could just hardcode them but maybe this will be more
             //future-proof?  we use a regex here as DOM select methods crash on
@@ -300,7 +300,7 @@ const rsOnline = {
                 .exec(btn_doc.innerHTML.toString())[1]
             return callback(viewstate, form_id)
         }
-        , () => callback("", "")
+        , () => callback('', '')
         )
     },
 
@@ -309,28 +309,28 @@ const rsOnline = {
         const url = `http${this.site}${this.cart}`
         return http.get(url, {}, responseText => {
             const doc = browser.parseDOM(responseText)
-            const viewstate_elem = doc.getElementById("javax.faces.ViewState")
+            const viewstate_elem = doc.getElementById('javax.faces.ViewState')
             if (viewstate_elem != null) {
-                var viewstate = doc.getElementById("javax.faces.ViewState").value
+                var viewstate = doc.getElementById('javax.faces.ViewState').value
             } else {
-                return callback("", [])
+                return callback('', [])
             }
 
-            const form_elem = doc.getElementById("a4jCloseForm")
+            const form_elem = doc.getElementById('a4jCloseForm')
             if (form_elem != null) {
                 const form = form_elem.nextElementSibling.nextElementSibling
                 //the form_id elements are different values depending on signed
                 //in or signed out could just hardcode them but maybe this will
                 //be more future-proof?
                 const form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
-                const form_id3  = doc.getElementById("a4jCloseForm")
-                    .firstChild.id.split(":")[1]
+                const form_id3  = doc.getElementById('a4jCloseForm')
+                    .firstChild.id.split(':')[1]
                 return callback(viewstate, [form.id, form_id2, form_id3])
             } else {
-                return callback("", [])
+                return callback('', [])
             }
         }
-        , () => callback("", [])
+        , () => callback('', [])
         )
     }
 }
@@ -375,13 +375,13 @@ const rsDelivers = {
         return http.get(url, {}, function(responseText) {
             const html = JSON.parse(responseText).cartLinesHtml
             const doc = browser.parseDOM(html)
-            const errors = doc.getElementsByClassName("errorOrderLine")
+            const errors = doc.getElementsByClassName('errorOrderLine')
             const ids = []
             const parts = []
             for (let i = 0; i < errors.length; i++) {
                 const error = errors[i]
                 parts.push(error.parentElement.nextElementSibling
-                    .querySelector(".descTd").firstElementChild
+                    .querySelector('.descTd').firstElementChild
                     .nextElementSibling.firstElementChild.nextElementSibling
                     .innerText.trim().replace('-',''))
             }
@@ -410,7 +410,7 @@ const rsDelivers = {
     //otherwise
     _add_lines(lines_incoming, i, result, callback) {
         if (i < lines_incoming.length) {
-            const lines = lines_incoming.slice(i, i+99 + 1)
+            const lines = lines_incoming.slice(i, i + 99 + 1)
             return this._clear_invalid(() => {
                 const url = `http${this.site}/CheckoutServices/BulkAddProducts`
                 let params = 'productString='
@@ -420,8 +420,8 @@ const rsDelivers = {
                 return http.post(url, params, responseText => {
                     return callback({success:true})
                     const doc = browser.parseDOM(JSON.parse(responseText).html)
-                    const success = doc.querySelector("#hidErrorAtLineLevel")
-                        .value === "0"
+                    const success = doc.querySelector('#hidErrorAtLineLevel')
+                        .value === '0'
                     if (!success) {
                         return this._get_invalid_lines(parts => {
                             const invalid = []
@@ -432,7 +432,7 @@ const rsDelivers = {
                                 }
                             }
                             return this._add_lines(lines_incoming
-                            , i+100
+                            , i + 100
                             , {
                                 success:false,
                                 fails:result.fails.concat(invalid)
@@ -441,12 +441,12 @@ const rsDelivers = {
                         }
                         )
                     } else {
-                        return this._add_lines(lines_incoming, i+100, result, callback)
+                        return this._add_lines(lines_incoming, i + 100, result, callback)
                     }
                 }
                 , () => {
                     return this._add_lines(lines_incoming
-                    , i+100
+                    , i + 100
                     , {success:false, fails:result.fails.concat(lines)}
                     , callback)
                 }

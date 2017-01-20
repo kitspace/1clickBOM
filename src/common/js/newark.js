@@ -45,10 +45,10 @@ class Newark extends RetailerInterface {
     }
 
     _set_store_id(callback) {
-        let url = `https${this.site}${this.cart}`
+        const url = `https${this.site}${this.cart}`
         return http.get(url, {}, response => {
-            let doc = browser.parseDOM(response)
-            let id_elem = doc.getElementById('storeId')
+            const doc = browser.parseDOM(response)
+            const id_elem = doc.getElementById('storeId')
             if (id_elem != null) {
                 this.store_id = id_elem.value
                 return callback()
@@ -60,10 +60,10 @@ class Newark extends RetailerInterface {
 
 
     _clear_cart(ids, callback) {
-        let url = `https${this.site}/webapp/wcs/stores/servlet/ProcessBasket`
+        const url = `https${this.site}/webapp/wcs/stores/servlet/ProcessBasket`
         let params = `langId=-1&orderId=&catalogId=15003&BASE_URL=BasketPage&errorViewName=AjaxOrderItemDisplayView&storeId=${this.store_id}&URL=BasketDataAjaxResponse&isEmpty=false&LoginTimeout=&LoginTimeoutURL=&blankLinesResponse=10&orderItemDeleteAll=`
         for (let i = 0; i < ids.length; i++) {
-            let id = ids[i]
+            const id = ids[i]
             params += `&orderItemDelete=${id}`
         }
         return http.post(url, params, {}, event => {
@@ -77,19 +77,19 @@ class Newark extends RetailerInterface {
     }
 
     _get_item_ids(callback) {
-        let url = `https${this.site}${this.cart}`
+        const url = `https${this.site}${this.cart}`
         return http.get(url, {}, responseText => {
-            let doc = browser.parseDOM(responseText)
-            let order_details = doc.querySelector('#order_details')
+            const doc = browser.parseDOM(responseText)
+            const order_details = doc.querySelector('#order_details')
             if (order_details != null) {
-                let tbody = order_details.querySelector('tbody')
+                const tbody = order_details.querySelector('tbody')
                 var inputs = tbody.querySelectorAll('input')
             } else {
                 var inputs = []
             }
-            let ids = []
+            const ids = []
             for (let i = 0; i < inputs.length; i++) {
-                let input = inputs[i]
+                const input = inputs[i]
                 if (input.type === 'hidden' && /orderItem_/.test(input.id)) {
                     ids.push(input.value)
                 }
@@ -113,7 +113,7 @@ class Newark extends RetailerInterface {
     }
 
     _add_lines(lines, callback) {
-        let url = `https${this.site}/AjaxPasteOrderChangeServiceItemAdd`
+        const url = `https${this.site}/AjaxPasteOrderChangeServiceItemAdd`
         return http.get(url, {notify:false}, () => {
             return this._add_lines_ajax(lines, callback)
         }
@@ -130,18 +130,18 @@ class Newark extends RetailerInterface {
             }
             return
         }
-        let url = `https${this.site}/webapp/wcs/stores/servlet/PasteOrderChangeServiceItemAdd`
+        const url = `https${this.site}/webapp/wcs/stores/servlet/PasteOrderChangeServiceItemAdd`
         let params = `storeId=${this.store_id}&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
         //&addToBasket=Add+to+Cart'
         for (let i = 0; i < lines.length; i++) {
-            let line = lines[i]
+            const line = lines[i]
             params += encodeURIComponent(line.part) + ','
             params += encodeURIComponent(line.quantity) + ','
             params += encodeURIComponent(line.reference) + '\n'
         }
         return http.post(url, params, {}, responseText => {
-            let doc = browser.parseDOM(responseText)
-            let form_errors = doc.querySelector('#formErrors')
+            const doc = browser.parseDOM(responseText)
+            const form_errors = doc.querySelector('#formErrors')
             let success = true
             if (form_errors != null) {
                 success = form_errors.className !== ''
@@ -150,13 +150,13 @@ class Newark extends RetailerInterface {
                 //we find out which parts are the problem, call addLines again
                 //on the rest and concatenate the fails to the new result
                 //returning everything together to our callback
-                let fail_names  = []
-                let fails       = []
-                let retry_lines = []
+                const fail_names  = []
+                const fails       = []
+                const retry_lines = []
                 for (let j = 0; j < lines.length; j++) {
                     var line = lines[j]
-                    let regex = new RegExp(line.part, 'g')
-                    let result = regex.exec(form_errors.innerHTML)
+                    const regex = new RegExp(line.part, 'g')
+                    const result = regex.exec(form_errors.innerHTML)
                     if (result !== null) {
                         fail_names.push(result[0])
                     }
@@ -193,18 +193,18 @@ class Newark extends RetailerInterface {
 
 
     _add_lines_ajax(lines, callback) {
-        let result = {success: true, fails:[], warnings:[]}
+        const result = {success: true, fails:[], warnings:[]}
         if (lines.length === 0) {
             if (callback != null) {
                 callback({success:true, fails:[]})
             }
             return
         }
-        let url = `https${this.site}/AjaxPasteOrderChangeServiceItemAdd`
+        const url = `https${this.site}/AjaxPasteOrderChangeServiceItemAdd`
 
         let params = `storeId=${this.store_id}&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
         for (let i = 0; i < lines.length; i++) {
-            let line = lines[i]
+            const line = lines[i]
             params += encodeURIComponent(line.part) + ','
             params += encodeURIComponent(line.quantity) + ','
             if (line.reference.length > 30) {
@@ -214,30 +214,30 @@ class Newark extends RetailerInterface {
             params += encodeURIComponent(line.reference.substr(0,30)) + '\n'
         }
         return http.post(url, params, {}, responseText => {
-            let stxt = responseText.split('\n')
-            let stxt2 = stxt.slice(3 ,  (stxt.length - 4) + 1)
+            const stxt = responseText.split('\n')
+            const stxt2 = stxt.slice(3 ,  (stxt.length - 4) + 1)
             let stxt3 = ''
             for (let j = 0; j < stxt2.length; j++) {
-                let s = stxt2[j]
+                const s = stxt2[j]
                 stxt3 += s
             }
-            let json = JSON.parse(stxt3)
+            const json = JSON.parse(stxt3)
             if ((json.hasPartNumberErrors != null) || (json.hasCommentErrors != null)) {
                 //we find out which parts are the problem, call addLines again
                 //on the rest and concatenate the fails to the new result
                 //returning everything together to our callback
-                let fail_names  = []
-                let fails       = []
-                let retry_lines = []
-                for (let k in json) {
+                const fail_names  = []
+                const fails       = []
+                const retry_lines = []
+                for (const k in json) {
                     //the rest of the json lines are the part numbers
-                    let v = json[k]
+                    const v = json[k]
                     if (k !== 'hasPartNumberErrors' && k !== 'hasCommentErrors') {
                         fail_names.push(v[0])
                     }
                 }
                 for (let i1 = 0; i1 < lines.length; i1++) {
-                    let line = lines[i1]
+                    const line = lines[i1]
                     if (__in__(line.part, fail_names)) {
                         fails.push(line)
                     } else {
@@ -270,5 +270,5 @@ class Newark extends RetailerInterface {
 exports.Newark = Newark
 
 function __in__(needle, haystack) {
-  return haystack.indexOf(needle) >= 0
+    return haystack.indexOf(needle) >= 0
 }

@@ -18,7 +18,7 @@
 // the Original Code is Kaspar Emanuel.
 
 const { writeTSV } = require('1-click-bom')
-let { retailer_list } = require('1-click-bom').lineData
+const { retailer_list } = require('1-click-bom').lineData
 
 const { bom_manager } = require('./bom_manager')
 const { browser } = require('./browser')
@@ -29,7 +29,7 @@ exports.background = function background(messenger) {
     browser.prefsOnChanged(['country', 'settings'], () => bom_manager.init()
     )
 
-    let sendState = () =>
+    const sendState = () =>
         bom_manager.getBOM(function(bom) {
             messenger.send('sendBackgroundState', {
                 bom,
@@ -48,7 +48,7 @@ exports.background = function background(messenger) {
     }
     )
 
-    function autoComplete(deep=false) {
+    function autoComplete(deep = false) {
         function finish(timeout_id, no_of_completed) {
             browser.clearTimeout(timeout_id)
             sendState()
@@ -70,7 +70,7 @@ exports.background = function background(messenger) {
                 return badge.setDecaying('Warn','#FF8A00')
             }
         }
-        let timeout_id = browser.setTimeout(function() {
+        const timeout_id = browser.setTimeout(function() {
             promise.cancel()
             return finish(timeout_id, 0)
         }
@@ -81,7 +81,7 @@ exports.background = function background(messenger) {
 
     function emptyCart(name) {
         bom_manager.interfaces[name].clearing_cart = true
-        let timeout_id = browser.setTimeout((function(name) {
+        const timeout_id = browser.setTimeout((function(name) {
             bom_manager.interfaces[name].clearing_cart = false
             return sendState()
         }).bind(null, name)
@@ -98,7 +98,7 @@ exports.background = function background(messenger) {
 
     function fillCart(name) {
         bom_manager.interfaces[name].adding_lines = true
-        let timeout_id = browser.setTimeout((function(name) {
+        const timeout_id = browser.setTimeout((function(name) {
             bom_manager.interfaces[name].adding_lines = false
             return sendState()
         }).bind(null, name)
@@ -123,7 +123,7 @@ exports.background = function background(messenger) {
 
     messenger.on('deepAutoComplete', function() {
         let deep
-        return autoComplete(deep=true)
+        return autoComplete(deep = true)
     }
     )
 

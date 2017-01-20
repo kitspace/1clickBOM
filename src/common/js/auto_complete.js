@@ -28,27 +28,27 @@ const commonParts = require('./common_parts')
 
 function _next_query(line, queries) {
     let query = ''
-    let other_fields = []
-    let retailers = []
+    const other_fields = []
+    const retailers = []
     for (let i = 0; i < line.partNumbers.length; i++) {
-        let n = line.partNumbers[i]
-        let q = `${n.manufacturer} ${n.part}`
+        const n = line.partNumbers[i]
+        const q = `${n.manufacturer} ${n.part}`
         if (!__in__(q, queries)) {
             query = q
             break
         }
     }
     for (let j = 0; j < retailer_list.length; j++) {
-        let key = retailer_list[j]
-        let sku = line.retailers[key]
+        const key = retailer_list[j]
+        const sku = line.retailers[key]
         if (sku !== '' && (!__in__(sku, queries))) {
             query = sku
             break
         }
     }
     for (let k = 0; k < retailer_list.length; k++) {
-        let key = retailer_list[k]
-        let sku = line.retailers[key]
+        const key = retailer_list[k]
+        const sku = line.retailers[key]
         if (sku === '') {
             retailers.push(key)
         }
@@ -72,14 +72,14 @@ function _next_query(line, queries) {
 }
 
 function _auto_complete(search_engine, lines, depth) {
-    let promise_array = (() => {
-        let result = []
+    const promise_array = (() => {
+        const result = []
         for (let i = 0; i < lines.length; i++) {
-            let line = lines[i]
-            let queries = []
-            let searchPromises = []
+            const line = lines[i]
+            const queries = []
+            const searchPromises = []
             function search({line, queries}) {
-                let {query, other_fields, retailers} = _next_query(line, queries)
+                const {query, other_fields, retailers} = _next_query(line, queries)
                 if ((retailers.length === 0 && other_fields.length === 0) || query === '') {
                     return Promise.resolve({line, queries})
                 }
@@ -88,7 +88,7 @@ function _auto_complete(search_engine, lines, depth) {
                     .then(function(line, queries, result) {
                         line.partNumbers = line.partNumbers.concat(result.partNumbers)
                         for (let j = 0; j < retailer_list.length; j++) {
-                            let retailer = retailer_list[j]
+                            const retailer = retailer_list[j]
                             if (result.retailers[retailer] != null) {
                                 //replace reeled components with non-reeled for Farnell
                                 if (retailer === 'Farnell' &&
@@ -110,11 +110,11 @@ function _auto_complete(search_engine, lines, depth) {
                         return {line, queries}
                     }.bind(null, line, queries))
             }
-            let p = search({line, queries:[]})
+            const p = search({line, queries:[]})
             if ((depth - 1) > 0) {
-                let iterable = __range__(1, (depth-1), true)
+                const iterable = __range__(1, (depth - 1), true)
                 for (let j = 0; j < iterable.length; j++) {
-                    let _ = iterable[j]
+                    const _ = iterable[j]
                     p.then(search)
                 }
             }
@@ -123,7 +123,7 @@ function _auto_complete(search_engine, lines, depth) {
         return result
     })()
 
-    let final = promise_array.reduce((prev, promise) =>
+    const final = promise_array.reduce((prev, promise) =>
         prev.then(newLines =>
             promise.then(function(line) {
                 newLines.push(line)
@@ -137,7 +137,7 @@ function _auto_complete(search_engine, lines, depth) {
 }
 
 
-function autoComplete(lines, deep=false) {
+function autoComplete(lines, deep = false) {
     lines = JSON.parse(JSON.stringify(lines))
     if (deep) {
         var depth = 3
@@ -167,9 +167,9 @@ function __in__(needle, haystack) {
     return haystack.indexOf(needle) >= 0
 }
 function __range__(left, right, inclusive) {
-    let range = []
-    let ascending = left < right
-    let end = !inclusive ? right : ascending ? right + 1 : right - 1
+    const range = []
+    const ascending = left < right
+    const end = !inclusive ? right : ascending ? right + 1 : right - 1
     for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
         range.push(i)
     }

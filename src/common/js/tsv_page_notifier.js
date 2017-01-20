@@ -39,7 +39,7 @@ exports.tsvPageNotifier = function tsvPageNotifier(sendState, bom_manager) {
         checkPage(callback) {
             return browser.tabsGetActive(tab => {
                 if (tab != null) {
-                    let tab_url = tab.url.split('?')[0]
+                    const tab_url = tab.url.split('?')[0]
                     if (tab_url.match(this.re)) {
                         if (/^https?:\/\/.*?\.?kitnic.it\/boards\//.test(tab.url)) {
                             var url = tab_url + '/1-click-BOM.tsv'
@@ -53,7 +53,7 @@ exports.tsvPageNotifier = function tsvPageNotifier(sendState, bom_manager) {
                             var url = tab_url
                         }
                         http.get(url, {notify:false}, responseText => {
-                            let {lines, invalid} = parseTSV(responseText)
+                            const {lines, invalid} = parseTSV(responseText)
                             if (lines.length > 0) {
                                 badge.setDefault('\u2191', '#0000FF')
                                 this.onDotTSV = true
@@ -104,7 +104,7 @@ exports.tsvPageNotifier = function tsvPageNotifier(sendState, bom_manager) {
                         return line
                     })
                     bom_manager.interfaces[retailer].adding_lines = true
-                    let timeout_id = browser.setTimeout((function(retailer) {
+                    const timeout_id = browser.setTimeout((function(retailer) {
                         bom_manager.interfaces[retailer].adding_lines = false
                         return sendState()
                     }).bind(null, retailer)

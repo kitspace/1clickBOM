@@ -19,20 +19,20 @@
 
 const { messenger } = require('./messenger')
 const oneClickBOM = require('1-click-bom')
-let {retailer_list, isComplete, hasSKUs} = oneClickBOM.lineData
+const {retailer_list, isComplete, hasSKUs} = oneClickBOM.lineData
 
-let element_Bom              = document.querySelector('#bom')
-let element_Table            = document.querySelector('#bom_table')
-let element_TotalItems       = document.querySelector('#total_items')
-let element_TotalPartNumbers = document.querySelector('#total_partNumbers')
-let element_TotalLines       = document.querySelector('#total_lines')
-let button_Clear             = document.querySelector('button#clear')
-let button_LoadFromPage      = document.querySelector('button#load_from_page')
-let button_DeepComplete      = document.querySelector('button#deep_complete')
-let button_Copy              = document.querySelector('button#copy')
-let button_Paste             = document.querySelector('button#paste')
-let button_FillCarts         = document.querySelector('button#fill_carts')
-let button_EmptyCarts        = document.querySelector('button#empty_carts')
+const element_Bom              = document.querySelector('#bom')
+const element_Table            = document.querySelector('#bom_table')
+const element_TotalItems       = document.querySelector('#total_items')
+const element_TotalPartNumbers = document.querySelector('#total_partNumbers')
+const element_TotalLines       = document.querySelector('#total_lines')
+const button_Clear             = document.querySelector('button#clear')
+const button_LoadFromPage      = document.querySelector('button#load_from_page')
+const button_DeepComplete      = document.querySelector('button#deep_complete')
+const button_Copy              = document.querySelector('button#copy')
+const button_Paste             = document.querySelector('button#paste')
+const button_FillCarts         = document.querySelector('button#fill_carts')
+const button_EmptyCarts        = document.querySelector('button#empty_carts')
 
 
 button_FillCarts.addEventListener('click', function() {
@@ -70,7 +70,7 @@ button_DeepComplete.addEventListener('click', () => messenger.send('deepAutoComp
 
 
 function hideOrShow(bom, onDotTSV) {
-    let hasBOM = Boolean(Object.keys(bom.lines).length)
+    const hasBOM = Boolean(Object.keys(bom.lines).length)
 
     button_Clear.disabled         = !hasBOM
     button_DeepComplete.disabled  = (!hasBOM) || isComplete(bom.lines)
@@ -81,20 +81,20 @@ function hideOrShow(bom, onDotTSV) {
 
 
 function startSpinning(link) {
-    let td = link.parentNode
+    const td = link.parentNode
     let counter = 0
-    let spinner = document.createElement('div')
+    const spinner = document.createElement('div')
     spinner.className = 'spinner'
     td.appendChild(spinner)
 
     link.interval_id = setInterval(function(){
-        let frames     = 12
-        let frameWidth = 15
-        let offset     = counter * -frameWidth
-        spinner.style.backgroundPosition=
+        const frames     = 12
+        const frameWidth = 15
+        const offset     = counter * -frameWidth
+        spinner.style.backgroundPosition =
             offset + 'px' + ' ' + 0 + 'px'
         counter++
-        if (counter>=frames) {
+        if (counter >= frames) {
             return counter = 0
         }
     }
@@ -107,8 +107,8 @@ function startSpinning(link) {
 
 function stopSpinning(link) {
     if ((link.spinning != null) && link.spinning) {
-        let td            = link.parentNode
-        let spinner       = td.querySelector('div.spinner')
+        const td            = link.parentNode
+        const spinner       = td.querySelector('div.spinner')
         clearInterval(link.interval_id)
         td.removeChild(spinner)
         link.hidden   = false
@@ -116,9 +116,9 @@ function stopSpinning(link) {
     }
 }
 
-let removeChildren = element =>
+const removeChildren = element =>
     (() => {
-        let result = []
+        const result = []
         while (element.hasChildNodes()) {
             result.push(element.removeChild(element.lastChild))
         }
@@ -128,7 +128,7 @@ let removeChildren = element =>
 
 
 function render(state) {
-    let { bom } = state
+    const { bom } = state
 
     hideOrShow(bom, state.onDotTSV)
 
@@ -137,7 +137,7 @@ function render(state) {
         document.createTextNode(`${bom.lines.length}
                 line${bom.lines.length !== 1 ? 's' : ''}`))
 
-    let part_numbers = bom.lines.reduce((prev, line) => prev += line.partNumbers.length > 0
+    const part_numbers = bom.lines.reduce((prev, line) => prev += line.partNumbers.length > 0
     , 0)
 
     removeChildren(element_TotalPartNumbers)
@@ -146,7 +146,7 @@ function render(state) {
 
     let quantity = 0
     for (let j = 0; j < bom.lines.length; j++) {
-        let line = bom.lines[j]
+        const line = bom.lines[j]
         quantity += line.quantity
     }
 
@@ -162,25 +162,25 @@ function render(state) {
     let any_emptying = false
 
     return (() => {
-        let result = []
+        const result = []
         for (let k = 0; k < retailer_list.length; k++) {
-            let retailer_name = retailer_list[k]
+            const retailer_name = retailer_list[k]
             let lines = []
             if (retailer_name in bom.retailers) {
                 lines = bom.retailers[retailer_name]
             }
-            let retailer = state.interfaces[retailer_name]
+            const retailer = state.interfaces[retailer_name]
             let no_of_lines = 0
             for (let i1 = 0; i1 < lines.length; i1++) {
-                let line = lines[i1]
+                const line = lines[i1]
                 no_of_lines += line.quantity
             }
-            let tr = document.createElement('tr')
+            const tr = document.createElement('tr')
             element_Table.appendChild(tr)
-            let td_0 = document.createElement('td')
-            let icon = document.createElement('img')
+            const td_0 = document.createElement('td')
+            const icon = document.createElement('img')
             icon.src = retailer.icon_src
-            let viewCart = document.createElement('a')
+            const viewCart = document.createElement('a')
             viewCart.appendChild(icon)
             viewCart.innerHTML += retailer.name
             viewCart.value = retailer.name
@@ -193,34 +193,34 @@ function render(state) {
             td_0.id = 'icon'
             tr.appendChild(td_0)
 
-            let td_1 = document.createElement('td')
-            let t  = `${lines.length}`
-            let tspan = document.createElement('span')
+            const td_1 = document.createElement('td')
+            const t  = `${lines.length}`
+            const tspan = document.createElement('span')
             tspan.appendChild(document.createTextNode(t))
 
             if (lines.length !== bom.lines.length) {
                 td_1.style.backgroundColor = 'pink'
             }
 
-            let t2 = ` line${lines.length !== 1 ? 's' : ''}`
-            let t2span = document.createElement('span')
+            const t2 = ` line${lines.length !== 1 ? 's' : ''}`
+            const t2span = document.createElement('span')
             t2span.appendChild(document.createTextNode(t2))
 
             td_1.appendChild(tspan)
             td_1.appendChild(t2span)
             tr.appendChild(td_1)
 
-            let unicode_chars = ['\uf21e', '\uf21b',]
-            let titles   = ['Add lines to ', 'Empty ']
-            let messages = ['fillCart', 'emptyCart']
-            let lookup   = ['adding_lines', 'clearing_cart']
-            let iterable = [0, 1]
+            const unicode_chars = ['\uf21e', '\uf21b',]
+            const titles   = ['Add lines to ', 'Empty ']
+            const messages = ['fillCart', 'emptyCart']
+            const lookup   = ['adding_lines', 'clearing_cart']
+            const iterable = [0, 1]
             for (let j1 = 0; j1 < iterable.length; j1++) {
-                let i = iterable[j1]
-                let td = document.createElement('td')
+                const i = iterable[j1]
+                const td = document.createElement('td')
                 td.className = 'button_icon_td'
                 tr.appendChild(td)
-                let span = document.createElement('span')
+                const span = document.createElement('span')
                 span.className = 'button_icon'
                 span.appendChild(document.createTextNode(unicode_chars[i]))
                 if (messages[i] === 'fillCart' && lines.length === 0) {
@@ -228,7 +228,7 @@ function render(state) {
                     span.style.cursor = 'default'
                     td.appendChild(span)
                 } else {
-                    let a = document.createElement('a')
+                    const a = document.createElement('a')
                     a.value = retailer.name
                     a.message = messages[i]
                     a.title = titles[i] + retailer.name + ' cart'

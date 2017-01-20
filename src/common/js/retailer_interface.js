@@ -23,10 +23,10 @@ const { browser } = require('./browser')
 class RetailerInterface {
     constructor(name, country_code, data_path, settings, callback) {
         this.country = country_code
-        let data = browser.getLocal(data_path)
-        let country_code_lookedup = data.lookup[country_code]
+        const data = browser.getLocal(data_path)
+        const country_code_lookedup = data.lookup[country_code]
         if (!country_code_lookedup) {
-            let error = new InvalidCountryError
+            const error = new InvalidCountryError
             error.message += ` '${country_code}' given to ${name}`
             throw error
         }
@@ -92,7 +92,7 @@ class RetailerInterface {
         return browser.tabsQuery({url:`*${this.site}/*`}, tabs => {
             tabs.forEach(tab => {
                 if (tab.url.match(re)) {
-                    let protocol = tab.url.split('://')[0]
+                    const protocol = tab.url.split('://')[0]
                     browser.tabsUpdate(tab, protocol + this.site + this.cart)
                 }
             })
@@ -101,7 +101,7 @@ class RetailerInterface {
     refreshSiteTabs() {
         //refresh the tabs that are not the cart url. XXX could some of the
         //passed params cause problems on, say, quick-add urls?
-        const re = new RegExp(this.site, "i")
+        const re = new RegExp(this.site, 'i')
         return browser.tabsQuery({url:`*${this.site}/*`}, tabs => {
             tabs.forEach(tab => {
                 if (!(tab.url.match(re))) {

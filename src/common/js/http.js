@@ -22,7 +22,7 @@ Promise.config({cancellation:true})
 const { browser, XMLHttpRequest } = require('./browser')
 const { badge } = require('./badge')
 
-function network_callback(event, callback, error_callback, notify=true) {
+function network_callback(event, callback, error_callback, notify = true) {
     if (event.target.readyState === 4) {
         if (event.target.status === 200) {
             if (callback != null) {
@@ -33,10 +33,10 @@ function network_callback(event, callback, error_callback, notify=true) {
             message += event.target.url
             if (notify) {
                 browser.notificationsCreate({
-                  type:'basic',
-                  title:'Network Error Occured',
-                  message,
-                  iconUrl:'/images/net_error.png'
+                    type:'basic',
+                    title:'Network Error Occured',
+                    message,
+                    iconUrl:'/images/net_error.png'
                 }, function () {} )
                 badge.setDecaying(`${event.target.status}`, '#CC00FF', 3)
             }
@@ -58,7 +58,7 @@ function post(url, params, options, callback, error_callback) {
     if (json == null) {
         json = false
     }
-    let xhr = new XMLHttpRequest()
+    const xhr = new XMLHttpRequest()
     xhr.open('POST', url, true)
     if (json) {
         xhr.setRequestHeader('Content-type', 'application/JSON')
@@ -83,7 +83,7 @@ function get(url, {notify, timeout}, callback, error_callback) {
     if (timeout == null) {
         timeout = 60000
     }
-    let xhr = new XMLHttpRequest()
+    const xhr = new XMLHttpRequest()
     xhr.open('GET', url, true)
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
     xhr.url = url
@@ -95,15 +95,15 @@ function get(url, {notify, timeout}, callback, error_callback) {
 
 
 function getLocation(callback) {
-    let used_country_codes = []
-    let countries_data = browser.getLocal('data/countries.json')
-    for (let _ in countries_data) {
-        let code = countries_data[_]
+    const used_country_codes = []
+    const countries_data = browser.getLocal('data/countries.json')
+    for (const _ in countries_data) {
+        const code = countries_data[_]
         used_country_codes.push(code)
     }
-    let url = 'https://freegeoip.kitnic.it'
+    const url = 'https://freegeoip.kitnic.it'
     return get(url, {timeout:5000}, responseText => {
-        let response = JSON.parse(responseText)
+        const response = JSON.parse(responseText)
         let code = response.country_code
         if (code === 'GB') { code = 'UK'; }
         if (!__in__(code, used_country_codes)) { code = 'Other'; }
@@ -132,5 +132,5 @@ exports.promiseGet  = promiseGet
 exports.getLocation = getLocation
 
 function __in__(needle, haystack) {
-  return haystack.indexOf(needle) >= 0
+    return haystack.indexOf(needle) >= 0
 }

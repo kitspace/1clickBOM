@@ -29,7 +29,7 @@ class Digikey extends RetailerInterface {
     }
 
     clearCart(callback) {
-        let url = `http${this.site}${this.cart}?webid=-1`
+        const url = `http${this.site}${this.cart}?webid=-1`
         return http.get(url, {}, () => {
             if (callback != null) {
                 callback({success:true})
@@ -57,7 +57,7 @@ class Digikey extends RetailerInterface {
     }
 
     _add_lines(lines, callback) {
-        let result = {success:true, fails:[]}
+        const result = {success:true, fails:[]}
         let count = lines.length
         return lines.map((line) =>
             this._add_line(line, (line, line_result) => {
@@ -148,15 +148,15 @@ class Digikey extends RetailerInterface {
             ))
     }
     _add_line(line, callback) {
-        let url = `http${this.site}${this.addline}`
-        let params = `qty=${line.quantity}&part=` +
+        const url = `http${this.site}${this.addline}`
+        const params = `qty=${line.quantity}&part=` +
             encodeURIComponent(line.part) + '&cref=' +
             encodeURIComponent(line.reference)
-        let result = {success:true, fails:[]}
+        const result = {success:true, fails:[]}
         return http.post(url, params, {}, responseText => {
-            let doc = browser.parseDOM(responseText)
+            const doc = browser.parseDOM(responseText)
             //if the cart returns with a quick-add quantity filled-in there was an error
-            let quick_add_quant = doc.querySelector('#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity')
+            const quick_add_quant = doc.querySelector('#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity')
             result.success = (quick_add_quant != null) && (quick_add_quant.value != null) && (quick_add_quant.value === '')
             if (!result.success) {
                 result.fails.push(line)
@@ -174,10 +174,10 @@ class Digikey extends RetailerInterface {
         url += line.part + '/'
         url += line.part + '/'
         return http.get(url, {notify:false}, function(responseText) {
-            let doc = browser.parseDOM(responseText)
-            let inputs = doc.querySelectorAll('input')
+            const doc = browser.parseDOM(responseText)
+            const inputs = doc.querySelectorAll('input')
             for (let i = 0; i < inputs.length; i++) {
-                let input = inputs[i]
+                const input = inputs[i]
                 if (input.name === 'partid') {
                     callback(line, input.value)
                     return
@@ -195,20 +195,20 @@ class Digikey extends RetailerInterface {
         url += `&partId=${id}`
         url += `&error=${error}&cref=&esc=-1&returnURL=%2f%2fwww.digikey.co.uk%2fclassic%2fordering%2faddpart.aspx&fastAdd=false&showUpsell=True`
         return http.get(url, {line, notify:false}, function(responseText) {
-            let doc = browser.parseDOM(responseText)
+            const doc = browser.parseDOM(responseText)
             switch (error) {
-                case 'TapeReelQuantityTooLow':       var choice = doc.getElementById('rb1'); break
-                case 'NextBreakQuanIsLowerExtPrice': choice = doc.getElementById('rb2'); break
-                case 'CutTapeQuantityIsMultipleOfReelQuantity': choice = doc.getElementById('rb1'); break
+            case 'TapeReelQuantityTooLow':       var choice = doc.getElementById('rb1'); break
+            case 'NextBreakQuanIsLowerExtPrice': choice = doc.getElementById('rb2'); break
+            case 'CutTapeQuantityIsMultipleOfReelQuantity': choice = doc.getElementById('rb1'); break
             }
             if (choice != null) {
-                let label = choice.nextElementSibling
+                const label = choice.nextElementSibling
                 if (label != null) {
-                    let split  = label.innerHTML.split('&nbsp;')
-                    let part   = split[2]
-                    let number = parseInt(split[0].replace(/,/,''))
+                    const split  = label.innerHTML.split('&nbsp;')
+                    const part   = split[2]
+                    const number = parseInt(split[0].replace(/,/,''))
                     if (!isNaN(number)) {
-                        let it = line
+                        const it = line
                         it.part = part
                         it.quantity = number
                         return callback(it)
