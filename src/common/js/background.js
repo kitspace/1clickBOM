@@ -35,8 +35,7 @@ exports.background = function background(messenger) {
                 bom,
                 interfaces : bom_manager.interfaces,
                 onDotTSV   : tsvPageNotifier.onDotTSV
-            }
-            )
+            })
             return messenger.send('updateKitnic', bom_manager.interfaces)
         })
 
@@ -45,8 +44,7 @@ exports.background = function background(messenger) {
 
     browser.tabsOnUpdated(() => {
         return tsvPageNotifier.checkPage()
-    }
-    )
+    })
 
     function autoComplete(deep = false) {
         function finish(timeout_id, no_of_completed) {
@@ -56,7 +54,9 @@ exports.background = function background(messenger) {
                 browser.notificationsCreate({
                     type    : 'basic',
                     title   : 'Auto-complete successful',
-                    message : `Completed ${no_of_completed} fields for you by matching against the CPL and searching Octopart and Findchips.`,
+                    message : `Completed ${no_of_completed} fields for you `
+                        + 'by matching against the CPL and searching Octopart '
+                        + 'and Findchips.',
                     iconUrl : '/images/ok.png'
                 })
                 return badge.setDecaying('OK','#00CF0F')

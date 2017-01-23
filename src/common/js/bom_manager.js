@@ -60,10 +60,8 @@ const bom_manager = {
                     if (count === 0) {
                         return __guardFunc__(callback, f => f())
                     }
-                }
-                )))
-        }
-        )
+                })))
+        })
     },
 
     getBOM(callback) {
@@ -96,8 +94,7 @@ const bom_manager = {
                 }
             }
             return callback(bom)
-        }
-        )
+        })
     },
 
     autoComplete(deep) {
@@ -111,12 +108,9 @@ const bom_manager = {
                     bom.retailers = this._to_retailers(lines)
                     return browser.storageSet({bom}, () => resolve(numberOfEmpty(prev_lines) - numberOfEmpty(lines))
                     )
-                }
-                )
-            }
-            )
-        }
-        )
+                })
+            })
+        })
     },
 
     addToBOM(text, callback) {
@@ -238,10 +232,8 @@ const bom_manager = {
             }
             return browser.storageSet({bom}, () => {
                 return __guardFunc__(callback, f => f(this))
-            }
-            )
-        }
-        )
+            })
+        })
     },
 
 
@@ -282,7 +274,8 @@ const bom_manager = {
                 iconUrl:'/images/error.png'
             })
             badge.setDecaying('Err','#FF0000', priority = 2)
-        } else {
+        }
+        else {
             badge.setDecaying('OK','#00CF0F')
         }
         if (result.warnings != null) {
@@ -312,7 +305,8 @@ const bom_manager = {
                 iconUrl:'/images/error.png'
             })
             return badge.setDecaying('Err','#FF0000', priority = 2)
-        } else {
+        }
+        else {
             return badge.setDecaying('OK','#00CF0F')
         }
     },
@@ -325,19 +319,16 @@ const bom_manager = {
                 , result => {
                     this.notifyFillCart(bom.retailers[retailer], retailer, result)
                     return callback(result)
-                }
-                )
+                })
             }
-        }
-        )
+        })
     },
 
     emptyCart(retailer, callback){
         return this.interfaces[retailer].clearCart(result => {
             this.notifyEmptyCart(retailer, result)
             return __guardFunc__(callback, f => f(result))
-        }
-        )
+        })
     }
 }
 
