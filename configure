@@ -167,7 +167,8 @@ targets.firefox.push('build/firefox/package.json')
 const chrome_package_name = `1clickBOM-v${version}-chrome`
 ninja.rule('package-chrome')
     .run(`cd build/ && cp -r chrome  ${chrome_package_name}`
-         + `&& rm -f ${chrome_package_name}/js/{functional,unit,qunit}.js `
+         + `&& rm -f ${chrome_package_name}/js/functional.js `
+         + `${chrome_package_name}/js/unit.js ${chrome_package_name}/js/qunit.js `
          + `${chrome_package_name}/html/test.html ${chrome_package_name}/html/qunit-1.11.0.css`
          + `&& zip -r ${chrome_package_name}.zip ${chrome_package_name}/ `
          + `&& rm -rf ${chrome_package_name}`)
