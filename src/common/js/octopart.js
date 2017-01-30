@@ -54,8 +54,12 @@ function _search(query, retailers = [], other_fields = []) {
                 if (manufacturer == null) {
                     manufacturer = ''
                 }
-                const number = __guard__(doc.querySelector('.part-card-mpn'), x1 => x1.innerHTML.trim())
+                let number = __guard__(doc.querySelector('.part-card-mpn'), x1 => x1.innerHTML.trim())
                 if (number != null) {
+                    const match = /<em class="highlight">(.*)<\/em>(.*)/.exec(number)
+                    if (match) {
+                        number = match[1] + match[2]
+                    }
                     result.partNumbers.push({manufacturer, part:number})
                 }
             }
