@@ -17,7 +17,7 @@ build() {
     ninja $1 && echo '* build succeeded *';
 }
 
-./configure.js && build $1;
+./configure && build $1;
 
 if [ "$OS" == 'LINUX' ]; then
     while inotifywait --exclude '\..*sw.' -r -q -e modify src/; do
