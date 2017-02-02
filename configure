@@ -6,7 +6,7 @@ const path    = require('path')
 const cp      = require('child_process')
 const ninjaBuildGen = require('ninja-build-gen')
 
-const version = "1.2.3"
+const version = "1.2.4"
 
 const ninja = ninjaBuildGen('1.5.1', 'build/')
 ninja.header(`#generated from ${path.basename(module.filename)}`)
@@ -182,9 +182,9 @@ ninja.edge('build/firefox/node_modules')
     .using('npm-install')
 targets.firefox.push('build/firefox/node_modules')
 
-ninja.rule('make-jpmignore').run("node make-jpmignore.js $in")
+ninja.rule('make-jpmignore').run("cp src/firefox/.jpmignore build/firefox/.jpmignore && ./make-jpmignore $in >> build/firefox/.jpmignore")
 ninja.edge('build/firefox/.jpmignore').from('build/firefox/lib/main.js')
-    .need(firefox_js.concat(['src/firefox/.jpmignore', 'make-jpmignore.js']))
+    .need(firefox_js.concat(['src/firefox/.jpmignore', 'make-jpmignore']))
     .using('make-jpmignore')
 targets.firefox.push('build/firefox/.jpmignore')
 
