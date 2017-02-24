@@ -6,13 +6,13 @@ const path    = require('path')
 const cp      = require('child_process')
 const ninjaBuildGen = require('ninja-build-gen')
 
-const version = "1.2.4"
+const version = "1.2.5"
 
 const ninja = ninjaBuildGen('1.5.1', 'build/')
 ninja.header(`#generated from ${path.basename(module.filename)}`)
 
 const presets = "--presets es2015-script"
-const browserify = `browserify -x $exclude --debug --transform [ babelify ${presets} ]`
+const browserify = `browserify -x $exclude --transform [ babelify ${presets} ]`
 
 //- Rules -#
 
