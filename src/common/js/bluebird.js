@@ -1,3 +1,5 @@
+const setTimeout   = require('./browser').browser.setTimeout
+const clearTimeout = require('./browser').browser.clearTimeout
 /* @preserve
  * The MIT License (MIT)
  *
