@@ -3,6 +3,10 @@ const cp = require('child_process')
 const path = require('path')
 const paths = cp.execSync(`browserify --ignore-missing --list ${process.argv[2]}`, {encoding:'utf-8'})
     .split('\n').slice(0, -1)
-const dont_ignore = paths.map(p => path.relative('build/firefox', p)).map(p => '!' + p)
+let dont_ignore = paths.map(p => path.relative('build/firefox', p)).map(p => '!' + p)
+dont_ignore = dont_ignore.map(p => {
+    return p.replace(/\.\.\/\.\.\/node_modules/, 'node_modules')
+})
+
 
 console.log(dont_ignore.join('\n'))
