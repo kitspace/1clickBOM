@@ -25,21 +25,17 @@ const { browser } = require('./browser')
 
 const rsOnline = {
     clearCart(callback) {
-        return this._get_clear_viewstate((viewstate, form_ids) => {
-            return this._clear_cart(viewstate, form_ids, result => {
-                __guardFunc__(callback, f => f(result, this))
-                this.refreshCartTabs()
-                return this.refreshSiteTabs()
-            })
+        return this._clear_cart(result => {
+            __guardFunc__(callback, f => f(result, this))
+            this.refreshCartTabs()
+            return this.refreshSiteTabs()
         })
     },
 
 
-    _clear_cart(viewstate, form_ids, callback) {
-        const url = `http${this.site}${this.cart}`
-        return http.post(url, 'isRemoveAll=true', {}, () => __guardFunc__(callback, f => f({success:true}))
-        , () => __guardFunc__(callback, f => f({success:false}))
-        )
+    _clear_cart(callback) {
+        const url = `https${this.site}${this.cart}`
+        return http.post(url, 'isRemoveAll=true', {}, () => callback({success:true}), () => callback({success:false}))
     },
 
     _clear_invalid(callback) {
