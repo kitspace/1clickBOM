@@ -18,14 +18,19 @@
 // the Original Code is Kaspar Emanuel.
 
 const { RetailerInterface } = require('./retailer_interface')
-const http = require('./http')
-const { browser } = require('./browser')
+const http                  = require('./http')
+const { browser }           = require('./browser')
+const rateLimit             = require('./promise-rate-limit')
 
 class Digikey extends RetailerInterface {
     constructor(country_code, settings, callback) {
         super('Digikey', country_code, 'data/digikey.json', settings, callback)
+
         //make sure we have a cart cookie
         http.get(`https${this.site}${this.cart}`, {notify: false}, () => {})
+
+        //rate limiting _add_line as we were starting to get 503s
+        this._rate_limited_add_line = rateLimit(6, 1000, this._add_line)
     }
 
     clearCart(callback) {
@@ -60,20 +65,20 @@ class Digikey extends RetailerInterface {
         const result = {success:true, fails:[]}
         let count = lines.length
         return lines.map((line) =>
-            this._add_line(line, (line, line_result) => {
+            this._rate_limited_add_line(line, (line, line_result) => {
                 if (!line_result.success) {
                     return this._get_part_id(line, (line, id) => {
                         return this._get_suggested(line, id, 'NextBreakQuanIsLowerExtPrice'
                         , new_line => {
-                            return this._add_line(new_line, (_, r) => {
+                            return this._rate_limited_add_line(new_line, (_, r) => {
                                 if (!r.success) {
                                     return this._get_suggested(line, id, 'CutTapeQuantityIsMultipleOfReelQuantity'
                                     , new_line => {
-                                        return this._add_line(new_line, (_, r) => {
+                                        return this._rate_limited_add_line(new_line, (_, r) => {
                                             if (!r.success) {
                                                 return this._get_suggested(new_line, id, 'TapeReelQuantityTooLow'
                                                 , new_line => {
-                                                    return this._add_line(new_line, function(_, r) {
+                                                    return this._rate_limited_add_line(new_line, function(_, r) {
                                                         if (result.success) { result.success = r.success; }
                                                         result.fails = result.fails.concat(r.fails)
                                                         count--
