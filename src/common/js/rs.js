@@ -38,82 +38,14 @@ const rsOnline = {
         return http.post(url, 'isRemoveAll=true', {}, () => callback({success:true}), () => callback({success:false}))
     },
 
-    _clear_invalid(callback) {
-        return this._get_clear_viewstate((viewstate, form_ids) => {
-            const params1 =
-            'AJAXREQUEST=_viewRoot&shoppingBasketForm=shoppingBasket' +
-            'Form&=ManualEntry&=DELIVERY&shoppingBasketForm%3AquickStockNo_0=&s' +
-            'hoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_' +
-            '1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickStoc' +
-            'kNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3Aquick' +
-            'StockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3Aq' +
-            'uickStockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm' +
-            '%3AquickStockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasket' +
-            'Form%3AquickStockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBa' +
-            'sketForm%3AquickStockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppi' +
-            'ngBasketForm%3AquickStockNo_8=&shoppingBasketForm%3AquickQty_8=&sh' +
-            'oppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%3AquickQty_9' +
-            '=&shoppingBasketForm%3Aj_id1085=&shoppingBasketForm%3Aj_id1091=&sh' +
-            'oppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decora' +
-            'te%3AQuickOrderWidgetAction_listItems=Paste%20or%20type%20your%20l' +
-            'ist%20here%20and%20click%20\'Add\'.&shoppingBasketForm%3Aj_id1182%3A' +
-            '0%3Aj_id1228=505-1441&shoppingBasketForm%3Aj_id1182%3A0%3Aj_id1248' +
-            '=1&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction' +
-            '_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionMod' +
-            'alLayerOpenedState=&shoppingBasketForm%3AsendToColleagueWidgetPane' +
-            'lOpenedState=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetA' +
-            'ction_senderName_decorate%3AGuestUserSendToColleagueWidgetAction_s' +
-            'enderName=&shoppingBasketForm%3AGuestUserSendToColleagueWidgetActi' +
-            'on_senderEmail_decorate%3AGuestUserSendToColleagueWidgetAction_sen' +
-            'derEmail=name%40company.com&shoppingBasketForm%3AGuestUserSendToCo' +
-            'lleagueWidgetAction_mailTo_decorate%3AGuestUserSendToColleagueWidg' +
-            'etAction_mailTo=name%40company.com&shoppingBasketForm%3AGuestUserS' +
-            'endToColleagueWidgetAction_subject_decorate%3AGuestUserSendToColle' +
-            'agueWidgetAction_subject=Copy%20of%20order%20from%20RS%20Online&sh' +
-            'oppingBasketForm%3AGuestUserSendToColleagueWidgetAction_message_de' +
-            'corate%3AGuestUserSendToColleagueWidgetAction_message=&shoppingBas' +
-            'ketForm%3AsendToColleagueSuccessWidgetPanelOpenedState=&javax.face' +
-            `s.ViewState=${viewstate}`
-            const params2 = `AJAXREQUEST=_viewRoot&${form_ids[0]}=${form_ids[0]}&` +
-              `javax.faces.ViewState=${viewstate}&ajaxSingle=${form_ids[0]}%3A` +
-              `${form_ids[1]}&${form_ids[0]}%3A${form_ids[1]}=${form_ids[0]}%3A` +
-              `${form_ids[1]}&`
-            const params3 = 'AJAXREQUEST=_viewRoot&a4jCloseForm=a4jCloseForm&auto' +
-              `Scroll=&javax.faces.ViewState=${viewstate}&a4jCloseForm%3A` +
-              `${form_ids[2]}=a4jCloseForm%3A${form_ids[2]}&`
-            const p = http.promiseGet(`http${this.site}${this.cart}`)
-            return p.then(doc => {
-                const error_lines = doc.querySelectorAll('.dataRow.errorRow')
-                const a = []
-                for (let i = 0; i < error_lines.length; i++) {
-                    a.push(null)
-                }
-                //for each line we basically click the 'remove' link which also
-                //asks for confirmation
-                const chain = a.reduce(prev => {
-                    return prev.then(_doc => {
-                        if (_doc == null) {
-                            return http.promiseGet(`http${this.site}${this.cart}`)
-                        } else {
-                            return Promise.resolve(_doc)
-                        }
-                    }).then(_doc => {
-                        const error_line = __guard__(__guard__(_doc, x1 => x1.querySelector('.dataRow.errorRow')), x => x.querySelector('.quantityTd'))
-                        const id = __guard__(__guard__(__guard__(error_line, x4 => x4.children[3]), x3 => x3.children[0]), x2 => x2.id)
-                        const param_id = params1 + '&' + encodeURIComponent(id)
-                        return http.promisePost(`http${this.site}${this.cart}`, param_id)
-                    }).then(() => {
-                        return http.promisePost(`http${this.site}${this.cart}`, params2)
-                    }).then(() => {
-                        return http.promisePost(`http${this.site}${this.cart}`, params3)
-                    })
-                }
-                , Promise.resolve(doc))
-                chain.then(() => callback({success:true}))
-                return chain.catch(() => callback({success:false}))
-            }).catch(() => callback({success:false}))
-        }
-        )
+    _clear_invalid() {
+        const url = `https${this.site}${this.cart}`
+        return this._get_invalid().then(ids => {
+            return Promise.all(ids.map(id =>  {
+                const params = `isRemoveItem=true&basketLineId=${id}`
+                return http.promisePost(url, params)
+            }))
+        })
     },
 
 
@@ -125,13 +57,9 @@ const rsOnline = {
         }
 
         const add = (lines, callback) => {
-            return this._clear_invalid(() => {
                 return this._get_adding_viewstate((viewstate, form_id) => {
                     return this._add_lines(lines, viewstate, form_id, callback)
-                }
-                )
-            }
-            )
+                })
         }
 
         const end = result => {
@@ -139,21 +67,33 @@ const rsOnline = {
             this.refreshCartTabs()
             return this.refreshSiteTabs()
         }
+        return this._clear_invalid().then(() => {
+            add(lines, result => {
+                if (!result.success) {
+                    //do a second pass with corrected quantities
+                    add(lines, end)
+                } else {
+                    return end(result)
+                }
+            })
+        })
+    },
 
-        return add(lines, function(result) {
-            if (!result.success) {
-                //do a second pass with corrected quantities
-                return add(result.fails, _result => end(_result)
-                )
-            } else {
-                return end(result)
+    _get_invalid() {
+        const url = `https${this.site}${this.cart}`
+        return http.promiseGet(url).then(doc => {
+            const errors = doc.querySelectorAll('.dataRow.errorRow')
+            const ids = []
+            for (let i = 0; i < errors.length; i++) {
+                const id = /showConfirmDelete\('(.*?)'\)/.exec(errors[i].innerHTML.toString())[1]
+                ids.push(id)
             }
-        }
-        )
+            return ids
+        })
     },
 
     _get_and_correct_invalid_lines(callback) {
-        const url = `http${this.site}${this.cart}`
+        const url = `https${this.site}${this.cart}`
         return http.get(url, {}, responseText => {
             const doc = browser.parseDOM(responseText)
             const lines = []
@@ -210,21 +150,9 @@ const rsOnline = {
         } else {
             var lines = lines_incoming
         }
-        const url = `http${this.site}${this.cart}`
-        let params = `AJAXREQUEST=shoppingBasketForm%3A${form_id}&shoppingBasketFo` +
-        'rm=shoppingBasketForm&=QuickAdd&=DELIVERY&shoppingBasketForm%3AquickSt' +
-        'ockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickSt' +
-        'ockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickSt' +
-        'ockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickSt' +
-        'ockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickSt' +
-        'ockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickSt' +
-        'ockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickSt' +
-        'ockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickSt' +
-        'ockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickSt' +
-        'ockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickSt' +
-        'ockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3AQuickOr' +
-        'derWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_li' +
-        'stItems='
+        const url = `https${this.site}${this.cart}`
+        let params = 'shoppingBasketForm=shoppingBasketForm&shoppingBasketForm%3AquickStockNo_0=&shoppingBasketForm%3AquickQty_0=&shoppingBasketForm%3AquickStockNo_1=&shoppingBasketForm%3AquickQty_1=&shoppingBasketForm%3AquickStockNo_2=&shoppingBasketForm%3AquickQty_2=&shoppingBasketForm%3AquickStockNo_3=&shoppingBasketForm%3AquickQty_3=&shoppingBasketForm%3AquickStockNo_4=&shoppingBasketForm%3AquickQty_4=&shoppingBasketForm%3AquickStockNo_5=&shoppingBasketForm%3AquickQty_5=&shoppingBasketForm%3AquickStockNo_6=&shoppingBasketForm%3AquickQty_6=&shoppingBasketForm%3AquickStockNo_7=&shoppingBasketForm%3AquickQty_7=&shoppingBasketForm%3AquickStockNo_8=&shoppingBasketForm%3AquickQty_8=&shoppingBasketForm%3AquickStockNo_9=&shoppingBasketForm%3AquickQty_9=&shoppingBasketForm%3Aj_idt3056=&shoppingBasketForm%3Aj_idt3062=&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_listItems='
+
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i]
@@ -232,13 +160,8 @@ const rsOnline = {
             `${line.reference}\n`)
         }
 
-        params += '&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetA' +
-        'ction_promotionCode=&shoppingBasketForm%3ApromoCodeTermsAndConditionMo' +
-        `dalLayerOpenedState=&javax.faces.ViewState=${viewstate}&shoppingBasket` +
-        'Form%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderW' +
-        'idgetAction_quickOrderTextBoxbtn=shoppingBasketForm%3AQuickOrderWidget' +
-        'Action_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderT' +
-        'extBoxbtn&'
+        params += `&deliveryOrCollection=DELIVERY&deliveryOptionCode=5&shoppingBasketForm%3APromoCodeWidgetAction_promotionCode=&javax.faces.ViewState=${viewstate}&javax.faces.source=shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderTextBoxbtn&javax.faces.partial.event=click&javax.faces.partial.execute=shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderTextBoxbtn%20%40component&javax.faces.partial.render=%40component&org.richfaces.ajax.component=shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderTextBoxbtn&shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderTextBoxbtn=shoppingBasketForm%3AQuickOrderWidgetAction_quickOrderTextBox_decorate%3AQuickOrderWidgetAction_quickOrderTextBoxbtn&rfExt=null&AJAX%3AEVENTS_COUNT=1&javax.faces.partial.ajax=true`
+
 
         return http.post(url, params, {}, () => {
             return this._get_and_correct_invalid_lines(invalid_lines => {
@@ -278,7 +201,7 @@ const rsOnline = {
 
 
     _get_adding_viewstate(callback){
-        const url = `http${this.site}${this.cart}`
+        const url = `https${this.site}${this.cart}`
         return http.get(url, {}, responseText => {
             const doc = browser.parseDOM(responseText)
             const viewstate_element  = doc.getElementById('javax.faces.ViewState')
@@ -287,48 +210,17 @@ const rsOnline = {
             } else {
                 return callback('', '')
             }
-            const btn_doc = doc.getElementById('addToOrderDiv')
+            const content_doc = doc.getElementById('mainContent')
             //the form_id element is different values depending on signed in or
             //signed out could just hardcode them but maybe this will be more
             //future-proof?  we use a regex here as DOM select methods crash on
             //this element!
-            const form_id  = /AJAX.Submit\('shoppingBasketForm\:(j_id\d+)/
-                .exec(btn_doc.innerHTML.toString())[1]
+            const form_id  = /shoppingBasketForm\:(j_idt\d+)/.exec(content_doc.innerHTML.toString())[1]
             return callback(viewstate, form_id)
         }
         , () => callback('', '')
         )
     },
-
-
-    _get_clear_viewstate(callback){
-        const url = `http${this.site}${this.cart}`
-        return http.get(url, {}, responseText => {
-            const doc = browser.parseDOM(responseText)
-            const viewstate_elem = doc.getElementById('javax.faces.ViewState')
-            if (viewstate_elem != null) {
-                var viewstate = doc.getElementById('javax.faces.ViewState').value
-            } else {
-                return callback('', [])
-            }
-
-            const form_elem = doc.getElementById('a4jCloseForm')
-            if (form_elem != null) {
-                const form = form_elem.nextElementSibling.nextElementSibling
-                //the form_id elements are different values depending on signed
-                //in or signed out could just hardcode them but maybe this will
-                //be more future-proof?
-                const form_id2  = /"cssButton secondary red enabledBtn" href="#" id="j_id\d+\:(j_id\d+)"/.exec(form.innerHTML.toString())[1]
-                const form_id3  = doc.getElementById('a4jCloseForm')
-                    .firstChild.id.split(':')[1]
-                return callback(viewstate, [form.id, form_id2, form_id3])
-            } else {
-                return callback('', [])
-            }
-        }
-        , () => callback('', [])
-        )
-    }
 }
 
 
@@ -352,8 +244,7 @@ const rsDelivers = {
     _clear_invalid(callback) {
         return this._get_invalid_lines(parts => {
             return this._delete_invalid(parts, callback)
-        }
-        )
+        })
     },
 
 
