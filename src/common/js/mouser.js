@@ -120,7 +120,7 @@ class Mouser extends RetailerInterface {
             const errors = this._get_errors(responseText)
             const item_ids = []
             for (let i = 0; i < errors.length; ++i) {
-                item_ids.push(errors[i].getAttribute('data-cartitemid'))
+                item_ids.push(errors[i].getAttribute('data-itemid'))
             }
             const promiseArray = item_ids.map(id => {
                 return http.promisePost(
