@@ -25,11 +25,11 @@ class Digikey extends RetailerInterface {
     constructor(country_code, settings, callback) {
         super('Digikey', country_code, 'data/digikey.json', settings, callback)
         //make sure we have a cart cookie
-        http.get(`http${this.site}${this.cart}`, {notify: false}, () => {})
+        http.get(`https${this.site}${this.cart}`, {notify: false}, () => {})
     }
 
     clearCart(callback) {
-        const url = `http${this.site}${this.cart}?webid=-1`
+        const url = `https${this.site}${this.cart}?webid=-1`
         return http.get(url, {}, () => {
             if (callback != null) {
                 callback({success:true})
@@ -148,7 +148,7 @@ class Digikey extends RetailerInterface {
             ))
     }
     _add_line(line, callback) {
-        const url = `http${this.site}${this.addline}`
+        const url = `https${this.site}${this.addline}`
         const params = `qty=${line.quantity}&part=` +
             encodeURIComponent(line.part) + '&cref=' +
             encodeURIComponent(line.reference)
@@ -170,7 +170,7 @@ class Digikey extends RetailerInterface {
     }
 
     _get_part_id(line, callback, error_callback) {
-        let url = `http${this.site}/product-detail/en/`
+        let url = `https${this.site}/product-detail/en/`
         url += line.part + '/'
         url += line.part + '/'
         return http.get(url, {notify:false}, function(responseText) {
@@ -189,7 +189,7 @@ class Digikey extends RetailerInterface {
         , error_callback)
     }
     _get_suggested(line, id, error, callback, error_callback) {
-        let url = `http${this.site}/classic/Ordering/PackTypeDialog.aspx?`
+        let url = `https${this.site}/classic/Ordering/PackTypeDialog.aspx?`
         url += `part=${line.part}`
         url += `&qty=${line.quantity}`
         url += `&partId=${id}`
