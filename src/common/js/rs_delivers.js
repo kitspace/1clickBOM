@@ -35,7 +35,11 @@ const rsDelivers = {
     _get_invalid_lines(callback) {
         const url = `http${this.site}/CheckoutServices/GetCartLinesHtml`
         return http.get(url, {}, function(responseText) {
-            const html = JSON.parse(responseText).cartLinesHtml
+            let html = responseText;
+            try {
+                html = JSON.parse(responseText).cartLinesHtml
+            } catch (e) {
+            }
             const doc = browser.parseDOM(html)
             const errors = doc.getElementsByClassName('errorOrderLine')
             const ids = []
