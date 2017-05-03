@@ -13,8 +13,6 @@
 
 ## Summary ##
 
-*** For those having issue with controlling carts from the Firefox extension, use Chrome for now, a fix will be released as v1.2.8 as soon as Mozilla approves the changes. *** 
-
 1-click BOM is a browser extension that fills your shopping carts for you on
 sites like Digikey and Mouser. It's main purpose is to work with the electronic
 project sharing site [kitnic.it](https://kitnic.it). But you can also use it
