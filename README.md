@@ -163,7 +163,7 @@ Auto-completion works best if you have limited text in the description. Try and 
 
 If you need any help or think you found a bug please get in touch via
 [GitHub][10], [email][11] or visit the [Kitnic chat
-room][kitnic gitter]
+room][kitnic chat].
 
 ## Roadmap ##
 
@@ -260,7 +260,7 @@ code-improvements to 1clickBOM itself under the CPAL as well. This also applies
 to software you are solely making available to users over a network i.e.
 software as a service. See the [LICENSE][6] file for details.
 
-[kitnic gitter]:https://gitter.im/monostable/kitnic
+[kitnic chat]:https://riot.im/app/#/room/#kitnic:matrix.org
 [output_scripts/kicad]:https://github.com/monostable/1clickBOM/blob/master/output_scripts/kicad
 [eagle_bom_export.png]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/eagle_bom_export.png
 [kicad_bom_export.png]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/kicad_bom_export.png
