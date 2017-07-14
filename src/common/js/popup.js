@@ -38,35 +38,38 @@ const button_EmptyCarts        = document.querySelector('button#empty_carts')
 button_FillCarts.addEventListener('click', function() {
     this.disabled = true
     return messenger.send('fillCarts')
-}
-)
+})
 
 
 button_EmptyCarts.addEventListener('click', function() {
     this.disabled = true
     return messenger.send('emptyCarts')
-}
-)
+})
 
 
-button_Clear.addEventListener('click', () => messenger.send('clearBOM')
-)
+button_Clear.addEventListener('click', () => {
+    messenger.send('clearBOM')
+})
 
 
-button_Paste.addEventListener('click', () => messenger.send('paste')
-)
+button_Paste.addEventListener('click', () => {
+    messenger.send('paste')
+})
 
 
-button_LoadFromPage.addEventListener('click', () => messenger.send('loadFromPage')
-)
+button_LoadFromPage.addEventListener('click', () => {
+    messenger.send('loadFromPage')
+})
 
 
-button_Copy.addEventListener('click', () => messenger.send('copy')
-)
+button_Copy.addEventListener('click', () => {
+    messenger.send('copy')
+})
 
 
-button_DeepComplete.addEventListener('click', () => messenger.send('deepAutoComplete')
-)
+button_DeepComplete.addEventListener('click', () => {
+    messenger.send('deepAutoComplete')
+})
 
 
 function hideOrShow(bom, onDotTSV) {
@@ -237,8 +240,7 @@ function render(state) {
                     a.addEventListener('click', function() {
                         startSpinning(this)
                         return messenger.send(this.message, this.value)
-                    }
-                    )
+                    })
                     td.appendChild(a)
                 }
                 if (retailer[lookup[i]]) {
