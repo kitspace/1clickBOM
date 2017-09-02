@@ -27,8 +27,6 @@
   },
   "dependencies": {
     "1-click-bom": "^1.1.1",
-    "fuzzy": "^0.1.3",
-    "js-quantities": "^1.6.3",
-    "resistor-data": "^1.0.0"
+    "electro-grammar": "git+https://github.com/monostable/electro-grammar.git"
   }
 }
