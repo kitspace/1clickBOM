@@ -30,15 +30,18 @@ const resistors = browser.getLocal('data/resistors.json')
 
 //we wrap in a promise to be compatible the completers that send async web requests
 exports.search = function search() {
-    try {
-        const result = _search(...arguments)
-        return Promise.resolve(result)
-    } catch (e) {
-        return Promise.reject(e)
-    }
+    return new Promise((resolve, reject) => {
+        try {
+            const result = _search(...arguments)
+            resolve(result)
+        } catch (e) {
+            reject(e)
+        }
+    })
 }
 
 function _search(query, retailers = [], other_fields = []) {
+
     if (query.trim() !== '') {
         if (/capacitor/i.test(query)) {
             return getCapacitors(query.replace(/capacitors?/ig, ''))
