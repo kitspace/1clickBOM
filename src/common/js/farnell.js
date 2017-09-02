@@ -31,10 +31,10 @@ class Farnell extends RetailerInterface {
             this[names[index]] = method
         }
         this.cart = '/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView'
+        this.affiliate_prefix = 'http://www.anrdoezrs.net/links/8291192/type/dlg/'
         this._set_store_id(() => {
             return callback(this)
-        }
-        )
+        })
     }
 }
 

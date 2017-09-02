@@ -78,7 +78,7 @@ class RetailerInterface {
 
         this.addline_params = data.addline_params
         this.name           = name
-        this.icon_src       =  browser.getURL(`images/${this.name.toLowerCase()}.ico`)
+        this.icon_src       = browser.getURL(`images/${this.name.toLowerCase()}.ico`)
         if (callback != null) {
             callback()
         }
@@ -117,7 +117,9 @@ class RetailerInterface {
             if (tabs.length > 0) {
                 return browser.tabsActivate(tabs[tabs.length - 1])
             } else {
-                return browser.tabsCreate(`http${this.site}${this.cart}`)
+                const prefix = this.affiliate_prefix || ''
+                const url = `${prefix}http${this.site}${this.cart}`
+                return browser.tabsCreate(url)
             }
         })
     }
