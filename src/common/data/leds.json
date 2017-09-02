@@ -1,0 +1,339 @@
+[
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Lite-On",
+        "part": "LTST-C190GKT"
+      },
+      {
+        "manufacturer": "Avago",
+        "part": "HSMG-C190"
+      },
+      {
+        "manufacturer": "Everlight",
+        "part": "19-217-G7C-AN1P2-3T"
+      }
+    ],
+    "cplid": "CPL-LED-0603-GREEN",
+    "title": "Green SMD LED  0603",
+    "extravals": {
+      "Color": "Green",
+      "Mounting Type": "SMD",
+      "Package": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "160-1183-1-ND",
+        "160-1183-6-ND",
+        "516-1425-1-ND",
+        "516-1425-6-ND",
+        "160-1183-2-ND",
+        "516-1425-2-ND"
+      ],
+      "Mouser": [
+        "859-LTST-C190GKT",
+        "630-HSMG-C190"
+      ],
+      "RS": [
+        "6920975",
+        "450985",
+        "9225683"
+      ],
+      "Newark": [
+        "68Y1165",
+        "40K0122",
+        "68Y1166"
+      ],
+      "Farnell": [
+        "2497374",
+        "2497360"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Lite-On",
+        "part": "LTST-C190KRKT"
+      },
+      {
+        "manufacturer": "Avago",
+        "part": "HSMH-C190"
+      },
+      {
+        "manufacturer": "Everlight",
+        "part": "19-217-R6C-AL1M2VY-3T"
+      }
+    ],
+    "cplid": "CPL-LED-0603-RED",
+    "title": "Red SMD LED  0603",
+    "extravals": {
+      "Color": "Red",
+      "Mounting Type": "SMD",
+      "Package": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "160-1436-1-ND",
+        "160-1436-6-ND",
+        "516-1420-1-ND",
+        "516-1420-6-ND",
+        "160-1436-2-ND",
+        "516-1420-2-ND"
+      ],
+      "Mouser": [
+        "859-LTST-C190KRKT",
+        "630-HSMH-C190"
+      ],
+      "RS": [
+        "7166570",
+        "6920981"
+      ],
+      "Newark": [
+        "68Y1170",
+        "68Y1171",
+        "93T9264",
+        "40K0127"
+      ],
+      "Farnell": [
+        "2497373",
+        "8554641",
+        "2497347"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Lite-On",
+        "part": "LTST-C190KSKT"
+      },
+      {
+        "manufacturer": "Avago",
+        "part": "HSMY-C190"
+      },
+      {
+        "manufacturer": "Everlight",
+        "part": "19-217-Y5C-AM1N1VY-3T"
+      }
+    ],
+    "cplid": "CPL-LED-0603-YELLOW",
+    "title": "Yellow SMD LED  0603",
+    "extravals": {
+      "Color": "Yellow",
+      "Mounting Type": "SMD",
+      "Package": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "516-1424-6-ND",
+        "160-1437-6-ND",
+        "160-1437-1-ND",
+        "516-1424-1-ND",
+        "160-1437-2-ND",
+        "516-1424-2-ND"
+      ],
+      "Mouser": [
+        "630-HSMY-C190",
+        "859-LTST-C190KSKT"
+      ],
+      "RS": [
+        "6920985",
+        "9225592"
+      ],
+      "Newark": [
+        "68Y1193",
+        "93T9273",
+        "40K0152"
+      ],
+      "Farnell": [
+        "2497355",
+        "2497365"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Lite-On",
+        "part": "LTST-C190KFKT"
+      },
+      {
+        "manufacturer": "Avago",
+        "part": "HSMD-C190"
+      }
+    ],
+    "cplid": "CPL-LED-0603-ORANGE",
+    "title": "Orange SMD LED  0603",
+    "extravals": {
+      "Color": "Orange",
+      "Mounting Type": "SMD",
+      "Package": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "160-1434-6-ND",
+        "160-1434-1-ND",
+        "516-2489-1-ND",
+        "516-2489-6-ND",
+        "160-1434-2-ND",
+        "516-2489-2-ND"
+      ],
+      "Mouser": [
+        "859-LTST-C190KFKT",
+        "630-HSMD-C190"
+      ],
+      "RS": [
+        "6920979",
+        "8134928"
+      ],
+      "Newark": [
+        "92K0422",
+        "68Y1152"
+      ],
+      "Farnell": [
+        "8554552",
+        "2497358"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Lite-On",
+        "part": "LTST-C190AKT"
+      },
+      {
+        "manufacturer": "Avago",
+        "part": "HSMA-C190"
+      }
+    ],
+    "cplid": "CPL-LED-0603-AMBER",
+    "title": "Amber SMD LED  0603",
+    "extravals": {
+      "Color": "Amber",
+      "Mounting Type": "SMD",
+      "Package": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "516-1423-1-ND",
+        "160-1180-1-ND",
+        "160-1180-6-ND",
+        "516-1423-6-ND",
+        "160-1180-2-ND",
+        "516-1423-2-ND"
+      ],
+      "Mouser": [
+        "859-LTST-C190AKT",
+        "630-HSMA-C190"
+      ],
+      "RS": [
+        "8676532",
+        "6920969"
+      ],
+      "Newark": [
+        "28X3021"
+      ],
+      "Farnell": [
+        "2497352"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Lite-On",
+        "part": "LTST-C190TBKT"
+      },
+      {
+        "manufacturer": "Avago",
+        "part": "HSMR-C190"
+      },
+      {
+        "manufacturer": "Everlight",
+        "part": "19-217-BHC-ZL1M2RY-3T"
+      }
+    ],
+    "cplid": "CPL-LED-0603-BLUE",
+    "title": "Blue SMD LED  0603",
+    "extravals": {
+      "Color": "Blue",
+      "Mounting Type": "SMD",
+      "Package": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "516-2502-6-ND",
+        "160-1646-6-ND",
+        "160-1646-1-ND",
+        "516-2502-1-ND",
+        "160-1646-2-ND",
+        "516-2502-2-ND",
+        "19-217/BHC-ZL1M2RY/3T-ND"
+      ],
+      "Mouser": [
+        "859-LTST-C190TBKT",
+        "630-HSMR-C190"
+      ],
+      "RS": [
+        "6920994"
+      ],
+      "Newark": [
+        "58Y4905"
+      ],
+      "Farnell": [
+        "1652108"
+      ]
+    }
+  },
+  {
+    "partNumbers": [
+      {
+        "manufacturer": "Lite-On",
+        "part": "LTW-C191TS5"
+      },
+      {
+        "manufacturer": "Avago",
+        "part": "HSMW-C191"
+      },
+      {
+        "manufacturer": "Everlight",
+        "part": "16-219A/T2D-AR2T1QY/3T"
+      }
+    ],
+    "cplid": "CPL-LED-0603-WHITE",
+    "title": "White SMD LED  0603",
+    "extravals": {
+      "Color": "White",
+      "Mounting Type": "SMD",
+      "Package": "0603"
+    },
+    "retailers": {
+      "Digikey": [
+        "516-2236-1-ND",
+        "160-1724-6-ND",
+        "160-1724-1-ND",
+        "516-2236-6-ND",
+        "516-2236-2-ND",
+        "160-1724-2-ND",
+        "16-219A/T2D-AR2T1QY/3T-ND"
+      ],
+      "Mouser": [
+        "630-HSMW-C191",
+        "859-LTW-C191TS5"
+      ],
+      "RS": [
+        "6910451",
+        "7031200",
+        "9226567"
+      ],
+      "Newark": [
+        "97K1697"
+      ],
+      "Farnell": [
+        "1058375"
+      ]
+    }
+  }
+]
