@@ -1213,7 +1213,7 @@ ecdsa-sig-formatter@1.0.9:
 
 "electro-grammar@git+https://github.com/monostable/electro-grammar.git":
   version "1.0.0"
-  resolved "git+https://github.com/monostable/electro-grammar.git#3d4a225eed6064e3ac541c521f809c56658d0a05"
+  resolved "git+https://github.com/monostable/electro-grammar.git#c293ac2232e4c18be6cdaaea04130e7ea8bf2aea"
   dependencies:
     nearley "https://github.com/Hardmath123/nearley"
 
