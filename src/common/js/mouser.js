@@ -142,7 +142,7 @@ class Mouser extends RetailerInterface {
         })
     }
     _clear_cart(token, callback){
-        const url = 'http' + this.site + this.cart + '/cart/DeleteCart'
+        const url = 'https' + this.site + this.cart + '/cart/DeleteCart'
         const params = `__RequestVerificationToken=${token}`
         return http.post(url, params, {}, event => {
             if (callback != null) {
@@ -159,7 +159,7 @@ class Mouser extends RetailerInterface {
     _get_adding_viewstate(callback, arg){
         //we get the quick-add form, extend it to 99 lines (the max) and get
         //the viewstate from the response
-        const url = `http${this.site}${this.addline}`
+        const url = `https${this.site}${this.addline}`
         return http.get(url, {}, responseText => {
             let doc = browser.parseDOM(responseText)
             let params = this.addline_params
@@ -177,7 +177,7 @@ class Mouser extends RetailerInterface {
         })
     }
     _get_cart_viewstate(callback){
-        const url = `http${this.site}${this.cart}`
+        const url = `https${this.site}${this.cart}`
         return http.get(url, {}, responseText => {
             const doc = browser.parseDOM(responseText)
             const viewstate = encodeURIComponent(__guard__(doc.getElementById('__VIEWSTATE'), x => x.value))
@@ -187,7 +187,7 @@ class Mouser extends RetailerInterface {
         })
     }
     _get_token(callback) {
-        url = `http${this.site}${this.cart}`
+        url = `https${this.site}${this.cart}`
         http.get(url, {}, responseText => {
             const doc = browser.parseDOM(responseText)
             const token = doc.querySelector('form#cart-form > input').value
