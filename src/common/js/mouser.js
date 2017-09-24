@@ -51,12 +51,12 @@ class Mouser extends RetailerInterface {
         return this._get_token(token => {
             return this._clear_errors(token, () => {
                 return this._get_cart_viewstate(viewstate => {
-                    return this._get_adding_viewstate(viewstate => {
+                    return this._get_adding_viewstate((viewstate, generator) => {
                         const result = []
                         for (let i = 0; i < lines.length; i += 99) {
                             const _99_lines = lines.slice(i, i + 98 + 1)
                             count += 1
-                            result.push(this._add_lines(_99_lines, viewstate, result => {
+                            result.push(this._add_lines(_99_lines, viewstate, generator, result => {
                                 if (big_result.success) { big_result.success = result.success; }
                                 big_result.fails = big_result.fails.concat(result.fails)
                                 count -= 1
@@ -72,18 +72,20 @@ class Mouser extends RetailerInterface {
             })
         })
     }
-    _add_lines(lines, viewstate, callback) {
-        let params = this.addline_params + viewstate
+    _add_lines(lines, viewstate, generator, callback) {
+        let params = this.addline_params + viewstate + '&__VIEWSTATEGENERATOR=' + generator
+            + '&__SCROLLPOSITIONX=0&__SCROLLPOSITIONY=3738'
         params += '&ctl00$ContentMain$hNumberOfLines=99'
         params += '&ctl00$ContentMain$txtNumberOfLines=94'
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i]
-            params += `&ctl00$ContentMain$txtCustomerPartNumber${i + 1}=`
-                + `${line.reference}&ctl00$ContentMain$txtPartNumber${i + 1}=`
-                + `${line.part}&ctl00$ContentMain$txtQuantity${i + 1}=}`
+            params += `&ctl00$ContentMain$txtPartNumber${i + 1}=`
+                + `${line.part}&ctl00$ContentMain$txtCustomerPartNumber${i + 1}=`
+                + `${line.reference}&ctl00$ContentMain$txtQuantity${i + 1}=`
                 + `${line.quantity}`
         }
-        const url = `http${this.site}${this.addline}`
+        params += '&ctl00$ContentMain$ddlProjects=ORDER&ctl00$ContentMain$btnAddToOrder=Add'
+        const url = `https${this.site}${this.addline}`
         const result = {success: true, fails:[]}
         return http.post(url, params, {}, responseText => {
             const errors = this._get_errors(responseText)
@@ -156,7 +158,7 @@ class Mouser extends RetailerInterface {
             }
         })
     }
-    _get_adding_viewstate(callback, arg){
+    _get_adding_viewstate(callback){
         //we get the quick-add form, extend it to 99 lines (the max) and get
         //the viewstate from the response
         const url = `https${this.site}${this.addline}`
@@ -170,8 +172,9 @@ class Mouser extends RetailerInterface {
             return http.post(url, params, {}, responseText => {
                 doc = browser.parseDOM(responseText)
                 const viewstate = encodeURIComponent(doc.getElementById('__VIEWSTATE').value)
+                const generator = encodeURIComponent(doc.getElementById('__VIEWSTATEGENERATOR').value)
                 if (callback != null) {
-                    return callback(viewstate, arg)
+                    return callback(viewstate, generator)
                 }
             })
         })
