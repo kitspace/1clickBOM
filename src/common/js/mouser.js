@@ -50,24 +50,22 @@ class Mouser extends RetailerInterface {
         const big_result = {success:true, fails:[]}
         return this._get_token(token => {
             return this._clear_errors(token, () => {
-                return this._get_cart_viewstate(viewstate => {
-                    return this._get_adding_viewstate((viewstate, generator) => {
-                        const result = []
-                        for (let i = 0; i < lines.length; i += 99) {
-                            const _99_lines = lines.slice(i, i + 98 + 1)
-                            count += 1
-                            result.push(this._add_lines(_99_lines, viewstate, generator, result => {
-                                if (big_result.success) { big_result.success = result.success; }
-                                big_result.fails = big_result.fails.concat(result.fails)
-                                count -= 1
-                                if (count <= 0) {
-                                    callback(big_result, this, lines)
-                                    return this.refreshCartTabs()
-                                }
-                            }))
-                        }
-                        return result
-                    })
+                return this._get_adding_viewstate((viewstate, generator) => {
+                    const result = []
+                    for (let i = 0; i < lines.length; i += 99) {
+                        const _99_lines = lines.slice(i, i + 99)
+                        count += 1
+                        result.push(this._add_lines(_99_lines, viewstate, generator, result => {
+                            if (big_result.success) { big_result.success = result.success; }
+                            big_result.fails = big_result.fails.concat(result.fails)
+                            count -= 1
+                            if (count <= 0) {
+                                callback(big_result, this, lines)
+                                return this.refreshCartTabs()
+                            }
+                        }))
+                    }
+                    return result
                 })
             })
         })
