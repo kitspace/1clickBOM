@@ -118,7 +118,7 @@ class Mouser extends RetailerInterface {
     }
 
     _clear_errors(token, callback) {
-        http.get(`http${this.site}${this.cart}`, {}, responseText => {
+        http.get(`https${this.site}${this.cart}`, {}, responseText => {
             const errors = this._get_errors(responseText)
             const item_ids = []
             for (let i = 0; i < errors.length; ++i) {
@@ -126,7 +126,7 @@ class Mouser extends RetailerInterface {
             }
             const promiseArray = item_ids.map(id => {
                 return http.promisePost(
-                    `http${this.site}${this.cart}/cart/DeleteCartItem?cartItemId=${id}&page=null&grid-column=SortColumn&grid-dir=0`,
+                    `https${this.site}${this.cart}/cart/DeleteCartItem?cartItemId=${id}&page=null&grid-column=SortColumn&grid-dir=0`,
                     `__RequestVerificationToken=${token}`
                 ).catch(e => console.error(e))
             })
