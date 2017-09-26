@@ -26,6 +26,7 @@ Promise.config({cancellation:true})
 class Mouser extends RetailerInterface {
     constructor(country_code, settings) {
         super('Mouser', country_code, 'data/mouser.json', settings)
+        this.protocol = 'http'
         //posting our sub-domain as the sites are all linked and switching
         //countries would not register properly otherwise
         const split = this.site.split('.')
@@ -34,6 +35,7 @@ class Mouser extends RetailerInterface {
             s = split[split.length - 1]
         }
         if (s === 'uk') {
+            this.protocol = 'https'
             s = 'gb'
         }
         http.post(`http://www2.mouser.com/api/Preferences/SetSubdomain?subdomainName=${s}`
@@ -83,7 +85,7 @@ class Mouser extends RetailerInterface {
                 + `${line.quantity}`
         }
         params += '&ctl00$ContentMain$ddlProjects=ORDER&ctl00$ContentMain$btnAddToOrder=Add'
-        const url = `https${this.site}${this.addline}`
+        const url = `${this.protocol}${this.site}${this.addline}`
         const result = {success: true, fails:[]}
         return http.post(url, params, {}, responseText => {
             const errors = this._get_errors(responseText)
@@ -116,7 +118,7 @@ class Mouser extends RetailerInterface {
     }
 
     _clear_errors(token, callback) {
-        http.get(`https${this.site}${this.cart}`, {}, responseText => {
+        http.get(`${this.protocol}${this.site}${this.cart}`, {}, responseText => {
             const errors = this._get_errors(responseText)
             const item_ids = []
             for (let i = 0; i < errors.length; ++i) {
@@ -124,7 +126,7 @@ class Mouser extends RetailerInterface {
             }
             const promiseArray = item_ids.map(id => {
                 return http.promisePost(
-                    `https${this.site}${this.cart}/cart/DeleteCartItem?cartItemId=${id}&page=null&grid-column=SortColumn&grid-dir=0`,
+                    `${this.protocol}${this.site}${this.cart}/cart/DeleteCartItem?cartItemId=${id}&page=null&grid-column=SortColumn&grid-dir=0`,
                     `__RequestVerificationToken=${token}`
                 ).catch(e => console.error(e))
             })
@@ -142,7 +144,7 @@ class Mouser extends RetailerInterface {
         })
     }
     _clear_cart(token, callback){
-        const url = 'https' + this.site + this.cart + '/cart/DeleteCart'
+        const url = this.protocol + this.site + this.cart + '/cart/DeleteCart'
         const params = `__RequestVerificationToken=${token}`
         return http.post(url, params, {}, event => {
             if (callback != null) {
@@ -159,7 +161,7 @@ class Mouser extends RetailerInterface {
     _get_adding_viewstate(callback){
         //we get the quick-add form, extend it to 99 lines (the max) and get
         //the viewstate from the response
-        const url = `https${this.site}${this.addline}`
+        const url = `${this.protocol}${this.site}${this.addline}`
         return http.get(url, {}, responseText => {
             let doc = browser.parseDOM(responseText)
             let params = this.addline_params
@@ -178,7 +180,7 @@ class Mouser extends RetailerInterface {
         })
     }
     _get_cart_viewstate(callback){
-        const url = `https${this.site}${this.cart}`
+        const url = `${this.protocol}${this.site}${this.cart}`
         return http.get(url, {}, responseText => {
             const doc = browser.parseDOM(responseText)
             const viewstate = encodeURIComponent(__guard__(doc.getElementById('__VIEWSTATE'), x => x.value))
@@ -188,7 +190,7 @@ class Mouser extends RetailerInterface {
         })
     }
     _get_token(callback) {
-        url = `https${this.site}${this.cart}`
+        url = `${this.protocol}${this.site}${this.cart}`
         http.get(url, {}, responseText => {
             const doc = browser.parseDOM(responseText)
             const token = doc.querySelector('form#cart-form > input').value
