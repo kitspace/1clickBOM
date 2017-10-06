@@ -19,8 +19,8 @@
 
 const { browser } = require('./browser')
 
-let countries_data = browser.getLocal('data/countries.json')
-let settings_data  = browser.getLocal('data/settings.json')
+let countries_data = require('./data/countries.json')
+let settings_data  = require('./data/settings.json')
 
 function save_options() {
     let select = document.getElementById('country')

@@ -96,7 +96,7 @@ function get(url, {notify, timeout}, callback, error_callback) {
 
 function getLocation(callback) {
     const used_country_codes = []
-    const countries_data = browser.getLocal('data/countries.json')
+    const countries_data = require('./data/countries.json')
     for (const _ in countries_data) {
         const code = countries_data[_]
         used_country_codes.push(code)

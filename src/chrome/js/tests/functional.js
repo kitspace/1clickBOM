@@ -35,9 +35,9 @@ let { start }     = qunit
 let { deepEqual } = qunit
 let { ok } = qunit
 
-let digikey_data = browser.getLocal('data/digikey.json')
-let farnell_data = browser.getLocal('data/farnell.json')
-let mouser_data  = browser.getLocal('data/mouser.json')
+let digikey_data = require('./data/digikey.json')
+let farnell_data = require('./data/farnell.json')
+let mouser_data  = require('./data/mouser.json')
 
 module('Digikey')
 

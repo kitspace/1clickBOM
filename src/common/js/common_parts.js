@@ -23,9 +23,9 @@ const electroGrammar = require('electro-grammar')
 
 const { browser } = require('./browser')
 const cpl = {
-    capacitors : browser.getLocal('data/capacitors.json'),
-    resistors  : browser.getLocal('data/resistors.json'),
-    leds       : browser.getLocal('data/leds.json'),
+    capacitors : require('./data/capacitors.json'),
+    resistors  : require('./data/resistors.json'),
+    leds       : require('./data/leds.json'),
 }
 
 

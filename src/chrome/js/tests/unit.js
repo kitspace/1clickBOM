@@ -32,7 +32,7 @@ let { ok }        = qunit
 let { throws }    = qunit
 let { deepEqual } = qunit
 
-let countries = browser.getLocal('/data/countries.json')
+let countries = require('./data/countries.json')
 
 module('unit')
 

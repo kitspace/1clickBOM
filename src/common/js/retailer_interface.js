@@ -20,10 +20,18 @@
 const http = require('./http')
 const { browser } = require('./browser')
 
+const retailer_data = {
+    Digikey: require('./data/digikey.json'),
+    Mouser: require('./data/mouser.json'),
+    RS: require('./data/rs.json'),
+    Farnell: require('./data/farnell.json'),
+    Newark: require('./data/newark.json'),
+}
+
 class RetailerInterface {
     constructor(name, country_code, data_path, settings, callback) {
         this.country = country_code
-        const data = browser.getLocal(data_path)
+        const data = retailer_data[name]
         const country_code_lookedup = data.lookup[country_code]
         if (!country_code_lookedup) {
             const error = new InvalidCountryError

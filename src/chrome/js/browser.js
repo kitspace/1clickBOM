@@ -83,18 +83,6 @@ let browser = {
     getURL(url) {
         return chrome.extension.getURL(url)
     },
-    getLocal(url, json=true){
-        let xhr = new XMLHttpRequest()
-        xhr.open('GET', chrome.extension.getURL(url), false)
-        xhr.send()
-        if (xhr.status === 200) {
-            if (json) {
-                return JSON.parse(xhr.responseText)
-            } else {
-                return xhr.responseText
-            }
-        }
-    },
     setBadge(obj) {
         if (obj.color != null) {
             chrome.browserAction.setBadgeBackgroundColor({color:obj.color})

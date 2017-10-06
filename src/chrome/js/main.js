@@ -10,7 +10,7 @@ chrome.runtime.onInstalled.addListener(function(details){
         })
         http.getLocation(() => browser.tabsCreate(browser.getURL('html/options.html')))
         //set-up settings with default values
-        let set_scheme = browser.getLocal('data/settings.json')
+        let set_scheme = require('./data/settings.json')
         let settings = {}
         for (let country in set_scheme) {
             let retailers = set_scheme[country]

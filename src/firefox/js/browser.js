@@ -208,14 +208,6 @@ let browser = {
     getURL(url) {
         return data.url(url)
     },
-    getLocal(url, json=true){
-        let s = data.load(url)
-        if (json) {
-            return JSON.parse(s)
-        } else {
-            return s
-        }
-    },
     setBadge({color, text}) {
         button.badge = text
         return button.badgeColor = color

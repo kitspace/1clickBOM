@@ -76,7 +76,7 @@ const browserifyEdge = function(target, browser, layer, exclude='') {
         .using('browserify')
 
     if (browser === 'chrome') {
-        edge.after(sourceJson('chrome').map(f => `build/.temp-chrome/${path.basename(f)}`))
+        edge.after(sourceJson('chrome').map(f => `build/.temp-chrome/data/${path.basename(f)}`))
     }
 
     return targets[browser].push(target)
@@ -102,15 +102,19 @@ sourceJs('firefox').forEach(file => {
 
 
 function sourceCopyEdge(browser, f) {
-    const target = `build/.temp-${browser}/${path.basename(f)}`
-    ninja.edge(target).from(f).using('copy')
 }
 
 for (let browser in targets) {
-    sourceJs(browser).forEach(f => sourceCopyEdge(browser, f))
+    sourceJs(browser).forEach(f => {
+        const target = `build/.temp-${browser}/${path.basename(f)}`
+        ninja.edge(target).from(f).using('copy')
+    })
 }
 
-sourceJson('chrome').forEach(f => sourceCopyEdge('chrome', f))
+sourceJson('chrome').forEach(f => {
+    const target = `build/.temp-chrome/data/${path.basename(f)}`
+    ninja.edge(target).from(f).using('copy')
+})
 
 const qunitSrc = 'build/.temp-chrome/qunit-1.11.0.js'
 ninja.edge('build/chrome/js/qunit.js').from(qunitSrc)
