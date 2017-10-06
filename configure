@@ -49,15 +49,18 @@ const sourceJs = browser =>
         'src/common/js/*.js'
     ])
 
+const sourceJson = browser =>
+    globule.find([
+        `src/${browser}/data/*.json`,
+        'src/common/data/*.json'
+    ])
 
 const copyFiles = browser =>
     globule.find([
         `src/${browser}/html/*`,
         `src/${browser}/images/*`,
-        `src/${browser}/data/*.json`,
         'src/common/html/*',
         'src/common/images/*',
-        'src/common/data/*.json'
     ])
 
 
@@ -66,11 +69,16 @@ const copyFiles = browser =>
 const targets = {firefox:[], chrome:[]}
 
 const browserifyEdge = function(target, browser, layer, exclude='') {
-    ninja.edge(target)
+    const edge = ninja.edge(target)
         .from(`build/.temp-${browser}/${layer}.js`)
         .assign('exclude', exclude)
         .after(sourceJs(browser).map(f => `build/.temp-${browser}/${path.basename(f)}`))
         .using('browserify')
+
+    if (browser === 'chrome') {
+        edge.after(sourceJson('chrome').map(f => `build/.temp-chrome/${path.basename(f)}`))
+    }
+
     return targets[browser].push(target)
 }
 
@@ -93,15 +101,16 @@ sourceJs('firefox').forEach(file => {
 })
 
 
-for (let browser in targets) {
-    const list = targets[browser]
-    sourceJs(browser).forEach(f => {
-        const target = `build/.temp-${browser}/${path.basename(f)}`
-        ninja.edge(target).from(f).using('copy')
-        list.push(target)
-    })
+function sourceCopyEdge(browser, f) {
+    const target = `build/.temp-${browser}/${path.basename(f)}`
+    ninja.edge(target).from(f).using('copy')
 }
 
+for (let browser in targets) {
+    sourceJs(browser).forEach(f => sourceCopyEdge(browser, f))
+}
+
+sourceJson('chrome').forEach(f => sourceCopyEdge('chrome', f))
 
 const qunitSrc = 'build/.temp-chrome/qunit-1.11.0.js'
 ninja.edge('build/chrome/js/qunit.js').from(qunitSrc)
@@ -121,20 +130,18 @@ ninja.edge('build/chrome/js/functional.js').from('build/.temp-chrome/functional.
 targets.chrome.push('build/chrome/js/functional.js')
 
 
-copyFiles('chrome').forEach(f => {
+copyFiles('chrome').concat(sourceJson('chrome')).forEach(f => {
     const target = f.replace(/src\/.*?\//, "build/chrome/")
     ninja.edge(target).from(f).using('copy')
     targets.chrome.push(target)
 })
 
 
-const iterable4 = copyFiles('firefox')
-for (let j1 = 0; j1 < iterable4.length; j1++) {
-    const f = iterable4[j1]
+copyFiles('firefox').concat(sourceJson('firefox')).forEach(f => {
     const target = f.replace(/src\/.*?\//, "build/firefox/data/")
     ninja.edge(target).from(f).using('copy')
     targets.firefox.push(target)
-}
+})
 
 
 for (let browser in targets) {
