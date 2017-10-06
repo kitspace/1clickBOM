@@ -17,9 +17,9 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-let dom = new DOMParser()
+const dom = new DOMParser()
 
-let browser = {
+const browser = {
     storageGet(keys, callback) {
         return chrome.storage.local.get(keys, callback)
     },
@@ -95,13 +95,13 @@ let browser = {
         return chrome.notifications.create('', obj, callback)
     },
     paste() {
-        let textarea = document.getElementById('pastebox')
+        const textarea = document.getElementById('pastebox')
         textarea.select()
         document.execCommand('paste')
         return textarea.value
     },
     copy(text) {
-        let textarea = document.getElementById('pastebox')
+        const textarea = document.getElementById('pastebox')
         textarea.value = text
         textarea.select()
         document.execCommand('SelectAll')

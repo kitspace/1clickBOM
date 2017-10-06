@@ -17,7 +17,7 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-let messenger = {
+const messenger = {
     msgNames: [],
     listening: false,
     on(msgName, callback) {
@@ -41,7 +41,7 @@ let messenger = {
             return chrome.tabs.query({url:['*://*.kitnic.it/boards/*', '*://kitnic.it/boards/*', '*://127.0.0.1/boards/*']}, tabs =>
                 tabs.map((tab) =>
                     chrome.tabs.sendMessage(tab.id, {name:msgName, value:input}))
-            
+
             )
         }
     }
