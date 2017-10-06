@@ -17,12 +17,12 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const { RetailerInterface } = require('./retailer_interface')
-const { browser } = require('./browser')
+const {RetailerInterface} = require('./retailer_interface')
+const {browser} = require('./browser')
 const http = require('./http')
 
 class Newark extends RetailerInterface {
-    constructor(country_code, settings,callback) {
+    constructor(country_code, settings, callback) {
         super('Newark', country_code, 'data/newark.json', settings)
         this._set_store_id(() => {
             return callback(this)
@@ -43,30 +43,41 @@ class Newark extends RetailerInterface {
 
     _set_store_id(callback) {
         const url = `https${this.site}${this.cart}`
-        return http.get(url, {}, response => {
-            const doc = browser.parseDOM(response)
-            const id_elem = doc.getElementById('storeId')
-            if (id_elem != null) {
-                this.store_id = id_elem.value
-                return callback()
-            }
-        }, () => callback())
+        return http.get(
+            url,
+            {},
+            response => {
+                const doc = browser.parseDOM(response)
+                const id_elem = doc.getElementById('storeId')
+                if (id_elem != null) {
+                    this.store_id = id_elem.value
+                    return callback()
+                }
+            },
+            () => callback()
+        )
     }
-
 
     _clear_cart(ids, callback) {
         const url = `https${this.site}/webapp/wcs/stores/servlet/ProcessBasket`
-        let params = `langId=-1&orderId=&catalogId=15003&BASE_URL=BasketPage&errorViewName=AjaxOrderItemDisplayView&storeId=${this.store_id}&URL=BasketDataAjaxResponse&isEmpty=false&LoginTimeout=&LoginTimeoutURL=&blankLinesResponse=10&orderItemDeleteAll=`
+        let params = `langId=-1&orderId=&catalogId=15003&BASE_URL=BasketPage&errorViewName=AjaxOrderItemDisplayView&storeId=${this
+            .store_id}&URL=BasketDataAjaxResponse&isEmpty=false&LoginTimeout=&LoginTimeoutURL=&blankLinesResponse=10&orderItemDeleteAll=`
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i]
             params += `&orderItemDelete=${id}`
         }
-        return http.post(url, params, {}, event => {
-            return callback({success:true}, this)
-        }, () => {
-            //we actually successfully clear the cart on 404s
-            return callback({success:true}, this)
-        })
+        return http.post(
+            url,
+            params,
+            {},
+            event => {
+                return callback({success: true}, this)
+            },
+            () => {
+                //we actually successfully clear the cart on 404s
+                return callback({success: true}, this)
+            }
+        )
     }
 
     _get_item_ids(callback) {
@@ -105,23 +116,29 @@ class Newark extends RetailerInterface {
 
     _add_lines(lines, callback) {
         const url = `https${this.site}/AjaxPasteOrderChangeServiceItemAdd`
-        return http.get(url, {notify:false}, () => {
-            return this._add_lines_ajax(lines, callback)
-        }
-        , () => {
-            return this._add_lines_non_ajax(lines, callback)
-        })
+        return http.get(
+            url,
+            {notify: false},
+            () => {
+                return this._add_lines_ajax(lines, callback)
+            },
+            () => {
+                return this._add_lines_non_ajax(lines, callback)
+            }
+        )
     }
 
     _add_lines_non_ajax(lines, callback) {
         if (lines.length === 0) {
             if (callback != null) {
-                callback({success:true, fails:[]})
+                callback({success: true, fails: []})
             }
             return
         }
-        const url = `https${this.site}/webapp/wcs/stores/servlet/PasteOrderChangeServiceItemAdd`
-        let params = `storeId=${this.store_id}&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
+        const url = `https${this
+            .site}/webapp/wcs/stores/servlet/PasteOrderChangeServiceItemAdd`
+        let params = `storeId=${this
+            .store_id}&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
         //&addToBasket=Add+to+Cart'
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i]
@@ -129,70 +146,76 @@ class Newark extends RetailerInterface {
             params += encodeURIComponent(line.quantity) + ','
             params += encodeURIComponent(line.reference) + '\n'
         }
-        return http.post(url, params, {}, responseText => {
-            const doc = browser.parseDOM(responseText)
-            const form_errors = doc.querySelector('#formErrors')
-            let success = true
-            if (form_errors != null) {
-                success = form_errors.className !== ''
-            }
-            if (!success) {
-                //we find out which parts are the problem, call addLines again
-                //on the rest and concatenate the fails to the new result
-                //returning everything together to our callback
-                const fail_names  = []
-                const fails       = []
-                const retry_lines = []
-                for (let j = 0; j < lines.length; j++) {
-                    var line = lines[j]
-                    const regex = new RegExp(line.part, 'g')
-                    const result = regex.exec(form_errors.innerHTML)
-                    if (result !== null) {
-                        fail_names.push(result[0])
-                    }
+        return http.post(
+            url,
+            params,
+            {},
+            responseText => {
+                const doc = browser.parseDOM(responseText)
+                const form_errors = doc.querySelector('#formErrors')
+                let success = true
+                if (form_errors != null) {
+                    success = form_errors.className !== ''
                 }
-                for (let k = 0; k < lines.length; k++) {
-                    var line = lines[k]
-                    if (__in__(line.part, fail_names)) {
-                        fails.push(line)
-                    } else {
-                        retry_lines.push(line)
+                if (!success) {
+                    //we find out which parts are the problem, call addLines again
+                    //on the rest and concatenate the fails to the new result
+                    //returning everything together to our callback
+                    const fail_names = []
+                    const fails = []
+                    const retry_lines = []
+                    for (let j = 0; j < lines.length; j++) {
+                        var line = lines[j]
+                        const regex = new RegExp(line.part, 'g')
+                        const result = regex.exec(form_errors.innerHTML)
+                        if (result !== null) {
+                            fail_names.push(result[0])
+                        }
                     }
-                }
-                return this._add_lines_non_ajax(retry_lines, function(result) {
+                    for (let k = 0; k < lines.length; k++) {
+                        var line = lines[k]
+                        if (__in__(line.part, fail_names)) {
+                            fails.push(line)
+                        } else {
+                            retry_lines.push(line)
+                        }
+                    }
+                    return this._add_lines_non_ajax(retry_lines, function(
+                        result
+                    ) {
+                        if (callback != null) {
+                            result.fails = result.fails.concat(fails)
+                            result.success = false
+                            return callback(result)
+                        }
+                    })
+                } else {
+                    //success
                     if (callback != null) {
-                        result.fails = result.fails.concat(fails)
-                        result.success = false
-                        return callback(result)
+                        return callback({success: true, fails: []})
                     }
                 }
-                )
-            } else { //success
+            },
+            () => {
                 if (callback != null) {
-                    return callback({success: true, fails:[]})
+                    return callback({success: false, fails: lines})
                 }
             }
-        }
-        , () => {
-            if (callback != null) {
-                return callback({success:false,fails:lines})
-            }
-        }
         )
     }
 
-
     _add_lines_ajax(lines, callback) {
-        const result = {success: true, fails:[], warnings:[]}
+        const result = {success: true, fails: [], warnings: []}
         if (lines.length === 0) {
             if (callback != null) {
-                callback({success:true, fails:[]})
+                callback({success: true, fails: []})
             }
             return
         }
         const url = `https${this.site}/AjaxPasteOrderChangeServiceItemAdd`
 
-        let params = `storeId=${this.store_id}&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
+        let params = `storeId=${this
+            .store_id}&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i]
             params += encodeURIComponent(line.part) + ','
@@ -201,58 +224,72 @@ class Newark extends RetailerInterface {
                 result.warnings.push(`Truncated line-note when adding
                     ${this.name} line to cart: ${line.reference}`)
             }
-            params += encodeURIComponent(line.reference.substr(0,30)) + '\n'
+            params += encodeURIComponent(line.reference.substr(0, 30)) + '\n'
         }
-        return http.post(url, params, {}, responseText => {
-            const stxt = responseText.split('\n')
-            const stxt2 = stxt.slice(3 ,  (stxt.length - 4) + 1)
-            let stxt3 = ''
-            for (let j = 0; j < stxt2.length; j++) {
-                const s = stxt2[j]
-                stxt3 += s
-            }
-            const json = JSON.parse(stxt3)
-            if ((json.hasPartNumberErrors != null) || (json.hasCommentErrors != null)) {
-                //we find out which parts are the problem, call addLines again
-                //on the rest and concatenate the fails to the new result
-                //returning everything together to our callback
-                const fail_names  = []
-                const fails       = []
-                const retry_lines = []
-                for (const k in json) {
-                    //the rest of the json lines are the part numbers
-                    const v = json[k]
-                    if (k !== 'hasPartNumberErrors' && k !== 'hasCommentErrors') {
-                        fail_names.push(v[0])
-                    }
+        return http.post(
+            url,
+            params,
+            {},
+            responseText => {
+                const stxt = responseText.split('\n')
+                const stxt2 = stxt.slice(3, stxt.length - 4 + 1)
+                let stxt3 = ''
+                for (let j = 0; j < stxt2.length; j++) {
+                    const s = stxt2[j]
+                    stxt3 += s
                 }
-                for (let i1 = 0; i1 < lines.length; i1++) {
-                    const line = lines[i1]
-                    if (__in__(line.part, fail_names)) {
-                        fails.push(line)
-                    } else {
-                        retry_lines.push(line)
+                const json = JSON.parse(stxt3)
+                if (
+                    json.hasPartNumberErrors != null ||
+                    json.hasCommentErrors != null
+                ) {
+                    //we find out which parts are the problem, call addLines again
+                    //on the rest and concatenate the fails to the new result
+                    //returning everything together to our callback
+                    const fail_names = []
+                    const fails = []
+                    const retry_lines = []
+                    for (const k in json) {
+                        //the rest of the json lines are the part numbers
+                        const v = json[k]
+                        if (
+                            k !== 'hasPartNumberErrors' &&
+                            k !== 'hasCommentErrors'
+                        ) {
+                            fail_names.push(v[0])
+                        }
                     }
-                }
-                return this._add_lines_ajax(retry_lines, function(result) {
+                    for (let i1 = 0; i1 < lines.length; i1++) {
+                        const line = lines[i1]
+                        if (__in__(line.part, fail_names)) {
+                            fails.push(line)
+                        } else {
+                            retry_lines.push(line)
+                        }
+                    }
+                    return this._add_lines_ajax(retry_lines, function(result) {
+                        if (callback != null) {
+                            result.fails = result.fails.concat(fails)
+                            result.success = false
+                            return callback(result)
+                        }
+                    })
+                } else {
+                    //success
                     if (callback != null) {
-                        result.fails = result.fails.concat(fails)
-                        result.success = false
                         return callback(result)
                     }
                 }
-                )
-            } else { //success
+            },
+            () => {
                 if (callback != null) {
-                    return callback(result)
+                    return callback({
+                        success: false,
+                        fails: lines,
+                        warnings: result.warnings
+                    })
                 }
             }
-        }
-        , () => {
-            if (callback != null) {
-                return callback({success:false,fails:lines,warnings:result.warnings})
-            }
-        }
         )
     }
 }

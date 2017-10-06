@@ -18,14 +18,14 @@
 // the Original Code is Kaspar Emanuel.
 
 const http = require('./http')
-const { browser } = require('./browser')
+const {browser} = require('./browser')
 
 const retailer_data = {
     Digikey: require('./data/digikey.json'),
     Mouser: require('./data/mouser.json'),
     RS: require('./data/rs.json'),
     Farnell: require('./data/farnell.json'),
-    Newark: require('./data/newark.json'),
+    Newark: require('./data/newark.json')
 }
 
 class RetailerInterface {
@@ -34,7 +34,7 @@ class RetailerInterface {
         const data = retailer_data[name]
         const country_code_lookedup = data.lookup[country_code]
         if (!country_code_lookedup) {
-            const error = new InvalidCountryError
+            const error = new InvalidCountryError()
             error.message += ` '${country_code}' given to ${name}`
             throw error
         }
@@ -62,13 +62,13 @@ class RetailerInterface {
 
         this.settings = settings
 
-        if (typeof(data.carts) === 'string') {
+        if (typeof data.carts === 'string') {
             this.cart = data.carts
         } else {
             this.cart = data.carts[country_code_lookedup]
         }
 
-        if (typeof(data.addlines) === 'string') {
+        if (typeof data.addlines === 'string') {
             this.addline = data.addlines
         } else {
             this.addline = data.addlines[country_code_lookedup]
@@ -78,15 +78,15 @@ class RetailerInterface {
             this.language = data.language[country_code_lookedup]
         }
 
-        if ((settings != null) && (settings.site != null)) {
+        if (settings != null && settings.site != null) {
             this.site = settings.site
         } else {
             this.site = data.sites[country_code_lookedup]
         }
 
         this.addline_params = data.addline_params
-        this.name           = name
-        this.icon_src       = browser.getURL(`images/${this.name.toLowerCase()}.ico`)
+        this.name = name
+        this.icon_src = browser.getURL(`images/${this.name.toLowerCase()}.ico`)
         if (callback != null) {
             callback()
         }
@@ -97,7 +97,7 @@ class RetailerInterface {
         //so we use a regex. we update the matching tabs to the cart URL instead
         //of using tabs.refresh so we don't re-pass any parameters to the cart
         const re = new RegExp(this.cart, 'i')
-        return browser.tabsQuery({url:`*${this.site}/*`}, tabs => {
+        return browser.tabsQuery({url: `*${this.site}/*`}, tabs => {
             tabs.forEach(tab => {
                 if (tab.url.match(re)) {
                     const protocol = tab.url.split('://')[0]
@@ -110,9 +110,9 @@ class RetailerInterface {
         //refresh the tabs that are not the cart url. XXX could some of the
         //passed params cause problems on, say, quick-add urls?
         const re = new RegExp(this.site, 'i')
-        return browser.tabsQuery({url:`*${this.site}/*`}, tabs => {
+        return browser.tabsQuery({url: `*${this.site}/*`}, tabs => {
             tabs.forEach(tab => {
-                if (!(tab.url.match(re))) {
+                if (!tab.url.match(re)) {
                     browser.tabsReload(tab)
                 }
             })
@@ -120,16 +120,18 @@ class RetailerInterface {
     }
 
     openCartTab() {
-        return browser.tabsQuery({url:`*${this.site}${this.cart}*` , currentWindow:true}
-        , tabs => {
-            if (tabs.length > 0) {
-                return browser.tabsActivate(tabs[tabs.length - 1])
-            } else {
-                const prefix = this.affiliate_prefix || ''
-                const url = `${prefix}http${this.site}${this.cart}`
-                return browser.tabsCreate(url)
+        return browser.tabsQuery(
+            {url: `*${this.site}${this.cart}*`, currentWindow: true},
+            tabs => {
+                if (tabs.length > 0) {
+                    return browser.tabsActivate(tabs[tabs.length - 1])
+                } else {
+                    const prefix = this.affiliate_prefix || ''
+                    const url = `${prefix}http${this.site}${this.cart}`
+                    return browser.tabsCreate(url)
+                }
             }
-        })
+        )
     }
 }
 

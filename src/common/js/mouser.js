@@ -17,11 +17,11 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const { RetailerInterface } = require('./retailer_interface')
+const {RetailerInterface} = require('./retailer_interface')
 const http = require('./http')
-const { browser } = require('./browser')
+const {browser} = require('./browser')
 const Promise = require('./bluebird')
-Promise.config({cancellation:true})
+Promise.config({cancellation: true})
 
 class Mouser extends RetailerInterface {
     constructor(country_code, settings) {
@@ -38,10 +38,13 @@ class Mouser extends RetailerInterface {
             this.protocol = 'https'
             s = 'gb'
         }
-        http.post(`http://www2.mouser.com/api/Preferences/SetSubdomain?subdomainName=${s}`
-            , ''
-            , {notify:false}
-            , (function() {}), (function() {}))
+        http.post(
+            `http://www2.mouser.com/api/Preferences/SetSubdomain?subdomainName=${s}`,
+            '',
+            {notify: false},
+            function() {},
+            function() {}
+        )
     }
     addLines(lines, callback) {
         if (lines.length === 0) {
@@ -49,7 +52,7 @@ class Mouser extends RetailerInterface {
             return
         }
         let count = 0
-        const big_result = {success:true, fails:[]}
+        const big_result = {success: true, fails: []}
         return this._get_token(token => {
             return this._clear_errors(token, () => {
                 return this._get_adding_viewstate((viewstate, generator) => {
@@ -57,15 +60,26 @@ class Mouser extends RetailerInterface {
                     for (let i = 0; i < lines.length; i += 99) {
                         const _99_lines = lines.slice(i, i + 99)
                         count += 1
-                        result.push(this._add_lines(_99_lines, viewstate, generator, result => {
-                            if (big_result.success) { big_result.success = result.success; }
-                            big_result.fails = big_result.fails.concat(result.fails)
-                            count -= 1
-                            if (count <= 0) {
-                                callback(big_result, this, lines)
-                                return this.refreshCartTabs()
-                            }
-                        }))
+                        result.push(
+                            this._add_lines(
+                                _99_lines,
+                                viewstate,
+                                generator,
+                                result => {
+                                    if (big_result.success) {
+                                        big_result.success = result.success
+                                    }
+                                    big_result.fails = big_result.fails.concat(
+                                        result.fails
+                                    )
+                                    count -= 1
+                                    if (count <= 0) {
+                                        callback(big_result, this, lines)
+                                        return this.refreshCartTabs()
+                                    }
+                                }
+                            )
+                        )
                     }
                     return result
                 })
@@ -73,43 +87,55 @@ class Mouser extends RetailerInterface {
         })
     }
     _add_lines(lines, viewstate, generator, callback) {
-        let params = this.addline_params + viewstate + '&__VIEWSTATEGENERATOR=' + generator
-            + '&__SCROLLPOSITIONX=0&__SCROLLPOSITIONY=3738'
+        let params =
+            this.addline_params +
+            viewstate +
+            '&__VIEWSTATEGENERATOR=' +
+            generator +
+            '&__SCROLLPOSITIONX=0&__SCROLLPOSITIONY=3738'
         params += '&ctl00$ContentMain$hNumberOfLines=99'
         params += '&ctl00$ContentMain$txtNumberOfLines=94'
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i]
-            params += `&ctl00$ContentMain$txtPartNumber${i + 1}=`
-                + `${line.part}&ctl00$ContentMain$txtCustomerPartNumber${i + 1}=`
-                + `${line.reference}&ctl00$ContentMain$txtQuantity${i + 1}=`
-                + `${line.quantity}`
+            params +=
+                `&ctl00$ContentMain$txtPartNumber${i + 1}=` +
+                `${line.part}&ctl00$ContentMain$txtCustomerPartNumber${i +
+                    1}=` +
+                `${line.reference}&ctl00$ContentMain$txtQuantity${i + 1}=` +
+                `${line.quantity}`
         }
-        params += '&ctl00$ContentMain$ddlProjects=ORDER&ctl00$ContentMain$btnAddToOrder=Add'
+        params +=
+            '&ctl00$ContentMain$ddlProjects=ORDER&ctl00$ContentMain$btnAddToOrder=Add'
         const url = `${this.protocol}${this.site}${this.addline}`
-        const result = {success: true, fails:[]}
-        return http.post(url, params, {}, responseText => {
-            const errors = this._get_errors(responseText)
-            for (let j = 0; j < errors.length; j++) {
-                const part = errors[j].getAttribute('data-partnumber')
-                if (part != null) {
-                    for (let k = 0; k < lines.length; k++) {
-                        const line = lines[k]
-                        if (line.part === part.replace(/-/g, '')) {
-                            result.fails.push(line)
+        const result = {success: true, fails: []}
+        return http.post(
+            url,
+            params,
+            {},
+            responseText => {
+                const errors = this._get_errors(responseText)
+                for (let j = 0; j < errors.length; j++) {
+                    const part = errors[j].getAttribute('data-partnumber')
+                    if (part != null) {
+                        for (let k = 0; k < lines.length; k++) {
+                            const line = lines[k]
+                            if (line.part === part.replace(/-/g, '')) {
+                                result.fails.push(line)
+                            }
                         }
+                        result.success = false
                     }
-                    result.success = false
+                }
+                if (callback != null) {
+                    return callback(result)
+                }
+            },
+            function() {
+                if (callback != null) {
+                    return callback({success: false, fails: lines})
                 }
             }
-            if (callback != null) {
-                return callback(result)
-            }
-        }
-        , function() {
-            if (callback != null) {
-                return callback({success:false, fails:lines})
-            }
-        })
+        )
     }
 
     _get_errors(responseText) {
@@ -118,24 +144,31 @@ class Mouser extends RetailerInterface {
     }
 
     _clear_errors(token, callback) {
-        http.get(`${this.protocol}${this.site}${this.cart}`, {}, responseText => {
-            const errors = this._get_errors(responseText)
-            const item_ids = []
-            for (let i = 0; i < errors.length; ++i) {
-                item_ids.push(errors[i].getAttribute('data-itemid'))
-            }
-            const promiseArray = item_ids.map(id => {
-                return http.promisePost(
-                    `${this.protocol}${this.site}${this.cart}/cart/DeleteCartItem?cartItemId=${id}&page=null&grid-column=SortColumn&grid-dir=0`,
-                    `__RequestVerificationToken=${token}`
-                ).catch(e => console.error(e))
-            })
-            return Promise.all(promiseArray).then(() => {
-                if (callback != null) {
-                    return callback()
+        http.get(
+            `${this.protocol}${this.site}${this.cart}`,
+            {},
+            responseText => {
+                const errors = this._get_errors(responseText)
+                const item_ids = []
+                for (let i = 0; i < errors.length; ++i) {
+                    item_ids.push(errors[i].getAttribute('data-itemid'))
                 }
-            })
-        })
+                const promiseArray = item_ids.map(id => {
+                    return http
+                        .promisePost(
+                            `${this.protocol}${this.site}${this
+                                .cart}/cart/DeleteCartItem?cartItemId=${id}&page=null&grid-column=SortColumn&grid-dir=0`,
+                            `__RequestVerificationToken=${token}`
+                        )
+                        .catch(e => console.error(e))
+                })
+                return Promise.all(promiseArray).then(() => {
+                    if (callback != null) {
+                        return callback()
+                    }
+                })
+            }
+        )
     }
 
     clearCart(callback) {
@@ -143,47 +176,60 @@ class Mouser extends RetailerInterface {
             return this._clear_cart(token, callback)
         })
     }
-    _clear_cart(token, callback){
+    _clear_cart(token, callback) {
         const url = this.protocol + this.site + this.cart + '/cart/DeleteCart'
         const params = `__RequestVerificationToken=${token}`
-        return http.post(url, params, {}, event => {
-            if (callback != null) {
-                callback({success:true}, this)
+        return http.post(
+            url,
+            params,
+            {},
+            event => {
+                if (callback != null) {
+                    callback({success: true}, this)
+                }
+                return this.refreshCartTabs()
+            },
+            () => {
+                if (callback != null) {
+                    return callback({success: false}, this)
+                }
             }
-            return this.refreshCartTabs()
-        }
-        , () => {
-            if (callback != null) {
-                return callback({success:false}, this)
-            }
-        })
+        )
     }
-    _get_adding_viewstate(callback){
+    _get_adding_viewstate(callback) {
         //we get the quick-add form, extend it to 99 lines (the max) and get
         //the viewstate from the response
         const url = `${this.protocol}${this.site}${this.addline}`
         return http.get(url, {}, responseText => {
             let doc = browser.parseDOM(responseText)
             let params = this.addline_params
-            params += encodeURIComponent(doc.getElementById('__VIEWSTATE').value)
+            params += encodeURIComponent(
+                doc.getElementById('__VIEWSTATE').value
+            )
             params += '&ctl00$ContentMain$btnAddLines=Lines to Forms'
             params += '&ctl00$ContentMain$hNumberOfLines=5'
             params += '&ctl00$ContentMain$txtNumberOfLines=94'
             return http.post(url, params, {}, responseText => {
                 doc = browser.parseDOM(responseText)
-                const viewstate = encodeURIComponent(doc.getElementById('__VIEWSTATE').value)
-                const generator = encodeURIComponent(doc.getElementById('__VIEWSTATEGENERATOR').value)
+                const viewstate = encodeURIComponent(
+                    doc.getElementById('__VIEWSTATE').value
+                )
+                const generator = encodeURIComponent(
+                    doc.getElementById('__VIEWSTATEGENERATOR').value
+                )
                 if (callback != null) {
                     return callback(viewstate, generator)
                 }
             })
         })
     }
-    _get_cart_viewstate(callback){
+    _get_cart_viewstate(callback) {
         const url = `${this.protocol}${this.site}${this.cart}`
         return http.get(url, {}, responseText => {
             const doc = browser.parseDOM(responseText)
-            const viewstate = encodeURIComponent(__guard__(doc.getElementById('__VIEWSTATE'), x => x.value))
+            const viewstate = encodeURIComponent(
+                __guard__(doc.getElementById('__VIEWSTATE'), x => x.value)
+            )
             if (callback != null) {
                 return callback(viewstate)
             }
@@ -202,5 +248,7 @@ class Mouser extends RetailerInterface {
 exports.Mouser = Mouser
 
 function __guard__(value, transform) {
-    return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
+    return typeof value !== 'undefined' && value !== null
+        ? transform(value)
+        : undefined
 }

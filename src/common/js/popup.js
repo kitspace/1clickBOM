@@ -17,71 +17,62 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const { messenger } = require('./messenger')
+const {messenger} = require('./messenger')
 const oneClickBOM = require('1-click-bom')
 const {retailer_list, isComplete, hasSKUs} = oneClickBOM.lineData
 
-const element_Bom              = document.querySelector('#bom')
-const element_Table            = document.querySelector('#bom_table')
-const element_TotalItems       = document.querySelector('#total_items')
+const element_Bom = document.querySelector('#bom')
+const element_Table = document.querySelector('#bom_table')
+const element_TotalItems = document.querySelector('#total_items')
 const element_TotalPartNumbers = document.querySelector('#total_partNumbers')
-const element_TotalLines       = document.querySelector('#total_lines')
-const button_Clear             = document.querySelector('button#clear')
-const button_LoadFromPage      = document.querySelector('button#load_from_page')
-const button_DeepComplete      = document.querySelector('button#deep_complete')
-const button_Copy              = document.querySelector('button#copy')
-const button_Paste             = document.querySelector('button#paste')
-const button_FillCarts         = document.querySelector('button#fill_carts')
-const button_EmptyCarts        = document.querySelector('button#empty_carts')
-
+const element_TotalLines = document.querySelector('#total_lines')
+const button_Clear = document.querySelector('button#clear')
+const button_LoadFromPage = document.querySelector('button#load_from_page')
+const button_DeepComplete = document.querySelector('button#deep_complete')
+const button_Copy = document.querySelector('button#copy')
+const button_Paste = document.querySelector('button#paste')
+const button_FillCarts = document.querySelector('button#fill_carts')
+const button_EmptyCarts = document.querySelector('button#empty_carts')
 
 button_FillCarts.addEventListener('click', function() {
     this.disabled = true
     return messenger.send('fillCarts')
 })
 
-
 button_EmptyCarts.addEventListener('click', function() {
     this.disabled = true
     return messenger.send('emptyCarts')
 })
 
-
 button_Clear.addEventListener('click', () => {
     messenger.send('clearBOM')
 })
-
 
 button_Paste.addEventListener('click', () => {
     messenger.send('paste')
 })
 
-
 button_LoadFromPage.addEventListener('click', () => {
     messenger.send('loadFromPage')
 })
-
 
 button_Copy.addEventListener('click', () => {
     messenger.send('copy')
 })
 
-
 button_DeepComplete.addEventListener('click', () => {
     messenger.send('deepAutoComplete')
 })
 
-
 function hideOrShow(bom, onDotTSV) {
     const hasBOM = Boolean(Object.keys(bom.lines).length)
 
-    button_Clear.disabled         = !hasBOM
-    button_DeepComplete.disabled  = (!hasBOM) || isComplete(bom.lines)
-    button_Copy.disabled          = !hasBOM
+    button_Clear.disabled = !hasBOM
+    button_DeepComplete.disabled = !hasBOM || isComplete(bom.lines)
+    button_Copy.disabled = !hasBOM
 
-    return button_LoadFromPage.hidden = !onDotTSV
+    return (button_LoadFromPage.hidden = !onDotTSV)
 }
-
 
 function startSpinning(link) {
     const td = link.parentNode
@@ -90,32 +81,29 @@ function startSpinning(link) {
     spinner.className = 'spinner'
     td.appendChild(spinner)
 
-    link.interval_id = setInterval(function(){
-        const frames     = 12
+    link.interval_id = setInterval(function() {
+        const frames = 12
         const frameWidth = 15
-        const offset     = counter * -frameWidth
-        spinner.style.backgroundPosition =
-            offset + 'px' + ' ' + 0 + 'px'
+        const offset = counter * -frameWidth
+        spinner.style.backgroundPosition = offset + 'px' + ' ' + 0 + 'px'
         counter++
         if (counter >= frames) {
-            return counter = 0
+            return (counter = 0)
         }
-    }
-    , 50)
+    }, 50)
 
-    link.hidden   = true
-    return link.spinning = true
+    link.hidden = true
+    return (link.spinning = true)
 }
 
-
 function stopSpinning(link) {
-    if ((link.spinning != null) && link.spinning) {
-        const td            = link.parentNode
-        const spinner       = td.querySelector('div.spinner')
+    if (link.spinning != null && link.spinning) {
+        const td = link.parentNode
+        const spinner = td.querySelector('div.spinner')
         clearInterval(link.interval_id)
         td.removeChild(spinner)
-        link.hidden   = false
-        return link.spinning = false
+        link.hidden = false
+        return (link.spinning = false)
     }
 }
 
@@ -128,24 +116,26 @@ const removeChildren = element =>
         return result
     })()
 
-
-
 function render(state) {
-    const { bom } = state
+    const {bom} = state
 
     hideOrShow(bom, state.onDotTSV)
 
     removeChildren(element_TotalLines)
     element_TotalLines.appendChild(
         document.createTextNode(`${bom.lines.length}
-                line${bom.lines.length !== 1 ? 's' : ''}`))
+                line${bom.lines.length !== 1 ? 's' : ''}`)
+    )
 
-    const part_numbers = bom.lines.reduce((prev, line) => prev += line.partNumbers.length > 0
-    , 0)
+    const part_numbers = bom.lines.reduce(
+        (prev, line) => (prev += line.partNumbers.length > 0),
+        0
+    )
 
     removeChildren(element_TotalPartNumbers)
     element_TotalPartNumbers.appendChild(
-        document.createTextNode(`${part_numbers} with MPN`))
+        document.createTextNode(`${part_numbers} with MPN`)
+    )
 
     let quantity = 0
     for (let j = 0; j < bom.lines.length; j++) {
@@ -154,14 +144,16 @@ function render(state) {
     }
 
     removeChildren(element_TotalItems)
-    element_TotalItems.appendChild(document.createTextNode(`${quantity}
-        item${quantity !== 1 ? 's' : ''}`))
+    element_TotalItems.appendChild(
+        document.createTextNode(`${quantity}
+        item${quantity !== 1 ? 's' : ''}`)
+    )
 
     while (element_Table.hasChildNodes()) {
         element_Table.removeChild(element_Table.lastChild)
     }
 
-    let any_adding   = false
+    let any_adding = false
     let any_emptying = false
 
     return (() => {
@@ -190,14 +182,13 @@ function render(state) {
             td_0.value = retailer.name
             td_0.addEventListener('click', function() {
                 return messenger.send('openCart', this.value)
-            }
-            )
+            })
             td_0.appendChild(viewCart)
             td_0.id = 'icon'
             tr.appendChild(td_0)
 
             const td_1 = document.createElement('td')
-            const t  = `${lines.length}`
+            const t = `${lines.length}`
             const tspan = document.createElement('span')
             tspan.appendChild(document.createTextNode(t))
 
@@ -213,10 +204,10 @@ function render(state) {
             td_1.appendChild(t2span)
             tr.appendChild(td_1)
 
-            const unicode_chars = ['\uf21e', '\uf21b',]
-            const titles   = ['Add lines to ', 'Empty ']
+            const unicode_chars = ['\uf21e', '\uf21b']
+            const titles = ['Add lines to ', 'Empty ']
             const messages = ['fillCart', 'emptyCart']
-            const lookup   = ['adding_lines', 'clearing_cart']
+            const lookup = ['adding_lines', 'clearing_cart']
             const iterable = [0, 1]
             for (let j1 = 0; j1 < iterable.length; j1++) {
                 const i = iterable[j1]
@@ -246,28 +237,23 @@ function render(state) {
                 if (retailer[lookup[i]]) {
                     startSpinning(span)
                 }
-                any_adding   |= retailer.adding_lines
+                any_adding |= retailer.adding_lines
                 any_emptying |= retailer.clearing_cart
             }
 
-            button_FillCarts.disabled  = any_adding || (!hasSKUs(bom.lines))
-            result.push(button_EmptyCarts.disabled = any_emptying)
+            button_FillCarts.disabled = any_adding || !hasSKUs(bom.lines)
+            result.push((button_EmptyCarts.disabled = any_emptying))
         }
         return result
     })()
 }
 
-
-messenger.on('sendBackgroundState', state => render(state)
-)
-
+messenger.on('sendBackgroundState', state => render(state))
 
 // For Firefox we forward the popup 'show' event from browser.coffee because
 // this script seems get loaded once at startup not on popup. The 'show' message
 // is never sent on Chrome.
-messenger.on('show', ()=> messenger.send('getBackgroundState')
-)
-
+messenger.on('show', () => messenger.send('getBackgroundState'))
 
 // For Chrome the whole script is instead re-executed each time the popup is
 // opened.

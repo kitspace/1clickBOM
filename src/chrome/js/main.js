@@ -1,14 +1,16 @@
-const { messenger } = require('./messenger')
-const { background } = require('./background')
+const {messenger} = require('./messenger')
+const {background} = require('./background')
 const http = require('./http')
-const { browser } = require('./browser')
+const {browser} = require('./browser')
 
-chrome.runtime.onInstalled.addListener(function(details){
+chrome.runtime.onInstalled.addListener(function(details) {
     if (details.reason === 'install') {
-        browser.tabsQuery({url:'*://kitnic.it/boards/*'}, tabs => {
+        browser.tabsQuery({url: '*://kitnic.it/boards/*'}, tabs => {
             tabs.forEach(browser.tabsReload)
         })
-        http.getLocation(() => browser.tabsCreate(browser.getURL('html/options.html')))
+        http.getLocation(() =>
+            browser.tabsCreate(browser.getURL('html/options.html'))
+        )
         //set-up settings with default values
         const set_scheme = require('./data/settings.json')
         const settings = {}
@@ -30,12 +32,14 @@ chrome.runtime.onInstalled.addListener(function(details){
 
 // tests only work in chrome currently, open a console on background and execute
 // Test() or test a specific module, e.g. Farnell, with Test('Farnell')
-window.Test = function(module){
+window.Test = function(module) {
     let url = browser.getURL('html/test.html')
-    if (module != null) { url += `?module=${module}`; }
+    if (module != null) {
+        url += `?module=${module}`
+    }
     return window.open(url)
 }
 
-window.clear = () => browser.storageRemove('bom' , function() {})
+window.clear = () => browser.storageRemove('bom', function() {})
 
 background(messenger)

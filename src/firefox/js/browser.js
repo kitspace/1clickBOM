@@ -22,17 +22,19 @@ const firefoxTabs = require('sdk/tabs')
 const notifications = require('sdk/notifications')
 const tabsUtils = require('sdk/tabs/utils')
 const windowUtils = require('sdk/window/utils')
-const { ActionButton } = require('sdk/ui/button/action')
-const { XMLHttpRequest } = require('sdk/net/xhr')
-const { data } = require('sdk/self')
-const { modelFor } = require('sdk/model/core')
+const {ActionButton} = require('sdk/ui/button/action')
+const {XMLHttpRequest} = require('sdk/net/xhr')
+const {data} = require('sdk/self')
+const {modelFor} = require('sdk/model/core')
 const timers = require('sdk/timers')
-const { storage } = require('sdk/simple-storage')
+const {storage} = require('sdk/simple-storage')
 const preferences = require('sdk/simple-prefs')
 const pageMod = require('sdk/page-mod')
 const locationChanged = require('./location_changed')
-const { Cc, Ci } = require('chrome')
-let dom = Cc['@mozilla.org/xmlextras/domparser;1'].createInstance(Ci.nsIDOMParser)
+const {Cc, Ci} = require('chrome')
+let dom = Cc['@mozilla.org/xmlextras/domparser;1'].createInstance(
+    Ci.nsIDOMParser
+)
 
 function globToRegex(glob) {
     let specialChars = '\\^$*+?.()|{}[]'
@@ -65,26 +67,24 @@ let popup = require('sdk/panel').Panel({
 })
 
 let button = ActionButton({
-    id:'bom_button',
-    label:'1clickBOM',
-    icon : {
+    id: 'bom_button',
+    label: '1clickBOM',
+    icon: {
         '16': './images/button16.png',
         '32': './images/button32.png'
     },
     onClick(state) {
-        return popup.show({position:button})
+        return popup.show({position: button})
     }
 })
 
-popup.on('show', () => popup.port.emit('show')
-)
+popup.on('show', () => popup.port.emit('show'))
 
 let preference_listeners = {}
 
-
-let message_exchange = {adders:[], receivers:[]}
+let message_exchange = {adders: [], receivers: []}
 pageMod.PageMod({
-    include: RegExp('https?://(.+\.)?kitnic.it/boards/.*', 'i'),
+    include: RegExp('https?://(.+.)?kitnic.it/boards/.*', 'i'),
     contentScriptFile: data.url('kitnic.js'),
     onAttach(worker) {
         if (!__in__(worker, message_exchange.receivers)) {
@@ -94,11 +94,9 @@ pageMod.PageMod({
                 if (index >= 0) {
                     return message_exchange.receivers.splice(index, 1)
                 }
-            }
-            )
+            })
         }
-        return message_exchange.adders.map((add) =>
-            add(worker))
+        return message_exchange.adders.map(add => add(worker))
     }
 })
 
@@ -119,13 +117,12 @@ let browser = {
             if (/\./.test(k)) {
                 let ks = k.split('.')
                 ks.reduce(function(prev, curr, i, arr) {
-                    if (i === (arr.length - 1)) {
-                        return prev[curr] = v
+                    if (i === arr.length - 1) {
+                        return (prev[curr] = v)
                     } else {
-                        return prev[curr] = {}
+                        return (prev[curr] = {})
                     }
-                }
-                , ret)
+                }, ret)
             } else {
                 ret[k] = v
             }
@@ -133,11 +130,12 @@ let browser = {
         return callback(ret)
     },
     prefsOnChanged(keys, callback) {
-        return keys.map((key) =>
-            (preference_listeners[key] != null) ?
-                preference_listeners[key].push(callback)
-            :
-                preference_listeners[key] = [callback])
+        return keys.map(
+            key =>
+                preference_listeners[key] != null
+                    ? preference_listeners[key].push(callback)
+                    : (preference_listeners[key] = [callback])
+        )
     },
     storageGet(keys, callback) {
         let ret = {}
@@ -169,7 +167,7 @@ let browser = {
         return callback(firefoxTabs.activeTab)
     },
     tabsQuery({url, currentWindow}, callback) {
-        if ((currentWindow != null) && currentWindow) {
+        if (currentWindow != null && currentWindow) {
             let current = windowUtils.getMostRecentBrowserWindow()
             var tabs = []
             let iterable = tabsUtils.getTabs(current)
@@ -190,7 +188,7 @@ let browser = {
         return callback(matches)
     },
     tabsUpdate(tab, url) {
-        return tab.url = url
+        return (tab.url = url)
     },
     tabsReload(tab) {
         return tab.reload()
@@ -210,13 +208,13 @@ let browser = {
     },
     setBadge({color, text}) {
         button.badge = text
-        return button.badgeColor = color
+        return (button.badgeColor = color)
     },
     notificationsCreate(obj, callback) {
         let ffObj = {
-            title   : obj.title,
-            text    : obj.message,
-            iconURL : `.${obj.iconUrl}`
+            title: obj.title,
+            text: obj.message,
+            iconURL: `.${obj.iconUrl}`
         }
         if (obj.type === 'list') {
             for (let j = 0; j < obj.items.length; j++) {
@@ -254,15 +252,13 @@ preferences.on('', prefName =>
         for (let name in preference_listeners) {
             let callbacks = preference_listeners[name]
             let item
-            if ((RegExp(`^${name}`)).test(prefName)) {
-                item = callbacks.map((callback) =>
-                    callback())
+            if (RegExp(`^${name}`).test(prefName)) {
+                item = callbacks.map(callback => callback())
             }
             result.push(item)
         }
         return result
     })()
-
 )
 
 exports.browser = browser
@@ -271,5 +267,5 @@ exports.popup = popup
 exports.message_exchange = message_exchange
 
 function __in__(needle, haystack) {
-  return haystack.indexOf(needle) >= 0
+    return haystack.indexOf(needle) >= 0
 }

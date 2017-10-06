@@ -37,25 +37,31 @@ const browser = {
             if (callback != null) {
                 return callback()
             }
-        }
-        )
+        })
     },
     prefsOnChanged(keys, callback) {
-        return chrome.storage.onChanged.addListener(function(changes, namespace) {
-            if (namespace === 'local' && (keys.filter(x => x in changes).length > 0)) {
+        return chrome.storage.onChanged.addListener(function(
+            changes,
+            namespace
+        ) {
+            if (
+                namespace === 'local' &&
+                keys.filter(x => x in changes).length > 0
+            ) {
                 return callback()
             }
         })
     },
     tabsGetActive(callback) {
-        return chrome.tabs.query({active:true, currentWindow:true}, function(tabs) {
+        return chrome.tabs.query({active: true, currentWindow: true}, function(
+            tabs
+        ) {
             if (tabs.length >= 1) {
                 return callback(tabs[0])
             } else {
                 return callback(null)
             }
-        }
-        )
+        })
     },
     tabsQuery(obj, callback) {
         return chrome.tabs.query(obj, callback)
@@ -85,10 +91,10 @@ const browser = {
     },
     setBadge(obj) {
         if (obj.color != null) {
-            chrome.browserAction.setBadgeBackgroundColor({color:obj.color})
+            chrome.browserAction.setBadgeBackgroundColor({color: obj.color})
         }
         if (obj.text != null) {
-            return chrome.browserAction.setBadgeText(({text:obj.text}))
+            return chrome.browserAction.setBadgeText({text: obj.text})
         }
     },
     notificationsCreate(obj, callback) {

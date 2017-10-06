@@ -18,16 +18,15 @@
 // the Original Code is Kaspar Emanuel.
 
 const Promise = require('./bluebird')
-Promise.config({cancellation:true})
+Promise.config({cancellation: true})
 const electroGrammar = require('electro-grammar')
 
-const { browser } = require('./browser')
+const {browser} = require('./browser')
 const cpl = {
-    capacitors : require('./data/capacitors.json'),
-    resistors  : require('./data/resistors.json'),
-    leds       : require('./data/leds.json'),
+    capacitors: require('./data/capacitors.json'),
+    resistors: require('./data/resistors.json'),
+    leds: require('./data/leds.json')
 }
-
 
 //we wrap in a promise to be compatible the completers that send async web requests
 exports.search = function search() {
@@ -47,27 +46,32 @@ function _search(query, retailers = [], other_fields = []) {
 
     const components = cpl[c.type]
 
-    const results = ids.map(id => {
-        return components.reduce((prev, r) => {
-            if (prev) {
-                return prev
-            } else if (r.cplid === id) {
-                return r
-            }
-        }, null)
-    }).filter(x => x)
+    const results = ids
+        .map(id => {
+            return components.reduce((prev, r) => {
+                if (prev) {
+                    return prev
+                } else if (r.cplid === id) {
+                    return r
+                }
+            }, null)
+        })
+        .filter(x => x)
 
     return combine(results)
 }
 
 function combine(results) {
-    return results.reduce((prev, item) => {
-        Object.keys(item.retailers).forEach(name => {
-            if (prev.retailers[name] == null)  {
-                prev.retailers[name] = item.retailers[name][0]
-            }
-        })
-        prev.partNumbers = prev.partNumbers.concat(item.partNumbers)
-        return prev
-    }, {retailers:{}, partNumbers:[]})
+    return results.reduce(
+        (prev, item) => {
+            Object.keys(item.retailers).forEach(name => {
+                if (prev.retailers[name] == null) {
+                    prev.retailers[name] = item.retailers[name][0]
+                }
+            })
+            prev.partNumbers = prev.partNumbers.concat(item.partNumbers)
+            return prev
+        },
+        {retailers: {}, partNumbers: []}
+    )
 }

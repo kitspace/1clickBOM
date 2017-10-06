@@ -17,8 +17,8 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const { RetailerInterface } = require('./retailer_interface')
-const { Newark } = require('./newark')
+const {RetailerInterface} = require('./retailer_interface')
+const {Newark} = require('./newark')
 
 class Farnell extends RetailerInterface {
     constructor(country_code, settings, callback) {
@@ -31,7 +31,8 @@ class Farnell extends RetailerInterface {
             this[names[index]] = method
         }
         this.cart = '/webapp/wcs/stores/servlet/AjaxOrderItemDisplayView'
-        this.affiliate_prefix = 'http://www.anrdoezrs.net/links/8291192/type/dlg/'
+        this.affiliate_prefix =
+            'http://www.anrdoezrs.net/links/8291192/type/dlg/'
         this._set_store_id(() => {
             return callback(this)
         })
