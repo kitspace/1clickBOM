@@ -2,7 +2,9 @@
   "name": "1-click-BOM",
   "description": "A browser extension to add electronic components to shopping carts.",
   "scripts": {
-    "prettier": "prettier --no-bracket-spacing --no-semi --single-quote --tab-width 4 --write src/**/*.js"
+    "prettier": "prettier --no-bracket-spacing --no-semi --single-quote --tab-width 4 --write src/**/*.js",
+    "eslintfix": "eslint --fix 'src/**/*.js'",
+    "fix": "npm run eslintfix && npm run prettier"
   },
   "repository": {
     "type": "git",

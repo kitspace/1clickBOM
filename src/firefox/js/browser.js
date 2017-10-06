@@ -32,41 +32,41 @@ const preferences = require('sdk/simple-prefs')
 const pageMod = require('sdk/page-mod')
 const locationChanged = require('./location_changed')
 const {Cc, Ci} = require('chrome')
-let dom = Cc['@mozilla.org/xmlextras/domparser;1'].createInstance(
+const dom = Cc['@mozilla.org/xmlextras/domparser;1'].createInstance(
     Ci.nsIDOMParser
 )
 
 function globToRegex(glob) {
-    let specialChars = '\\^$*+?.()|{}[]'
-    let regexChars = ['^']
+    const specialChars = '\\^$*+?.()|{}[]'
+    const regexChars = ['^']
     for (let i = 0; i < glob.length; i++) {
-        let c = glob[i]
+        const c = glob[i]
         switch (c) {
-            case '?':
-                regexChars.push('.')
-                break
-            case '*':
-                regexChars.push('.*')
-                break
-            default:
-                if (specialChars.indexOf(c) >= 0) {
-                    regexChars.push('\\')
-                }
-                regexChars.push(c)
+        case '?':
+            regexChars.push('.')
+            break
+        case '*':
+            regexChars.push('.*')
+            break
+        default:
+            if (specialChars.indexOf(c) >= 0) {
+                regexChars.push('\\')
+            }
+            regexChars.push(c)
         }
     }
     regexChars.push('$')
     return new RegExp(regexChars.join(''))
 }
 
-let popup = require('sdk/panel').Panel({
+const popup = require('sdk/panel').Panel({
     contentURL: data.url('html/popup.html'),
     contentScriptFile: [data.url('popup.js')],
     width: 280,
     height: 320
 })
 
-let button = ActionButton({
+const button = ActionButton({
     id: 'bom_button',
     label: '1clickBOM',
     icon: {
@@ -80,9 +80,9 @@ let button = ActionButton({
 
 popup.on('show', () => popup.port.emit('show'))
 
-let preference_listeners = {}
+const preference_listeners = {}
 
-let message_exchange = {adders: [], receivers: []}
+const message_exchange = {adders: [], receivers: []}
 pageMod.PageMod({
     include: RegExp('https?://(.+.)?kitnic.it/boards/.*', 'i'),
     contentScriptFile: data.url('kitnic.js'),
@@ -90,7 +90,7 @@ pageMod.PageMod({
         if (!__in__(worker, message_exchange.receivers)) {
             message_exchange.receivers.push(worker)
             worker.on('detach', function() {
-                let index = message_exchange.receivers.indexOf(this)
+                const index = message_exchange.receivers.indexOf(this)
                 if (index >= 0) {
                     return message_exchange.receivers.splice(index, 1)
                 }
@@ -100,22 +100,22 @@ pageMod.PageMod({
     }
 })
 
-let browser = {
+const browser = {
     prefsSet(obj, callback) {
-        for (let k in obj) {
-            let v = obj[k]
+        for (const k in obj) {
+            const v = obj[k]
             preferences.prefs[k] = v
         }
         return callback()
     },
     prefsGet(keys, callback) {
-        let ret = {}
+        const ret = {}
         //give preferences a faux object hierarchy so
         // {'settings.UK.Farnell':''} becomes {settings:{UK:{Farnell:''}}}
-        for (let k in preferences.prefs) {
-            let v = preferences.prefs[k]
+        for (const k in preferences.prefs) {
+            const v = preferences.prefs[k]
             if (/\./.test(k)) {
-                let ks = k.split('.')
+                const ks = k.split('.')
                 ks.reduce(function(prev, curr, i, arr) {
                     if (i === arr.length - 1) {
                         return (prev[curr] = v)
@@ -138,9 +138,9 @@ let browser = {
         )
     },
     storageGet(keys, callback) {
-        let ret = {}
+        const ret = {}
         for (let i = 0; i < keys.length; i++) {
-            let key = keys[i]
+            const key = keys[i]
             if (storage[key] != null) {
                 ret[key] = JSON.parse(JSON.stringify(storage[key]))
             }
@@ -148,7 +148,7 @@ let browser = {
         return callback(ret)
     },
     storageSet(obj, callback) {
-        for (let k in obj) {
+        for (const k in obj) {
             storage[k] = obj[k]
         }
         if (callback != null) {
@@ -157,7 +157,7 @@ let browser = {
     },
     storageRemove(key, callback) {
         delete storage[key]
-        let obj = {}
+        const obj = {}
         obj[key] = undefined
         if (callback != null) {
             return callback()
@@ -168,9 +168,9 @@ let browser = {
     },
     tabsQuery({url, currentWindow}, callback) {
         if (currentWindow != null && currentWindow) {
-            let current = windowUtils.getMostRecentBrowserWindow()
+            const current = windowUtils.getMostRecentBrowserWindow()
             var tabs = []
-            let iterable = tabsUtils.getTabs(current)
+            const iterable = tabsUtils.getTabs(current)
             for (let i = 0; i < iterable.length; i++) {
                 var tab = iterable[i]
                 tabs.push(modelFor(tab))
@@ -178,7 +178,7 @@ let browser = {
         } else {
             var tabs = firefoxTabs
         }
-        let matches = []
+        const matches = []
         for (let j = 0; j < tabs.length; j++) {
             var tab = tabs[j]
             if (tab.url.match(globToRegex(url)) != null) {
@@ -211,21 +211,21 @@ let browser = {
         return (button.badgeColor = color)
     },
     notificationsCreate(obj, callback) {
-        let ffObj = {
+        const ffObj = {
             title: obj.title,
             text: obj.message,
             iconURL: `.${obj.iconUrl}`
         }
         if (obj.type === 'list') {
             for (let j = 0; j < obj.items.length; j++) {
-                let i = obj.items[j]
+                const i = obj.items[j]
                 ffObj.text += `\n${i.title}`
             }
         }
         return notifications.notify(ffObj)
     },
     paste(callback) {
-        let c = clipboard.get('text')
+        const c = clipboard.get('text')
         if (c == null) {
             return ''
         } else {
@@ -248,9 +248,9 @@ let browser = {
 
 preferences.on('', prefName =>
     (() => {
-        let result = []
-        for (let name in preference_listeners) {
-            let callbacks = preference_listeners[name]
+        const result = []
+        for (const name in preference_listeners) {
+            const callbacks = preference_listeners[name]
             let item
             if (RegExp(`^${name}`).test(prefName)) {
                 item = callbacks.map(callback => callback())

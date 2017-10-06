@@ -26,21 +26,21 @@ const {Newark} = require('./newark')
 const qunit = require('./qunit-1.11.0')
 const {browser} = require('./browser')
 
-let {module} = qunit
-let {test} = qunit
-let {ok} = qunit
-let {throws} = qunit
-let {deepEqual} = qunit
+const {module} = qunit
+const {test} = qunit
+const {ok} = qunit
+const {throws} = qunit
+const {deepEqual} = qunit
 
-let countries = require('./data/countries.json')
+const countries = require('./data/countries.json')
 
 module('unit')
 
 test('Digikey: Constructs for all countries', () =>
     (() => {
-        let result = []
-        for (let country in countries) {
-            let code = countries[country]
+        const result = []
+        for (const country in countries) {
+            const code = countries[country]
             result.push(
                 ok(
                     new Digikey(code, {}, function() {}) instanceof
@@ -54,9 +54,9 @@ test('Digikey: Constructs for all countries', () =>
 
 test('Farnell: Constructs for all countries', () =>
     (() => {
-        let result = []
-        for (let country in countries) {
-            let code = countries[country]
+        const result = []
+        for (const country in countries) {
+            const code = countries[country]
             result.push(
                 ok(
                     new Farnell(code, {}, function() {}) instanceof
@@ -71,9 +71,9 @@ test('Farnell: Constructs for all countries', () =>
 test('Mouser: Constructs for all countries', () =>
     //this test might time-out because it sends a lot of requests
     (() => {
-        let result = []
-        for (let country in countries) {
-            let code = countries[country]
+        const result = []
+        for (const country in countries) {
+            const code = countries[country]
             result.push(
                 ok(
                     new Mouser(code) instanceof RetailerInterface,
@@ -86,9 +86,9 @@ test('Mouser: Constructs for all countries', () =>
 
 test('RS: Constructs for all countries', () =>
     (() => {
-        let result = []
-        for (let country in countries) {
-            let code = countries[country]
+        const result = []
+        for (const country in countries) {
+            const code = countries[country]
             result.push(
                 ok(
                     new RS(code) instanceof RetailerInterface,
@@ -101,9 +101,9 @@ test('RS: Constructs for all countries', () =>
 
 test('Newark: Constructs for all countries', () =>
     (() => {
-        let result = []
-        for (let country in countries) {
-            let code = countries[country]
+        const result = []
+        for (const country in countries) {
+            const code = countries[country]
             result.push(
                 ok(
                     new Newark(code, {}, function() {}) instanceof

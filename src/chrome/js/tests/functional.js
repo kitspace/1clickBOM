@@ -28,21 +28,21 @@ const octopart = require('./octopart')
 
 const {retailer_list} = require('1-click-bom').lineData
 
-let {module} = qunit
-let {asyncTest} = qunit
-let {stop} = qunit
-let {start} = qunit
-let {deepEqual} = qunit
-let {ok} = qunit
+const {module} = qunit
+const {asyncTest} = qunit
+const {stop} = qunit
+const {start} = qunit
+const {deepEqual} = qunit
+const {ok} = qunit
 
-let digikey_data = require('./data/digikey.json')
-let farnell_data = require('./data/farnell.json')
-let mouser_data = require('./data/mouser.json')
+const digikey_data = require('./data/digikey.json')
+const farnell_data = require('./data/farnell.json')
+const mouser_data = require('./data/mouser.json')
 
 module('Digikey')
 
 // we only test a few locations or else we start getting 403: forbidden
-let digikey_locations = ['UK', 'AT', 'IL', 'US', 'AU']
+const digikey_locations = ['UK', 'AT', 'IL', 'US', 'AU']
 
 asyncTest('Clear All', function() {
     let r
@@ -60,7 +60,7 @@ asyncTest('Clear All', function() {
 
 asyncTest('Add lines', function() {
     let r
-    let lines = [
+    const lines = [
         {part: '754-1173-1-ND', quantity: 2, reference: 'test'},
         {part: 'MAX2606EUT+TCT-ND', quantity: 2, reference: 'test'}
     ]
@@ -78,7 +78,7 @@ asyncTest('Add lines', function() {
 
 asyncTest('Add lines fails', function() {
     let r
-    let lines = [
+    const lines = [
         {part: 'fail', quantity: 2, reference: 'test'},
         {part: '754-1173-1-ND', quantity: 2, reference: 'test'}
     ]
@@ -97,7 +97,7 @@ asyncTest('Add lines fails', function() {
 
 module('Farnell')
 
-let farnell_locations = Object.keys(farnell_data.sites)
+const farnell_locations = Object.keys(farnell_data.sites)
 
 asyncTest('Clear All', function() {
     let r
@@ -115,7 +115,7 @@ asyncTest('Clear All', function() {
 
 asyncTest('Add lines', function() {
     let r
-    let lines = [{part: '2250472', quantity: 2, reference: 'test'}]
+    const lines = [{part: '2250472', quantity: 2, reference: 'test'}]
     stop(farnell_locations.length - 1)
     return farnell_locations.map(
         l =>
@@ -130,7 +130,7 @@ asyncTest('Add lines', function() {
 
 asyncTest('Add lines fails', function() {
     let r
-    let lines = [
+    const lines = [
         {part: 'fail', quantity: 2, reference: 'test'},
         {part: '2250472', quantity: 2, reference: 'test'}
     ]
@@ -155,7 +155,7 @@ module('Mouser')
 // the other retailers but the locations can interfere with each other
 
 asyncTest('Clear All', function() {
-    let r = new Mouser('AU')
+    const r = new Mouser('AU')
     return r.clearCart(function(result, that) {
         deepEqual(result.success, true)
         return start()
@@ -168,7 +168,7 @@ asyncTest('Add lines fails but adds again', function() {
         {part: '595-NE555P', quantity: 2, reference: 'test'},
         {part: 'fail2', quantity: 2, reference: 'test'}
     ]
-    let r = new Mouser('UK')
+    const r = new Mouser('UK')
     return r.addLines(lines, function(result, that) {
         deepEqual(result.success, false, that.country)
         deepEqual(result.fails, [lines[0], lines[2]], that.country)
@@ -184,7 +184,7 @@ asyncTest('Add lines fails but adds again', function() {
 
 module('RS')
 
-let rs_locations_online = [
+const rs_locations_online = [
     'AT',
     'AU',
     'BE',
@@ -216,7 +216,7 @@ let rs_locations_online = [
     'ZA'
 ]
 
-let rs_locations_delivers = [
+const rs_locations_delivers = [
     'AE',
     'AZ',
     'CL',
@@ -241,13 +241,13 @@ let rs_locations_delivers = [
     'US'
 ]
 
-let rs_locations = rs_locations_online.concat(rs_locations_delivers)
+const rs_locations = rs_locations_online.concat(rs_locations_delivers)
 
 asyncTest('Clear all', function() {
     let r
     stop(rs_locations.length - 1)
     return rs_locations.map(l => {
-        ;(r = new RS(l)),
+        (r = new RS(l)),
             r.clearCart(function(result, that) {
                 deepEqual(result.success, true, `1:${that.country}`)
                 return start()
@@ -267,7 +267,7 @@ asyncTest('Add lines fails but adds again', function() {
             {part: 'fail2', quantity: 2, reference: 'test'}
         ]
         r.addLines(lines, function(result, that) {
-            let expected_fails = [
+            const expected_fails = [
                 {part: 'fail1', quantity: 2, reference: 'test'},
                 {part: 'fail2', quantity: 2, reference: 'test'}
             ]
@@ -310,7 +310,7 @@ asyncTest('Add lines fails, add lines, clear all', function() {
 asyncTest('Add lines', function() {
     let r
     return (r = new Newark('US', {}, function() {
-        let lines = [{part: '98W0461', quantity: 2, reference: 'test'}]
+        const lines = [{part: '98W0461', quantity: 2, reference: 'test'}]
         return r.addLines(lines, function(result) {
             deepEqual(result.success, true)
             return start()
@@ -321,7 +321,7 @@ asyncTest('Add lines', function() {
 module('Octopart')
 
 asyncTest('Auto complete fails', function() {
-    let query = 'wizzooooabbbaa'
+    const query = 'wizzooooabbbaa'
     octopart.search(query, retailer_list).then(new_lines => {
         retailer_list.forEach(name => {
             ok(!new_lines.retailers[name])
@@ -331,7 +331,7 @@ asyncTest('Auto complete fails', function() {
 })
 
 asyncTest('Auto complete', function() {
-    let query = 'IRF7309PBF'
+    const query = 'IRF7309PBF'
     octopart.search(query, retailer_list).then(new_lines => {
         retailer_list.forEach(name => {
             ok(new_lines.retailers[name])
@@ -341,7 +341,7 @@ asyncTest('Auto complete', function() {
 })
 
 asyncTest('Auto complete returns on empty result', function() {
-    let query = 'C Small 0.1uF Unpolarized capacitor 1206 HandSoldering'
+    const query = 'C Small 0.1uF Unpolarized capacitor 1206 HandSoldering'
     octopart.search(query, retailer_list).then(new_lines => {
         ok(new_lines.partNumbers.length == 0)
         start()

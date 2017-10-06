@@ -26,7 +26,7 @@ const messenger = {
             chrome.runtime.onMessage.addListener(
                 (request, sender, sendResponse) => {
                     for (let i = 0; i < this.msgNames.length; i++) {
-                        ;({msgName, callback} = this.msgNames[i])
+                        ({msgName, callback} = this.msgNames[i])
                         if (request.name === msgName) {
                             return callback(request.value, sendResponse)
                         }

@@ -51,7 +51,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                     var a = typeof _dereq_ == 'function' && _dereq_
                     if (!u && a) return a(o, !0)
                     if (i) return i(o, !0)
-                    var f = new Error("Cannot find module '" + o + "'")
+                    var f = new Error('Cannot find module \'' + o + '\'')
                     throw ((f.code = 'MODULE_NOT_FOUND'), f)
                 }
                 var l = (n[o] = {exports: {}})
@@ -2237,11 +2237,11 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     return new Function(
                                         'value',
                                         'holder',
-                                        "                             \n\
-            'use strict';                                                    \n\
+                                        '                             \n\
+            \'use strict\';                                                    \n\
             holder.pIndex = value;                                           \n\
             holder.checkFulfillment(this);                                   \n\
-            ".replace(
+            '.replace(
                                             /Index/g,
                                             i
                                         )
@@ -2252,10 +2252,10 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     return new Function(
                                         'promise',
                                         'holder',
-                                        "                           \n\
-            'use strict';                                                    \n\
+                                        '                           \n\
+            \'use strict\';                                                    \n\
             holder.pIndex = promise;                                         \n\
-            ".replace(
+            '.replace(
                                             /Index/g,
                                             i
                                         )
@@ -2289,8 +2289,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     var name = 'Holder$' + total
 
                                     var code =
-                                        "return function(tryCatch, errorObj, Promise) {           \n\
-            'use strict';                                                    \n\
+                                        'return function(tryCatch, errorObj, Promise) {           \n\
+            \'use strict\';                                                    \n\
             function [TheName](fn) {                                         \n\
                 [TheProperties]                                              \n\
                 this.fn = fn;                                                \n\
@@ -2317,7 +2317,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                                                              \n\
             return [TheName];                                                \n\
         }(tryCatch, errorObj, Promise);                                      \n\
-        "
+        '
 
                                     code = code
                                         .replace(/\[TheName\]/g, name)
@@ -3656,10 +3656,10 @@ const clearTimeout = require('./browser').browser.clearTimeout
 
                         function toResolutionValue(val) {
                             switch (val) {
-                                case -2:
-                                    return []
-                                case -3:
-                                    return {}
+                            case -2:
+                                return []
+                            case -3:
+                                return {}
                             }
                         }
 
@@ -3985,11 +3985,11 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         var ProcessNextTick = process.nextTick
                         schedule = util.isRecentNode
                             ? function(fn) {
-                                  GlobalSetImmediate.call(global, fn)
-                              }
+                                GlobalSetImmediate.call(global, fn)
+                            }
                             : function(fn) {
-                                  ProcessNextTick.call(process, fn)
-                              }
+                                ProcessNextTick.call(process, fn)
+                            }
                     } else if (
                         typeof MutationObserver !== 'undefined' &&
                         !(
@@ -4585,17 +4585,17 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         var ArrayFrom =
                             typeof Array.from === 'function'
                                 ? function(v) {
-                                      return Array.from(v)
-                                  }
+                                    return Array.from(v)
+                                }
                                 : function(v) {
-                                      var ret = []
-                                      var it = v[Symbol.iterator]()
-                                      var itResult
-                                      while (!(itResult = it.next()).done) {
-                                          ret.push(itResult.value)
-                                      }
-                                      return ret
-                                  }
+                                    var ret = []
+                                    var it = v[Symbol.iterator]()
+                                    var itResult
+                                    while (!(itResult = it.next()).done) {
+                                        ret.push(itResult.value)
+                                    }
+                                    return ret
+                                }
 
                         asArray = function(v) {
                             if (es5.isArray(v)) {

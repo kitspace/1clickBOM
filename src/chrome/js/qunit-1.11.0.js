@@ -8,7 +8,7 @@
  * http://jquery.org/license
  */
 
-;(function(window) {
+(function(window) {
     var QUnit,
         assert,
         config,
@@ -334,9 +334,9 @@
                 b = document.createElement('strong')
                 b.innerHTML =
                     this.nameHtml +
-                    " <b class='counts'>(<b class='failed'>" +
+                    ' <b class=\'counts\'>(<b class=\'failed\'>' +
                     bad +
-                    "</b>, <b class='passed'>" +
+                    '</b>, <b class=\'passed\'>' +
                     good +
                     '</b>, ' +
                     this.assertions.length +
@@ -469,7 +469,7 @@
         test: function(testName, expected, callback, async) {
             var test,
                 nameHtml =
-                    "<span class='test-name'>" +
+                    '<span class=\'test-name\'>' +
                     escapeText(testName) +
                     '</span>'
 
@@ -480,7 +480,7 @@
 
             if (config.currentModule) {
                 nameHtml =
-                    "<span class='module-name'>" +
+                    '<span class=\'module-name\'>' +
                     escapeText(config.currentModule) +
                     '</span>: ' +
                     nameHtml
@@ -607,14 +607,14 @@
                 }
 
             msg = escapeText(msg || (result ? 'okay' : 'failed'))
-            msg = "<span class='test-message'>" + msg + '</span>'
+            msg = '<span class=\'test-message\'>' + msg + '</span>'
 
             if (!result) {
                 source = sourceFromStacktrace(2)
                 if (source) {
                     details.source = source
                     msg +=
-                        "<table><tr class='test-source'><th>Source: </th><td><pre>" +
+                        '<table><tr class=\'test-source\'><th>Source: </th><td><pre>' +
                         escapeText(source) +
                         '</pre></td></tr></table>'
                 }
@@ -861,7 +861,7 @@
     }
 
     // Initialize more QUnit.config and QUnit.urlParams
-    ;(function() {
+    (function() {
         var i,
             location = window.location || {search: '', protocol: 'file:'},
             params = location.search.slice(1).split('&'),
@@ -922,13 +922,13 @@
 
             if (qunit) {
                 qunit.innerHTML =
-                    "<h1 id='qunit-header'>" +
+                    '<h1 id=\'qunit-header\'>' +
                     escapeText(document.title) +
                     '</h1>' +
-                    "<h2 id='qunit-banner'></h2>" +
-                    "<div id='qunit-testrunner-toolbar'></div>" +
-                    "<h2 id='qunit-userAgent'></h2>" +
-                    "<ol id='qunit-tests'></ol>"
+                    '<h2 id=\'qunit-banner\'></h2>' +
+                    '<div id=\'qunit-testrunner-toolbar\'></div>' +
+                    '<h2 id=\'qunit-userAgent\'></h2>' +
+                    '<ol id=\'qunit-tests\'></ol>'
             }
 
             tests = id('qunit-tests')
@@ -1011,18 +1011,18 @@
                 type = (match && match[1]) || ''
 
             switch (type) {
-                case 'Number':
-                    if (isNaN(obj)) {
-                        return 'nan'
-                    }
-                    return 'number'
-                case 'String':
-                case 'Boolean':
-                case 'Array':
-                case 'Date':
-                case 'RegExp':
-                case 'Function':
-                    return type.toLowerCase()
+            case 'Number':
+                if (isNaN(obj)) {
+                    return 'nan'
+                }
+                return 'number'
+            case 'String':
+            case 'Boolean':
+            case 'Array':
+            case 'Date':
+            case 'RegExp':
+            case 'Function':
+                return type.toLowerCase()
             }
             if (typeof obj === 'object') {
                 return 'object'
@@ -1050,24 +1050,24 @@
                 }
 
             message = escapeText(message) || (result ? 'okay' : 'failed')
-            message = "<span class='test-message'>" + message + '</span>'
+            message = '<span class=\'test-message\'>' + message + '</span>'
             output = message
 
             if (!result) {
                 expected = escapeText(QUnit.jsDump.parse(expected))
                 actual = escapeText(QUnit.jsDump.parse(actual))
                 output +=
-                    "<table><tr class='test-expected'><th>Expected: </th><td><pre>" +
+                    '<table><tr class=\'test-expected\'><th>Expected: </th><td><pre>' +
                     expected +
                     '</pre></td></tr>'
 
                 if (actual !== expected) {
                     output +=
-                        "<tr class='test-actual'><th>Result: </th><td><pre>" +
+                        '<tr class=\'test-actual\'><th>Result: </th><td><pre>' +
                         actual +
                         '</pre></td></tr>'
                     output +=
-                        "<tr class='test-diff'><th>Diff: </th><td><pre>" +
+                        '<tr class=\'test-diff\'><th>Diff: </th><td><pre>' +
                         QUnit.diff(expected, actual) +
                         '</pre></td></tr>'
                 }
@@ -1077,7 +1077,7 @@
                 if (source) {
                     details.source = source
                     output +=
-                        "<tr class='test-source'><th>Source: </th><td><pre>" +
+                        '<tr class=\'test-source\'><th>Source: </th><td><pre>' +
                         escapeText(source) +
                         '</pre></td></tr>'
                 }
@@ -1110,14 +1110,14 @@
                 }
 
             message = escapeText(message) || 'error'
-            message = "<span class='test-message'>" + message + '</span>'
+            message = '<span class=\'test-message\'>' + message + '</span>'
             output = message
 
             output += '<table>'
 
             if (actual) {
                 output +=
-                    "<tr class='test-actual'><th>Result: </th><td><pre>" +
+                    '<tr class=\'test-actual\'><th>Result: </th><td><pre>' +
                     escapeText(actual) +
                     '</pre></td></tr>'
             }
@@ -1125,7 +1125,7 @@
             if (source) {
                 details.source = source
                 output +=
-                    "<tr class='test-source'><th>Source: </th><td><pre>" +
+                    '<tr class=\'test-source\'><th>Source: </th><td><pre>' +
                     escapeText(source) +
                     '</pre></td></tr>'
             }
@@ -1245,36 +1245,36 @@
             }
             config[val.id] = QUnit.urlParams[val.id]
             urlConfigHtml +=
-                "<input id='qunit-urlconfig-" +
+                '<input id=\'qunit-urlconfig-' +
                 escapeText(val.id) +
-                "' name='" +
+                '\' name=\'' +
                 escapeText(val.id) +
-                "' type='checkbox'" +
-                (config[val.id] ? " checked='checked'" : '') +
-                " title='" +
+                '\' type=\'checkbox\'' +
+                (config[val.id] ? ' checked=\'checked\'' : '') +
+                ' title=\'' +
                 escapeText(val.tooltip) +
-                "'><label for='qunit-urlconfig-" +
+                '\'><label for=\'qunit-urlconfig-' +
                 escapeText(val.id) +
-                "' title='" +
+                '\' title=\'' +
                 escapeText(val.tooltip) +
-                "'>" +
+                '\'>' +
                 val.label +
                 '</label>'
         }
 
         moduleFilterHtml +=
-            "<label for='qunit-modulefilter'>Module: </label><select id='qunit-modulefilter' name='modulefilter'><option value='' " +
-            (config.module === undefined ? "selected='selected'" : '') +
+            '<label for=\'qunit-modulefilter\'>Module: </label><select id=\'qunit-modulefilter\' name=\'modulefilter\'><option value=\'\' ' +
+            (config.module === undefined ? 'selected=\'selected\'' : '') +
             '>< All Modules ></option>'
 
         for (i in config.modules) {
             if (config.modules.hasOwnProperty(i)) {
                 numModules += 1
                 moduleFilterHtml +=
-                    "<option value='" +
+                    '<option value=\'' +
                     escapeText(encodeURIComponent(i)) +
-                    "' " +
-                    (config.module === i ? "selected='selected'" : '') +
+                    '\' ' +
+                    (config.module === i ? 'selected=\'selected\'' : '') +
                     '>' +
                     escapeText(i) +
                     '</option>'
@@ -1292,13 +1292,13 @@
         banner = id('qunit-header')
         if (banner) {
             banner.innerHTML =
-                "<a href='" +
+                '<a href=\'' +
                 QUnit.url({
                     filter: undefined,
                     module: undefined,
                     testNumber: undefined
                 }) +
-                "'>" +
+                '\'>' +
                 banner.innerHTML +
                 '</a> '
         }
@@ -1467,11 +1467,11 @@
                 'Tests completed in ',
                 runtime,
                 ' milliseconds.<br/>',
-                "<span class='passed'>",
+                '<span class=\'passed\'>',
                 passed,
-                "</span> assertions of <span class='total'>",
+                '</span> assertions of <span class=\'total\'>',
                 config.stats.all,
-                "</span> passed, <span class='failed'>",
+                '</span> passed, <span class=\'failed\'>',
                 config.stats.bad,
                 '</span> failed.'
             ].join('')
@@ -1624,16 +1624,16 @@
         // Both single quotes and double quotes (for attributes)
         return s.replace(/['"<>&]/g, function(s) {
             switch (s) {
-                case "'":
-                    return '&#039;'
-                case '"':
-                    return '&quot;'
-                case '<':
-                    return '&lt;'
-                case '>':
-                    return '&gt;'
-                case '&':
-                    return '&amp;'
+            case '\'':
+                return '&#039;'
+            case '"':
+                return '&quot;'
+            case '<':
+                return '&lt;'
+            case '>':
+                return '&gt;'
+            case '&':
+                return '&amp;'
             }
         })
     }

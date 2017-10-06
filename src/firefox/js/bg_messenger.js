@@ -19,7 +19,7 @@
 
 //this is the messenger object used by the background in firefox
 
-let bgMessenger = (popup, message_exchange) => ({
+const bgMessenger = (popup, message_exchange) => ({
     on(msgName, callback) {
         popup.port.on(msgName, callback)
         return message_exchange.adders.push(

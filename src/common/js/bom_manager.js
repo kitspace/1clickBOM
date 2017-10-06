@@ -226,7 +226,7 @@ const bom_manager = {
             }
             if (over.length > 0) {
                 var priority
-                const title = "That's a lot of lines!"
+                const title = 'That\'s a lot of lines!'
                 let message = 'You have over 100 lines for '
                 message += over[0]
                 if (over.length > 1) {

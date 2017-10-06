@@ -19,7 +19,7 @@ exports.main = function main(options, callbacks) {
                         contentScriptWhen: 'end',
                         contentScript:
                             'AddonManager.getAddonByID(' +
-                            "'1clickBOM@monostable',           " +
+                            '\'1clickBOM@monostable\',           ' +
                             'function(aAddon) {                ' +
                             '    window                        ' +
                             '        .gViewController          ' +
