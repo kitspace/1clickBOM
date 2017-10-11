@@ -37,7 +37,7 @@ const messenger = {
         }
     },
     send(msgName, input) {
-        chrome.runtime.sendMessage({name: msgName, value: input})
+        chrome.runtime.sendMessage({name: msgName, value: JSON.parse(JSON.stringify(input))})
         if (chrome.tabs != null) {
             return chrome.tabs.query(
                 {
