@@ -208,7 +208,7 @@ room][kitnic chat].
 The code is available on [GitHub][7]. To get started you will need:
 
 - Chrome or Chromium
-- Firefox (optionally with [Extension Autoinstaller][16])
+- Firefox version 52 or higher
 - [Ninja Build](https://ninja-build.org/)
 - sed
 - npm
@@ -222,12 +222,12 @@ The rest of the dependencies can be retrieved via `npm install`.
 - Get dependencies above and make sure executables are on your path
 - `npm install --global` (or `npm install && export PATH=$PATH:$(pwd)/node_modules/.bin`)
 - `./configure`
-- `ninja`
+- `ninja chrome`
 
 #### Load
 
 - For Chrome enable developer mode in `chrome://extensions` and load the unpacked extension from `build/chrome`
-- For Firefox run `./run-firefox`
+- For Firefox go to `about:debugging#addons` select "Load Temporary Add-on" and load the `build/chrome/manifest.json`
 
 #### Test
 
