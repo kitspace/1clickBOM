@@ -144,7 +144,6 @@ ninja
 targets.chrome.push('build/chrome/js/functional.js')
 
 copyFiles('chrome')
-    .concat(sourceJson('chrome'))
     .forEach(f => {
         const target = f.replace(/src\/.*?\//, 'build/chrome/')
         ninja
@@ -197,8 +196,8 @@ ninja
             `&& rm -f ${chrome_package_name}/js/functional.js ` +
             `${chrome_package_name}/js/unit.js ${chrome_package_name}/js/qunit.js ` +
             `${chrome_package_name}/html/test.html ${chrome_package_name}/html/qunit-1.11.0.css` +
-            `&& zip -r ${chrome_package_name}.zip ${chrome_package_name}/ ` +
-            `&& rm -rf ${chrome_package_name}`
+        `&& cd ${chrome_package_name} && zip -r ../${chrome_package_name}.zip * ` +
+            `&& cd .. && rm -rf ${chrome_package_name}`
     )
 ninja
     .edge(`${chrome_package_name}.zip`)
