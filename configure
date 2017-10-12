@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 'use strict'
-const fs      = require('fs')
+const fs = require('fs')
 const globule = require('globule')
-const path    = require('path')
-const cp      = require('child_process')
+const path = require('path')
+const cp = require('child_process')
 const ninjaBuildGen = require('ninja-build-gen')
 
-const version = "1.4.0"
+const version = '1.4.0'
 
 const ninja = ninjaBuildGen('1.5.1', 'build/')
 ninja.header(`#generated from ${path.basename(module.filename)}`)
 
-const presets = "--presets es2015-script"
+const presets = '--presets es2015-script'
 const browserify = `browserify -x $exclude --transform [ babelify ${presets} ]`
 
 //- Rules -
@@ -22,187 +22,229 @@ ninja.rule('babel').run(`babel ${presets} --source-maps false $in -o $out`)
 
 //browserify and put dependency list in $out.d in makefile format using
 //relative paths
-ninja.rule('browserify')
-    .run(`${browserify} $in --list > $out.d `
-         + `&& node ./depfileify.js $out $out.d && ${browserify} $in -o $out`)
+ninja
+    .rule('browserify')
+    .run(
+        `${browserify} $in --list > $out.d ` +
+            `&& node ./depfileify.js $out $out.d && ${browserify} $in -o $out`
+    )
     .depfile('$out.d')
-    .description("browserify $in -o $out")
+    .description('browserify $in -o $out')
 
-ninja.rule('browserify-require')
-    .run("browserify --require='./$in' --list > $out.d"
-         + "&& node ./depfileify.js $out $out.d && browserify --require='./$in' -o $out")
+ninja
+    .rule('browserify-require')
+    .run(
+        "browserify --require='./$in' --list > $out.d" +
+            "&& node ./depfileify.js $out $out.d && browserify --require='./$in' -o $out"
+    )
     .depfile('$out.d')
-    .description("browserify $in -o $out")
-
+    .description('browserify $in -o $out')
 
 ninja.rule('sed').run("sed 's$regex' $in > $out")
 
-
 ninja.rule('remove').run('rm -rf $in')
-
 
 //- Lists of Files -
 
 const sourceJs = browser =>
-    globule.find([
-        `src/${browser}/js/**/*.js`,
-        'src/common/js/*.js'
-    ])
+    globule.find([`src/${browser}/js/**/*.js`, 'src/common/js/*.js'])
 
 const sourceJson = browser =>
-    globule.find([
-        `src/${browser}/data/*.json`,
-        'src/common/data/*.json'
-    ])
+    globule.find([`src/${browser}/data/*.json`, 'src/common/data/*.json'])
 
 const copyFiles = browser =>
     globule.find([
         `src/${browser}/html/*`,
         `src/${browser}/images/*`,
         'src/common/html/*',
-        'src/common/images/*',
+        'src/common/images/*'
     ])
-
 
 //- Edges -
 
-const targets = {firefox:[], chrome:[]}
+const targets = {firefox: [], chrome: []}
 
-const browserifyEdge = function(target, browser, layer, exclude='') {
-    const edge = ninja.edge(target)
+const browserifyEdge = function(target, browser, layer, exclude = '') {
+    const edge = ninja
+        .edge(target)
         .from(`build/.temp-${browser}/${layer}.js`)
         .assign('exclude', exclude)
-        .after(sourceJs(browser).map(f => `build/.temp-${browser}/${path.basename(f)}`))
+        .after(
+            sourceJs(browser).map(
+                f => `build/.temp-${browser}/${path.basename(f)}`
+            )
+        )
         .using('browserify')
 
     if (browser === 'chrome') {
-        edge.after(sourceJson('chrome').map(f => `build/.temp-chrome/data/${path.basename(f)}`))
+        edge.after(
+            sourceJson('chrome').map(
+                f => `build/.temp-chrome/data/${path.basename(f)}`
+            )
+        )
     }
 
     return targets[browser].push(target)
 }
-
-
 ;['main', 'popup', 'options', 'kitnic'].forEach(layer => {
     browserifyEdge(`build/chrome/js/${layer}.js`, 'chrome', layer)
 })
 
-
 browserifyEdge('build/firefox/data/popup.js', 'firefox', 'popup')
 browserifyEdge('build/firefox/data/kitnic.js', 'firefox', 'kitnic')
-
 
 const firefox_js = []
 sourceJs('firefox').forEach(file => {
     const target = `build/firefox/lib/${path.basename(file)}`
-    ninja.edge(target).from(file).using('babel')
+    ninja
+        .edge(target)
+        .from(file)
+        .using('babel')
     firefox_js.push(target)
     targets.firefox.push(target)
 })
 
-
-function sourceCopyEdge(browser, f) {
-}
-
-for (let browser in targets) {
+for (const browser in targets) {
     sourceJs(browser).forEach(f => {
         const target = `build/.temp-${browser}/${path.basename(f)}`
-        ninja.edge(target).from(f).using('copy')
+        ninja
+            .edge(target)
+            .from(f)
+            .using('copy')
     })
 }
 
 sourceJson('chrome').forEach(f => {
     const target = `build/.temp-chrome/data/${path.basename(f)}`
-    ninja.edge(target).from(f).using('copy')
+    ninja
+        .edge(target)
+        .from(f)
+        .using('copy')
 })
 
 const qunitSrc = 'build/.temp-chrome/qunit-1.11.0.js'
-ninja.edge('build/chrome/js/qunit.js').from(qunitSrc)
+ninja
+    .edge('build/chrome/js/qunit.js')
+    .from(qunitSrc)
     .using('browserify-require')
 targets.chrome.push('build/chrome/js/qunit.js')
 
-
-ninja.edge('build/chrome/js/unit.js').from('build/.temp-chrome/unit.js')
+ninja
+    .edge('build/chrome/js/unit.js')
+    .from('build/.temp-chrome/unit.js')
     .assign('exclude', qunitSrc)
     .using('browserify')
 targets.chrome.push('build/chrome/js/unit.js')
 
-
-ninja.edge('build/chrome/js/functional.js').from('build/.temp-chrome/functional.js')
+ninja
+    .edge('build/chrome/js/functional.js')
+    .from('build/.temp-chrome/functional.js')
     .assign('exclude', qunitSrc)
     .using('browserify')
 targets.chrome.push('build/chrome/js/functional.js')
 
+copyFiles('chrome')
+    .concat(sourceJson('chrome'))
+    .forEach(f => {
+        const target = f.replace(/src\/.*?\//, 'build/chrome/')
+        ninja
+            .edge(target)
+            .from(f)
+            .using('copy')
+        targets.chrome.push(target)
+    })
 
-copyFiles('chrome').concat(sourceJson('chrome')).forEach(f => {
-    const target = f.replace(/src\/.*?\//, "build/chrome/")
-    ninja.edge(target).from(f).using('copy')
-    targets.chrome.push(target)
-})
+copyFiles('firefox')
+    .concat(sourceJson('firefox'))
+    .forEach(f => {
+        const target = f.replace(/src\/.*?\//, 'build/firefox/data/')
+        ninja
+            .edge(target)
+            .from(f)
+            .using('copy')
+        targets.firefox.push(target)
+    })
 
-
-copyFiles('firefox').concat(sourceJson('firefox')).forEach(f => {
-    const target = f.replace(/src\/.*?\//, "build/firefox/data/")
-    ninja.edge(target).from(f).using('copy')
-    targets.firefox.push(target)
-})
-
-
-for (let browser in targets) {
+for (const browser in targets) {
     const list = targets[browser]
     ninja.edge(browser).from(list)
 }
 
-
 const manifest = 'build/chrome/manifest.json'
-ninja.edge(manifest).from(manifest.replace('build','src'))
-    .assign('regex',`/@version/\"${version}\"/`).using('sed')
+ninja
+    .edge(manifest)
+    .from(manifest.replace('build', 'src'))
+    .assign('regex', `/@version/\"${version}\"/`)
+    .using('sed')
 targets.chrome.push(manifest)
 
-
-ninja.rule('make-package-json')
-    .run(`node make-package-json.js ${version}`)
-ninja.edge('build/firefox/package.json')
-    .from(['src/common/data/countries.json','src/firefox/package.json', 'package.json'])
+ninja.rule('make-package-json').run(`node make-package-json.js ${version}`)
+ninja
+    .edge('build/firefox/package.json')
+    .from([
+        'src/common/data/countries.json',
+        'src/firefox/package.json',
+        'package.json'
+    ])
     .using('make-package-json')
 targets.firefox.push('build/firefox/package.json')
 
 const chrome_package_name = `1clickBOM-v${version}-chrome`
-ninja.rule('package-chrome')
-    .run(`cd build/ && cp -r chrome  ${chrome_package_name}`
-         + `&& rm -f ${chrome_package_name}/js/functional.js `
-         + `${chrome_package_name}/js/unit.js ${chrome_package_name}/js/qunit.js `
-         + `${chrome_package_name}/html/test.html ${chrome_package_name}/html/qunit-1.11.0.css`
-         + `&& zip -r ${chrome_package_name}.zip ${chrome_package_name}/ `
-         + `&& rm -rf ${chrome_package_name}`)
-ninja.edge(`${chrome_package_name}.zip`).need('chrome').using('package-chrome')
+ninja
+    .rule('package-chrome')
+    .run(
+        `cd build/ && cp -r chrome  ${chrome_package_name}` +
+            `&& rm -f ${chrome_package_name}/js/functional.js ` +
+            `${chrome_package_name}/js/unit.js ${chrome_package_name}/js/qunit.js ` +
+            `${chrome_package_name}/html/test.html ${chrome_package_name}/html/qunit-1.11.0.css` +
+            `&& zip -r ${chrome_package_name}.zip ${chrome_package_name}/ ` +
+            `&& rm -rf ${chrome_package_name}`
+    )
+ninja
+    .edge(`${chrome_package_name}.zip`)
+    .need('chrome')
+    .using('package-chrome')
 ninja.edge('package-chrome').need(`${chrome_package_name}.zip`)
 
-
 ninja.rule('npm-install').run('cd build/firefox/ && npm install')
-ninja.edge('build/firefox/node_modules')
+ninja
+    .edge('build/firefox/node_modules')
     .from('build/firefox/package.json')
     .using('npm-install')
 targets.firefox.push('build/firefox/node_modules')
 
-ninja.rule('make-jpmignore').run("cp src/firefox/.jpmignore build/firefox/.jpmignore && ./make-jpmignore $in >> build/firefox/.jpmignore")
-ninja.edge('build/firefox/.jpmignore').from('build/firefox/lib/main.js')
+ninja
+    .rule('make-jpmignore')
+    .run(
+        'cp src/firefox/.jpmignore build/firefox/.jpmignore && ./make-jpmignore $in >> build/firefox/.jpmignore'
+    )
+ninja
+    .edge('build/firefox/.jpmignore')
+    .from('build/firefox/lib/main.js')
     .need(firefox_js.concat(['src/firefox/.jpmignore', 'make-jpmignore']))
     .using('make-jpmignore')
 targets.firefox.push('build/firefox/.jpmignore')
 
 const firefox_package = `build/1clickBOM-v${version}-firefox.xpi`
-ninja.rule('package-firefox')
-    .run(`jpm xpi --addon-dir=${__dirname}/build/firefox `
-            + `&& mv build/firefox/*.xpi $out && echo 'moved to ${firefox_package}'`)
-ninja.edge(firefox_package).need('firefox').using('package-firefox')
+ninja
+    .rule('package-firefox')
+    .run(
+        `jpm xpi --addon-dir=${__dirname}/build/firefox ` +
+            `&& mv build/firefox/*.xpi $out && echo 'moved to ${firefox_package}'`
+    )
+ninja
+    .edge(firefox_package)
+    .need('firefox')
+    .using('package-firefox')
 ninja.edge('package-firefox').need(firefox_package)
-
 
 ninja.edge('all').from(Object.keys(targets))
 ninja.byDefault('all')
 
-ninja.edge('clean').from('build/').using('remove')
+ninja
+    .edge('clean')
+    .from('build/')
+    .using('remove')
 
 ninja.save('build.ninja')
 
