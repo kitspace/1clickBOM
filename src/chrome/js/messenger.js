@@ -36,7 +36,7 @@ const messenger = {
             return (this.listening = true)
         }
     },
-    send(msgName, input) {
+    send(msgName, input=null) {
         chrome.runtime.sendMessage({name: msgName, value: JSON.parse(JSON.stringify(input))})
         if (chrome.tabs != null) {
             return chrome.tabs.query(
@@ -51,7 +51,7 @@ const messenger = {
                     tabs.map(tab =>
                         chrome.tabs.sendMessage(tab.id, {
                             name: msgName,
-                            value: input
+                            value: JSON.parse(JSON.stringify(input))
                         })
                     )
             )
