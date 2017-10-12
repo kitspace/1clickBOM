@@ -274,15 +274,15 @@ class Digikey extends RetailerInterface {
             function(responseText) {
                 const doc = browser.parseDOM(responseText)
                 switch (error) {
-                case 'TapeReelQuantityTooLow':
-                    var choice = doc.getElementById('rb1')
-                    break
-                case 'NextBreakQuanIsLowerExtPrice':
-                    choice = doc.getElementById('rb2')
-                    break
-                case 'CutTapeQuantityIsMultipleOfReelQuantity':
-                    choice = doc.getElementById('rb1')
-                    break
+                    case 'TapeReelQuantityTooLow':
+                        var choice = doc.getElementById('rb1')
+                        break
+                    case 'NextBreakQuanIsLowerExtPrice':
+                        choice = doc.getElementById('rb2')
+                        break
+                    case 'CutTapeQuantityIsMultipleOfReelQuantity':
+                        choice = doc.getElementById('rb1')
+                        break
                 }
                 if (choice != null) {
                     const label = choice.nextElementSibling

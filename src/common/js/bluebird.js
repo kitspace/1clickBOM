@@ -34,7 +34,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
         module.exports = e()
     else if ('function' == typeof define && define.amd) define([], e)
     else {
-        var f
+        let f
         'undefined' != typeof window
             ? (f = window)
             : 'undefined' != typeof global
@@ -43,22 +43,22 @@ const clearTimeout = require('./browser').browser.clearTimeout
             (f.Promise = e())
     }
 })(function() {
-    var define, module, exports
+    let define, module, exports
     return (function e(t, n, r) {
         function s(o, u) {
             if (!n[o]) {
                 if (!t[o]) {
-                    var a = typeof _dereq_ == 'function' && _dereq_
+                    const a = typeof _dereq_ == 'function' && _dereq_
                     if (!u && a) return a(o, !0)
                     if (i) return i(o, !0)
-                    var f = new Error('Cannot find module \'' + o + '\'')
+                    const f = new Error("Cannot find module '" + o + "'")
                     throw ((f.code = 'MODULE_NOT_FOUND'), f)
                 }
-                var l = (n[o] = {exports: {}})
+                const l = (n[o] = {exports: {}})
                 t[o][0].call(
                     l.exports,
                     function(e) {
-                        var n = t[o][1][e]
+                        const n = t[o][1][e]
                         return s(n ? n : e)
                     },
                     l,
@@ -72,22 +72,22 @@ const clearTimeout = require('./browser').browser.clearTimeout
             return n[o].exports
         }
         var i = typeof _dereq_ == 'function' && _dereq_
-        for (var o = 0; o < r.length; o++) s(r[o])
+        for (let o = 0; o < r.length; o++) s(r[o])
         return s
     })(
         {
             1: [
                 function(_dereq_, module, exports) {
                     'use strict'
-                    var firstLineError
+                    let firstLineError
                     try {
                         throw new Error()
                     } catch (e) {
                         firstLineError = e
                     }
-                    var schedule = _dereq_('./schedule')
-                    var Queue = _dereq_('./queue')
-                    var util = _dereq_('./util')
+                    const schedule = _dereq_('./schedule')
+                    const Queue = _dereq_('./queue')
+                    const util = _dereq_('./util')
 
                     function Async() {
                         this._isTickUsed = false
@@ -95,7 +95,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         this._normalQueue = new Queue(16)
                         this._haveDrainedQueues = false
                         this._trampolineEnabled = true
-                        var self = this
+                        const self = this
                         this.drainQueues = function() {
                             self._drainQueues()
                         }
@@ -216,13 +216,13 @@ const clearTimeout = require('./browser').browser.clearTimeout
 
                     Async.prototype._drainQueue = function(queue) {
                         while (queue.length() > 0) {
-                            var fn = queue.shift()
+                            const fn = queue.shift()
                             if (typeof fn !== 'function') {
                                 fn._settlePromises()
                                 continue
                             }
-                            var receiver = queue.shift()
-                            var arg = queue.shift()
+                            const receiver = queue.shift()
+                            const arg = queue.shift()
                             fn.call(receiver, arg)
                         }
                     }
@@ -259,12 +259,12 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         tryConvertToPromise,
                         debug
                     ) {
-                        var calledBind = false
-                        var rejectThis = function(_, e) {
+                        let calledBind = false
+                        const rejectThis = function(_, e) {
                             this._reject(e)
                         }
 
-                        var targetRejected = function(e, context) {
+                        const targetRejected = function(e, context) {
                             context.promiseRejectionQueued = true
                             context.bindingPromise._then(
                                 rejectThis,
@@ -275,13 +275,13 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             )
                         }
 
-                        var bindingResolved = function(thisArg, context) {
+                        const bindingResolved = function(thisArg, context) {
                             if ((this._bitField & 50397184) === 0) {
                                 this._resolveCallback(context.target)
                             }
                         }
 
-                        var bindingRejected = function(e, context) {
+                        const bindingRejected = function(e, context) {
                             if (!context.promiseRejectionQueued) this._reject(e)
                         }
 
@@ -291,13 +291,13 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 Promise.prototype._propagateFrom = debug.propagateFromFunction()
                                 Promise.prototype._boundValue = debug.boundValueFunction()
                             }
-                            var maybePromise = tryConvertToPromise(thisArg)
-                            var ret = new Promise(INTERNAL)
+                            const maybePromise = tryConvertToPromise(thisArg)
+                            const ret = new Promise(INTERNAL)
                             ret._propagateFrom(this, 1)
-                            var target = this._target()
+                            const target = this._target()
                             ret._setBoundTo(maybePromise)
                             if (maybePromise instanceof Promise) {
-                                var context = {
+                                const context = {
                                     promiseRejectionQueued: false,
                                     promise: ret,
                                     target: target,
@@ -347,7 +347,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
             3: [
                 function(_dereq_, module, exports) {
                     'use strict'
-                    var old
+                    let old
                     if (typeof Promise !== 'undefined') old = Promise
                     function noConflict() {
                         try {
@@ -370,10 +370,10 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         apiRejection,
                         debug
                     ) {
-                        var util = _dereq_('./util')
-                        var tryCatch = util.tryCatch
-                        var errorObj = util.errorObj
-                        var async = Promise._async
+                        const util = _dereq_('./util')
+                        const tryCatch = util.tryCatch
+                        const errorObj = util.errorObj
+                        const async = Promise._async
 
                         Promise.prototype[
                             'break'
@@ -381,8 +381,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             if (!debug.cancellation())
                                 return this._warn('cancellation is disabled')
 
-                            var promise = this
-                            var child = promise
+                            let promise = this
+                            let child = promise
                             while (promise.isCancellable()) {
                                 if (!promise._cancelBy(child)) {
                                     if (child._isFollowing()) {
@@ -393,7 +393,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     break
                                 }
 
-                                var parent = promise._cancellationParent
+                                const parent = promise._cancellationParent
                                 if (parent == null || !parent.isCancellable()) {
                                     if (promise._isFollowing()) {
                                         promise._followee().cancel()
@@ -467,7 +467,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         ) {
                             if (util.isArray(onCancelCallback)) {
                                 for (
-                                    var i = 0;
+                                    let i = 0;
                                     i < onCancelCallback.length;
                                     ++i
                                 ) {
@@ -479,9 +479,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             } else if (onCancelCallback !== undefined) {
                                 if (typeof onCancelCallback === 'function') {
                                     if (!internalOnly) {
-                                        var e = tryCatch(onCancelCallback).call(
-                                            this._boundValue()
-                                        )
+                                        const e = tryCatch(
+                                            onCancelCallback
+                                        ).call(this._boundValue())
                                         if (e === errorObj) {
                                             this._attachExtraTrace(e.e)
                                             async.throwLater(e.e)
@@ -494,7 +494,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         Promise.prototype._invokeOnCancel = function() {
-                            var onCancelCallback = this._onCancel()
+                            const onCancelCallback = this._onCancel()
                             this._unsetOnCancel()
                             async.invoke(
                                 this._doInvokeOnCancel,
@@ -521,20 +521,20 @@ const clearTimeout = require('./browser').browser.clearTimeout
                 function(_dereq_, module, exports) {
                     'use strict'
                     module.exports = function(NEXT_FILTER) {
-                        var util = _dereq_('./util')
-                        var getKeys = _dereq_('./es5').keys
-                        var tryCatch = util.tryCatch
-                        var errorObj = util.errorObj
+                        const util = _dereq_('./util')
+                        const getKeys = _dereq_('./es5').keys
+                        const tryCatch = util.tryCatch
+                        const errorObj = util.errorObj
 
                         function catchFilter(instances, cb, promise) {
                             return function(e) {
-                                var boundTo = promise._boundValue()
+                                const boundTo = promise._boundValue()
                                 predicateLoop: for (
-                                    var i = 0;
+                                    let i = 0;
                                     i < instances.length;
                                     ++i
                                 ) {
-                                    var item = instances[i]
+                                    const item = instances[i]
 
                                     if (
                                         item === Error ||
@@ -545,7 +545,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                             return tryCatch(cb).call(boundTo, e)
                                         }
                                     } else if (typeof item === 'function') {
-                                        var matchesPredicate = tryCatch(
+                                        const matchesPredicate = tryCatch(
                                             item
                                         ).call(boundTo, e)
                                         if (matchesPredicate === errorObj) {
@@ -554,9 +554,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                             return tryCatch(cb).call(boundTo, e)
                                         }
                                     } else if (util.isObject(e)) {
-                                        var keys = getKeys(item)
-                                        for (var j = 0; j < keys.length; ++j) {
-                                            var key = keys[j]
+                                        const keys = getKeys(item)
+                                        for (let j = 0; j < keys.length; ++j) {
+                                            const key = keys[j]
                                             if (item[key] != e[key]) {
                                                 continue predicateLoop
                                             }
@@ -577,8 +577,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                 function(_dereq_, module, exports) {
                     'use strict'
                     module.exports = function(Promise) {
-                        var longStackTraces = false
-                        var contextStack = []
+                        let longStackTraces = false
+                        const contextStack = []
 
                         Promise.prototype._promiseCreated = function() {}
                         Promise.prototype._pushContext = function() {}
@@ -601,8 +601,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
 
                         Context.prototype._popContext = function() {
                             if (this._trace !== undefined) {
-                                var trace = contextStack.pop()
-                                var ret = trace._promiseCreated
+                                const trace = contextStack.pop()
+                                const ret = trace._promiseCreated
                                 trace._promiseCreated = null
                                 return ret
                             }
@@ -614,7 +614,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         function peekContext() {
-                            var lastIndex = contextStack.length - 1
+                            const lastIndex = contextStack.length - 1
                             if (lastIndex >= 0) {
                                 return contextStack[lastIndex]
                             }
@@ -624,14 +624,14 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         Context.create = createContext
                         Context.deactivateLongStackTraces = function() {}
                         Context.activateLongStackTraces = function() {
-                            var Promise_pushContext =
+                            const Promise_pushContext =
                                 Promise.prototype._pushContext
-                            var Promise_popContext =
+                            const Promise_popContext =
                                 Promise.prototype._popContext
-                            var Promise_PeekContext = Promise._peekContext
-                            var Promise_peekContext =
+                            const Promise_PeekContext = Promise._peekContext
+                            const Promise_peekContext =
                                 Promise.prototype._peekContext
-                            var Promise_promiseCreated =
+                            const Promise_promiseCreated =
                                 Promise.prototype._promiseCreated
                             Context.deactivateLongStackTraces = function() {
                                 Promise.prototype._pushContext = Promise_pushContext
@@ -648,7 +648,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 Context.prototype._popContext
                             Promise._peekContext = Promise.prototype._peekContext = peekContext
                             Promise.prototype._promiseCreated = function() {
-                                var ctx = this._peekContext()
+                                const ctx = this._peekContext()
                                 if (ctx && ctx._promiseCreated == null)
                                     ctx._promiseCreated = this
                             }
@@ -662,43 +662,43 @@ const clearTimeout = require('./browser').browser.clearTimeout
                 function(_dereq_, module, exports) {
                     'use strict'
                     module.exports = function(Promise, Context) {
-                        var getDomain = Promise._getDomain
-                        var async = Promise._async
-                        var Warning = _dereq_('./errors').Warning
-                        var util = _dereq_('./util')
-                        var canAttachTrace = util.canAttachTrace
-                        var unhandledRejectionHandled
-                        var possiblyUnhandledRejection
-                        var bluebirdFramePattern = /[\\\/]bluebird[\\\/]js[\\\/](release|debug|instrumented)/
-                        var stackFramePattern = null
-                        var formatStack = null
-                        var indentStackFrames = false
-                        var printWarning
-                        var debugging = !!(
+                        const getDomain = Promise._getDomain
+                        const async = Promise._async
+                        const Warning = _dereq_('./errors').Warning
+                        const util = _dereq_('./util')
+                        const canAttachTrace = util.canAttachTrace
+                        let unhandledRejectionHandled
+                        let possiblyUnhandledRejection
+                        const bluebirdFramePattern = /[\\\/]bluebird[\\\/]js[\\\/](release|debug|instrumented)/
+                        let stackFramePattern = null
+                        let formatStack = null
+                        let indentStackFrames = false
+                        let printWarning
+                        const debugging = !!(
                             util.env('BLUEBIRD_DEBUG') != 0 &&
                             (true ||
                                 util.env('BLUEBIRD_DEBUG') ||
                                 util.env('NODE_ENV') === 'development')
                         )
 
-                        var warnings = !!(
+                        const warnings = !!(
                             util.env('BLUEBIRD_WARNINGS') != 0 &&
                             (debugging || util.env('BLUEBIRD_WARNINGS'))
                         )
 
-                        var longStackTraces = !!(
+                        const longStackTraces = !!(
                             util.env('BLUEBIRD_LONG_STACK_TRACES') != 0 &&
                             (debugging ||
                                 util.env('BLUEBIRD_LONG_STACK_TRACES'))
                         )
 
-                        var wForgottenReturn =
+                        let wForgottenReturn =
                             util.env('BLUEBIRD_W_FORGOTTEN_RETURN') != 0 &&
                             (warnings ||
                                 !!util.env('BLUEBIRD_W_FORGOTTEN_RETURN'))
 
                         Promise.prototype.suppressUnhandledRejections = function() {
-                            var target = this._target()
+                            const target = this._target()
                             target._bitField =
                                 (target._bitField & ~1048576) | 524288
                         }
@@ -732,7 +732,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
 
                         Promise.prototype._notifyUnhandledRejection = function() {
                             if (this._isRejectionUnhandled()) {
-                                var reason = this._settledValue()
+                                const reason = this._settledValue()
                                 this._setUnhandledRejectionIsNotified()
                                 fireRejectionEvent(
                                     'unhandledRejection',
@@ -784,7 +784,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         Promise.onPossiblyUnhandledRejection = function(fn) {
-                            var domain = getDomain()
+                            const domain = getDomain()
                             possiblyUnhandledRejection =
                                 typeof fn === 'function'
                                     ? domain === null ? fn : domain.bind(fn)
@@ -792,14 +792,14 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         Promise.onUnhandledRejectionHandled = function(fn) {
-                            var domain = getDomain()
+                            const domain = getDomain()
                             unhandledRejectionHandled =
                                 typeof fn === 'function'
                                     ? domain === null ? fn : domain.bind(fn)
                                     : undefined
                         }
 
-                        var disableLongStackTraces = function() {}
+                        let disableLongStackTraces = function() {}
                         Promise.longStackTraces = function() {
                             if (
                                 async.haveItemsQueued() &&
@@ -813,9 +813,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 !config.longStackTraces &&
                                 longStackTracesIsSupported()
                             ) {
-                                var Promise_captureStackTrace =
+                                const Promise_captureStackTrace =
                                     Promise.prototype._captureStackTrace
-                                var Promise_attachExtraTrace =
+                                const Promise_attachExtraTrace =
                                     Promise.prototype._attachExtraTrace
                                 config.longStackTraces = true
                                 disableLongStackTraces = function() {
@@ -847,9 +847,11 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             )
                         }
 
-                        var fireDomEvent = (function() {
+                        const fireDomEvent = (function() {
                             try {
-                                var event = document.createEvent('CustomEvent')
+                                const event = document.createEvent(
+                                    'CustomEvent'
+                                )
                                 event.initCustomEvent(
                                     'testingtheevent',
                                     false,
@@ -858,7 +860,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 )
                                 util.global.dispatchEvent(event)
                                 return function(name, event) {
-                                    var domEvent = document.createEvent(
+                                    const domEvent = document.createEvent(
                                         'CustomEvent'
                                     )
                                     domEvent.initCustomEvent(
@@ -875,7 +877,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             }
                         })()
 
-                        var fireGlobalEvent = (function() {
+                        const fireGlobalEvent = (function() {
                             if (util.isNode) {
                                 return function() {
                                     return process.emit.apply(
@@ -890,8 +892,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     }
                                 }
                                 return function(name) {
-                                    var methodName = 'on' + name.toLowerCase()
-                                    var method = util.global[methodName]
+                                    const methodName = 'on' + name.toLowerCase()
+                                    const method = util.global[methodName]
                                     if (!method) return false
                                     method.apply(
                                         util.global,
@@ -909,7 +911,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             return {promise: promise}
                         }
 
-                        var eventToObjectGenerator = {
+                        const eventToObjectGenerator = {
                             promiseCreated: generatePromiseLifecycleEventObject,
                             promiseFulfilled: generatePromiseLifecycleEventObject,
                             promiseRejected: generatePromiseLifecycleEventObject,
@@ -931,8 +933,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             rejectionHandled: generatePromiseLifecycleEventObject
                         }
 
-                        var activeFireEvent = function(name) {
-                            var globalEventFired = false
+                        const activeFireEvent = function(name) {
+                            let globalEventFired = false
                             try {
                                 globalEventFired = fireGlobalEvent.apply(
                                     null,
@@ -943,7 +945,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 globalEventFired = true
                             }
 
-                            var domEventFired = false
+                            let domEventFired = false
                             try {
                                 domEventFired = fireDomEvent(
                                     name,
@@ -973,7 +975,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 }
                             }
                             if ('warnings' in opts) {
-                                var warningsOption = opts.warnings
+                                const warningsOption = opts.warnings
                                 config.warnings = !!warningsOption
                                 wForgottenReturn = config.warnings
 
@@ -1050,7 +1052,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             resolve,
                             reject
                         ) {
-                            var promise = this
+                            const promise = this
                             try {
                                 executor(resolve, reject, function(onCancel) {
                                     if (typeof onCancel !== 'function') {
@@ -1073,7 +1075,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         ) {
                             if (!this.isCancellable()) return this
 
-                            var previousOnCancel = this._onCancel()
+                            const previousOnCancel = this._onCancel()
                             if (previousOnCancel !== undefined) {
                                 if (util.isArray(previousOnCancel)) {
                                     previousOnCancel.push(onCancel)
@@ -1104,7 +1106,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         function cancellationPropagateFrom(parent, flags) {
                             if ((flags & 1) !== 0) {
                                 this._cancellationParent = parent
-                                var branchesRemainingToCancel =
+                                let branchesRemainingToCancel =
                                     parent._branchesRemainingToCancel
                                 if (branchesRemainingToCancel === undefined) {
                                     branchesRemainingToCancel = 0
@@ -1125,7 +1127,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         var propagateFromFunction = bindingPropagateFrom
 
                         function boundValueFunction() {
-                            var ret = this._boundTo
+                            const ret = this._boundTo
                             if (ret !== undefined) {
                                 if (ret instanceof Promise) {
                                     if (ret.isFulfilled()) {
@@ -1147,14 +1149,14 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             ignoreSelf
                         ) {
                             if (canAttachTrace(error)) {
-                                var trace = this._trace
+                                let trace = this._trace
                                 if (trace !== undefined) {
                                     if (ignoreSelf) trace = trace._parent
                                 }
                                 if (trace !== undefined) {
                                     trace.attachExtraTrace(error)
                                 } else if (!error.__stackCleaned__) {
-                                    var parsed = parseStackAndMessage(error)
+                                    const parsed = parseStackAndMessage(error)
                                     util.notEnumerableProp(
                                         error,
                                         'stack',
@@ -1188,11 +1190,11 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     parent._returnedNonUndefined()
                                 )
                                     return
-                                var bitField = promise._bitField
+                                const bitField = promise._bitField
                                 if ((bitField & 65535) === 0) return
 
                                 if (name) name = name + ' '
-                                var msg =
+                                const msg =
                                     'a promise was created in a ' +
                                     name +
                                     'handler but was not returned from it'
@@ -1201,7 +1203,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         function deprecated(name, replacement) {
-                            var message =
+                            let message =
                                 name +
                                 ' is deprecated and will be removed in a future version.'
                             if (replacement)
@@ -1211,8 +1213,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
 
                         function warn(message, shouldUseOwnTrace, promise) {
                             if (!config.warnings) return
-                            var warning = new Warning(message)
-                            var ctx
+                            const warning = new Warning(message)
+                            let ctx
                             if (shouldUseOwnTrace) {
                                 promise._attachExtraTrace(warning)
                             } else if (
@@ -1221,7 +1223,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             ) {
                                 ctx.attachExtraTrace(warning)
                             } else {
-                                var parsed = parseStackAndMessage(warning)
+                                const parsed = parseStackAndMessage(warning)
                                 warning.stack =
                                     parsed.message +
                                     '\n' +
@@ -1245,7 +1247,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         function removeDuplicateOrEmptyJumps(stacks) {
-                            for (var i = 0; i < stacks.length; ++i) {
+                            for (let i = 0; i < stacks.length; ++i) {
                                 if (
                                     stacks[i].length === 0 ||
                                     (i + 1 < stacks.length &&
@@ -1258,12 +1260,13 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         function removeCommonRoots(stacks) {
-                            var current = stacks[0]
-                            for (var i = 1; i < stacks.length; ++i) {
-                                var prev = stacks[i]
-                                var currentLastIndex = current.length - 1
-                                var currentLastLine = current[currentLastIndex]
-                                var commonRootMeetPoint = -1
+                            let current = stacks[0]
+                            for (let i = 1; i < stacks.length; ++i) {
+                                const prev = stacks[i]
+                                let currentLastIndex = current.length - 1
+                                const currentLastLine =
+                                    current[currentLastIndex]
+                                let commonRootMeetPoint = -1
 
                                 for (var j = prev.length - 1; j >= 0; --j) {
                                     if (prev[j] === currentLastLine) {
@@ -1273,7 +1276,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 }
 
                                 for (var j = commonRootMeetPoint; j >= 0; --j) {
-                                    var line = prev[j]
+                                    const line = prev[j]
                                     if (current[currentLastIndex] === line) {
                                         current.pop()
                                         currentLastIndex--
@@ -1286,13 +1289,13 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         function cleanStack(stack) {
-                            var ret = []
-                            for (var i = 0; i < stack.length; ++i) {
-                                var line = stack[i]
-                                var isTraceLine =
+                            const ret = []
+                            for (let i = 0; i < stack.length; ++i) {
+                                let line = stack[i]
+                                const isTraceLine =
                                     '    (No stack trace)' === line ||
                                     stackFramePattern.test(line)
-                                var isInternalFrame =
+                                const isInternalFrame =
                                     isTraceLine && shouldIgnore(line)
                                 if (isTraceLine && !isInternalFrame) {
                                     if (
@@ -1308,11 +1311,11 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         function stackFramesAsArray(error) {
-                            var stack = error.stack
+                            let stack = error.stack
                                 .replace(/\s+$/g, '')
                                 .split('\n')
                             for (var i = 0; i < stack.length; ++i) {
-                                var line = stack[i]
+                                const line = stack[i]
                                 if (
                                     '    (No stack trace)' === line ||
                                     stackFramePattern.test(line)
@@ -1327,8 +1330,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         function parseStackAndMessage(error) {
-                            var stack = error.stack
-                            var message = error.toString()
+                            let stack = error.stack
+                            const message = error.toString()
                             stack =
                                 typeof stack === 'string' && stack.length > 0
                                     ? stackFramesAsArray(error)
@@ -1341,9 +1344,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
 
                         function formatAndLogError(error, title, isSoft) {
                             if (typeof console !== 'undefined') {
-                                var message
+                                let message
                                 if (util.isObject(error)) {
-                                    var stack = error.stack
+                                    const stack = error.stack
                                     message = title + formatStack(stack, error)
                                 } else {
                                     message = title + String(error)
@@ -1365,7 +1368,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             reason,
                             promise
                         ) {
-                            var localEventFired = false
+                            let localEventFired = false
                             try {
                                 if (typeof localHandler === 'function') {
                                     localEventFired = true
@@ -1395,7 +1398,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         function formatNonError(obj) {
-                            var str
+                            let str
                             if (typeof obj === 'function') {
                                 str =
                                     '[function ' +
@@ -1406,10 +1409,10 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     obj && typeof obj.toString === 'function'
                                         ? obj.toString()
                                         : util.toString(obj)
-                                var ruselessToString = /\[object [a-zA-Z0-9$_]+\]/
+                                const ruselessToString = /\[object [a-zA-Z0-9$_]+\]/
                                 if (ruselessToString.test(str)) {
                                     try {
-                                        var newStr = JSON.stringify(obj)
+                                        const newStr = JSON.stringify(obj)
                                         str = newStr
                                     } catch (e) {}
                                 }
@@ -1421,7 +1424,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         function snip(str) {
-                            var maxChars = 41
+                            const maxChars = 41
                             if (str.length < maxChars) {
                                 return str
                             }
@@ -1435,9 +1438,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         var shouldIgnore = function() {
                             return false
                         }
-                        var parseLineInfoRegex = /[\/<\(]([^:\/]+):(\d+):(?:\d+)\)?\s*$/
+                        const parseLineInfoRegex = /[\/<\(]([^:\/]+):(\d+):(?:\d+)\)?\s*$/
                         function parseLineInfo(line) {
-                            var matches = line.match(parseLineInfoRegex)
+                            const matches = line.match(parseLineInfoRegex)
                             if (matches) {
                                 return {
                                     fileName: matches[1],
@@ -1448,14 +1451,16 @@ const clearTimeout = require('./browser').browser.clearTimeout
 
                         function setBounds(firstLineError, lastLineError) {
                             if (!longStackTracesIsSupported()) return
-                            var firstStackLines = firstLineError.stack.split(
+                            const firstStackLines = firstLineError.stack.split(
                                 '\n'
                             )
-                            var lastStackLines = lastLineError.stack.split('\n')
-                            var firstIndex = -1
-                            var lastIndex = -1
-                            var firstFileName
-                            var lastFileName
+                            const lastStackLines = lastLineError.stack.split(
+                                '\n'
+                            )
+                            let firstIndex = -1
+                            let lastIndex = -1
+                            let firstFileName
+                            let lastFileName
                             for (var i = 0; i < firstStackLines.length; ++i) {
                                 var result = parseLineInfo(firstStackLines[i])
                                 if (result) {
@@ -1485,7 +1490,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
 
                             shouldIgnore = function(line) {
                                 if (bluebirdFramePattern.test(line)) return true
-                                var info = parseLineInfo(line)
+                                const info = parseLineInfo(line)
                                 if (info) {
                                     if (
                                         info.fileName === firstFileName &&
@@ -1502,7 +1507,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         function CapturedTrace(parent) {
                             this._parent = parent
                             this._promisesCreated = 0
-                            var length = (this._length =
+                            const length = (this._length =
                                 1 + (parent === undefined ? 0 : parent._length))
                             captureStackTrace(this, CapturedTrace)
                             if (length > 32) this.uncycle()
@@ -1511,10 +1516,10 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         Context.CapturedTrace = CapturedTrace
 
                         CapturedTrace.prototype.uncycle = function() {
-                            var length = this._length
+                            let length = this._length
                             if (length < 2) return
-                            var nodes = []
-                            var stackToIndex = {}
+                            const nodes = []
+                            const stackToIndex = {}
 
                             for (
                                 var i = 0, node = this;
@@ -1526,14 +1531,14 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             }
                             length = this._length = i
                             for (var i = length - 1; i >= 0; --i) {
-                                var stack = nodes[i].stack
+                                const stack = nodes[i].stack
                                 if (stackToIndex[stack] === undefined) {
                                     stackToIndex[stack] = i
                                 }
                             }
                             for (var i = 0; i < length; ++i) {
-                                var currentStack = nodes[i].stack
-                                var index = stackToIndex[currentStack]
+                                const currentStack = nodes[i].stack
+                                const index = stackToIndex[currentStack]
                                 if (index !== undefined && index !== i) {
                                     if (index > 0) {
                                         nodes[index - 1]._parent = undefined
@@ -1541,7 +1546,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     }
                                     nodes[i]._parent = undefined
                                     nodes[i]._length = 1
-                                    var cycleEdgeNode =
+                                    const cycleEdgeNode =
                                         i > 0 ? nodes[i - 1] : this
 
                                     if (index < length - 1) {
@@ -1553,9 +1558,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                         cycleEdgeNode._parent = undefined
                                         cycleEdgeNode._length = 1
                                     }
-                                    var currentChildLength =
+                                    let currentChildLength =
                                         cycleEdgeNode._length + 1
-                                    for (var j = i - 2; j >= 0; --j) {
+                                    for (let j = i - 2; j >= 0; --j) {
                                         nodes[j]._length = currentChildLength
                                         currentChildLength++
                                     }
@@ -1569,11 +1574,11 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         ) {
                             if (error.__stackCleaned__) return
                             this.uncycle()
-                            var parsed = parseStackAndMessage(error)
-                            var message = parsed.message
-                            var stacks = [parsed.stack]
+                            const parsed = parseStackAndMessage(error)
+                            const message = parsed.message
+                            const stacks = [parsed.stack]
 
-                            var trace = this
+                            let trace = this
                             while (trace !== undefined) {
                                 stacks.push(cleanStack(trace.stack.split('\n')))
                                 trace = trace._parent
@@ -1593,8 +1598,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         var captureStackTrace = (function stackDetection() {
-                            var v8stackFramePattern = /^\s*at\s*/
-                            var v8stackFormatter = function(stack, error) {
+                            const v8stackFramePattern = /^\s*at\s*/
+                            const v8stackFormatter = function(stack, error) {
                                 if (typeof stack === 'string') return stack
 
                                 if (
@@ -1613,7 +1618,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 Error.stackTraceLimit += 6
                                 stackFramePattern = v8stackFramePattern
                                 formatStack = v8stackFormatter
-                                var captureStackTrace = Error.captureStackTrace
+                                const captureStackTrace =
+                                    Error.captureStackTrace
 
                                 shouldIgnore = function(line) {
                                     return bluebirdFramePattern.test(line)
@@ -1624,7 +1630,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     Error.stackTraceLimit -= 6
                                 }
                             }
-                            var err = new Error()
+                            const err = new Error()
 
                             if (
                                 typeof err.stack === 'string' &&
@@ -1640,7 +1646,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 }
                             }
 
-                            var hasStackAfterThrow
+                            let hasStackAfterThrow
                             try {
                                 throw new Error()
                             } catch (e) {
@@ -1690,7 +1696,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             }
                             if (util.isNode && process.stderr.isTTY) {
                                 printWarning = function(message, isSoft) {
-                                    var color = isSoft
+                                    const color = isSoft
                                         ? '\u001b[33m'
                                         : '\u001b[31m'
                                     console.warn(
@@ -1799,8 +1805,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     undefined
                                 )
                             } else {
-                                var _reason = arguments[1]
-                                var handler = function() {
+                                const _reason = arguments[1]
+                                const handler = function() {
                                     throw _reason
                                 }
                                 return this.caught(reason, handler)
@@ -1819,10 +1825,10 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     undefined
                                 )
                             } else {
-                                var _value = arguments[1]
+                                const _value = arguments[1]
                                 if (_value instanceof Promise)
                                     _value.suppressUnhandledRejections()
-                                var handler = function() {
+                                const handler = function() {
                                     return _value
                                 }
                                 return this.caught(value, handler)
@@ -1835,11 +1841,11 @@ const clearTimeout = require('./browser').browser.clearTimeout
             9: [
                 function(_dereq_, module, exports) {
                     'use strict'
-                    var es5 = _dereq_('./es5')
-                    var Objectfreeze = es5.freeze
-                    var util = _dereq_('./util')
-                    var inherits = util.inherits
-                    var notEnumerableProp = util.notEnumerableProp
+                    const es5 = _dereq_('./es5')
+                    const Objectfreeze = es5.freeze
+                    const util = _dereq_('./util')
+                    const inherits = util.inherits
+                    const notEnumerableProp = util.notEnumerableProp
 
                     function subError(nameProperty, defaultMessage) {
                         function SubError(message) {
@@ -1863,14 +1869,17 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         return SubError
                     }
 
-                    var _TypeError, _RangeError
-                    var Warning = subError('Warning', 'warning')
-                    var CancellationError = subError(
+                    let _TypeError, _RangeError
+                    const Warning = subError('Warning', 'warning')
+                    const CancellationError = subError(
                         'CancellationError',
                         'cancellation error'
                     )
-                    var TimeoutError = subError('TimeoutError', 'timeout error')
-                    var AggregateError = subError(
+                    const TimeoutError = subError(
+                        'TimeoutError',
+                        'timeout error'
+                    )
+                    const AggregateError = subError(
                         'AggregateError',
                         'aggregate error'
                     )
@@ -1882,11 +1891,11 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         _RangeError = subError('RangeError', 'range error')
                     }
 
-                    var methods = ('join pop push shift unshift slice filter forEach some ' +
+                    const methods = ('join pop push shift unshift slice filter forEach some ' +
                         'every map indexOf lastIndexOf reduce reduceRight sort reverse'
                     ).split(' ')
 
-                    for (var i = 0; i < methods.length; ++i) {
+                    for (let i = 0; i < methods.length; ++i) {
                         if (typeof Array.prototype[methods[i]] === 'function') {
                             AggregateError.prototype[methods[i]] =
                                 Array.prototype[methods[i]]
@@ -1900,19 +1909,19 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         enumerable: true
                     })
                     AggregateError.prototype['isOperational'] = true
-                    var level = 0
+                    let level = 0
                     AggregateError.prototype.toString = function() {
-                        var indent = Array(level * 4 + 1).join(' ')
-                        var ret = '\n' + indent + 'AggregateError of:' + '\n'
+                        let indent = Array(level * 4 + 1).join(' ')
+                        let ret = '\n' + indent + 'AggregateError of:' + '\n'
                         level++
                         indent = Array(level * 4 + 1).join(' ')
-                        for (var i = 0; i < this.length; ++i) {
-                            var str =
+                        for (let i = 0; i < this.length; ++i) {
+                            let str =
                                 this[i] === this
                                     ? '[Circular AggregateError]'
                                     : this[i] + ''
-                            var lines = str.split('\n')
-                            for (var j = 0; j < lines.length; ++j) {
+                            const lines = str.split('\n')
+                            for (let j = 0; j < lines.length; ++j) {
                                 lines[j] = indent + lines[j]
                             }
                             str = lines.join('\n')
@@ -1939,7 +1948,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                     }
                     inherits(OperationalError, Error)
 
-                    var errorTypes = Error['__BluebirdErrorTypes__']
+                    let errorTypes = Error['__BluebirdErrorTypes__']
                     if (!errorTypes) {
                         errorTypes = Objectfreeze({
                             CancellationError: CancellationError,
@@ -1971,7 +1980,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
             ],
             10: [
                 function(_dereq_, module, exports) {
-                    var isES5 = (function() {
+                    const isES5 = (function() {
                         'use strict'
                         return this === undefined
                     })()
@@ -1987,7 +1996,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             isArray: Array.isArray,
                             isES5: isES5,
                             propertyIsWritable: function(obj, prop) {
-                                var descriptor = Object.getOwnPropertyDescriptor(
+                                const descriptor = Object.getOwnPropertyDescriptor(
                                     obj,
                                     prop
                                 )
@@ -1999,13 +2008,13 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             }
                         }
                     } else {
-                        var has = {}.hasOwnProperty
-                        var str = {}.toString
-                        var proto = {}.constructor.prototype
+                        const has = {}.hasOwnProperty
+                        const str = {}.toString
+                        const proto = {}.constructor.prototype
 
-                        var ObjectKeys = function(o) {
-                            var ret = []
-                            for (var key in o) {
+                        const ObjectKeys = function(o) {
+                            const ret = []
+                            for (const key in o) {
                                 if (has.call(o, key)) {
                                     ret.push(key)
                                 }
@@ -2013,20 +2022,20 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             return ret
                         }
 
-                        var ObjectGetDescriptor = function(o, key) {
+                        const ObjectGetDescriptor = function(o, key) {
                             return {value: o[key]}
                         }
 
-                        var ObjectDefineProperty = function(o, key, desc) {
+                        const ObjectDefineProperty = function(o, key, desc) {
                             o[key] = desc.value
                             return o
                         }
 
-                        var ObjectFreeze = function(obj) {
+                        const ObjectFreeze = function(obj) {
                             return obj
                         }
 
-                        var ObjectGetPrototypeOf = function(obj) {
+                        const ObjectGetPrototypeOf = function(obj) {
                             try {
                                 return Object(obj).constructor.prototype
                             } catch (e) {
@@ -2034,7 +2043,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             }
                         }
 
-                        var ArrayIsArray = function(obj) {
+                        const ArrayIsArray = function(obj) {
                             try {
                                 return str.call(obj) === '[object Array]'
                             } catch (e) {
@@ -2063,9 +2072,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
                 function(_dereq_, module, exports) {
                     'use strict'
                     module.exports = function(Promise, tryConvertToPromise) {
-                        var util = _dereq_('./util')
-                        var CancellationError = Promise.CancellationError
-                        var errorObj = util.errorObj
+                        const util = _dereq_('./util')
+                        const CancellationError = Promise.CancellationError
+                        const errorObj = util.errorObj
 
                         function PassThroughHandlerContext(
                             promise,
@@ -2116,12 +2125,12 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             return errorObj
                         }
                         function finallyHandler(reasonOrValue) {
-                            var promise = this.promise
-                            var handler = this.handler
+                            const promise = this.promise
+                            const handler = this.handler
 
                             if (!this.called) {
                                 this.called = true
-                                var ret = this.isFinallyHandler()
+                                const ret = this.isFinallyHandler()
                                     ? handler.call(promise._boundValue())
                                     : handler.call(
                                           promise._boundValue(),
@@ -2129,14 +2138,14 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                       )
                                 if (ret !== undefined) {
                                     promise._setReturnedNonUndefined()
-                                    var maybePromise = tryConvertToPromise(
+                                    const maybePromise = tryConvertToPromise(
                                         ret,
                                         promise
                                     )
                                     if (maybePromise instanceof Promise) {
                                         if (this.cancelPromise != null) {
                                             if (maybePromise.isCancelled()) {
-                                                var reason = new CancellationError(
+                                                const reason = new CancellationError(
                                                     'late cancellation observer'
                                                 )
                                                 promise._attachExtraTrace(
@@ -2225,51 +2234,51 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         tryConvertToPromise,
                         INTERNAL
                     ) {
-                        var util = _dereq_('./util')
-                        var canEvaluate = util.canEvaluate
-                        var tryCatch = util.tryCatch
-                        var errorObj = util.errorObj
-                        var reject
+                        const util = _dereq_('./util')
+                        const canEvaluate = util.canEvaluate
+                        const tryCatch = util.tryCatch
+                        const errorObj = util.errorObj
+                        let reject
 
                         if (!true) {
                             if (canEvaluate) {
-                                var thenCallback = function(i) {
+                                const thenCallback = function(i) {
                                     return new Function(
                                         'value',
                                         'holder',
-                                        '                             \n\
-            \'use strict\';                                                    \n\
+                                        "                             \n\
+            'use strict';                                                    \n\
             holder.pIndex = value;                                           \n\
             holder.checkFulfillment(this);                                   \n\
-            '.replace(
+            ".replace(
                                             /Index/g,
                                             i
                                         )
                                     )
                                 }
 
-                                var promiseSetter = function(i) {
+                                const promiseSetter = function(i) {
                                     return new Function(
                                         'promise',
                                         'holder',
-                                        '                           \n\
-            \'use strict\';                                                    \n\
+                                        "                           \n\
+            'use strict';                                                    \n\
             holder.pIndex = promise;                                         \n\
-            '.replace(
+            ".replace(
                                             /Index/g,
                                             i
                                         )
                                     )
                                 }
 
-                                var generateHolderClass = function(total) {
-                                    var props = new Array(total)
-                                    for (var i = 0; i < props.length; ++i) {
+                                const generateHolderClass = function(total) {
+                                    const props = new Array(total)
+                                    for (let i = 0; i < props.length; ++i) {
                                         props[i] = 'this.p' + (i + 1)
                                     }
-                                    var assignment =
+                                    const assignment =
                                         props.join(' = ') + ' = null;'
-                                    var cancellationCode =
+                                    const cancellationCode =
                                         'var promise;\n' +
                                         props
                                             .map(function(prop) {
@@ -2285,12 +2294,12 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                                 )
                                             })
                                             .join('\n')
-                                    var passedArguments = props.join(', ')
-                                    var name = 'Holder$' + total
+                                    const passedArguments = props.join(', ')
+                                    const name = 'Holder$' + total
 
-                                    var code =
-                                        'return function(tryCatch, errorObj, Promise) {           \n\
-            \'use strict\';                                                    \n\
+                                    let code =
+                                        "return function(tryCatch, errorObj, Promise) {           \n\
+            'use strict';                                                    \n\
             function [TheName](fn) {                                         \n\
                 [TheProperties]                                              \n\
                 this.fn = fn;                                                \n\
@@ -2317,7 +2326,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                                                              \n\
             return [TheName];                                                \n\
         }(tryCatch, errorObj, Promise);                                      \n\
-        '
+        "
 
                                     code = code
                                         .replace(/\[TheName\]/g, name)
@@ -2347,7 +2356,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 var thenCallbacks = []
                                 var promiseSetters = []
 
-                                for (var i = 0; i < 8; ++i) {
+                                for (let i = 0; i < 8; ++i) {
                                     holderClasses.push(
                                         generateHolderClass(i + 1)
                                     )
@@ -2362,8 +2371,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         Promise.join = function() {
-                            var last = arguments.length - 1
-                            var fn
+                            const last = arguments.length - 1
+                            let fn
                             if (
                                 last > 0 &&
                                 typeof arguments[last] === 'function'
@@ -2373,13 +2382,13 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     if (last <= 8 && canEvaluate) {
                                         var ret = new Promise(INTERNAL)
                                         ret._captureStackTrace()
-                                        var HolderClass =
+                                        const HolderClass =
                                             holderClasses[last - 1]
-                                        var holder = new HolderClass(fn)
-                                        var callbacks = thenCallbacks
+                                        const holder = new HolderClass(fn)
+                                        const callbacks = thenCallbacks
 
-                                        for (var i = 0; i < last; ++i) {
-                                            var maybePromise = tryConvertToPromise(
+                                        for (let i = 0; i < last; ++i) {
+                                            let maybePromise = tryConvertToPromise(
                                                 arguments[i],
                                                 ret
                                             )
@@ -2387,7 +2396,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                                 maybePromise instanceof Promise
                                             ) {
                                                 maybePromise = maybePromise._target()
-                                                var bitField =
+                                                const bitField =
                                                     maybePromise._bitField
                                                 if (
                                                     (bitField & 50397184) ===
@@ -2439,7 +2448,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     }
                                 }
                             }
-                            var args = [].slice.call(arguments)
+                            const args = [].slice.call(arguments)
                             if (fn) args.pop()
                             var ret = new PromiseArray(args).promise()
                             return fn !== undefined ? ret.spread(fn) : ret
@@ -2458,8 +2467,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         apiRejection,
                         debug
                     ) {
-                        var util = _dereq_('./util')
-                        var tryCatch = util.tryCatch
+                        const util = _dereq_('./util')
+                        const tryCatch = util.tryCatch
 
                         Promise.method = function(fn) {
                             if (typeof fn !== 'function') {
@@ -2469,11 +2478,14 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 )
                             }
                             return function() {
-                                var ret = new Promise(INTERNAL)
+                                const ret = new Promise(INTERNAL)
                                 ret._captureStackTrace()
                                 ret._pushContext()
-                                var value = tryCatch(fn).apply(this, arguments)
-                                var promiseCreated = ret._popContext()
+                                const value = tryCatch(fn).apply(
+                                    this,
+                                    arguments
+                                )
+                                const promiseCreated = ret._popContext()
                                 debug.checkForgottenReturns(
                                     value,
                                     promiseCreated,
@@ -2492,23 +2504,23 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                         util.classString(fn)
                                 )
                             }
-                            var ret = new Promise(INTERNAL)
+                            const ret = new Promise(INTERNAL)
                             ret._captureStackTrace()
                             ret._pushContext()
-                            var value
+                            let value
                             if (arguments.length > 1) {
                                 debug.deprecated(
                                     'calling Promise.try with more than 1 argument'
                                 )
-                                var arg = arguments[1]
-                                var ctx = arguments[2]
+                                const arg = arguments[1]
+                                const ctx = arguments[2]
                                 value = util.isArray(arg)
                                     ? tryCatch(fn).apply(ctx, arg)
                                     : tryCatch(fn).call(ctx, arg)
                             } else {
                                 value = tryCatch(fn)()
                             }
-                            var promiseCreated = ret._popContext()
+                            const promiseCreated = ret._popContext()
                             debug.checkForgottenReturns(
                                 value,
                                 promiseCreated,
@@ -2535,11 +2547,11 @@ const clearTimeout = require('./browser').browser.clearTimeout
             14: [
                 function(_dereq_, module, exports) {
                     'use strict'
-                    var util = _dereq_('./util')
-                    var maybeWrapAsError = util.maybeWrapAsError
-                    var errors = _dereq_('./errors')
-                    var OperationalError = errors.OperationalError
-                    var es5 = _dereq_('./es5')
+                    const util = _dereq_('./util')
+                    const maybeWrapAsError = util.maybeWrapAsError
+                    const errors = _dereq_('./errors')
+                    const OperationalError = errors.OperationalError
+                    const es5 = _dereq_('./es5')
 
                     function isUntypedError(obj) {
                         return (
@@ -2548,17 +2560,17 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         )
                     }
 
-                    var rErrorKey = /^(?:name|message|stack|cause)$/
+                    const rErrorKey = /^(?:name|message|stack|cause)$/
                     function wrapAsOperationalError(obj) {
-                        var ret
+                        let ret
                         if (isUntypedError(obj)) {
                             ret = new OperationalError(obj)
                             ret.name = obj.name
                             ret.message = obj.message
                             ret.stack = obj.stack
-                            var keys = es5.keys(obj)
-                            for (var i = 0; i < keys.length; ++i) {
-                                var key = keys[i]
+                            const keys = es5.keys(obj)
+                            for (let i = 0; i < keys.length; ++i) {
+                                const key = keys[i]
                                 if (!rErrorKey.test(key)) {
                                     ret[key] = obj[key]
                                 }
@@ -2573,7 +2585,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         return function(err, value) {
                             if (promise === null) return
                             if (err) {
-                                var wrapped = wrapAsOperationalError(
+                                const wrapped = wrapAsOperationalError(
                                     maybeWrapAsError(err)
                                 )
                                 promise._attachExtraTrace(wrapped)
@@ -2581,7 +2593,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             } else if (!multiArgs) {
                                 promise._fulfill(value)
                             } else {
-                                var args = [].slice.call(arguments, 1)
+                                const args = [].slice.call(arguments, 1)
                                 promise._fulfill(args)
                             }
                             promise = null
@@ -2596,25 +2608,25 @@ const clearTimeout = require('./browser').browser.clearTimeout
                 function(_dereq_, module, exports) {
                     'use strict'
                     module.exports = function() {
-                        var makeSelfResolutionError = function() {
+                        const makeSelfResolutionError = function() {
                             return new TypeError(
                                 'circular promise resolution chain\u000a\u000a    See http://goo.gl/MqrFmX\u000a'
                             )
                         }
-                        var reflectHandler = function() {
+                        const reflectHandler = function() {
                             return new Promise.PromiseInspection(this._target())
                         }
-                        var apiRejection = function(msg) {
+                        const apiRejection = function(msg) {
                             return Promise.reject(new TypeError(msg))
                         }
                         function Proxyable() {}
-                        var UNDEFINED_BINDING = {}
-                        var util = _dereq_('./util')
+                        const UNDEFINED_BINDING = {}
+                        const util = _dereq_('./util')
 
-                        var getDomain
+                        let getDomain
                         if (util.isNode) {
                             getDomain = function() {
-                                var ret = process.domain
+                                let ret = process.domain
                                 if (ret === undefined) ret = null
                                 return ret
                             }
@@ -2625,46 +2637,51 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
                         util.notEnumerableProp(Promise, '_getDomain', getDomain)
 
-                        var es5 = _dereq_('./es5')
-                        var Async = _dereq_('./async')
-                        var async = new Async()
+                        const es5 = _dereq_('./es5')
+                        const Async = _dereq_('./async')
+                        const async = new Async()
                         es5.defineProperty(Promise, '_async', {value: async})
-                        var errors = _dereq_('./errors')
+                        const errors = _dereq_('./errors')
                         var TypeError = (Promise.TypeError = errors.TypeError)
                         Promise.RangeError = errors.RangeError
-                        var CancellationError = (Promise.CancellationError =
+                        const CancellationError = (Promise.CancellationError =
                             errors.CancellationError)
                         Promise.TimeoutError = errors.TimeoutError
                         Promise.OperationalError = errors.OperationalError
                         Promise.RejectionError = errors.OperationalError
                         Promise.AggregateError = errors.AggregateError
-                        var INTERNAL = function() {}
-                        var APPLY = {}
-                        var NEXT_FILTER = {}
-                        var tryConvertToPromise = _dereq_('./thenables')(
+                        const INTERNAL = function() {}
+                        const APPLY = {}
+                        const NEXT_FILTER = {}
+                        const tryConvertToPromise = _dereq_('./thenables')(
                             Promise,
                             INTERNAL
                         )
-                        var PromiseArray = _dereq_('./promise_array')(
+                        const PromiseArray = _dereq_('./promise_array')(
                             Promise,
                             INTERNAL,
                             tryConvertToPromise,
                             apiRejection,
                             Proxyable
                         )
-                        var Context = _dereq_('./context')(Promise)
+                        const Context = _dereq_('./context')(Promise)
                         /*jshint unused:false*/
-                        var createContext = Context.create
-                        var debug = _dereq_('./debuggability')(Promise, Context)
-                        var CapturedTrace = debug.CapturedTrace
-                        var PassThroughHandlerContext = _dereq_('./finally')(
+                        const createContext = Context.create
+                        const debug = _dereq_('./debuggability')(
+                            Promise,
+                            Context
+                        )
+                        const CapturedTrace = debug.CapturedTrace
+                        const PassThroughHandlerContext = _dereq_('./finally')(
                             Promise,
                             tryConvertToPromise
                         )
-                        var catchFilter = _dereq_('./catch_filter')(NEXT_FILTER)
-                        var nodebackForPromise = _dereq_('./nodeback')
-                        var errorObj = util.errorObj
-                        var tryCatch = util.tryCatch
+                        const catchFilter = _dereq_('./catch_filter')(
+                            NEXT_FILTER
+                        )
+                        const nodebackForPromise = _dereq_('./nodeback')
+                        const errorObj = util.errorObj
+                        const tryCatch = util.tryCatch
                         function check(self, executor) {
                             if (typeof executor !== 'function') {
                                 throw new TypeError(
@@ -2700,13 +2717,13 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         Promise.prototype.caught = Promise.prototype[
                             'catch'
                         ] = function(fn) {
-                            var len = arguments.length
+                            const len = arguments.length
                             if (len > 1) {
-                                var catchInstances = new Array(len - 1),
+                                let catchInstances = new Array(len - 1),
                                     j = 0,
                                     i
                                 for (i = 0; i < len - 1; ++i) {
-                                    var item = arguments[i]
+                                    const item = arguments[i]
                                     if (util.isObject(item)) {
                                         catchInstances[j++] = item
                                     } else {
@@ -2746,7 +2763,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 typeof didFulfill !== 'function' &&
                                 typeof didReject !== 'function'
                             ) {
-                                var msg =
+                                let msg =
                                     '.then() only accepts functions but was passed: ' +
                                     util.classString(didFulfill)
                                 if (arguments.length > 1) {
@@ -2767,7 +2784,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             didFulfill,
                             didReject
                         ) {
-                            var promise = this._then(
+                            const promise = this._then(
                                 didFulfill,
                                 didReject,
                                 undefined,
@@ -2794,7 +2811,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         Promise.prototype.toJSON = function() {
-                            var ret = {
+                            const ret = {
                                 isFulfilled: false,
                                 isRejected: false,
                                 fulfillmentValue: undefined,
@@ -2828,13 +2845,13 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         Promise.fromNode = Promise.fromCallback = function(fn) {
-                            var ret = new Promise(INTERNAL)
+                            const ret = new Promise(INTERNAL)
                             ret._captureStackTrace()
-                            var multiArgs =
+                            const multiArgs =
                                 arguments.length > 1
                                     ? !!Object(arguments[1]).multiArgs
                                     : false
-                            var result = tryCatch(fn)(
+                            const result = tryCatch(fn)(
                                 nodebackForPromise(ret, multiArgs)
                             )
                             if (result === errorObj) {
@@ -2849,7 +2866,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         Promise.cast = function(obj) {
-                            var ret = tryConvertToPromise(obj)
+                            let ret = tryConvertToPromise(obj)
                             if (!(ret instanceof Promise)) {
                                 ret = new Promise(INTERNAL)
                                 ret._captureStackTrace()
@@ -2862,7 +2879,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         Promise.resolve = Promise.fulfilled = Promise.cast
 
                         Promise.reject = Promise.rejected = function(reason) {
-                            var ret = new Promise(INTERNAL)
+                            const ret = new Promise(INTERNAL)
                             ret._captureStackTrace()
                             ret._rejectCallback(reason, true)
                             return ret
@@ -2875,7 +2892,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                         util.classString(fn)
                                 )
                             }
-                            var prev = async._schedule
+                            const prev = async._schedule
                             async._schedule = fn
                             return prev
                         }
@@ -2887,12 +2904,12 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             receiver,
                             internalData
                         ) {
-                            var haveInternalData = internalData !== undefined
-                            var promise = haveInternalData
+                            const haveInternalData = internalData !== undefined
+                            const promise = haveInternalData
                                 ? internalData
                                 : new Promise(INTERNAL)
-                            var target = this._target()
-                            var bitField = target._bitField
+                            const target = this._target()
+                            const bitField = target._bitField
 
                             if (!haveInternalData) {
                                 promise._propagateFrom(this, 3)
@@ -2913,9 +2930,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 this._fireEvent('promiseChained', this, promise)
                             }
 
-                            var domain = getDomain()
+                            const domain = getDomain()
                             if (!((bitField & 50397184) === 0)) {
-                                var handler,
+                                let handler,
                                     value,
                                     settler = target._settlePromiseCtx
                                 if ((bitField & 33554432) !== 0) {
@@ -3012,7 +3029,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         Promise.prototype._receiverAt = function(index) {
-                            var ret =
+                            const ret =
                                 index === 0
                                     ? this._receiver0
                                     : this[index * 4 - 4 + 3]
@@ -3045,11 +3062,11 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         Promise.prototype._migrateCallback0 = function(
                             follower
                         ) {
-                            var bitField = follower._bitField
-                            var fulfill = follower._fulfillmentHandler0
-                            var reject = follower._rejectionHandler0
-                            var promise = follower._promise0
-                            var receiver = follower._receiverAt(0)
+                            const bitField = follower._bitField
+                            const fulfill = follower._fulfillmentHandler0
+                            const reject = follower._rejectionHandler0
+                            const promise = follower._promise0
+                            let receiver = follower._receiverAt(0)
                             if (receiver === undefined)
                                 receiver = UNDEFINED_BINDING
                             this._addCallbacks(
@@ -3065,10 +3082,12 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             follower,
                             index
                         ) {
-                            var fulfill = follower._fulfillmentHandlerAt(index)
-                            var reject = follower._rejectionHandlerAt(index)
-                            var promise = follower._promiseAt(index)
-                            var receiver = follower._receiverAt(index)
+                            const fulfill = follower._fulfillmentHandlerAt(
+                                index
+                            )
+                            const reject = follower._rejectionHandlerAt(index)
+                            const promise = follower._promiseAt(index)
+                            let receiver = follower._receiverAt(index)
                             if (receiver === undefined)
                                 receiver = UNDEFINED_BINDING
                             this._addCallbacks(
@@ -3087,7 +3106,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             receiver,
                             domain
                         ) {
-                            var index = this._length()
+                            let index = this._length()
 
                             if (index >= 65535 - 4) {
                                 index = 0
@@ -3110,7 +3129,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                             : domain.bind(reject)
                                 }
                             } else {
-                                var base = index * 4 - 4
+                                const base = index * 4 - 4
                                 this[base + 2] = promise
                                 this[base + 3] = receiver
                                 if (typeof fulfill === 'function') {
@@ -3150,24 +3169,27 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     makeSelfResolutionError(),
                                     false
                                 )
-                            var maybePromise = tryConvertToPromise(value, this)
+                            const maybePromise = tryConvertToPromise(
+                                value,
+                                this
+                            )
                             if (!(maybePromise instanceof Promise))
                                 return this._fulfill(value)
 
                             if (shouldBind) this._propagateFrom(maybePromise, 2)
 
-                            var promise = maybePromise._target()
+                            const promise = maybePromise._target()
 
                             if (promise === this) {
                                 this._reject(makeSelfResolutionError())
                                 return
                             }
 
-                            var bitField = promise._bitField
+                            const bitField = promise._bitField
                             if ((bitField & 50397184) === 0) {
-                                var len = this._length()
+                                const len = this._length()
                                 if (len > 0) promise._migrateCallback0(this)
-                                for (var i = 1; i < len; ++i) {
+                                for (let i = 1; i < len; ++i) {
                                     promise._migrateCallbackAt(this, i)
                                 }
                                 this._setFollowing()
@@ -3178,7 +3200,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             } else if ((bitField & 16777216) !== 0) {
                                 this._reject(promise._reason())
                             } else {
-                                var reason = new CancellationError(
+                                const reason = new CancellationError(
                                     'late cancellation observer'
                                 )
                                 promise._attachExtraTrace(reason)
@@ -3191,14 +3213,14 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             synchronous,
                             ignoreNonErrorWarnings
                         ) {
-                            var trace = util.ensureErrorObject(reason)
-                            var hasStack = trace === reason
+                            const trace = util.ensureErrorObject(reason)
+                            const hasStack = trace === reason
                             if (
                                 !hasStack &&
                                 !ignoreNonErrorWarnings &&
                                 debug.warnings()
                             ) {
-                                var message =
+                                const message =
                                     'a promise was rejected with a non-error: ' +
                                     util.classString(reason)
                                 this._warn(message, true)
@@ -3213,11 +3235,11 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         Promise.prototype._resolveFromExecutor = function(
                             executor
                         ) {
-                            var promise = this
+                            const promise = this
                             this._captureStackTrace()
                             this._pushContext()
-                            var synchronous = true
-                            var r = this._execute(
+                            let synchronous = true
+                            const r = this._execute(
                                 executor,
                                 function(value) {
                                     promise._resolveCallback(value)
@@ -3240,10 +3262,10 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             value,
                             promise
                         ) {
-                            var bitField = promise._bitField
+                            let bitField = promise._bitField
                             if ((bitField & 65536) !== 0) return
                             promise._pushContext()
-                            var x
+                            let x
                             if (receiver === APPLY) {
                                 if (
                                     !value ||
@@ -3263,7 +3285,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             } else {
                                 x = tryCatch(handler).call(receiver, value)
                             }
-                            var promiseCreated = promise._popContext()
+                            const promiseCreated = promise._popContext()
                             bitField = promise._bitField
                             if ((bitField & 65536) !== 0) return
 
@@ -3284,7 +3306,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         Promise.prototype._target = function() {
-                            var ret = this
+                            let ret = this
                             while (ret._isFollowing()) ret = ret._followee()
                             return ret
                         }
@@ -3303,9 +3325,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             receiver,
                             value
                         ) {
-                            var isPromise = promise instanceof Promise
-                            var bitField = this._bitField
-                            var asyncGuaranteed = (bitField & 134217728) !== 0
+                            const isPromise = promise instanceof Promise
+                            const bitField = this._bitField
+                            const asyncGuaranteed = (bitField & 134217728) !== 0
                             if ((bitField & 65536) !== 0) {
                                 if (isPromise) promise._invokeInternalOnCancel()
 
@@ -3378,10 +3400,10 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         Promise.prototype._settlePromiseLateCancellationObserver = function(
                             ctx
                         ) {
-                            var handler = ctx.handler
-                            var promise = ctx.promise
-                            var receiver = ctx.receiver
-                            var value = ctx.value
+                            const handler = ctx.handler
+                            const promise = ctx.promise
+                            const receiver = ctx.receiver
+                            const value = ctx.value
                             if (typeof handler === 'function') {
                                 if (!(promise instanceof Promise)) {
                                     handler.call(receiver, value, promise)
@@ -3412,8 +3434,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             value,
                             bitField
                         ) {
-                            var promise = this._promise0
-                            var receiver = this._receiverAt(0)
+                            const promise = this._promise0
+                            const receiver = this._receiverAt(0)
                             this._promise0 = undefined
                             this._receiver0 = undefined
                             this._settlePromise(
@@ -3427,17 +3449,17 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         Promise.prototype._clearCallbackDataAtIndex = function(
                             index
                         ) {
-                            var base = index * 4 - 4
+                            const base = index * 4 - 4
                             this[base + 2] = this[base + 3] = this[
                                 base + 0
                             ] = this[base + 1] = undefined
                         }
 
                         Promise.prototype._fulfill = function(value) {
-                            var bitField = this._bitField
+                            const bitField = this._bitField
                             if ((bitField & 117506048) >>> 16) return
                             if (value === this) {
-                                var err = makeSelfResolutionError()
+                                const err = makeSelfResolutionError()
                                 this._attachExtraTrace(err)
                                 return this._reject(err)
                             }
@@ -3454,7 +3476,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         Promise.prototype._reject = function(reason) {
-                            var bitField = this._bitField
+                            const bitField = this._bitField
                             if ((bitField & 117506048) >>> 16) return
                             this._setRejected()
                             this._fulfillmentHandler0 = reason
@@ -3474,10 +3496,10 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             len,
                             value
                         ) {
-                            for (var i = 1; i < len; i++) {
-                                var handler = this._fulfillmentHandlerAt(i)
-                                var promise = this._promiseAt(i)
-                                var receiver = this._receiverAt(i)
+                            for (let i = 1; i < len; i++) {
+                                const handler = this._fulfillmentHandlerAt(i)
+                                const promise = this._promiseAt(i)
+                                const receiver = this._receiverAt(i)
                                 this._clearCallbackDataAtIndex(i)
                                 this._settlePromise(
                                     promise,
@@ -3492,10 +3514,10 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             len,
                             reason
                         ) {
-                            for (var i = 1; i < len; i++) {
-                                var handler = this._rejectionHandlerAt(i)
-                                var promise = this._promiseAt(i)
-                                var receiver = this._receiverAt(i)
+                            for (let i = 1; i < len; i++) {
+                                const handler = this._rejectionHandlerAt(i)
+                                const promise = this._promiseAt(i)
+                                const receiver = this._receiverAt(i)
                                 this._clearCallbackDataAtIndex(i)
                                 this._settlePromise(
                                     promise,
@@ -3507,12 +3529,12 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         Promise.prototype._settlePromises = function() {
-                            var bitField = this._bitField
-                            var len = bitField & 65535
+                            const bitField = this._bitField
+                            const len = bitField & 65535
 
                             if (len > 0) {
                                 if ((bitField & 16842752) !== 0) {
-                                    var reason = this._fulfillmentHandler0
+                                    const reason = this._fulfillmentHandler0
                                     this._settlePromise0(
                                         this._rejectionHandler0,
                                         reason,
@@ -3520,7 +3542,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     )
                                     this._rejectPromises(len, reason)
                                 } else {
-                                    var value = this._rejectionHandler0
+                                    const value = this._rejectionHandler0
                                     this._settlePromise0(
                                         this._fulfillmentHandler0,
                                         value,
@@ -3534,7 +3556,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         Promise.prototype._settledValue = function() {
-                            var bitField = this._bitField
+                            const bitField = this._bitField
                             if ((bitField & 33554432) !== 0) {
                                 return this._rejectionHandler0
                             } else if ((bitField & 16777216) !== 0) {
@@ -3551,7 +3573,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
 
                         Promise.defer = Promise.pending = function() {
                             debug.deprecated('Promise.defer', 'new Promise')
-                            var promise = new Promise(INTERNAL)
+                            const promise = new Promise(INTERNAL)
                             return {
                                 promise: promise,
                                 resolve: deferResolve,
@@ -3598,7 +3620,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         util.toFastProperties(Promise)
                         util.toFastProperties(Promise.prototype)
                         function fillTypes(value) {
-                            var p = new Promise(INTERNAL)
+                            const p = new Promise(INTERNAL)
                             p._fulfillmentHandler0 = value
                             p._rejectionHandler0 = value
                             p._promise0 = value
@@ -3651,20 +3673,20 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         apiRejection,
                         Proxyable
                     ) {
-                        var util = _dereq_('./util')
-                        var isArray = util.isArray
+                        const util = _dereq_('./util')
+                        const isArray = util.isArray
 
                         function toResolutionValue(val) {
                             switch (val) {
-                            case -2:
-                                return []
-                            case -3:
-                                return {}
+                                case -2:
+                                    return []
+                                case -3:
+                                    return {}
                             }
                         }
 
                         function PromiseArray(values) {
-                            var promise = (this._promise = new Promise(
+                            const promise = (this._promise = new Promise(
                                 INTERNAL
                             ))
                             if (values instanceof Promise) {
@@ -3690,13 +3712,13 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             _,
                             resolveValueIfEmpty
                         ) {
-                            var values = tryConvertToPromise(
+                            let values = tryConvertToPromise(
                                 this._values,
                                 this._promise
                             )
                             if (values instanceof Promise) {
                                 values = values._target()
-                                var bitField = values._bitField
+                                const bitField = values._bitField
                                 this._values = values
 
                                 if ((bitField & 50397184) === 0) {
@@ -3718,7 +3740,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             }
                             values = util.asArray(values)
                             if (values === null) {
-                                var err = apiRejection(
+                                const err = apiRejection(
                                     'expecting an array or an iterable object but got ' +
                                         util.classString(values)
                                 ).reason()
@@ -3740,16 +3762,16 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         PromiseArray.prototype._iterate = function(values) {
-                            var len = this.getActualLength(values.length)
+                            const len = this.getActualLength(values.length)
                             this._length = len
                             this._values = this.shouldCopyValues()
                                 ? new Array(len)
                                 : this._values
-                            var result = this._promise
-                            var isResolved = false
-                            var bitField = null
-                            for (var i = 0; i < len; ++i) {
-                                var maybePromise = tryConvertToPromise(
+                            const result = this._promise
+                            let isResolved = false
+                            let bitField = null
+                            for (let i = 0; i < len; ++i) {
+                                let maybePromise = tryConvertToPromise(
                                     values[i],
                                     result
                                 )
@@ -3821,7 +3843,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             index
                         ) {
                             this._values[index] = value
-                            var totalResolved = ++this._totalResolved
+                            const totalResolved = ++this._totalResolved
                             if (totalResolved >= this._length) {
                                 this._resolve(this._values)
                                 return true
@@ -3844,12 +3866,12 @@ const clearTimeout = require('./browser').browser.clearTimeout
 
                         PromiseArray.prototype._resultCancelled = function() {
                             if (this._isResolved()) return
-                            var values = this._values
+                            const values = this._values
                             this._cancel()
                             if (values instanceof Promise) {
                                 values.cancel()
                             } else {
-                                for (var i = 0; i < values.length; ++i) {
+                                for (let i = 0; i < values.length; ++i) {
                                     if (values[i] instanceof Promise) {
                                         values[i].cancel()
                                     }
@@ -3874,7 +3896,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                 function(_dereq_, module, exports) {
                     'use strict'
                     function arrayMove(src, srcIndex, dst, dstIndex, len) {
-                        for (var j = 0; j < len; ++j) {
+                        for (let j = 0; j < len; ++j) {
                             dst[j + dstIndex] = src[j + srcIndex]
                             src[j + srcIndex] = void 0
                         }
@@ -3891,18 +3913,18 @@ const clearTimeout = require('./browser').browser.clearTimeout
                     }
 
                     Queue.prototype._pushOne = function(arg) {
-                        var length = this.length()
+                        const length = this.length()
                         this._checkCapacity(length + 1)
-                        var i = (this._front + length) & (this._capacity - 1)
+                        const i = (this._front + length) & (this._capacity - 1)
                         this[i] = arg
                         this._length = length + 1
                     }
 
                     Queue.prototype._unshiftOne = function(value) {
-                        var capacity = this._capacity
+                        const capacity = this._capacity
                         this._checkCapacity(this.length() + 1)
-                        var front = this._front
-                        var i =
+                        const front = this._front
+                        const i =
                             (((front - 1) & (capacity - 1)) ^ capacity) -
                             capacity
                         this[i] = value
@@ -3917,16 +3939,16 @@ const clearTimeout = require('./browser').browser.clearTimeout
                     }
 
                     Queue.prototype.push = function(fn, receiver, arg) {
-                        var length = this.length() + 3
+                        const length = this.length() + 3
                         if (this._willBeOverCapacity(length)) {
                             this._pushOne(fn)
                             this._pushOne(receiver)
                             this._pushOne(arg)
                             return
                         }
-                        var j = this._front + length - 3
+                        const j = this._front + length - 3
                         this._checkCapacity(length)
-                        var wrapMask = this._capacity - 1
+                        const wrapMask = this._capacity - 1
                         this[(j + 0) & wrapMask] = fn
                         this[(j + 1) & wrapMask] = receiver
                         this[(j + 2) & wrapMask] = arg
@@ -3934,7 +3956,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                     }
 
                     Queue.prototype.shift = function() {
-                        var front = this._front,
+                        let front = this._front,
                             ret = this[front]
 
                         this[front] = undefined
@@ -3954,11 +3976,11 @@ const clearTimeout = require('./browser').browser.clearTimeout
                     }
 
                     Queue.prototype._resizeTo = function(capacity) {
-                        var oldCapacity = this._capacity
+                        const oldCapacity = this._capacity
                         this._capacity = capacity
-                        var front = this._front
-                        var length = this._length
-                        var moveItemsCount =
+                        const front = this._front
+                        const length = this._length
+                        const moveItemsCount =
                             (front + length) & (oldCapacity - 1)
                         arrayMove(this, 0, this, oldCapacity, moveItemsCount)
                     }
@@ -3970,9 +3992,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
             18: [
                 function(_dereq_, module, exports) {
                     'use strict'
-                    var util = _dereq_('./util')
-                    var schedule
-                    var noAsyncScheduler = function() {
+                    const util = _dereq_('./util')
+                    let schedule
+                    const noAsyncScheduler = function() {
                         throw new Error(
                             'No async scheduler available\u000a\u000a    See http://goo.gl/MqrFmX\u000a'
                         )
@@ -3981,15 +4003,15 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         util.isNode &&
                         typeof MutationObserver === 'undefined'
                     ) {
-                        var GlobalSetImmediate = global.setImmediate
-                        var ProcessNextTick = process.nextTick
+                        const GlobalSetImmediate = global.setImmediate
+                        const ProcessNextTick = process.nextTick
                         schedule = util.isRecentNode
                             ? function(fn) {
-                                GlobalSetImmediate.call(global, fn)
-                            }
+                                  GlobalSetImmediate.call(global, fn)
+                              }
                             : function(fn) {
-                                ProcessNextTick.call(process, fn)
-                            }
+                                  ProcessNextTick.call(process, fn)
+                              }
                     } else if (
                         typeof MutationObserver !== 'undefined' &&
                         !(
@@ -3999,17 +4021,17 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         )
                     ) {
                         schedule = (function() {
-                            var div = document.createElement('div')
-                            var opts = {attributes: true}
-                            var toggleScheduled = false
-                            var div2 = document.createElement('div')
-                            var o2 = new MutationObserver(function() {
+                            const div = document.createElement('div')
+                            const opts = {attributes: true}
+                            let toggleScheduled = false
+                            const div2 = document.createElement('div')
+                            const o2 = new MutationObserver(function() {
                                 div.classList.toggle('foo')
                                 toggleScheduled = false
                             })
                             o2.observe(div2, opts)
 
-                            var scheduleToggle = function() {
+                            const scheduleToggle = function() {
                                 if (toggleScheduled) return
                                 toggleScheduled = true
                                 div2.classList.toggle('foo')
@@ -4060,7 +4082,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             return this._settledValueField
                         }
 
-                        var value = (PromiseInspection.prototype.value = function() {
+                        const value = (PromiseInspection.prototype.value = function() {
                             if (!this.isFulfilled()) {
                                 throw new TypeError(
                                     'cannot get fulfillment value of a non-fulfilled promise\u000a\u000a    See http://goo.gl/MqrFmX\u000a'
@@ -4069,7 +4091,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             return this._settledValue()
                         })
 
-                        var reason = (PromiseInspection.prototype.error = PromiseInspection.prototype.reason = function() {
+                        const reason = (PromiseInspection.prototype.error = PromiseInspection.prototype.reason = function() {
                             if (!this.isRejected()) {
                                 throw new TypeError(
                                     'cannot get rejection reason of a non-rejected promise\u000a\u000a    See http://goo.gl/MqrFmX\u000a'
@@ -4078,19 +4100,19 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             return this._settledValue()
                         })
 
-                        var isFulfilled = (PromiseInspection.prototype.isFulfilled = function() {
+                        const isFulfilled = (PromiseInspection.prototype.isFulfilled = function() {
                             return (this._bitField & 33554432) !== 0
                         })
 
-                        var isRejected = (PromiseInspection.prototype.isRejected = function() {
+                        const isRejected = (PromiseInspection.prototype.isRejected = function() {
                             return (this._bitField & 16777216) !== 0
                         })
 
-                        var isPending = (PromiseInspection.prototype.isPending = function() {
+                        const isPending = (PromiseInspection.prototype.isPending = function() {
                             return (this._bitField & 50397184) === 0
                         })
 
-                        var isResolved = (PromiseInspection.prototype.isResolved = function() {
+                        const isResolved = (PromiseInspection.prototype.isResolved = function() {
                             return (this._bitField & 50331648) !== 0
                         })
 
@@ -4123,7 +4145,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         Promise.prototype.reason = function() {
-                            var target = this._target()
+                            const target = this._target()
                             target._unsetRejectionIsUnhandled()
                             return reason.call(target)
                         }
@@ -4146,14 +4168,14 @@ const clearTimeout = require('./browser').browser.clearTimeout
                 function(_dereq_, module, exports) {
                     'use strict'
                     module.exports = function(Promise, INTERNAL) {
-                        var util = _dereq_('./util')
-                        var errorObj = util.errorObj
-                        var isObject = util.isObject
+                        const util = _dereq_('./util')
+                        const errorObj = util.errorObj
+                        const isObject = util.isObject
 
                         function tryConvertToPromise(obj, context) {
                             if (isObject(obj)) {
                                 if (obj instanceof Promise) return obj
-                                var then = getThen(obj)
+                                const then = getThen(obj)
                                 if (then === errorObj) {
                                     if (context) context._pushContext()
                                     var ret = Promise.reject(then.e)
@@ -4190,19 +4212,19 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             }
                         }
 
-                        var hasProp = {}.hasOwnProperty
+                        const hasProp = {}.hasOwnProperty
                         function isAnyBluebirdPromise(obj) {
                             return hasProp.call(obj, '_promise0')
                         }
 
                         function doThenable(x, then, context) {
-                            var promise = new Promise(INTERNAL)
-                            var ret = promise
+                            let promise = new Promise(INTERNAL)
+                            const ret = promise
                             if (context) context._pushContext()
                             promise._captureStackTrace()
                             if (context) context._popContext()
-                            var synchronous = true
-                            var result = util
+                            let synchronous = true
+                            const result = util
                                 .tryCatch(then)
                                 .call(x, resolve, reject)
                             synchronous = false
@@ -4238,12 +4260,12 @@ const clearTimeout = require('./browser').browser.clearTimeout
             21: [
                 function(_dereq_, module, exports) {
                     'use strict'
-                    var es5 = _dereq_('./es5')
-                    var canEvaluate = typeof navigator == 'undefined'
+                    const es5 = _dereq_('./es5')
+                    const canEvaluate = typeof navigator == 'undefined'
 
-                    var errorObj = {e: {}}
-                    var tryCatchTarget
-                    var globalObject =
+                    const errorObj = {e: {}}
+                    let tryCatchTarget
+                    const globalObject =
                         typeof self !== 'undefined'
                             ? self
                             : typeof window !== 'undefined'
@@ -4254,7 +4276,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
 
                     function tryCatcher() {
                         try {
-                            var target = tryCatchTarget
+                            const target = tryCatchTarget
                             tryCatchTarget = null
                             return target.apply(this, arguments)
                         } catch (e) {
@@ -4267,13 +4289,13 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         return tryCatcher
                     }
 
-                    var inherits = function(Child, Parent) {
-                        var hasProp = {}.hasOwnProperty
+                    const inherits = function(Child, Parent) {
+                        const hasProp = {}.hasOwnProperty
 
                         function T() {
                             this.constructor = Child
                             this.constructor$ = Parent
-                            for (var propertyName in Parent.prototype) {
+                            for (const propertyName in Parent.prototype) {
                                 if (
                                     hasProp.call(
                                         Parent.prototype,
@@ -4317,9 +4339,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
                     }
 
                     function withAppended(target, appendee) {
-                        var len = target.length
-                        var ret = new Array(len + 1)
-                        var i
+                        const len = target.length
+                        const ret = new Array(len + 1)
+                        let i
                         for (i = 0; i < len; ++i) {
                             ret[i] = target[i]
                         }
@@ -4329,7 +4351,10 @@ const clearTimeout = require('./browser').browser.clearTimeout
 
                     function getDataPropertyOrDefault(obj, key, defaultValue) {
                         if (es5.isES5) {
-                            var desc = Object.getOwnPropertyDescriptor(obj, key)
+                            const desc = Object.getOwnPropertyDescriptor(
+                                obj,
+                                key
+                            )
 
                             if (desc != null) {
                                 return desc.get == null && desc.set == null
@@ -4345,7 +4370,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
 
                     function notEnumerableProp(obj, name, value) {
                         if (isPrimitive(obj)) return obj
-                        var descriptor = {
+                        const descriptor = {
                             value: value,
                             configurable: true,
                             enumerable: false,
@@ -4359,16 +4384,16 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         throw r
                     }
 
-                    var inheritedDataKeys = (function() {
-                        var excludedPrototypes = [
+                    const inheritedDataKeys = (function() {
+                        const excludedPrototypes = [
                             Array.prototype,
                             Object.prototype,
                             Function.prototype
                         ]
 
-                        var isExcludedProto = function(val) {
+                        const isExcludedProto = function(val) {
                             for (
-                                var i = 0;
+                                let i = 0;
                                 i < excludedPrototypes.length;
                                 ++i
                             ) {
@@ -4380,10 +4405,10 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
 
                         if (es5.isES5) {
-                            var getKeys = Object.getOwnPropertyNames
+                            const getKeys = Object.getOwnPropertyNames
                             return function(obj) {
-                                var ret = []
-                                var visitedKeys = Object.create(null)
+                                const ret = []
+                                const visitedKeys = Object.create(null)
                                 while (obj != null && !isExcludedProto(obj)) {
                                     var keys
                                     try {
@@ -4391,11 +4416,11 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     } catch (e) {
                                         return ret
                                     }
-                                    for (var i = 0; i < keys.length; ++i) {
-                                        var key = keys[i]
+                                    for (let i = 0; i < keys.length; ++i) {
+                                        const key = keys[i]
                                         if (visitedKeys[key]) continue
                                         visitedKeys[key] = true
-                                        var desc = Object.getOwnPropertyDescriptor(
+                                        const desc = Object.getOwnPropertyDescriptor(
                                             obj,
                                             key
                                         )
@@ -4412,18 +4437,18 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 return ret
                             }
                         } else {
-                            var hasProp = {}.hasOwnProperty
+                            const hasProp = {}.hasOwnProperty
                             return function(obj) {
                                 if (isExcludedProto(obj)) return []
-                                var ret = []
+                                const ret = []
 
                                 /*jshint forin:false */
-                                enumeration: for (var key in obj) {
+                                enumeration: for (const key in obj) {
                                     if (hasProp.call(obj, key)) {
                                         ret.push(key)
                                     } else {
                                         for (
-                                            var i = 0;
+                                            let i = 0;
                                             i < excludedPrototypes.length;
                                             ++i
                                         ) {
@@ -4444,20 +4469,20 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
                     })()
 
-                    var thisAssignmentPattern = /this\s*\.\s*\S+\s*=/
+                    const thisAssignmentPattern = /this\s*\.\s*\S+\s*=/
                     function isClass(fn) {
                         try {
                             if (typeof fn === 'function') {
-                                var keys = es5.names(fn.prototype)
+                                const keys = es5.names(fn.prototype)
 
-                                var hasMethods = es5.isES5 && keys.length > 1
-                                var hasMethodsOtherThanConstructor =
+                                const hasMethods = es5.isES5 && keys.length > 1
+                                const hasMethodsOtherThanConstructor =
                                     keys.length > 0 &&
                                     !(
                                         keys.length === 1 &&
                                         keys[0] === 'constructor'
                                     )
-                                var hasThisAssignmentAndStaticMethods =
+                                const hasThisAssignmentAndStaticMethods =
                                     thisAssignmentPattern.test(fn + '') &&
                                     es5.names(fn).length > 0
 
@@ -4479,19 +4504,19 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         /*jshint -W027,-W055,-W031*/
                         function FakeConstructor() {}
                         FakeConstructor.prototype = obj
-                        var l = 8
+                        let l = 8
                         while (l--) new FakeConstructor()
                         return obj
                     }
 
-                    var rident = /^[a-z$_][a-z$_0-9]*$/i
+                    const rident = /^[a-z$_][a-z$_0-9]*$/i
                     function isIdentifier(str) {
                         return rident.test(str)
                     }
 
                     function filledRange(count, prefix, suffix) {
-                        var ret = new Array(count)
-                        for (var i = 0; i < count; ++i) {
+                        const ret = new Array(count)
+                        for (let i = 0; i < count; ++i) {
                             ret[i] = prefix + i + suffix
                         }
                         return ret
@@ -4536,7 +4561,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         )
                     }
 
-                    var ensureErrorObject = (function() {
+                    const ensureErrorObject = (function() {
                         if (!('stack' in new Error())) {
                             return function(value) {
                                 if (canAttachTrace(value)) return value
@@ -4559,9 +4584,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
                     }
 
                     function copyDescriptors(from, to, filter) {
-                        var keys = es5.names(from)
-                        for (var i = 0; i < keys.length; ++i) {
-                            var key = keys[i]
+                        const keys = es5.names(from)
+                        for (let i = 0; i < keys.length; ++i) {
+                            const key = keys[i]
                             if (filter(key)) {
                                 try {
                                     es5.defineProperty(
@@ -4574,7 +4599,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
                     }
 
-                    var asArray = function(v) {
+                    let asArray = function(v) {
                         if (es5.isArray(v)) {
                             return v
                         }
@@ -4582,20 +4607,20 @@ const clearTimeout = require('./browser').browser.clearTimeout
                     }
 
                     if (typeof Symbol !== 'undefined' && Symbol.iterator) {
-                        var ArrayFrom =
+                        const ArrayFrom =
                             typeof Array.from === 'function'
                                 ? function(v) {
-                                    return Array.from(v)
-                                }
+                                      return Array.from(v)
+                                  }
                                 : function(v) {
-                                    var ret = []
-                                    var it = v[Symbol.iterator]()
-                                    var itResult
-                                    while (!(itResult = it.next()).done) {
-                                        ret.push(itResult.value)
-                                    }
-                                    return ret
-                                }
+                                      const ret = []
+                                      const it = v[Symbol.iterator]()
+                                      let itResult
+                                      while (!(itResult = it.next()).done) {
+                                          ret.push(itResult.value)
+                                      }
+                                      return ret
+                                  }
 
                         asArray = function(v) {
                             if (es5.isArray(v)) {
@@ -4610,7 +4635,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         }
                     }
 
-                    var isNode =
+                    const isNode =
                         typeof process !== 'undefined' &&
                         classString(process).toLowerCase() ===
                             '[object process]'
@@ -4619,7 +4644,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         return isNode ? process.env[key] : def
                     }
 
-                    var ret = {
+                    const ret = {
                         isClass: isClass,
                         isIdentifier: isIdentifier,
                         inheritedDataKeys: inheritedDataKeys,
@@ -4657,7 +4682,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                     ret.isRecentNode =
                         ret.isNode &&
                         (function() {
-                            var version = process.versions.node
+                            const version = process.versions.node
                                 .split('.')
                                 .map(Number)
                             return (

@@ -247,7 +247,7 @@ asyncTest('Clear all', function() {
     let r
     stop(rs_locations.length - 1)
     return rs_locations.map(l => {
-        (r = new RS(l)),
+        ;(r = new RS(l)),
             r.clearCart(function(result, that) {
                 deepEqual(result.success, true, `1:${that.country}`)
                 return start()

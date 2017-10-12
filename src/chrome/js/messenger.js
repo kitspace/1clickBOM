@@ -26,7 +26,7 @@ const messenger = {
             chrome.runtime.onMessage.addListener(
                 (request, sender, sendResponse) => {
                     for (let i = 0; i < this.msgNames.length; i++) {
-                        ({msgName, callback} = this.msgNames[i])
+                        const {msgName, callback} = this.msgNames[i]
                         if (request.name === msgName) {
                             return callback(request.value, sendResponse)
                         }
@@ -36,8 +36,11 @@ const messenger = {
             return (this.listening = true)
         }
     },
-    send(msgName, input=null) {
-        chrome.runtime.sendMessage({name: msgName, value: JSON.parse(JSON.stringify(input))})
+    send(msgName, input = null) {
+        chrome.runtime.sendMessage({
+            name: msgName,
+            value: JSON.parse(JSON.stringify(input))
+        })
         if (chrome.tabs != null) {
             return chrome.tabs.query(
                 {

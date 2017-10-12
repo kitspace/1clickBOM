@@ -42,17 +42,17 @@ function globToRegex(glob) {
     for (let i = 0; i < glob.length; i++) {
         const c = glob[i]
         switch (c) {
-        case '?':
-            regexChars.push('.')
-            break
-        case '*':
-            regexChars.push('.*')
-            break
-        default:
-            if (specialChars.indexOf(c) >= 0) {
-                regexChars.push('\\')
-            }
-            regexChars.push(c)
+            case '?':
+                regexChars.push('.')
+                break
+            case '*':
+                regexChars.push('.*')
+                break
+            default:
+                if (specialChars.indexOf(c) >= 0) {
+                    regexChars.push('\\')
+                }
+                regexChars.push(c)
         }
     }
     regexChars.push('$')

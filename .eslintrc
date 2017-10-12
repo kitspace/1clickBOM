@@ -4,8 +4,8 @@
 		"commonjs": true,
 		"es6": true
 	},
-    "brace-style": [2, "stroustrup", {"allowSingleLine": true}],
 	"rules": {
+        "brace-style": [2, "stroustrup", {"allowSingleLine": true}],
 		"comma-dangle": ["off"],
 		"indent": [
 			"error",
@@ -28,6 +28,7 @@
 		"max-len": ["error", {
 			"tabWidth": 4
 		}],
+        "no-var": "error",
 		"prefer-const": "error",
 		"space-infix-ops": ["error", {
 			"int32Hint": false

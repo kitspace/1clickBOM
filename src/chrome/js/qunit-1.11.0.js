@@ -8,7 +8,7 @@
  * http://jquery.org/license
  */
 
-(function(window) {
+;(function(window) {
     var QUnit,
         assert,
         config,
@@ -24,7 +24,7 @@
         defined = {
             setTimeout: typeof window.setTimeout !== 'undefined',
             sessionStorage: (function() {
-                var x = 'qunit-test-string'
+                const x = 'qunit-test-string'
                 try {
                     sessionStorage.setItem(x, x)
                     sessionStorage.removeItem(x)
@@ -45,7 +45,7 @@
 	 * @return {String} error message
 	 */
         errorString = function(error) {
-            var name,
+            let name,
                 message,
                 errorString = error.toString()
             if (errorString.substring(0, 7) === '[object') {
@@ -74,7 +74,7 @@
         objectValues = function(obj) {
             // Grunt 0.3.x uses an older version of jshint that still has jshint/jshint#392.
             /*jshint newcap: false */
-            var key,
+            let key,
                 val,
                 vals = QUnit.is('array', obj) ? [] : {}
             for (key in obj) {
@@ -96,7 +96,7 @@
 
     Test.prototype = {
         init: function() {
-            var a,
+            let a,
                 b,
                 li,
                 tests = id('qunit-tests')
@@ -182,7 +182,7 @@
         run: function() {
             config.current = this
 
-            var running = id('qunit-testresult')
+            const running = id('qunit-testresult')
 
             if (running) {
                 running.innerHTML = 'Running: <br/>' + this.nameHtml
@@ -273,7 +273,7 @@
                 )
             }
 
-            var i,
+            let i,
                 assertion,
                 a,
                 b,
@@ -334,16 +334,16 @@
                 b = document.createElement('strong')
                 b.innerHTML =
                     this.nameHtml +
-                    ' <b class=\'counts\'>(<b class=\'failed\'>' +
+                    " <b class='counts'>(<b class='failed'>" +
                     bad +
-                    '</b>, <b class=\'passed\'>' +
+                    "</b>, <b class='passed'>" +
                     good +
                     '</b>, ' +
                     this.assertions.length +
                     ')</b>'
 
                 addEvent(b, 'click', function() {
-                    var next = b.parentNode.lastChild,
+                    let next = b.parentNode.lastChild,
                         collapsed = hasClass(next, 'qunit-collapsed')
                     ;(collapsed
                         ? removeClass
@@ -351,7 +351,7 @@
                 })
 
                 addEvent(b, 'dblclick', function(e) {
-                    var target =
+                    let target =
                         e && e.target ? e.target : window.event.srcElement
                     if (
                         target.nodeName.toLowerCase() === 'span' ||
@@ -408,7 +408,7 @@
         },
 
         queue: function() {
-            var bad,
+            let bad,
                 test = this
 
             synchronize(function() {
@@ -467,9 +467,9 @@
         },
 
         test: function(testName, expected, callback, async) {
-            var test,
+            let test,
                 nameHtml =
-                    '<span class=\'test-name\'>' +
+                    "<span class='test-name'>" +
                     escapeText(testName) +
                     '</span>'
 
@@ -480,7 +480,7 @@
 
             if (config.currentModule) {
                 nameHtml =
-                    '<span class=\'module-name\'>' +
+                    "<span class='module-name'>" +
                     escapeText(config.currentModule) +
                     '</span>: ' +
                     nameHtml
@@ -598,7 +598,7 @@
             }
             result = !!result
 
-            var source,
+            let source,
                 details = {
                     module: config.current.module,
                     name: config.current.testName,
@@ -607,14 +607,14 @@
                 }
 
             msg = escapeText(msg || (result ? 'okay' : 'failed'))
-            msg = '<span class=\'test-message\'>' + msg + '</span>'
+            msg = "<span class='test-message'>" + msg + '</span>'
 
             if (!result) {
                 source = sourceFromStacktrace(2)
                 if (source) {
                     details.source = source
                     msg +=
-                        '<table><tr class=\'test-source\'><th>Source: </th><td><pre>' +
+                        "<table><tr class='test-source'><th>Source: </th><td><pre>" +
                         escapeText(source) +
                         '</pre></td></tr></table>'
                 }
@@ -710,7 +710,7 @@
         },
 
         throws: function(block, expected, message) {
-            var actual,
+            let actual,
                 expectedOutput = expected,
                 ok = false
 
@@ -861,8 +861,8 @@
     }
 
     // Initialize more QUnit.config and QUnit.urlParams
-    (function() {
-        var i,
+    ;(function() {
+        let i,
             location = window.location || {search: '', protocol: 'file:'},
             params = location.search.slice(1).split('&'),
             length = params.length,
@@ -915,20 +915,20 @@
                 semaphore: 1
             })
 
-            var tests,
+            let tests,
                 banner,
                 result,
                 qunit = id('qunit')
 
             if (qunit) {
                 qunit.innerHTML =
-                    '<h1 id=\'qunit-header\'>' +
+                    "<h1 id='qunit-header'>" +
                     escapeText(document.title) +
                     '</h1>' +
-                    '<h2 id=\'qunit-banner\'></h2>' +
-                    '<div id=\'qunit-testrunner-toolbar\'></div>' +
-                    '<h2 id=\'qunit-userAgent\'></h2>' +
-                    '<ol id=\'qunit-tests\'></ol>'
+                    "<h2 id='qunit-banner'></h2>" +
+                    "<div id='qunit-testrunner-toolbar'></div>" +
+                    "<h2 id='qunit-userAgent'></h2>" +
+                    "<ol id='qunit-tests'></ol>"
             }
 
             tests = id('qunit-tests')
@@ -958,7 +958,7 @@
 
         // Resets the test setup. Useful for tests that modify the DOM.
         reset: function() {
-            var fixture = id('qunit-fixture')
+            const fixture = id('qunit-fixture')
             if (fixture) {
                 fixture.innerHTML = config.fixture
             }
@@ -1007,22 +1007,22 @@
                 return 'null'
             }
 
-            var match = toString.call(obj).match(/^\[object\s(.*)\]$/),
+            let match = toString.call(obj).match(/^\[object\s(.*)\]$/),
                 type = (match && match[1]) || ''
 
             switch (type) {
-            case 'Number':
-                if (isNaN(obj)) {
-                    return 'nan'
-                }
-                return 'number'
-            case 'String':
-            case 'Boolean':
-            case 'Array':
-            case 'Date':
-            case 'RegExp':
-            case 'Function':
-                return type.toLowerCase()
+                case 'Number':
+                    if (isNaN(obj)) {
+                        return 'nan'
+                    }
+                    return 'number'
+                case 'String':
+                case 'Boolean':
+                case 'Array':
+                case 'Date':
+                case 'RegExp':
+                case 'Function':
+                    return type.toLowerCase()
             }
             if (typeof obj === 'object') {
                 return 'object'
@@ -1038,7 +1038,7 @@
                 )
             }
 
-            var output,
+            let output,
                 source,
                 details = {
                     module: config.current.module,
@@ -1050,24 +1050,24 @@
                 }
 
             message = escapeText(message) || (result ? 'okay' : 'failed')
-            message = '<span class=\'test-message\'>' + message + '</span>'
+            message = "<span class='test-message'>" + message + '</span>'
             output = message
 
             if (!result) {
                 expected = escapeText(QUnit.jsDump.parse(expected))
                 actual = escapeText(QUnit.jsDump.parse(actual))
                 output +=
-                    '<table><tr class=\'test-expected\'><th>Expected: </th><td><pre>' +
+                    "<table><tr class='test-expected'><th>Expected: </th><td><pre>" +
                     expected +
                     '</pre></td></tr>'
 
                 if (actual !== expected) {
                     output +=
-                        '<tr class=\'test-actual\'><th>Result: </th><td><pre>' +
+                        "<tr class='test-actual'><th>Result: </th><td><pre>" +
                         actual +
                         '</pre></td></tr>'
                     output +=
-                        '<tr class=\'test-diff\'><th>Diff: </th><td><pre>' +
+                        "<tr class='test-diff'><th>Diff: </th><td><pre>" +
                         QUnit.diff(expected, actual) +
                         '</pre></td></tr>'
                 }
@@ -1077,7 +1077,7 @@
                 if (source) {
                     details.source = source
                     output +=
-                        '<tr class=\'test-source\'><th>Source: </th><td><pre>' +
+                        "<tr class='test-source'><th>Source: </th><td><pre>" +
                         escapeText(source) +
                         '</pre></td></tr>'
                 }
@@ -1101,7 +1101,7 @@
                 )
             }
 
-            var output,
+            let output,
                 details = {
                     module: config.current.module,
                     name: config.current.testName,
@@ -1110,14 +1110,14 @@
                 }
 
             message = escapeText(message) || 'error'
-            message = '<span class=\'test-message\'>' + message + '</span>'
+            message = "<span class='test-message'>" + message + '</span>'
             output = message
 
             output += '<table>'
 
             if (actual) {
                 output +=
-                    '<tr class=\'test-actual\'><th>Result: </th><td><pre>' +
+                    "<tr class='test-actual'><th>Result: </th><td><pre>" +
                     escapeText(actual) +
                     '</pre></td></tr>'
             }
@@ -1125,7 +1125,7 @@
             if (source) {
                 details.source = source
                 output +=
-                    '<tr class=\'test-source\'><th>Source: </th><td><pre>' +
+                    "<tr class='test-source'><th>Source: </th><td><pre>" +
                     escapeText(source) +
                     '</pre></td></tr>'
             }
@@ -1142,7 +1142,7 @@
 
         url: function(params) {
             params = extend(extend({}, QUnit.urlParams), params)
-            var key,
+            let key,
                 querystring = '?'
 
             for (key in params) {
@@ -1209,7 +1209,7 @@
         runLoggingCallbacks('begin', QUnit, {})
 
         // Initialize the config, saving the execution queue
-        var banner,
+        let banner,
             filter,
             i,
             label,
@@ -1245,36 +1245,36 @@
             }
             config[val.id] = QUnit.urlParams[val.id]
             urlConfigHtml +=
-                '<input id=\'qunit-urlconfig-' +
+                "<input id='qunit-urlconfig-" +
                 escapeText(val.id) +
-                '\' name=\'' +
+                "' name='" +
                 escapeText(val.id) +
-                '\' type=\'checkbox\'' +
-                (config[val.id] ? ' checked=\'checked\'' : '') +
-                ' title=\'' +
+                "' type='checkbox'" +
+                (config[val.id] ? " checked='checked'" : '') +
+                " title='" +
                 escapeText(val.tooltip) +
-                '\'><label for=\'qunit-urlconfig-' +
+                "'><label for='qunit-urlconfig-" +
                 escapeText(val.id) +
-                '\' title=\'' +
+                "' title='" +
                 escapeText(val.tooltip) +
-                '\'>' +
+                "'>" +
                 val.label +
                 '</label>'
         }
 
         moduleFilterHtml +=
-            '<label for=\'qunit-modulefilter\'>Module: </label><select id=\'qunit-modulefilter\' name=\'modulefilter\'><option value=\'\' ' +
-            (config.module === undefined ? 'selected=\'selected\'' : '') +
+            "<label for='qunit-modulefilter'>Module: </label><select id='qunit-modulefilter' name='modulefilter'><option value='' " +
+            (config.module === undefined ? "selected='selected'" : '') +
             '>< All Modules ></option>'
 
         for (i in config.modules) {
             if (config.modules.hasOwnProperty(i)) {
                 numModules += 1
                 moduleFilterHtml +=
-                    '<option value=\'' +
+                    "<option value='" +
                     escapeText(encodeURIComponent(i)) +
-                    '\' ' +
-                    (config.module === i ? 'selected=\'selected\'' : '') +
+                    "' " +
+                    (config.module === i ? "selected='selected'" : '') +
                     '>' +
                     escapeText(i) +
                     '</option>'
@@ -1292,13 +1292,13 @@
         banner = id('qunit-header')
         if (banner) {
             banner.innerHTML =
-                '<a href=\'' +
+                "<a href='" +
                 QUnit.url({
                     filter: undefined,
                     module: undefined,
                     testNumber: undefined
                 }) +
-                '\'>' +
+                "'>" +
                 banner.innerHTML +
                 '</a> '
         }
@@ -1312,7 +1312,7 @@
             filter.id = 'qunit-filter-pass'
 
             addEvent(filter, 'click', function() {
-                var tmp,
+                let tmp,
                     ol = document.getElementById('qunit-tests')
 
                 if (filter.checked) {
@@ -1365,7 +1365,7 @@
             // * Use "click" instead of "change"
             // * Fallback from event.target to event.srcElement
             addEvents(urlConfigCheckboxes, 'click', function(event) {
-                var params = {},
+                let params = {},
                     target = event.target || event.srcElement
                 params[target.name] = target.checked ? true : undefined
                 window.location = QUnit.url(params)
@@ -1377,7 +1377,7 @@
                 moduleFilter.setAttribute('id', 'qunit-modulefilter-container')
                 moduleFilter.innerHTML = moduleFilterHtml
                 addEvent(moduleFilter.lastChild, 'change', function() {
-                    var selectBox = moduleFilter.getElementsByTagName(
+                    let selectBox = moduleFilter.getElementsByTagName(
                             'select'
                         )[0],
                         selectedModule = decodeURIComponent(
@@ -1414,7 +1414,7 @@
     // Returning true will surpress the default browser handler,
     // returning false will let it run.
     window.onerror = function(error, filePath, linerNr) {
-        var ret = false
+        let ret = false
         if (onErrorFnPrev) {
             ret = onErrorFnPrev(error, filePath, linerNr)
         }
@@ -1457,7 +1457,7 @@
             })
         }
 
-        var i,
+        let i,
             key,
             banner = id('qunit-banner'),
             tests = id('qunit-tests'),
@@ -1467,11 +1467,11 @@
                 'Tests completed in ',
                 runtime,
                 ' milliseconds.<br/>',
-                '<span class=\'passed\'>',
+                "<span class='passed'>",
                 passed,
-                '</span> assertions of <span class=\'total\'>',
+                "</span> assertions of <span class='total'>",
                 config.stats.all,
-                '</span> passed, <span class=\'failed\'>',
+                "</span> passed, <span class='failed'>",
                 config.stats.bad,
                 '</span> failed.'
             ].join('')
@@ -1527,7 +1527,7 @@
 
     /** @return Boolean: true if this test should be ran */
     function validTest(test) {
-        var include,
+        let include,
             filter = config.filter && config.filter.toLowerCase(),
             module = config.module && config.module.toLowerCase(),
             fullName = (test.module + ': ' + test.testName).toLowerCase()
@@ -1570,7 +1570,7 @@
     function extractStacktrace(e, offset) {
         offset = offset === undefined ? 3 : offset
 
-        var stack, include, i
+        let stack, include, i
 
         if (e.stacktrace) {
             // Opera
@@ -1624,16 +1624,16 @@
         // Both single quotes and double quotes (for attributes)
         return s.replace(/['"<>&]/g, function(s) {
             switch (s) {
-            case '\'':
-                return '&#039;'
-            case '"':
-                return '&quot;'
-            case '<':
-                return '&lt;'
-            case '>':
-                return '&gt;'
-            case '&':
-                return '&amp;'
+                case "'":
+                    return '&#039;'
+                case '"':
+                    return '&quot;'
+                case '<':
+                    return '&lt;'
+                case '>':
+                    return '&gt;'
+                case '&':
+                    return '&amp;'
             }
         })
     }
@@ -1650,7 +1650,7 @@
         function next() {
             process(last)
         }
-        var start = new Date().getTime()
+        const start = new Date().getTime()
         config.depth = config.depth ? config.depth + 1 : 1
 
         while (config.queue.length && !config.blocking) {
@@ -1680,7 +1680,7 @@
         config.pollution = []
 
         if (config.noglobals) {
-            for (var key in window) {
+            for (const key in window) {
                 // in Opera sometimes DOM element ids show up here, ignore them
                 if (
                     !hasOwn.call(window, key) ||
@@ -1694,7 +1694,7 @@
     }
 
     function checkPollution() {
-        var newGlobals,
+        let newGlobals,
             deletedGlobals,
             old = config.pollution
 
@@ -1717,7 +1717,7 @@
 
     // returns a new Array with the elements that are in a but not in b
     function diff(a, b) {
-        var i,
+        let i,
             j,
             result = a.slice()
 
@@ -1734,7 +1734,7 @@
     }
 
     function extend(a, b) {
-        for (var prop in b) {
+        for (const prop in b) {
             if (b[prop] === undefined) {
                 delete a[prop]
 
@@ -1768,7 +1768,7 @@
  * @param {Function} fn
  */
     function addEvents(elems, type, fn) {
-        var i = elems.length
+        let i = elems.length
         while (i--) {
             addEvent(elems[i], type, fn)
         }
@@ -1785,7 +1785,7 @@
     }
 
     function removeClass(elem, name) {
-        var set = ' ' + elem.className + ' '
+        let set = ' ' + elem.className + ' '
         // Class name may appear multiple times
         while (set.indexOf(' ' + name + ' ') > -1) {
             set = set.replace(' ' + name + ' ', ' ')
@@ -1814,7 +1814,7 @@
 
     // Supports deprecated method of completely overwriting logging callbacks
     function runLoggingCallbacks(key, scope, args) {
-        var i, callbacks
+        let i, callbacks
         if (QUnit.hasOwnProperty(key)) {
             QUnit[key].call(scope, args)
         } else {
@@ -1830,7 +1830,7 @@
     QUnit.equiv = (function() {
         // Call the o related callback with the given arguments.
         function bindCallbacks(o, callbacks, args) {
-            var prop = QUnit.objectType(o)
+            const prop = QUnit.objectType(o)
             if (prop) {
                 if (QUnit.objectType(callbacks[prop]) === 'function') {
                     return callbacks[prop].apply(callbacks, args)
@@ -1841,7 +1841,7 @@
         }
 
         // the real equiv function
-        var innerEquiv,
+        let innerEquiv,
             // stack to decide between skip/abort functions
             callers = [],
             // stack to avoiding loops from circular referencing
@@ -1905,14 +1905,14 @@
                     // - abort otherwise,
                     // initial === would have catch identical references anyway
                     function: function() {
-                        var caller = callers[callers.length - 1]
+                        const caller = callers[callers.length - 1]
                         return (
                             caller !== Object && typeof caller !== 'undefined'
                         )
                     },
 
                     array: function(b, a) {
-                        var i, j, len, loop
+                        let i, j, len, loop
 
                         // b could be an object literal here
                         if (QUnit.objectType(b) !== 'array') {
@@ -1944,7 +1944,7 @@
                     },
 
                     object: function(b, a) {
-                        var i,
+                        let i,
                             j,
                             loop,
                             // Default to true
@@ -2010,7 +2010,7 @@
 
         innerEquiv = function() {
             // can take multiple arguments
-            var args = [].slice.apply(arguments)
+            const args = [].slice.apply(arguments)
             if (args.length < 2) {
                 return true // end transition
             }
@@ -2058,7 +2058,7 @@
             return o + ''
         }
         function join(pre, arr, post) {
-            var s = jsDump.separator(),
+            let s = jsDump.separator(),
                 base = jsDump.indent(),
                 inner = jsDump.indent(1)
             if (arr.join) {
@@ -2070,7 +2070,7 @@
             return [pre, inner + arr, base + post].join(s)
         }
         function array(arr, stack) {
-            var i = arr.length,
+            let i = arr.length,
                 ret = new Array(i)
             this.up()
             while (i--) {
@@ -2085,7 +2085,7 @@
                 // type is used mostly internally, you can fix a (custom)type in advance
                 parse: function(obj, type, stack) {
                     stack = stack || []
-                    var inStack,
+                    let inStack,
                         res,
                         parser = this.parsers[type || this.typeOf(obj)]
 
@@ -2104,7 +2104,7 @@
                     return type === 'string' ? parser : this.parsers.error
                 },
                 typeOf: function(obj) {
-                    var type
+                    let type
                     if (obj === null) {
                         type = 'null'
                     } else if (typeof obj === 'undefined') {
@@ -2156,7 +2156,7 @@
                     if (!this.multiline) {
                         return ''
                     }
-                    var chr = this.indentChar
+                    let chr = this.indentChar
                     if (this.HTML) {
                         chr = chr.replace(/\t/g, '   ').replace(/ /g, '&nbsp;')
                     }
@@ -2188,7 +2188,7 @@
                     null: 'null',
                     undefined: 'undefined',
                     function: function(fn) {
-                        var ret = 'function',
+                        let ret = 'function',
                             // functions never have name in IE
                             name =
                                 'name' in fn
@@ -2215,7 +2215,7 @@
                     nodelist: array,
                     arguments: array,
                     object: function(map, stack) {
-                        var ret = [],
+                        let ret = [],
                             keys,
                             key,
                             val,
@@ -2239,7 +2239,7 @@
                         return join('{', ret, '}')
                     },
                     node: function(node) {
-                        var len,
+                        let len,
                             i,
                             val,
                             open = QUnit.jsDump.HTML ? '&lt;' : '<',
@@ -2273,7 +2273,7 @@
                     },
                     // function calls it internally, it's the arguments part of the function
                     functionArgs: function(fn) {
-                        var args,
+                        let args,
                             l = fn.length
 
                         if (!l) {
@@ -2316,7 +2316,7 @@
             return array.indexOf(elem)
         }
 
-        for (var i = 0, length = array.length; i < length; i++) {
+        for (let i = 0, length = array.length; i < length; i++) {
             if (array[i] === elem) {
                 return i
             }
@@ -2342,7 +2342,7 @@
     QUnit.diff = (function() {
         /*jshint eqeqeq:false, eqnull:true */
         function diff(o, n) {
-            var i,
+            let i,
                 ns = {},
                 os = {}
 
@@ -2434,7 +2434,7 @@
             o = o.replace(/\s+$/, '')
             n = n.replace(/\s+$/, '')
 
-            var i,
+            let i,
                 pre,
                 str = '',
                 out = diff(
