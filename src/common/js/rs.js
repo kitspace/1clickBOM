@@ -16,13 +16,13 @@
 //
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
-const Promise               = require('./bluebird')
-const { RetailerInterface } = require('./retailer_interface')
-const { rsOnline }          = require('./rs_online')
-const { rsDelivers }        = require('./rs_delivers')
-const { rsDeliversAspx }    = require('./rs_delivers_aspx')
+const Promise = require('./bluebird')
+const {RetailerInterface} = require('./retailer_interface')
+const {rsOnline} = require('./rs_online')
+const {rsDelivers} = require('./rs_delivers')
+const {rsDeliversAspx} = require('./rs_delivers_aspx')
 
-Promise.config({cancellation:true})
+Promise.config({cancellation: true})
 
 class RS extends RetailerInterface {
     constructor(country_code, settings, callback) {
@@ -32,14 +32,12 @@ class RS extends RetailerInterface {
                 var method = rsOnline[name]
                 this[name] = method
             }
-        }
-        else if (/\.aspx$/.test(this.cart)) {
+        } else if (/\.aspx$/.test(this.cart)) {
             for (var name in rsDeliversAspx) {
                 var method = rsDeliversAspx[name]
                 this[name] = method
             }
-        }
-        else {
+        } else {
             for (var name in rsDelivers) {
                 var method = rsDelivers[name]
                 this[name] = method

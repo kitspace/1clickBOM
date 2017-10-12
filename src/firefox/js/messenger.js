@@ -19,7 +19,7 @@
 
 //this is the messenger object used by the popup and content-scripts in firefox
 
-let messenger = {
+const messenger = {
     on(msgName, callback) {
         return self.port.on(msgName, callback)
     },

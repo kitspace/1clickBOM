@@ -17,9 +17,9 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-let dom = new DOMParser()
+const dom = new DOMParser()
 
-let browser = {
+const browser = {
     storageGet(keys, callback) {
         return chrome.storage.local.get(keys, callback)
     },
@@ -37,25 +37,31 @@ let browser = {
             if (callback != null) {
                 return callback()
             }
-        }
-        )
+        })
     },
     prefsOnChanged(keys, callback) {
-        return chrome.storage.onChanged.addListener(function(changes, namespace) {
-            if (namespace === 'local' && (keys.filter(x => x in changes).length > 0)) {
+        return chrome.storage.onChanged.addListener(function(
+            changes,
+            namespace
+        ) {
+            if (
+                namespace === 'local' &&
+                keys.filter(x => x in changes).length > 0
+            ) {
                 return callback()
             }
         })
     },
     tabsGetActive(callback) {
-        return chrome.tabs.query({active:true, currentWindow:true}, function(tabs) {
+        return chrome.tabs.query({active: true, currentWindow: true}, function(
+            tabs
+        ) {
             if (tabs.length >= 1) {
                 return callback(tabs[0])
             } else {
                 return callback(null)
             }
-        }
-        )
+        })
     },
     tabsQuery(obj, callback) {
         return chrome.tabs.query(obj, callback)
@@ -83,37 +89,25 @@ let browser = {
     getURL(url) {
         return chrome.extension.getURL(url)
     },
-    getLocal(url, json=true){
-        let xhr = new XMLHttpRequest()
-        xhr.open('GET', chrome.extension.getURL(url), false)
-        xhr.send()
-        if (xhr.status === 200) {
-            if (json) {
-                return JSON.parse(xhr.responseText)
-            } else {
-                return xhr.responseText
-            }
-        }
-    },
     setBadge(obj) {
         if (obj.color != null) {
-            chrome.browserAction.setBadgeBackgroundColor({color:obj.color})
+            chrome.browserAction.setBadgeBackgroundColor({color: obj.color})
         }
         if (obj.text != null) {
-            return chrome.browserAction.setBadgeText(({text:obj.text}))
+            return chrome.browserAction.setBadgeText({text: obj.text})
         }
     },
     notificationsCreate(obj, callback) {
         return chrome.notifications.create('', obj, callback)
     },
     paste() {
-        let textarea = document.getElementById('pastebox')
+        const textarea = document.getElementById('pastebox')
         textarea.select()
         document.execCommand('paste')
         return textarea.value
     },
     copy(text) {
-        let textarea = document.getElementById('pastebox')
+        const textarea = document.getElementById('pastebox')
         textarea.value = text
         textarea.select()
         document.execCommand('SelectAll')

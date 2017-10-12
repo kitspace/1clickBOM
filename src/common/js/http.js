@@ -17,10 +17,10 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 const Promise = require('./bluebird')
-Promise.config({cancellation:true})
+Promise.config({cancellation: true})
 
-const { browser, XMLHttpRequest } = require('./browser')
-const { badge } = require('./badge')
+const {browser, XMLHttpRequest} = require('./browser')
+const {badge} = require('./badge')
 
 function network_callback(event, callback, error_callback, notify = true) {
     if (event.target.readyState === 4) {
@@ -32,12 +32,15 @@ function network_callback(event, callback, error_callback, notify = true) {
             let message = event.target.status + '\n'
             message += event.target.url
             if (notify) {
-                browser.notificationsCreate({
-                    type:'basic',
-                    title:'Network Error Occured',
-                    message,
-                    iconUrl:'/images/net_error.png'
-                }, function () {} )
+                browser.notificationsCreate(
+                    {
+                        type: 'basic',
+                        title: 'Network Error Occured',
+                        message,
+                        iconUrl: '/images/net_error.png'
+                    },
+                    function() {}
+                )
                 badge.setDecaying(`${event.target.status}`, '#CC00FF', 3)
             }
             if (error_callback != null) {
@@ -63,7 +66,10 @@ function post(url, params, options, callback, error_callback) {
     if (json) {
         xhr.setRequestHeader('Content-type', 'application/JSON')
     } else {
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+        xhr.setRequestHeader(
+            'Content-type',
+            'application/x-www-form-urlencoded'
+        )
     }
     xhr.url = url
     xhr.onreadystatechange = event => {
@@ -87,28 +93,38 @@ function get(url, {notify, timeout}, callback, error_callback) {
     xhr.open('GET', url, true)
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
     xhr.url = url
-    xhr.onreadystatechange = event => network_callback(event, callback, error_callback, notify)
+    xhr.onreadystatechange = event =>
+        network_callback(event, callback, error_callback, notify)
     xhr.timeout = timeout
-    xhr.ontimedout = event => network_callback(event, callback, error_callback, notify)
+    xhr.ontimedout = event =>
+        network_callback(event, callback, error_callback, notify)
     return xhr.send()
 }
 
-
 function getLocation(callback) {
     const used_country_codes = []
-    const countries_data = browser.getLocal('data/countries.json')
+    const countries_data = require('./data/countries.json')
     for (const _ in countries_data) {
         const code = countries_data[_]
         used_country_codes.push(code)
     }
     const url = 'https://freegeoip.kitnic.it'
-    return get(url, {timeout:5000}, responseText => {
-        const response = JSON.parse(responseText)
-        let code = response.country_code
-        if (code === 'GB') { code = 'UK'; }
-        if (!__in__(code, used_country_codes)) { code = 'Other'; }
-        return browser.prefsSet({country: code}, callback)
-    }, () => callback())
+    return get(
+        url,
+        {timeout: 5000},
+        responseText => {
+            const response = JSON.parse(responseText)
+            let code = response.country_code
+            if (code === 'GB') {
+                code = 'UK'
+            }
+            if (!__in__(code, used_country_codes)) {
+                code = 'Other'
+            }
+            return browser.prefsSet({country: code}, callback)
+        },
+        () => callback()
+    )
 }
 
 function promisePost(url, params) {
@@ -117,18 +133,21 @@ function promisePost(url, params) {
     })
 }
 
-
 function promiseGet(url) {
     return new Promise((resolve, reject) => {
-        get(url, {}, responseText => resolve(browser.parseDOM(responseText)), reject)
+        get(
+            url,
+            {},
+            responseText => resolve(browser.parseDOM(responseText)),
+            reject
+        )
     })
 }
 
-
-exports.post        = post
-exports.get         = get
+exports.post = post
+exports.get = get
 exports.promisePost = promisePost
-exports.promiseGet  = promiseGet
+exports.promiseGet = promiseGet
 exports.getLocation = getLocation
 
 function __in__(needle, haystack) {

@@ -17,13 +17,13 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 const Promise = require('./bluebird')
-Promise.config({cancellation:true})
+Promise.config({cancellation: true})
 
 const oneClickBOM = require('1-click-bom')
 const {retailer_list, isComplete, field_list} = oneClickBOM.lineData
 
-const octopart    = require('./octopart')
-const findchips   = require('./findchips')
+const octopart = require('./octopart')
+const findchips = require('./findchips')
 const commonParts = require('./common_parts')
 
 function _next_query(line, queries) {
@@ -41,7 +41,7 @@ function _next_query(line, queries) {
     for (let j = 0; j < retailer_list.length; j++) {
         const key = retailer_list[j]
         const sku = line.retailers[key]
-        if (sku !== '' && (!__in__(sku, queries))) {
+        if (sku !== '' && !__in__(sku, queries)) {
             query = sku
             break
         }
@@ -79,40 +79,64 @@ function _auto_complete(search_engine, lines, depth) {
             const queries = []
             const searchPromises = []
             function search({line, queries}) {
-                const {query, other_fields, retailers} = _next_query(line, queries)
-                if ((retailers.length === 0 && other_fields.length === 0) || query === '') {
+                const {query, other_fields, retailers} = _next_query(
+                    line,
+                    queries
+                )
+                if (
+                    (retailers.length === 0 && other_fields.length === 0) ||
+                    query === ''
+                ) {
                     return Promise.resolve({line, queries})
                 }
                 queries.push(query)
-                return search_engine.search(query, retailers, other_fields)
-                    .then(function(line, queries, result) {
-                        line.partNumbers = line.partNumbers.concat(result.partNumbers)
-                        for (let j = 0; j < retailer_list.length; j++) {
-                            const retailer = retailer_list[j]
-                            if (result.retailers[retailer] != null) {
-                                //replace reeled components with non-reeled for Farnell
-                                if (retailer === 'Farnell' &&
-                                /RL$/.test(result.retailers[retailer])) {
-                                    result.retailers[retailer] =
-                                        result.retailers[retailer].replace('RL','')
+                return search_engine
+                    .search(query, retailers, other_fields)
+                    .then(
+                        function(line, queries, result) {
+                            line.partNumbers = line.partNumbers.concat(
+                                result.partNumbers
+                            )
+                            for (let j = 0; j < retailer_list.length; j++) {
+                                const retailer = retailer_list[j]
+                                if (result.retailers[retailer] != null) {
+                                    //replace reeled components with non-reeled for Farnell
+                                    if (
+                                        retailer === 'Farnell' &&
+                                        /RL$/.test(result.retailers[retailer])
+                                    ) {
+                                        result.retailers[
+                                            retailer
+                                        ] = result.retailers[retailer].replace(
+                                            'RL',
+                                            ''
+                                        )
+                                    }
+                                    if (retailer !== 'Digikey') {
+                                        result.retailers[
+                                            retailer
+                                        ] = result.retailers[retailer].replace(
+                                            /-/g,
+                                            ''
+                                        )
+                                    }
+                                    line.retailers[retailer] =
+                                        result.retailers[retailer]
                                 }
-                                if (retailer !== 'Digikey') {
-                                    result.retailers[retailer] =
-                                        result.retailers[retailer].replace(/-/g,'')
-                                }
-                                line.retailers[retailer] = result.retailers[retailer]
                             }
-                        }
-                        return {line, queries}
-                    }.bind(null, line, queries))
-                    .catch(function (e) {
-                        console.error(e)
-                        return {line, queries}
-                    }.bind(null, line, queries))
+                            return {line, queries}
+                        }.bind(null, line, queries)
+                    )
+                    .catch(
+                        function(e) {
+                            console.error(e)
+                            return {line, queries}
+                        }.bind(null, line, queries)
+                    )
             }
-            const p = search({line, queries:[]})
-            if ((depth - 1) > 0) {
-                const iterable = __range__(1, (depth - 1), true)
+            const p = search({line, queries: []})
+            if (depth - 1 > 0) {
+                const iterable = __range__(1, depth - 1, true)
                 for (let j = 0; j < iterable.length; j++) {
                     const _ = iterable[j]
                     p.then(search)
@@ -123,19 +147,20 @@ function _auto_complete(search_engine, lines, depth) {
         return result
     })()
 
-    const final = promise_array.reduce((prev, promise) =>
-        prev.then(newLines =>
-            promise.then(function(line) {
-                newLines.push(line)
-                return newLines
-            })
-        )
+    const final = promise_array.reduce(
+        (prev, promise) =>
+            prev.then(newLines =>
+                promise.then(function(line) {
+                    newLines.push(line)
+                    return newLines
+                })
+            ),
 
-    , Promise.resolve([]))
+        Promise.resolve([])
+    )
 
     return final
 }
-
 
 function autoComplete(lines, deep = false) {
     lines = JSON.parse(JSON.stringify(lines))
@@ -144,24 +169,24 @@ function autoComplete(lines, deep = false) {
     } else {
         var depth = 1
     }
-    return _auto_complete(commonParts, lines, depth).then(newLines => {
-        if (!isComplete(newLines)) {
-            return _auto_complete(octopart, newLines, depth)
-        } else {
-            return newLines
-        }
-    }).then(newLines => {
-        if (!isComplete(newLines)) {
-            return _auto_complete(findchips, newLines, depth)
-        } else {
-            return newLines
-        }
-    })
+    return _auto_complete(commonParts, lines, depth)
+        .then(newLines => {
+            if (!isComplete(newLines)) {
+                return _auto_complete(octopart, newLines, depth)
+            } else {
+                return newLines
+            }
+        })
+        .then(newLines => {
+            if (!isComplete(newLines)) {
+                return _auto_complete(findchips, newLines, depth)
+            } else {
+                return newLines
+            }
+        })
 }
 
-
 exports.autoComplete = autoComplete
-
 
 function __in__(needle, haystack) {
     return haystack.indexOf(needle) >= 0

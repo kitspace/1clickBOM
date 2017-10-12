@@ -17,31 +17,46 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-let messenger = {
+const messenger = {
     msgNames: [],
     listening: false,
     on(msgName, callback) {
         this.msgNames.push({msgName, callback})
         if (!this.listening) {
-            chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-                for (let i = 0; i < this.msgNames.length; i++) {
-                    ({msgName, callback} = this.msgNames[i])
-                    if (request.name === msgName) {
-                        return callback(request.value, sendResponse)
+            chrome.runtime.onMessage.addListener(
+                (request, sender, sendResponse) => {
+                    for (let i = 0; i < this.msgNames.length; i++) {
+                        const {msgName, callback} = this.msgNames[i]
+                        if (request.name === msgName) {
+                            return callback(request.value, sendResponse)
+                        }
                     }
                 }
-            }
             )
-            return this.listening = true
+            return (this.listening = true)
         }
     },
-    send(msgName, input) {
-        chrome.runtime.sendMessage({name:msgName, value:input})
+    send(msgName, input = null) {
+        chrome.runtime.sendMessage({
+            name: msgName,
+            value: JSON.parse(JSON.stringify(input))
+        })
         if (chrome.tabs != null) {
-            return chrome.tabs.query({url:['*://*.kitnic.it/boards/*', '*://kitnic.it/boards/*', '*://127.0.0.1/boards/*']}, tabs =>
-                tabs.map((tab) =>
-                    chrome.tabs.sendMessage(tab.id, {name:msgName, value:input}))
-            
+            return chrome.tabs.query(
+                {
+                    url: [
+                        '*://*.kitnic.it/boards/*',
+                        '*://kitnic.it/boards/*',
+                        '*://127.0.0.1/boards/*'
+                    ]
+                },
+                tabs =>
+                    tabs.map(tab =>
+                        chrome.tabs.sendMessage(tab.id, {
+                            name: msgName,
+                            value: JSON.parse(JSON.stringify(input))
+                        })
+                    )
             )
         }
     }

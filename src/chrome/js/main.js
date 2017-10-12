@@ -1,25 +1,25 @@
-const { messenger } = require('./messenger')
-const { background } = require('./background')
+const {messenger} = require('./messenger')
+const {background} = require('./background')
 const http = require('./http')
-const { browser } = require('./browser')
+const {browser} = require('./browser')
+const set_scheme = require('./data/settings.json')
 
-chrome.runtime.onInstalled.addListener(function(details){
+chrome.runtime.onInstalled.addListener(function(details) {
     if (details.reason === 'install') {
-        browser.tabsQuery({url:'*://kitnic.it/boards/*'}, tabs => {
+        browser.tabsQuery({url: '*://kitnic.it/boards/*'}, tabs => {
             tabs.forEach(browser.tabsReload)
         })
-        http.getLocation(() => browser.tabsCreate(browser.getURL('html/options.html')))
+        http.getLocation()
         //set-up settings with default values
-        let set_scheme = browser.getLocal('data/settings.json')
-        let settings = {}
-        for (let country in set_scheme) {
-            let retailers = set_scheme[country]
+        const settings = {}
+        for (const country in set_scheme) {
+            const retailers = set_scheme[country]
             settings[country] = {}
-            for (let retailer in retailers) {
-                let setting_names = retailers[retailer]
+            for (const retailer in retailers) {
+                const setting_names = retailers[retailer]
                 settings[country][retailer] = {}
-                for (let setting in setting_names) {
-                    let info = setting_names[setting]
+                for (const setting in setting_names) {
+                    const info = setting_names[setting]
                     settings[country][retailer][setting] = info.value
                 }
             }
@@ -30,12 +30,14 @@ chrome.runtime.onInstalled.addListener(function(details){
 
 // tests only work in chrome currently, open a console on background and execute
 // Test() or test a specific module, e.g. Farnell, with Test('Farnell')
-window.Test = function(module){
+window.Test = function(module) {
     let url = browser.getURL('html/test.html')
-    if (module != null) { url += `?module=${module}`; }
+    if (module != null) {
+        url += `?module=${module}`
+    }
     return window.open(url)
 }
 
-window.clear = () => browser.storageRemove('bom' , function() {})
+window.clear = () => browser.storageRemove('bom', function() {})
 
 background(messenger)

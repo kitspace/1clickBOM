@@ -17,10 +17,10 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const { RetailerInterface } = require('./retailer_interface')
-const http                  = require('./http')
-const { browser }           = require('./browser')
-const rateLimit             = require('./promise-rate-limit')
+const {RetailerInterface} = require('./retailer_interface')
+const http = require('./http')
+const {browser} = require('./browser')
+const rateLimit = require('./promise-rate-limit')
 
 class Digikey extends RetailerInterface {
     constructor(country_code, settings, callback) {
@@ -35,17 +35,21 @@ class Digikey extends RetailerInterface {
 
     clearCart(callback) {
         const url = `https${this.site}${this.cart}?webid=-1`
-        return http.get(url, {}, () => {
-            if (callback != null) {
-                callback({success:true})
+        return http.get(
+            url,
+            {},
+            () => {
+                if (callback != null) {
+                    callback({success: true})
+                }
+                return this.refreshCartTabs()
+            },
+            () => {
+                if (callback != null) {
+                    return callback({success: false})
+                }
             }
-            return this.refreshCartTabs()
-        }
-        , () => {
-            if (callback != null) {
-                return callback({success:false})
-            }
-        })
+        )
     }
 
     addLines(lines, callback) {
@@ -62,40 +66,106 @@ class Digikey extends RetailerInterface {
     }
 
     _add_lines(lines, callback) {
-        const result = {success:true, fails:[]}
+        const result = {success: true, fails: []}
         let count = lines.length
-        return lines.map((line) =>
+        return lines.map(line =>
             this._rate_limited_add_line(line, (line, line_result) => {
                 if (!line_result.success) {
-                    return this._get_part_id(line, (line, id) => {
-                        return this._get_suggested(line, id, 'NextBreakQuanIsLowerExtPrice'
-                        , new_line => {
-                            return this._rate_limited_add_line(new_line, (_, r) => {
-                                if (!r.success) {
-                                    return this._get_suggested(line, id, 'CutTapeQuantityIsMultipleOfReelQuantity'
-                                    , new_line => {
-                                        return this._rate_limited_add_line(new_line, (_, r) => {
+                    return this._get_part_id(
+                        line,
+                        (line, id) => {
+                            return this._get_suggested(
+                                line,
+                                id,
+                                'NextBreakQuanIsLowerExtPrice',
+                                new_line => {
+                                    return this._rate_limited_add_line(
+                                        new_line,
+                                        (_, r) => {
                                             if (!r.success) {
-                                                return this._get_suggested(new_line, id, 'TapeReelQuantityTooLow'
-                                                , new_line => {
-                                                    return this._rate_limited_add_line(new_line, function(_, r) {
-                                                        if (result.success) { result.success = r.success; }
-                                                        result.fails = result.fails.concat(r.fails)
+                                                return this._get_suggested(
+                                                    line,
+                                                    id,
+                                                    'CutTapeQuantityIsMultipleOfReelQuantity',
+                                                    new_line => {
+                                                        return this._rate_limited_add_line(
+                                                            new_line,
+                                                            (_, r) => {
+                                                                if (
+                                                                    !r.success
+                                                                ) {
+                                                                    return this._get_suggested(
+                                                                        new_line,
+                                                                        id,
+                                                                        'TapeReelQuantityTooLow',
+                                                                        new_line => {
+                                                                            return this._rate_limited_add_line(
+                                                                                new_line,
+                                                                                function(
+                                                                                    _,
+                                                                                    r
+                                                                                ) {
+                                                                                    if (
+                                                                                        result.success
+                                                                                    ) {
+                                                                                        result.success =
+                                                                                            r.success
+                                                                                    }
+                                                                                    result.fails = result.fails.concat(
+                                                                                        r.fails
+                                                                                    )
+                                                                                    count--
+                                                                                    if (
+                                                                                        count ===
+                                                                                        0
+                                                                                    ) {
+                                                                                        return callback(
+                                                                                            result
+                                                                                        )
+                                                                                    }
+                                                                                }
+                                                                            )
+                                                                        },
+                                                                        function() {
+                                                                            result.success = false
+                                                                            result.fails.push(
+                                                                                line
+                                                                            )
+                                                                            count--
+                                                                            if (
+                                                                                count ===
+                                                                                0
+                                                                            ) {
+                                                                                return callback(
+                                                                                    result
+                                                                                )
+                                                                            }
+                                                                        }
+                                                                    )
+                                                                } else {
+                                                                    count--
+                                                                    if (
+                                                                        count ===
+                                                                        0
+                                                                    ) {
+                                                                        return callback(
+                                                                            result
+                                                                        )
+                                                                    }
+                                                                }
+                                                            }
+                                                        )
+                                                    },
+                                                    function() {
+                                                        result.success = false
+                                                        result.fails.push(line)
                                                         count--
                                                         if (count === 0) {
-                                                            return callback(result)
+                                                            return callback(
+                                                                result
+                                                            )
                                                         }
                                                     }
-                                                    )
-                                                }
-                                                , function() {
-                                                    result.success = false
-                                                    result.fails.push(line)
-                                                    count--
-                                                    if (count === 0) {
-                                                        return callback(result)
-                                                    }
-                                                }
                                                 )
                                             } else {
                                                 count--
@@ -104,27 +174,19 @@ class Digikey extends RetailerInterface {
                                                 }
                                             }
                                         }
-                                        )
-                                    }
-                                    , function() {
-                                        result.success = false
-                                        result.fails.push(line)
-                                        count--
-                                        if (count === 0) {
-                                            return callback(result)
-                                        }
-                                    }
                                     )
-                                } else {
+                                },
+                                function() {
+                                    result.success = false
+                                    result.fails.push(line)
                                     count--
                                     if (count === 0) {
                                         return callback(result)
                                     }
                                 }
-                            }
                             )
-                        }
-                        , function() {
+                        },
+                        function() {
                             result.success = false
                             result.fails.push(line)
                             count--
@@ -132,16 +194,6 @@ class Digikey extends RetailerInterface {
                                 return callback(result)
                             }
                         }
-                        )
-                    }
-                    , function() {
-                        result.success = false
-                        result.fails.push(line)
-                        count--
-                        if (count === 0) {
-                            return callback(result)
-                        }
-                    }
                     )
                 } else {
                     count--
@@ -149,49 +201,66 @@ class Digikey extends RetailerInterface {
                         return callback(result)
                     }
                 }
-            }
-            ))
+            })
+        )
     }
     _add_line(line, callback) {
         const url = `https${this.site}${this.addline}`
-        const params = `qty=${line.quantity}&part=` +
-            encodeURIComponent(line.part) + '&cref=' +
+        const params =
+            `qty=${line.quantity}&part=` +
+            encodeURIComponent(line.part) +
+            '&cref=' +
             encodeURIComponent(line.reference)
-        const result = {success:true, fails:[]}
-        return http.post(url, params, {}, responseText => {
-            const doc = browser.parseDOM(responseText)
-            //if the cart returns with a quick-add quantity filled-in there was an error
-            const quick_add_quant = doc.querySelector('#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity')
-            result.success = (quick_add_quant != null) && (quick_add_quant.value != null) && (quick_add_quant.value === '')
-            if (!result.success) {
+        const result = {success: true, fails: []}
+        return http.post(
+            url,
+            params,
+            {},
+            responseText => {
+                const doc = browser.parseDOM(responseText)
+                //if the cart returns with a quick-add quantity filled-in there was an error
+                const quick_add_quant = doc.querySelector(
+                    '#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity'
+                )
+                result.success =
+                    quick_add_quant != null &&
+                    quick_add_quant.value != null &&
+                    quick_add_quant.value === ''
+                if (!result.success) {
+                    result.fails.push(line)
+                }
+                return callback(line, result)
+            },
+            () => {
+                result.success = false
                 result.fails.push(line)
+                return callback(line, result)
             }
-            return callback(line, result)
-        }, () => {
-            result.success = false
-            result.fails.push(line)
-            return callback(line, result)
-        })
+        )
     }
 
     _get_part_id(line, callback, error_callback) {
         let url = `https${this.site}/product-detail/en/`
         url += line.part + '/'
         url += line.part + '/'
-        return http.get(url, {notify:false}, function(responseText) {
-            const doc = browser.parseDOM(responseText)
-            const inputs = doc.querySelectorAll('input')
-            for (let i = 0; i < inputs.length; i++) {
-                const input = inputs[i]
-                if (input.name === 'partid') {
-                    callback(line, input.value)
-                    return
+        return http.get(
+            url,
+            {notify: false},
+            function(responseText) {
+                const doc = browser.parseDOM(responseText)
+                const inputs = doc.querySelectorAll('input')
+                for (let i = 0; i < inputs.length; i++) {
+                    const input = inputs[i]
+                    if (input.name === 'partid') {
+                        callback(line, input.value)
+                        return
+                    }
                 }
-            }
-            //we never found an id
-            return error_callback()
-        }
-        , error_callback)
+                //we never found an id
+                return error_callback()
+            },
+            error_callback
+        )
     }
     _get_suggested(line, id, error, callback, error_callback) {
         let url = `https${this.site}/classic/Ordering/PackTypeDialog.aspx?`
@@ -199,35 +268,45 @@ class Digikey extends RetailerInterface {
         url += `&qty=${line.quantity}`
         url += `&partId=${id}`
         url += `&error=${error}&cref=&esc=-1&returnURL=%2f%2fwww.digikey.co.uk%2fclassic%2fordering%2faddpart.aspx&fastAdd=false&showUpsell=True`
-        return http.get(url, {line, notify:false}, function(responseText) {
-            const doc = browser.parseDOM(responseText)
-            switch (error) {
-            case 'TapeReelQuantityTooLow':       var choice = doc.getElementById('rb1'); break
-            case 'NextBreakQuanIsLowerExtPrice': choice = doc.getElementById('rb2'); break
-            case 'CutTapeQuantityIsMultipleOfReelQuantity': choice = doc.getElementById('rb1'); break
-            }
-            if (choice != null) {
-                const label = choice.nextElementSibling
-                if (label != null) {
-                    const split  = label.innerHTML.split('&nbsp;')
-                    const part   = split[2]
-                    const number = parseInt(split[0].replace(/,/,''))
-                    if (!isNaN(number)) {
-                        const it = line
-                        it.part = part
-                        it.quantity = number
-                        return callback(it)
+        return http.get(
+            url,
+            {line, notify: false},
+            function(responseText) {
+                const doc = browser.parseDOM(responseText)
+                switch (error) {
+                    case 'TapeReelQuantityTooLow':
+                        var choice = doc.getElementById('rb1')
+                        break
+                    case 'NextBreakQuanIsLowerExtPrice':
+                        choice = doc.getElementById('rb2')
+                        break
+                    case 'CutTapeQuantityIsMultipleOfReelQuantity':
+                        choice = doc.getElementById('rb1')
+                        break
+                }
+                if (choice != null) {
+                    const label = choice.nextElementSibling
+                    if (label != null) {
+                        const split = label.innerHTML.split('&nbsp;')
+                        const part = split[2]
+                        const number = parseInt(split[0].replace(/,/, ''))
+                        if (!isNaN(number)) {
+                            const it = line
+                            it.part = part
+                            it.quantity = number
+                            return callback(it)
+                        } else {
+                            return error_callback()
+                        }
                     } else {
                         return error_callback()
                     }
                 } else {
                     return error_callback()
                 }
-            } else {
-                return error_callback()
-            }
-        }
-        , error_callback)
+            },
+            error_callback
+        )
     }
 }
 

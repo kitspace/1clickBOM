@@ -3,27 +3,26 @@ const setTimeout = require('./browser').browser.setTimeout
 module.exports = rateLimit
 
 function rateLimit(limitCount, limitInterval, fn) {
-    var fifo = []
+    const fifo = []
 
-  // count starts at limit
-  // each call of `fn` decrements the count
-  // it is incremented after limitInterval
-    var count = limitCount
+    // count starts at limit
+    // each call of `fn` decrements the count
+    // it is incremented after limitInterval
+    let count = limitCount
 
     function call_next(args) {
         setTimeout(function() {
             if (fifo.length > 0) {
                 call_next()
-            }
-            else {
+            } else {
                 count = count + 1
             }
         }, limitInterval)
 
-        var call_args = fifo.shift()
+        const call_args = fifo.shift()
 
-    // if there is no next item in the queue
-    // and we were called with args, trigger function immediately
+        // if there is no next item in the queue
+        // and we were called with args, trigger function immediately
         if (!call_args && args) {
             fn.apply(args[0], args[1])
             return
@@ -33,8 +32,8 @@ function rateLimit(limitCount, limitInterval, fn) {
     }
 
     return function rate_limited_function() {
-        var ctx = this
-        var args = Array.prototype.slice.call(arguments)
+        const ctx = this
+        const args = Array.prototype.slice.call(arguments)
         if (count <= 0) {
             fifo.push([ctx, args])
             return

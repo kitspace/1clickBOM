@@ -17,105 +17,123 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const { RetailerInterface, InvalidCountryError } = require('./retailer_interface')
-const { Digikey } = require('./digikey')
-const { Farnell } = require('./farnell')
-const { Mouser }  = require('./mouser')
-const { RS }      = require('./rs')
-const { Newark }  = require('./newark')
-const qunit       = require('./qunit-1.11.0')
-const { browser } = require('./browser')
+const {RetailerInterface, InvalidCountryError} = require('./retailer_interface')
+const {Digikey} = require('./digikey')
+const {Farnell} = require('./farnell')
+const {Mouser} = require('./mouser')
+const {RS} = require('./rs')
+const {Newark} = require('./newark')
+const qunit = require('./qunit-1.11.0')
+const {browser} = require('./browser')
 
-let { module }    = qunit
-let { test }      = qunit
-let { ok }        = qunit
-let { throws }    = qunit
-let { deepEqual } = qunit
+const {module} = qunit
+const {test} = qunit
+const {ok} = qunit
+const {throws} = qunit
+const {deepEqual} = qunit
 
-let countries = browser.getLocal('/data/countries.json')
+const countries = require('./data/countries.json')
 
 module('unit')
 
 test('Digikey: Constructs for all countries', () =>
     (() => {
-        let result = []
-        for (let country in countries) {
-            let code = countries[country]
-            result.push(ok(new Digikey(code, {}, function(){}) instanceof RetailerInterface, country + ' ' + code))
+        const result = []
+        for (const country in countries) {
+            const code = countries[country]
+            result.push(
+                ok(
+                    new Digikey(code, {}, function() {}) instanceof
+                        RetailerInterface,
+                    country + ' ' + code
+                )
+            )
         }
         return result
-    })()
-
-)
+    })())
 
 test('Farnell: Constructs for all countries', () =>
     (() => {
-        let result = []
-        for (let country in countries) {
-            let code = countries[country]
-            result.push(ok(new Farnell(code, {}, function(){}) instanceof RetailerInterface, country + ' ' + code))
+        const result = []
+        for (const country in countries) {
+            const code = countries[country]
+            result.push(
+                ok(
+                    new Farnell(code, {}, function() {}) instanceof
+                        RetailerInterface,
+                    country + ' ' + code
+                )
+            )
         }
         return result
-    })()
-
-)
+    })())
 
 test('Mouser: Constructs for all countries', () =>
     //this test might time-out because it sends a lot of requests
     (() => {
-        let result = []
-        for (let country in countries) {
-            let code = countries[country]
-            result.push(ok(new Mouser(code) instanceof RetailerInterface, country + ' ' + code))
+        const result = []
+        for (const country in countries) {
+            const code = countries[country]
+            result.push(
+                ok(
+                    new Mouser(code) instanceof RetailerInterface,
+                    country + ' ' + code
+                )
+            )
         }
         return result
-    })()
-
-)
+    })())
 
 test('RS: Constructs for all countries', () =>
     (() => {
-        let result = []
-        for (let country in countries) {
-            let code = countries[country]
-            result.push(ok(new RS(code) instanceof RetailerInterface, country + ' ' + code))
+        const result = []
+        for (const country in countries) {
+            const code = countries[country]
+            result.push(
+                ok(
+                    new RS(code) instanceof RetailerInterface,
+                    country + ' ' + code
+                )
+            )
         }
         return result
-    })()
-
-)
+    })())
 
 test('Newark: Constructs for all countries', () =>
     (() => {
-        let result = []
-        for (let country in countries) {
-            let code = countries[country]
-            result.push(ok(new Newark(code, {}, function(){}) instanceof RetailerInterface, country + ' ' + code))
+        const result = []
+        for (const country in countries) {
+            const code = countries[country]
+            result.push(
+                ok(
+                    new Newark(code, {}, function() {}) instanceof
+                        RetailerInterface,
+                    country + ' ' + code
+                )
+            )
         }
         return result
-    })()
+    })())
 
-)
-
-test('InvalidCountryError Exists', () => ok(new InvalidCountryError instanceof Error)
-)
+test('InvalidCountryError Exists', () =>
+    ok(new InvalidCountryError() instanceof Error))
 
 test('Digikey: InvalidCountryError Thrown', () => {
-    throws(() => new Digikey('XX', {}, function(){}))
+    throws(() => new Digikey('XX', {}, function() {}))
 })
 
 test('Farnell: InvalidCountryError Thrown', () => {
-    throws(() => new Farnell('XX', {}, function(){}))
+    throws(() => new Farnell('XX', {}, function() {}))
 })
 
 test('Mouser: InvalidCountryError Thrown', () => {
-    throws(() => new Mouser('XX', {}, function(){}))
+    throws(() => new Mouser('XX', {}, function() {}))
 })
 
 test('RS: InvalidCountryError Thrown', () => {
-    throws(() => new RS('XX', {}, function(){}))
+    throws(() => new RS('XX', {}, function() {}))
 })
 
 test('Newark: InvalidCountryError Thrown', () => {
-    throws(() => new Newark('XX', {}, function(){}))
+    throws(() => new Newark('XX', {}, function() {}))
 })
