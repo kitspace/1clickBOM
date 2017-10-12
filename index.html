@@ -44,7 +44,7 @@
 <a href="https://chrome.google.com/webstore/detail/1clickbom/mflpmlediakefinapghmabapjeippfdi"> <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/chrome.png" /> </a> <a href="https://addons.mozilla.org/firefox/downloads/latest/634060/addon-634060-latest.xpi"> <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/firefox.png" /> </a>
 </p>
 <h2 id="summary">Summary</h2>
-<p>1-click BOM is a browser extension that fills your shopping carts for you on sites like Digikey and Mouser. It's main purpose is to work with the electronic project sharing site <a href="https://kitnic.it">kitnic.it</a>. But you can also use it from a spreadsheet or load an online <code>.tsv</code> file from any other site.</p>
+<p>1-click BOM is a browser extension that fills your shopping carts for you on sites like Digikey and Mouser. Its main purpose is to work with the electronic project sharing site <a href="https://kitnic.it">kitnic.it</a>. But you can also use it from a spreadsheet or load an online <code>.tsv</code> file from any other site.</p>
 <h2 id="table-of-contents">Table of Contents</h2>
 <ul>
 <li><a href="#summary">Summary</a></li>
@@ -313,21 +313,9 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+'emai
 </script><noscript>&#x65;&#x6d;&#x61;&#x69;&#108;&#32;&#40;&#x69;&#110;&#102;&#x6f;&#32;&#x61;&#116;&#32;&#x31;&#x63;&#108;&#x69;&#x63;&#x6b;&#66;&#x4f;&#x4d;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript> or visit the <a href="https://riot.im/app/#/room/#kitnic:matrix.org">Kitnic chat room</a>.</p>
 <h2 id="roadmap">Roadmap</h2>
 <ul>
-<li>1.2
-<ul>
-<li>Improved completion of generic resistors and capacitors</li>
-<li>Refresh Kitnic page on first install</li>
-</ul></li>
-<li>1.3
-<ul>
-<li>Improved completion by searching retailer sites directly</li>
-</ul></li>
-<li>1.4
-<ul>
-<li>Ability to add components to BOM from retailer site</li>
-</ul></li>
 <li>1.5
 <ul>
+<li>Ability to add components to BOM from retailer site</li>
 <li>Make requests cancelable</li>
 <li>Improve user interface</li>
 </ul></li>
@@ -373,7 +361,7 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+'emai
 <p>The code is available on <a href="https://github.com/monostable/1clickBOM">GitHub</a>. To get started you will need:</p>
 <ul>
 <li>Chrome or Chromium</li>
-<li>Firefox (optionally with <a href="https://palant.de/2012/01/13/extension-auto-installer">Extension Autoinstaller</a>)</li>
+<li>Firefox version 52 or higher</li>
 <li><a href="https://ninja-build.org/">Ninja Build</a></li>
 <li>sed</li>
 <li>npm</li>
@@ -385,12 +373,12 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+'emai
 <li>Get dependencies above and make sure executables are on your path</li>
 <li><code>npm install --global</code> (or <code>npm install &amp;&amp; export PATH=$PATH:$(pwd)/node_modules/.bin</code>)</li>
 <li><code>./configure</code></li>
-<li><code>ninja</code></li>
+<li><code>ninja chrome</code></li>
 </ul>
 <h4 id="load">Load</h4>
 <ul>
 <li>For Chrome enable developer mode in <code>chrome://extensions</code> and load the unpacked extension from <code>build/chrome</code></li>
-<li>For Firefox run <code>./run-firefox</code></li>
+<li>For Firefox go to <code>about:debugging#addons</code> select &quot;Load Temporary Add-on&quot; and load the <code>build/chrome/manifest.json</code></li>
 </ul>
 <h4 id="test">Test</h4>
 <p>Tests are written in <a href="https://web.archive.org/web/20130128010139/http://api.qunitjs.com/">QUnit 1.11</a> and can only be run in Chrome/Chromium. Open a console on background page and execute <code>Test()</code> or test a specific module, e.g. Farnell, with <code>Test('Farnell')</code></p>

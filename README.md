@@ -14,7 +14,7 @@
 ## Summary ##
 
 1-click BOM is a browser extension that fills your shopping carts for you on
-sites like Digikey and Mouser. It's main purpose is to work with the electronic
+sites like Digikey and Mouser. Its main purpose is to work with the electronic
 project sharing site [kitnic.it](https://kitnic.it). But you can also use it
 from a spreadsheet or load an online `.tsv` file from any other site.
 
@@ -167,17 +167,8 @@ room][kitnic chat].
 
 ## Roadmap ##
 
-* 1.2
-    * Improved completion of generic resistors and capacitors
-    * Refresh Kitnic page on first install
-
-* 1.3
-    * Improved completion by searching retailer sites directly
-
-* 1.4
-    * Ability to add components to BOM from retailer site
-
 * 1.5
+    * Ability to add components to BOM from retailer site
     * Make requests cancelable
     * Improve user interface
 
@@ -217,7 +208,7 @@ room][kitnic chat].
 The code is available on [GitHub][7]. To get started you will need:
 
 - Chrome or Chromium
-- Firefox (optionally with [Extension Autoinstaller][16])
+- Firefox version 52 or higher
 - [Ninja Build](https://ninja-build.org/)
 - sed
 - npm
@@ -231,12 +222,12 @@ The rest of the dependencies can be retrieved via `npm install`.
 - Get dependencies above and make sure executables are on your path
 - `npm install --global` (or `npm install && export PATH=$PATH:$(pwd)/node_modules/.bin`)
 - `./configure`
-- `ninja`
+- `ninja chrome`
 
 #### Load
 
 - For Chrome enable developer mode in `chrome://extensions` and load the unpacked extension from `build/chrome`
-- For Firefox run `./run-firefox`
+- For Firefox go to `about:debugging#addons` select "Load Temporary Add-on" and load the `build/chrome/manifest.json`
 
 #### Test
 
