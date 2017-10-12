@@ -14,7 +14,7 @@
 ## Summary ##
 
 1-click BOM is a browser extension that fills your shopping carts for you on
-sites like Digikey and Mouser. It's main purpose is to work with the electronic
+sites like Digikey and Mouser. Its main purpose is to work with the electronic
 project sharing site [kitnic.it](https://kitnic.it). But you can also use it
 from a spreadsheet or load an online `.tsv` file from any other site.
 
@@ -167,17 +167,8 @@ room][kitnic chat].
 
 ## Roadmap ##
 
-* 1.2
-    * Improved completion of generic resistors and capacitors
-    * Refresh Kitnic page on first install
-
-* 1.3
-    * Improved completion by searching retailer sites directly
-
-* 1.4
-    * Ability to add components to BOM from retailer site
-
 * 1.5
+    * Ability to add components to BOM from retailer site
     * Make requests cancelable
     * Improve user interface
 
