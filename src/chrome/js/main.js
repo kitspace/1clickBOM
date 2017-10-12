@@ -2,17 +2,15 @@ const {messenger} = require('./messenger')
 const {background} = require('./background')
 const http = require('./http')
 const {browser} = require('./browser')
+const set_scheme = require('./data/settings.json')
 
 chrome.runtime.onInstalled.addListener(function(details) {
     if (details.reason === 'install') {
         browser.tabsQuery({url: '*://kitnic.it/boards/*'}, tabs => {
             tabs.forEach(browser.tabsReload)
         })
-        http.getLocation(() =>
-            browser.tabsCreate(browser.getURL('html/options.html'))
-        )
+        http.getLocation()
         //set-up settings with default values
-        const set_scheme = require('./data/settings.json')
         const settings = {}
         for (const country in set_scheme) {
             const retailers = set_scheme[country]
