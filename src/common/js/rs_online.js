@@ -68,7 +68,7 @@ const rsOnline = {
             const errors = doc.querySelectorAll('.dataRow.errorRow')
             const ids = []
             for (let i = 0; i < errors.length; i++) {
-                const id = /showConfirmDelete\('(.*?)'\)/.exec(
+                const id = /showConfirmDelete\('(.*?)'/.exec(
                     errors[i].innerHTML.toString()
                 )[1]
                 ids.push(id)
