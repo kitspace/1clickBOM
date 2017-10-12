@@ -75,12 +75,12 @@ var load_options = () =>
                     settings_data[stored.country][retailer].site.options
                 const _default =
                     settings_data[stored.country][retailer].site.value
-                let div = document.createElement('div')
+                const div = document.createElement('div')
                 const div2 = document.createElement('div')
                 div2.className = 'heading_2'
-                const h2 = document.createElement('h2')
-                h2.innerHTML = retailer
-                div2.appendChild(h2)
+                const h3 = document.createElement('h3')
+                h3.innerHTML = retailer
+                div2.appendChild(h3)
                 div.appendChild(div2)
                 form.appendChild(div)
                 for (let index = 0; index < choices.length; index++) {
@@ -90,12 +90,13 @@ var load_options = () =>
                     radio.name = retailer
                     radio.value = choice.value
                     radio.id = `id_${choice.value}`
-                    div = document.createElement('div')
+                    radio.label = choice.label
+                    const div = document.createElement('div')
                     div.appendChild(radio)
                     div.innerHTML += choice.label
-                    div.className = 'radio_text'
+                    div.style = 'cursor: pointer;'
                     div.onclick = function(mouse_event) {
-                        const child = mouse_event.toElement.firstChild
+                        const child = mouse_event.target.firstChild
                         if (child != null) {
                             if (child.type === 'radio') {
                                 child.checked = 'checked'
