@@ -6,7 +6,7 @@ const path = require('path')
 const cp = require('child_process')
 const ninjaBuildGen = require('ninja-build-gen')
 
-const version = '1.4.0'
+const version = '1.4.1'
 
 const ninja = ninjaBuildGen('1.5.1', 'build/')
 ninja.header(`#generated from ${path.basename(module.filename)}`)
@@ -143,15 +143,14 @@ ninja
     .using('browserify')
 targets.chrome.push('build/chrome/js/functional.js')
 
-copyFiles('chrome')
-    .forEach(f => {
-        const target = f.replace(/src\/.*?\//, 'build/chrome/')
-        ninja
-            .edge(target)
-            .from(f)
-            .using('copy')
-        targets.chrome.push(target)
-    })
+copyFiles('chrome').forEach(f => {
+    const target = f.replace(/src\/.*?\//, 'build/chrome/')
+    ninja
+        .edge(target)
+        .from(f)
+        .using('copy')
+    targets.chrome.push(target)
+})
 
 copyFiles('firefox')
     .concat(sourceJson('firefox'))
@@ -196,7 +195,7 @@ ninja
             `&& rm -f ${chrome_package_name}/js/functional.js ` +
             `${chrome_package_name}/js/unit.js ${chrome_package_name}/js/qunit.js ` +
             `${chrome_package_name}/html/test.html ${chrome_package_name}/html/qunit-1.11.0.css` +
-        `&& cd ${chrome_package_name} && zip -r ../${chrome_package_name}.zip * ` +
+            `&& cd ${chrome_package_name} && zip -r ../${chrome_package_name}.zip * ` +
             `&& cd .. && rm -rf ${chrome_package_name}`
     )
 ninja
