@@ -48,11 +48,20 @@ button_Clear.addEventListener('click', () => {
     messenger.send('clearBOM')
 })
 
-button_Paste.addEventListener('click', () => {
+button_Paste.addEventListener('click', e => {
     const textarea = document.getElementById('pastebox')
-    textarea.focus()
-    document.execCommand("Paste")
-    console.log(textarea.textContent)
+    textarea.select()
+    document.execCommand('Paste')
+})
+
+//work-around to get the text only in firefox, no html
+document.addEventListener('paste', e => {
+    // cancel paste
+    e.preventDefault()
+    // get text representation of clipboard
+    const text = e.clipboardData.getData('text/plain')
+    // insert text manually
+    messenger.send('paste', text)
 })
 
 button_LoadFromPage.addEventListener('click', () => {
@@ -61,6 +70,14 @@ button_LoadFromPage.addEventListener('click', () => {
 
 button_Copy.addEventListener('click', () => {
     messenger.send('copy')
+})
+
+messenger.on('copyResponse', tsv => {
+    const textarea = document.getElementById('pastebox')
+    textarea.value = tsv
+    textarea.select()
+    document.execCommand('SelectAll')
+    document.execCommand('Cut')
 })
 
 button_DeepComplete.addEventListener('click', () => {

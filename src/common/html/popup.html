@@ -185,9 +185,15 @@ button#load_from_page:hover {
 button#load_from_page:active {
     background-image: linear-gradient(to bottom,#4444FF,#0000EE);
 }
+#pastebox {
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+}
 </style>
 </head>
 <body>
+<textarea contenteditable="true" id="pastebox"></textarea>
 <center>
 <div id=main_content>
     <div style="text-align:center;">
@@ -253,7 +259,6 @@ button#load_from_page:active {
     </center>
     </div>
 </div>
-      <textarea id="pastebox"></textarea>
 <script src="../js/popup.js"></script>
 </center>
 </body>

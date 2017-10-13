@@ -141,13 +141,13 @@ exports.background = function background(messenger) {
         browser.storageRemove('bom', () => sendState())
     )
 
-    messenger.on('paste', () =>
-        bom_manager.addToBOM(browser.paste(), () => sendState())
-    )
+    messenger.on('paste', text => {
+        bom_manager.addToBOM(text, () => sendState())
+    })
 
     messenger.on('copy', () =>
         bom_manager.getBOM(function(bom) {
-            browser.copy(writeTSV(bom.lines))
+            messenger.send('copyResponse', writeTSV(bom.lines))
             return badge.setDecaying('OK', '#00CF0F')
         })
     )
