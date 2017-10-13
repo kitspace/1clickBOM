@@ -102,8 +102,10 @@ const browser = {
     },
     paste() {
         const textarea = document.getElementById('pastebox')
-        textarea.select()
-        document.execCommand('paste')
+        console.log('textarea', textarea)
+        textarea.focus()
+        document.execCommand('Paste')
+        console.log(textarea.value)
         return textarea.value
     },
     copy(text) {
@@ -111,7 +113,7 @@ const browser = {
         textarea.value = text
         textarea.select()
         document.execCommand('SelectAll')
-        return document.execCommand('Copy')
+        return document.execCommand('Cut')
     },
     setTimeout(callback, time) {
         return setTimeout(callback, time)

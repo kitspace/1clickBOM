@@ -34,14 +34,14 @@ const button_Paste = document.querySelector('button#paste')
 const button_FillCarts = document.querySelector('button#fill_carts')
 const button_EmptyCarts = document.querySelector('button#empty_carts')
 
-button_FillCarts.addEventListener('click', function() {
+button_FillCarts.addEventListener('click', () => {
     this.disabled = true
-    return messenger.send('fillCarts')
+    messenger.send('fillCarts')
 })
 
-button_EmptyCarts.addEventListener('click', function() {
+button_EmptyCarts.addEventListener('click', () => {
     this.disabled = true
-    return messenger.send('emptyCarts')
+    messenger.send('emptyCarts')
 })
 
 button_Clear.addEventListener('click', () => {
@@ -49,7 +49,10 @@ button_Clear.addEventListener('click', () => {
 })
 
 button_Paste.addEventListener('click', () => {
-    messenger.send('paste')
+    const textarea = document.getElementById('pastebox')
+    textarea.focus()
+    document.execCommand("Paste")
+    console.log(textarea.textContent)
 })
 
 button_LoadFromPage.addEventListener('click', () => {
