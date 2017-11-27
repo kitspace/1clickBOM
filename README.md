@@ -15,7 +15,7 @@
 
 1-click BOM is a browser extension that fills your shopping carts for you on
 sites like Digikey and Mouser. Its main purpose is to work with the electronic
-project sharing site [kitnic.it](https://kitnic.it). But you can also use it
+project sharing site [kitspace.org](https://kitspace.org). But you can also use it
 from a spreadsheet or load an online `.tsv` file from any other site.
 
 ## Table of Contents ##
@@ -30,7 +30,7 @@ from a spreadsheet or load an online `.tsv` file from any other site.
 * [License](#license)
 
 ## News ##
-- [Check out our electronics sharing site: Kitnic!](https://kitnic.it)
+- [Check out our electronics sharing site: Kitspace!](https://kitspace.org)
 
 - [Added function to auto-complete BOM](#completion)
 
@@ -137,7 +137,7 @@ is ignored, characters within brackets, like`(s)`, denote they are optional.)
 
 ### Loading an online BOM ###
 
-If you visit a page on [kitnic.it](https://kitnic.it) or one that ends in
+If you visit a page on [kitspace.org](https://kitspace.org) or one that ends in
 `.tsv` and has data in the right format available 1clickBOM will show a blue
 badge and button with an arrow. Clicking the blue button will load the data
 into the extension.
@@ -162,8 +162,8 @@ Auto-completion works best if you have limited text in the description. Try and 
 ## Issues ##
 
 If you need any help or think you found a bug please get in touch via
-[GitHub][10], [email][11] or visit the [Kitnic chat
-room][kitnic chat].
+[GitHub][10], [email][11] or visit the [Kitspace chat
+room][kitspace chat].
 
 ## Roadmap ##
 
@@ -251,7 +251,7 @@ code-improvements to 1clickBOM itself under the CPAL as well. This also applies
 to software you are solely making available to users over a network i.e.
 software as a service. See the [LICENSE][6] file for details.
 
-[kitnic chat]:https://riot.im/app/#/room/#kitnic:matrix.org
+[kitspace chat]:https://riot.im/app/#/room/#kitspace:matrix.org
 [output_scripts/kicad]:https://github.com/monostable/1clickBOM/blob/master/output_scripts/kicad
 [eagle_bom_export.png]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/eagle_bom_export.png
 [kicad_bom_export.png]:https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/kicad_bom_export.png

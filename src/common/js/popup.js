@@ -76,7 +76,6 @@ messenger.on('copyResponse', tsv => {
     const textarea = document.getElementById('pastebox')
     textarea.value = tsv
     textarea.select()
-    document.execCommand('SelectAll')
     document.execCommand('Cut')
 })
 
