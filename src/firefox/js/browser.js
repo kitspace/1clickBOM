@@ -84,7 +84,7 @@ const preference_listeners = {}
 
 const message_exchange = {adders: [], receivers: []}
 pageMod.PageMod({
-    include: RegExp('https?://(.+.)?kitnic.it/boards/.*', 'i'),
+    include: RegExp('https?://(.+.)?kitspace.org/boards/.*', 'i'),
     contentScriptFile: data.url('kitnic.js'),
     onAttach(worker) {
         if (!__in__(worker, message_exchange.receivers)) {

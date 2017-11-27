@@ -6,7 +6,7 @@ const path = require('path')
 const cp = require('child_process')
 const ninjaBuildGen = require('ninja-build-gen')
 
-const version = '1.4.3'
+const version = '1.4.4'
 
 const ninja = ninjaBuildGen('1.5.1', 'build/')
 ninja.header(`#generated from ${path.basename(module.filename)}`)
@@ -86,12 +86,12 @@ const browserifyEdge = function(target, browser, layer, exclude = '') {
 
     return targets[browser].push(target)
 }
-;['main', 'popup', 'options', 'kitnic'].forEach(layer => {
+;['main', 'popup', 'options', 'kitspace'].forEach(layer => {
     browserifyEdge(`build/chrome/js/${layer}.js`, 'chrome', layer)
 })
 
 browserifyEdge('build/firefox/data/popup.js', 'firefox', 'popup')
-browserifyEdge('build/firefox/data/kitnic.js', 'firefox', 'kitnic')
+browserifyEdge('build/firefox/data/kitspace.js', 'firefox', 'kitspace')
 
 const firefox_js = []
 sourceJs('firefox').forEach(file => {

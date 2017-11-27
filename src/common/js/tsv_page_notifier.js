@@ -27,7 +27,7 @@ exports.tsvPageNotifier = function tsvPageNotifier(sendState, bom_manager) {
     return {
         onDotTSV: false,
         re: new RegExp(
-            '((.tsv$)|(^https?://.*?.?kitnic.it/boards/)|(https?://127.0.0.1:8080/boards/))',
+            '((.tsv$)|(^https?://.*?.?kitspace.org/boards/)|(https?://127.0.0.1:8080/boards/))',
             'i'
         ),
         lines: [],
@@ -45,7 +45,7 @@ exports.tsvPageNotifier = function tsvPageNotifier(sendState, bom_manager) {
                     const tab_url = tab.url.split('?')[0]
                     if (tab_url.match(this.re)) {
                         if (
-                            /^https?:\/\/.*?\.?kitnic.it\/boards\//.test(
+                            /^https?:\/\/.*?\.?kitspace.org\/boards\//.test(
                                 tab.url
                             )
                         ) {

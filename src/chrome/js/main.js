@@ -6,7 +6,7 @@ const set_scheme = require('./data/settings.json')
 
 chrome.runtime.onInstalled.addListener(function(details) {
     if (details.reason === 'install') {
-        browser.tabsQuery({url: '*://kitnic.it/boards/*'}, tabs => {
+        browser.tabsQuery({url: '*://kitspace.org/boards/*'}, tabs => {
             tabs.forEach(browser.tabsReload)
         })
         http.getLocation()

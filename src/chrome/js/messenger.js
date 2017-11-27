@@ -45,8 +45,8 @@ const messenger = {
             return chrome.tabs.query(
                 {
                     url: [
-                        '*://*.kitnic.it/boards/*',
-                        '*://kitnic.it/boards/*',
+                        '*://*.kitspace.org/boards/*',
+                        '*://kitspace.org/boards/*',
                         '*://127.0.0.1/boards/*'
                     ]
                 },
