@@ -23,9 +23,9 @@ const electroGrammar = require('electro-grammar')
 
 const {browser} = require('./browser')
 const cpl = {
-    capacitors: require('./data/capacitors.json'),
-    resistors: require('./data/resistors.json'),
-    leds: require('./data/leds.json')
+    capacitor: require('./data/capacitors.json'),
+    resistor: require('./data/resistors.json'),
+    led: require('./data/leds.json')
 }
 
 //we wrap in a promise to be compatible the completers that send async web requests
@@ -44,7 +44,7 @@ function _search(query, retailers = [], other_fields = []) {
     const c = electroGrammar.parse(query)
     const ids = electroGrammar.matchCPL(c)
 
-    const components = cpl[c.type]
+    const components = cpl[c.type] || []
 
     const results = ids
         .map(id => {
