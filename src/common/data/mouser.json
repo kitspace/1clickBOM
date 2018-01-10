@@ -63,7 +63,7 @@
     "ZA":"://za.mouser.com"},
 
 "carts": "/cart",
-"addlines": "/EZBuy/EZBuy.aspx",
+"addlines": "/cart/ezbuy",
 "addline_params" : "__EVENTTARGET=&__EVENTARGUMENT=&__VIEWSTATE=",
 
 "lookup" : {

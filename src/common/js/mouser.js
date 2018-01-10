@@ -26,20 +26,13 @@ Promise.config({cancellation: true})
 class Mouser extends RetailerInterface {
     constructor(country_code, settings) {
         super('Mouser', country_code, 'data/mouser.json', settings)
-        this.protocol = 'http'
+        this.protocol = 'https'
         //posting our sub-domain as the sites are all linked and switching
         //countries would not register properly otherwise
         const split = this.site.split('.')
         let s = split[0].slice(3)
-        if (s === 'www') {
-            s = split[split.length - 1]
-        }
-        if (s === 'uk') {
-            this.protocol = 'https'
-            s = 'gb'
-        }
         http.post(
-            `http://www2.mouser.com/api/Preferences/SetSubdomain?subdomainName=${s}`,
+            `https://www.mouser.com/api/Preferences/SetSubdomain?subdomainName=${s}`,
             '',
             {notify: false},
             function() {},
@@ -55,30 +48,25 @@ class Mouser extends RetailerInterface {
         const big_result = {success: true, fails: []}
         return this._get_token(token => {
             return this._clear_errors(token, () => {
-                return this._get_adding_viewstate((viewstate, generator) => {
+                return this._get_adding_token(token => {
                     const result = []
                     for (let i = 0; i < lines.length; i += 99) {
                         const _99_lines = lines.slice(i, i + 99)
                         count += 1
                         result.push(
-                            this._add_lines(
-                                _99_lines,
-                                viewstate,
-                                generator,
-                                result => {
-                                    if (big_result.success) {
-                                        big_result.success = result.success
-                                    }
-                                    big_result.fails = big_result.fails.concat(
-                                        result.fails
-                                    )
-                                    count -= 1
-                                    if (count <= 0) {
-                                        callback(big_result, this, lines)
-                                        return this.refreshCartTabs()
-                                    }
+                            this._add_lines(_99_lines, token, result => {
+                                if (big_result.success) {
+                                    big_result.success = result.success
                                 }
-                            )
+                                big_result.fails = big_result.fails.concat(
+                                    result.fails
+                                )
+                                count -= 1
+                                if (count <= 0) {
+                                    callback(big_result, this, lines)
+                                    return this.refreshCartTabs()
+                                }
+                            })
                         )
                     }
                     return result
@@ -86,26 +74,29 @@ class Mouser extends RetailerInterface {
             })
         })
     }
-    _add_lines(lines, viewstate, generator, callback) {
-        let params =
-            this.addline_params +
-            viewstate +
-            '&__VIEWSTATEGENERATOR=' +
-            generator +
-            '&__SCROLLPOSITIONX=0&__SCROLLPOSITIONY=3738'
-        params += '&ctl00$ContentMain$hNumberOfLines=99'
-        params += '&ctl00$ContentMain$txtNumberOfLines=94'
+    _add_lines(lines, token, callback) {
+        let params = '__RequestVerificationToken=' + token
+        params += '&NumRows=94'
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i]
             params +=
-                `&ctl00$ContentMain$txtPartNumber${i + 1}=` +
-                `${line.part}&ctl00$ContentMain$txtCustomerPartNumber${i +
-                    1}=` +
-                `${line.reference}&ctl00$ContentMain$txtQuantity${i + 1}=` +
-                `${line.quantity}`
+                '&' +
+                encodeURIComponent(`ListItems[${i}].BackgroundColor`) +
+                '=' +
+                '&' +
+                encodeURIComponent(`ListItems[${i}].PartNumber`) +
+                '=' +
+                line.part +
+                '&' +
+                encodeURIComponent(`ListItems[${i}].CustomerPartNumber`) +
+                '=' +
+                line.reference +
+                '&' +
+                encodeURIComponent(`ListItems[${i}].Quantity`) +
+                '=' +
+                line.quantity
         }
-        params +=
-            '&ctl00$ContentMain$ddlProjects=ORDER&ctl00$ContentMain$btnAddToOrder=Add'
+        params += '&ProjectSelected=ORDER&EzBuyController.AddtoOrder='
         const url = `${this.protocol}${this.site}${this.addline}`
         const result = {success: true, fails: []}
         return http.post(
@@ -196,43 +187,26 @@ class Mouser extends RetailerInterface {
             }
         )
     }
-    _get_adding_viewstate(callback) {
+    _get_adding_token(callback) {
         //we get the quick-add form, extend it to 99 lines (the max) and get
-        //the viewstate from the response
+        //the __RequestVerificationToken from the response
         const url = `${this.protocol}${this.site}${this.addline}`
         return http.get(url, {}, responseText => {
             let doc = browser.parseDOM(responseText)
-            let params = this.addline_params
-            params += encodeURIComponent(
-                doc.getElementById('__VIEWSTATE').value
-            )
-            params += '&ctl00$ContentMain$btnAddLines=Lines to Forms'
-            params += '&ctl00$ContentMain$hNumberOfLines=5'
-            params += '&ctl00$ContentMain$txtNumberOfLines=94'
+            let params = '__RequestVerificationToken='
+            params += doc.querySelector(
+                'input[name=__RequestVerificationToken]'
+            ).value
+            params += '&NumRows=94'
             return http.post(url, params, {}, responseText => {
                 doc = browser.parseDOM(responseText)
-                const viewstate = encodeURIComponent(
-                    doc.getElementById('__VIEWSTATE').value
-                )
-                const generator = encodeURIComponent(
-                    doc.getElementById('__VIEWSTATEGENERATOR').value
-                )
+                const token = doc.querySelector(
+                    'input[name=__RequestVerificationToken]'
+                ).value
                 if (callback != null) {
-                    return callback(viewstate, generator)
+                    return callback(token)
                 }
             })
-        })
-    }
-    _get_cart_viewstate(callback) {
-        const url = `${this.protocol}${this.site}${this.cart}`
-        return http.get(url, {}, responseText => {
-            const doc = browser.parseDOM(responseText)
-            const viewstate = encodeURIComponent(
-                __guard__(doc.getElementById('__VIEWSTATE'), x => x.value)
-            )
-            if (callback != null) {
-                return callback(viewstate)
-            }
         })
     }
     _get_token(callback) {
