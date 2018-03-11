@@ -60,7 +60,7 @@ class Newark extends RetailerInterface {
 
     _clear_cart(ids, callback) {
         const url = `https${this.site}/webapp/wcs/stores/servlet/ProcessBasket`
-        let params = `langId=44&orderId=64789866&catalogId=10001&BASE_URL=BasketPage&errorViewName=BasketErrorAjaxResponse&storeId=${this
+        let params = `langId=&orderId=&catalogId=&BASE_URL=BasketPage&errorViewName=BasketErrorAjaxResponse&storeId=${this
             .store_id}&URL=BasketDataAjaxResponse&calcRequired=true&orderItemDeleteAll=&isBasketUpdated=true`
         ids.forEach(id => {
             params += `&orderItemDelete=${id}`
