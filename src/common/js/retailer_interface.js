@@ -119,19 +119,18 @@ class RetailerInterface {
         })
     }
 
-    openCartTab() {
-        return browser.tabsQuery(
-            {url: `*${this.site}${this.cart}*`, currentWindow: true},
-            tabs => {
-                if (tabs.length > 0) {
-                    return browser.tabsActivate(tabs[tabs.length - 1])
-                } else {
-                    const prefix = this.affiliate_prefix || ''
-                    const url = `${prefix}http${this.site}${this.cart}`
-                    return browser.tabsCreate(url)
-                }
+    _open_tab(url) {
+        browser.tabsQuery({url: `*${url}*`, currentWindow: true}, tabs => {
+            if (tabs.length > 0) {
+                return browser.tabsActivate(tabs[tabs.length - 1])
+            } else {
+                return browser.tabsCreate('http' + url)
             }
-        )
+        })
+    }
+
+    openCartTab() {
+        this._open_tab(this.site + this.cart)
     }
 }
 

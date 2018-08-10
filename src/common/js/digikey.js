@@ -48,6 +48,19 @@ class Digikey extends RetailerInterface {
         )
     }
 
+    openCartTab() {
+        browser.tabsQuery(
+            {url: `*${this.site}${this.addline}*`, currentWindow: true},
+            tabs => {
+                if (tabs.length > 0) {
+                    browser.tabsActivate(tabs[tabs.length - 1])
+                } else {
+                    this._open_tab(this.site + this.cart)
+                }
+            }
+        )
+    }
+
     addLines(lines, callback) {
         if (lines.length === 0) {
             callback({success: true, fails: []})
