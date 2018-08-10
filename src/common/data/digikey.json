@@ -30,8 +30,8 @@
     "TW": "://www.digikey.tw",
     "UK": "://www.digikey.co.uk"},
 
-"carts" : "/classic/ordering/addpart.aspx",
-"addlines": "/classic/ordering/addpart.aspx",
+"carts" : "/ordering/shoppingcart",
+"addlines": "/ordering/shoppingcart/shoppingcart/AddParts",
 "addline_params" : "",
 
 "lookup" : {

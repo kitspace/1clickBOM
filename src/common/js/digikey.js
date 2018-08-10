@@ -30,11 +30,15 @@ class Digikey extends RetailerInterface {
         http.get(`https${this.site}${this.cart}`, {notify: false}, () => {})
 
         //rate limiting _add_line as we were starting to get 503s
-        this._rate_limited_add_line = rateLimit(6, 1000, this._add_line)
+        this._rate_limited_add_line = rateLimit(
+            6,
+            1000,
+            this._add_line.bind(this)
+        )
     }
 
     clearCart(callback) {
-        const url = `https${this.site}${this.cart}?webid=-1`
+        const url = `https${this.site}/classic/ordering/fastadd.aspx?webid=-1`
         return http.get(
             url,
             {},
@@ -66,177 +70,47 @@ class Digikey extends RetailerInterface {
     }
 
     _add_lines(lines, callback) {
-        const result = {success: true, fails: []}
-        let count = lines.length
-        return lines.map(line =>
-            this._rate_limited_add_line(line, (line, line_result) => {
-                if (!line_result.success) {
-                    return this._get_part_id(
-                        line,
-                        (line, id) => {
-                            return this._get_suggested(
-                                line,
-                                id,
-                                'NextBreakQuanIsLowerExtPrice',
-                                new_line => {
-                                    return this._rate_limited_add_line(
-                                        new_line,
-                                        (_, r) => {
-                                            if (!r.success) {
-                                                return this._get_suggested(
-                                                    line,
-                                                    id,
-                                                    'CutTapeQuantityIsMultipleOfReelQuantity',
-                                                    new_line => {
-                                                        return this._rate_limited_add_line(
-                                                            new_line,
-                                                            (_, r) => {
-                                                                if (
-                                                                    !r.success
-                                                                ) {
-                                                                    return this._get_suggested(
-                                                                        new_line,
-                                                                        id,
-                                                                        'TapeReelQuantityTooLow',
-                                                                        new_line => {
-                                                                            return this._rate_limited_add_line(
-                                                                                new_line,
-                                                                                function(
-                                                                                    _,
-                                                                                    r
-                                                                                ) {
-                                                                                    if (
-                                                                                        result.success
-                                                                                    ) {
-                                                                                        result.success =
-                                                                                            r.success
-                                                                                    }
-                                                                                    result.fails = result.fails.concat(
-                                                                                        r.fails
-                                                                                    )
-                                                                                    count--
-                                                                                    if (
-                                                                                        count ===
-                                                                                        0
-                                                                                    ) {
-                                                                                        return callback(
-                                                                                            result
-                                                                                        )
-                                                                                    }
-                                                                                }
-                                                                            )
-                                                                        },
-                                                                        function() {
-                                                                            result.success = false
-                                                                            result.fails.push(
-                                                                                line
-                                                                            )
-                                                                            count--
-                                                                            if (
-                                                                                count ===
-                                                                                0
-                                                                            ) {
-                                                                                return callback(
-                                                                                    result
-                                                                                )
-                                                                            }
-                                                                        }
-                                                                    )
-                                                                } else {
-                                                                    count--
-                                                                    if (
-                                                                        count ===
-                                                                        0
-                                                                    ) {
-                                                                        return callback(
-                                                                            result
-                                                                        )
-                                                                    }
-                                                                }
-                                                            }
-                                                        )
-                                                    },
-                                                    function() {
-                                                        result.success = false
-                                                        result.fails.push(line)
-                                                        count--
-                                                        if (count === 0) {
-                                                            return callback(
-                                                                result
-                                                            )
-                                                        }
-                                                    }
-                                                )
-                                            } else {
-                                                count--
-                                                if (count === 0) {
-                                                    return callback(result)
-                                                }
-                                            }
-                                        }
-                                    )
-                                },
-                                function() {
-                                    result.success = false
-                                    result.fails.push(line)
-                                    count--
-                                    if (count === 0) {
-                                        return callback(result)
-                                    }
-                                }
-                            )
-                        },
-                        function() {
-                            result.success = false
-                            result.fails.push(line)
-                            count--
-                            if (count === 0) {
-                                return callback(result)
-                            }
-                        }
-                    )
-                } else {
-                    count--
-                    if (count === 0) {
-                        return callback(result)
-                    }
-                }
-            })
+        return Promise.all(lines.map(this._rate_limited_add_line)).then(
+            results => {
+                console.log({results})
+                callback({success: true, fails: []})
+            }
         )
     }
     _add_line(line, callback) {
         const url = `https${this.site}${this.addline}`
-        const params =
-            `qty=${line.quantity}&part=` +
-            encodeURIComponent(line.part) +
-            '&cref=' +
-            encodeURIComponent(line.reference)
-        const result = {success: true, fails: []}
-        return http.post(
-            url,
-            params,
-            {},
-            responseText => {
-                const doc = browser.parseDOM(responseText)
-                //if the cart returns with a quick-add quantity filled-in there was an error
-                const quick_add_quant = doc.querySelector(
-                    '#ctl00_ctl00_mainContentPlaceHolder_mainContentPlaceHolder_txtQuantity'
-                )
-                result.success =
-                    quick_add_quant != null &&
-                    quick_add_quant.value != null &&
-                    quick_add_quant.value === ''
-                if (!result.success) {
-                    result.fails.push(line)
+        const params = {
+            details: [
+                {
+                    quantity: `${line.quantity}`,
+                    partNumber: line.part,
+                    cRef: line.reference.slice(0, 48)
                 }
-                return callback(line, result)
+            ],
+            overrideUpsell: false
+        }
+
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                pragma: 'no-cache',
+                'Content-Type': 'application/json'
             },
-            () => {
-                result.success = false
-                result.fails.push(line)
-                return callback(line, result)
-            }
-        )
+            referrer: 'https://www.digikey.co.uk/ordering/shoppingcart',
+            credentials: 'include',
+            body: JSON.stringify(params)
+        })
+            .then(r => {
+                if (r.status === 200) {
+                    return r.json().then(x => {
+                        console.log(x)
+                        return {line, success: x.BaseSuccess}
+                    })
+                } else {
+                    return {line, success: false}
+                }
+            })
+            .catch(() => ({line, success: false}))
     }
 
     _get_part_id(line, callback, error_callback) {
