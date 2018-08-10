@@ -20,7 +20,6 @@
 const {RetailerInterface} = require('./retailer_interface')
 const http = require('./http')
 const {browser} = require('./browser')
-const rateLimit = require('./promise-rate-limit')
 
 class Digikey extends RetailerInterface {
     constructor(country_code, settings, callback) {
@@ -28,17 +27,10 @@ class Digikey extends RetailerInterface {
 
         //make sure we have a cart cookie
         http.get(`https${this.site}${this.cart}`, {notify: false}, () => {})
-
-        //rate limiting _add_line as we were starting to get 503s
-        this._rate_limited_add_line = rateLimit(
-            6,
-            1000,
-            this._add_line.bind(this)
-        )
     }
 
     clearCart(callback) {
-        const url = `https${this.site}/classic/ordering/fastadd.aspx?webid=-1`
+        const url = `https${this.site}${this.addline}?webid=-1`
         return http.get(
             url,
             {},
@@ -65,122 +57,21 @@ class Digikey extends RetailerInterface {
             if (callback != null) {
                 callback(result, this, lines)
             }
-            return this.refreshCartTabs()
         })
     }
 
     _add_lines(lines, callback) {
-        return Promise.all(lines.map(this._rate_limited_add_line)).then(
-            results => {
-                console.log({results})
-                callback({success: true, fails: []})
-            }
-        )
-    }
-    _add_line(line, callback) {
         const url = `https${this.site}${this.addline}`
-        const params = {
-            details: [
-                {
-                    quantity: `${line.quantity}`,
-                    partNumber: line.part,
-                    cRef: line.reference.slice(0, 48)
-                }
-            ],
-            overrideUpsell: false
-        }
-
-        return fetch(url, {
-            method: 'POST',
-            headers: {
-                pragma: 'no-cache',
-                'Content-Type': 'application/json'
-            },
-            referrer: 'https://www.digikey.co.uk/ordering/shoppingcart',
-            credentials: 'include',
-            body: JSON.stringify(params)
+        let params = ''
+        lines.forEach((line, i) => {
+            params +=
+                (i === 0 ? '?' : '&') +
+                `part${i}=${line.part}` +
+                `&qty${i}=${line.quantity}` +
+                `&cref${i}=${encodeURIComponent(line.reference.slice(0, 48))}`
         })
-            .then(r => {
-                if (r.status === 200) {
-                    return r.json().then(x => {
-                        console.log(x)
-                        return {line, success: x.BaseSuccess}
-                    })
-                } else {
-                    return {line, success: false}
-                }
-            })
-            .catch(() => ({line, success: false}))
-    }
-
-    _get_part_id(line, callback, error_callback) {
-        let url = `https${this.site}/product-detail/en/`
-        url += line.part + '/'
-        url += line.part + '/'
-        return http.get(
-            url,
-            {notify: false},
-            function(responseText) {
-                const doc = browser.parseDOM(responseText)
-                const inputs = doc.querySelectorAll('input')
-                for (let i = 0; i < inputs.length; i++) {
-                    const input = inputs[i]
-                    if (input.name === 'partid') {
-                        callback(line, input.value)
-                        return
-                    }
-                }
-                //we never found an id
-                return error_callback()
-            },
-            error_callback
-        )
-    }
-    _get_suggested(line, id, error, callback, error_callback) {
-        let url = `https${this.site}/classic/Ordering/PackTypeDialog.aspx?`
-        url += `part=${line.part}`
-        url += `&qty=${line.quantity}`
-        url += `&partId=${id}`
-        url += `&error=${error}&cref=&esc=-1&returnURL=%2f%2fwww.digikey.co.uk%2fclassic%2fordering%2faddpart.aspx&fastAdd=false&showUpsell=True`
-        return http.get(
-            url,
-            {line, notify: false},
-            function(responseText) {
-                const doc = browser.parseDOM(responseText)
-                switch (error) {
-                    case 'TapeReelQuantityTooLow':
-                        var choice = doc.getElementById('rb1')
-                        break
-                    case 'NextBreakQuanIsLowerExtPrice':
-                        choice = doc.getElementById('rb2')
-                        break
-                    case 'CutTapeQuantityIsMultipleOfReelQuantity':
-                        choice = doc.getElementById('rb1')
-                        break
-                }
-                if (choice != null) {
-                    const label = choice.nextElementSibling
-                    if (label != null) {
-                        const split = label.innerHTML.split('&nbsp;')
-                        const part = split[2]
-                        const number = parseInt(split[0].replace(/,/, ''))
-                        if (!isNaN(number)) {
-                            const it = line
-                            it.part = part
-                            it.quantity = number
-                            return callback(it)
-                        } else {
-                            return error_callback()
-                        }
-                    } else {
-                        return error_callback()
-                    }
-                } else {
-                    return error_callback()
-                }
-            },
-            error_callback
-        )
+        const tab = browser.tabsCreate(url + params)
+        setTimeout(() => callback({success: true, fails: []}), 1000)
     }
 }
 
