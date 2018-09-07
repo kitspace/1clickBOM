@@ -29,7 +29,7 @@
     "prettier": "^1.7.4"
   },
   "dependencies": {
-    "1-click-bom": "^1.1.1",
-    "electro-grammar": "git+https://github.com/monostable/electro-grammar.git"
+    "1-click-bom": "git+https://github.com/kitspace/npm-1-click-bom.git",
+    "electro-grammar": "^1.0.0"
   }
 }
