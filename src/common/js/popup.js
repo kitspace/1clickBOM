@@ -19,7 +19,8 @@
 
 const {messenger} = require('./messenger')
 const oneClickBOM = require('1-click-bom')
-const {retailer_list, isComplete, hasSKUs} = oneClickBOM.lineData
+const {getRetailers, isComplete, hasSKUs} = oneClickBOM
+const retailer_list = getRetailers()
 
 const element_Bom = document.querySelector('#bom')
 const element_Table = document.querySelector('#bom_table')

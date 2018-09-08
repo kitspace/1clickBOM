@@ -19,10 +19,8 @@
 const Promise = require('./bluebird')
 Promise.config({cancellation: true})
 
-const {parseTSV} = require('1-click-bom')
-const {retailer_list} = require('1-click-bom').lineData
-const {numberOfEmpty} = require('1-click-bom').lineData
-const line_data = require('1-click-bom').lineData
+const oneClickBom = require('1-click-bom')
+const retailer_list = oneClickBom.getRetailers()
 
 const http = require('./http')
 const {browser} = require('./browser')
@@ -59,9 +57,7 @@ const bom_manager = {
                             ? (setting_values =
                                   stored_settings[country][retailer])
                             : (setting_values = {}),
-                        (this.interfaces[
-                            retailer
-                        ] = new retailer_interface(
+                        (this.interfaces[retailer] = new retailer_interface(
                             country,
                             setting_values,
                             function() {
@@ -123,7 +119,8 @@ const bom_manager = {
                     bom.retailers = this._to_retailers(lines)
                     return browser.storageSet({bom}, () =>
                         resolve(
-                            numberOfEmpty(prev_lines) - numberOfEmpty(lines)
+                            oneClickBom.numberOfEmpty(prev_lines) -
+                                oneClickBom.numberOfEmpty(lines)
                         )
                     )
                 })
@@ -132,7 +129,7 @@ const bom_manager = {
     },
 
     addToBOM(text, callback) {
-        const {lines, invalid, warnings} = parseTSV(text)
+        const {lines, invalid, warnings} = oneClickBom.parseTSV(text)
         if (invalid.length > 0) {
             for (let i = 0; i < invalid.length; i++) {
                 var priority
@@ -203,7 +200,7 @@ const bom_manager = {
     _add_to_bom(lines, invalid, callback) {
         return this.getBOM(bom => {
             let warnings
-            ;[lines, warnings] = line_data.merge(bom.lines, lines)
+            ;[lines, warnings] = oneClickBom.merge(bom.lines, lines)
             bom.lines = lines
             for (let i = 0; i < warnings.length; i++) {
                 var priority
@@ -278,7 +275,9 @@ const bom_manager = {
                 for (let i = 0; i < fails.length; i++) {
                     const fail = fails[i]
                     failed_lines.push({
-                        title: `line: ${fail.reference} | ${fail.quantity} | ${fail.part}`,
+                        title: `line: ${fail.reference} | ${fail.quantity} | ${
+                            fail.part
+                        }`,
                         message: ''
                     })
                 }
