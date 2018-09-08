@@ -20,7 +20,8 @@ const Promise = require('./bluebird')
 Promise.config({cancellation: true})
 
 const oneClickBOM = require('1-click-bom')
-const {retailer_list, isComplete, field_list} = oneClickBOM.lineData
+const {getRetailers, isComplete, field_list} = oneClickBOM
+const retailer_list = getRetailers()
 
 const octopart = require('./octopart')
 const findchips = require('./findchips')

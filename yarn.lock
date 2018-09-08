@@ -4,7 +4,7 @@
 
 "1-click-bom@git+https://github.com/kitspace/npm-1-click-bom.git":
   version "1.3.1"
-  resolved "git+https://github.com/kitspace/npm-1-click-bom.git#b6664ea625d7f66fd366f2b1cbad8fd75a607d65"
+  resolved "git+https://github.com/kitspace/npm-1-click-bom.git#79f087e0b7c658b24e9eeceff73ea3de11b7bce3"
   dependencies:
     xlsx "^0.12.6"
 

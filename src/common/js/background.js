@@ -18,7 +18,7 @@
 // the Original Code is Kaspar Emanuel.
 
 const {writeTSV} = require('1-click-bom')
-const {retailer_list} = require('1-click-bom').lineData
+const retailer_list = require('1-click-bom').getRetailers()
 
 const {bom_manager} = require('./bom_manager')
 const {browser} = require('./browser')
