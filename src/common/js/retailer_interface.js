@@ -25,7 +25,8 @@ const retailer_data = {
     Mouser: require('./data/mouser.json'),
     RS: require('./data/rs.json'),
     Farnell: require('./data/farnell.json'),
-    Newark: require('./data/newark.json')
+    Newark: require('./data/newark.json'),
+    Rapid: require('./data/rapid.json')
 }
 
 class RetailerInterface {
@@ -121,7 +122,7 @@ class RetailerInterface {
 
     _open_tab(url) {
         browser.tabsQuery({url: `*${url}*`, currentWindow: true}, tabs => {
-            if (tabs.length > 0) {
+            if (tabs && tabs.length > 0) {
                 return browser.tabsActivate(tabs[tabs.length - 1])
             } else {
                 return browser.tabsCreate('http' + url)

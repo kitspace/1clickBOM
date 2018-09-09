@@ -29,11 +29,12 @@ const {Farnell} = require('./farnell')
 const {Mouser} = require('./mouser')
 const {RS} = require('./rs')
 const {Newark} = require('./newark')
+const {Rapid} = require('./rapid')
 const {badge} = require('./badge')
 const {autoComplete} = require('./auto_complete')
 
 const bom_manager = {
-    retailers: [Digikey, Farnell, Mouser, RS, Newark],
+    retailers: [Digikey, Farnell, Mouser, RS, Newark, Rapid],
     init(callback) {
         this.filling_carts = false
         this.emptying_carts = false

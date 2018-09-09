@@ -127,9 +127,9 @@ function getLocation(callback) {
     )
 }
 
-function promisePost(url, params) {
+function promisePost(url, params, options) {
     return new Promise((resolve, reject) => {
-        post(url, params, {}, () => resolve(), () => reject())
+        post(url, params, options, () => resolve(), () => reject())
     })
 }
 
