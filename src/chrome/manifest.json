@@ -6,7 +6,7 @@
     "homepage_url":"http://1clickBOM.com",
     "permissions": [
         "tabs", "clipboardRead", "clipboardWrite", "storage", "notifications",
-        "<all_urls>"
+        "<all_urls>", "cookies"
     ],
     "browser_action": {
         "default_icon": "images/button19.png",

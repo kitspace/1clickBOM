@@ -123,6 +123,39 @@ const browser = {
     },
     parseDOM(str) {
         return dom.parseFromString(str, 'text/html')
+    },
+    getCookies(obj) {
+        return new Promise((resolve, reject) => {
+            chrome.cookies.getAll(obj, cookies => {
+                if (cookies == null) {
+                    reject()
+                } else {
+                    resolve(cookies)
+                }
+            })
+        })
+    },
+    setCookie(cookie) {
+        return new Promise((resolve, reject) => {
+            chrome.cookies.set(cookie, details => {
+                if (details == null) {
+                    reject()
+                } else {
+                    resolve(details)
+                }
+            })
+        })
+    },
+    removeCookie(obj) {
+        return new Promise((resolve, reject) => {
+            chrome.cookies.remove(obj, details => {
+                if (details == null) {
+                    reject()
+                } else {
+                    resolve(details)
+                }
+            })
+        })
     }
 }
 
