@@ -18,6 +18,7 @@
 // the Original Code is Kaspar Emanuel.
 
 const {messenger} = require('./messenger')
+const {browser} = require('./browser')
 const oneClickBOM = require('1-click-bom')
 const {getRetailers, isComplete, hasSKUs} = oneClickBOM
 const retailer_list = getRetailers()
@@ -186,7 +187,7 @@ function render(state) {
         element_Table.appendChild(tr)
         const td_0 = document.createElement('td')
         const icon = document.createElement('img')
-        icon.src = retailer.icon_src
+        icon.src = browser.getURL(`images/${retailer_name.toLowerCase()}.ico`)
         const viewCart = document.createElement('a')
         viewCart.appendChild(icon)
         viewCart.innerHTML += retailer.name
