@@ -64,6 +64,7 @@ class Rapid extends RetailerInterface {
                 for (const line of lines) {
                     params += line.part + '.' + line.quantity + ','
                 }
+                //remove trailing comma
                 params = params.slice(0, -1)
                 return fetch(
                     'https' + this.site + this.cart + '/Add/Many' + params,
@@ -96,23 +97,19 @@ class Rapid extends RetailerInterface {
         })
     }
 
-    _modify_cookie() {
-        // modifies the ASPNET Antiforgery cookie so it get's sent along with
+    async _modify_cookie() {
+        // modifies the ASP.Net Antiforgery cookie so it gets sent along with
         // our requests
-        return this._get_cookie()
-            .then(cookie => {
-                // we seem to need to remove the original first
-                return browser
-                    .removeCookie({url: 'https' + this.site, name: cookie.name})
-                    .then(() => cookie)
-            })
-            .then(cookie => {
-                cookie.url = 'https' + this.site
-                delete cookie.hostOnly
-                delete cookie.session
-                cookie.sameSite = 'no_restriction'
-                return browser.setCookie(cookie)
-            })
+        const cookie = await this._get_cookie()
+        await browser.removeCookie({
+            url: 'https' + this.site,
+            name: cookie.name
+        })
+        cookie.url = 'https' + this.site
+        delete cookie.hostOnly
+        delete cookie.session
+        cookie.sameSite = 'no_restriction'
+        await browser.setCookie(cookie)
     }
 
     _get_token() {
