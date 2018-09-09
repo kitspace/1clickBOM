@@ -193,9 +193,9 @@ function render(state) {
         viewCart.innerHTML += retailer.name
         viewCart.value = retailer.name
         td_0.value = retailer.name
-        td_0.addEventListener('click', () =>
-            messenger.send('openCart', this.value)
-        )
+        td_0.addEventListener('click', function() {
+            return messenger.send('openCart', this.value)
+        })
         td_0.appendChild(viewCart)
         td_0.id = 'icon'
         tr.appendChild(td_0)
