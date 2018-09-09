@@ -75,8 +75,13 @@ class Rapid extends RetailerInterface {
                         if (r.status !== 200) {
                             throw Error(r.status)
                         }
+                        return r.text()
+                    })
+                    .then(text => {
+                        const doc = browser.parseDOM(text)
+                        const success = !doc.querySelector('.invalid')
                         this.refreshCartTabs()
-                        callback({success: true, fails: []})
+                        callback({success, fails: []})
                     })
                     .catch(e => {
                         console.error(e)
