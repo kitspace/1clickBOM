@@ -84,14 +84,14 @@ button_DeepComplete.addEventListener('click', () => {
     messenger.send('deepAutoComplete')
 })
 
-function hideOrShow(bom, onDotTSV) {
+function hideOrShowButtons(bom, onDotTSV) {
     const hasBOM = Boolean(Object.keys(bom.lines).length)
 
     button_Clear.disabled = !hasBOM
     button_DeepComplete.disabled = !hasBOM || isComplete(bom.lines)
     button_Copy.disabled = !hasBOM
 
-    return (button_LoadFromPage.hidden = !onDotTSV)
+    button_LoadFromPage.hidden = !onDotTSV
 }
 
 function startSpinning(link) {
@@ -127,19 +127,16 @@ function stopSpinning(link) {
     }
 }
 
-const removeChildren = element =>
-    (() => {
-        const result = []
-        while (element.hasChildNodes()) {
-            result.push(element.removeChild(element.lastChild))
-        }
-        return result
-    })()
+function removeChildren(element) {
+    while (element.hasChildNodes()) {
+        element.removeChild(element.lastChild)
+    }
+}
 
 function render(state) {
-    const {bom} = state
+    const bom = state.bom
 
-    hideOrShow(bom, state.onDotTSV)
+    hideOrShowButtons(bom, state.onDotTSV)
 
     removeChildren(element_TotalLines)
     element_TotalLines.appendChild(
@@ -169,112 +166,98 @@ function render(state) {
         item${quantity !== 1 ? 's' : ''}`)
     )
 
-    while (element_Table.hasChildNodes()) {
-        element_Table.removeChild(element_Table.lastChild)
-    }
+    removeChildren(element_Table)
 
     let any_adding = false
     let any_emptying = false
 
-    return (() => {
-        const result = []
-        for (let k = 0; k < retailer_list.length; k++) {
-            const retailer_name = retailer_list[k]
-            let lines = []
-            if (retailer_name in bom.retailers) {
-                lines = bom.retailers[retailer_name]
-            }
-            const retailer = state.interfaces[retailer_name]
-            let no_of_lines = 0
-            for (let i1 = 0; i1 < lines.length; i1++) {
-                const line = lines[i1]
-                no_of_lines += line.quantity
-            }
-            const tr = document.createElement('tr')
-            element_Table.appendChild(tr)
-            const td_0 = document.createElement('td')
-            const icon = document.createElement('img')
-            icon.src = retailer.icon_src
-            const viewCart = document.createElement('a')
-            viewCart.appendChild(icon)
-            viewCart.innerHTML += retailer.name
-            viewCart.value = retailer.name
-            td_0.value = retailer.name
-            td_0.addEventListener('click', function() {
-                return messenger.send('openCart', this.value)
-            })
-            td_0.appendChild(viewCart)
-            td_0.id = 'icon'
-            tr.appendChild(td_0)
-
-            const td_1 = document.createElement('td')
-            const t = `${lines.length}`
-            const tspan = document.createElement('span')
-            tspan.appendChild(document.createTextNode(t))
-
-            if (lines.length !== bom.lines.length) {
-                td_1.style.backgroundColor = 'pink'
-            }
-
-            const t2 = ` line${lines.length !== 1 ? 's' : ''}`
-            const t2span = document.createElement('span')
-            t2span.appendChild(document.createTextNode(t2))
-
-            td_1.appendChild(tspan)
-            td_1.appendChild(t2span)
-            tr.appendChild(td_1)
-
-            const unicode_chars = ['\uf21e', '\uf21b']
-            const titles = ['Add lines to ', 'Empty ']
-            const messages = ['fillCart', 'emptyCart']
-            const lookup = ['adding_lines', 'clearing_cart']
-            const iterable = [0, 1]
-            for (let j1 = 0; j1 < iterable.length; j1++) {
-                const i = iterable[j1]
-                const td = document.createElement('td')
-                td.className = 'button_icon_td'
-                tr.appendChild(td)
-                const span = document.createElement('span')
-                span.className = 'button_icon'
-                span.appendChild(document.createTextNode(unicode_chars[i]))
-                if (messages[i] === 'fillCart' && lines.length === 0) {
-                    span.style.color = 'grey'
-                    span.style.cursor = 'default'
-                    td.appendChild(span)
-                } else {
-                    const a = document.createElement('a')
-                    a.value = retailer.name
-                    a.message = messages[i]
-                    a.title = titles[i] + retailer.name + ' cart'
-                    a.href = '#'
-                    a.appendChild(span)
-                    a.addEventListener('click', function() {
-                        startSpinning(this)
-                        return messenger.send(this.message, this.value)
-                    })
-                    td.appendChild(a)
-                }
-                if (retailer[lookup[i]]) {
-                    startSpinning(span)
-                }
-                any_adding |= retailer.adding_lines
-                any_emptying |= retailer.clearing_cart
-            }
-
-            button_FillCarts.disabled = any_adding || !hasSKUs(bom.lines)
-            result.push((button_EmptyCarts.disabled = any_emptying))
+    for (const retailer_name of retailer_list) {
+        let lines = []
+        if (retailer_name in bom.retailers) {
+            lines = bom.retailers[retailer_name]
         }
-        return result
-    })()
+        const retailer = state.interfaces[retailer_name]
+        let no_of_lines = 0
+        for (let i1 = 0; i1 < lines.length; i1++) {
+            const line = lines[i1]
+            no_of_lines += line.quantity
+        }
+        const tr = document.createElement('tr')
+        element_Table.appendChild(tr)
+        const td_0 = document.createElement('td')
+        const icon = document.createElement('img')
+        icon.src = retailer.icon_src
+        const viewCart = document.createElement('a')
+        viewCart.appendChild(icon)
+        viewCart.innerHTML += retailer.name
+        viewCart.value = retailer.name
+        td_0.value = retailer.name
+        td_0.addEventListener('click', function() {
+            return messenger.send('openCart', this.value)
+        })
+        td_0.appendChild(viewCart)
+        td_0.id = 'icon'
+        tr.appendChild(td_0)
+
+        const td_1 = document.createElement('td')
+        const t = `${lines.length}`
+        const tspan = document.createElement('span')
+        tspan.appendChild(document.createTextNode(t))
+
+        if (lines.length !== bom.lines.length) {
+            td_1.style.backgroundColor = 'pink'
+        }
+
+        const t2 = ` line${lines.length !== 1 ? 's' : ''}`
+        const t2span = document.createElement('span')
+        t2span.appendChild(document.createTextNode(t2))
+
+        td_1.appendChild(tspan)
+        td_1.appendChild(t2span)
+        tr.appendChild(td_1)
+
+        const unicode_chars = ['\uf21e', '\uf21b']
+        const titles = ['Add lines to ', 'Empty ']
+        const messages = ['fillCart', 'emptyCart']
+        const lookup = ['adding_lines', 'clearing_cart']
+        for (let i = 0; i < 2; i++) {
+            const td = document.createElement('td')
+            td.className = 'button_icon_td'
+            tr.appendChild(td)
+            const span = document.createElement('span')
+            span.className = 'button_icon'
+            span.appendChild(document.createTextNode(unicode_chars[i]))
+            if (messages[i] === 'fillCart' && lines.length === 0) {
+                span.style.color = 'grey'
+                span.style.cursor = 'default'
+                td.appendChild(span)
+            } else {
+                const a = document.createElement('a')
+                a.value = retailer.name
+                a.message = messages[i]
+                a.title = titles[i] + retailer.name + ' cart'
+                a.href = '#'
+                a.appendChild(span)
+                a.addEventListener('click', function() {
+                    startSpinning(this)
+                    return messenger.send(this.message, this.value)
+                })
+                td.appendChild(a)
+            }
+            if (retailer[lookup[i]]) {
+                startSpinning(span)
+            }
+            any_adding |= retailer.adding_lines
+            any_emptying |= retailer.clearing_cart
+        }
+
+        button_FillCarts.disabled = any_adding || !hasSKUs(bom.lines)
+        button_EmptyCarts.disabled = any_emptying
+    }
 }
 
 messenger.on('sendBackgroundState', state => render(state))
 
-// For Firefox we forward the popup 'show' event from browser.coffee because
-// this script seems get loaded once at startup not on popup. The 'show' message
-// is never sent on Chrome.
-messenger.on('show', () => messenger.send('getBackgroundState'))
-
-// For Chrome the whole script is instead re-executed each time the popup is
+// For Chrome the whole script is re-executed each time the popup is
 // opened.
 messenger.send('getBackgroundState')
