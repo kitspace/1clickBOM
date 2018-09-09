@@ -56,7 +56,34 @@ class Rapid extends RetailerInterface {
             })
     }
 
-    addLines(lines, callback) {}
+    addLines(lines, callback) {
+        return this._modify_cookie()
+            .then(() => this._get_token())
+            .then(token => {
+                let params = '?items='
+                for (const line of lines) {
+                    params += line.part + '.' + line.quantity + ','
+                }
+                params = params.slice(0, -1)
+                return fetch(
+                    'https' + this.site + this.cart + '/Add/Many' + params,
+                    {
+                        credentials: 'include'
+                    }
+                )
+                    .then(r => {
+                        if (r.status !== 200) {
+                            throw Error(r.status)
+                        }
+                        this.refreshCartTabs()
+                        callback({success: true, fails: []})
+                    })
+                    .catch(e => {
+                        console.error(e)
+                        callback({success: false, fails: []})
+                    })
+            })
+    }
 
     _get_cookie() {
         return browser.getCookies({url: 'https' + this.site}).then(cookies => {
