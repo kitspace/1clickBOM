@@ -43,7 +43,10 @@ class Rapid extends RetailerInterface {
                     body: '{}'
                 })
             })
-            .then(() => {
+            .then(r => {
+                if (r.status !== 200) {
+                    throw Error(r.status)
+                }
                 this.refreshCartTabs()
                 callback({success: true})
             })
@@ -82,7 +85,12 @@ class Rapid extends RetailerInterface {
 
     _get_token() {
         return fetch('https' + this.site + this.cart, {credentials: 'include'})
-            .then(r => r.text())
+            .then(r => {
+                if (r.status !== 200) {
+                    throw Error(r.status)
+                }
+                return r.text()
+            })
             .then(text => {
                 const doc = browser.parseDOM(text)
                 const input = doc.querySelector(
