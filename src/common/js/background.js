@@ -38,12 +38,14 @@ exports.background = function background(messenger) {
             return messenger.send('updateKitnic', bom_manager.interfaces)
         })
 
-    const tsvPageNotifier = require('./tsv_page_notifier').tsvPageNotifier(
+    var tsvPageNotifier = require('./tsv_page_notifier').tsvPageNotifier(
         sendState,
         bom_manager
     )
 
-    browser.tabsOnUpdated(tsvPageNotifier.checkPage)
+    browser.tabsOnUpdated(() => {
+        return tsvPageNotifier.checkPage()
+    })
 
     function autoComplete(deep = false) {
         function finish(timeout_id, no_of_completed) {
@@ -82,32 +84,44 @@ exports.background = function background(messenger) {
 
     function emptyCart(name) {
         bom_manager.interfaces[name].clearing_cart = true
-        const timeout_id = browser.setTimeout(() => {
-            bom_manager.interfaces[name].clearing_cart = false
-            sendState()
-        }, 180000)
-        bom_manager.emptyCart(name, () => {
-            browser.clearTimeout(timeout_id)
-            bom_manager.interfaces[name].clearing_cart = false
-            bom_manager.interfaces[name].openCartTab()
-            sendState()
-        })
-        sendState()
+        const timeout_id = browser.setTimeout(
+            function(name) {
+                bom_manager.interfaces[name].clearing_cart = false
+                return sendState()
+            }.bind(null, name),
+            180000
+        )
+        bom_manager.emptyCart(
+            name,
+            function(name, timeout_id) {
+                browser.clearTimeout(timeout_id)
+                bom_manager.interfaces[name].clearing_cart = false
+                bom_manager.interfaces[name].openCartTab()
+                return sendState()
+            }.bind(null, name, timeout_id)
+        )
+        return sendState()
     }
 
     function fillCart(name) {
         bom_manager.interfaces[name].adding_lines = true
-        const timeout_id = browser.setTimeout(() => {
-            bom_manager.interfaces[name].adding_lines = false
-            sendState()
-        }, 180000)
-        bom_manager.fillCart(name, () => {
-            browser.clearTimeout(timeout_id)
-            bom_manager.interfaces[name].adding_lines = false
-            bom_manager.interfaces[name].openCartTab()
-            sendState()
-        })
-        sendState()
+        const timeout_id = browser.setTimeout(
+            function(name) {
+                bom_manager.interfaces[name].adding_lines = false
+                return sendState()
+            }.bind(null, name),
+            180000
+        )
+        bom_manager.fillCart(
+            name,
+            function(name, timeout_id) {
+                browser.clearTimeout(timeout_id)
+                bom_manager.interfaces[name].adding_lines = false
+                bom_manager.interfaces[name].openCartTab()
+                return sendState()
+            }.bind(null, name, timeout_id)
+        )
+        return sendState()
     }
 
     messenger.on('getBackgroundState', () => sendState())
@@ -116,7 +130,10 @@ exports.background = function background(messenger) {
 
     messenger.on('openCart', name => bom_manager.interfaces[name].openCartTab())
 
-    messenger.on('deepAutoComplete', () => autoComplete(true))
+    messenger.on('deepAutoComplete', function() {
+        let deep
+        return autoComplete((deep = true))
+    })
 
     messenger.on('emptyCart', emptyCart)
 
