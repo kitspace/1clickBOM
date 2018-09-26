@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/monostable/1clickBOM"
+    "url": "https://github.com/kitspace/1clickBOM"
   },
   "author": "Kaspar Emanuel",
   "license": "CPAL-1.0",
   "bugs": {
-    "url": "https://github.com/monostable/1clickBOM/issues"
+    "url": "https://github.com/kitspace/1clickBOM/issues"
   },
   "main": "lib/main.js",
   "homepage": "http://1clickBOM.com",
