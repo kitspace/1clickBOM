@@ -130,7 +130,7 @@ const bom_manager = {
     },
 
     addToBOM(text, callback) {
-        const {lines, invalid, warnings} = oneClickBom.parseTSV(text)
+        const {lines, invalid, warnings} = oneClickBom.parse(text)
         if (invalid.length > 0) {
             for (let i = 0; i < invalid.length; i++) {
                 var priority
