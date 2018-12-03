@@ -27,7 +27,7 @@
              },
     "content_scripts": [
         {
-          "matches": ["*://kitspace.org/boards/*", "*://*.kitspace.org/boards/"],
+          "matches": ["*://kitspace.org/boards/*", "*://*.kitspace.org/boards/", "*://localhost:3000/*"],
           "js": ["js/kitspace.js"],
           "run_at": "document_end"
         }

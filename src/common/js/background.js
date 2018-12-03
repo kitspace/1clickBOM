@@ -162,5 +162,10 @@ exports.background = function background(messenger) {
 
     messenger.on('quickAddToCart', obj => tsvPageNotifier.quickAddToCart(obj))
 
+    messenger.on('bomBuilderAddToCart', obj => {
+        const lines = oneClickBom.parseTSV(obj.tsv)
+        console.log(lines)
+    })
+
     return sendState()
 }

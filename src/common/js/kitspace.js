@@ -1,5 +1,8 @@
 const {messenger} = require('./messenger')
-window.postMessage({from: 'extension', message: 'register'}, '*')
+setInterval(
+    () => window.postMessage({from: 'extension', message: 'register'}, '*'),
+    3000
+)
 messenger.send('getBackgroundState')
 
 messenger.on('updateKitnic', function(interfaces) {
