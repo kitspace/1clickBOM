@@ -6,7 +6,7 @@
     "homepage_url":"http://1clickBOM.com",
     "permissions": [
         "tabs", "clipboardRead", "clipboardWrite", "storage", "notifications",
-        "<all_urls>", "cookies"
+        "<all_urls>", "cookies", "http://localhost/"
     ],
     "browser_action": {
         "default_icon": "images/button19.png",
@@ -27,7 +27,7 @@
              },
     "content_scripts": [
         {
-          "matches": ["*://kitspace.org/boards/*", "*://*.kitspace.org/boards/", "*://localhost:3000/*"],
+          "matches": ["*://kitspace.org/boards/*", "*://*.kitspace.org/boards/", "*://localhost:*/*"],
           "js": ["js/kitspace.js"],
           "run_at": "document_end"
         }
