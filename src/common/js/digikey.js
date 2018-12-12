@@ -81,7 +81,7 @@ class Digikey extends RetailerInterface {
                 (i === 0 ? '?' : '&') +
                 `part${i}=${line.part}` +
                 `&qty${i}=${line.quantity}` +
-                `&cref${i}=${encodeURIComponent(line.reference).slice(0, 67)}`
+                `&cref${i}=${encodeURIComponent(line.reference.slice(0, 48))}`
         })
         const tab = browser.tabsCreate(url + params)
         setTimeout(() => callback({success: true, fails: []}), 1000)
