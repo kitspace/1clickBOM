@@ -21,61 +21,50 @@ const dom = new DOMParser()
 
 const browser = {
     storageGet(keys, callback) {
-        return new Promise((resolve, reject) => {
-            chrome.storage.local.get(keys, result => {
-                resolve(result)
-                callback && callback(result)
-            })
-        })
+        return chrome.storage.local.get(keys, callback)
     },
     storageSet(obj, callback) {
-        return new Promise((resolve, reject) => {
-            chrome.storage.local.set(obj, () => {
-                resolve()
-                callback && callback()
-            })
-        })
+        return chrome.storage.local.set(obj, callback)
     },
     prefsGet(keys, callback) {
-        return this.storageGet(keys, callback)
+        return chrome.storage.local.get(keys, callback)
     },
     prefsSet(obj, callback) {
-        return this.storageSet(keys, callback)
+        return chrome.storage.local.set(obj, callback)
     },
     storageRemove(key, callback) {
-        return new Promise((resolve, reject) => {
-            chrome.storage.local.remove(key, () => {
-                resolve()
-                callback && callback()
-            })
+        return chrome.storage.local.remove(key, function() {
+            if (callback != null) {
+                return callback()
+            }
         })
     },
     prefsOnChanged(keys, callback) {
-        return chrome.storage.onChanged.addListener((changes, namespace) => {
+        return chrome.storage.onChanged.addListener(function(
+            changes,
+            namespace
+        ) {
             if (
                 namespace === 'local' &&
                 keys.filter(x => x in changes).length > 0
             ) {
-                callback()
+                return callback()
             }
         })
     },
     tabsGetActive(callback) {
-        return chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+        return chrome.tabs.query({active: true, currentWindow: true}, function(
+            tabs
+        ) {
             if (tabs.length >= 1) {
-                callback(tabs[0])
+                return callback(tabs[0])
             } else {
-                callback(null)
+                return callback(null)
             }
         })
     },
     tabsQuery(obj, callback) {
-        return new Promise((resolve, reject) => {
-            chrome.tabs.query(obj, tabs => {
-                resolve(tabs)
-                callback && callback(tabs)
-            })
-        })
+        return chrome.tabs.query(obj, callback)
     },
     tabsUpdate(tab, url) {
         return chrome.tabs.update(tab.id, {url})
@@ -92,7 +81,10 @@ const browser = {
     tabsOnUpdated(callback) {
         chrome.tabs.onUpdated.addListener(callback)
         chrome.tabs.onActivated.addListener(callback)
-        chrome.windows.onFocusChanged.addListener(callback)
+        return chrome.windows.onFocusChanged.addListener(callback)
+    },
+    getBackgroundPage(callback) {
+        return chrome.runtime.getBackgroundPage(callback)
     },
     getURL(url) {
         return chrome.extension.getURL(url)
@@ -102,7 +94,7 @@ const browser = {
             chrome.browserAction.setBadgeBackgroundColor({color: obj.color})
         }
         if (obj.text != null) {
-            chrome.browserAction.setBadgeText({text: obj.text})
+            return chrome.browserAction.setBadgeText({text: obj.text})
         }
     },
     notificationsCreate(obj, callback) {
