@@ -4,9 +4,9 @@
 
 "1-click-bom@git+https://github.com/kitspace/npm-1-click-bom.git":
   version "1.3.1"
-  resolved "git+https://github.com/kitspace/npm-1-click-bom.git#6d727e4de5d8c7042feb28d2878d33f30764a6ea"
+  resolved "git+https://github.com/kitspace/npm-1-click-bom.git#ae579c2dd425d3c2041a0f4ed933fde1350a3228"
   dependencies:
-    file-type "^9.0.0"
+    s-expression "^3.0.3"
     xlsx "^0.12.6"
 
 JSONStream@^1.0.3:
@@ -3129,6 +3129,11 @@ rx-lite-aggregates@^4.0.8:
 rx-lite@*, rx-lite@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/rx-lite/-/rx-lite-4.0.8.tgz#0b1e11af8bc44836f04a6407e92da42467b79444"
+
+s-expression@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/s-expression/-/s-expression-3.0.3.tgz#80309bfea6bcf80960b61bb22f4498d17860799d"
+  integrity sha1-gDCb/qa8+AlgthuyL0SY0XhgeZ0=
 
 safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.1, safe-buffer@^5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
