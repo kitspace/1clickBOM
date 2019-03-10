@@ -17,7 +17,7 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const {writeTSV} = require('1-click-bom')
+const oneClickBom = require('1-click-bom')
 const retailer_list = require('1-click-bom').getRetailers()
 
 const {bom_manager} = require('./bom_manager')
@@ -147,7 +147,7 @@ exports.background = function background(messenger) {
 
     messenger.on('copy', () =>
         bom_manager.getBOM(function(bom) {
-            messenger.send('copyResponse', writeTSV(bom.lines))
+            messenger.send('copyResponse', oneClickBom.writeTSV(bom.lines))
             return badge.setDecaying('OK', '#00CF0F')
         })
     )
@@ -162,9 +162,30 @@ exports.background = function background(messenger) {
 
     messenger.on('quickAddToCart', obj => tsvPageNotifier.quickAddToCart(obj))
 
-    messenger.on('bomBuilderAddToCart', obj => {
-        const lines = oneClickBom.parseTSV(obj.tsv)
-        console.log(lines)
+    messenger.on('bomBuilderAddToCart', ({tsv}) => {
+        const {lines} = oneClickBom.parseTSV(tsv)
+        const retailers = bom_manager._to_retailers(lines)
+        for (const retailer in retailers) {
+            const parts = retailers[retailer]
+            bom_manager.interfaces[retailer].adding_lines = true
+            const timeout_id = browser.setTimeout(
+                function(retailer) {
+                    bom_manager.interfaces[retailer].adding_lines = false
+                    sendState()
+                }.bind(null, retailer),
+                180000
+            )
+            bom_manager.interfaces[retailer].addLines(
+                parts,
+                function(timeout_id, retailer, result) {
+                    browser.clearTimeout(timeout_id)
+                    bom_manager.interfaces[retailer].adding_lines = false
+                    sendState()
+                    bom_manager.interfaces[retailer].openCartTab()
+                    bom_manager.notifyFillCart(parts, retailer, result)
+                }.bind(null, timeout_id, retailer)
+            )
+        }
     })
 
     return sendState()
