@@ -29,14 +29,14 @@ class Mouser extends RetailerInterface {
         this.protocol = 'https'
         //posting our sub-domain as the sites are all linked and switching
         //countries would not register properly otherwise
-        const split = this.site.split('.')
-        let s = split[0].slice(3)
+        let s = country_code.toLowerCase()
+        if (s === 'uk') {
+            s = 'gb'
+        }
         http.post(
             `https://www.mouser.com/api/Preferences/SetSubdomain?subdomainName=${s}`,
             '',
-            {notify: false},
-            function() {},
-            function() {}
+            {notify: false}
         )
     }
     addLines(lines, callback) {
@@ -147,8 +147,9 @@ class Mouser extends RetailerInterface {
                 const promiseArray = item_ids.map(id => {
                     return http
                         .promisePost(
-                            `${this.protocol}${this.site}${this
-                                .cart}/cart/DeleteCartItem?cartItemId=${id}&page=null&grid-column=SortColumn&grid-dir=0`,
+                            `${this.protocol}${this.site}${
+                                this.cart
+                            }/cart/DeleteCartItem?cartItemId=${id}&page=null&grid-column=SortColumn&grid-dir=0`,
                             `__RequestVerificationToken=${token}`
                         )
                         .catch(e => console.error(e))

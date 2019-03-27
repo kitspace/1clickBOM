@@ -45,9 +45,11 @@ const messenger = {
             return chrome.tabs.query(
                 {
                     url: [
-                        '*://*.kitspace.org/boards/*',
-                        '*://kitspace.org/boards/*',
-                        '*://127.0.0.1/boards/*'
+                        '*://*.kitspace.org/*',
+                        '*://kitspace.org/*',
+                        '*://127.0.0.1/boards/*',
+                        '*://localhost:*/*',
+                        '*://dev--bom-builder.netlify.com/*'
                     ]
                 },
                 tabs =>

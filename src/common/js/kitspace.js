@@ -1,17 +1,26 @@
 const {messenger} = require('./messenger')
+
 setInterval(
     () => window.postMessage({from: 'extension', message: 'register'}, '*'),
     3000
 )
+
 messenger.send('getBackgroundState')
 
-messenger.on('updateKitnic', function(interfaces) {
+messenger.on('bomBuilderResult', value => {
+    window.postMessage(
+        {from: 'extension', message: 'bomBuilderResult', value},
+        '*'
+    )
+})
+
+messenger.on('updateKitnic', interfaces => {
     const adding = {}
     for (const name in interfaces) {
         const retailer = interfaces[name]
         adding[name] = retailer.adding_lines
     }
-    return window.postMessage(
+    window.postMessage(
         {from: 'extension', message: 'updateAddingState', value: adding},
         '*'
     )
@@ -19,7 +28,7 @@ messenger.on('updateKitnic', function(interfaces) {
 
 window.addEventListener(
     'message',
-    function(event) {
+    event => {
         if (event.data.from === 'page') {
             return messenger.send(event.data.message, event.data.value)
         }

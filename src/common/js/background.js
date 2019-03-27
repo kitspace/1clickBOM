@@ -35,7 +35,8 @@ exports.background = function background(messenger) {
                 interfaces: bom_manager.interfaces,
                 onDotTSV: tsvPageNotifier.onDotTSV
             })
-            return messenger.send('updateKitnic', bom_manager.interfaces)
+            console.log('updateKitnic')
+            messenger.send('updateKitnic', bom_manager.interfaces)
         })
 
     var tsvPageNotifier = require('./tsv_page_notifier').tsvPageNotifier(
@@ -162,29 +163,24 @@ exports.background = function background(messenger) {
 
     messenger.on('quickAddToCart', obj => tsvPageNotifier.quickAddToCart(obj))
 
-    messenger.on('bomBuilderAddToCart', ({tsv}) => {
+    messenger.on('bomBuilderAddToCart', ({tsv, id}) => {
         const {lines} = oneClickBom.parseTSV(tsv)
         const retailers = bom_manager._to_retailers(lines)
         for (const retailer in retailers) {
             const parts = retailers[retailer]
             bom_manager.interfaces[retailer].adding_lines = true
-            const timeout_id = browser.setTimeout(
-                function(retailer) {
-                    bom_manager.interfaces[retailer].adding_lines = false
-                    sendState()
-                }.bind(null, retailer),
-                180000
-            )
-            bom_manager.interfaces[retailer].addLines(
-                parts,
-                function(timeout_id, retailer, result) {
-                    browser.clearTimeout(timeout_id)
-                    bom_manager.interfaces[retailer].adding_lines = false
-                    sendState()
-                    bom_manager.interfaces[retailer].openCartTab()
-                    bom_manager.notifyFillCart(parts, retailer, result)
-                }.bind(null, timeout_id, retailer)
-            )
+            const timeout_id = browser.setTimeout(() => {
+                bom_manager.interfaces[retailer].adding_lines = false
+                sendState()
+            }, 180000)
+            bom_manager.interfaces[retailer].addLines(parts, result => {
+                browser.clearTimeout(timeout_id)
+                bom_manager.interfaces[retailer].adding_lines = false
+                sendState()
+                bom_manager.interfaces[retailer].openCartTab()
+                console.log('bomBuilderResult', {parts, retailer, result})
+                messenger.send('bomBuilderResult', {parts, retailer, result, id})
+            })
         }
     })
 
