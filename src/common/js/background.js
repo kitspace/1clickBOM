@@ -29,14 +29,13 @@ exports.background = function background(messenger) {
     browser.prefsOnChanged(['country', 'settings'], () => bom_manager.init())
 
     const sendState = () =>
-        bom_manager.getBOM(function(bom) {
+        bom_manager.getBOM(bom => {
             messenger.send('sendBackgroundState', {
                 bom,
                 interfaces: bom_manager.interfaces,
                 onDotTSV: tsvPageNotifier.onDotTSV
             })
-            console.log('updateKitnic')
-            messenger.send('updateKitnic', bom_manager.interfaces)
+            messenger.send('updateKitspace', bom_manager.interfaces)
         })
 
     var tsvPageNotifier = require('./tsv_page_notifier').tsvPageNotifier(
@@ -85,43 +84,31 @@ exports.background = function background(messenger) {
 
     function emptyCart(name) {
         bom_manager.interfaces[name].clearing_cart = true
-        const timeout_id = browser.setTimeout(
-            function(name) {
-                bom_manager.interfaces[name].clearing_cart = false
-                return sendState()
-            }.bind(null, name),
-            180000
-        )
-        bom_manager.emptyCart(
-            name,
-            function(name, timeout_id) {
-                browser.clearTimeout(timeout_id)
-                bom_manager.interfaces[name].clearing_cart = false
-                bom_manager.interfaces[name].openCartTab()
-                return sendState()
-            }.bind(null, name, timeout_id)
-        )
-        return sendState()
+        const timeout_id = browser.setTimeout(() => {
+            bom_manager.interfaces[name].clearing_cart = false
+            sendState()
+        }, 180000)
+        bom_manager.emptyCart(name, () => {
+            browser.clearTimeout(timeout_id)
+            bom_manager.interfaces[name].clearing_cart = false
+            bom_manager.interfaces[name].openCartTab()
+            sendState()
+        })
+        sendState()
     }
 
     function fillCart(name) {
         bom_manager.interfaces[name].adding_lines = true
-        const timeout_id = browser.setTimeout(
-            function(name) {
-                bom_manager.interfaces[name].adding_lines = false
-                return sendState()
-            }.bind(null, name),
-            180000
-        )
-        bom_manager.fillCart(
-            name,
-            function(name, timeout_id) {
-                browser.clearTimeout(timeout_id)
-                bom_manager.interfaces[name].adding_lines = false
-                bom_manager.interfaces[name].openCartTab()
-                return sendState()
-            }.bind(null, name, timeout_id)
-        )
+        const timeout_id = browser.setTimeout(() => {
+            bom_manager.interfaces[name].adding_lines = false
+            return sendState()
+        }, 180000)
+        bom_manager.fillCart(name, () => {
+            browser.clearTimeout(timeout_id)
+            bom_manager.interfaces[name].adding_lines = false
+            bom_manager.interfaces[name].openCartTab()
+            return sendState()
+        })
         return sendState()
     }
 
@@ -178,11 +165,32 @@ exports.background = function background(messenger) {
                 bom_manager.interfaces[retailer].adding_lines = false
                 sendState()
                 bom_manager.interfaces[retailer].openCartTab()
-                console.log('bomBuilderResult', {parts, retailer, result})
-                messenger.send('bomBuilderResult', {parts, retailer, result, id})
+                messenger.send('bomBuilderResult', {
+                    parts,
+                    retailer,
+                    result,
+                    id
+                })
             })
         }
     })
 
-    return sendState()
+    messenger.on('bomBuilderClearCarts', ({tsv, id}) => {
+        const {lines} = oneClickBom.parseTSV(tsv)
+        const retailers = bom_manager._to_retailers(lines)
+        for (const retailer in retailers) {
+            const timeout_id = browser.setTimeout(() => {
+                bom_manager.interfaces[retailer].clearing_cart = false
+                sendState()
+            }, 180000)
+            bom_manager.emptyCart(retailer, () => {
+                browser.clearTimeout(timeout_id)
+                bom_manager.interfaces[retailer].clearing_cart = false
+                sendState()
+            })
+            sendState()
+        }
+    })
+
+    sendState()
 }

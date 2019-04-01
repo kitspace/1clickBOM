@@ -14,14 +14,23 @@ messenger.on('bomBuilderResult', value => {
     )
 })
 
-messenger.on('updateKitnic', interfaces => {
+messenger.on('updateKitspace', interfaces => {
     const adding = {}
     for (const name in interfaces) {
         const retailer = interfaces[name]
         adding[name] = retailer.adding_lines
     }
+    const clearing = {}
+    for (const name in interfaces) {
+        const retailer = interfaces[name]
+        clearing[name] = retailer.clearing_cart
+    }
     window.postMessage(
         {from: 'extension', message: 'updateAddingState', value: adding},
+        '*'
+    )
+    window.postMessage(
+        {from: 'extension', message: 'updateClearingState', value: clearing},
         '*'
     )
 })

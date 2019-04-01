@@ -121,7 +121,7 @@ const rsOnline = {
                                 __guard__(re_mul.exec(descr), x5 => x5[1])
                             )
                             if (!isNaN(mul)) {
-                                line.quantity = mul - quantity % mul
+                                line.quantity = mul - (quantity % mul)
                             }
                         } else {
                             min = parseInt(min)
