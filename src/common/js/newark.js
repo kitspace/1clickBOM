@@ -279,7 +279,6 @@ class Newark extends RetailerInterface {
                     })
                 } else {
                     if (json.pfOrderErrorEnc) {
-                        console.log(json.pfOrderErrorEnc)
                         const url = `https${this.site}${this.cart}?storeId=${
                             this.store_id
                         }&catalogId=15001&langId=44&pfOrderErrorEnc=${
@@ -301,7 +300,16 @@ class Newark extends RetailerInterface {
                                             form_errors.innerHTML
                                         )
                                         if (result != null) {
-                                            fails.push(line)
+                                            // ignore 'has a pack size of ...' errors
+                                            const regex_pack = new RegExp(
+                                                line.part + ' has a pack'
+                                            )
+                                            const result_pack = regex_pack.exec(
+                                                form_errors.innerHTML
+                                            )
+                                            if (result_pack == null) {
+                                                fails.push(line)
+                                            }
                                         }
                                     }
                                 }
