@@ -313,7 +313,7 @@ class Newark extends RetailerInterface {
                                         }
                                     }
                                 }
-                                result.success = success
+                                result.success = success || fails.length == 0
                                 result.fails = fails
                                 return callback(result)
                             })
