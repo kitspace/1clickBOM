@@ -60,8 +60,9 @@ class Newark extends RetailerInterface {
 
     _clear_cart(ids, callback) {
         const url = `https${this.site}/webapp/wcs/stores/servlet/ProcessBasket`
-        let params = `langId=&orderId=&catalogId=&BASE_URL=BasketPage&errorViewName=BasketErrorAjaxResponse&storeId=${this
-            .store_id}&URL=BasketDataAjaxResponse&calcRequired=true&orderItemDeleteAll=&isBasketUpdated=true`
+        let params = `langId=&orderId=&catalogId=&BASE_URL=BasketPage&errorViewName=BasketErrorAjaxResponse&storeId=${
+            this.store_id
+        }&URL=BasketDataAjaxResponse&calcRequired=true&orderItemDeleteAll=&isBasketUpdated=true`
         ids.forEach(id => {
             params += `&orderItemDelete=${id}`
         })
@@ -134,10 +135,12 @@ class Newark extends RetailerInterface {
             }
             return
         }
-        const url = `https${this
-            .site}/webapp/wcs/stores/servlet/PasteOrderChangeServiceItemAdd`
-        let params = `storeId=${this
-            .store_id}&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
+        const url = `https${
+            this.site
+        }/webapp/wcs/stores/servlet/PasteOrderChangeServiceItemAdd`
+        let params = `storeId=${
+            this.store_id
+        }&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
         //&addToBasket=Add+to+Cart'
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i]
@@ -213,8 +216,9 @@ class Newark extends RetailerInterface {
         }
         const url = `https${this.site}/AjaxPasteOrderChangeServiceItemAdd`
 
-        let params = `storeId=${this
-            .store_id}&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
+        let params = `storeId=${
+            this.store_id
+        }&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i]
             params += encodeURIComponent(line.part) + ','
@@ -266,18 +270,48 @@ class Newark extends RetailerInterface {
                             retry_lines.push(line)
                         }
                     }
-                    return this._add_lines_ajax(retry_lines, function(result) {
+                    this._add_lines_ajax(retry_lines, function(result) {
                         if (callback != null) {
                             result.fails = result.fails.concat(fails)
                             result.success = false
-                            return callback(result)
+                            callback(result)
                         }
                     })
                 } else {
-                    //success
-                    if (callback != null) {
-                        return callback(result)
+                    if (json.pfOrderErrorEnc) {
+                        console.log(json.pfOrderErrorEnc)
+                        const url = `https${this.site}${this.cart}?storeId=${
+                            this.store_id
+                        }&catalogId=15001&langId=44&pfOrderErrorEnc=${
+                            json.pfOrderErrorEnc
+                        }`
+                        http.promiseGet(url)
+                            .then(() => http.promiseGet(url))
+                            .then(doc => {
+                                const form_errors = doc.querySelector(
+                                    '#formErrors'
+                                )
+                                const success = form_errors == null
+                                const fails = []
+                                if (!success) {
+                                    for (let j = 0; j < lines.length; j++) {
+                                        var line = lines[j]
+                                        const regex = new RegExp(line.part, 'g')
+                                        const result = regex.exec(
+                                            form_errors.innerHTML
+                                        )
+                                        if (result != null) {
+                                            fails.push(line)
+                                        }
+                                    }
+                                }
+                                result.success = success
+                                result.fails = fails
+                                return callback(result)
+                            })
                     }
+                    //success
+                    return callback(result)
                 }
             },
             () => {
