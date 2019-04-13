@@ -270,7 +270,7 @@ class Newark extends RetailerInterface {
                             retry_lines.push(line)
                         }
                     }
-                    this._add_lines_ajax(retry_lines, function(result) {
+                    return this._add_lines_ajax(retry_lines, function(result) {
                         if (callback != null) {
                             result.fails = result.fails.concat(fails)
                             result.success = false
@@ -285,7 +285,17 @@ class Newark extends RetailerInterface {
                             json.pfOrderErrorEnc
                         }`
                         http.promiseGet(url)
-                            .then(() => http.promiseGet(url))
+                            .then(doc => {
+                                const form_errors = doc.querySelector(
+                                    '#formErrors'
+                                )
+                                if (form_errors == null) {
+                                    // sometimes we don't get the right
+                                    // response the first time
+                                    return http.promiseGet(url)
+                                }
+                                return doc
+                            })
                             .then(doc => {
                                 const form_errors = doc.querySelector(
                                     '#formErrors'
