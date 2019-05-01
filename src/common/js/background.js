@@ -193,4 +193,5 @@ exports.background = function background(messenger) {
     })
 
     sendState()
+    setInterval(sendState, 10000)
 }
