@@ -27,15 +27,14 @@ class Mouser extends RetailerInterface {
     constructor(country_code, settings) {
         super('Mouser', country_code, 'data/mouser.json', settings)
         this.protocol = 'https'
-        //posting our sub-domain as the sites are all linked and switching
+        //setting our sub-domain as the sites are all linked and switching
         //countries would not register properly otherwise
         let s = country_code.toLowerCase()
         if (s === 'uk') {
             s = 'gb'
         }
-        http.post(
-            `https://www.mouser.com/api/Preferences/SetSubdomain?subdomainName=${s}`,
-            '',
+        http.get(
+            'https://www.mouser.com/cs/localsitesredirect?subdomain=' + s,
             {notify: false}
         )
     }
