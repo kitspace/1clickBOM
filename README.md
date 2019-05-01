@@ -167,16 +167,16 @@ room][kitspace chat].
 
 ## Roadmap ##
 
-* 1.5
+* 1.6
     * Ability to add components to BOM from retailer site
     * Make requests cancelable
     * Improve user interface
 
-* 1.6
+* 1.7
     * Add retailer preference ranking
     * Add function to reduce BOM (and add to cart?) according to retailer preference
 
-* 1.7
+* 1.8
     * Additional retailer support
         * AVNet
         * Adafruit
