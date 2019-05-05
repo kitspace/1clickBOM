@@ -39,7 +39,7 @@ window.addEventListener(
     'message',
     event => {
         if (event.data.from === 'page') {
-            return messenger.send(event.data.message, event.data.value)
+            messenger.send(event.data.message, event.data.value)
         }
     },
     false

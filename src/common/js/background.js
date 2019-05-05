@@ -150,11 +150,9 @@ exports.background = function background(messenger) {
 
     messenger.on('quickAddToCart', obj => tsvPageNotifier.quickAddToCart(obj))
 
-    messenger.on('bomBuilderAddToCart', ({tsv, id}) => {
-        const {lines} = oneClickBom.parseTSV(tsv)
-        const retailers = bom_manager._to_retailers(lines)
-        for (const retailer in retailers) {
-            const parts = retailers[retailer]
+    messenger.on('bomBuilderAddToCart', ({purchase, id}) => {
+        for (const retailer in purchase) {
+            const parts = purchase[retailer]
             bom_manager.interfaces[retailer].adding_lines = true
             const timeout_id = browser.setTimeout(() => {
                 bom_manager.interfaces[retailer].adding_lines = false
@@ -175,10 +173,8 @@ exports.background = function background(messenger) {
         }
     })
 
-    messenger.on('bomBuilderClearCarts', ({tsv, id}) => {
-        const {lines} = oneClickBom.parseTSV(tsv)
-        const retailers = bom_manager._to_retailers(lines)
-        for (const retailer in retailers) {
+    messenger.on('bomBuilderClearCarts', ({purchase, id}) => {
+        for (const retailer in purchase) {
             const timeout_id = browser.setTimeout(() => {
                 bom_manager.interfaces[retailer].clearing_cart = false
                 sendState()
