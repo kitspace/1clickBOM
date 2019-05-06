@@ -317,7 +317,18 @@ class Newark extends RetailerInterface {
                                             const result_pack = regex_pack.exec(
                                                 form_errors.innerHTML
                                             )
-                                            if (result_pack == null) {
+                                            // ignore 'needs to be order in multiples ...' errors
+                                            const regex_multiples = new RegExp(
+                                                line.part +
+                                                    ' needs to be ordered in multiples of'
+                                            )
+                                            const result_multiples = regex_multiples.exec(
+                                                form_errors.innerHTML
+                                            )
+                                            if (
+                                                result_pack == null &&
+                                                result_multiples == null
+                                            ) {
                                                 fails.push(line)
                                             }
                                         }
