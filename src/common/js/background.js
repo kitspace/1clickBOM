@@ -183,6 +183,7 @@ exports.background = function background(messenger) {
                 browser.clearTimeout(timeout_id)
                 bom_manager.interfaces[retailer].clearing_cart = false
                 sendState()
+                bom_manager.interfaces[retailer].openCartTab()
             })
             sendState()
         }
