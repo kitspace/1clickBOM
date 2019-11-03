@@ -146,7 +146,8 @@ class Newark extends RetailerInterface {
             const line = lines[i]
             params += encodeURIComponent(line.part) + ','
             params += encodeURIComponent(line.quantity) + ','
-            params += encodeURIComponent(line.reference) + '\n'
+            params +=
+                encodeURIComponent(line.reference.replace(/,/g, ' ')) + '\n'
         }
         return http.post(
             url,
@@ -223,11 +224,12 @@ class Newark extends RetailerInterface {
             const line = lines[i]
             params += encodeURIComponent(line.part) + ','
             params += encodeURIComponent(line.quantity) + ','
-            if (line.reference.length > 30) {
+            const reference = line.reference.replace(/,/g, ' ')
+            if (reference.length > 30) {
                 result.warnings.push(`Truncated line-note when adding
                     ${this.name} line to cart: ${line.reference}`)
             }
-            params += encodeURIComponent(line.reference.substr(0, 30)) + '\n'
+            params += encodeURIComponent(reference.substr(0, 30)) + '\n'
         }
         return http.post(
             url,
