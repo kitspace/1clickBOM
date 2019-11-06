@@ -26,6 +26,7 @@ const retailer_data = {
     RS: require('./data/rs.json'),
     Farnell: require('./data/farnell.json'),
     Newark: require('./data/newark.json'),
+    LCSC: require('./data/lcsc.json'),
     Rapid: require('./data/rapid.json')
 }
 
@@ -110,12 +111,9 @@ class RetailerInterface {
     refreshSiteTabs() {
         //refresh the tabs that are not the cart url. XXX could some of the
         //passed params cause problems on, say, quick-add urls?
-        const re = new RegExp(this.site, 'i')
         return browser.tabsQuery({url: `*${this.site}/*`}, tabs => {
             tabs.forEach(tab => {
-                if (!tab.url.match(re)) {
-                    browser.tabsReload(tab)
-                }
+                browser.tabsReload(tab)
             })
         })
     }
