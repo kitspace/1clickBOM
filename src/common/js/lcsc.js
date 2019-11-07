@@ -20,6 +20,37 @@
 const {RetailerInterface} = require('./retailer_interface')
 const {browser} = require('./browser')
 const http = require('./http')
+const rateLimit = require('./promise-rate-limit')
+
+const _add_line = rateLimit(60, 1000, (line, doc) => {
+    const button = doc.querySelector('.btn-tocart')
+    if (button == null) {
+        return {success: false}
+    }
+    const tag = line.reference.slice(0, 20)
+    const product_id = button.getAttribute('data-productid')
+    let quantity = line.quantity
+    const params = `product_id=${product_id}&quantity=${quantity}&tag=${tag}`
+    return http
+        .promisePost('https://lcsc.com/api/cart/add', params)
+        .then(r => {
+            r = JSON.parse(r)
+            if (r.code === 400001) {
+                quantity = Math.ceil(quantity / r.step) * r.step
+                const params = `product_id=${product_id}&quantity=${quantity}&tag=${tag}`
+                return http
+                    .promisePost('https://lcsc.com/api/cart/add', params)
+                    .then(r => JSON.parse(r))
+            }
+            return r
+        })
+        .then(r => {
+            if (r.code === 200) {
+                return {success: true}
+            }
+            return {success: false}
+        })
+})
 
 class LCSC extends RetailerInterface {
     constructor(country_code, settings, callback) {
@@ -27,16 +58,50 @@ class LCSC extends RetailerInterface {
     }
 
     clearCart(callback) {
-        return http.promiseGet('https://lcsc.com/api/cart/del-all').then(() => {
-            this.refreshSiteTabs()
-            if (callback != null) {
-                callback({success: true})
-            }
-            return {success: true}
-        })
+        return fetch('https://lcsc.com/api/cart/del-all')
+            .then(r => r.json())
+            .then(r => {
+                const ret = {success: false}
+                if (r.code === 200) {
+                    ret.success = true
+                }
+                this.refreshSiteTabs()
+                if (callback != null) {
+                    callback(ret)
+                }
+                return ret
+            })
     }
 
-    addLines(lines, callback) {}
+    addLines(lines, callback) {
+        return Promise.all(
+            lines.map(line =>
+                http
+                    .promiseGet(
+                        'https://lcsc.com/pre_search/link?type=lcsc&&value=' +
+                            line.part
+                    )
+                    .then(_add_line.bind(null, line))
+                    .catch(err => {
+                        console.error(err)
+                        return {success: false}
+                    })
+            )
+        ).then(rs => {
+            const result = {success: true, fails: []}
+            rs.forEach((r, i) => {
+                if (!r.success) {
+                    result.success = false
+                    result.fails.push(lines[i])
+                }
+            })
+            this.refreshSiteTabs()
+            if (callback != null) {
+                callback(result, this, lines)
+            }
+            return result
+        })
+    }
 }
 
 exports.LCSC = LCSC

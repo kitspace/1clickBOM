@@ -51,6 +51,9 @@ function network_callback(event, callback, error_callback, notify = true) {
 }
 
 function post(url, params, options, callback, error_callback) {
+    if (options == null) {
+        options = {}
+    }
     let {notify, timeout, json} = options
     if (notify == null) {
         notify = true
@@ -129,7 +132,7 @@ function getLocation(callback) {
 
 function promisePost(url, params, options) {
     return new Promise((resolve, reject) => {
-        post(url, params, options, () => resolve(), () => reject())
+        post(url, params, options, resolve, reject)
     })
 }
 

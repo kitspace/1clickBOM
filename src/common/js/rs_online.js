@@ -48,7 +48,7 @@ const rsOnline = {
         const end = result => {
             callback(result, this, lines)
             this.refreshCartTabs()
-            return this.refreshSiteTabs()
+            this.refreshSiteTabs()
         }
         return this._clear_invalid().then(() => {
             add(lines, result => {
@@ -56,7 +56,7 @@ const rsOnline = {
                     //do a second pass with corrected quantities
                     add(lines, end)
                 } else {
-                    return end(result)
+                    end(result)
                 }
             })
         })
