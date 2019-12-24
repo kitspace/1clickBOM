@@ -2,7 +2,7 @@
     "sites": {
         "US": "://lcsc.com"
     },
-    "carts": "/mallPurchase.html",
+    "carts": "/cart",
     "addlines": "",
     "addline_params": "",
     "lookup": {

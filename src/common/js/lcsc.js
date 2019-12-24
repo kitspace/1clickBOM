@@ -32,14 +32,14 @@ const _add_line = rateLimit(60, 1000, (line, doc) => {
     let quantity = line.quantity
     const params = `product_id=${product_id}&quantity=${quantity}&tag=${tag}`
     return http
-        .promisePost('https://lcsc.com/api/cart/add', params)
+        .promisePost('https://lcsc.com/cart/add', params)
         .then(r => {
             r = JSON.parse(r)
             if (r.code === 400001) {
                 quantity = Math.ceil(quantity / r.step) * r.step
                 const params = `product_id=${product_id}&quantity=${quantity}&tag=${tag}`
                 return http
-                    .promisePost('https://lcsc.com/api/cart/add', params)
+                    .promisePost('https://lcsc.com/cart/add', params)
                     .then(r => JSON.parse(r))
             }
             return r
@@ -58,7 +58,28 @@ class LCSC extends RetailerInterface {
     }
 
     clearCart(callback) {
-        return fetch('https://lcsc.com/api/cart/del-all')
+        return fetch('https://lcsc.com/carts')
+            .then(r => r.json())
+            .then(cart => cart.data.map(x => x.id))
+            .then(ids => {
+                let params = []
+                ids.forEach(id => {
+                    params.push(
+                        encodeURIComponent('product_id[]') +
+                            '=' +
+                            encodeURIComponent(id)
+                    )
+                })
+                params = params.join('&')
+                return fetch('https://lcsc.com/cart/delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':
+                            'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    body: params
+                })
+            })
             .then(r => r.json())
             .then(r => {
                 const ret = {success: false}
