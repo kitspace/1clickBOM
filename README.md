@@ -49,6 +49,7 @@ Currently supported distributors are:
 * Farnell/Element14
 * Newark
 * RS
+* LCSC
 
 Check the [roadmap](#roadmap) for more details on planned features.
 
