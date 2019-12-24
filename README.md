@@ -22,7 +22,7 @@ from a spreadsheet or load an online `.tsv` file from any other site.
 
 * [Summary](#summary)
 * [News](#news)
-* [Which retailers?](#which-retailers)
+* [Which distributors?](#which-distributors)
 * [Usage](#usage)
 * [Issues](#issues)
 * [Roadmap](#roadmap)
@@ -40,9 +40,9 @@ from a spreadsheet or load an online `.tsv` file from any other site.
 
 - [I gave a talk about 1clickBOM at FOSDEM in 2015][12]
 
-## Which retailers? ##
+## Which distributors? ##
 
-Currently supported retailers are:
+Currently supported distributors are:
 
 * Digikey
 * Mouser
@@ -85,7 +85,7 @@ Check the [roadmap](#roadmap) for more details on planned features.
 
 You can copy and paste into the extension from a text editor or spread sheet
 program (LibreOffice, Excel). You must have a column for references, one for the
-quantity and at least one of: decription, part number or a retailer column.
+quantity and at least one of: decription, part number or a distributor column.
 You can have multiple part number columns for specifying
 multiple possible manufacturer part numbers per schematic reference.
 
@@ -153,7 +153,7 @@ using the buttons on the popup. You can also quickly view and empty your carts.
 ### Completion ###
 
 1-click BOM can try and complete an incomplete BOM for you by selecting resistors and capacitors from the [CPL](https://octopart.com/common-parts-library) and searching Octopart and Findchips.
-A complete BOM is where every part has a manufacturer part number and a part number for _every_ retailer.
+A complete BOM is where every part has a manufacturer part number and a part number for _every_ distributor.
 Simply press the button labeled 'Complete' and 1clickBOM will use other fields to search for the fields that are left blank.
 You should always check over the parts it has selected for you.
 
@@ -168,16 +168,16 @@ room][kitspace chat].
 ## Roadmap ##
 
 * 1.6
-    * Ability to add components to BOM from retailer site
+    * Ability to add components to BOM from distributor site
     * Make requests cancelable
     * Improve user interface
 
 * 1.7
-    * Add retailer preference ranking
-    * Add function to reduce BOM (and add to cart?) according to retailer preference
+    * Add distributor preference ranking
+    * Add function to reduce BOM (and add to cart?) according to distributor preference
 
 * 1.8
-    * Additional retailer support
+    * Additional distributor support
         * AVNet
         * Adafruit
         * Allied
@@ -237,7 +237,7 @@ Open a console on background page and execute `Test()` or test a specific
 module, e.g.  Farnell, with `Test('Farnell')`
 
 Most of the tests are functional tests that require interaction with the
-various retailer sites and they make a lot of network requests to test across
+various distributor sites and they make a lot of network requests to test across
 all the different possible locations. Sometimes they will fail because they are
 not an accurate representation of actual extension use. If a test fails or
 doesn't complete, run it again before investigating. Try and re-create the
