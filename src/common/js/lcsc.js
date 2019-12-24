@@ -60,17 +60,15 @@ class LCSC extends RetailerInterface {
     clearCart(callback) {
         return fetch('https://lcsc.com/carts')
             .then(r => r.json())
-            .then(cart => cart.data.map(x => x.id))
-            .then(ids => {
-                let params = []
-                ids.forEach(id => {
-                    params.push(
-                        encodeURIComponent('product_id[]') +
+            .then(cart => {
+                const params = cart.data
+                    .map(
+                        x =>
+                            encodeURIComponent('product_id[]') +
                             '=' +
-                            encodeURIComponent(id)
+                            encodeURIComponent(x.product_id)
                     )
-                })
-                params = params.join('&')
+                    .join('&')
                 return fetch('https://lcsc.com/cart/delete', {
                     method: 'POST',
                     headers: {
