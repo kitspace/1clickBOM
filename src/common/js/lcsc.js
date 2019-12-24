@@ -22,6 +22,8 @@ const {browser} = require('./browser')
 const http = require('./http')
 const rateLimit = require('./promise-rate-limit')
 
+const accepted_codes = [200, 204004]
+
 const _add_line = rateLimit(60, 1000, (line, doc) => {
     const button = doc.querySelector('.btn-tocart')
     if (button == null) {
@@ -45,7 +47,7 @@ const _add_line = rateLimit(60, 1000, (line, doc) => {
             return r
         })
         .then(r => {
-            if (r.code === 200) {
+            if (accepted_codes.includes(r.code)) {
                 return {success: true}
             }
             return {success: false}
