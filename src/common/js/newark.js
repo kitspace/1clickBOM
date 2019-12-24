@@ -312,6 +312,7 @@ class Newark extends RetailerInterface {
                                             form_errors.innerHTML
                                         )
                                         if (result != null) {
+                                            // TODO: make this work for all languages
                                             // ignore 'has a pack size of ...' errors
                                             const regex_pack = new RegExp(
                                                 line.part + ' has a pack'
@@ -322,7 +323,7 @@ class Newark extends RetailerInterface {
                                             // ignore 'needs to be order in multiples ...' errors
                                             const regex_multiples = new RegExp(
                                                 line.part +
-                                                    ' needs to be ordered in multiples of'
+                                                    '( needs to be ordered in multiples of)|( peut être commandé uniquement avec une quantité minimale)'
                                             )
                                             const result_multiples = regex_multiples.exec(
                                                 form_errors.innerHTML
