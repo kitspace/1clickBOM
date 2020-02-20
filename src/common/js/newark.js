@@ -281,11 +281,7 @@ class Newark extends RetailerInterface {
                     })
                 } else {
                     if (json.pfOrderErrorEnc) {
-                        const url = `https${this.site}${this.cart}?storeId=${
-                            this.store_id
-                        }&catalogId=15001&langId=44&pfOrderErrorEnc=${
-                            json.pfOrderErrorEnc
-                        }`
+                        const url = `https${this.site}${this.cart}?storeId=${this.store_id}&catalogId=15001&langId=44&pfOrderErrorEnc=${json.pfOrderErrorEnc}`
                         http.promiseGet(url)
                             .then(doc => {
                                 const form_errors = doc.querySelector(
@@ -323,7 +319,9 @@ class Newark extends RetailerInterface {
                                             // ignore 'needs to be order in multiples ...' errors
                                             const regex_multiples = new RegExp(
                                                 line.part +
-                                                    '( needs to be ordered in multiples of)|( peut être commandé uniquement avec une quantité minimale)'
+                                                    '( can only be ordered to a minimum)' +
+                                                    '|( needs to be ordered in multiples of)' +
+                                                    '|( peut être commandé uniquement avec une quantité minimale)'
                                             )
                                             const result_multiples = regex_multiples.exec(
                                                 form_errors.innerHTML
