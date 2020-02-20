@@ -310,8 +310,19 @@ class Newark extends RetailerInterface {
                                         if (result != null) {
                                             // TODO: make this work for all languages
                                             // ignore 'has a pack size of ...' errors
+                                            // XXX i don't think we actually ever receive these here
                                             const regex_pack = new RegExp(
-                                                line.part + ' has a pack'
+                                                line.part +
+                                                    //english
+                                                    '( has a pack)' +
+                                                    //spanish
+                                                    '|( tiene \\d+ artículos)' +
+                                                    //german
+                                                    '|( hat eine Verpackungsgröße von)' +
+                                                    //dutch
+                                                    '|(  heeft een pakketgrootte van)' +
+                                                    //french
+                                                    '|( est disponible par groupe de)'
                                             )
                                             const result_pack = regex_pack.exec(
                                                 form_errors.innerHTML
@@ -319,8 +330,20 @@ class Newark extends RetailerInterface {
                                             // ignore 'needs to be order in multiples ...' errors
                                             const regex_multiples = new RegExp(
                                                 line.part +
+                                                    //english
                                                     '( can only be ordered to a minimum)' +
                                                     '|( needs to be ordered in multiples of)' +
+                                                    //spanish
+                                                    '|( solo se puede pedir en cantidades mínimas de)' +
+                                                    '|( tiene que pedirse en múltiplos de)' +
+                                                    //german
+                                                    '|( muss die Mindestmenge von)' +
+                                                    '|( muss in Staffelungen von)' +
+                                                    //dutch
+                                                    '|( moet worden besteld in veelvouden van)' +
+                                                    '|( alleen worden besteld met een minimaal aantal van)' +
+                                                    //french
+                                                    '|( doit être commandé par multiple de)' +
                                                     '|( peut être commandé uniquement avec une quantité minimale)'
                                             )
                                             const result_multiples = regex_multiples.exec(
