@@ -306,15 +306,25 @@ class Newark extends RetailerInterface {
                                             const regex_pack = new RegExp(
                                                 line.part +
                                                     //english
-                                                    '( has a pack)' +
+                                                    ' has a pack|' +
+                                                    line.part +
                                                     //spanish
-                                                    '|( tiene \\d+ artículos)' +
+                                                    ' tiene \\d+ artículos|' +
+                                                    line.part +
                                                     //german
-                                                    '|( hat eine Verpackungsgröße von)' +
+                                                    ' hat eine Verpackungsgröße von|' +
+                                                    line.part +
                                                     //dutch
-                                                    '|(  heeft een pakketgrootte van)' +
+                                                    '  heeft een pakketgrootte van|' +
+                                                    line.part +
                                                     //french
-                                                    '|( est disponible par groupe de)'
+                                                    ' est disponible par groupe de|' +
+                                                    line.part +
+                                                    //bulgarian
+                                                    ' има количество на опаковката от|'
+                                                    line.part +
+                                                    //czech
+                                                    ' obsahuje v balení'
                                             )
                                             const result_pack = regex_pack.exec(
                                                 form_errors.innerHTML
@@ -323,20 +333,39 @@ class Newark extends RetailerInterface {
                                             const regex_multiples = new RegExp(
                                                 line.part +
                                                     //english
-                                                    '( can only be ordered to a minimum)' +
-                                                    '|( needs to be ordered in multiples of)' +
+                                                    ' can only be ordered to a minimum|' +
+                                                    line.part +
+                                                    ' needs to be ordered in multiples of|' +
+                                                    line.part +
                                                     //spanish
-                                                    '|( solo se puede pedir en cantidades mínimas de)' +
-                                                    '|( tiene que pedirse en múltiplos de)' +
+                                                    ' solo se puede pedir en cantidades mínimas de|' +
+                                                    line.part +
+                                                    ' tiene que pedirse en múltiplos de|' +
+                                                    line.part +
                                                     //german
-                                                    '|( muss die Mindestmenge von)' +
-                                                    '|( muss in Staffelungen von)' +
+                                                    ' muss die Mindestmenge von|' +
+                                                    line.part +
+                                                    ' muss in Staffelungen von|' +
+                                                    line.part +
                                                     //dutch
-                                                    '|( moet worden besteld in veelvouden van)' +
-                                                    '|( alleen worden besteld met een minimaal aantal van)' +
+                                                    ' moet worden besteld in veelvouden van|' +
+                                                    line.part +
+                                                    ' alleen worden besteld met een minimaal aantal van|' +
+                                                    line.part +
                                                     //french
-                                                    '|( doit être commandé par multiple de)' +
-                                                    '|( peut être commandé uniquement avec une quantité minimale)'
+                                                    ' doit être commandé par multiple de' +
+                                                    line.part +
+                                                    ' peut être commandé uniquement avec une quantité minimale|' +
+                                                    line.part +
+                                                    //bulgarian
+                                                    ' трябва да се поръчва в множество от|' +
+                                                    line.part +
+                                                    ' може да се поръчва само при минимално количество от|' +
+                                                    line.part +
+                                                    //czech
+                                                    ' je nutné objednat|' +
+                                                    line.part +
+                                                    ' lze objednat pouze'
                                             )
                                             const result_multiples = regex_multiples.exec(
                                                 form_errors.innerHTML
