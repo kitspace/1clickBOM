@@ -305,8 +305,8 @@ class Newark extends RetailerInterface {
                                             // XXX i don't think we actually ever receive these here
                                             const p = line.part
                                             const regex_pack = new RegExp(
-                                                    //english
-                                                    `(${p} has a pack)` +
+                                                //english
+                                                `(${p} has a pack)` +
                                                     //spanish
                                                     `|(${p} tiene \\d+ artículos)` +
                                                     //german
@@ -320,7 +320,11 @@ class Newark extends RetailerInterface {
                                                     //czech
                                                     `|(${p} obsahuje v balení)` +
                                                     //danish
-                                                    `|(${p} har en pakkestørrelse på)`
+                                                    `|(${p} har en pakkestørrelse på)` +
+                                                    //estonian
+                                                    `|(${p} pakend sisaldab)` +
+                                                    //finish
+                                                    `|(${p} pakkauskoko on)`
                                             )
                                             const result_pack = regex_pack.exec(
                                                 form_errors.innerHTML
@@ -350,7 +354,13 @@ class Newark extends RetailerInterface {
                                                     `|(${p} lze objednat pouze)` +
                                                     //danish
                                                     `|(Minimumsantallet ved bestilling af produkt ${p})` +
-                                                    `|(${p} skal bestilles i antal deleligt med)`
+                                                    `|(${p} skal bestilles i antal deleligt med)` +
+                                                    //estonian
+                                                    `|(${p} tuleb tellida)` +
+                                                    `|(${p} minimaalne tellitav kogus on)` +
+                                                    //finish
+                                                    `|(${p} vähimmäistilausmäärä on)` +
+                                                    `|(${p} on tilattava)`
                                             )
                                             const result_multiples = regex_multiples.exec(
                                                 form_errors.innerHTML
