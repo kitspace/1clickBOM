@@ -168,7 +168,6 @@ ninja
     .using('package-chrome')
 ninja.edge('package-chrome').need(`${chrome_package_name}.zip`)
 
-
 ninja.edge('all').from(Object.keys(targets))
 ninja.byDefault('all')
 

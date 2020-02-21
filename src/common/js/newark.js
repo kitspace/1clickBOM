@@ -274,7 +274,8 @@ class Newark extends RetailerInterface {
                 } else {
                     if (json.pfOrderErrorEnc) {
                         const url = `https${this.site}${this.cart}?storeId=${this.store_id}&catalogId=15001&langId=44&pfOrderErrorEnc=${json.pfOrderErrorEnc}`
-                        return http.promiseGet(url)
+                        return http
+                            .promiseGet(url)
                             .then(doc => {
                                 const form_errors = doc.querySelector(
                                     '#formErrors'

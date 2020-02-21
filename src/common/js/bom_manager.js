@@ -276,9 +276,7 @@ const bom_manager = {
                 for (let i = 0; i < fails.length; i++) {
                     const fail = fails[i]
                     failed_lines.push({
-                        title: `line: ${fail.reference} | ${fail.quantity} | ${
-                            fail.part
-                        }`,
+                        title: `line: ${fail.reference} | ${fail.quantity} | ${fail.part}`,
                         message: ''
                     })
                 }

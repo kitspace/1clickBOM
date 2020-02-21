@@ -3,8 +3,7 @@ const {browser} = require('./browser')
 
 const rsDeliversAspx = {
     clearCart(callback) {
-        const url = `http${this
-            .site}/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart`
+        const url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/EmptyCart`
         return http.post(
             url,
             '',
@@ -29,8 +28,7 @@ const rsDeliversAspx = {
     },
 
     _delete_invalid(ids, callback) {
-        const url = `http${this
-            .site}/ShoppingCart/NcjRevampServicePage.aspx/RemoveMultiple`
+        const url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/RemoveMultiple`
         let params = '{"request":{"encodedString":"'
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i]
@@ -55,8 +53,7 @@ const rsDeliversAspx = {
     },
 
     _get_invalid_line_ids(callback) {
-        const url = `http${this
-            .site}/ShoppingCart/NcjRevampServicePage.aspx/GetCartHtml`
+        const url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/GetCartHtml`
         return http.post(
             url,
             undefined,
@@ -103,8 +100,7 @@ const rsDeliversAspx = {
         if (i < lines_incoming.length) {
             const lines = lines_incoming.slice(i, i + 99 + 1)
             return this._clear_invalid(() => {
-                const url = `http${this
-                    .site}/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder`
+                const url = `http${this.site}/ShoppingCart/NcjRevampServicePage.aspx/BulkOrder`
                 let params = '{"request":{"lines":"'
                 for (let j = 0; j < lines.length; j++) {
                     const line = lines[j]

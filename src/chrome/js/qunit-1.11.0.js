@@ -35,15 +35,15 @@
             })()
         },
         /**
-	 * Provides a normalized error string, correcting an issue
-	 * with IE 7 (and prior) where Error.prototype.toString is
-	 * not properly implemented
-	 *
-	 * Based on http://es5.github.com/#x15.11.4.4
-	 *
-	 * @param {String|Error} error
-	 * @return {String} error message
-	 */
+         * Provides a normalized error string, correcting an issue
+         * with IE 7 (and prior) where Error.prototype.toString is
+         * not properly implemented
+         *
+         * Based on http://es5.github.com/#x15.11.4.4
+         *
+         * @param {String|Error} error
+         * @return {String} error message
+         */
         errorString = function(error) {
             let name,
                 message,
@@ -65,12 +65,12 @@
             }
         },
         /**
-	 * Makes a clone of an object using only Array or Object as base,
-	 * and copies over the own enumerable properties.
-	 *
-	 * @param {Object} obj
-	 * @return {Object} New object with only the own properties (recursively).
-	 */
+         * Makes a clone of an object using only Array or Object as base,
+         * and copies over the own enumerable properties.
+         *
+         * @param {Object} obj
+         * @return {Object} New object with only the own properties (recursively).
+         */
         objectValues = function(obj) {
             // Grunt 0.3.x uses an older version of jshint that still has jshint/jshint#392.
             /*jshint newcap: false */
@@ -584,11 +584,11 @@
     // otherwise `assert` will become a global variable in browsers (#341).
     assert = {
         /**
-	 * Asserts rough true-ish result.
-	 * @name ok
-	 * @function
-	 * @example ok( "asdfasdf".length > 5, "There must be at least 5 chars" );
-	 */
+         * Asserts rough true-ish result.
+         * @name ok
+         * @function
+         * @example ok( "asdfasdf".length > 5, "There must be at least 5 chars" );
+         */
         ok: function(result, msg) {
             if (!config.current) {
                 throw new Error(
@@ -627,30 +627,30 @@
         },
 
         /**
-	 * Assert that the first two arguments are equal, with an optional message.
-	 * Prints out both actual and expected values.
-	 * @name equal
-	 * @function
-	 * @example equal( format( "Received {0} bytes.", 2), "Received 2 bytes.", "format() replaces {0} with next argument" );
-	 */
+         * Assert that the first two arguments are equal, with an optional message.
+         * Prints out both actual and expected values.
+         * @name equal
+         * @function
+         * @example equal( format( "Received {0} bytes.", 2), "Received 2 bytes.", "format() replaces {0} with next argument" );
+         */
         equal: function(actual, expected, message) {
             /*jshint eqeqeq:false */
             QUnit.push(expected == actual, actual, expected, message)
         },
 
         /**
-	 * @name notEqual
-	 * @function
-	 */
+         * @name notEqual
+         * @function
+         */
         notEqual: function(actual, expected, message) {
             /*jshint eqeqeq:false */
             QUnit.push(expected != actual, actual, expected, message)
         },
 
         /**
-	 * @name propEqual
-	 * @function
-	 */
+         * @name propEqual
+         * @function
+         */
         propEqual: function(actual, expected, message) {
             actual = objectValues(actual)
             expected = objectValues(expected)
@@ -658,9 +658,9 @@
         },
 
         /**
-	 * @name notPropEqual
-	 * @function
-	 */
+         * @name notPropEqual
+         * @function
+         */
         notPropEqual: function(actual, expected, message) {
             actual = objectValues(actual)
             expected = objectValues(expected)
@@ -673,17 +673,17 @@
         },
 
         /**
-	 * @name deepEqual
-	 * @function
-	 */
+         * @name deepEqual
+         * @function
+         */
         deepEqual: function(actual, expected, message) {
             QUnit.push(QUnit.equiv(actual, expected), actual, expected, message)
         },
 
         /**
-	 * @name notDeepEqual
-	 * @function
-	 */
+         * @name notDeepEqual
+         * @function
+         */
         notDeepEqual: function(actual, expected, message) {
             QUnit.push(
                 !QUnit.equiv(actual, expected),
@@ -694,17 +694,17 @@
         },
 
         /**
-	 * @name strictEqual
-	 * @function
-	 */
+         * @name strictEqual
+         * @function
+         */
         strictEqual: function(actual, expected, message) {
             QUnit.push(expected === actual, actual, expected, message)
         },
 
         /**
-	 * @name notStrictEqual
-	 * @function
-	 */
+         * @name notStrictEqual
+         * @function
+         */
         notStrictEqual: function(actual, expected, message) {
             QUnit.push(expected !== actual, actual, expected, message)
         },
@@ -753,22 +753,22 @@
     }
 
     /**
- * @deprecate since 1.8.0
- * Kept assertion helpers in root for backwards compatibility.
- */
+     * @deprecate since 1.8.0
+     * Kept assertion helpers in root for backwards compatibility.
+     */
     extend(QUnit, assert)
 
     /**
- * @deprecated since 1.9.0
- * Kept root "raises()" for backwards compatibility.
- * (Note that we don't introduce assert.raises).
- */
+     * @deprecated since 1.9.0
+     * Kept root "raises()" for backwards compatibility.
+     * (Note that we don't introduce assert.raises).
+     */
     QUnit.raises = assert['throws']
 
     /**
- * @deprecated since 1.0.0, replaced with error pushes since 1.3.0
- * Kept to avoid TypeErrors for undefined methods.
- */
+     * @deprecated since 1.0.0, replaced with error pushes since 1.3.0
+     * Kept to avoid TypeErrors for undefined methods.
+     */
     QUnit.equals = function() {
         QUnit.push(
             false,
@@ -796,10 +796,10 @@
     })()
 
     /**
- * Config object: Maintain internal state
- * Later exposed as QUnit.config
- * `config` initialized at top of scope
- */
+     * Config object: Maintain internal state
+     * Later exposed as QUnit.config
+     * `config` initialized at top of scope
+     */
     config = {
         // The queue of tests to run
         queue: [],
@@ -1171,12 +1171,12 @@
     })
 
     /**
- * @deprecated: Created for backwards compatibility with test runner that set the hook function
- * into QUnit.{hook}, instead of invoking it and passing the hook function.
- * QUnit.constructor is set to the empty F() above so that we can add to it's prototype here.
- * Doing this allows us to tell if the following methods have been overwritten on the actual
- * QUnit object.
- */
+     * @deprecated: Created for backwards compatibility with test runner that set the hook function
+     * into QUnit.{hook}, instead of invoking it and passing the hook function.
+     * QUnit.constructor is set to the empty F() above so that we can add to it's prototype here.
+     * Doing this allows us to tell if the following methods have been overwritten on the actual
+     * QUnit object.
+     */
     extend(QUnit.constructor.prototype, {
         // Logging callbacks; all receive a single argument with the listed properties
         // run test/logs.html for any related changes
@@ -1614,8 +1614,8 @@
     }
 
     /**
- * Escape text for attribute or text content.
- */
+     * Escape text for attribute or text content.
+     */
     function escapeText(s) {
         if (!s) {
             return ''
@@ -1748,10 +1748,10 @@
     }
 
     /**
- * @param {HTMLElement} elem
- * @param {string} type
- * @param {Function} fn
- */
+     * @param {HTMLElement} elem
+     * @param {string} type
+     * @param {Function} fn
+     */
     function addEvent(elem, type, fn) {
         // Standards-based browsers
         if (elem.addEventListener) {
@@ -1763,10 +1763,10 @@
     }
 
     /**
- * @param {Array|NodeList} elems
- * @param {string} type
- * @param {Function} fn
- */
+     * @param {Array|NodeList} elems
+     * @param {string} type
+     * @param {Function} fn
+     */
     function addEvents(elems, type, fn) {
         let i = elems.length
         while (i--) {
@@ -1793,7 +1793,9 @@
         // If possible, trim it for prettiness, but not neccecarily
         elem.className = window.jQuery
             ? jQuery.trim(set)
-            : set.trim ? set.trim() : set
+            : set.trim
+            ? set.trim()
+            : set
     }
 
     function id(name) {
@@ -2041,15 +2043,15 @@
     })()
 
     /**
- * jsDump Copyright (c) 2008 Ariel Flesler - aflesler(at)gmail(dot)com |
- * http://flesler.blogspot.com Licensed under BSD
- * (http://www.opensource.org/licenses/bsd-license.php) Date: 5/15/2008
- *
- * @projectDescription Advanced and extensible data dumping for Javascript.
- * @version 1.0.0
- * @author Ariel Flesler
- * @link {http://flesler.blogspot.com/2008/05/jsdump-pretty-dump-of-any-javascript.html}
- */
+     * jsDump Copyright (c) 2008 Ariel Flesler - aflesler(at)gmail(dot)com |
+     * http://flesler.blogspot.com Licensed under BSD
+     * (http://www.opensource.org/licenses/bsd-license.php) Date: 5/15/2008
+     *
+     * @projectDescription Advanced and extensible data dumping for Javascript.
+     * @version 1.0.0
+     * @author Ariel Flesler
+     * @link {http://flesler.blogspot.com/2008/05/jsdump-pretty-dump-of-any-javascript.html}
+     */
     QUnit.jsDump = (function() {
         function quote(str) {
             return '"' + str.toString().replace(/"/g, '\\"') + '"'
@@ -2148,8 +2150,12 @@
                 },
                 separator: function() {
                     return this.multiline
-                        ? this.HTML ? '<br />' : '\n'
-                        : this.HTML ? '&nbsp;' : ' '
+                        ? this.HTML
+                            ? '<br />'
+                            : '\n'
+                        : this.HTML
+                        ? '&nbsp;'
+                        : ' '
                 },
                 // extra can be a number, shortcut for increasing-calling-decreasing
                 indent: function(extra) {
@@ -2326,19 +2332,19 @@
     }
 
     /*
- * Javascript Diff Algorithm
- *  By John Resig (http://ejohn.org/)
- *  Modified by Chu Alan "sprite"
- *
- * Released under the MIT license.
- *
- * More Info:
- *  http://ejohn.org/projects/javascript-diff-algorithm/
- *
- * Usage: QUnit.diff(expected, actual)
- *
- * QUnit.diff( "the quick brown fox jumped over", "the quick fox jumps over" ) == "the  quick <del>brown </del> fox <del>jumped </del><ins>jumps </ins> over"
- */
+     * Javascript Diff Algorithm
+     *  By John Resig (http://ejohn.org/)
+     *  Modified by Chu Alan "sprite"
+     *
+     * Released under the MIT license.
+     *
+     * More Info:
+     *  http://ejohn.org/projects/javascript-diff-algorithm/
+     *
+     * Usage: QUnit.diff(expected, actual)
+     *
+     * QUnit.diff( "the quick brown fox jumped over", "the quick fox jumps over" ) == "the  quick <del>brown </del> fox <del>jumped </del><ins>jumps </ins> over"
+     */
     QUnit.diff = (function() {
         /*jshint eqeqeq:false, eqnull:true */
         function diff(o, n) {

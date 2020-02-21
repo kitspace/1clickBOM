@@ -28,8 +28,7 @@ const rsDelivers = {
     },
 
     _delete_invalid(parts, callback) {
-        const url = `http${this
-            .site}/CheckoutServices/UpdateDeleteProductsInCart`
+        const url = `http${this.site}/CheckoutServices/UpdateDeleteProductsInCart`
         const promises = parts.map(part => {
             return http.promisePost(url, `stockCode=${part}&quantity=0`)
         })

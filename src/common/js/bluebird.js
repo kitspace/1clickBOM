@@ -28,7 +28,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
  * bluebird build version 3.3.4
  * Features enabled: core
  * Features disabled: race, call_get, generators, map, nodeify, promisify, props, reduce, settle, some, using, timers, filter, any, each
-*/
+ */
 !(function(e) {
     if ('object' == typeof exports && 'undefined' != typeof module)
         module.exports = e()
@@ -38,8 +38,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
         'undefined' != typeof window
             ? (f = window)
             : 'undefined' != typeof global
-              ? (f = global)
-              : 'undefined' != typeof self && (f = self),
+            ? (f = global)
+            : 'undefined' != typeof self && (f = self),
             (f.Promise = e())
     }
 })(function() {
@@ -787,7 +787,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             const domain = getDomain()
                             possiblyUnhandledRejection =
                                 typeof fn === 'function'
-                                    ? domain === null ? fn : domain.bind(fn)
+                                    ? domain === null
+                                        ? fn
+                                        : domain.bind(fn)
                                     : undefined
                         }
 
@@ -795,7 +797,9 @@ const clearTimeout = require('./browser').browser.clearTimeout
                             const domain = getDomain()
                             unhandledRejectionHandled =
                                 typeof fn === 'function'
-                                    ? domain === null ? fn : domain.bind(fn)
+                                    ? domain === null
+                                        ? fn
+                                        : domain.bind(fn)
                                     : undefined
                         }
 
@@ -1494,8 +1498,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                 if (info) {
                                     if (
                                         info.fileName === firstFileName &&
-                                        (firstIndex <= info.line &&
-                                            info.line <= lastIndex)
+                                        firstIndex <= info.line &&
+                                            info.line <= lastIndex
                                     ) {
                                         return true
                                     }
@@ -1891,7 +1895,8 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         _RangeError = subError('RangeError', 'range error')
                     }
 
-                    const methods = ('join pop push shift unshift slice filter forEach some ' +
+                    const methods = (
+                        'join pop push shift unshift slice filter forEach some ' +
                         'every map indexOf lastIndexOf reduce reduceRight sort reverse'
                     ).split(' ')
 
@@ -4269,10 +4274,12 @@ const clearTimeout = require('./browser').browser.clearTimeout
                         typeof self !== 'undefined'
                             ? self
                             : typeof window !== 'undefined'
-                              ? window
-                              : typeof global !== 'undefined'
-                                ? global
-                                : this !== undefined ? this : null
+                            ? window
+                            : typeof global !== 'undefined'
+                            ? global
+                            : this !== undefined
+                            ? this
+                            : null
 
                     function tryCatcher() {
                         try {

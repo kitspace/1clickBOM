@@ -30,7 +30,7 @@ const aliases = {
     'RS Components': 'RS',
     'Mouser Electronics': 'Mouser',
     'Farnell element14': 'Farnell',
-    'Newark element14': 'Newark',
+    'Newark element14': 'Newark'
 }
 
 function _search(query, retailers_to_search = [], other_fields = []) {

@@ -112,8 +112,9 @@ var load_options = () =>
                     stored.settings[stored.country] != null &&
                     Boolean(Object.keys(stored.settings[stored.country]).length)
                 ) {
-                    const id = `id_${stored.settings[stored.country][retailer]
-                        .site}`
+                    const id = `id_${
+                        stored.settings[stored.country][retailer].site
+                    }`
                     var selected = document.getElementById(id)
                 } else {
                     var selected = document.getElementById(`id_${_default}`)
