@@ -60,9 +60,7 @@ class Newark extends RetailerInterface {
 
     _clear_cart(ids, callback) {
         const url = `https${this.site}/webapp/wcs/stores/servlet/ProcessBasket`
-        let params = `langId=&orderId=&catalogId=&BASE_URL=BasketPage&errorViewName=BasketErrorAjaxResponse&storeId=${
-            this.store_id
-        }&URL=BasketDataAjaxResponse&calcRequired=true&orderItemDeleteAll=&isBasketUpdated=true`
+        let params = `langId=&orderId=&catalogId=&BASE_URL=BasketPage&errorViewName=BasketErrorAjaxResponse&storeId=${this.store_id}&URL=BasketDataAjaxResponse&calcRequired=true&orderItemDeleteAll=&isBasketUpdated=true`
         ids.forEach(id => {
             params += `&orderItemDelete=${id}`
         })
@@ -135,12 +133,8 @@ class Newark extends RetailerInterface {
             }
             return
         }
-        const url = `https${
-            this.site
-        }/webapp/wcs/stores/servlet/PasteOrderChangeServiceItemAdd`
-        let params = `storeId=${
-            this.store_id
-        }&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
+        const url = `https${this.site}/webapp/wcs/stores/servlet/PasteOrderChangeServiceItemAdd`
+        let params = `storeId=${this.store_id}&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
         //&addToBasket=Add+to+Cart'
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i]
@@ -217,9 +211,7 @@ class Newark extends RetailerInterface {
         }
         const url = `https${this.site}/AjaxPasteOrderChangeServiceItemAdd`
 
-        let params = `storeId=${
-            this.store_id
-        }&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
+        let params = `storeId=${this.store_id}&catalogId=&langId=-1&omItemAdd=quickPaste&URL=AjaxOrderItemDisplayView%3FstoreId%3D10194%26catalogId%3D15003%26langId%3D-1%26quickPaste%3D*&errorViewName=QuickOrderView&calculationUsage=-1%2C-2%2C-3%2C-4%2C-5%2C-6%2C-7&isQuickPaste=true&quickPaste=`
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i]
             params += encodeURIComponent(line.part) + ','
