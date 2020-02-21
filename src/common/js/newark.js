@@ -303,69 +303,54 @@ class Newark extends RetailerInterface {
                                             // TODO: make this work for all languages
                                             // ignore 'has a pack size of ...' errors
                                             // XXX i don't think we actually ever receive these here
+                                            const p = line.part
                                             const regex_pack = new RegExp(
-                                                line.part +
                                                     //english
-                                                    ' has a pack|' +
-                                                    line.part +
+                                                    `(${p} has a pack)` +
                                                     //spanish
-                                                    ' tiene \\d+ artículos|' +
-                                                    line.part +
+                                                    `|(${p} tiene \\d+ artículos)` +
                                                     //german
-                                                    ' hat eine Verpackungsgröße von|' +
-                                                    line.part +
+                                                    `|(${p} hat eine Verpackungsgröße von)` +
                                                     //dutch
-                                                    '  heeft een pakketgrootte van|' +
-                                                    line.part +
+                                                    `|(${p}  heeft een pakketgrootte van)` +
                                                     //french
-                                                    ' est disponible par groupe de|' +
-                                                    line.part +
+                                                    `|(${p} est disponible par groupe de)` +
                                                     //bulgarian
-                                                    ' има количество на опаковката от|'
-                                                    line.part +
+                                                    `|(${p} има количество на опаковката от)` +
                                                     //czech
-                                                    ' obsahuje v balení'
+                                                    `|(${p} obsahuje v balení)` +
+                                                    //danish
+                                                    `|(${p} har en pakkestørrelse på)`
                                             )
                                             const result_pack = regex_pack.exec(
                                                 form_errors.innerHTML
                                             )
                                             // ignore 'needs to be order in multiples ...' errors
                                             const regex_multiples = new RegExp(
-                                                line.part +
-                                                    //english
-                                                    ' can only be ordered to a minimum|' +
-                                                    line.part +
-                                                    ' needs to be ordered in multiples of|' +
-                                                    line.part +
+                                                //english
+                                                `(${p} can only be ordered to a minimum)` +
+                                                    `|(${p} needs to be ordered in multiples of)` +
                                                     //spanish
-                                                    ' solo se puede pedir en cantidades mínimas de|' +
-                                                    line.part +
-                                                    ' tiene que pedirse en múltiplos de|' +
-                                                    line.part +
+                                                    `|(${p} solo se puede pedir en cantidades mínimas de)` +
+                                                    `|(${p} tiene que pedirse en múltiplos de)` +
                                                     //german
-                                                    ' muss die Mindestmenge von|' +
-                                                    line.part +
-                                                    ' muss in Staffelungen von|' +
-                                                    line.part +
+                                                    `|(${p} muss die Mindestmenge von)` +
+                                                    `|(${p} muss in Staffelungen von)` +
                                                     //dutch
-                                                    ' moet worden besteld in veelvouden van|' +
-                                                    line.part +
-                                                    ' alleen worden besteld met een minimaal aantal van|' +
-                                                    line.part +
+                                                    `|(${p} moet worden besteld in veelvouden van)` +
+                                                    `|(${p} alleen worden besteld met een minimaal aantal van)` +
                                                     //french
-                                                    ' doit être commandé par multiple de' +
-                                                    line.part +
-                                                    ' peut être commandé uniquement avec une quantité minimale|' +
-                                                    line.part +
+                                                    `|(${p} doit être commandé par multiple de)` +
+                                                    `|(${p} peut être commandé uniquement avec une quantité minimale)` +
                                                     //bulgarian
-                                                    ' трябва да се поръчва в множество от|' +
-                                                    line.part +
-                                                    ' може да се поръчва само при минимално количество от|' +
-                                                    line.part +
+                                                    `|(${p} трябва да се поръчва в множество от)` +
+                                                    `|(${p} може да се поръчва само при минимално количество от)` +
                                                     //czech
-                                                    ' je nutné objednat|' +
-                                                    line.part +
-                                                    ' lze objednat pouze'
+                                                    `|(${p} je nutné objednat)` +
+                                                    `|(${p} lze objednat pouze)` +
+                                                    //danish
+                                                    `|(Minimumsantallet ved bestilling af produkt ${p})` +
+                                                    `|(${p} skal bestilles i antal deleligt med)`
                                             )
                                             const result_multiples = regex_multiples.exec(
                                                 form_errors.innerHTML
