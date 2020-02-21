@@ -324,7 +324,9 @@ class Newark extends RetailerInterface {
                                                     //estonian
                                                     `|(${p} pakend sisaldab)` +
                                                     //finish
-                                                    `|(${p} pakkauskoko on)`
+                                                    `|(${p} pakkauskoko on)` +
+                                                    //hungarian
+                                                    `|(${p} termék csomagmérete)`
                                             )
                                             const result_pack = regex_pack.exec(
                                                 form_errors.innerHTML
@@ -360,7 +362,10 @@ class Newark extends RetailerInterface {
                                                     `|(${p} minimaalne tellitav kogus on)` +
                                                     //finish
                                                     `|(${p} vähimmäistilausmäärä on)` +
-                                                    `|(${p} on tilattava)`
+                                                    `|(${p} on tilattava)` +
+                                                    //hungarian
+                                                    `|(${p} esetén a megrendelt mennyiség csak)` +
+                                                    `|(${p} termék csak)`
                                             )
                                             const result_multiples = regex_multiples.exec(
                                                 form_errors.innerHTML
