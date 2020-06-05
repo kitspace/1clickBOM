@@ -85,15 +85,15 @@ class Mouser extends RetailerInterface {
                 '&' +
                 encodeURIComponent(`ListItems[${i}].PartNumber`) +
                 '=' +
-                line.part +
+                encodeURIComponent(line.part) +
                 '&' +
                 encodeURIComponent(`ListItems[${i}].CustomerPartNumber`) +
                 '=' +
-                line.reference +
+                encodeURIComponent(line.reference) +
                 '&' +
                 encodeURIComponent(`ListItems[${i}].Quantity`) +
                 '=' +
-                line.quantity
+                encodeURIComponent(line.quantity)
         }
         params += '&ProjectSelected=ORDER&EzBuyController.AddtoOrder='
         const url = `${this.protocol}${this.site}${this.addline}`
@@ -120,7 +120,7 @@ class Mouser extends RetailerInterface {
                     return callback(result)
                 }
             },
-            function() {
+            function () {
                 if (callback != null) {
                     return callback({success: false, fails: lines})
                 }
