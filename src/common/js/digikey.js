@@ -78,6 +78,8 @@ class Digikey extends RetailerInterface {
             const _30_lines = lines.slice(i * 30, i * 30 + 30)
             this._add_30_lines(_30_lines)
         }
+        // we are faking success because we can't get a response from the digikey tab
+        // it seems to be very reliable though
         setTimeout(() => callback({success: true, fails: []}), 1000)
     }
 
