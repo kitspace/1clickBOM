@@ -74,6 +74,14 @@ class Digikey extends RetailerInterface {
     }
 
     _add_lines(lines, callback) {
+        for (let i = 0; i < lines.length / 30; i++) {
+            const _30_lines = lines.slice(i * 30, i * 30 + 30)
+            this._add_30_lines(_30_lines)
+        }
+        setTimeout(() => callback({success: true, fails: []}), 1000)
+    }
+
+    _add_30_lines(lines) {
         const url = `https${this.site}${this.addline}`
         let params = ''
         lines.forEach((line, i) => {
@@ -84,7 +92,6 @@ class Digikey extends RetailerInterface {
                 `&cref${i}=${encodeURIComponent(line.reference.slice(0, 48))}`
         })
         const tab = browser.tabsCreate(url + params)
-        setTimeout(() => callback({success: true, fails: []}), 1000)
     }
 }
 
