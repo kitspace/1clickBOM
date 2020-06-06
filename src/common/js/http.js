@@ -111,10 +111,10 @@ function getLocation(callback) {
         const code = countries_data[_]
         used_country_codes.push(code)
     }
-    const url = 'https://freegeoip.kitnic.it'
+    const url = 'https://freegeoip.kitspace.org'
     return get(
         url,
-        {timeout: 5000},
+        {timeout: 30000},
         responseText => {
             const response = JSON.parse(responseText)
             let code = response.country_code
