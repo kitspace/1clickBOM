@@ -24,7 +24,10 @@ const rateLimit = require('./promise-rate-limit')
 
 const accepted_codes = [200, 204004]
 
-const _add_line = rateLimit(60, 1000, (line, doc) => {
+const _add_line = rateLimit(1, 750, async line => {
+    const doc = await http.promiseGet(
+        'https://lcsc.com/pre_search/link?type=lcsc&&value=' + line.part
+    )
     const button = doc.querySelector('.btn-tocart')
     if (button == null) {
         return {success: false}
@@ -97,16 +100,10 @@ class LCSC extends RetailerInterface {
     addLines(lines, callback) {
         return Promise.all(
             lines.map(line =>
-                http
-                    .promiseGet(
-                        'https://lcsc.com/pre_search/link?type=lcsc&&value=' +
-                            line.part
-                    )
-                    .then(_add_line.bind(null, line))
-                    .catch(err => {
-                        console.error(err)
-                        return {success: false}
-                    })
+                _add_line(line).catch(err => {
+                    console.error(err)
+                    return {success: false}
+                })
             )
         ).then(rs => {
             const result = {success: true, fails: []}
