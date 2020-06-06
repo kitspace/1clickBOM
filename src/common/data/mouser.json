@@ -62,7 +62,7 @@
     "VN":"://vn.mouser.com",
     "ZA":"://za.mouser.com"},
 
-"carts": "/cart",
+"carts": "/cart/",
 "addlines": "/cart/ezbuy",
 "addline_params" : "__EVENTTARGET=&__EVENTARGUMENT=&__VIEWSTATE=",
 
