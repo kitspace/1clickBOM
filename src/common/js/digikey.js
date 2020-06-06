@@ -79,8 +79,8 @@ class Digikey extends RetailerInterface {
         lines.forEach((line, i) => {
             params +=
                 (i === 0 ? '?' : '&') +
-                `part${i}=${line.part}` +
-                `&qty${i}=${line.quantity}` +
+                `part${i}=${encodeURIComponent(line.part)}` +
+                `&qty${i}=${encodeURIComponent(line.quantity)}` +
                 `&cref${i}=${encodeURIComponent(line.reference.slice(0, 48))}`
         })
         const tab = browser.tabsCreate(url + params)
