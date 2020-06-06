@@ -39,6 +39,9 @@ const rsOnline = {
             return
         }
 
+        const [merged, warnings] = this.mergeSameSkus(lines)
+        lines = merged
+
         const add = (lines, callback) => {
             return this._get_adding_viewstate((viewstate, form_id) => {
                 return this._add_lines(lines, viewstate, form_id, callback)
@@ -46,6 +49,7 @@ const rsOnline = {
         }
 
         const end = result => {
+            result.warnings = (result.warnings || []).concat(warnings)
             callback(result, this, lines)
             this.refreshCartTabs()
             this.refreshSiteTabs()

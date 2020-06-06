@@ -98,6 +98,15 @@ class LCSC extends RetailerInterface {
     }
 
     addLines(lines, callback) {
+        if (lines.length === 0) {
+            const result = {success: true, fails: []}
+            if (callback != null) {
+                callback(result, this, lines)
+            }
+            return Promise.resolve(result)
+        }
+        const [merged, warnings] = this.mergeSameSkus(lines)
+        lines = merged
         return Promise.all(
             lines.map(line =>
                 _add_line(line).catch(err => {
@@ -114,6 +123,7 @@ class LCSC extends RetailerInterface {
                 }
             })
             this.refreshSiteTabs()
+            result.warnings = (result.warnings || []).concat(warnings)
             if (callback != null) {
                 callback(result, this, lines)
             }

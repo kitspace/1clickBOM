@@ -105,9 +105,12 @@ class Newark extends RetailerInterface {
             callback({success: true, fails: []})
             return
         }
+        const [merged, warnings] = this.mergeSameSkus(lines)
+        lines = merged
         return this._add_lines(lines, result => {
             this.refreshCartTabs()
             this.refreshSiteTabs()
+            result.warnings = (result.warnings || []).concat(warnings)
             return callback(result, this, lines)
         })
     }

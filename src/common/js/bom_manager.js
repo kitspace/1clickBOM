@@ -293,20 +293,15 @@ const bom_manager = {
             badge.setDecaying('OK', '#00CF0F')
         }
         if (result.warnings != null) {
-            var title
-            var priority
-            return result.warnings.map(
-                warning => (
-                    (title = warning),
-                    browser.notificationsCreate({
-                        type: 'basic',
-                        title,
-                        message: '',
-                        iconUrl: '/images/warning.png'
-                    }),
-                    badge.setDecaying('Warn', '#FF8A00', (priority = 1))
-                )
-            )
+            result.warnings.forEach(warning => {
+                browser.notificationsCreate({
+                    type: 'basic',
+                    title: warning.title || title,
+                    message: warning.message || warning,
+                    iconUrl: '/images/warning.png'
+                })
+                badge.setDecaying('Warn', '#FF8A00', 1)
+            })
         }
     },
 

@@ -40,11 +40,12 @@ class Mouser extends RetailerInterface {
     }
     addLines(lines, callback) {
         if (lines.length === 0) {
-            callback({success: true, fails: []})
+            callback({success: true, fails: [], warnings})
             return
         }
+        const [merged, warnings] = this.mergeSameSkus(lines)
         let count = 0
-        const big_result = {success: true, fails: []}
+        const big_result = {success: true, fails: [], warnings}
         return this._get_token(token => {
             return this._clear_errors(token, async () => {
                 const token = await this._get_adding_token()
@@ -52,8 +53,8 @@ class Mouser extends RetailerInterface {
                     return callback({success: false, fails: lines})
                 }
                 const result = []
-                for (let i = 0; i < lines.length; i += 99) {
-                    const _99_lines = lines.slice(i, i + 99)
+                for (let i = 0; i < merged.length; i += 99) {
+                    const _99_lines = merged.slice(i, i + 99)
                     count += 1
                     result.push(
                         this._add_lines(_99_lines, token, result => {

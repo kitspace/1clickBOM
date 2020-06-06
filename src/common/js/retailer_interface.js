@@ -94,6 +94,36 @@ class RetailerInterface {
         }
     }
 
+    mergeSameSkus(lines) {
+        const merged = []
+        const warnMerged = []
+        for (const line of lines) {
+            const existing = merged.findIndex(l => l.part === line.part)
+            if (existing != -1) {
+                merged[existing].quantity += line.quantity
+                merged[existing].reference += ', ' + line.reference
+                if (!warnMerged.includes(line.part)) {
+                    warnMerged.push(line.part)
+                }
+            } else {
+                merged.push(line)
+            }
+        }
+        const warnings = []
+        if (merged.length < lines.length) {
+            const s = merged.length > 1 ? 's' : ''
+            warnings.push({
+                title: `Multiple lines have same ${this.name} part`,
+                message:
+                    `Quanties and references are merged but expect ${merged.length} line${s} added to cart, not ${lines.length}.` +
+                    ` Part${
+                        warnMerged.length > 1 ? 's' : ''
+                    } with duplicate lines: ${warnMerged}`
+            })
+        }
+        return [merged, warnings]
+    }
+
     refreshCartTabs() {
         //we reload any tabs with the cart URL but the path is case insensitive
         //so we use a regex. we update the matching tabs to the cart URL instead

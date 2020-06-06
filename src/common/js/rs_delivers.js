@@ -69,7 +69,10 @@ const rsDelivers = {
             callback({success: true, fails: []})
             return
         }
+        const [merged, warnings] = this.mergeSameSkus(lines)
+        lines = merged
         return this._add_lines(lines, 0, {success: true, fails: []}, result => {
+            result.warnings = (result.warnings || []).concat(warnings)
             callback(result, this, lines)
             this.refreshCartTabs()
             return this.refreshSiteTabs()
