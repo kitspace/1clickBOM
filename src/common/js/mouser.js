@@ -46,30 +46,32 @@ class Mouser extends RetailerInterface {
         let count = 0
         const big_result = {success: true, fails: []}
         return this._get_token(token => {
-            return this._clear_errors(token, () => {
-                return this._get_adding_token(token => {
-                    const result = []
-                    for (let i = 0; i < lines.length; i += 99) {
-                        const _99_lines = lines.slice(i, i + 99)
-                        count += 1
-                        result.push(
-                            this._add_lines(_99_lines, token, result => {
-                                if (big_result.success) {
-                                    big_result.success = result.success
-                                }
-                                big_result.fails = big_result.fails.concat(
-                                    result.fails
-                                )
-                                count -= 1
-                                if (count <= 0) {
-                                    callback(big_result, this, lines)
-                                    return this.refreshCartTabs()
-                                }
-                            })
-                        )
-                    }
-                    return result
-                })
+            return this._clear_errors(token, async () => {
+                const token = await this._get_adding_token()
+                if (token == null) {
+                    return callback({success: false, fails: lines})
+                }
+                const result = []
+                for (let i = 0; i < lines.length; i += 99) {
+                    const _99_lines = lines.slice(i, i + 99)
+                    count += 1
+                    result.push(
+                        this._add_lines(_99_lines, token, result => {
+                            if (big_result.success) {
+                                big_result.success = result.success
+                            }
+                            big_result.fails = big_result.fails.concat(
+                                result.fails
+                            )
+                            count -= 1
+                            if (count <= 0) {
+                                callback(big_result, this, lines)
+                                return this.refreshCartTabs()
+                            }
+                        })
+                    )
+                }
+                return result
             })
         })
     }
@@ -120,7 +122,7 @@ class Mouser extends RetailerInterface {
                     return callback(result)
                 }
             },
-            function () {
+            function() {
                 if (callback != null) {
                     return callback({success: false, fails: lines})
                 }
@@ -186,23 +188,16 @@ class Mouser extends RetailerInterface {
         )
     }
     _get_adding_token(callback) {
-        //we get the quick-add form, extend it to 99 lines (the max) and get
-        //the __RequestVerificationToken from the response
-        const url = `${this.protocol}${this.site}${this.addline}`
-        return http.get(url, {}, responseText => {
-            let doc = browser.parseDOM(responseText)
-            let params = '__RequestVerificationToken='
-            params += doc.querySelector(
-                'input[name=__RequestVerificationToken]'
-            ).value
-            params += '&NumRows=94'
-            return http.post(url, params, {}, responseText => {
-                doc = browser.parseDOM(responseText)
-                const token = doc.querySelector(
-                    'input[name=__RequestVerificationToken]'
-                ).value
-                if (callback != null) {
-                    return callback(token)
+        const url = `${this.protocol}${this.site}/price-availability/`
+        return new Promise((resolve, reject) => {
+            http.get(url, {}, responseText => {
+                const match = responseText.match(
+                    /name="__RequestVerificationToken" type="hidden" value="(.*?)"/
+                )
+                if (match != null && match.length >= 2) {
+                    return resolve(match[1])
+                } else {
+                    resolve(null)
                 }
             })
         })
