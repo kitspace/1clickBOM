@@ -65,7 +65,6 @@ Check the [roadmap](#roadmap) for more details on planned features.
 1. Open the `.csv` in a spreadsheet program (LibreOffice, Excel). Select a semi-colon seperator when importing.
 1. Adjust the description column to be more informative, e.g. "10uf 0603 X7R" for a capcitor or "1k 0805" for a resistor or the MPN for ICs and transistors. The description will be used for auto-completing.
 1. Select everything in your spreadsheet program, copy and paste into the extension.
-1. Press "complete" in the extension, wait till it's done and then press copy.
 1. Open a new spreadsheet and paste into it. Save it as tab-seperated values, with a `.tsv` extension and UTF-8 encoding.
 1. Check over all the part numbers and make sure they are correct. Put them into your shopping cart using the extension to confirm they have the right minimum order quantity etc.
 
@@ -74,15 +73,13 @@ Check the [roadmap](#roadmap) for more details on planned features.
 ![][kicad_bom_export.png]
 
 1. Download the Python files from the [output_scripts/kicad][output_scripts/kicad] directory. Put them all together into a directory where you want to keep them.
-2. In Eeschema, the schematic tool, select `Tools -> Generate Bill of Materials` then `Add Plugin` and then `Generate` Select:
+1. In Eeschema, the schematic tool, select `Tools -> Generate Bill of Materials` then `Add Plugin` and then `Generate` Select:
     - 1-click-bom_description.py to try and extract a description for [auto-complete](#completion)
     - 1-click-bom_fields.py if you have fields in your symbols that 1-click BOM will understand (see [below](#field-matching)).
-3. Open the resulting file in a spreadsheet program or text editor. Reduce the descriptions down to the bare minimum if you want to use auto-completing. Copy and paste it into the extension.
-4. Try auto-completing in the extension if you wish, check all the values afterwards.
-5. To sync any changes back into your schematic you can use [KiField](https://pypi.python.org/pypi/kifield).
+1. To sync any changes back into your schematic you can use [KiField](https://pypi.python.org/pypi/kifield).
 
 
-#### All CAD Programs
+#### Any CAD Program
 
 You can copy and paste into the extension from a text editor or spread sheet
 program (LibreOffice, Excel). You must have a column for references, one for the
@@ -93,7 +90,7 @@ multiple possible manufacturer part numbers per schematic reference.
 When saving files from your external editor or spreadsheet save them as
 tab-seperated values with a `.tsv` extension with UTF-8 encoding.
 
-Here is a small example which is well suited for [auto-completing](#completion):
+Here is a small example:
 
 | References | Qty | Description   | Part Number |
 |------------|-----|---------------|-------------|
@@ -168,16 +165,16 @@ room][kitspace chat].
 
 ## Roadmap ##
 
-* 1.7
+* 1.8
     * Ability to add components to BOM from distributor site
     * Make requests cancelable
     * Improve user interface
 
-* 1.8
+* 1.9
     * Add distributor preference ranking
     * Add function to reduce BOM (and add to cart?) according to distributor preference
 
-* 1.9
+* 1.10
     * Additional distributor support
         * AVNet
         * Adafruit
