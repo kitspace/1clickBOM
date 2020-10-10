@@ -22,17 +22,34 @@ const {browser} = require('./browser')
 const http = require('./http')
 const rateLimit = require('./promise-rate-limit')
 
+const rateLimitedFetch = rateLimit(1, 750, fetch)
+
 const accepted_codes = [200, 204004]
 
-const _get_token = rateLimit(1, 750, async () => {
-    const html = await fetch('https://lcsc.com/cart').then(r => r.text())
+function getHeaders(token) {
+    return {
+        accept: 'application/json, text/javascript, */*; q=0.01',
+        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        isajax: 'true',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-site': 'same-origin',
+        'x-csrf-token': token,
+        'x-requested-with': 'XMLHttpRequest'
+    }
+}
+
+async function _get_token() {
+    const html = await rateLimitedFetch('https://lcsc.com/cart').then(r =>
+        r.text()
+    )
     const m = html.match(/'X-CSRF-TOKEN': '(.*?)'/)
     if (m != null) {
         return m[1]
     }
-})
+}
 
-const _add_line = rateLimit(1, 750, async line => {
+async function _add_line(line) {
     const doc = await http.promiseGet(
         'https://lcsc.com/pre_search/link?type=lcsc&&value=' + line.part
     )
@@ -45,23 +62,12 @@ const _add_line = rateLimit(1, 750, async line => {
     let quantity = line.quantity
     const params = `product_id=${product_id}&quantity=${quantity}&tag=${tag}`
     const token = await _get_token()
-    return fetch('https://lcsc.com/cart/add', {
-        headers: {
-            accept: 'application/json, text/javascript, */*; q=0.01',
-            'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
-            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            isajax: 'true',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-origin',
-            'x-csrf-token': token,
-            'x-requested-with': 'XMLHttpRequest'
-        },
+    return rateLimitedFetch('https://lcsc.com/cart/add', {
+        headers: getHeaders(token),
         referrer: 'https://lcsc.com/cart',
         referrerPolicy: 'no-referrer-when-downgrade',
         body: params,
         method: 'POST',
-        mode: 'cors',
         credentials: 'include'
     })
         .then(r => r.json())
@@ -69,25 +75,12 @@ const _add_line = rateLimit(1, 750, async line => {
             if (r.code === 400001) {
                 quantity = Math.ceil(quantity / r.step) * r.step
                 const params = `product_id=${product_id}&quantity=${quantity}&tag=${tag}`
-                return fetch('https://lcsc.com/cart/add', {
-                    headers: {
-                        accept:
-                            'application/json, text/javascript, */*; q=0.01',
-                        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
-                        'content-type':
-                            'application/x-www-form-urlencoded; charset=UTF-8',
-                        isajax: 'true',
-                        'sec-fetch-dest': 'empty',
-                        'sec-fetch-mode': 'cors',
-                        'sec-fetch-site': 'same-origin',
-                        'x-csrf-token': token,
-                        'x-requested-with': 'XMLHttpRequest'
-                    },
+                return rateLimitedFetch('https://lcsc.com/cart/add', {
+                    headers: getHeaders(token),
                     referrer: 'https://lcsc.com/cart',
                     referrerPolicy: 'no-referrer-when-downgrade',
                     body: params,
                     method: 'POST',
-                    mode: 'cors',
                     credentials: 'include'
                 }).then(r => r.json())
             }
@@ -99,7 +92,7 @@ const _add_line = rateLimit(1, 750, async line => {
             }
             return {success: false}
         })
-})
+}
 
 class LCSC extends RetailerInterface {
     constructor(country_code, settings, callback) {
@@ -109,7 +102,7 @@ class LCSC extends RetailerInterface {
     clearCart(callback) {
         return _get_token()
             .then(token =>
-                fetch('https://lcsc.com/carts')
+                rateLimitedFetch('https://lcsc.com/carts')
                     .then(r => r.json())
                     .then(cart => {
                         if (cart.data.length === 0) {
@@ -123,23 +116,17 @@ class LCSC extends RetailerInterface {
                                     encodeURIComponent(x.product_id)
                             )
                             .join('&')
-                        return fetch('https://lcsc.com/cart/delete', {
-                            method: 'POST',
-                            headers: {
-                                accept:
-                                    'application/json, text/javascript, */*; q=0.01',
-                                'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
-                                'content-type':
-                                    'application/x-www-form-urlencoded; charset=UTF-8',
-                                isajax: 'true',
-                                'sec-fetch-dest': 'empty',
-                                'sec-fetch-mode': 'cors',
-                                'sec-fetch-site': 'same-origin',
-                                'x-csrf-token': token,
-                                'x-requested-with': 'XMLHttpRequest'
-                            },
-                            body: params
-                        }).then(r => r.json())
+                        return rateLimitedFetch(
+                            'https://lcsc.com/cart/delete',
+                            {
+                                method: 'POST',
+                                headers: getHeaders(token),
+                                body: params,
+                                referrer: 'https://lcsc.com/cart',
+                                referrerPolicy: 'no-referrer-when-downgrade',
+                                credentials: 'include'
+                            }
+                        ).then(r => r.json())
                     })
             )
             .then(r => {
