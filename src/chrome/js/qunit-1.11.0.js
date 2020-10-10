@@ -343,7 +343,7 @@
                     ')</b>'
 
                 addEvent(b, 'click', function() {
-                    let next = b.parentNode.lastChild,
+                    const next = b.parentNode.lastChild,
                         collapsed = hasClass(next, 'qunit-collapsed')
                     ;(collapsed
                         ? removeClass
@@ -1007,7 +1007,7 @@
                 return 'null'
             }
 
-            let match = toString.call(obj).match(/^\[object\s(.*)\]$/),
+            const match = toString.call(obj).match(/^\[object\s(.*)\]$/),
                 type = (match && match[1]) || ''
 
             switch (type) {
@@ -1365,7 +1365,7 @@
             // * Use "click" instead of "change"
             // * Fallback from event.target to event.srcElement
             addEvents(urlConfigCheckboxes, 'click', function(event) {
-                let params = {},
+                const params = {},
                     target = event.target || event.srcElement
                 params[target.name] = target.checked ? true : undefined
                 window.location = QUnit.url(params)
@@ -1377,7 +1377,7 @@
                 moduleFilter.setAttribute('id', 'qunit-modulefilter-container')
                 moduleFilter.innerHTML = moduleFilterHtml
                 addEvent(moduleFilter.lastChild, 'change', function() {
-                    let selectBox = moduleFilter.getElementsByTagName(
+                    const selectBox = moduleFilter.getElementsByTagName(
                             'select'
                         )[0],
                         selectedModule = decodeURIComponent(
@@ -2060,7 +2060,7 @@
             return o + ''
         }
         function join(pre, arr, post) {
-            let s = jsDump.separator(),
+            const s = jsDump.separator(),
                 base = jsDump.indent(),
                 inner = jsDump.indent(1)
             if (arr.join) {

@@ -1499,7 +1499,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                                     if (
                                         info.fileName === firstFileName &&
                                         firstIndex <= info.line &&
-                                            info.line <= lastIndex
+                                        info.line <= lastIndex
                                     ) {
                                         return true
                                     }
@@ -3961,7 +3961,7 @@ const clearTimeout = require('./browser').browser.clearTimeout
                     }
 
                     Queue.prototype.shift = function() {
-                        let front = this._front,
+                        const front = this._front,
                             ret = this[front]
 
                         this[front] = undefined
