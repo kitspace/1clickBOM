@@ -298,7 +298,7 @@ class Newark extends RetailerInterface {
                                 const fails = []
                                 if (!success) {
                                     for (let j = 0; j < lines.length; j++) {
-                                        var line = lines[j]
+                                        const line = lines[j]
                                         const regex = new RegExp(line.part, 'g')
                                         const result = regex.test(
                                             form_errors.innerHTML

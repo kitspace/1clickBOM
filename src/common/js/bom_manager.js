@@ -254,7 +254,7 @@ const bom_manager = {
 
     notifyFillCart(lines, retailer, result) {
         if (!result.success) {
-            var priority
+            let priority
             const {fails} = result
             const failed_lines = []
             if (fails.length === 0) {
