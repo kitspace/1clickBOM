@@ -66,24 +66,26 @@ class LCSC extends RetailerInterface {
         return fetch('https://lcsc.com/carts')
             .then(r => r.json())
             .then(cart => {
-                const params = cart.data
-                    .map(
-                        x =>
-                            encodeURIComponent('product_id[]') +
-                            '=' +
-                            encodeURIComponent(x.product_id)
-                    )
-                    .join('&')
-                return fetch('https://lcsc.com/cart/delete', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type':
-                            'application/x-www-form-urlencoded;charset=UTF-8'
-                    },
-                    body: params
-                })
+                if (cart.data.length > 0) {
+                    const params = cart.data
+                        .map(
+                            x =>
+                                encodeURIComponent('product_id[]') +
+                                '=' +
+                                encodeURIComponent(x.product_id)
+                        )
+                        .join('&')
+                    return fetch('https://lcsc.com/cart/delete', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type':
+                                'application/x-www-form-urlencoded;charset=UTF-8'
+                        },
+                        body: params
+                    }).then(r => r.json())
+                }
+                return {code: 200}
             })
-            .then(r => r.json())
             .then(r => {
                 const ret = {success: false}
                 if (r.code === 200) {
