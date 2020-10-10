@@ -24,6 +24,14 @@ const rateLimit = require('./promise-rate-limit')
 
 const accepted_codes = [200, 204004]
 
+const _get_token = rateLimit(1, 750, async () => {
+    const html = await fetch('https://lcsc.com/cart').then(r => r.text())
+    const m = html.match(/'X-CSRF-TOKEN': '(.*?)'/)
+    if (m != null) {
+        return m[1]
+    }
+})
+
 const _add_line = rateLimit(1, 750, async line => {
     const doc = await http.promiseGet(
         'https://lcsc.com/pre_search/link?type=lcsc&&value=' + line.part
@@ -36,16 +44,52 @@ const _add_line = rateLimit(1, 750, async line => {
     const product_id = button.getAttribute('data-productid')
     let quantity = line.quantity
     const params = `product_id=${product_id}&quantity=${quantity}&tag=${tag}`
-    return http
-        .promisePost('https://lcsc.com/cart/add', params)
+    const token = await _get_token()
+    return fetch('https://lcsc.com/cart/add', {
+        headers: {
+            accept: 'application/json, text/javascript, */*; q=0.01',
+            'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            isajax: 'true',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-origin',
+            'x-csrf-token': token,
+            'x-requested-with': 'XMLHttpRequest'
+        },
+        referrer: 'https://lcsc.com/cart',
+        referrerPolicy: 'no-referrer-when-downgrade',
+        body: params,
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'include'
+    })
+        .then(r => r.json())
         .then(r => {
-            r = JSON.parse(r)
             if (r.code === 400001) {
                 quantity = Math.ceil(quantity / r.step) * r.step
                 const params = `product_id=${product_id}&quantity=${quantity}&tag=${tag}`
-                return http
-                    .promisePost('https://lcsc.com/cart/add', params)
-                    .then(r => JSON.parse(r))
+                return fetch('https://lcsc.com/cart/add', {
+                    headers: {
+                        accept:
+                            'application/json, text/javascript, */*; q=0.01',
+                        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+                        'content-type':
+                            'application/x-www-form-urlencoded; charset=UTF-8',
+                        isajax: 'true',
+                        'sec-fetch-dest': 'empty',
+                        'sec-fetch-mode': 'cors',
+                        'sec-fetch-site': 'same-origin',
+                        'x-csrf-token': token,
+                        'x-requested-with': 'XMLHttpRequest'
+                    },
+                    referrer: 'https://lcsc.com/cart',
+                    referrerPolicy: 'no-referrer-when-downgrade',
+                    body: params,
+                    method: 'POST',
+                    mode: 'cors',
+                    credentials: 'include'
+                }).then(r => r.json())
             }
             return r
         })
@@ -63,29 +107,41 @@ class LCSC extends RetailerInterface {
     }
 
     clearCart(callback) {
-        return fetch('https://lcsc.com/carts')
-            .then(r => r.json())
-            .then(cart => {
-                if (cart.data.length > 0) {
-                    const params = cart.data
-                        .map(
-                            x =>
-                                encodeURIComponent('product_id[]') +
-                                '=' +
-                                encodeURIComponent(x.product_id)
-                        )
-                        .join('&')
-                    return fetch('https://lcsc.com/cart/delete', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type':
-                                'application/x-www-form-urlencoded;charset=UTF-8'
-                        },
-                        body: params
-                    }).then(r => r.json())
-                }
-                return {code: 200}
-            })
+        return _get_token()
+            .then(token =>
+                fetch('https://lcsc.com/carts')
+                    .then(r => r.json())
+                    .then(cart => {
+                        if (cart.data.length === 0) {
+                            return {code: 200}
+                        }
+                        const params = cart.data
+                            .map(
+                                x =>
+                                    encodeURIComponent('product_id[]') +
+                                    '=' +
+                                    encodeURIComponent(x.product_id)
+                            )
+                            .join('&')
+                        return fetch('https://lcsc.com/cart/delete', {
+                            method: 'POST',
+                            headers: {
+                                accept:
+                                    'application/json, text/javascript, */*; q=0.01',
+                                'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+                                'content-type':
+                                    'application/x-www-form-urlencoded; charset=UTF-8',
+                                isajax: 'true',
+                                'sec-fetch-dest': 'empty',
+                                'sec-fetch-mode': 'cors',
+                                'sec-fetch-site': 'same-origin',
+                                'x-csrf-token': token,
+                                'x-requested-with': 'XMLHttpRequest'
+                            },
+                            body: params
+                        }).then(r => r.json())
+                    })
+            )
             .then(r => {
                 const ret = {success: false}
                 if (r.code === 200) {
