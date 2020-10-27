@@ -56,9 +56,9 @@ const rsOnline = {
         }
         return this._clear_invalid().then(() => {
             add(lines, result => {
-                if (!result.success) {
+                if (!result.success && result.fails.length > 0) {
                     //do a second pass with corrected quantities
-                    add(lines, end)
+                    add(result.fails, end)
                 } else {
                     end(result)
                 }
