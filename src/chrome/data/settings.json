@@ -10,5 +10,17 @@
                 ]
             }
         }
+    },
+    "FR": {
+        "Farnell": {
+            "site": {
+                "value": "://fr.farnell.com",
+                "options": [ {"value":"://fr.farnell.com"
+                                , "label":"fr.farnell.com"}
+                           , {"value":"://eproc-fr.farnell.com"
+                                , "label":"eproc-fr.farnell.com"}
+                ]
+            }
+        }
     }
 }
