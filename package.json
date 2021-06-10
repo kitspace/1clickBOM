@@ -2,6 +2,7 @@
   "name": "1-click-BOM",
   "description": "A browser extension to add electronic components to shopping carts.",
   "scripts": {
+    "package": "./configure && ninja package-chrome",
     "build": "./configure && ninja",
     "prettier": "prettier --write src/**/*.js configure",
     "eslintfix": "eslint --fix 'src/**/*.js' configure",
