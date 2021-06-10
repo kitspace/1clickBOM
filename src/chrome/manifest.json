@@ -2,11 +2,17 @@
     "manifest_version": 2,
     "name": "Kitspace 1-click BOM",
     "description": "Quickly fill shopping carts with electronic components.",
+    "homepage_url": "http://1clickBOM.com",
     "version": @version,
-    "homepage_url":"http://1clickBOM.com",
     "permissions": [
-        "tabs", "clipboardRead", "clipboardWrite", "storage", "notifications",
-        "<all_urls>", "cookies", "http://localhost/"
+        "tabs",
+        "clipboardRead",
+        "clipboardWrite",
+        "storage",
+        "notifications",
+        "<all_urls>",
+        "cookies",
+        "http://localhost/"
     ],
     "browser_action": {
         "default_icon": "images/button19.png",
@@ -14,22 +20,27 @@
     },
     "background": {
         "persistent": true,
-        "page":"html/background.html"
+        "page": "html/background.html"
     },
     "options_ui": {
-      "page": "html/options.html",
-      "browser_style": true
+        "page": "html/options.html",
+        "browser_style": true
     },
-    "icons": { "16" :"images/logo16.png"
-             , "19" :"images/button19.png"
-             , "38" :"images/logo38.png"
-             , "48" :"images/logo48.png"
-             },
+    "icons": {
+        "16": "images/logo16.png",
+        "19": "images/button19.png",
+        "38": "images/logo38.png",
+        "48": "images/logo48.png"
+    },
     "content_scripts": [
         {
-          "matches": ["*://kitspace.org/*", "*://*.kitspace.org/*", "*://dev--bom-builder.netlify.com/*"],
-          "js": ["js/kitspace.js"],
-          "run_at": "document_end"
+            "matches": [
+                "*://kitspace.org/*",
+                "*://*.kitspace.org/*",
+                "*://dev--bom-builder.netlify.com/*"
+            ],
+            "js": ["js/kitspace.js"],
+            "run_at": "document_end"
         }
-      ]
+    ]
 }
