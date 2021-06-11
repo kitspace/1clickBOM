@@ -40,8 +40,8 @@
                 "*://kitspace.dev/*",
                 "*://*.kitspace.dev/*",
                 "*://dev--bom-builder.netlify.com/*",
-                "*://kitspace.test:3000/*",
-                "*://*.kitspace.test:3000/*"
+                "*://kitspace.test/*",
+                "*://*.kitspace.test/*"
             ],
             "js": ["js/kitspace.js"],
             "run_at": "document_end"
