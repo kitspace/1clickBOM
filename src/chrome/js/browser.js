@@ -56,7 +56,7 @@ const browser = {
         return chrome.tabs.query({active: true, currentWindow: true}, function(
             tabs
         ) {
-            if (tabs.length >= 1) {
+            if (tabs && tabs.length >= 1) {
                 return callback(tabs[0])
             } else {
                 return callback(null)
