@@ -39,7 +39,6 @@
                 "*://*.kitspace.org/*",
                 "*://kitspace.dev/*",
                 "*://*.kitspace.dev/*",
-                "*://dev--bom-builder.netlify.com/*",
                 "*://kitspace.test/*",
                 "*://*.kitspace.test/*"
             ],
