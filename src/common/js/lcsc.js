@@ -18,76 +18,37 @@
 // the Original Code is Kaspar Emanuel.
 
 const {RetailerInterface} = require('./retailer_interface')
-const {browser} = require('./browser')
-const http = require('./http')
-const rateLimit = require('./promise-rate-limit')
 
-const rateLimitedFetch = rateLimit(1, 750, fetch)
-
-const accepted_codes = [200, 204004]
-
-function getHeaders(token) {
+function getHeaders() {
     return {
-        accept: 'application/json, text/javascript, */*; q=0.01',
-        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
-        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        isajax: 'true',
+        accept: 'application/json, text/plain, */*',
+        'content-type': 'application/json;charset=UTF-8',
         'sec-fetch-dest': 'empty',
-        'sec-fetch-site': 'same-origin',
-        'x-csrf-token': token,
-        'x-requested-with': 'XMLHttpRequest'
-    }
-}
-
-async function _get_token() {
-    const html = await rateLimitedFetch('https://lcsc.com/cart').then(r =>
-        r.text()
-    )
-    const m = html.match(/'X-CSRF-TOKEN': '(.*?)'/)
-    if (m != null) {
-        return m[1]
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-site'
     }
 }
 
 async function _add_line(line) {
-    const doc = await http.promiseGet(
-        'https://lcsc.com/pre_search/link?type=lcsc&&value=' + line.part
-    )
-    const button = doc.querySelector('.btn-tocart')
-    if (button == null) {
-        return {success: false}
-    }
-    const tag = line.reference.slice(0, 20)
-    const product_id = button.getAttribute('data-productid')
     let quantity = line.quantity
-    const params = `product_id=${product_id}&quantity=${quantity}&tag=${tag}`
-    const token = await _get_token()
-    return rateLimitedFetch('https://lcsc.com/cart/add', {
-        headers: getHeaders(token),
-        referrer: 'https://lcsc.com/cart',
-        referrerPolicy: 'no-referrer-when-downgrade',
-        body: params,
+    return fetch('https://wwwapi.lcsc.com/v1/carts/add', {
         method: 'POST',
-        credentials: 'include'
+        credentials: 'include',
+        headers: getHeaders(),
+        referrer: 'https://lcsc.com/cart',
+        referrerPolicy: 'strict-origin-when-cross-origin',
+        body: JSON.stringify({
+            product_code: line.part,
+            quantity: line.quantity,
+            // commas in the tag seem to just get removed by lcsc so we use
+            // a space instead
+            tag: line.reference.replace(/,/g, ' '),
+            link_from: 'https://lcsc.com/cart'
+        })
     })
         .then(r => r.json())
         .then(r => {
-            if (r.code === 400001) {
-                quantity = Math.ceil(quantity / r.step) * r.step
-                const params = `product_id=${product_id}&quantity=${quantity}&tag=${tag}`
-                return rateLimitedFetch('https://lcsc.com/cart/add', {
-                    headers: getHeaders(token),
-                    referrer: 'https://lcsc.com/cart',
-                    referrerPolicy: 'no-referrer-when-downgrade',
-                    body: params,
-                    method: 'POST',
-                    credentials: 'include'
-                }).then(r => r.json())
-            }
-            return r
-        })
-        .then(r => {
-            if (accepted_codes.includes(r.code)) {
+            if (r.error == null) {
                 return {success: true}
             }
             return {success: false}
@@ -99,47 +60,40 @@ class LCSC extends RetailerInterface {
         super('LCSC', country_code, null, settings)
     }
 
-    clearCart(callback) {
-        return _get_token()
-            .then(token =>
-                rateLimitedFetch('https://lcsc.com/carts')
-                    .then(r => r.json())
-                    .then(cart => {
-                        if (cart.data.length === 0) {
-                            return {code: 200}
-                        }
-                        const params = cart.data
-                            .map(
-                                x =>
-                                    encodeURIComponent('product_id[]') +
-                                    '=' +
-                                    encodeURIComponent(x.product_id)
-                            )
-                            .join('&')
-                        return rateLimitedFetch(
-                            'https://lcsc.com/cart/delete',
-                            {
-                                method: 'POST',
-                                headers: getHeaders(token),
-                                body: params,
-                                referrer: 'https://lcsc.com/cart',
-                                referrerPolicy: 'no-referrer-when-downgrade',
-                                credentials: 'include'
-                            }
-                        ).then(r => r.json())
-                    })
-            )
-            .then(r => {
-                const ret = {success: false}
-                if (r.code === 200) {
-                    ret.success = true
+    async clearCart(callback) {
+        try {
+            const cart = await fetch('https://wwwapi.lcsc.com/v1/carts', {
+                headers: getHeaders(),
+                method: 'GET',
+                mode: 'cors',
+                credentials: 'include'
+            }).then(r => r.json())
+
+            const cart_ids = cart.stock.concat(cart.back_order).map(x => x.id)
+            const ret = {success: true}
+            if (cart_ids.length > 0) {
+                const r = await fetch(
+                    'https://wwwapi.lcsc.com/v1/carts/del-cart',
+                    {
+                        headers: getHeaders(),
+                        method: 'POST',
+                        mode: 'cors',
+                        credentials: 'include',
+                        body: JSON.stringify({cart_ids})
+                    }
+                )
+                if (r.status !== 200) {
+                    ret.success = false
                 }
-                this.refreshSiteTabs()
-                if (callback != null) {
-                    callback(ret)
-                }
-                return ret
-            })
+            }
+            this.refreshSiteTabs()
+            if (callback != null) {
+                callback(ret)
+            }
+            return ret
+        } catch (e) {
+            return {success: false}
+        }
     }
 
     addLines(lines, callback) {
@@ -178,3 +132,4 @@ class LCSC extends RetailerInterface {
 }
 
 exports.LCSC = LCSC
+
