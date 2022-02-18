@@ -76,59 +76,83 @@ class Mouser extends RetailerInterface {
             })
         })
     }
-    _add_lines(lines, token, callback) {
-        let params = '__RequestVerificationToken=' + token
-        params += '&NumRows=94'
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i]
-            params +=
-                '&' +
-                encodeURIComponent(`ListItems[${i}].BackgroundColor`) +
-                '=' +
-                '&' +
-                encodeURIComponent(`ListItems[${i}].PartNumber`) +
-                '=' +
-                encodeURIComponent(line.part) +
-                '&' +
-                encodeURIComponent(`ListItems[${i}].CustomerPartNumber`) +
-                '=' +
-                encodeURIComponent(line.reference) +
-                '&' +
-                encodeURIComponent(`ListItems[${i}].Quantity`) +
-                '=' +
-                encodeURIComponent(line.quantity)
+    async _get_cart_guid() {
+        await fetch(`${this.protocol}${this.site}/cart`, {
+            credentials: 'include',
+        })
+        const domain = this.site.replace(/^:\/\/.*?\.mouser/, '.mouser')
+        const cookies = await browser.getCookies({
+            domain,
+            name: 'CARTCOOKIEUUID',
+        })
+        if (cookies[0]) {
+            return cookies[0].value
         }
-        params += '&ProjectSelected=ORDER&EzBuyController.AddtoOrder='
-        const url = `${this.protocol}${this.site}${this.addline}`
-        const result = {success: true, fails: []}
-        return http.post(
-            url,
-            params,
-            {},
-            responseText => {
-                const errors = this._get_errors(responseText)
-                for (let j = 0; j < errors.length; j++) {
-                    const part = errors[j].getAttribute('data-partnumber')
-                    if (part != null) {
-                        for (let k = 0; k < lines.length; k++) {
-                            const line = lines[k]
-                            if (line.part === part.replace(/-/g, '')) {
-                                result.fails.push(line)
-                            }
-                        }
-                        result.success = false
+    }
+    async _add_lines(lines, token, callback) {
+        const cartGuid = await this._get_cart_guid()
+        if (cartGuid == null) {
+            return callback({success: false, fails: lines})
+        }
+        const url = `${this.protocol}${this.site}/api/Cart/AddCartItems?cartGuid=${cartGuid}&source=SearchProductDetail`
+        // this is not great, we used to remove dashes in our mouser part numbers
+        // but mouser API doesn't accept those any more now, if the part doesn't
+        // have dashes. below we do a search and get the mouser part number with dashes
+        // from the page
+        const correctedLines = await Promise.all(
+            lines.map(async line => {
+                if (/-/.test(line.part)) {
+                    return line
+                }
+                const text = await fetch(
+                    `${this.protocol}${this.site}/c/?q=${line.part}`
+                ).then(r => r.text())
+                try {
+                    const doc = new DOMParser().parseFromString(
+                        text,
+                        'text/html'
+                    )
+                    let mouserPart = doc.getElementById(
+                        'spnMouserPartNumFormattedForProdInfo'
+                    )
+                    if (mouserPart == null) {
+                        // it's a search result page, we take the first result
+                        mouserPart = doc.getElementsByClassName(
+                            'mpart-number-lbl'
+                        )[0]
                     }
+                    mouserPart = mouserPart.innerHTML.trim()
+                    if (mouserPart.replace(/-/g, '') !== line.part) {
+                        return {fail: line}
+                    }
+                    return Object.assign({}, line, {part: mouserPart})
+                } catch (e) {
+                    console.warn(e)
+                    return {fail: line}
                 }
-                if (callback != null) {
-                    return callback(result)
-                }
-            },
-            function() {
-                if (callback != null) {
-                    return callback({success: false, fails: lines})
-                }
-            }
+            })
         )
+        const fails = correctedLines.map(line => line.fail).filter(x => x)
+        lines = correctedLines.filter(x => x.fail == null)
+        const body = lines.map(line => ({
+            MouserPartNumber: line.part,
+            Quantity: line.quantity,
+            MouseReelRequest: 'None',
+            CustomerPartNumber: line.reference,
+        }))
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        }).then(r => r.json())
+        if (response.CartHasErrorItem || fails.length > 0) {
+            return callback({success: false, fails})
+        }
+        callback({success: true})
     }
 
     _get_errors(responseText) {
