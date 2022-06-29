@@ -210,18 +210,17 @@ The code is available on [GitHub][7]. To get started you will need:
 - Firefox version 52 or higher
 - [Ninja Build](https://ninja-build.org/)
 - sed
-- npm
+- yarn
 
-The rest of the dependencies can be retrieved via `npm install`.
+The rest of the dependencies can be retrieved via `yarn install`.
 
 ### Build and Test Instructions ###
 
 #### Build
 
-- Get dependencies above and make sure executables are on your path
-- `npm install --global` (or `npm install && export PATH=$PATH:$(pwd)/node_modules/.bin`)
-- `./configure`
-- `ninja chrome`
+- Get dependencies above and make sure executables are on your path then:
+- `yarn install`
+- `yarn build`
 
 #### Load
 
