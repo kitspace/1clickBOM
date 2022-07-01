@@ -30,7 +30,7 @@
         "HU": "://hu.mouser.com",
         "ID": "://www.mouser.co.id",
         "IE": "://www.mouser.ie",
-        "IL": "://il.mouser.com",
+        "IL": "://www.mouser.co.il",
         "IN": "://www.mouser.in",
         "IT": "://www.mouser.it",
         "JP": "://www.mouser.jp",
@@ -58,10 +58,10 @@
         "UY": "://uy.mouser.com",
         "VE": "://ve.mouser.com",
         "VN": "://www.mouser.vn",
-        "ZA": "://za.mouser.com",
-        "Other": "://www.mouser.com"
+        "ZA": "://www.mouser.co.za",
+        "US": "://www.mouser.com",
+        "Other": "://www2.mouser.com"
     },
-
     "carts": "/cart/",
     "addlines": "/cart/ezbuy",
     "addline_params": "__EVENTTARGET=&__EVENTARGUMENT=&__VIEWSTATE=",
