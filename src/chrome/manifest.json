@@ -24,6 +24,7 @@
     },
     "options_ui": {
         "page": "html/options.html",
+        "open_in_tab": true,
         "browser_style": true
     },
     "icons": {
