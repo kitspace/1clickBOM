@@ -19,7 +19,7 @@
 const Promise = require('./bluebird')
 Promise.config({cancellation: true})
 
-const oneClickBOM = require('1-click-bom')
+const oneClickBOM = require('1-click-bom-minimal')
 const {getRetailers, isComplete, field_list} = oneClickBOM
 const retailer_list = getRetailers()
 

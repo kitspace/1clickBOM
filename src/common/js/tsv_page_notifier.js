@@ -17,7 +17,7 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const {parseTSV, writeTSV} = require('1-click-bom')
+const {parseTSV, writeTSV} = require('1-click-bom-minimal')
 
 const http = require('./http')
 const {browser} = require('./browser')

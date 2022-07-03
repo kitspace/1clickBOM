@@ -19,7 +19,7 @@
 const Promise = require('./bluebird')
 Promise.config({cancellation: true})
 
-const oneClickBom = require('1-click-bom')
+const oneClickBom = require('1-click-bom-minimal')
 const retailer_list = oneClickBom.getRetailers()
 
 const http = require('./http')
@@ -130,7 +130,7 @@ const bom_manager = {
     },
 
     addToBOM(text, callback) {
-        const {lines, invalid, warnings} = oneClickBom.parse(text)
+        const {lines, invalid, warnings} = oneClickBom.parseTSV(text)
         if (invalid.length > 0) {
             for (let i = 0; i < invalid.length; i++) {
                 var priority

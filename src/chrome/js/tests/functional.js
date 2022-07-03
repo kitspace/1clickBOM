@@ -26,7 +26,7 @@ const {Newark} = require('./newark')
 const qunit = require('./qunit-1.11.0')
 const octopart = require('./octopart')
 
-const retailer_list = require('1-click-bom').getRetailers()
+const retailer_list = require('1-click-bom-minimal').getRetailers()
 
 const {module} = qunit
 const {asyncTest} = qunit

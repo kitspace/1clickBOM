@@ -17,8 +17,8 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const oneClickBom = require('1-click-bom')
-const retailer_list = require('1-click-bom').getRetailers()
+const oneClickBom = require('1-click-bom-minimal')
+const retailer_list = require('1-click-bom-minimal').getRetailers()
 
 const {bom_manager} = require('./bom_manager')
 const {browser} = require('./browser')
