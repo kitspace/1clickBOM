@@ -19,8 +19,7 @@
 
 const {messenger} = require('./messenger')
 const {browser} = require('./browser')
-const oneClickBOM = require('1-click-bom')
-const {getRetailers, isComplete, hasSKUs} = oneClickBOM
+const {getRetailers, isComplete, hasSKUs} = require('1-click-bom-minimal')
 const retailer_list = getRetailers()
 
 const element_Bom = document.querySelector('#bom')

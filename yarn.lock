@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"1-click-bom-minimal@https://github.com/kitspace/npm-1-click-bom-minimal":
+  version "1.3.1"
+  resolved "https://github.com/kitspace/npm-1-click-bom-minimal#b174fec7a21fe1d6c9021ded42e85640f2c2244f"
+
 "1-click-bom@https://github.com/kitspace/npm-1-click-bom":
   version "1.3.1"
   resolved "https://github.com/kitspace/npm-1-click-bom#d654935edf348015bc726d7e66dd167757060cbe"

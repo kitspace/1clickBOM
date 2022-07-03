@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "1-click-bom": "https://github.com/kitspace/npm-1-click-bom",
+    "1-click-bom-minimal": "https://github.com/kitspace/npm-1-click-bom-minimal",
     "electro-grammar": "^1.0.0"
   }
 }
