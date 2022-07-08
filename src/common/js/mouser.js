@@ -20,7 +20,7 @@
 const {RetailerInterface} = require('./retailer_interface')
 const http = require('./http')
 const {browser} = require('./browser')
-const Promise = require('./bluebird')
+const Promise = require('bluebird')
 Promise.config({cancellation: true})
 
 class Mouser extends RetailerInterface {

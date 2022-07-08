@@ -16,7 +16,7 @@
 //
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
-const Promise = require('./bluebird')
+const Promise = require('bluebird')
 const {RetailerInterface} = require('./retailer_interface')
 const {rsOnline} = require('./rs_online')
 const {rsDelivers} = require('./rs_delivers')

@@ -18,7 +18,7 @@
 // the Original Code is Kaspar Emanuel.
 let n
 let time_period_ms
-const Promise = require('./bluebird')
+const Promise = require('bluebird')
 Promise.config({cancellation: true})
 
 const rateLimit = require('./promise-rate-limit')

@@ -16,7 +16,7 @@
 //
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
-const Promise = require('./bluebird')
+const Promise = require('bluebird')
 Promise.config({cancellation: true})
 
 const oneClickBOM = require('1-click-bom-minimal')

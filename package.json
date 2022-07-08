@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "1-click-bom-minimal": "https://github.com/kitspace/npm-1-click-bom-minimal",
+    "bluebird": "^3.7.2",
     "electro-grammar": "^1.0.0"
   }
 }
