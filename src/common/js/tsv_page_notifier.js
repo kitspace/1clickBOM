@@ -17,19 +17,19 @@
 // The Original Developer is the Initial Developer. The Original Developer of
 // the Original Code is Kaspar Emanuel.
 
-const {parseTSV, writeTSV} = require('1-click-bom-minimal')
+const {parseTSV} = require('1-click-bom-minimal')
 
 const http = require('./http')
 const {browser} = require('./browser')
 const {badge} = require('./badge')
 
 exports.tsvPageNotifier = function tsvPageNotifier(sendState, bom_manager) {
+    const re_kitspace_v1 = RegExp('^https://(?:.*\.)?kitspace\.org/boards/.*/.*/.*')
+    const re_kitspace_v2 = RegExp('^https?://(?:.*\.)?kitspace\.(?:org|dev|test:3000)/(.*)/(.*)')
+    const re_kitspace_v2_sub = RegExp('^https?://(?:.*\.)?kitspace\.(?:org|dev|test:3000)/(.*)/(.*)/(.*)')
+    const re_tsv = RegExp("\.tsv$")
     return {
         onDotTSV: false,
-        re: new RegExp(
-            '((.tsv$)|(^https?://.*?.?kitspace.org/boards/)|(https?://127.0.0.1:8080/boards/)|(^https?://kitspace.test:3000)|(^https?://.*?.kitspace.dev/))',
-            'i'
-        ),
         lines: [],
         invalid: [],
         _set_not_dotTSV() {
@@ -43,19 +43,23 @@ exports.tsvPageNotifier = function tsvPageNotifier(sendState, bom_manager) {
             return browser.tabsGetActive(tab => {
                 if (tab != null) {
                     const tab_url = tab.url.split('?')[0]
-                    if (tab_url.match(this.re)) {
-                        if (
-                            /^https?:\/\/.*?\.?kitspace.org\/boards\//.test(
-                                tab.url
-                            ) ||
-                            /^https?:\/\/kitspace.test:3000\//.test(tab.url) ||
-                            /^https?:\/\/.*?\.kitspace.dev\//.test(tab.url)
-                        ) {
+                    const any_matches = re_kitspace_v1.test(tab_url) || re_kitspace_v2.test(tab_url) || re_tsv.test(tab_url)
+                    if (any_matches) {
+                        if (re_kitspace_v1.test(tab_url))
+                        {
                             var url = tab_url + '/1-click-BOM.tsv'
-                        } else if (
-                            /^https?:\/\/127.0.0.1:8080\/boards\//.test(tab.url)
-                        ) {
-                            var url = tab_url + '/1-click-BOM.tsv'
+                        } else if (re_kitspace_v2.test(tab_url)) {
+                            let groups = tab_url.match(re_kitspace_v2)
+                            const user = groups[1]
+                            const repo = groups[2]
+                            let project = "_"
+                            const is_sub_project = re_kitspace_v2_sub.test(tab_url)
+                            if (is_sub_project) {
+                              groups = tab_url.match(re_kitspace_v2_sub)
+                              project = groups[3]
+                            }
+                            const origin = (new URL(tab_url)).origin
+                            var url = `${origin}/${user}/${repo}/${project}/1-click-BOM.tsv`
                         } else if (/^https?:\/\/github.com\//.test(tab.url)) {
                             var url = tab_url.replace(/blob/, 'raw')
                         } else if (
