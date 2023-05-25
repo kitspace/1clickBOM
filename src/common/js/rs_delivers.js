@@ -32,8 +32,10 @@ const rsDelivers = {
             const err = res.errors[0]
             if (invalid_qty_re.test(err.message)) {
                 const match = err.message.match(invalid_qty_re)
+                const mult = parseInt(match[1], 10)
+                const q = Math.ceil(line.quantity / mult) * mult
                 const l = Object.assign({}, line, {
-                    quantity: parseInt(match[1], 10),
+                    quantity: q,
                 })
                 return this._add_line(l)
             }
@@ -55,6 +57,7 @@ const rsDelivers = {
             })
             .then(results => {
                 const fails = results.filter(r => !r.success).map(r => r.line)
+                this.refreshSiteTabs()
                 callback({success: fails.length === 0, warnings, fails}, this)
             })
     },
