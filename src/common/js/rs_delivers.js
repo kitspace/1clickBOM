@@ -3,22 +3,20 @@ const {browser} = require('./browser')
 
 const rsDelivers = {
     clearCart(callback) {
-        const url = `http${this.site}/CheckoutServices/DeleteAllProductsInCart`
-        return http.post(
-            url,
-            '',
-            {json: true},
-            responseText => {
-                if (callback != null) {
-                    callback({success: true}, this)
-                }
+        const url = `http${this.site}/graphql`
+        return http
+            .promisePost(
+                url,
+                '{"operationName":"clearBasket","variables":{},"query":"mutation clearBasket {\\n  clearBasket {\\n    isSuccess\\n    tags {\\n      ... on BulkRemoveFromBasketEnsighten {\\n        products {\\n          productId\\n          orderQuantity\\n          __typename\\n        }\\n        __typename\\n      }\\n      ... on BulkRemoveFromBasketGoogleAnalytics {\\n        products {\\n          id\\n          name\\n          category\\n          brand\\n          quantity\\n          __typename\\n        }\\n        __typename\\n      }\\n      ... on BulkRemoveFromBasketTealium {\\n        products {\\n          productId\\n          __typename\\n        }\\n        __typename\\n      }\\n      ... on GA4Event_RemoveFromCart {\\n        event\\n        ecommerce {\\n          currency\\n          value\\n          items {\\n            ...GA4Item\\n            __typename\\n          }\\n          __typename\\n        }\\n        __typename\\n      }\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n\\nfragment GA4Item on GA4Item {\\n  item_id\\n  item_name\\n  currency\\n  discount\\n  index\\n  item_brand\\n  item_category\\n  item_category2\\n  item_category3\\n  item_category4\\n  price\\n  quantity\\n  __typename\\n}\\n"}',
+                {json: true}
+            )
+            .catch(() => {
+                callback({success: false}, this)
+            })
+            .then(() => {
                 this.refreshSiteTabs()
-                return this.refreshCartTabs()
-            },
-            () => {
-                return callback({success: false}, this)
-            }
-        )
+                callback({success: true}, this)
+            })
     },
 
     _clear_invalid(callback) {
@@ -115,7 +113,7 @@ const rsDelivers = {
                                     i + 100,
                                     {
                                         success: false,
-                                        fails: result.fails.concat(invalid)
+                                        fails: result.fails.concat(invalid),
                                     },
                                     callback
                                 )
@@ -142,7 +140,7 @@ const rsDelivers = {
         } else {
             return callback(result)
         }
-    }
+    },
 }
 
 exports.rsDelivers = rsDelivers

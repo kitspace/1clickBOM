@@ -67,10 +67,10 @@ function post(url, params, options, callback, error_callback) {
     const xhr = new XMLHttpRequest()
     xhr.open('POST', url, true)
     if (json) {
-        xhr.setRequestHeader('Content-type', 'application/JSON')
+        xhr.setRequestHeader('Content-Type', 'application/json')
     } else {
         xhr.setRequestHeader(
-            'Content-type',
+            'Content-Type',
             'application/x-www-form-urlencoded'
         )
     }
