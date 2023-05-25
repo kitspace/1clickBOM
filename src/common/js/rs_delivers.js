@@ -1,9 +1,9 @@
 const http = require('./http')
-const {browser} = require('./browser')
+const {Promise} = require('bluebird')
 
 const rsDelivers = {
     clearCart(callback) {
-        const url = `http${this.site}/graphql`
+        const url = `https${this.site}/graphql`
         return http
             .promisePost(
                 url,
@@ -19,47 +19,27 @@ const rsDelivers = {
             })
     },
 
-    _clear_invalid(callback) {
-        return this._get_invalid_lines(parts => {
-            return this._delete_invalid(parts, callback)
-        })
-    },
-
-    _delete_invalid(parts, callback) {
-        const url = `http${this.site}/CheckoutServices/UpdateDeleteProductsInCart`
-        const promises = parts.map(part => {
-            return http.promisePost(url, `stockCode=${part}&quantity=0`)
-        })
-        Promise.all(promises).then(callback)
-    },
-
-    _get_invalid_lines(callback) {
-        const url = `http${this.site}/CheckoutServices/GetCartLinesHtml`
-        return http.get(
+    async _add_line(line) {
+        const url = `https${this.site}/graphql`
+        const body = await http.promisePost(
             url,
-            {},
-            function(responseText) {
-                let html = responseText
-                try {
-                    html = JSON.parse(responseText).cartLinesHtml
-                } catch (e) {}
-                const doc = browser.parseDOM(html)
-                const errors = doc.getElementsByClassName('errorOrderLine')
-                const ids = []
-                const parts = []
-                for (let i = 0; i < errors.length; i++) {
-                    const error = errors[i]
-                    parts.push(
-                        error.parentElement.nextElementSibling
-                            .querySelector('.descTd')
-                            .firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.innerText.trim()
-                            .replace('-', '')
-                    )
-                }
-                return callback(parts)
-            },
-            () => callback([], [])
+            `{"query":"mutation ($quantity: Float!, $stockCode:String!) {\\n                        addToBasketV2(pageType: Basket, quantity: $quantity, stockCode: $stockCode) {\\n                                isSuccess\\n                              }\\n                            }","variables":{"quantity":${line.quantity},"stockCode":"${line.part}"}}`,
+            {json: true}
         )
+        const res = JSON.parse(body)
+        if (res.errors != null) {
+            const invalid_qty_re = /Invalid quantity \d+ for product with ssm (\d+)/
+            const err = res.errors[0]
+            if (invalid_qty_re.test(err.message)) {
+                const match = err.message.match(invalid_qty_re)
+                const l = Object.assign({}, line, {
+                    quantity: parseInt(match[1], 10),
+                })
+                return this._add_line(l)
+            }
+            return {success: false, line}
+        }
+        return {success: true}
     },
 
     addLines(lines, callback) {
@@ -68,83 +48,16 @@ const rsDelivers = {
             return
         }
         const [merged, warnings] = this.mergeSameSkus(lines)
-        lines = merged
-        return this._add_lines(lines, 0, {success: true, fails: []}, result => {
-            result.warnings = (result.warnings || []).concat(warnings)
-            callback(result, this, lines)
-            this.refreshCartTabs()
-            return this.refreshSiteTabs()
-        })
-    },
-
-    //adds lines recursively in batches of 100 -- requests would timeout
-    //otherwise
-    _add_lines(lines_incoming, i, result, callback) {
-        if (i < lines_incoming.length) {
-            const lines = lines_incoming.slice(i, i + 99 + 1)
-            return this._clear_invalid(() => {
-                const url = `http${this.site}/CheckoutServices/BulkAddProducts`
-                let params = 'productString='
-                lines.forEach(line => {
-                    params += `${line.part},${line.quantity},"${line.reference}"\n`
-                })
-                return http.post(
-                    url,
-                    params,
-                    responseText => {
-                        return callback({success: true})
-                        const doc = browser.parseDOM(
-                            JSON.parse(responseText).html
-                        )
-                        const success =
-                            doc.querySelector('#hidErrorAtLineLevel').value ===
-                            '0'
-                        if (!success) {
-                            return this._get_invalid_lines(parts => {
-                                const invalid = []
-                                for (let k = 0; k < lines.length; k++) {
-                                    const line = lines[k]
-                                    if (__in__(line.part, parts)) {
-                                        invalid.push(line)
-                                    }
-                                }
-                                return this._add_lines(
-                                    lines_incoming,
-                                    i + 100,
-                                    {
-                                        success: false,
-                                        fails: result.fails.concat(invalid),
-                                    },
-                                    callback
-                                )
-                            })
-                        } else {
-                            return this._add_lines(
-                                lines_incoming,
-                                i + 100,
-                                result,
-                                callback
-                            )
-                        }
-                    },
-                    () => {
-                        return this._add_lines(
-                            lines_incoming,
-                            i + 100,
-                            {success: false, fails: result.fails.concat(lines)},
-                            callback
-                        )
-                    }
-                )
+        return Promise.all(merged.map(line => this._add_line(line)))
+            .catch(e => {
+                console.error(e)
+                callback({success: false, warnings, fails: lines}, this)
             })
-        } else {
-            return callback(result)
-        }
+            .then(results => {
+                const fails = results.filter(r => !r.success).map(r => r.line)
+                callback({success: fails.length === 0, warnings, fails}, this)
+            })
     },
 }
 
 exports.rsDelivers = rsDelivers
-
-function __in__(needle, haystack) {
-    return haystack.indexOf(needle) >= 0
-}
