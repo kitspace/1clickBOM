@@ -31,23 +31,34 @@ class RS extends RetailerInterface {
                 var method = rsOnline[name]
                 this[name] = method
             }
-            chrome.webRequest.onBeforeSendHeaders.addListener(
-                details => {
-                    const requestHeaders = setHeader(
-                        details.requestHeaders,
-                        'origin',
-                        `https://${this.site}`
-                    )
-                    return {requestHeaders}
-                },
-                {
-                    urls: [
-                        `https${this.site}/web/services/aggregation/search-and-browse/graphql`,
-                        `https${this.site}/services/buy/aggregator/graphql`,
-                    ],
-                },
-                ['blocking', 'requestHeaders', 'extraHeaders']
-            )
+            let gettingBrowserType = Promise.resolve('Chrome')
+            if (typeof browser !== 'undefined') {
+                gettingBrowserType = browser.runtime.getBrowserInfo()
+            }
+
+            gettingBrowserType.then(browserType => {
+                const capabilities = ['blocking', 'requestHeaders']
+                if (browserType === 'Chrome') {
+                    capabilities.push('extraHeaders')
+                }
+                chrome.webRequest.onBeforeSendHeaders.addListener(
+                    details => {
+                        const requestHeaders = setHeader(
+                            details.requestHeaders,
+                            'origin',
+                            `https://${this.site}`
+                        )
+                        return {requestHeaders}
+                    },
+                    {
+                        urls: [
+                            `https${this.site}/web/services/aggregation/search-and-browse/graphql`,
+                            `https${this.site}/services/buy/aggregator/graphql`,
+                        ],
+                    },
+                    capabilities
+                )
+            })
         } else {
             for (var name in rsDelivers) {
                 var method = rsDelivers[name]
