@@ -10,6 +10,8 @@
         "clipboardWrite",
         "storage",
         "notifications",
+        "webRequest",
+        "webRequestBlocking",
         "<all_urls>",
         "cookies",
         "http://localhost/"

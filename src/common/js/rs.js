@@ -26,23 +26,44 @@ Promise.config({cancellation: true})
 class RS extends RetailerInterface {
     constructor(country_code, settings, callback) {
         super('RS', country_code, 'data/rs.json', settings)
-        if (/web\/ca/.test(this.cart)) {
+        if (/basket/.test(this.cart)) {
             for (var name in rsOnline) {
                 var method = rsOnline[name]
                 this[name] = method
             }
+            chrome.webRequest.onBeforeSendHeaders.addListener(
+                details => {
+                    const requestHeaders = setHeader(
+                        details.requestHeaders,
+                        'origin',
+                        `https://${this.site}`
+                    )
+                    return {requestHeaders}
+                },
+                {
+                    urls: [
+                        `https${this.site}/web/services/aggregation/search-and-browse/graphql`,
+                        `https${this.site}/services/buy/aggregator/graphql`,
+                    ],
+                },
+                ['blocking', 'requestHeaders', 'extraHeaders']
+            )
         } else {
             for (var name in rsDelivers) {
                 var method = rsDelivers[name]
                 this[name] = method
             }
         }
-        __guardFunc__(callback, f => f())
+        if (callback != null) {
+            callback()
+        }
     }
 }
 
 exports.RS = RS
 
-function __guardFunc__(func, transform) {
-    return typeof func === 'function' ? transform(func) : undefined
+function setHeader(headers, name, value) {
+    headers = headers.filter(h => h.name.toLowerCase() !== name.toLowerCase())
+    headers.push({name, value})
+    return headers
 }
