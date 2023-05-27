@@ -172,16 +172,14 @@ function render(state) {
     let any_emptying = false
 
     for (const retailer_name of retailer_list) {
+        if (retailer_name === 'JLC Assembly') {
+            continue
+        }
         let lines = []
         if (retailer_name in bom.retailers) {
             lines = bom.retailers[retailer_name]
         }
         const retailer = state.interfaces[retailer_name]
-        let no_of_lines = 0
-        for (let i1 = 0; i1 < lines.length; i1++) {
-            const line = lines[i1]
-            no_of_lines += line.quantity
-        }
         const tr = document.createElement('tr')
         element_Table.appendChild(tr)
         const td_0 = document.createElement('td')
