@@ -184,7 +184,7 @@ function render(state) {
         element_Table.appendChild(tr)
         const td_0 = document.createElement('td')
         const icon = document.createElement('img')
-        icon.src = browser.getURL(`images/${retailer_name.toLowerCase()}.ico`)
+        icon.src = browser.getURL(`images/${retailer_name.toLowerCase()}.png`)
         const viewCart = document.createElement('a')
         viewCart.appendChild(icon)
         viewCart.innerHTML += retailer.name
