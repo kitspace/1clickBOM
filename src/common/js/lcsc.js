@@ -19,40 +19,37 @@
 
 const {RetailerInterface} = require('./retailer_interface')
 
-function getHeaders() {
-    return {
-        accept: 'application/json, text/plain, */*',
-        'content-type': 'application/json;charset=UTF-8',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-site'
+async function _add_lines(lines, fails) {
+    if (lines.length === 0) {
+        return {success: fails.length === 0, fails}
     }
-}
+    const body = lines.map(line => ({
+        productCode: line.part,
+        quantity: line.quantity,
+        customerTag: line.reference,
+        cartSource: 'product_list',
+    }))
 
-async function _add_line(line) {
-    let quantity = line.quantity
-    return fetch('https://wwwapi.lcsc.com/v1/carts/add', {
+    const r = await fetch('https://wmsc.lcsc.com/wmsc/cart/add/batch', {
+        headers: {
+            accept: 'application/json, text/plain, */*',
+            'content-type': 'application/json;charset=UTF-8',
+        },
+        body: JSON.stringify(body),
         method: 'POST',
         credentials: 'include',
-        headers: getHeaders(),
-        referrer: 'https://lcsc.com/cart',
-        referrerPolicy: 'strict-origin-when-cross-origin',
-        body: JSON.stringify({
-            product_code: line.part,
-            quantity: line.quantity,
-            // commas in the tag seem to just get removed by lcsc so we use
-            // a space instead
-            tag: line.reference.replace(/,/g, ' '),
-            link_from: 'https://lcsc.com/cart'
-        })
-    })
-        .then(r => r.json())
-        .then(r => {
-            if (r.error == null) {
-                return {success: true}
-            }
-            return {success: false}
-        })
+    }).then(r => r.json())
+
+    if (r.result.error) {
+        const failedProducts = r.result.error.map(x => x.productCode)
+        fails = fails.concat(
+            lines.filter(line => failedProducts.includes(line.part))
+        )
+        lines = lines.filter(line => !failedProducts.includes(line.part))
+        return _add_lines(lines, fails)
+    }
+
+    return {success: fails.length === 0, fails}
 }
 
 class LCSC extends RetailerInterface {
@@ -62,74 +59,65 @@ class LCSC extends RetailerInterface {
 
     async clearCart(callback) {
         try {
-            const cart = await fetch('https://wwwapi.lcsc.com/v1/carts', {
-                headers: getHeaders(),
+            const cart = await fetch('https://wmsc.lcsc.com/wmsc/cart/index', {
+                headers: {
+                    accept: 'application/json, text/plain, */*',
+                },
                 method: 'GET',
-                mode: 'cors',
-                credentials: 'include'
+                credentials: 'include',
             }).then(r => r.json())
+            const {
+                instockCartList,
+                lcOrderCartList,
+                orderCartList,
+            } = cart.result
+            const cartIds = instockCartList
+                .concat(lcOrderCartList)
+                .concat(orderCartList)
+                .map(x => x.uuid)
 
-            const cart_ids = cart.stock.concat(cart.back_order).map(x => x.id)
-            const ret = {success: true}
-            if (cart_ids.length > 0) {
-                const r = await fetch(
-                    'https://wwwapi.lcsc.com/v1/carts/del-cart',
-                    {
-                        headers: getHeaders(),
-                        method: 'POST',
-                        mode: 'cors',
-                        credentials: 'include',
-                        body: JSON.stringify({cart_ids})
-                    }
-                )
-                if (r.status !== 200) {
-                    ret.success = false
-                }
+            const res = await fetch('https://wmsc.lcsc.com/wmsc/cart/delete', {
+                headers: {
+                    accept: 'application/json, text/plain, */*',
+                    'content-type': 'application/x-www-form-urlencoded',
+                },
+                body: `uuid=${encodeURIComponent(String(cartIds))}`,
+                method: 'POST',
+                credentials: 'include',
+            })
+            if (res.status !== 200) {
+                throw Error('Non 200 response for clear cart')
+            }
+            if (callback != null) {
+                callback({success: true})
             }
             this.refreshSiteTabs()
-            if (callback != null) {
-                callback(ret)
-            }
-            return ret
+            return {success: true}
         } catch (e) {
+            console.error(e)
+            if (callback != null) {
+                callback({success: false})
+            }
             return {success: false}
         }
     }
 
-    addLines(lines, callback) {
-        if (lines.length === 0) {
-            const result = {success: true, fails: []}
+    async addLines(lines, callback) {
+        try {
+            const r = await _add_lines(lines, [])
             if (callback != null) {
-                callback(result, this, lines)
+                callback(r)
             }
-            return Promise.resolve(result)
-        }
-        const [merged, warnings] = this.mergeSameSkus(lines)
-        lines = merged
-        return Promise.all(
-            lines.map(line =>
-                _add_line(line).catch(err => {
-                    console.error(err)
-                    return {success: false}
-                })
-            )
-        ).then(rs => {
-            const result = {success: true, fails: []}
-            rs.forEach((r, i) => {
-                if (!r.success) {
-                    result.success = false
-                    result.fails.push(lines[i])
-                }
-            })
             this.refreshSiteTabs()
-            result.warnings = (result.warnings || []).concat(warnings)
+            return r
+        } catch (e) {
+            console.error(e)
             if (callback != null) {
-                callback(result, this, lines)
+                callback({success: false, fails: lines})
             }
-            return result
-        })
+            return {success: false, fails: lines}
+        }
     }
 }
 
 exports.LCSC = LCSC
-
