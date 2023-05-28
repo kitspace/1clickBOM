@@ -79,7 +79,7 @@ class Newark extends RetailerInterface {
     }
 
     _get_item_ids(callback) {
-        const url = `https${this.site}${this.cart}`
+        const url = `https${this.site}/BasketDataAjaxResponse?storeId=${this.store_id}`
         return http.get(url, {}, responseText => {
             const doc = browser.parseDOM(responseText)
             const order_details = doc.querySelector('#order_details')
