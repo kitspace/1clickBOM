@@ -1,3 +1,5 @@
+> ❗ No longer being actively developed. 
+
 <p align=center>
 <img src="https://raw.githubusercontent.com/monostable/1clickBOM/master/readme_images/demo.gif" />
 </p>
